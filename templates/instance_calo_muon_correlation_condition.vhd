@@ -1,0 +1,20 @@
+{ConditionName}_i: calo_muon_correlation
+    generic map(nr_{Calo1ObjectType}_objects, {Calo1EtGeMode}, d_s_i_{Calo1ObjectType},
+        X"{Calo1EtThreshold:04X}", 
+        {Calo1EtaFullRange}, X"{Calo1EtaW1UpperLimit:04X}", X"{Calo1EtaW1LowerLimit:04X}",
+        {ECalo1taW2Ignore}, X"{Calo1EtaW2UpperLimit:04X}", X"{Calo1EtaW2LowerLimit:04X}",
+        {Calo1PhiFullRange}, X"{Calo1PhiW1UpperLimit:04X}", X"{Calo1PhiW1LowerLimit:04X}",
+        {Calo1PhiW2Ignore}, X"{Calo1PhiW2UpperLimit:04X}", X"{Calo1PhiW2LowerLimit:04X}",
+        nr_{Calo2ObjectType}_objects, {Calo2EtGeMode}, d_s_i_{Calo2ObjectType},
+        nr_muon_objects, {MuonPtGeMode}, d_s_i_muon,
+        X"{PtHighThreshold:04X}", X"{PtLowThreshold:04X}", 
+        {EtaFullRange}, X"{EtaW1UpperLimit:04X}", X"{EtaW1LowerLimit:04X}",
+        {EtaW2Ignore}, X"{EtaW2UpperLimit:04X}", X"{EtaW2LowerLimit:04X}",
+        {PhiFullRange}, X"{PhiW1UpperLimit:04X}", X"{PhiW1LowerLimit:04X}",
+        {PhiW2Ignore}, X"{PhiW2UpperLimit:04X}", X"{PhiW2LowerLimit:04X}",
+        {RequstedCharge},
+        {DiffEtaUpperLimit:d}, {DiffEtaLowerLimit:d}, {DiffPhiUpperLimit:d}, {DiffPhiLowerLimit:d})
+    port map(lhc_clk, {CaloObjectType}_bx_{Bx1}, muon_bx_{Bx2},
+        pos_charge_single_bx_{Bx2}, neg_charge_single_bx_{Bx2},
+        diff_{CaloObjectType}_muon_eta_bx_{Bx1}_bx_{Bx2}, diff_{CaloObjectType}_muon_phi_bx_{Bx1}_bx_{Bx2},
+        {ConditionName});

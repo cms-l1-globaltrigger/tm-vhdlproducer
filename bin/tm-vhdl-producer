@@ -1,0 +1,84 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+#
+# Repository path   : $HeadURL: $
+# Last committed    : $Revision: $
+# Last changed by   : $Author: $
+# Last changed date : $Date: $
+#
+
+from tmVhdlProducer import tmVhdlProducer
+
+import argparse
+import logging
+import sys, os
+
+# -----------------------------------------------------------------------------
+#  Constants.
+# -----------------------------------------------------------------------------
+
+EXIT_OK = 0
+EXIT_FAIL = 1
+
+# -----------------------------------------------------------------------------
+#  Command line parsing.
+# -----------------------------------------------------------------------------
+
+def parse():
+    """Parsing command line arguments."""
+    parser = argparse.ArgumentParser(
+        prog        = "tm-vhdl-producer",
+        description = "Trigger Menu VHDL producer for uGT upgrade",
+        epilog      = "Report bugs to <bernhard.arnold@cern.ch>.",
+    )
+    parser.add_argument('triggermenu',
+        metavar = '<triggermenu>',
+        type = os.path.abspath,
+        help = "L1 Trigger Menu XML file to load",
+    )
+    parser.add_argument('-o',
+        dest = 'outdir',
+        metavar = '<path>',
+        default = '.',
+        help = "optional output directory location",
+    )
+    parser.add_argument('--dryrun',
+        dest = 'dryrun',
+        action = 'store_true',
+        default = False,
+        help = "do not write any generated code to disk",
+    )
+    parser.add_argument('--version',
+        action = 'version',
+        version = "L1 Trigger Menu XML compiler version {0.major}.{0.minor}.{0.revision}".format(version_info()),
+    )
+
+    return parser.parse_args()
+
+# -----------------------------------------------------------------------------
+#  The main routine.
+# -----------------------------------------------------------------------------
+
+def main():
+
+    # Parse command lines.
+    args = parse()
+
+    # Setup console logging
+    logging.basicConfig(format = '%(levelname)s: %(message)s', level = logging.DEBUG)
+
+    try:
+        producer = tmVhdlProducer()
+        # TODO
+    except (RuntimeError, IOError, OSError), message:
+        logging.error(message)
+        return EXIT_FAIL
+
+    return EXIT_OK
+
+# -----------------------------------------------------------------------------
+#  Execution point.
+# -----------------------------------------------------------------------------
+
+if __name__ == '__main__':
+    sys.exit(main())
