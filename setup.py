@@ -8,7 +8,7 @@
 #
 
 from distutils.core import setup
-import glob
+from glob import glob
 
 setup(
     name = 'tmVhdlProducer',
@@ -17,13 +17,12 @@ setup(
     author = "Bernhard Arnold",
     author_email = "bernhard.arnold@cern.ch",
     url = "https://twiki.cern.ch/twiki/bin/viewauth/CMS/GlobalTriggerUpgradeL1T-uTme",
-    package_dir = {'' : 'lib'},
-    packages = ['', ],
+    packages = ['tmVhdlProducer', ],
     data_files = [
-        ('shared/tmVhdlReporter/templates', glob.glob('templates/*.vhd')),
+        ('shared/tmVhdlProducer/templates', glob('templates/*.vhd')),
     ],
     scripts = [
-        'bin/tm-vhdl-producer',
+        'scripts/tm-vhdl-producer',
     ],
     provides = ['tmVhdlProducer', ],
 )
