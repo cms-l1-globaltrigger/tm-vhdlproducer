@@ -8,3 +8,4 @@
 include Makefile
 include scripts/tm-vhdl-producer
 include templates/*.vhd
+include utils/tplrcc

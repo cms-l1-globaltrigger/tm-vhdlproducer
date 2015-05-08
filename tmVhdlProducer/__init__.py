@@ -6,4 +6,5 @@
 # Last changed date : $Date: $
 #
 
+from tmVhdlProducer import __version__
 from tmVhdlProducer import *

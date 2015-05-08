@@ -7,7 +7,7 @@
 # Last changed date : $Date: $
 #
 
-from tmVhdlProducer import tmVhdlProducer
+from tmVhdlProducer import VhdlProducer, __version__
 
 import argparse
 import logging
@@ -17,8 +17,8 @@ import sys, os
 #  Constants.
 # -----------------------------------------------------------------------------
 
-EXIT_OK = 0
-EXIT_FAIL = 1
+EXIT_SUCCESS = 0
+EXIT_FAILURE = 1
 
 # -----------------------------------------------------------------------------
 #  Command line parsing.
@@ -50,7 +50,7 @@ def parse():
     )
     parser.add_argument('--version',
         action = 'version',
-        version = "L1 Trigger Menu XML compiler version {0.major}.{0.minor}.{0.revision}".format(version_info()),
+        version = "L1 Trigger Menu XML compiler version {0}".format(__version__),
     )
 
     return parser.parse_args()
@@ -68,13 +68,14 @@ def main():
     logging.basicConfig(format = '%(levelname)s: %(message)s', level = logging.DEBUG)
 
     try:
-        producer = tmVhdlProducer()
         # TODO
+        producer = VhdlProducer()
+        producer.write()
     except (RuntimeError, IOError, OSError), message:
         logging.error(message)
-        return EXIT_FAIL
+        return EXIT_FAILURE
 
-    return EXIT_OK
+    return EXIT_SUCCESS
 
 # -----------------------------------------------------------------------------
 #  Execution point.

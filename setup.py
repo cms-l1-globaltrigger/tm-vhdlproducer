@@ -8,9 +8,23 @@
 #
 
 from distutils.core import setup
+from distutils.command.build import build
 from glob import glob
+import subprocess
+
+class build_hook(build):
+    """Custom build command performing pre and post build operations."""
+    def run(self):
+        self.pre_build()
+        build.run(self)
+        self.post_build()
+    def pre_build(self):
+        subprocess.check_call('make')
+    def post_build(self):
+        pass
 
 setup(
+    cmdclass = {'build' : build_hook, },
     name = 'tmVhdlProducer',
     version = '0.1.0',
     description = "Trigger Menu VHDL producer for uGT upgrade",
