@@ -13,7 +13,7 @@
         {MuonEtaW2Ignore}, X"{MuonEtaW2UpperLimit:04X}", X"{MuonEtaW2LowerLimit:04X}",
         {MuonPhiFullRange}, X"{MuonPhiW1UpperLimit:04X}", X"{MuonPhiW1LowerLimit:04X}",
         {MuonPhiW2Ignore}, X"{MuonPhiW2UpperLimit:04X}", X"{MuonPhiW2LowerLimit:04X}",
-        "{MuonRequstedCharge}", (X"{MuonQualityLuts:04X}", (X"{MuonIsolationLuts:01X}",
+        "{MuonRequstedCharge}", (X"{MuonQualityLut:04X}", (X"{MuonIsolationLut:01X}",
         {DiffEtaUpperLimit:3f}, {DiffEtaLowerLimit:3f}, {DiffPhiUpperLimit:3f}, {DiffPhiLowerLimit:3f}), {DiffPhiUpperLimit:3f}, {DiffPhiLowerLimit:3f}
     port map(lhc_clk, {CaloObjectType}_bx_{Bx1}, muon_bx_{Bx2},
         diff_{CaloObjectType}_muon_eta_integer_value_bx_{Bx1}_bx_{Bx2}, diff_{CaloObjectType}_muon_phi_integer_value_bx_{Bx1}_bx_{Bx2},
