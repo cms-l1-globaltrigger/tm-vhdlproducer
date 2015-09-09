@@ -4,9 +4,9 @@
 ######### Module #: {{iMod}}
 --- NAVID ---
 
+algo_after_finor_mask_rop_int <= (
 {%- for algoName in menu.reporter['index_sorted'] %}
 {%- set algoDict = menu.reporter['algoDict'][algoName] %}
-algo_after_finor_mask_rop_int <= (
 {%- set algoIndex = algoDict["index"] %}
 {%- if algoIndex in menu.reporter['m2a'][iMod]%}
 {%- set localAlgoIndex = menu.reporter['m2a'][iMod].index(algoIndex) %}

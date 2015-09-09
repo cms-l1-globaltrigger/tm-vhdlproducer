@@ -12,7 +12,7 @@ DIR              = "/afs/cern.ch/user/n/nrad/tm/utm/"
 #vhdlTemplateDir  = DIR+"/tmVhdlProducer/templates/"
 vhdlTemplateDir  = DIR+"/tmVhdlProducer/jinjaTemplates/"
 outputDir        = "/afs/cern.ch/user/n/nrad/tm/utm/tmVhdlProducer/test/vhdltest/"
-nModules         = 1
+nModules         = 3
 #menu             = tmEventSetup.getTriggerMenu(DIR+'menu.xml')
 menu             = tmEventSetup.getTriggerMenu("/afs/cern.ch/user/t/tmatsush/public/tmGui/L1Menu_Point5IntegrationTest_2015_v1.xml")
 

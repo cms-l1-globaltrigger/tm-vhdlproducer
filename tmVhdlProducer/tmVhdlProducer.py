@@ -9,7 +9,7 @@
 from jinja2 import Environment, BaseLoader, TemplateNotFound, FileSystemLoader,filters
 from os.path import join, exists, getmtime
 from tmReporter.tmReporter import getReport
-
+from os.path import basename
 #import template_rc
 
 __version__ = '0.1.0'
@@ -25,11 +25,11 @@ __all__ = ['VhdlProducer', ]
 # -----------------------------------------------------------------------------
 
 def pprint(x):
-  print "###############################################################################"
-  print "###############################################################################"
+  print "%%  ###############################################################################"
+  print "%%  ###############################################################################"
   print x
-  print "###############################################################################"
-  print "###############################################################################"
+  print "%%  ###############################################################################"
+  print "%%  ###############################################################################"
 
 def str2hex(s):
     """Convert a string into hex encoded value. Requires to reverse byte order, then encode."""
@@ -65,14 +65,18 @@ def bx_encode(value):
 templateDict = {  
         #"test"                  :       "testTemplate.ja",
         "gtl_module"            :       "gtl_module.vhd",
-        #"gtl_pkg"               :       "gtl_pkg.vhd",
-        "signal_eta_phi"        :       "signal_eta_phi.ja.vhd",
-        #"muon_conditions"       :       "instance_muon_condition.vhd",                   
-        "muon_conditions"       :       "instance_muon_condition.ja.vhd",                   
-        "calo_conditions"       :       "instance_calo_condition_v2.ja.vhd",                   
-        "muon_charges"          :       "instance_muon_charges.ja.vhd",                   
         "algo_mapping"          :       "algo_mapping_rop.ja.vhd",
+        "gtl_pkg"               :       "gtl_pkg.ja.vhd",
+        "signal_eta_phi"        :       "subTemplates/signal_eta_phi.ja.vhd",
+        #"muon_conditions"       :      "subTemplates/instance_muon_condition.vhd",                   
+        "muon_conditions"       :       "subTemplates/instance_muon_condition.ja.vhd",                   
+        "calo_conditions"       :       "subTemplates/instance_calo_condition_v2.ja.vhd",                   
+        "esums_conditions"      :       "subTemplates/instance_esums_condition.ja.vhd",                   
+        "muon_charges"          :       "subTemplates/instance_muon_charges.ja.vhd_",                   
         }
+
+#finalTemplates = ["gtl_module", "algo_mapping", "gtl_pkg"]
+finalTemplates = ["gtl_module", "algo_mapping"]
 
 
 
@@ -285,20 +289,18 @@ class VhdlProducer(object):
         m2a = [[] for x in range(self.nModules) ]
         while iAlgo < self.nAlgos:
           iMod = moduleCycle.next()
-          algoName  =  self.menu.reporter['algoDict'].keys()[iAlgo]  ## Need to spread out the algos in a more logical way
+          #algoName  =  self.menu.reporter['algoDict'].keys()[iAlgo]  ## Need to spread out the algos in a more logical way
+          algoName  =  self.menu.reporter['index_sorted'][iAlgo]  ## Need to spread out the algos in a more logical way
           algoDict  =  self.menu.reporter['algoDict'][algoName]
           algoIndex =  algoDict['index']
           m2a[iMod].append(algoIndex)
           a2m[algoIndex]=(iMod, m2a[iMod].index(algoIndex))
-
           iAlgo+=1
         print "adding mapping", m2a, a2m
-
         self.menu.reporter['m2a']=m2a
         self.menu.reporter['a2m']=a2m
         self.m2a=m2a
         self.a2m=a2m
-
 
     def write(self):
         self.initialize()
@@ -318,9 +320,12 @@ class VhdlProducer(object):
           print "template: "
           #temp = "signal_eta_phi"
           #for temp in [ "algo_mapping", "muon_conditions" , "muon_charges", "gtl_module"]:
-          #for temp in ["gtl_module"]:
-          for temp in [ "signal_eta_phi" ]:
-            tempOutput = self.directoryDict["module_%s"%(iMod)] +"/%s"%templateDict[temp] 
+          #for temp in finalTemplates:
+          for temp in [ "esums_conditions" ]:
+    
+            tempOutputName= basename(templateDict[temp])
+            #tempOutput = self.directoryDict["module_%s"%(iMod)] +"/%s"%templateDict[temp] 
+            tempOutput = self.directoryDict["module_%s"%(iMod)] +"/%s"%tempOutputName 
             #print temp, tempOutput
             #self.loader.env.filters.update(filters)
             
