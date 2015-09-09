@@ -203,7 +203,7 @@ class TemplateEngine(object):
 class VhdlProducer(object):
     """VHDL producer class."""
 
-    def __init__(self,menu,templateDir,nModules,outputDir):
+    def __init__(self,menu,templateDir,nModules,outputDir,verbose=False):
         self.menu     = menu
         self.menuName = menu.getName()
         self.nModules = nModules  ##how to get these?
@@ -220,7 +220,6 @@ class VhdlProducer(object):
         self.nAlgos = algoMap.size()
         getReport(self.menu)
         print "menu reporter keys:", self.menu.reporter.keys()
-        menu.reporter['DefaultTemps']= self._makeDefaultTemplateDictionaries()
 
     def _makeDirectories(self):
         mainDir = self.outputDir + "/" + "L1Menu_" + self.menuName
@@ -241,43 +240,6 @@ class VhdlProducer(object):
         for directory in self.directoryDict:
             mkdir_p(self.directoryDict[directory])
             print self.directoryDict[directory]
-
-
-    def _makeDefaultTemplateDictionaries(self):
-        defTempDict={}
-        defTempDict['muon_condition_dict'] =\
-                                     {
-                                              "PtThresholds"              :      [ 0,  0,  0,  0  ]     , 
-                                              "EtaFullRange"              :      [ 0,  0,  0,  0  ]     ,
-                                              "EtaW1UpperLimits"          :      [ 0,  0,  0,  0  ]     ,
-                                              "EtaW1LowerLimits"          :      [ 0,  0,  0,  0  ]     ,
-                                              "EtaW2Ignore"               :      [ 0,  0,  0,  0  ]     ,
-                                              "EtaW2UpperLimits"          :      [ 0,  0,  0,  0  ]     ,
-                                              "EtaW2LowerLimits"          :      [ 0,  0,  0,  0  ]     ,
-                                              "PhiFullRange"              :      [ 0,  0,  0,  0  ]     ,
-                                              "PhiW1UpperLimits"          :      [ 0,  0,  0,  0  ]     ,
-                                              "PhiW1LowerLimits"          :      [ 0,  0,  0,  0  ]     ,
-                                              "PhiW2Ignore"               :      [ 0,  0,  0,  0  ]     ,
-                                              "PhiW2UpperLimits"          :      [ 0,  0,  0,  0  ]     ,
-                                              "PhiW2LowerLimits"          :      [ 0,  0,  0,  0  ]     ,            
-                                              "RequestedCharges"          :      ["ign","ign","ign","ign"]  ,            
-                                              "QualityLuts"               :      [ 0,  0,  0,  0  ]     ,              
-                                              "IsolationLuts"             :      [ 0,  0,  0,  0  ]     ,              
-                                              "RequestedChargeCorrelation":        "ig"                                   ,
-                                              "DiffEtaUpperLimit"         :        0                                      ,
-                                              "DiffEtaLowerLimit"         :        0                                      ,
-                                              "DiffPhiUpperLimit"         :        0                                      ,
-                                              "DiffPhiLowerLimit"         :        0                                      ,
-                                     }
-
-        return defTempDict
-
-        
-
-
-
-
-
 
 
     def initialize(self):
