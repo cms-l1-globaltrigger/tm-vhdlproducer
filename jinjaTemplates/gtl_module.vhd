@@ -39,9 +39,9 @@
 {#%- include  "subTemplates/MuonChargeCorrelationInstances"%#}
 
 -- Instantiations of conditions - written by TME on the base of templates
-{#%- include  "subTemplates/ConditionInstances"%#}
 {%- include  "subTemplates/instance_calo_condition_v2.ja.vhd"%}
 {%- include  "subTemplates/instance_muon_condition.ja.vhd"%}
+{%- include  "subTemplates/instance_esums_condition.ja.vhd"%}
 
 
 -- Instantiations of algorithms - written by TME on the base of templates
