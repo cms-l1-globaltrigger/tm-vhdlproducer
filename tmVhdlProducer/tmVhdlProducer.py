@@ -320,8 +320,8 @@ class VhdlProducer(object):
           print "template: "
           #temp = "signal_eta_phi"
           #for temp in [ "algo_mapping", "muon_conditions" , "muon_charges", "gtl_module"]:
-          #for temp in finalTemplates:
-          for temp in [ "esums_conditions" ]:
+          for temp in finalTemplates:
+          #for temp in [ "esums_conditions" ]:
     
             tempOutputName= basename(templateDict[temp])
             #tempOutput = self.directoryDict["module_%s"%(iMod)] +"/%s"%templateDict[temp] 
