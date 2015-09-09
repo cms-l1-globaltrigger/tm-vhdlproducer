@@ -30,6 +30,7 @@ parser.add_option("--verbose",   dest="verbose",  default=True ,      type="stri
 outputDir        = DIR+"/tmVhdlProducer/test/vhdltest/"
 vhdlTemplateDir  = DIR+"/tmVhdlProducer/jinjaTemplates/"
 nModules         = options.nModules
+verbose          = options.verbose
 menu             = tmEventSetup.getTriggerMenu(options.menu)
 
 
