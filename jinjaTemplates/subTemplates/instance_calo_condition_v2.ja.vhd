@@ -13,7 +13,7 @@
     {%- if "EG" in condName %}
       {%set objName="EG"%}
     {%-endif%}
-    {% set ObjectType= objName + "_TYPE" %}
+    {% set ObjectType= objName %}
     {%- set nObj = menu.reporter['algoDict'][algoName]['condDict'][condName]['objList'] | count %}
     {%- set condDict = algoDict['condDict'][condName]%}
     {%- set caloCondDict = condDict['ConditionTemplates']['calo_condition_dict']  %}
@@ -30,7 +30,7 @@
 {#-#}
 {#-#}
 {#-#}
-{{condName}}_i: calo_conditions_v2
+{{condName}}_i: entity work.calo_conditions_v2
     generic map(nr_{{ObjectType}}_objects, {{nObj}}, {{DoubleWsc|default("false")}} , {{ objInfo['op'] }}, {{ObjectType}}_type,
         (X"{{caloCondDict['EtThresholds'][0]|X04}}", X"{{caloCondDict['EtThresholds'][1]|X04}}", X"{{caloCondDict['EtThresholds'][2]|X04}}", X"{{caloCondDict['EtThresholds'][3]|X04}}"),
         ({{caloCondDict['EtaFullRange'][0]}}, {{caloCondDict['EtaFullRange'][1]}}, {{caloCondDict['EtaFullRange'][2]}}, {{caloCondDict['EtaFullRange'][3]}}),
@@ -44,7 +44,7 @@
         (X"{{caloCondDict['IsoLuts'][0]|X01}}", X"{{caloCondDict['IsoLuts'][1]|X01}}", X"{{caloCondDict['IsoLuts'][2]|X01}}", X"{{caloCondDict['IsoLuts'][3]|X01}}"),
         {{caloCondDict['DiffEtaUpperLimit']}}, {{caloCondDict['DiffEtaLowerLimit']}}, {{caloCondDict['DiffPhiUpperLimit']}}, {{caloCondDict['DiffPhiLowerLimit']}})
     port map(lhc_clk, {{ObjectType}}_bx_{{Bx}}, diff_{{ObjectType}}_wsc_eta_bx_{{Bx}}, diff_{{ObjectType}}_wsc_phi_bx_{{Bx}},
-        {condName});
+        {{condName}});
 {#-#}
 {#-#}
 {#-#}
