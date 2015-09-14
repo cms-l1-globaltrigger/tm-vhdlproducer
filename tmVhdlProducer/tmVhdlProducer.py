@@ -63,22 +63,29 @@ def bx_encode(value):
 
 
 templateDict = {  
-        #"test"                  :       "testTemplate.ja",
+        "algo_mapping"          :       "algo_mapping_rop.vhd",
+        "gtl_pkg"               :       "gtl_pkg.vhd",
         "gtl_module"            :       "gtl_module.vhd",
-        "algo_mapping"          :       "algo_mapping_rop.ja.vhd",
-        "gtl_pkg"               :       "gtl_pkg.ja.vhd",
-        "signal_eta_phi"        :       "subTemplates/signal_eta_phi.ja.vhd",
-        #"muon_conditions"       :      "subTemplates/instance_muon_condition.vhd",                   
-        "muon_conditions"       :       "subTemplates/instance_muon_condition.ja.vhd",                   
-        "calo_conditions"       :       "subTemplates/instance_calo_condition_v2.ja.vhd",                   
-        "esums_conditions"      :       "subTemplates/instance_esums_condition.ja.vhd",                   
-        "muon_charges"          :       "subTemplates/instance_muon_charges.ja.vhd_",                   
+
+
+        #"signal_eta_phi"        :       "subTemplates/signal_eta_phi.ja.vhd",
+        ##"test"                  :       "testTemplate.ja",
+        ##"muon_conditions"       :      "subTemplates/instance_muon_condition.vhd",                   
+        #"muon_conditions"       :       "subTemplates/instance_muon_condition.ja.vhd",                   
+        #"calo_conditions"       :       "subTemplates/instance_calo_condition_v2.ja.vhd",                   
+        #"esums_conditions"      :       "subTemplates/instance_esums_condition.ja.vhd",                   
+        #"muon_charges"          :       "subTemplates/instance_muon_charges.ja.vhd_",                   
+
+
+        #"algoLoop"              :       "subTemplates/_algoLoop.ja.vhd", 
+        #"test"       :       "subTemplates/instance_calo_condition_v2.ja.vhd",                   
+        #"test"              :       "subTemplates/instance_calo_condition.vhd.j2", 
         }
 
 #finalTemplates = ["gtl_module", "algo_mapping", "gtl_pkg"]
-finalTemplates = ["gtl_module", "algo_mapping"]
-
-
+finalTemplates = ["gtl_module", "algo_mapping","gtl_pkg"]
+#templatesToUse = ["gtl_module"]
+templatesToUse = finalTemplates
 
 
 # -----------------------------------------------------------------------------
@@ -282,8 +289,8 @@ class VhdlProducer(object):
           print "template: "
           #temp = "signal_eta_phi"
           #for temp in [ "algo_mapping", "muon_conditions" , "muon_charges", "gtl_module"]:
-          for temp in finalTemplates:
-          #for temp in [ "esums_conditions" ]:
+          #for temp in finalTemplates:
+          for temp in templatesToUse:
     
             tempOutputName= basename(templateDict[temp])
             #tempOutput = self.directoryDict["module_%s"%(iMod)] +"/%s"%templateDict[temp] 
