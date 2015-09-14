@@ -23,12 +23,12 @@
 
 
 {{condName}}_i: esums_conditions
-    generic map({{ objInfo['op'] | lower  }}, {{ObjectType}}_type,
+    generic map({{ objInfo['op'] | lower  }}, {{ObjectType}}_TYPE,
         X"{{esumsCondDict["EtThreshold"][0]|X04}}",
         {{esumsCondDict["PhiFullRange"][0]}}, X"{{esumsCondDict["PhiW1UpperLimit"][0]|X04}}", X"{{esumsCondDict["PhiW1LowerLimit"][0]|X04}}",
         {{esumsCondDict["PhiW2Ignore"][0]}}, X"{{esumsCondDict["PhiW2UpperLimit"][0]|X04}}", X"{{esumsCondDict["PhiW2LowerLimit"][0]|X04}}"
         )
-    port map(lhc_clk, {{ObjectType}}_bx_{{Bx}}, {{condName}});
+    port map(lhc_clk, {{ObjectType|lower}}_bx_{{Bx|lower}}, {{condName}});
 
 
 {#-#}

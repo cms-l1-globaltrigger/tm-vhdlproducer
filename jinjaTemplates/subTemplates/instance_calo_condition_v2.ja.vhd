@@ -31,7 +31,7 @@
 {#-#}
 {#-#}
 {{condName}}_i: entity work.calo_conditions_v2
-    generic map(nr_{{ObjectType}}_objects, {{nObj}}, {{DoubleWsc|default("false")}} , {{ objInfo['op'] }}, {{ObjectType}}_type,
+    generic map(NR_{{ObjectType}}_OBJECTS, {{nObj}}, {{DoubleWsc|default("false")}} , {{ objInfo['op'] }}, {{ObjectType}}_TYPE,
         (X"{{caloCondDict['EtThresholds'][0]|X04}}", X"{{caloCondDict['EtThresholds'][1]|X04}}", X"{{caloCondDict['EtThresholds'][2]|X04}}", X"{{caloCondDict['EtThresholds'][3]|X04}}"),
         ({{caloCondDict['EtaFullRange'][0]}}, {{caloCondDict['EtaFullRange'][1]}}, {{caloCondDict['EtaFullRange'][2]}}, {{caloCondDict['EtaFullRange'][3]}}),
         (X"{{caloCondDict['EtaW1UpperLimits'][0]|X04}}", X"{{caloCondDict['EtaW1UpperLimits'][1]|X04}}", X"{{caloCondDict['EtaW1UpperLimits'][2]|X04}}", X"{{caloCondDict['EtaW1UpperLimits'][3]|X04}}"), (X"{{caloCondDict['EtaW1LowerLimits'][0]|X04}}", X"{{caloCondDict['EtaW1LowerLimits'][1]|X04}}", X"{{caloCondDict['EtaW1LowerLimits'][2]|X04}}", X"{{caloCondDict['EtaW1LowerLimits'][3]|X04}}"),
@@ -43,7 +43,7 @@
         (X"{{caloCondDict['PhiW2UpperLimits'][0]|X04}}", X"{{caloCondDict['PhiW2UpperLimits'][1]|X04}}", X"{{caloCondDict['PhiW2UpperLimits'][2]|X04}}", X"{{caloCondDict['PhiW2UpperLimits'][3]|X04}}"), (X"{{caloCondDict['PhiW2LowerLimits'][0]|X04}}", X"{{caloCondDict['PhiW2LowerLimits'][1]|X04}}", X"{{caloCondDict['PhiW2LowerLimits'][2]|X04}}", X"{{caloCondDict['PhiW2LowerLimits'][3]|X04}}"),   
         (X"{{caloCondDict['IsoLuts'][0]|X01}}", X"{{caloCondDict['IsoLuts'][1]|X01}}", X"{{caloCondDict['IsoLuts'][2]|X01}}", X"{{caloCondDict['IsoLuts'][3]|X01}}"),
         {{caloCondDict['DiffEtaUpperLimit']}}, {{caloCondDict['DiffEtaLowerLimit']}}, {{caloCondDict['DiffPhiUpperLimit']}}, {{caloCondDict['DiffPhiLowerLimit']}})
-    port map(lhc_clk, {{ObjectType}}_bx_{{Bx}}, diff_{{ObjectType}}_wsc_eta_bx_{{Bx}}, diff_{{ObjectType}}_wsc_phi_bx_{{Bx}},
+    port map(lhc_clk, {{ObjectType|lower}}_bx_{{Bx}}, diff_{{ObjectType|lower}}_wsc_eta_bx_{{Bx}}, diff_{{ObjectType|lower}}_wsc_phi_bx_{{Bx}},
         {{condName}});
 {#-#}
 {#-#}

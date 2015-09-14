@@ -20,7 +20,7 @@
 {#-#}
 {#-#}
 {{condName}}_i: muon_conditions
-    generic map(nr_muon_objects, {{nMuons}}, {{DoubleWsc|default("false")}}, {{ objInfo['op'] }}, d_s_i_muon,
+    generic map(NR_MUON_OBJECTS, {{nMuons}}, {{DoubleWsc|default("false")}}, {{ objInfo['op'] }}, d_s_i_muon,
         (X"{{muCondDict['PtThresholds'][0]|X04}}", X"{{muCondDict['PtThresholds'][1]|X04}}", X"{{muCondDict['PtThresholds'][2]|X04}}", X"{{muCondDict['PtThresholds'][3]|X04}}"),
         ({{muCondDict['EtaFullRange'][0]}}, {{muCondDict['EtaFullRange'][1]}}, {{muCondDict['EtaFullRange'][2]}}, {{muCondDict['EtaFullRange'][3]}}),
         (X"{{muCondDict['EtaW1UpperLimits'][0]|X04}}", X"{{muCondDict['EtaW1UpperLimits'][1]|X04}}", X"{{muCondDict['EtaW1UpperLimits'][2]|X04}}", X"{{muCondDict['EtaW1UpperLimits'][3]|X04}}"), (X"{{muCondDict['EtaW1LowerLimits'][0]|X04}}", X"{{muCondDict['EtaW1LowerLimits'][1]|X04}}", X"{{muCondDict['EtaW1LowerLimits'][2]|X04}}", X"{{muCondDict['EtaW1LowerLimits'][3]|X04}}"),
@@ -37,11 +37,11 @@
         {{muCondDict['DiffEtaUpperLimit']}}, {{muCondDict['DiffEtaLowerLimit']}}, {{muCondDict['DiffPhiUpperLimit']}}, {{muCondDict['DiffPhiLowerLimit']}})
 
     {%- set Bx = objInfo['Bx'] %}
-    port map(lhc_clk, muon_bx_{{Bx}},
-        ls_charcorr_double_bx_{{Bx}}, os_charcorr_double_bx_{{Bx}},
-        ls_charcorr_triple_bx_{{Bx}}, os_charcorr_triple_bx_{{Bx}},
-        ls_charcorr_quad_bx_{{Bx}}, os_charcorr_quad_bx_{{Bx}},
-        diff_muon_wsc_eta_bx_{{Bx}}, diff_muon_wsc_phi_bx_{{Bx}},
+    port map(lhc_clk, muon_bx_{{Bx|lower}},
+        ls_charcorr_double_bx_{{Bx|lower}}, os_charcorr_double_bx_{{Bx|lower}},
+        ls_charcorr_triple_bx_{{Bx|lower}}, os_charcorr_triple_bx_{{Bx|lower}},
+        ls_charcorr_quad_bx_{{Bx|lower}}, os_charcorr_quad_bx_{{Bx|lower}},
+        diff_muon_wsc_eta_bx_{{Bx|lower}}, diff_muon_wsc_phi_bx_{{Bx|lower}},
         {{condName}});
 {#-#}
 {#-#}
