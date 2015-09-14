@@ -1,0 +1,10 @@
+{%-  extends "templateLoops/algoLoop.j2" %}
+{%- block condLoop %}
+{%- if algoIndex in menu.reporter['m2a'][iMod]%}
+  {%- for condName in algoDict['condDict'].keys() %} 
+  {%- set condDict = algoDict['condDict'][condName]%}
+  {%- block objLoop scoped %}
+  {%- endblock %}
+{%- endfor%}
+{%- endif %}
+{%- endblock %}

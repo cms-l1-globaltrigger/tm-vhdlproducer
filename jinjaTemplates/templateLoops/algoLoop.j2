@@ -1,0 +1,9 @@
+{%- set signalEtaPhiList={}%}
+{%- for algoName in menu.reporter['index_sorted'] %}
+{%- set algoDict = menu.reporter['algoDict'][algoName] %}
+{%- set algoIndex = algoDict["index"] %}
+{%- block condLoop scoped %}
+{%- endblock %}
+{%- endfor %}
+{% block outterLoop %}
+{% endblock outterLoop %}

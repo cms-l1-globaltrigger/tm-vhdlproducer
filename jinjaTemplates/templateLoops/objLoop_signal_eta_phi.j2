@@ -1,0 +1,26 @@
+{%- extends "templateLoops/condLoop.j2" %}
+  {%- block objLoop%}
+  {#-
+  ############
+  {{signalEtaPhiList}}
+  {{algoName}}   {{condName}}
+  ###############
+  #}
+  {%- set objType = algoDict['condDict'][condName]['TriggerGroup'] %} 
+  {%- if not signalEtaPhiList.has_key(objType)%}
+      {# ---------------------- OBJTYPE ADDED{{objType}}  #} 
+      {%-if signalEtaPhiList.__setitem__(objType,[]) %}
+      {%-endif %}
+  {%- set nObj = condDict['objList'] | count %}
+  {%- for iObj in range(nObj) %}
+    {%- set objDict = condDict['objList'][iObj] %}
+          {%-if not objDict['Bx'] in signalEtaPhiList[objType] %}
+            {%-if signalEtaPhiList[objType].append(objDict['Bx'])%}
+            {%-endif%}
+          {%-endif%}
+  {%-endfor%}
+  {%- endif%}
+{%- endblock objLoop %}
+
+
+

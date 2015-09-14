@@ -1,0 +1,5 @@
+{%-  extends "templateLoops/algoLoop.j2" %}
+{%- block condLoop %}
+{{algoName}} <= {{algoDict['algo'].getExpressionInCondition() }};
+algo({{algoIndex|d}}) <= {{algoName}};
+{%- endblock condLoop %}

@@ -1,0 +1,7 @@
+# HB 2015-09-11: this template has to be converted to jinja notation !!!
+# The conversion should be done similar as in "signal_algorithm.ja.vhd"
+{%-  extends "templateLoops/condLoop.j2" %}
+{%- block objLoop %}
+    signal {{condName}} : std_logic;
+{%- endblock %}
+

@@ -1,0 +1,7 @@
+{%-  extends "templateLoops/algoLoop.j2" %}
+{%- block condLoop %}
+{%- if algoIndex in menu.reporter['m2a'][iMod]%}
+    signal {{algoName}} : std_logic;
+{%- endif %}
+{%- endblock %}
+
