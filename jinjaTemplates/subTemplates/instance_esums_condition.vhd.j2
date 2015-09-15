@@ -1,6 +1,6 @@
 {%- extends "templateLoops/objLoop_instance_esums_condition.j2" %}
 {%- block instance_esums_condition %}
-{{condName}}_i: esums_conditions
+{{condName}}_i: entity work.esums_conditions
     generic map({{ objInfo['op'] | lower  }}, {{ObjectType}}_type,
         X"{{esumsCondDict["EtThreshold"][0]|X04}}",
         {{esumsCondDict["PhiFullRange"][0]}}, X"{{esumsCondDict["PhiW1UpperLimit"][0]|X04}}", X"{{esumsCondDict["PhiW1LowerLimit"][0]|X04}}",

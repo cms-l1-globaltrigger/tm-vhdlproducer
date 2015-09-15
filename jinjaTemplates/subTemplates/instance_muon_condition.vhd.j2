@@ -1,6 +1,6 @@
 {%- extends "templateLoops/objLoop_instance_muon_condition.j2" %}
 {%- block instance_muon_condition %}
-{{condName}}_i: muon_conditions
+{{condName}}_i: entity work.muon_conditions
     generic map(nr_muon_objects, {{nMuons}}, {{DoubleWsc|default("false")}}, {{ objInfo['op'] }}, d_s_i_muon,
         (X"{{muCondDict['PtThresholds'][0]|X04}}", X"{{muCondDict['PtThresholds'][1]|X04}}", X"{{muCondDict['PtThresholds'][2]|X04}}", X"{{muCondDict['PtThresholds'][3]|X04}}"),
         ({{muCondDict['EtaFullRange'][0]}}, {{muCondDict['EtaFullRange'][1]}}, {{muCondDict['EtaFullRange'][2]}}, {{muCondDict['EtaFullRange'][3]}}),

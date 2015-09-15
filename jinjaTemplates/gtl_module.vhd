@@ -14,7 +14,22 @@
 -- $Revision: 4173 $
 --------------------------------------------------------------------------------
 
--- HB 2015-08-10: generated without TME for calo-muon-correlation tests
+-- Desription:
+-- Global Trigger Logic module.
+
+-- ========================================================
+-- from TME:
+
+-- Unique ID of L1 Trigger Menu:
+-- {L1TMenuUUID}
+
+-- Name of L1 Trigger Menu:
+-- {L1TMenuName}
+
+-- Version of L1 Trigger Menu Compiler:
+-- v{L1TMCompilerVersionMajor}.{L1TMCompilerVersionMinor}.{L1TMCompilerVersionRevision}
+
+-- ========================================================
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -156,8 +171,7 @@ end process;
 {#%- include  "subTemplates/instance_muon_charge_correlation.vhd.j2"%#}
 
 -- Instantiations of differences calculation for wsc conditions - once for every ObjectType in a certain Bx with at least one DoubleWsc condition
-{#%- include  "subTemplates/instance_difference_eta_wsc.vhd.j2"%#}
-{#%- include  "subTemplates/instance_difference_phi_wsc.vhd.j2"%#}
+{#%- include  "subTemplates/instance_difference_wsc.vhd.j2"%#}
 
 -- Instantiations of differences calculation for calo muon correlation conditions (used for DETA, DPHI and DR) - once for correlation conditions with two ObjectTypes in certain Bxs
 {#%- include  "subTemplates/instance_differences_correlation_conditions.vhd.j2"%#}
@@ -166,7 +180,7 @@ end process;
 {%- include  "subTemplates/instance_calo_condition.vhd.j2"%}
 {%- include  "subTemplates/instance_muon_condition.vhd.j2"%}
 {%- include  "subTemplates/instance_esums_condition.vhd.j2"%}
-{#%- include  "subTemplates/instance_calo_muon_correlation_condition.ja.vhd"%#}
+{#%- include  "subTemplates/instance_calo_muon_correlation_condition.vhd.j2"%#}
 
 -- Instantiations of algorithms 
 {%- include  "subTemplates/instance_algorithm.vhd.j2"%}

@@ -1,6 +1,6 @@
 {%- extends "templateLoops/objLoop_instance_calo_condition.j2" %}
 {%- block instance_calo_condition %}
-{{condName}}_i: calo_conditions_v2
+{{condName}}_i: entity work.calo_conditions_v2
     generic map(nr_{{ObjectType}}_objects, {{nObj}}, {{DoubleWsc|default("false")}} , {{ objInfo['op'] }}, {{ObjectType}}_type,
         (X"{{caloCondDict['EtThresholds'][0]|X04}}", X"{{caloCondDict['EtThresholds'][1]|X04}}", X"{{caloCondDict['EtThresholds'][2]|X04}}", X"{{caloCondDict['EtThresholds'][3]|X04}}"),
         ({{caloCondDict['EtaFullRange'][0]}}, {{caloCondDict['EtaFullRange'][1]}}, {{caloCondDict['EtaFullRange'][2]}}, {{caloCondDict['EtaFullRange'][3]}}),
