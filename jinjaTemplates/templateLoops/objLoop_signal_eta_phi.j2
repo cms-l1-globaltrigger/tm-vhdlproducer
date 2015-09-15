@@ -6,7 +6,7 @@
   {{algoName}}   {{condName}}
   ###############
   #}
-  {%- set objType = algoDict['condDict'][condName]['TriggerGroup'] %} 
+  {%- set objType = algoDict['condDict'][condName]['objType'] %} 
   {%- if not signalEtaPhiList.has_key(objType)%}
       {# ---------------------- OBJTYPE ADDED{{objType}}  #} 
       {%-if signalEtaPhiList.__setitem__(objType,[]) %}
