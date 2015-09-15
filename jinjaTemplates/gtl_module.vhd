@@ -77,14 +77,14 @@ architecture rtl of gtl_module is
 
 -- ==== Inserted by TME - begin =============================================================================================================
 
--- Signal definition for eta, phi and common (inputs of subtractors) for wsc and correlation conditions.
+-- Signal definition for eta, phi and common (inputs of subtractors) for wsc conditions.
 {%- include  "subTemplates/signal_eta_phi.vhd.j2"%}
 
 -- Signal definition for differences (outputs of subtractors) for wsc conditions.
 -- Insert signal_differences_wsc.ja.vhd for at least one occurance of a DoubleWsc condition. Insert as often as different ObjectTypes of DoubleWsc condition occure.
 {#%- include  "subTemplates/signal_differences_wsc.vhd.j2"%#}
 
--- Signal definition for eta and phi (inputs of subtractors) for correlation conditions.
+-- Signal definition for eta and phi (outputs of subtractors) for correlation conditions.
 -- Insert signal_differences_correlation_conditions.ja.vhd for at least one occurance of a correlation condition of the two ObjectTypes used in the correlation condition.
 -- Insert as often as correlation conditions of different ObjectTypes occure.
 {#%- include  "subTemplates/signal_differences_correlation_conditions.vhd.j2"%#}
