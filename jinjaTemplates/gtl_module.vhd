@@ -77,13 +77,6 @@ architecture rtl of gtl_module is
 
 -- ==== Inserted by TME - begin =============================================================================================================
 
--- Signal definition for eta, phi and common (inputs of subtractors) for wsc conditions.
-{%- include  "subTemplates/signal_eta_phi.vhd.j2"%}
-
--- Signal definition for differences (outputs of subtractors) for wsc conditions.
--- Insert signal_differences_wsc.ja.vhd for at least one occurance of a DoubleWsc condition. Insert as often as different ObjectTypes of DoubleWsc condition occure.
-{#%- include  "subTemplates/signal_differences_wsc.vhd.j2"%#}
-
 -- Signal definition for eta and phi (outputs of subtractors) for correlation conditions.
 -- Insert signal_differences_correlation_conditions.ja.vhd for at least one occurance of a correlation condition of the two ObjectTypes used in the correlation condition.
 -- Insert as often as correlation conditions of different ObjectTypes occure.
@@ -164,14 +157,8 @@ end process;
 
 -- ==== Inserted by TME - begin =============================================================================================================
 
--- Instantiations of eta and phi conversion to integer values - once for every ObjectType in a certain Bx, which is used for correlation conditions
-{#%- include  "subTemplates/instance_eta_phi_integer_values.vhd.j2"%#}
-
 -- Instantiations of muon charge correlations - only once in a certain Bx, if there is at least one DoubleMuon, TripleMuon or QuadMuon condition
 {#%- include  "subTemplates/instance_muon_charge_correlation.vhd.j2"%#}
-
--- Instantiations of differences calculation for wsc conditions - once for every ObjectType in a certain Bx with at least one DoubleWsc condition
-{#%- include  "subTemplates/instance_difference_wsc.vhd.j2"%#}
 
 -- Instantiations of differences calculation for calo muon correlation conditions (used for DETA, DPHI and DR) - once for correlation conditions with two ObjectTypes in certain Bxs
 {#%- include  "subTemplates/instance_differences_correlation_conditions.vhd.j2"%#}
