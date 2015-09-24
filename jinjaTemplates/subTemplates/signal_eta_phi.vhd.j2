@@ -6,10 +6,10 @@
 {%- block outterLoop%}
 {%- for objName in signalEtaPhiList %}
   {%- for Bx in signalEtaPhiList[objName] %}
-    signal {{objName|lower}}_eta_bx_{{Bx}} : diff_inputs_array(0 to nr_{{objName|lower}}_objects-1) := (others => (others => '0'));
-    signal {{objName|lower}}_eta_common_bx_{{Bx}} : diff_inputs_array(0 to nr_{{objName|lower}}_objects-1) := (others => (others => '0'));
-    signal {{objName|lower}}_phi_bx_{{Bx}} : diff_inputs_array(0 to nr_{{objName|lower}}_objects-1) := (others => (others => '0'));
-    signal {{objName|lower}}_phi_common_bx_{{Bx}} : diff_inputs_array(0 to nr_{{objName|lower}}_objects-1) := (others => (others => '0'));
+    signal {{objName|lower}}_eta_bx_{{Bx|lower}} : diff_inputs_array(0 to NR_{{objName}}_OBJECTS-1) := (others => (others => '0'));
+    signal {{objName|lower}}_eta_common_bx_{{Bx|lower}} : diff_inputs_array(0 to NR_{{objName}}_OBJECTS-1) := (others => (others => '0'));
+    signal {{objName|lower}}_phi_bx_{{Bx|lower}} : diff_inputs_array(0 to NR_{{objName}}_OBJECTS-1) := (others => (others => '0'));
+    signal {{objName|lower}}_phi_common_bx_{{Bx|lower}} : diff_inputs_array(0 to NR_{{objName}}_OBJECTS-1) := (others => (others => '0'));
 
   {%-endfor%}
 {%-endfor%}
