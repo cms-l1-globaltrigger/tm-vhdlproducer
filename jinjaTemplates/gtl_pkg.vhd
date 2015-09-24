@@ -136,15 +136,17 @@ type d_s_i_muon_record is record
     charge_high, charge_low, iso_high, iso_low, eta_high, eta_low, qual_high, qual_low, pt_high, pt_low, phi_high, phi_low : natural range MAX_MUON_BITS-1 downto 0;
 end record d_s_i_muon_record;
 
-constant d_s_i_muon : d_s_i_muon_record := (35,34,33,32,31,23,22,19,18,10,9,0);
+constant D_S_I_MUON : d_s_i_muon_record := (35,34,33,32,31,23,22,19,18,10,9,0);
 
 type muon_objects_array is array (natural range <>) of std_logic_vector(MAX_MUON_BITS-1 downto 0);
 constant MAX_MUON_TEMPLATES_BITS : positive range 1 to MUON_DATA_WIDTH := 16;
 type muon_templates_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
--- type muon_templates_quality_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector((2**(qual_high-qual_low+1))-1 downto 0);
+
+-- type muon_templates_quality_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector((2**(D_S_I_MUON.qual_high-D_S_I_MUON.qual_low+1))-1 downto 0);
 type muon_templates_quality_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(15 downto 0);
--- type muon_templates_iso_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector((2**(iso_high-iso_low+1))-1 downto 0);
+-- type muon_templates_iso_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector((2**(D_S_I_MUON.iso_high-D_S_I_MUON.iso_low+1))-1 downto 0);
 type muon_templates_iso_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(3 downto 0);
+
 type muon_templates_boolean_array is array (1 to NR_MUON_TEMPLATES) of boolean;
 type muon_templates_string_array is array (1 to NR_MUON_TEMPLATES) of string(1 to 3);
 
@@ -257,7 +259,7 @@ constant POSITION_FINAL_PRECISION : positive := 3; -- 3 => max. number, higher n
 subtype eta_range_integer is integer range -5000 to 5000;
 
 type eg_eta_lut_array is array (0 to 255) of eta_range_integer;
-constant eg_eta_lut : eg_eta_lut_array := (
+constant EG_ETA_LUT : eg_eta_lut_array := (
 22, 66, 109, 153, 196, 240, 283, 327, 370, 414, 457, 501, 544, 588, 631, 675,
 718, 762, 805, 849, 892, 936, 979, 1023, 1066, 1110, 1153, 1197, 1240, 1284, 1327, 1371,
 1414, 1458, 1501, 1545, 1588, 1632, 1675, 1719, 1762, 1806, 1849, 1893, 1936, 1980, 2023, 2067,
@@ -277,7 +279,7 @@ constant eg_eta_lut : eg_eta_lut_array := (
 );
 
 type jet_eta_lut_array is array (0 to 255) of eta_range_integer;
-constant jet_eta_lut : jet_eta_lut_array := (
+constant JET_ETA_LUT : jet_eta_lut_array := (
 22, 66, 109, 153, 196, 240, 283, 327, 370, 414, 457, 501, 544, 588, 631, 675,
 718, 762, 805, 849, 892, 936, 979, 1023, 1066, 1110, 1153, 1197, 1240, 1284, 1327, 1371,
 1414, 1458, 1501, 1545, 1588, 1632, 1675, 1719, 1762, 1806, 1849, 1893, 1936, 1980, 2023, 2067,
@@ -297,7 +299,7 @@ constant jet_eta_lut : jet_eta_lut_array := (
 );
 
 type tau_eta_lut_array is array (0 to 255) of eta_range_integer;
-constant tau_eta_lut : tau_eta_lut_array := (
+constant TAU_ETA_LUT : tau_eta_lut_array := (
 22, 66, 109, 153, 196, 240, 283, 327, 370, 414, 457, 501, 544, 588, 631, 675,
 718, 762, 805, 849, 892, 936, 979, 1023, 1066, 1110, 1153, 1197, 1240, 1284, 1327, 1371,
 1414, 1458, 1501, 1545, 1588, 1632, 1675, 1719, 1762, 1806, 1849, 1893, 1936, 1980, 2023, 2067,
@@ -317,7 +319,7 @@ constant tau_eta_lut : tau_eta_lut_array := (
 );
 
 type muon_eta_lut_array is array (0 to 511) of eta_range_integer;
-constant muon_eta_lut : muon_eta_lut_array := (
+constant MUON_ETA_LUT : muon_eta_lut_array := (
 6, 17, 28, 39, 49, 60, 71, 82, 93, 104, 115, 126, 136, 147, 158, 169,
 180, 191, 202, 213, 223, 234, 245, 256, 267, 278, 289, 300, 310, 321, 332, 343,
 354, 365, 376, 387, 397, 408, 419, 430, 441, 452, 463, 474, 484, 495, 506, 517,
@@ -357,7 +359,27 @@ subtype phi_range_integer is natural range 0 to 6283;
 
 -- HB 2015-08-17: LUT for eta values (values are in the center of bins).
 type eg_phi_lut_array is array (0 to 255) of phi_range_integer;
-constant eg_phi_lut : eg_phi_lut_array := (
+constant EG_PHI_LUT : eg_phi_lut_array := (
+22, 66, 110, 153, 197, 240, 284, 328, 371, 415, 459, 502, 546, 590, 633, 677,
+720, 764, 808, 851, 895, 939, 982, 1026, 1070, 1113, 1157, 1200, 1244, 1288, 1331, 1375,
+1419, 1462, 1506, 1549, 1593, 1637, 1680, 1724, 1768, 1811, 1855, 1899, 1942, 1986, 2029, 2073,
+2117, 2160, 2204, 2248, 2291, 2335, 2379, 2422, 2466, 2509, 2553, 2597, 2640, 2684, 2728, 2771,
+2815, 2858, 2902, 2946, 2989, 3033, 3077, 3120, 3164, 3208, 3251, 3295, 3338, 3382, 3426, 3469,
+3513, 3557, 3600, 3644, 3688, 3731, 3775, 3818, 3862, 3906, 3949, 3993, 4037, 4080, 4124, 4167,
+4211, 4255, 4298, 4342, 4386, 4429, 4473, 4517, 4560, 4604, 4647, 4691, 4735, 4778, 4822, 4866,
+4909, 4953, 4997, 5040, 5084, 5127, 5171, 5215, 5258, 5302, 5346, 5389, 5433, 5476, 5520, 5564,
+5607, 5651, 5695, 5738, 5782, 5826, 5869, 5913, 5956, 6000, 6044, 6087, 6131, 6175, 6218, 6262, -- phi range 0 to 2*PI=6.283
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+);
+
+type jet_phi_lut_array is array (0 to 255) of phi_range_integer;
+constant JET_PHI_LUT : jet_phi_lut_array := (
 22, 66, 110, 153, 197, 240, 284, 328, 371, 415, 459, 502, 546, 590, 633, 677,
 720, 764, 808, 851, 895, 939, 982, 1026, 1070, 1113, 1157, 1200, 1244, 1288, 1331, 1375,
 1419, 1462, 1506, 1549, 1593, 1637, 1680, 1724, 1768, 1811, 1855, 1899, 1942, 1986, 2029, 2073,
@@ -377,7 +399,7 @@ constant eg_phi_lut : eg_phi_lut_array := (
 );
 
 type tau_phi_lut_array is array (0 to 255) of phi_range_integer;
-constant tau_phi_lut : tau_phi_lut_array := (
+constant TAU_PHI_LUT : tau_phi_lut_array := (
 22, 66, 110, 153, 197, 240, 284, 328, 371, 415, 459, 502, 546, 590, 633, 677,
 720, 764, 808, 851, 895, 939, 982, 1026, 1070, 1113, 1157, 1200, 1244, 1288, 1331, 1375,
 1419, 1462, 1506, 1549, 1593, 1637, 1680, 1724, 1768, 1811, 1855, 1899, 1942, 1986, 2029, 2073,
@@ -397,7 +419,7 @@ constant tau_phi_lut : tau_phi_lut_array := (
 );
 
 type muon_phi_lut_array is array (0 to 1023) of phi_range_integer;
-constant muon_phi_lut : muon_phi_lut_array := (
+constant MUON_PHI_LUT : muon_phi_lut_array := (
 6, 17, 28, 39, 50, 60, 71, 82, 93, 104, 115, 126, 137, 148, 159, 170,
 180, 191, 202, 213, 224, 235, 246, 257, 268, 279, 290, 300, 311, 322, 333, 344,
 355, 366, 377, 388, 399, 410, 420, 431, 442, 453, 464, 475, 486, 497, 508, 519,
