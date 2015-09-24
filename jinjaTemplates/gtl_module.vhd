@@ -78,6 +78,8 @@ architecture rtl of gtl_module is
 -- ==== Inserted by TME - begin =============================================================================================================
 
 -- Signal definition for eta and phi (outputs of subtractors) for correlation conditions.
+{%- include  "subTemplates/signal_eta_phi.vhd.j2"%}
+
 -- Insert signal_differences_correlation_conditions.ja.vhd for at least one occurance of a correlation condition of the two ObjectTypes used in the correlation condition.
 -- Insert as often as correlation conditions of different ObjectTypes occure.
 {#%- include  "subTemplates/signal_differences_correlation_conditions.vhd.j2"%#}
