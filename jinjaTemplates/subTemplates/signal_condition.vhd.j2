@@ -1,5 +1,5 @@
 {%-  extends "templateLoops/condLoop.j2" %}
 {%- block objLoop %}
-    signal {{condName}} : std_logic;
+    signal {{condName|lower}} : std_logic;
 {%- endblock %}
 
