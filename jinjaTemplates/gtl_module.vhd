@@ -78,14 +78,12 @@ architecture rtl of gtl_module is
 -- ==== Inserted by TME - begin =============================================================================================================
 
 -- Signal definition for eta and phi (outputs of subtractors) for correlation conditions.
-{%- include  "subTemplates/signal_eta_phi.vhd.j2"%}
-
--- Insert signal_differences_correlation_conditions.ja.vhd for at least one occurance of a correlation condition of the two ObjectTypes used in the correlation condition.
+-- Insert signal_differences_correlation_conditions.vhd.j2 for at least one occurance of a correlation condition of the two ObjectTypes used in the correlation condition.
 -- Insert as often as correlation conditions of different ObjectTypes occure.
 {#%- include  "subTemplates/signal_differences_correlation_conditions.vhd.j2"%#}
 
--- Signal definition for muon charge correlation (only once for all muon conditions, except SingleMuon conditions)
--- Insert signal_muon_charge_correlations.ja.vhd for at least one occurance of a DoubleMuon, TripleMuon or QuadMuon condition.
+-- Signal definition for muon charge correlations (only once for all muon conditions, except SingleMuon conditions)
+-- Insert signal_muon_charge_correlations.vhd.j2 - only once in a certain Bx, if there is at least one DoubleMuon, TripleMuon or QuadMuon condition.
 {#%- include  "subTemplates/signal_muon_charge_correlations.vhd.j2"%#}
 
 -- Signal definition for conditions names
@@ -160,7 +158,7 @@ end process;
 -- ==== Inserted by TME - begin =============================================================================================================
 
 -- Instantiations of muon charge correlations - only once in a certain Bx, if there is at least one DoubleMuon, TripleMuon or QuadMuon condition
-{#%- include  "subTemplates/instance_muon_charge_correlation.vhd.j2"%#}
+{%- include  "subTemplates/instance_muon_charge_correlations.vhd.j2"%}
 
 -- Instantiations of differences calculation for calo muon correlation conditions (used for DETA, DPHI and DR) - once for correlation conditions with two ObjectTypes in certain Bxs
 {#%- include  "subTemplates/instance_differences_correlation_conditions.vhd.j2"%#}

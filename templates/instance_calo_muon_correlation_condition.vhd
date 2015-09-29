@@ -1,4 +1,4 @@
-{ConditionName}_i: calo_muon_correlation
+{ConditionName}_i: entity work.calo_muon_correlation
     generic map(
         {Deta}, {Dphi}, {Dr},
 	NR_{CaloObjectType}_OBJECTS, {CaloEtGeMode}, {CaloObjectType}_TYPE,
