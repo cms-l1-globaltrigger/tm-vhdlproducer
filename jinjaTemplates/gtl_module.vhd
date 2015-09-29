@@ -164,7 +164,7 @@ end process;
 {#%- include  "subTemplates/instance_differences_correlation_conditions.vhd.j2"%#}
 
 -- Instantiations of conditions
-{%- include  "subTemplates/instance_calo_condition.vhd.j2"%}
+{%- include  "subTemplates/instance_calo_condition_v3.vhd.j2"%}
 {%- include  "subTemplates/instance_muon_condition.vhd.j2"%}
 {%- include  "subTemplates/instance_esums_condition.vhd.j2"%}
 {#%- include  "subTemplates/instance_calo_muon_correlation_condition.vhd.j2"%#}
