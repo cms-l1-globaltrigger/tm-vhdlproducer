@@ -1,0 +1,29 @@
+{%- for algoName in menu.reporter['index_sorted'] %}
+{%- set algoDict = menu.reporter['algoDict'][algoName] %}
+{%- set algoIndex = algoDict["index"] %}
+{%- if algoIndex in menu.reporter['m2a'][iMod]%}
+  {%- for condName in algoDict['condDict'].keys() if ( "MU" in condName )    %}
+  {#-    ######################## if not "Muon" in algoDict['condDict'][condName]['TriggerGroup']    #}
+    {%- set nMuons = menu.reporter['algoDict'][algoName]['condDict'][condName]['objList'] | count %}
+    {%- set condDict = algoDict['condDict'][condName]%}
+    {%- set muCondDict = condDict['ConditionTemplates']['muon_condition_dict']  %} 
+    {%- set objInfo={}%}
+    {%- for iObj in range(nMuons) if "MU" in condDict['objList'][iObj]['name']%}
+      {%- set objDict = condDict['objList'][iObj] %}
+            {%-if loop.index0==0 %}
+              {%- if objInfo.update({"Bx": objDict['Bx']  , "op":objDict["op"] }) %}{%-endif%}{#- dirty way of doing "do" #}
+            {%-endif %}
+    {%-endfor%}
+{%- set Bx = objInfo['Bx'] %}
+{#-#}
+{#-#}
+muon_charge_correlations_bx_{{Bx|lower}}_i: entity work.muon_charge_correlations
+    port map(muon_bx_{{Bx|lower}},
+        ls_charcorr_double_bx_{{Bx|lower}}, os_charcorr_double_bx_{{Bx|lower}},
+        ls_charcorr_triple_bx_{{Bx|lower}}, os_charcorr_triple_bx_{{Bx|lower}},
+        ls_charcorr_quad_bx_{{Bx|lower}}, os_charcorr_quad_bx_{{Bx|lower}});
+{#-#}
+{#-#}
+{%-endfor%}
+{%-endif%}
+{%-endfor%}
