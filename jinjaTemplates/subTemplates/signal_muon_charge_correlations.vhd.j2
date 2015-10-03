@@ -1,7 +1,17 @@
 # HB 2015-09-11: this template has to be converted to jinja notation !!!
 # The conversion should be done similar as in "signal_eta_phi.ja.vhd"
 # These signals are implemented in gtl_module.vhd only, if at least one DoubleMuon, TripleMuon or QuadMuon condition is in the menu. Once for a certain Bx.
-
+{%- extends "templateLoops/objLoop_instance_muon_charge_correlations.j2" %}
+{%- block instance_muon_charge_correlation %}
+{%- endblock instance_muon_charge_correlation %}
+{%- block outerLoop %}
+{%- for objName in muonChargeCorrelationList %}
+  {%- for Bx in muonChargeCorrelationList[objName] %}
     signal ls_charcorr_double_bx_{{Bx|lower}}, os_charcorr_double_bx_{{Bx|lower}} : muon_charcorr_double_array;
     signal ls_charcorr_triple_bx_{{Bx|lower}}, os_charcorr_triple_bx_{{Bx|lower}} : muon_charcorr_triple_array;
     signal ls_charcorr_quad_bx_{{Bx|lower}}, os_charcorr_quad_bx_{{Bx|lower}} : muon_charcorr_quad_array;
+{%-endfor%}
+{%-endfor%}
+{%- endblock outerLoop%}
+{#-#}
+{#-#}

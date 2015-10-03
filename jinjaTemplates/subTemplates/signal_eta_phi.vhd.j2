@@ -3,7 +3,7 @@
 {%- block signal_eta_phi %}
 {%- endblock signal_eta_phi%}
 {#-#}
-{%- block outterLoop%}
+{%- block outerLoop%}
 {%- for objName in signalEtaPhiList %}
   {%- for Bx in signalEtaPhiList[objName] %}
     signal {{objName|lower}}_eta_bx_{{Bx|lower}} : diff_inputs_array(0 to NR_{{objName}}_OBJECTS-1) := (others => (others => '0'));

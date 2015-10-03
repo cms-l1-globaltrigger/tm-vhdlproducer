@@ -1,16 +1,16 @@
 {%- extends "templateLoops/condLoop.j2" %}
   {%- block objLoop%}
-  {#-
+  {#
   ############
   {{signalEtaPhiList}}
   {{algoName}}   {{condName}}
   ###############
   #}
+  {%- if condName=="wsc"%} {# WscCondition not set yet --- to be changed  #}
   {%- set objType = algoDict['condDict'][condName]['objType'] %} 
   {%- if not signalEtaPhiList.has_key(objType)%}
       {# ---------------------- OBJTYPE ADDED{{objType}}  #} 
-      {%-if signalEtaPhiList.__setitem__(objType,[]) %}
-      {%-endif %}
+      {%-if signalEtaPhiList.__setitem__(objType,[]) %} {%-endif %}
   {%- set nObj = condDict['objList'] | count %}
   {%- for iObj in range(nObj) %}
     {%- set objDict = condDict['objList'][iObj] %}
@@ -19,6 +19,7 @@
             {%-endif%}
           {%-endif%}
   {%-endfor%}
+  {%- endif%}
   {%- endif%}
 {%- endblock objLoop %}
 

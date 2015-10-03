@@ -84,7 +84,7 @@ architecture rtl of gtl_module is
 
 -- Signal definition for muon charge correlations (only once for all muon conditions, except SingleMuon conditions)
 -- Insert signal_muon_charge_correlations.vhd.j2 - only once in a certain Bx, if there is at least one DoubleMuon, TripleMuon or QuadMuon condition.
-{#%- include  "subTemplates/signal_muon_charge_correlations.vhd.j2"%#}
+{%- include  "subTemplates/signal_muon_charge_correlations.vhd.j2"%}
 
 -- Signal definition for conditions names
 {%- include  "subTemplates/signal_condition.vhd.j2"%}
