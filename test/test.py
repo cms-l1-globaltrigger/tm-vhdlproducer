@@ -9,13 +9,15 @@ import os
 
 
 DIR              = os.environ["UTM_ROOT"]
-defaultMenu      = "/afs/cern.ch/user/t/tmatsush/public/tmGui/L1Menu_Point5IntegrationTest_2015_v1.xml"
-
+defaultMenu      = "/afs/cern.ch/user/t/tmatsush/public/tmGui/L1Menu_Collisions2015_25nsStage1_v6_uGT_v2.xml"
+                   #"/afs/cern.ch/user/t/tmatsush/public/tmGui/L1Menu_Collisions2015_25nsStage1_v6_uGT.xml"
+                   #"/afs/cern.ch/user/t/tmatsush/public/tmGui/L1Menu_Point5IntegrationTest_2015_v1.xml"
 
 from optparse import OptionParser
 parser = OptionParser()
 parser.add_option("--menu",     dest="menu",      default=defaultMenu,       type="string",  action="store",     help="path to the xml trigger menu")
 parser.add_option("--nModules", dest="nModules",  default=1,      type="int",     action="store",     help="Number of Modules")
+parser.add_option("--auto_dist", dest="auto_dist",  default=True,      type="string",     action="store",     help="Auto distribue algos in module")
 parser.add_option("--output",   dest="outputDir", default=DIR+"/tmVhdlProducer/test/vhdltest/" ,      type="string", action="store", help="directory for the VHDL producer output")
 parser.add_option("--verbose",   dest="verbose",  default=True ,      type="string", action="store", help="prints template outputs (to be implemented)")
 
