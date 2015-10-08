@@ -29,7 +29,7 @@ parser.add_option("--verbose",   dest="verbose",  default=True ,      type="stri
 
 ## -----------------------------------------------
 #DIR              = "/afs/cern.ch/user/n/nrad/tm/utm/"
-outputDir        = DIR+"/tmVhdlProducer/test/vhdltest/"
+outputDir        = options.outputDir
 vhdlTemplateDir  = DIR+"/tmVhdlProducer/jinjaTemplates/"
 nModules         = options.nModules
 verbose          = options.verbose

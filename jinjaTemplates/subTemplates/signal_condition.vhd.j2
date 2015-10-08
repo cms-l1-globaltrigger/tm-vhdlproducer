@@ -1,5 +1,8 @@
-{%-  extends "templateLoops/condLoop.j2" %}
-{%- block objLoop %}
+{%- extends "templateLoops/objLoop_signal_condition.j2"%}
+{%- block instance_signal_condition%}
+{%- endblock instance_signal_condition%}
+{%- block outerLoop %}
+  {%- for condName in conditionSet%}
     signal {{condName|lower}} : std_logic;
-{%- endblock %}
-
+  {%- endfor %}
+{%-endblock outerLoop%}

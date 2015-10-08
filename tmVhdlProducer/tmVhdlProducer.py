@@ -40,9 +40,10 @@ def hex2str(i):
     return hex(i).decode("hex")[::-1].strip("\x00")
 
 extraFilters = {
-        "X04": lambda x: "%04X"%int(float(x)) , 
+        "X04"   : lambda x: "%04X"%int(float(x)) , 
         #"X04": lambda x: pprint(x),
-        "X01": lambda x: "%01X"%int(float(x)) , 
+        "X01"   : lambda x: "%01X"%int(float(x)) , 
+        "alpha" : lambda s: ''.join(c for c in s if c.isalpha() )
         #"X04": lambda x: x , 
         #"X01": lambda x: x , 
           }
@@ -210,12 +211,15 @@ class TemplateEngine(object):
 class VhdlProducer(object):
     """VHDL producer class."""
 
-    def __init__(self,menu,templateDir,nModules,outputDir,verbose=False):
+    def __init__(self,menu,templateDir,nModules,outputDir,verbose=False,auto_dist=True):
         self.menu     = menu
         self.menuName = menu.getName()
         self.nModules = nModules  ##how to get these?
         self.outputDir = outputDir
+        self.auto_dist = auto_dist
+        self.verbose = verbose
         self._makeDirectories()
+
         #self._makeDefaultTemplateDictionaries()
 
         self.loader = Loader(templateDir)
@@ -250,26 +254,37 @@ class VhdlProducer(object):
 
 
     def initialize(self):
-        from itertools import cycle
+
         iAlgo=0
-        moduleCycle=cycle(range(self.nModules))
-        print "writing %s Algos in %s Modules"%(self.nAlgos,self.nModules)
         a2m = {}
         m2a = [[] for x in range(self.nModules) ]
-        while iAlgo < self.nAlgos:
-          iMod = moduleCycle.next()
-          #algoName  =  self.menu.reporter['algoDict'].keys()[iAlgo]  ## Need to spread out the algos in a more logical way
-          algoName  =  self.menu.reporter['index_sorted'][iAlgo]  ## Need to spread out the algos in a more logical way
-          algoDict  =  self.menu.reporter['algoDict'][algoName]
-          algoIndex =  algoDict['index']
-          m2a[iMod].append(algoIndex)
-          a2m[algoIndex]=(iMod, m2a[iMod].index(algoIndex))
-          iAlgo+=1
+
+        if not self.auto_dist:
+          from itertools import cycle
+          moduleCycle=cycle(range(self.nModules))
+          print "writing %s Algos in %s Modules"%(self.nAlgos,self.nModules)
+          while iAlgo < self.nAlgos:
+            iMod = moduleCycle.next()
+            #algoName  =  self.menu.reporter['algoDict'].keys()[iAlgo]  ## Need to spread out the algos in a more logical way
+            algoName  =  self.menu.reporter['index_sorted'][iAlgo]  ## Need to spread out the algos in a more logical way
+            algoDict  =  self.menu.reporter['algoDict'][algoName]
+            algoIndex =  algoDict['index']
+            m2a[iMod].append(algoIndex)
+            a2m[algoIndex]=(iMod, m2a[iMod].index(algoIndex))
+            iAlgo+=1
+        else:
+          for algoName in self.menu.reporter['index_sorted']:
+            iMod = self.menu.reporter['algoDict'][algoName]['moduleId']
+            algoIndex = self.menu.reporter['algoDict'][algoName]['moduleIndex']
+            m2a[iMod].append(algoIndex)
+            a2m[algoIndex]=(iMod,m2a[iMod].index(algoIndex))
+
         print "adding mapping", m2a, a2m
         self.menu.reporter['m2a']=m2a
         self.menu.reporter['a2m']=a2m
         self.m2a=m2a
         self.a2m=a2m
+
 
     def write(self):
         self.initialize()
@@ -302,9 +317,12 @@ class VhdlProducer(object):
             with open( tempOutput ,'a') as f:
      
               f.write(self.loader.templateDict[temp].render(  {"menu":self.menu,"iMod":iMod } ))
-              print "###################################      Start Template:    %s       #################################"%temp
-              print(self.loader.templateDict[temp].render(  {"menu":self.menu,"iMod":iMod} ))
-              print "###################################      End   Template:    %s       #################################"%temp
+              if self.verbose:
+                print "###################################      Start Template:    %s       #################################"%temp
+                print(self.loader.templateDict[temp].render(  {"menu":self.menu,"iMod":iMod} ))
+                print "###################################"
+                print "Template Output:  " ,  tempOutput 
+                print "###################################      End   Template:    %s       #################################"%temp
               f.close()
           ## render template for the algo in the module directory 
           #print iAlgo, self.directoryDict["module_%s"%iMod]
