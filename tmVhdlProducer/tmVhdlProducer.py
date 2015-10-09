@@ -274,8 +274,8 @@ class VhdlProducer(object):
             #__oldlocalalgoindex= __oldmap[iMod].index(algoIndex)
             localAlgoIndex= len(m2a[iMod])
             m2a[iMod][localAlgoIndex]=algoIndex
-            #assert __oldlocalalgoindex == localAlgoIndex
-            print "            algoIndex " , algoIndex
+            # assert __oldlocalalgoindex == localAlgoIndex
+            # print "            algoIndex " , algoIndex
             a2m[algoIndex]=(iMod, localAlgoIndex)
             iAlgo+=1
         else:
