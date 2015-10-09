@@ -211,12 +211,12 @@ class TemplateEngine(object):
 class VhdlProducer(object):
     """VHDL producer class."""
 
-    def __init__(self,menu,templateDir,nModules,outputDir,verbose=False,auto_dist=True):
+    def __init__(self,menu,templateDir,nModules,outputDir,verbose=False,manual_dist=False):
         self.menu     = menu
         self.menuName = menu.getName()
         self.nModules = nModules  ##how to get these?
         self.outputDir = outputDir
-        self.auto_dist = auto_dist
+        self.manual_dist = manual_dist
         self.verbose = verbose
         self._makeDirectories()
 
@@ -257,9 +257,10 @@ class VhdlProducer(object):
 
         iAlgo=0
         a2m = {}                                            ####   moduleForAlgo, localAlgoIndex = a2m[globalAlgoIndex]      
-        m2a = [[] for x in range(self.nModules) ]           ####   
+        #__oldmap = [[] for x in range(self.nModules) ]           ####   globalAlgoIndex = __oldmap[iMod][__oldlocalalgoindex]
+        m2a = [{} for x in range(self.nModules)]           ####   globalAlgoIndex = m2a[iMod][localAlgoIndex]   
 
-        if not self.auto_dist:
+        if not self.manual_dist:
           from itertools import cycle
           moduleCycle=cycle(range(self.nModules))
           print "writing %s Algos in %s Modules"%(self.nAlgos,self.nModules)
@@ -269,18 +270,35 @@ class VhdlProducer(object):
             algoName  =  self.menu.reporter['index_sorted'][iAlgo]  ## Need to spread out the algos in a more logical way
             algoDict  =  self.menu.reporter['algoDict'][algoName]
             algoIndex =  algoDict['index']  ##global index
-            m2a[iMod].append(algoIndex)
-            a2m[algoIndex]=(iMod, m2a[iMod].index(algoIndex))
+            #__oldmap[iMod].append(algoIndex)
+            #__oldlocalalgoindex= __oldmap[iMod].index(algoIndex)
+            localAlgoIndex= len(m2a[iMod])
+            m2a[iMod][localAlgoIndex]=algoIndex
+            #assert __oldlocalalgoindex == localAlgoIndex
+            print "            algoIndex " , algoIndex
+            a2m[algoIndex]=(iMod, localAlgoIndex)
             iAlgo+=1
         else:
+          print "-----------------------------------------------------------"
+          print "Manually Distributing Algos in the Modules based on the menu"
+          print "-----------------------------------------------------------"
           for algoName in self.menu.reporter['index_sorted']:
-            iMod = self.menu.reporter['algoDict'][algoName]['moduleId']
-            algoIndex = self.menu.reporter['algoDict'][algoName]['moduleIndex']
-            m2a[iMod].append(algoIndex)
-            a2m[algoIndex]=(iMod,m2a[iMod].index(algoIndex))
+            algoDict  =  self.menu.reporter['algoDict'][algoName]
+            iMod = algoDict['moduleId']
+            algoIndex = algoDict['index']  ##global index
+            #algoIndex = self.menu.reporter['algoDict'][algoName]['moduleIndex']
+            #__oldmap[iMod].append(algoIndex)
+            #a2m[algoIndex]=(iMod,__oldmap[iMod].index(algoIndex))
+            localAlgoIndex= algoDict['moduleIndex']
+            m2a[iMod][localAlgoIndex]=algoIndex
+            #assert __oldlocalalgoindex == localAlgoIndex
+            #__oldmap[iMod].append(algoIndex)
+            #__oldlocalalgoindex= __oldmap[iMod].index(algoIndex)
+            a2m[algoIndex]=(iMod,localAlgoIndex)
 
-        print "adding mapping", m2a, a2m
+        #print "adding mapping", __oldmap, a2m
         self.menu.reporter['m2a']=m2a
+        #self.menu.reporter['__oldmap']=__oldmap
         self.menu.reporter['a2m']=a2m
         self.m2a=m2a
         self.a2m=a2m

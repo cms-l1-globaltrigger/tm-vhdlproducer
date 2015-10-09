@@ -17,9 +17,9 @@ from optparse import OptionParser
 parser = OptionParser()
 parser.add_option("--menu",     dest="menu",      default=defaultMenu,       type="string",  action="store",     help="path to the xml trigger menu")
 parser.add_option("--nModules", dest="nModules",  default=1,      type="int",     action="store",     help="Number of Modules")
-parser.add_option("--auto_dist", dest="auto_dist",  default=True,      type="string",     action="store",     help="Auto distribue algos in module")
+parser.add_option("--manual_dist", dest="manual_dist",  action="store_true",     help="Manual distribution of  Algos in Modules")
 parser.add_option("--output",   dest="outputDir", default=DIR+"/tmVhdlProducer/test/vhdltest/" ,      type="string", action="store", help="directory for the VHDL producer output")
-parser.add_option("--verbose",   dest="verbose",  default=True ,      type="string", action="store", help="prints template outputs (to be implemented)")
+parser.add_option("--verbose",   dest="verbose", action="store_true", help="prints template output")
 
 #parser.add_option("--overwrite", dest="overwrite", action="store_true", help="Overwrite?", default=True)
 (options, args) = parser.parse_args()
@@ -49,6 +49,6 @@ menu             = tmEventSetup.getTriggerMenu(options.menu)
 #loader.getTemplateDict( templateDict )
 #loader.templateDict
 
-producer=VhdlProducer(menu,vhdlTemplateDir,nModules,outputDir,verbose)
+producer=VhdlProducer(menu,vhdlTemplateDir,nModules,outputDir,verbose,options.manual_dist)
 producer.write()
 #producer.makeDirectories()

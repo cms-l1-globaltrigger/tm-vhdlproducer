@@ -1,6 +1,7 @@
 {%-  extends "templateLoops/algoLoop.j2" %}
 {%- block condLoop %}
-    #### {{algoIndex}}
+    #### {{algoIndex}} {{algoName}}
+{%- set localAlgoIndex = menu.reporter['a2m'][algoIndex][1] %}
 {{algoName}} <= {{algoDict['algo'].getExpressionInCondition() }};
-algo({{menu.reporter['a2m'][algoIndex]|d}}) <= {{algoName}};
+algo({{localAlgoIndex|d}}) <= {{algoName}};
 {%- endblock condLoop %}

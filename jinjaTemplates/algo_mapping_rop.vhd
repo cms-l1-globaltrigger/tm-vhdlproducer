@@ -71,7 +71,7 @@ algo_before_prescaler_rop_int <= (
 {%- set algoDict = menu.reporter['algoDict'][algoName] %}
 {%- set algoIndex = algoDict["index"] %}
 {%- if algoIndex in menu.reporter['m2a'][iMod]%}
-{%- set localAlgoIndex = menu.reporter['m2a'][iMod].index(algoIndex) %}
+{%- set localAlgoIndex = menu.reporter['a2m'][algoIndex][1] %}
 {{algoIndex}} => a_b_p({{localAlgoIndex}}),
 {%-endif%}
 {%-endfor%}
@@ -82,7 +82,7 @@ algo_after_prescaler_rop_int <= (
 {%- set algoDict = menu.reporter['algoDict'][algoName] %}
 {%- set algoIndex = algoDict["index"] %}
 {%- if algoIndex in menu.reporter['m2a'][iMod]%}
-{%- set localAlgoIndex = menu.reporter['m2a'][iMod].index(algoIndex) %}
+{%- set localAlgoIndex = menu.reporter['a2m'][algoIndex][1] %}
 {{algoIndex}} => a_a_p({{localAlgoIndex}}),
 {%-endif%}
 {%-endfor%}
@@ -93,7 +93,7 @@ algo_after_finor_mask_rop_int <= (
 {%- set algoDict = menu.reporter['algoDict'][algoName] %}
 {%- set algoIndex = algoDict["index"] %}
 {%- if algoIndex in menu.reporter['m2a'][iMod]%}
-{%- set localAlgoIndex = menu.reporter['m2a'][iMod].index(algoIndex) %}
+{%- set localAlgoIndex = menu.reporter['a2m'][algoIndex][1] %}
 {{algoIndex}} => a_a_f({{localAlgoIndex}}),
 {%-endif%}
 {%-endfor%}
