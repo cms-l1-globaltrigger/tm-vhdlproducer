@@ -256,8 +256,8 @@ class VhdlProducer(object):
     def initialize(self):
 
         iAlgo=0
-        a2m = {}
-        m2a = [[] for x in range(self.nModules) ]
+        a2m = {}                                            ####   moduleForAlgo, localAlgoIndex = a2m[globalAlgoIndex]      
+        m2a = [[] for x in range(self.nModules) ]           ####   
 
         if not self.auto_dist:
           from itertools import cycle
@@ -268,7 +268,7 @@ class VhdlProducer(object):
             #algoName  =  self.menu.reporter['algoDict'].keys()[iAlgo]  ## Need to spread out the algos in a more logical way
             algoName  =  self.menu.reporter['index_sorted'][iAlgo]  ## Need to spread out the algos in a more logical way
             algoDict  =  self.menu.reporter['algoDict'][algoName]
-            algoIndex =  algoDict['index']
+            algoIndex =  algoDict['index']  ##global index
             m2a[iMod].append(algoIndex)
             a2m[algoIndex]=(iMod, m2a[iMod].index(algoIndex))
             iAlgo+=1
