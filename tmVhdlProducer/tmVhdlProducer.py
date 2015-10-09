@@ -7,9 +7,9 @@
 #
 
 from jinja2 import Environment, BaseLoader, TemplateNotFound, FileSystemLoader,filters
-from os.path import join, exists, getmtime
+from os.path import join, exists, getmtime, basename
 from tmReporter.tmReporter import getReport
-from os.path import basename
+from itertools import cycle
 #import template_rc
 
 __version__ = '0.1.0'
@@ -230,7 +230,7 @@ class VhdlProducer(object):
         algoMap = menu.getAlgorithmMap()
         self.nAlgos = algoMap.size()
         getReport(self.menu)
-        print "menu reporter keys:", self.menu.reporter.keys()
+        #print "menu reporter keys:", self.menu.reporter.keys()
 
     def _makeDirectories(self):
         mainDir = self.outputDir + "/" + "L1Menu_" + self.menuName
@@ -250,7 +250,7 @@ class VhdlProducer(object):
 
         for directory in self.directoryDict:
             mkdir_p(self.directoryDict[directory])
-            print self.directoryDict[directory]
+            if self.verbose: print self.directoryDict[directory]
 
 
     def initialize(self):
@@ -261,9 +261,8 @@ class VhdlProducer(object):
         m2a = [{} for x in range(self.nModules)]           ####   globalAlgoIndex = m2a[iMod][localAlgoIndex]   
 
         if not self.manual_dist:
-          from itertools import cycle
           moduleCycle=cycle(range(self.nModules))
-          print "writing %s Algos in %s Modules"%(self.nAlgos,self.nModules)
+          #print "writing %s Algos in %s Modules"%(self.nAlgos,self.nModules)
           while iAlgo < self.nAlgos:
             iMod = moduleCycle.next()
             #algoName  =  self.menu.reporter['algoDict'].keys()[iAlgo]  ## Need to spread out the algos in a more logical way
@@ -306,11 +305,9 @@ class VhdlProducer(object):
 
     def write(self):
         self.initialize()
-
-        from itertools import cycle
+        print "writing %s Algos in %s Modules"%(self.nAlgos,self.nModules)
         iAlgo=0
         moduleCycle=cycle(range(self.nModules))
-        print "writing %s Algos in %s Modules"%(self.nAlgos,self.nModules)
 
         ##Loop over algos and insert them in each module.
 
@@ -319,28 +316,25 @@ class VhdlProducer(object):
         #  algoName  =  self.menu.reporter['algoDict'].keys()[iAlgo]  ## Need to spread out the algos in a more logical way
         #  algoDict  =  self.menu.reporter['algoDict'][algoName]
         for iMod in range(self.nModules): 
-          print "template: "
+          if self.verbose: print "template: "
           #temp = "signal_eta_phi"
           #for temp in [ "algo_mapping", "muon_conditions" , "muon_charges", "gtl_module"]:
           #for temp in finalTemplates:
           for temp in templatesToUse:
-    
             tempOutputName= basename(templateDict[temp])
             #tempOutput = self.directoryDict["module_%s"%(iMod)] +"/%s"%templateDict[temp] 
             tempOutput = self.directoryDict["module_%s"%(iMod)] +"/%s"%tempOutputName 
             #print temp, tempOutput
             #self.loader.env.filters.update(filters)
-            
             #print self.loader.env.filters
             with open( tempOutput ,'a') as f:
-     
               f.write(self.loader.templateDict[temp].render(  {"menu":self.menu,"iMod":iMod } ))
               if self.verbose:
                 print "###################################      Start Template:    %s       #################################"%temp
                 print(self.loader.templateDict[temp].render(  {"menu":self.menu,"iMod":iMod} ))
                 print "###################################"
-                print "Template Output:  " ,  tempOutput 
                 print "###################################      End   Template:    %s       #################################"%temp
+              print "Template Output:  " ,  tempOutput 
               f.close()
           ## render template for the algo in the module directory 
           #print iAlgo, self.directoryDict["module_%s"%iMod]
