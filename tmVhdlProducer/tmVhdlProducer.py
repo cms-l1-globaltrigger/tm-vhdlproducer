@@ -304,9 +304,26 @@ class VhdlProducer(object):
         self.m2a=m2a
         self.a2m=a2m
 
+    def update_reporter(self):
+        """ Update Reporter here to reduce the logic required in the templates """
+        self.menu.reporter['moduleConds']= [{} for x in range(self.nModules)]
+        self.menu.reporter['moduleCondSet']= [set() for x in range(self.nModules)]
+        for iMod in range(self.nModules):
+          for localAlgoIndex in self.menu.reporter['m2a'][iMod]:
+            algoIndex = self.menu.reporter['m2a'][iMod][localAlgoIndex]
+            algoName = filter(lambda x : self.menu.reporter['algoDict'][x]['index']==algoIndex ,self.menu.reporter['algoDict'])[0]
+            algoDict = self.menu.reporter['algoDict'][algoName]
+            self.menu.reporter['moduleConds'][iMod][localAlgoIndex]= [ condName for condName in algoDict['condDict']    ]
+
+            for condName in algoDict['condDict']:
+              self.menu.reporter['moduleCondSet'][iMod].add(condName)
+          self.menu.reporter['moduleCondSet'][iMod]= list(self.menu.reporter['moduleCondSet'][iMod] )
+        pass
+
 
     def write(self):
         self.initialize()
+        self.update_reporter()
         print "writing %s Algos in %s Modules"%(self.nAlgos,self.nModules)
         iAlgo=0
         moduleCycle=cycle(range(self.nModules))
