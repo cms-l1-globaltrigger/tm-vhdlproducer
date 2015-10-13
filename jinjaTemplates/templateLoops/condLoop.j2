@@ -1,6 +1,7 @@
 {%-  extends "templateLoops/algoLoop.j2" %}
 {%- block condLoop %}
-{%- if algoIndex in menu.reporter['m2a'][iMod]%}
+{#-%- if algoIndex in menu.reporter['m2a'][iMod]%#}
+{%- if algoIndex in menu.reporter['m2a'][iMod].values()%}
   {%- for condName in algoDict['condDict'].keys() %} 
   {%- set condDict = algoDict['condDict'][condName]%}
   {%- block objLoop scoped %}

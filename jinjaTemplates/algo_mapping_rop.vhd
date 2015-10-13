@@ -70,9 +70,13 @@ algo_before_prescaler_rop_int <= (
 {%- for algoName in menu.reporter['index_sorted'] %}
 {%- set algoDict = menu.reporter['algoDict'][algoName] %}
 {%- set algoIndex = algoDict["index"] %}
-{%- if algoIndex in menu.reporter['m2a'][iMod]%}
+{%- if algoIndex in menu.reporter['m2a'][iMod].values()%}
 {%- set localAlgoIndex = menu.reporter['a2m'][algoIndex][1] %}
 {{algoIndex}} => a_b_p({{localAlgoIndex}}),
+{%- else %}
+------------------------------------
+{{algoDict}}
+{{algoDict}}
 {%-endif%}
 {%-endfor%}
 others => '0');
@@ -81,7 +85,7 @@ algo_after_prescaler_rop_int <= (
 {%- for algoName in menu.reporter['index_sorted'] %}
 {%- set algoDict = menu.reporter['algoDict'][algoName] %}
 {%- set algoIndex = algoDict["index"] %}
-{%- if algoIndex in menu.reporter['m2a'][iMod]%}
+{%- if algoIndex in menu.reporter['m2a'][iMod].values()%}
 {%- set localAlgoIndex = menu.reporter['a2m'][algoIndex][1] %}
 {{algoIndex}} => a_a_p({{localAlgoIndex}}),
 {%-endif%}
@@ -92,7 +96,7 @@ algo_after_finor_mask_rop_int <= (
 {%- for algoName in menu.reporter['index_sorted'] %}
 {%- set algoDict = menu.reporter['algoDict'][algoName] %}
 {%- set algoIndex = algoDict["index"] %}
-{%- if algoIndex in menu.reporter['m2a'][iMod]%}
+{%- if algoIndex in menu.reporter['m2a'][iMod].values()%}
 {%- set localAlgoIndex = menu.reporter['a2m'][algoIndex][1] %}
 {{algoIndex}} => a_a_f({{localAlgoIndex}}),
 {%-endif%}

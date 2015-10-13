@@ -1,6 +1,7 @@
 {%-  extends "templateLoops/condLoop.j2" %}
 {%- block objLoop %}
-    {%-set conditionName = condName | alpha%}
+    {#-%-set conditionName = condName | alpha%#}
+    {%- set conditionName = condName%}
     {%- if conditionName not in conditionSet %}
       {%- if conditionSet.append(conditionName)%}{%- endif %}
     {%- endif %}
