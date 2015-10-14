@@ -1,7 +1,10 @@
 {%- extends "templateLoops/condLoop.j2" %}
   {%- block objLoop %}
   {%- if condDict['objType'] in ["ETT","HTT","ETM","HTM" ] %}
-    {%- if condName in menu.reporter['moduleCondSet'][iMod] %}
+    {%- if not moduleConditionSet.has_key(condName)%}
+        {# ---------------------- OBJTYPE ADDED{{objType}}  #}
+        {%-if moduleConditionSet.__setitem__(condName,[]) %} {%-endif %}
+    {#-%- if condName in menu.reporter['moduleCondSet'][iMod] %#}
       {%- set objType=condDict['objType'] %}
       {%- set ObjectType= objType %}
       {%- set nObj = menu.reporter['algoDict'][algoName]['condDict'][condName]['objList'] | count %}
@@ -15,7 +18,7 @@
               {%- endif %}
       {%- endfor%}
       {%- set Bx = objInfo['Bx'] %}
-  {#-#}
+{#-#}
         {%- block instance_esums_condition scoped%}
         THIS SHOULD NOT APPEAR
         {%- endblock instance_esums_condition%}

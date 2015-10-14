@@ -1,6 +1,7 @@
 {%- set signalEtaPhiList={}%}    {#-  #} 
 {%- set muonChargeCorrelationList={} %}   {#-  #}
-{%- set conditionSet = [] %}
+{%- set moduleConditionSet = {} %}              {#-  #}
+{%- set conditionSet = []  %}              {#-  #}
 {%- for algoName in menu.reporter['index_sorted'] %}
 {%- set algoDict = menu.reporter['algoDict'][algoName] %}
 {%- set algoIndex = algoDict["index"] %}
