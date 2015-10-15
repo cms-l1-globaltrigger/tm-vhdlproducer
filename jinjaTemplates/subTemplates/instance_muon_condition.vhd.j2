@@ -1,7 +1,7 @@
 {%- extends "templateLoops/objLoop_instance_muon_condition.j2" %}
 {%- block instance_muon_condition %}
 {{condName|lower}}_i: entity work.muon_conditions
-    generic map(NR_MUON_OBJECTS, {{nMuons}}, {{DoubleWsc|default("false")}}, {{ objInfo['op'] |lower}}, D_S_I_MUON,
+    generic map(NR_MUON_OBJECTS, {{nObj}}, {{DoubleWsc|default("false")}}, {{ objInfo['op'] |lower}}, D_S_I_MUON,
         (X"{{muCondDict['PtThresholds'][0]|X04}}", X"{{muCondDict['PtThresholds'][1]|X04}}", X"{{muCondDict['PtThresholds'][2]|X04}}", X"{{muCondDict['PtThresholds'][3]|X04}}"),
         ({{muCondDict['EtaFullRange'][0]}}, {{muCondDict['EtaFullRange'][1]}}, {{muCondDict['EtaFullRange'][2]}}, {{muCondDict['EtaFullRange'][3]}}),
         (X"{{muCondDict['EtaW1UpperLimits'][0]|X04}}", X"{{muCondDict['EtaW1UpperLimits'][1]|X04}}", X"{{muCondDict['EtaW1UpperLimits'][2]|X04}}", X"{{muCondDict['EtaW1UpperLimits'][3]|X04}}"), (X"{{muCondDict['EtaW1LowerLimits'][0]|X04}}", X"{{muCondDict['EtaW1LowerLimits'][1]|X04}}", X"{{muCondDict['EtaW1LowerLimits'][2]|X04}}", X"{{muCondDict['EtaW1LowerLimits'][3]|X04}}"),
