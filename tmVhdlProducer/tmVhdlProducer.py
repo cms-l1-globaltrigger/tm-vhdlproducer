@@ -233,7 +233,7 @@ class VhdlProducer(object):
         #print "menu reporter keys:", self.menu.reporter.keys()
 
     def _makeDirectories(self):
-        mainDir = self.outputDir + "/" + "L1Menu_" + self.menuName
+        mainDir = self.outputDir + "/" + self.menuName
         testVectorDir = mainDir +"/testvector"
         vhdlDir = mainDir + "/vhdl"
         self.directoryDict= { 
@@ -335,10 +335,11 @@ class VhdlProducer(object):
         #  algoName  =  self.menu.reporter['algoDict'].keys()[iAlgo]  ## Need to spread out the algos in a more logical way
         #  algoDict  =  self.menu.reporter['algoDict'][algoName]
         for iMod in range(self.nModules): 
-          if self.verbose: print "template: "
+          #if self.verbose: print "template: "
           #temp = "signal_eta_phi"
           #for temp in [ "algo_mapping", "muon_conditions" , "muon_charges", "gtl_module"]:
           #for temp in finalTemplates:
+          print "Template Output:  "
           for temp in templatesToUse:
             tempOutputName= basename(templateDict[temp])
             #tempOutput = self.directoryDict["module_%s"%(iMod)] +"/%s"%templateDict[temp] 
@@ -353,7 +354,7 @@ class VhdlProducer(object):
                 print(self.loader.templateDict[temp].render(  {"menu":self.menu,"iMod":iMod} ))
                 print "###################################"
                 print "###################################      End   Template:    %s       #################################"%temp
-              print "Template Output:  " ,  tempOutput 
+              print temp, " "*(20-len(temp)) ,":  " ,  tempOutput 
               f.close()
           ## render template for the algo in the module directory 
           #print iAlgo, self.directoryDict["module_%s"%iMod]
