@@ -12,9 +12,8 @@ from tmReporter.tmReporter import getReport
 from itertools import cycle
 #import template_rc
 
-__version__ = '0.1.0'
+__version__ = '0.0.1'
 __all__ = ['VhdlProducer', ]
-
 
 
 
@@ -219,6 +218,8 @@ class VhdlProducer(object):
         self.manual_dist = manual_dist
         self.verbose = verbose
         self._makeDirectories()
+        self.version = __version__
+        self.VHDLProducerVersion = __all__[0]+__version__
 
         #self._makeDefaultTemplateDictionaries()
 
@@ -229,23 +230,23 @@ class VhdlProducer(object):
 
         algoMap = menu.getAlgorithmMap()
         self.nAlgos = algoMap.size()
-        getReport(self.menu)
+        getReport(self.menu,self.version)
         #print "menu reporter keys:", self.menu.reporter.keys()
 
     def _makeDirectories(self):
         mainDir = self.outputDir + "/" + self.menuName
-        testVectorDir = mainDir +"/testvector"
+        #testVectorDir = mainDir +"/testvector"
         vhdlDir = mainDir + "/vhdl"
         self.directoryDict= { 
                 'top' : mainDir, 
-                "testvector" : testVectorDir,
+                #"testvector" : testVectorDir,
                 "vhdl" : vhdlDir, 
                             }
         for iMod in range(self.nModules):
             self.directoryDict["module_%s"%iMod] = vhdlDir + "/module_%s"%iMod+"/src/"
-        if os.path.exists(self.directoryDict['top']):
-          print self.directoryDict['top'], "already exists. Will be replaced"
-          shutil.rmtree(self.directoryDict['top'])
+        if os.path.exists(self.directoryDict['vhdl']):
+          print self.directoryDict['vhdl'], "already exists. Will be replaced"
+          shutil.rmtree(self.directoryDict['vhdl'])
 
 
         for directory in self.directoryDict:
