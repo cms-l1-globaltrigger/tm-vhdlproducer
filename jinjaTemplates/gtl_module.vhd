@@ -21,13 +21,16 @@
 -- from TME:
 
 -- Unique ID of L1 Trigger Menu:
--- {L1TMenuUUID}
+-- X"{{XxxDict['L1TMenuUUIDHex']}}"
 
 -- Name of L1 Trigger Menu:
--- {L1TMenuName}
+-- {{XxxDict['L1TMenuName']}}
+
+-- Scale set:
+-- {{XxxDict['L1TMenuScaleSet']}}
 
 -- Version of L1 Trigger Menu Compiler:
--- v{L1TMCompilerVersionMajor}.{L1TMCompilerVersionMinor}.{L1TMCompilerVersionRevision}
+-- v{{XxxDict['L1TMCompilerVersionMajor']|d}}.{{XxxDict['L1TMCompilerVersionMinor']|d}}.{{XxxDict['L1TMCompilerVersionRevision']|d}}
 
 -- ========================================================
 
@@ -76,6 +79,16 @@ architecture rtl of gtl_module is
     signal algo : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
 
 -- ==== Inserted by TME - begin =============================================================================================================
+
+-- Signal definition for differences (outputs of subtractors) for wsc conditions - written by TME on the base of templates
+    signal diff_eg_wsc_eta_bx_0 : diff_2dim_integer_array(0 to nr_eg_objects-1, 0 to nr_eg_objects-1) := (others => (others => 0));
+    signal diff_eg_wsc_phi_bx_0 : diff_2dim_integer_array(0 to nr_eg_objects-1, 0 to nr_eg_objects-1) := (others => (others => 0));
+    signal diff_jet_wsc_eta_bx_0 : diff_2dim_integer_array(0 to nr_jet_objects-1, 0 to nr_jet_objects-1) := (others => (others => 0));
+    signal diff_jet_wsc_phi_bx_0 : diff_2dim_integer_array(0 to nr_jet_objects-1, 0 to nr_jet_objects-1) := (others => (others => 0));
+    signal diff_muon_wsc_eta_bx_0 : diff_2dim_integer_array(0 to nr_muon_objects-1, 0 to nr_muon_objects-1) := (others => (others => 0));
+    signal diff_muon_wsc_phi_bx_0 : diff_2dim_integer_array(0 to nr_muon_objects-1, 0 to nr_muon_objects-1) := (others => (others => 0));
+    signal diff_tau_wsc_eta_bx_0 : diff_2dim_integer_array(0 to nr_tau_objects-1, 0 to nr_tau_objects-1) := (others => (others => 0));
+    signal diff_tau_wsc_phi_bx_0 : diff_2dim_integer_array(0 to nr_tau_objects-1, 0 to nr_tau_objects-1) := (others => (others => 0));
 
 -- Signal definition for eta and phi (outputs of subtractors) for correlation conditions.
 -- Insert signal_differences_correlation_conditions.vhd.j2 for at least one occurance of a correlation condition of the two ObjectTypes used in the correlation condition.

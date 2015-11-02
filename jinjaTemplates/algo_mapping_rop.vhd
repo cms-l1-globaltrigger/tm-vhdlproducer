@@ -21,13 +21,16 @@
 -- from TME:
 
 -- Unique ID of L1 Trigger Menu:
--- {L1TMenuUUID}
+-- X"{{XxxDict['L1TMenuUUIDHex']}}"
 
 -- Name of L1 Trigger Menu:
--- {L1TMenuName}
+-- {{XxxDict['L1TMenuName']}}
+
+-- Scale set:
+-- {{XxxDict['L1TMenuScaleSet']}}
 
 -- Version of L1 Trigger Menu Compiler:
--- v{L1TMCompilerVersionMajor}.{L1TMCompilerVersionMinor}.{L1TMCompilerVersionRevision}
+-- v{{XxxDict['L1TMCompilerVersionMajor']|d}}.{{XxxDict['L1TMCompilerVersionMinor']|d}}.{{XxxDict['L1TMCompilerVersionRevision']|d}}
 
 -- ========================================================
 
