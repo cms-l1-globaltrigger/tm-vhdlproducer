@@ -19,18 +19,18 @@
 
 -- ========================================================
 -- from TME:
-
+      
 -- Unique ID of L1 Trigger Menu:
--- X"{{XxxDict['L1TMenuUUIDHex']}}"
-
+-- X"{{menu.reporter['XxxDict']['L1TMenuUUIDHex']}}"
+    
 -- Name of L1 Trigger Menu:
--- {{XxxDict['L1TMenuName']}}
-
+-- {{menu.reporter['XxxDict']['L1TMenuName']}}
+    
 -- Scale set:
--- {{XxxDict['L1TMenuScaleSet']}}
-
+-- {{menu.reporter['XxxDict']['L1TMenuScaleSet']}}
+    
 -- Version of L1 Trigger Menu Compiler:
--- v{{XxxDict['L1TMCompilerVersionMajor']|d}}.{{XxxDict['L1TMCompilerVersionMinor']|d}}.{{XxxDict['L1TMCompilerVersionRevision']|d}}
+-- v{{menu.reporter['XxxDict']['L1TMCompilerVersionMajor']}}.{{menu.reporter['XxxDict']['L1TMCompilerVersionMinor']}}.{{menu.reporter['XxxDict']['L1TMCompilerVersionRevision']}}
 
 -- ========================================================
 

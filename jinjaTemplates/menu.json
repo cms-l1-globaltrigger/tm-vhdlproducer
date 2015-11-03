@@ -1,0 +1,13 @@
+{
+"firmware_uuid" :   {{menu.reporter['XxxDict']['L1TMenuFirmwareUUID'] }}  , 
+"menu_uuid"     :   {{menu.reporter['XxxDict']['L1TMenuUUID']}}           ,
+"n_modules"     :   {{menu.reporter['m2a']  |length}}                     ,
+"guide"         :   ["AlgoName", "Global_Index","Module_Index", "Local_Index" ]
+"algorithms"    :   [
+{%- for algoName in menu.reporter['index_sorted'] %}
+{%- set globalAlgoIndex = menu.reporter['algoDict'][algoName]['index'] %}
+{%- set moduleIndex, localAlgoIndex = menu.reporter['a2m'][globalAlgoIndex]  %}
+        [ {{algoName}}, {{globalAlgoIndex}}, {{moduleIndex}}, {{localAlgoIndex}} ],
+{%-endfor%}
+                    ]
+}

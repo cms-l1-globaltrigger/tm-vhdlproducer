@@ -66,7 +66,7 @@ templateDict = {
         "algo_mapping"          :       "algo_mapping_rop.vhd",
         "gtl_pkg"               :       "gtl_pkg.vhd",
         "gtl_module"            :       "gtl_module.vhd",
-
+        "json"                  :       "menu.json",
 
         #"signal_eta_phi"        :       "subTemplates/signal_eta_phi.ja.vhd",
         ##"test"                  :       "testTemplate.ja",
@@ -83,9 +83,8 @@ templateDict = {
         }
 
 #finalTemplates = ["gtl_module", "algo_mapping", "gtl_pkg"]
-finalTemplates = ["gtl_module", "algo_mapping","gtl_pkg"]
+templatesToUse = ["gtl_module", "algo_mapping","gtl_pkg","json"]
 #templatesToUse = ["gtl_module"]
-templatesToUse = finalTemplates
 
 
 # -----------------------------------------------------------------------------
@@ -344,7 +343,10 @@ class VhdlProducer(object):
           for temp in templatesToUse:
             tempOutputName= basename(templateDict[temp])
             #tempOutput = self.directoryDict["module_%s"%(iMod)] +"/%s"%templateDict[temp] 
-            tempOutput = self.directoryDict["module_%s"%(iMod)] +"/%s"%tempOutputName 
+            if temp =="json":
+              tempOutput = self.directoryDict["top"] + "/%s"%tempOutputName
+            else: 
+              tempOutput = self.directoryDict["module_%s"%(iMod)] +"/%s"%tempOutputName 
             #print temp, tempOutput
             #self.loader.env.filters.update(filters)
             #print self.loader.env.filters
