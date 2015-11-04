@@ -146,7 +146,7 @@ constant NR_EG_OBJECTS : positive := EG_ARRAY_LENGTH; -- number eg objects, from
 constant NR_JET_OBJECTS : positive := JET_ARRAY_LENGTH; -- number jet objects, from lhc_data_pkg.vhd
 constant NR_TAU_OBJECTS : positive := TAU_ARRAY_LENGTH; -- number tau objects, from lhc_data_pkg.vhd
 constant MAX_CALO_BITS : positive := max(EG_DATA_WIDTH, JET_DATA_WIDTH, TAU_DATA_WIDTH);
-constant MAX_ISO_BITS : positive range 1 to 2 := 2;
+constant MAX_CALO_ISO_BITS : positive range 1 to 2 := 2;
 
 -- d_s_i_calo_record used for calo_conditions.vhd
 type d_s_i_calo_record is record
@@ -184,7 +184,7 @@ type calo_objects_array is array (natural range <>) of std_logic_vector(MAX_CALO
 constant MAX_CALO_TEMPLATES_BITS : positive range 1 to MAX_CALO_BITS := 16;
 type calo_templates_array is array (1 to NR_CALO_TEMPLATES) of std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
 type calo_templates_boolean_array is array (1 to NR_CALO_TEMPLATES) of boolean;
-type calo_templates_iso_array is array (1 to NR_CALO_TEMPLATES) of std_logic_vector(2**MAX_ISO_BITS-1 downto 0);
+type calo_templates_iso_array is array (1 to NR_CALO_TEMPLATES) of std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0);
 
 -- ESUMs
 constant MAX_ESUMS_BITS_TEMP : positive := max(ETT_DATA_WIDTH, HT_DATA_WIDTH, ETM_DATA_WIDTH);
@@ -240,7 +240,8 @@ subtype dr_squared_range_real is real range 0.0 to ((ETA_RANGE_REAL**2)+(PHI_HAL
 subtype diff_eta_range_real is real range -ETA_RANGE_REAL to ETA_RANGE_REAL;
 subtype diff_phi_range_real is real range 0.0 to PHI_HALF_RANGE_REAL;
 
-constant DR_PRECISION_ALL : positive := 3; -- 3 => max. number, higher numbers exceed 32 bit integer values !!!
+constant DETA_DPHI_LIMITS_PRECISION_ALL : positive := 3;
+constant DR_LIMITS_PRECISION_ALL : positive := 3; -- 3 => max. number, higher numbers exceed 32 bit integer values !!!
 
 subtype calo_diff_eta_range_integer is integer range 0 to 10005; -- range -5.0 to +5.0
 type calo_diff_eta_lut_array is array (0 to 255) of calo_diff_eta_range_integer;
@@ -265,6 +266,7 @@ constant CALO_DIFF_ETA_LUT : calo_diff_eta_lut_array := (
 
 constant CALO_PHI_HALF_RANGE_BINS : positive := 72;
 subtype calo_diff_phi_range_integer is natural range 0 to 6283; -- range 0 to 2*PI
+
 type calo_diff_phi_lut_array is array (0 to 255) of calo_diff_phi_range_integer;
 constant CALO_DIFF_PHI_LUT : calo_diff_phi_lut_array := (
 0, 44, 87, 131, 175, 218, 262, 305, 349, 393, 436, 480, 524, 567, 611, 654,
@@ -286,6 +288,7 @@ constant CALO_DIFF_PHI_LUT : calo_diff_phi_lut_array := (
 );
 
 subtype muon_diff_eta_range_integer is integer range 0 to 4905; -- range -2.45 to +2.45
+
 type muon_diff_eta_lut_array is array (0 to 511) of muon_diff_eta_range_integer;
 constant MUON_DIFF_ETA_LUT : muon_diff_eta_lut_array := (
 0, 11, 22, 33, 44, 54, 65, 76, 87, 98, 109, 120, 131, 141, 152, 163,
@@ -324,6 +327,7 @@ constant MUON_DIFF_ETA_LUT : muon_diff_eta_lut_array := (
 
 constant MUON_PHI_HALF_RANGE_BINS : positive := 288;
 subtype muon_diff_phi_range_integer is natural range 0 to 6283; -- range 0 to 2*PI
+
 type muon_diff_phi_lut_array is array (0 to 1023) of muon_diff_phi_range_integer;
 constant MUON_DIFF_PHI_LUT : muon_diff_phi_lut_array := (
 0, 11, 22, 33, 44, 55, 65, 76, 87, 98, 109, 120, 131, 142, 153, 164,
@@ -395,20 +399,20 @@ constant MUON_DIFF_PHI_LUT : muon_diff_phi_lut_array := (
 -- ********************************************************
 -- invariant mass parameters
 
--- HB 2105-10-21: INV_MASS_PRECISION_ALL must be less than 2*INV_MASS_PT_PRECISION+INV_MASS_COSH_COS_PRECISION !!!
-constant INV_MASS_PRECISION_ALL : positive range 1 to 3 := 1; -- 1 => first digit after decimal point
+-- HB 2105-10-21: INV_MASS_LIMITS_PRECISION_ALL must be less than 2*INV_MASS_PT_PRECISION+INV_MASS_COSH_COS_PRECISION !!!
+constant INV_MASS_LIMITS_PRECISION_ALL : positive range 1 to 3 := 1; -- 1 => first digit after decimal point
 constant EG_ET_VECTOR_WIDTH: positive := 12; -- max. value 255.5 GeV => 2555 => 0x9FB
 constant JET_ET_VECTOR_WIDTH: positive := 14; -- max. value 1023.5 GeV => 10235 => 0x27FB 
 constant TAU_ET_VECTOR_WIDTH: positive := 12; -- max. value 255.5 GeV => 2555 => 0x9FB 
 
 constant CALO_INV_MASS_ET_PRECISION : positive := 1; -- 1 digit after decimal point
-constant CALO_INV_MASS_COSH_COS_PRECISION : positive := 3; -- 3 digits after decimal point (after rounding)
+constant CALO_INV_MASS_COSH_COS_PRECISION : positive := 3; -- 3 digits after decimal point (after roundimg to the 5th digit)
 
 constant CALO_COSH_COS_VECTOR_WIDTH: positive := 25; -- max. value cosh_deta-cos_dphi => [32838366-(-999)]=32839365 => 0x1F516C5
 type calo_cosh_cos_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_COSH_COS_VECTOR_WIDTH-1 downto 0);
 
 constant MUON_INV_MASS_PT_PRECISION : positive := 1; -- 1 digit after decimal point
-constant MUON_INV_MASS_COSH_COS_PRECISION : positive := 4; -- 4 digits after decimal point (after rounding)
+constant MUON_INV_MASS_COSH_COS_PRECISION : positive := 4; -- 4 digits after decimal point (after roundimg to the 5th digit)
 constant MUON_PT_VECTOR_WIDTH: positive := 12; -- max. value 255.5 GeV => 2555 => 0x9FB 
 
 constant MUON_COSH_COS_VECTOR_WIDTH: positive := 21; -- max. value cosh_deta-cos_dphi => [1295404-(-9999)]=1305403 => 0x13EB3B
@@ -496,7 +500,7 @@ constant TAU_ET_LUT: tau_et_lut_array := (
 2480, 2485, 2490, 2495, 2500, 2505, 2510, 2515, 2520, 2525, 2530, 2535, 2540, 2545, 2550, 2555
 );
 
-type eg_eg_cosh_deta_lut_array is array (0 to 2**(D_S_I_EG_V2.et_high-D_S_I_EG_V2.et_low)-1) of integer;
+type eg_eg_cosh_deta_lut_array is array (0 to 255) of integer;
 constant EG_EG_COSH_DETA_LUT: eg_eg_cosh_deta_lut_array := (
 1000, 1001, 1004, 1009, 1015, 1024, 1034, 1047, 1061, 1078, 1096, 1117, 1139, 1164, 1191, 1221,
 1252, 1286, 1323, 1361, 1403, 1447, 1494, 1544, 1596, 1652, 1711, 1773, 1838, 1907, 1979, 2056,
@@ -529,6 +533,7 @@ constant EG_EG_COS_DPHI_LUT: eg_eg_cos_dphi_lut_array := (
 );
 
 subtype muon_pt_range_integer is integer range 0 to 2555;
+
 type muon_pt_lut_array is array (0 to 2**(d_s_i_muon.pt_high-d_s_i_muon.pt_low+1)-1) of muon_pt_range_integer;
 constant MUON_PT_LUT: muon_pt_lut_array := (
 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75,
