@@ -1,0 +1,30 @@
+{%- extends "templateLoops/objLoop_instance_calo_calo_correlation.j2" %}
+{%- block instance_calo_calo_correlation %}
+{{condName|lower}}_i: entity work.calo_calo_correlation
+    generic map(
+	{{ cutType['deta'] |lower}}, {{ cutType['dphi'] |lower}}, {{ cutType['dr'] |lower}}, {{ cutType['mass'] |lower}},
+	NR_{{ObjectType1|upper}}_OBJECTS, {{ objInfo1['op'] |lower}}, {{ObjectType1|upper}}_TYPE,
+        X"{{calocaloCondDict['EtThreshold1']|X04}}",
+        {{calocaloCondDict['EtaFullRange1']}}, X"{{calocaloCondDict['EtaW1UpperLimit1']|X04}}",(X"{{calocaloCondDict['EtaW1LowerLimit1']|X04}}",
+        {{calocaloCondDict['EtaW2Ignore1']}}, X"{{calocaloCondDict['EtaW2UpperLimit1']|X04}}", X"{{calocaloCondDict['EtaW2LowerLimit1']|X04}}",
+        {{calocaloCondDict['PhiFullRange1']}}, X"{{calocaloCondDict['PhiW1UpperLimit1']|X04}}", X"{{calocaloCondDict['PhiW1LowerLimit1']|X04}}",
+        {{calocaloCondDict['PhiW2Ignore1']}}, X"{{calocaloCondDict['PhiW2UpperLimit1']|X04}}", X"{{calocaloCondDict['PhiW2LowerLimit1']|X04}}",  
+	X"{{calocaloCondDict['IsoLut1']|X01}}",	
+	NR_{{ObjectType2|upper}}_OBJECTS, {{ objInfo2['op'] |lower}}, {{ObjectType2|upper}}_TYPE,
+        X"{{calocaloCondDict['EtThreshold2']|X04}}",
+        {{calocaloCondDict['EtaFullRange2']}}, X"{{calocaloCondDict['EtaW1UpperLimit2']|X04}}",(X"{{calocaloCondDict['EtaW1LowerLimit2']|X04}}",
+        {{calocaloCondDict['EtaW2Ignore2']}}, X"{{calocaloCondDict['EtaW2UpperLimit2']|X04}}", X"{{calocaloCondDict['EtaW2LowerLimit2']|X04}}",
+        {{calocaloCondDict['PhiFullRange2']}}, X"{{calocaloCondDict['PhiW1UpperLimit2']|X04}}", X"{{calocaloCondDict['PhiW1LowerLimit2']|X04}}",
+        {{calocaloCondDict['PhiW2Ignore2']}}, X"{{calocaloCondDict['PhiW2UpperLimit2']|X04}}", X"{{calocaloCondDict['PhiW2LowerLimit2']|X04}}",  
+	X"{{calocaloCondDict['IsoLut2']|X01}}",
+        {{calocaloCondDict['DiffEtaUpperLimit']}}, {{calocaloCondDict['DiffEtaLowerLimit']}}, {{calocaloCondDict['DiffPhiUpperLimit']}}, {{calocaloCondDict['DiffPhiLowerLimit']}}, DETA_DPHI_LIMITS_PRECISION_ALL,
+        {{calocaloCondDict['DeltaRUpperLimit']}}, {{calocaloCondDict['DeltaRLowerLimit']}}, DR_LIMITS_PRECISION_ALL, 
+        {{calocaloCondDict['InvMassUpperLimit']}}, {{calocaloCondDict['InvMassLowerLimit']}}, INV_MASS_LIMITS_PRECISION_ALL,
+        CALO_INV_MASS_ET_PRECISION, {{ObjectType1|upper}}_ET_VECTOR_WIDTH, {{ObjectType2|upper}}_ET_VECTOR_WIDTH, CALO_INV_MASS_COSH_COS_PRECISION, CALO_COSH_COS_VECTOR_WIDTH
+    )
+    port map(lhc_clk, {{ObjectType1|lower}}_bx_{{Bx1|lower}}, {{ObjectType2|lower}}_bx_{{Bx2|lower}}, 
+	diff_{{ObjectType1|lower}}_{{ObjectType2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_eta_integer_value, diff_{{ObjectType1|lower}}_{{ObjectType2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_phi_integer_value, 
+        {{ObjectType1|lower}}_et_vector_bx_{{Bx1|lower}}, {{ObjectType2|lower}}_et_vector_bx_{{Bx2|lower}}, 
+        {{ObjectType1|lower}}_{{ObjectType2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_cosh_deta_vector, {{ObjectType1|lower}}_{{ObjectType2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_cos_dphi_vector,
+	{{condName|lower}});
+{% endblock instance_calo_calo_correlation %}

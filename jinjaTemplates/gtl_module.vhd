@@ -58,37 +58,24 @@ entity gtl_module is
 end gtl_module;
 
 architecture rtl of gtl_module is
-    constant calo_data_inputs_ff: boolean := false; -- used for tests of gtl_module_example.vhd
     constant external_conditions_pipeline_stages: natural := 2; -- pipeline stages for "External conditions" to get same pipeline to algos as conditions
 
-    signal muon_data_int, muon_bx_p2, muon_bx_p1, muon_bx_0, muon_bx_m1, muon_bx_m2 : muon_objects_array(0 to NR_MUON_OBJECTS-1);
-    signal eg_data_int, eg_bx_p2, eg_bx_p1, eg_bx_0, eg_bx_m1, eg_bx_m2 : calo_objects_array(0 to NR_EG_OBJECTS-1);
-    signal jet_data_int, jet_bx_p2, jet_bx_p1, jet_bx_0, jet_bx_m1, jet_bx_m2 : calo_objects_array(0 to NR_JET_OBJECTS-1);
-    signal tau_data_int, tau_bx_p2, tau_bx_p1, tau_bx_0, tau_bx_m1, tau_bx_m2 : calo_objects_array(0 to NR_TAU_OBJECTS-1);
-    signal ett_data_int, ett_bx_p2, ett_bx_p1, ett_bx_0, ett_bx_m1, ett_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+    signal muon_bx_p2, muon_bx_p1, muon_bx_0, muon_bx_m1, muon_bx_m2 : muon_objects_array(0 to NR_MUON_OBJECTS-1);
+    signal eg_bx_p2, eg_bx_p1, eg_bx_0, eg_bx_m1, eg_bx_m2 : calo_objects_array(0 to NR_EG_OBJECTS-1);
+    signal jet_bx_p2, jet_bx_p1, jet_bx_0, jet_bx_m1, jet_bx_m2 : calo_objects_array(0 to NR_JET_OBJECTS-1);
+    signal tau_bx_p2, tau_bx_p1, tau_bx_0, tau_bx_m1, tau_bx_m2 : calo_objects_array(0 to NR_TAU_OBJECTS-1);
+    signal ett_bx_p2, ett_bx_p1, ett_bx_0, ett_bx_m1, ett_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
 -- HB 2015-04-28: changed for "htt" - object type from TME [string(1 to 3)] in esums_conditions.vhd
---     signal ht_data_int, ht_bx_p2, ht_bx_p1, ht_bx_0, ht_bx_m1, ht_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-    signal htt_data_int, htt_bx_p2, htt_bx_p1, htt_bx_0, htt_bx_m1, htt_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-    signal etm_data_int, etm_bx_p2, etm_bx_p1, etm_bx_0, etm_bx_m1, etm_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-    signal htm_data_int, htm_bx_p2, htm_bx_p1, htm_bx_0, htm_bx_m1, htm_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-    signal external_conditions_int, ext_cond_bx_p2, ext_cond_bx_p1, ext_cond_bx_0, ext_cond_bx_m1, ext_cond_bx_m2 : std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);
+    signal htt_bx_p2, htt_bx_p1, htt_bx_0, htt_bx_m1, htt_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+    signal etm_bx_p2, etm_bx_p1, etm_bx_0, etm_bx_m1, etm_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+    signal htm_bx_p2, htm_bx_p1, htm_bx_0, htm_bx_m1, htm_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+    signal ext_cond_bx_p2, ext_cond_bx_p1, ext_cond_bx_0, ext_cond_bx_m1, ext_cond_bx_m2 : std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);
 
-    signal ext_cond_bx_p2_temp, ext_cond_bx_p1_temp, ext_cond_bx_0_temp, ext_cond_bx_m1_temp, ext_cond_bx_m2_temp : std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);
     signal ext_cond_bx_p2_pipe, ext_cond_bx_p1_pipe, ext_cond_bx_0_pipe, ext_cond_bx_m1_pipe, ext_cond_bx_m2_pipe : std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);
 
     signal algo : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
 
 -- ==== Inserted by TME - begin =============================================================================================================
-
--- Signal definition for differences (outputs of subtractors) for wsc conditions - written by TME on the base of templates
-    signal diff_eg_wsc_eta_bx_0 : diff_2dim_integer_array(0 to nr_eg_objects-1, 0 to nr_eg_objects-1) := (others => (others => 0));
-    signal diff_eg_wsc_phi_bx_0 : diff_2dim_integer_array(0 to nr_eg_objects-1, 0 to nr_eg_objects-1) := (others => (others => 0));
-    signal diff_jet_wsc_eta_bx_0 : diff_2dim_integer_array(0 to nr_jet_objects-1, 0 to nr_jet_objects-1) := (others => (others => 0));
-    signal diff_jet_wsc_phi_bx_0 : diff_2dim_integer_array(0 to nr_jet_objects-1, 0 to nr_jet_objects-1) := (others => (others => 0));
-    signal diff_muon_wsc_eta_bx_0 : diff_2dim_integer_array(0 to nr_muon_objects-1, 0 to nr_muon_objects-1) := (others => (others => 0));
-    signal diff_muon_wsc_phi_bx_0 : diff_2dim_integer_array(0 to nr_muon_objects-1, 0 to nr_muon_objects-1) := (others => (others => 0));
-    signal diff_tau_wsc_eta_bx_0 : diff_2dim_integer_array(0 to nr_tau_objects-1, 0 to nr_tau_objects-1) := (others => (others => 0));
-    signal diff_tau_wsc_phi_bx_0 : diff_2dim_integer_array(0 to nr_tau_objects-1, 0 to nr_tau_objects-1) := (others => (others => 0));
 
 -- Signal definition for eta and phi (outputs of subtractors) for correlation conditions.
 -- Insert signal_differences_correlation_conditions.vhd.j2 for at least one occurance of a correlation condition of the two ObjectTypes used in the correlation condition.
@@ -109,63 +96,48 @@ architecture rtl of gtl_module is
 
 begin
 
--- Input register for calorimeter data (used for timing analysis of gtl_fdl_wrapper)
-calo_data_in_ff_p: process(lhc_clk, muon_data, eg_data, jet_data, tau_data, ett_data, ht_data, etm_data, htm_data, external_conditions)
-    begin
-    if (calo_data_inputs_ff = false) then
-        muon_data_int <= muon_data;
-        eg_data_int <= eg_data;
-        jet_data_int <= jet_data;
-        tau_data_int <= tau_data;
-        ett_data_int <= ett_data;
-        htt_data_int <= ht_data;
-        etm_data_int <= etm_data;
-        htm_data_int <= htm_data;
-        external_conditions_int <= external_conditions;
-    else
-        if (lhc_clk'event and lhc_clk = '1') then
-           muon_data_int <= muon_data;
-           eg_data_int <= eg_data;
-           jet_data_int <= jet_data;
-           tau_data_int <= tau_data;
-           ett_data_int <= ett_data;
-           htt_data_int <= ht_data;
-           etm_data_int <= etm_data;
-           htm_data_int <= htm_data;
-           external_conditions_int <= external_conditions;
-        end if;
-    end if;
-end process;
-
 p_m_2_bx_pipeline_i: entity work.p_m_2_bx_pipeline
     port map(
         lhc_clk,
-        muon_data_int, muon_bx_p2, muon_bx_p1, muon_bx_0, muon_bx_m1, muon_bx_m2,
-        eg_data_int, eg_bx_p2, eg_bx_p1, eg_bx_0, eg_bx_m1, eg_bx_m2,
-        jet_data_int, jet_bx_p2, jet_bx_p1, jet_bx_0, jet_bx_m1, jet_bx_m2,
-        tau_data_int, tau_bx_p2, tau_bx_p1, tau_bx_0, tau_bx_m1, tau_bx_m2,
-        ett_data_int, ett_bx_p2, ett_bx_p1, ett_bx_0, ett_bx_m1, ett_bx_m2,
-        htt_data_int, htt_bx_p2, htt_bx_p1, htt_bx_0, htt_bx_m1, htt_bx_m2,
-        etm_data_int, etm_bx_p2, etm_bx_p1, etm_bx_0, etm_bx_m1, etm_bx_m2,
-        htm_data_int, htm_bx_p2, htm_bx_p1, htm_bx_0, htm_bx_m1, htm_bx_m2,
-        external_conditions_int, ext_cond_bx_p2, ext_cond_bx_p1, ext_cond_bx_0, ext_cond_bx_m1, ext_cond_bx_m2
+        muon_data, muon_bx_p2, muon_bx_p1, muon_bx_0, muon_bx_m1, muon_bx_m2,
+        eg_data, eg_bx_p2, eg_bx_p1, eg_bx_0, eg_bx_m1, eg_bx_m2,
+        jet_data, jet_bx_p2, jet_bx_p1, jet_bx_0, jet_bx_m1, jet_bx_m2,
+        tau_data, tau_bx_p2, tau_bx_p1, tau_bx_0, tau_bx_m1, tau_bx_m2,
+        ett_data, ett_bx_p2, ett_bx_p1, ett_bx_0, ett_bx_m1, ett_bx_m2,
+        ht_data, htt_bx_p2, htt_bx_p1, htt_bx_0, htt_bx_m1, htt_bx_m2,
+        etm_data, etm_bx_p2, etm_bx_p1, etm_bx_0, etm_bx_m1, etm_bx_m2,
+        htm_data, htm_bx_p2, htm_bx_p1, htm_bx_0, htm_bx_m1, htm_bx_m2,
+        external_conditions, ext_cond_bx_p2, ext_cond_bx_p1, ext_cond_bx_0, ext_cond_bx_m1, ext_cond_bx_m2
     );
 
--- Two pipeline stages for External conditions, because of 2 stages (fixed) in conditions
+-- Parameterized pipeline stages for External conditions, actually 2 stages (fixed) in conditions, see external_conditions_pipeline_stages
 ext_cond_pipe_p: process(lhc_clk, ext_cond_bx_p2, ext_cond_bx_p1, ext_cond_bx_0, ext_cond_bx_m1, ext_cond_bx_m2)
+    type ext_cond_pipe_array is array (0 to external_conditions_pipeline_stages+1) of std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);
+    variable ext_cond_bx_p2_pipe_temp : ext_cond_pipe_array := (others => (others => '0'));
+    variable ext_cond_bx_p1_pipe_temp : ext_cond_pipe_array := (others => (others => '0'));
+    variable ext_cond_bx_0_pipe_temp : ext_cond_pipe_array := (others => (others => '0'));
+    variable ext_cond_bx_m1_pipe_temp : ext_cond_pipe_array := (others => (others => '0'));
+    variable ext_cond_bx_m2_pipe_temp : ext_cond_pipe_array := (others => (others => '0'));
     begin
-    if (lhc_clk'event and lhc_clk = '1') then
-        ext_cond_bx_p2_temp <= ext_cond_bx_p2;
-        ext_cond_bx_p2_pipe <= ext_cond_bx_p2_temp;
-        ext_cond_bx_p1_temp <= ext_cond_bx_p1;
-        ext_cond_bx_p1_pipe <= ext_cond_bx_p1_temp;
-        ext_cond_bx_0_temp <= ext_cond_bx_0;
-        ext_cond_bx_0_pipe <= ext_cond_bx_0_temp;
-        ext_cond_bx_m1_temp <= ext_cond_bx_m1;
-        ext_cond_bx_m1_pipe <= ext_cond_bx_m1_temp;
-        ext_cond_bx_m2_temp <= ext_cond_bx_m2;
-        ext_cond_bx_m2_pipe <= ext_cond_bx_m2_temp;
-    end if;
+        ext_cond_bx_p2_pipe_temp(external_conditions_pipeline_stages+1) := ext_cond_bx_p2;
+        ext_cond_bx_p1_pipe_temp(external_conditions_pipeline_stages+1) := ext_cond_bx_p1;
+        ext_cond_bx_0_pipe_temp(external_conditions_pipeline_stages+1) := ext_cond_bx_0;
+        ext_cond_bx_m1_pipe_temp(external_conditions_pipeline_stages+1) := ext_cond_bx_m1;
+        ext_cond_bx_m2_pipe_temp(external_conditions_pipeline_stages+1) := ext_cond_bx_m2;
+        if (external_conditions_pipeline_stages > 0) then 
+            if (lhc_clk'event and (lhc_clk = '1') ) then
+                ext_cond_bx_p2_pipe_temp(0 to external_conditions_pipeline_stages) := ext_cond_bx_p2_pipe_temp(1 to external_conditions_pipeline_stages+1);
+                ext_cond_bx_p1_pipe_temp(0 to external_conditions_pipeline_stages) := ext_cond_bx_p1_pipe_temp(1 to external_conditions_pipeline_stages+1);
+                ext_cond_bx_0_pipe_temp(0 to external_conditions_pipeline_stages) := ext_cond_bx_0_pipe_temp(1 to external_conditions_pipeline_stages+1);
+                ext_cond_bx_m1_pipe_temp(0 to external_conditions_pipeline_stages) := ext_cond_bx_m1_pipe_temp(1 to external_conditions_pipeline_stages+1);
+                ext_cond_bx_m2_pipe_temp(0 to external_conditions_pipeline_stages) := ext_cond_bx_m2_pipe_temp(1 to external_conditions_pipeline_stages+1);
+            end if;
+        end if;
+        ext_cond_bx_p2_pipe <= ext_cond_bx_p2_pipe_temp(1); -- used pipe_temp(1) instead of pipe_temp(0), to prevent warnings in compilation
+        ext_cond_bx_p1_pipe <= ext_cond_bx_p1_pipe_temp(1);
+        ext_cond_bx_0_pipe <= ext_cond_bx_0_pipe_temp(1);
+        ext_cond_bx_m1_pipe <= ext_cond_bx_m1_pipe_temp(1);
+        ext_cond_bx_m2_pipe <= ext_cond_bx_m2_pipe_temp(1);
 end process;
 
 -- ==== Inserted by TME - begin =============================================================================================================
@@ -178,9 +150,12 @@ end process;
 
 -- Instantiations of conditions
 {%- include  "subTemplates/instance_calo_condition_v3.vhd.j2"%}
-{%- include  "subTemplates/instance_muon_condition_v2.vhd.j2"%}
+{#%- include  "subTemplates/instance_muon_condition_v2.vhd.j2"%#}
+{%- include  "subTemplates/instance_muon_condition_v3.vhd.j2"%}
 {%- include  "subTemplates/instance_esums_condition.vhd.j2"%}
+{#%- include  "subTemplates/instance_calo_calo_correlation_condition.vhd.j2"%#}
 {#%- include  "subTemplates/instance_calo_muon_correlation_condition.vhd.j2"%#}
+{#%- include  "subTemplates/instance_muon_muon_correlation_condition.vhd.j2"%#}
 
 -- Instantiations of algorithms 
 {%- include  "subTemplates/instance_algorithm.vhd.j2"%}
