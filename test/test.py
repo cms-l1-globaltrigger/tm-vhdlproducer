@@ -2,7 +2,6 @@
 from tmVhdlProducer import *
 #from tmVhdlProducer.tmVhdlProducer import TemplateEngine, mkdir_p, ResourceLoader
 from tmVhdlProducer.tmVhdlProducer import TemplateEngine, mkdir_p, ResourceLoader,Loader
-from tmReporter.tmReporter import getReport
 import tmEventSetup
 import tmGrammar
 import os

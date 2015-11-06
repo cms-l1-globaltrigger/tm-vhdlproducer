@@ -8,16 +8,14 @@
 
 from jinja2 import Environment, BaseLoader, TemplateNotFound, FileSystemLoader,filters
 from os.path import join, exists, getmtime, basename
-from tmReporter.tmReporter import getReport
 from itertools import cycle
+
+import eventsetup_util as util
+
 #import template_rc
 
 __version__ = '0.0.1'
 __all__ = ['VhdlProducer', ]
-
-
-
-
 
 # -----------------------------------------------------------------------------
 #  Helpers
@@ -46,20 +44,6 @@ extraFilters = {
         #"X04": lambda x: x , 
         #"X01": lambda x: x , 
           }
-
-def bx_encode(value):
-     """Encode relative bunch crossings into VHDL notation.
-     All positive values with the exception of zero are prefixed with m, all
-     negative values are prefixed with p instead of the minus sign.
-     """
-     # Prefix positive values greater then zero with p.
-     if value > 0:
-         return 'p{0:d}'.format(value)
-     # Prefix negative values with m instead of minus sign (abs).
-     if value < 0:
-         return 'm{0:d}'.format(abs(value))
-     # Zero value is not prefixed according to VHDL documentation.
-     return '0'
 
 
 templateDict = {  
@@ -229,7 +213,7 @@ class VhdlProducer(object):
 
         algoMap = menu.getAlgorithmMap()
         self.nAlgos = algoMap.size()
-        getReport(self.menu,self.version)
+        util.getReport(self.menu,self.version)
         #print "menu reporter keys:", self.menu.reporter.keys()
 
     def _makeDirectories(self):
