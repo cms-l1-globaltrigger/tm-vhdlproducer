@@ -235,6 +235,17 @@ def bx_encode(value):
   return '0'
 
 
+def chargeFormat(ch):
+  if str(ch).lower() in ["positive", "pos", "1"]:
+    charge = "pos"
+  elif str(ch).lower() in ["negative", "neg", "-1"]:
+    charge = "neg"
+  else:
+    print "CANT RECOGNIZE REQUESTED CHARGE. WILL BE IGNORED"
+    charge = "ign"
+  return charge
+
+
 def _makeDefaultTemplateDictionaries(condition):
   defTempDict = {}
 
@@ -294,11 +305,11 @@ def _makeDefaultTemplateDictionaries(condition):
     defTempDict[keyEsumsConditionDict] = {
       EtThreshold:      [ "0" ],
       PhiFullRange:     [ 'false' ],
-      PhiW1UpperLimit:  [ 0 ],
-      PhiW1LowerLimit:  [ 0 ],
+      PhiW1UpperLimits: [ 0 ],
+      PhiW1LowerLimits: [ 0 ],
       PhiW2Ignore:      [ 'false' ],
-      PhiW2UpperLimit:  [ 0 ],
-      PhiW2LowerLimit:  [ 0 ],
+      PhiW2UpperLimits: [ 0 ],
+      PhiW2LowerLimits: [ 0 ],
     }
 
   return defTempDict
@@ -316,8 +327,11 @@ def getObjectType(condName):
   for objType in objectTypes:
     if objType in condName:
       objectType.append(objType)
-  assert len(objectType) == 1
-  return objectType[0]
+  if len(objectType) == 1:
+    return objectType[0]
+  else:
+    print 'err> getObjectType: ', condName
+    raise NotImplementedError
 
 
 def setEtaCuts(ii, condDict, cutDict):
@@ -344,7 +358,7 @@ def setPhiCuts(ii, condDict, cutDict):
     condDict[PhiW1UpperLimits][ii] = PhiCuts[0][keyMaxIndex]
     condDict[PhiW1LowerLimits][ii] = PhiCuts[0][keyMinIndex]
     if nPhiCuts == 1:
-      esumsCondDict[PhiW2Ignore][ii] = 'true'
+      condDict[PhiW2Ignore][ii] = 'true'
     if nPhiCuts == 2:
       condDict[PhiW2UpperLimits][ii] = PhiCuts[1][keyMaxIndex]
       condDict[PhiW2LowerLimits][ii] = PhiCuts[1][keyMinIndex]
@@ -538,6 +552,7 @@ def getReport(menu, vhdlVersion=False):
         if any_in([tmGrammar.ETT, tmGrammar.HTT,
                    tmGrammar.ETM, tmGrammar.HTM], condName):
           getEsumCondition(ii, esumsCondDict, cutDict)
+          print esumsCondDict.keys()
          
   for algoName in data.reporter[keyAlgoDict]:
     algo = data.reporter[keyAlgoDict][algoName][keyAlgo]
