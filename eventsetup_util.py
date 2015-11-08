@@ -147,6 +147,8 @@ Charge = "Charge"
 Quality = "Quality"
 Isolation = "Isolation"
 ChargeCorrelation = "ChargeCorrelation"
+DeltaR = "DeltaR"
+Mass = "Mass"
 
 _cutTypes = [None]*tmEventSetup.nCutType
 _cutTypes[tmEventSetup.Threshold] = Threshold
@@ -157,8 +159,8 @@ _cutTypes[tmEventSetup.Quality] = Quality
 _cutTypes[tmEventSetup.Isolation] = Isolation
 _cutTypes[tmEventSetup.DeltaEta] = DeltaEta
 _cutTypes[tmEventSetup.DeltaPhi] = DeltaPhi
-_cutTypes[tmEventSetup.DeltaR] = "DeltaR"
-_cutTypes[tmEventSetup.Mass] = "Mass"
+_cutTypes[tmEventSetup.DeltaR] = DeltaR
+_cutTypes[tmEventSetup.Mass] = Mass
 _cutTypes[tmEventSetup.ChargeCorrelation] = ChargeCorrelation
 
 cutTypes = tuple(_cutTypes)
@@ -464,7 +466,7 @@ def getReport(menu, vhdlVersion=False):
 
   if vhdlVersion:
     version = vhdlVersion.rsplit(".")
-    value = {"L1TMenuUUIDHex": uuid.uuid5(uuid.NAMESPACE_DNS, menuName).hex}
+    value = {"L1TMenuUUIDHex": uuid.uuid5(uuid.NAMESPACE_DNS, menuName).hex }
     value.update( {"L1TMenuUUID": uuid.uuid5(uuid.NAMESPACE_DNS, menuName)} )
     value.update( {"L1TMenuUUID": uuid.uuid5(uuid.NAMESPACE_DNS, menuName)} )
     value.update( {"L1TMenuNameHex": hexlify(menu.getName()).zfill(256)} )
