@@ -1,432 +1,223 @@
+#!/bin/env python
+
 import uuid
-import binascii
+from binascii import hexlify as hexlify
 
-conditionTypes = (
-  "SingleMuon",
-  "DoubleMuon",
-  "TripleMuon",
-  "QuadMuon",
-  "SingleEgamma",
-  "DoubleEgamma",
-  "TripleEgamma",
-  "QuadEgamma",
-  "SingleTau",
-  "DoubleTau",
-  "TripleTau",
-  "QuadTau",
-  "SingleJet",
-  "DoubleJet",
-  "TripleJet",
-  "QuadJet",
-  "TotalEt", 
-  "TotalHt",   
-  "MissingEt",   
-  "MissingHt",   
-  "MuonMuonCorrelation",   
-  "MuonEsumCorrelation",   
-  "CaloMuonCorrelation",   
-  "CaloCaloCorrelation",   
-  "CaloEsumCorrelation",   
-  "InvariantMass",   
-)
+import tmGrammar
+import tmEventSetup
 
-objectTypes = (
-  "MU",
-  "EG",
-  "TAU",
-  "JET",
-  "ETT",
-  "HTT",
-  "ETM",
-  "HTM"
-)
-## which format in "Global Trigger Logic - description for emulator" and http://www.hephy.at/user/tmatsushita/utm/tmEventSetup/namespacetmeventsetup.html#a41abbc49e4f07549d47c2b9d8361baa8 dont match! 
 
-cutTypes = (
-  "Threshold",
-  "Eta",
-  "Phi",
-  "Charge",
-  "Quality",
-  "Isolation",
-  "DeltaEta",
-  "DeltaPhi",
-  "DeltaR",
-  "Mass",
-  "ChargeCorrelation",
-)
+# keys for reporter
+keyNAlgoDefined = "nAlgoDefined"
+keyNBitsSorted = "nBits_sorted"
+keyAlgoMap = "algoMap"
+keyIndexSorted = "index_sorted"
+keyAlgoDict = "algoDict"
+keyScaleMap = "scaleMap"
+keyConditionSet = "conditionSet"
+keyXxxDict = "XxxDict"
+keyTriggerGroups = "TriggerGroups"
+keyCondMap = "condMap"
+
+keyCutDict = "cutDict"
+keyObjDict = "objDict"
+keyObjList = "objList"
+
+
+# keys for algoDict
+#   reporter[keyAlgoDict][<algoName>]
+keyAlgo = "algo"
+keyExp = "exp"
+keyIndex = "index"
+keyModuleId = "moduleId"
+keyModuleIndex = "moduleIndex"
+keyCondDict = "condDict"
+
+
+# keys for condDict
+#   reporter[keyAlgoDict][<algoName>][keyCondDict][<condName>]
+keyHash = "hash"
+keyObjType = "objType"
+keyTriggerGroup = "TriggerGroup"
+keyCond = "cond"
+keyType = "type"
+keyConditionTemplates = "ConditionTemplates"
+
+
+# keys for template
+#  reporter[keyAlgoDict][<algoName>][keyCondDict][<condName>][keyConditionTemplates]
+keyMuonConditionDict = "muon_condition_dict"
+keyCaloConditionDict = "calo_condition_dict"
+keyEsumsConditionDict = "esums_condition_dict"
+
+
+# keys for objDict
+#   reporter[keyAlgoDict][keyCondDict][<condName>][keyObjDict][<objName>]
+keyObj = "obj"
+keyName = "name"
+keyBxOffset = "bxOffset"
+keyObjType
+keyBx = "Bx"
+keyType
+keyOp = "op"
+
+
+# keys for cutDict
+#   reporter[keyAlgoDict][<algoName>][keyCondDict][<condName>][keyObjList][ii][keyCutDict][<cutName>]
+keyMinIndex = "minIndex"
+keyMaxVal = "maxVal"
+keyCut = "cut"
+keyName
+keyTarget = "target"
+keyData = "data"
+keyMinVal = "minVal"
+keyType
+keyMaxIndex = "maxIndex"
+keyCutType = "cutType"
+
+
+# keys for reporter[keyTriggerGroups][<conditionType>]
+keyNBits = "nBits"
+keyBits = "bits"
+
+
+# keys for reporter[keyTriggerGroups][<conditionType>][keyBits][ii]
+keyAlgoName = 'algoName'
+keyIndex
+
+
+# list of condition types
+# should match esConditionType enum in ../tmEventSetup/esTriggerMenu.hh
+_conditionTypes = [None] * tmEventSetup.nConditionType
+_conditionTypes[tmEventSetup.SingleMuon] = "SingleMuon"
+_conditionTypes[tmEventSetup.DoubleMuon] = "DoubleMuon"
+_conditionTypes[tmEventSetup.TripleMuon] = "TripleMuon"
+_conditionTypes[tmEventSetup.QuadMuon] = "QuadMuon"
+_conditionTypes[tmEventSetup.SingleEgamma] = "SingleEgamma"
+_conditionTypes[tmEventSetup.DoubleEgamma] = "DoubleEgamma"
+_conditionTypes[tmEventSetup.TripleEgamma] = "TripleEgamma"
+_conditionTypes[tmEventSetup.QuadEgamma] = "QuadEgamma"
+_conditionTypes[tmEventSetup.SingleTau] = "SingleTau"
+_conditionTypes[tmEventSetup.DoubleTau] = "DoubleTau"
+_conditionTypes[tmEventSetup.TripleTau] = "TripleTau"
+_conditionTypes[tmEventSetup.QuadTau] = "QuadTau"
+_conditionTypes[tmEventSetup.SingleJet] = "SingleJet"
+_conditionTypes[tmEventSetup.DoubleJet] = "DoubleJet"
+_conditionTypes[tmEventSetup.TripleJet] = "TripleJet"
+_conditionTypes[tmEventSetup.QuadJet] = "QuadJet"
+_conditionTypes[tmEventSetup.TotalEt] = "TotalEt"
+_conditionTypes[tmEventSetup.TotalHt] = "TotalHt"
+_conditionTypes[tmEventSetup.MissingEt] = "MissingEt"
+_conditionTypes[tmEventSetup.MissingHt] = "MissingHt"
+_conditionTypes[tmEventSetup.MuonMuonCorrelation] = "MuonMuonCorrelation"
+_conditionTypes[tmEventSetup.MuonEsumCorrelation] = "MuonEsumCorrelation"
+_conditionTypes[tmEventSetup.CaloMuonCorrelation] = "CaloMuonCorrelation"
+_conditionTypes[tmEventSetup.CaloCaloCorrelation] = "CaloCaloCorrelation"
+_conditionTypes[tmEventSetup.CaloEsumCorrelation] = "CaloEsumCorrelation"
+_conditionTypes[tmEventSetup.InvariantMass] = "InvariantMass"
+
+conditionTypes = tuple(_conditionTypes)
+
+
+# list of object types
+# should match index in esConditionType enum of ../tmEventSetup/esTriggerMenu.hh
+# should match names in ../tmGrammar/Object.hh
+_objectTypes = [None] * tmEventSetup.nObjectType
+_objectTypes[tmEventSetup.Muon] = tmGrammar.MU
+_objectTypes[tmEventSetup.Egamma] = tmGrammar.EG
+_objectTypes[tmEventSetup.Tau] = tmGrammar.TAU
+_objectTypes[tmEventSetup.Jet] = tmGrammar.JET
+_objectTypes[tmEventSetup.ETT] = tmGrammar.ETT
+_objectTypes[tmEventSetup.HTT] = tmGrammar.HTT
+_objectTypes[tmEventSetup.ETM] = tmGrammar.ETM
+_objectTypes[tmEventSetup.HTM] = tmGrammar.HTM
+_objectTypes[tmEventSetup.EXT] = tmGrammar.EXT
+
+objectTypes = tuple(_objectTypes)
+
+
+# list of cut types
+# should match esCutType enum in ../tmEventSetup/esTriggerMenu.hh
+Threshold = "Threshold"
+Eta = "Eta"
+Phi = "Phi"
+DeltaEta = "DeltaEta"
+DeltaPhi = "DeltaPhi"
+Charge = "Charge"
+Quality = "Quality"
+Isolation = "Isolation"
+ChargeCorrelation = "ChargeCorrelation"
+
+_cutTypes = [None]*tmEventSetup.nCutType
+_cutTypes[tmEventSetup.Threshold] = Threshold
+_cutTypes[tmEventSetup.Eta] = Eta
+_cutTypes[tmEventSetup.Phi] = Phi
+_cutTypes[tmEventSetup.Charge] = Charge
+_cutTypes[tmEventSetup.Quality] = Quality
+_cutTypes[tmEventSetup.Isolation] = Isolation
+_cutTypes[tmEventSetup.DeltaEta] = DeltaEta
+_cutTypes[tmEventSetup.DeltaPhi] = DeltaPhi
+_cutTypes[tmEventSetup.DeltaR] = "DeltaR"
+_cutTypes[tmEventSetup.Mass] = "Mass"
+_cutTypes[tmEventSetup.ChargeCorrelation] = ChargeCorrelation
+
+cutTypes = tuple(_cutTypes)
+
+
+# template keywords
+EtaFullRange = "EtaFullRange"
+EtaW1UpperLimits = "EtaW1UpperLimits"
+EtaW1LowerLimits = "EtaW1LowerLimits"
+EtaW2Ignore = "EtaW2Ignore"
+EtaW2UpperLimits = "EtaW2UpperLimits"
+EtaW2LowerLimits = "EtaW2LowerLimits"
+
+PhiFullRange = "PhiFullRange"
+PhiW1UpperLimits = "PhiW1UpperLimits"
+PhiW1LowerLimits = "PhiW1LowerLimits"
+PhiW2Ignore = "PhiW2Ignore"
+PhiW2UpperLimits = "PhiW2UpperLimits"
+PhiW2LowerLimits = "PhiW2LowerLimits"
+
+PhiW1UpperLimit = "PhiW1UpperLimit"
+PhiW1LowerLimit = "PhiW1LowerLimit"
+PhiW2UpperLimit = "PhiW2UpperLimit"
+PhiW2LowerLimit = "PhiW2LowerLimit"
+
+DiffEtaUpperLimit = "DiffEtaUpperLimit"
+DiffEtaLowerLimit = "DiffEtaLowerLimit"
+DiffPhiUpperLimit = "DiffPhiUpperLimit"
+DiffPhiLowerLimit = "DiffPhiLowerLimit"
+
+PtThresholds = "PtThresholds"
+RequestedCharges = "RequestedCharges"
+QualityLuts = "QualityLuts"
+IsolationLuts = "IsolationLuts"
+RequestedChargeCorrelation = "RequestedChargeCorrelation"
+EtThreshold = "EtThreshold"
+EtThresholds = "EtThresholds"
+IsoLuts = "IsoLuts"
+
+
 
 # -----------------------------------------------------------------------------
 #  Helpers
 # -----------------------------------------------------------------------------
-sortDictByKey = lambda iDict, iKey,reverse : sorted ( iDict, key=lambda x: iDict[x][iKey],reverse=reverse )
+class Object:
+  def __init__(self):
+    pass
 
 
-def getCutDict(cutDict,cutType):
-  return [cutDict[c] for c in cutDict if cutDict[c]['cutType']==cutType]
-
-def _makeDefaultTemplateDictionaries(condition):
-    defTempDict={}
-    ###################################       Common Dictionaries     ###############################
-    EtaRangeDict = {
-                     "EtaFullRange"              :      [ 'false',  'false',  'false',  'false'  ]     ,
-                     "EtaW1UpperLimits"          :      [ 0,  0,  0,  0  ]     ,
-                     "EtaW1LowerLimits"          :      [ 0,  0,  0,  0  ]     ,
-                     "EtaW2Ignore"               :      [ 'false',  'false',  'false',  'false'  ]     ,
-                     "EtaW2UpperLimits"          :      [ 0,  0,  0,  0  ]     ,
-                     "EtaW2LowerLimits"          :      [ 0,  0,  0,  0  ]     ,
-                    }
-    PhiRangeDict = {
-                      "PhiFullRange"              :      [ 'false',  'false',  'false',  'false'  ]     ,
-                      "PhiW1UpperLimits"          :      [ 0,  0,  0,  0  ]     ,
-                      "PhiW1LowerLimits"          :      [ 0,  0,  0,  0  ]     ,
-                      "PhiW2Ignore"               :      [ 'false',  'false',  'false',  'false'  ]     , 
-                      "PhiW2UpperLimits"          :      [ 0,  0,  0,  0  ]     ,
-                      "PhiW2LowerLimits"          :      [ 0,  0,  0,  0  ]     ,            
-                    }
-
-    EtaPhiDiffDict= {
-                   "DiffEtaUpperLimit"         :        0                                      ,
-                   "DiffEtaLowerLimit"         :        0                                      ,
-                   "DiffPhiUpperLimit"         :        0                                      ,
-                   "DiffPhiLowerLimit"         :        0                                      ,
-                    }
-    #################################################################################################
-    
-
-    #### Muon Condition Template
-    if any_in(["MU"],condition):
-      defTempDict['muon_condition_dict'] =\
-                                   {
-                                            "PtThresholds"              :      [ 0,  0,  0,  0  ]     , 
-                                            "RequestedCharges"          :      ["ign","ign","ign","ign"]  ,            
-                                            "QualityLuts"               :      [ 0xFFFF,  0xFFFF, 0xFFFF, 0xFFFF  ]     ,              
-                                            "IsolationLuts"             :      [ 0xF, 0xF, 0xF, 0xF  ]     ,              
-                                            "RequestedChargeCorrelation":        "ig"                                   ,
-                                   }
-      for dct in [EtaRangeDict,  PhiRangeDict, EtaPhiDiffDict]:
-        defTempDict['muon_condition_dict'].update(dct)
-    #### Calo Condition Template
-    if any_in(["JET","TAU","EG"],condition):
-      defTempDict['calo_condition_dict'] =\
-                                   {
-                                            "EtThresholds"              :      [ 0,  0,  0,  0  ]     , 
-                                            #"IsoLuts"                   :      [ 0xF, 0xF, 0xF, 0xF  ]   ,
-                                            "IsoLuts"                   :      [ 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF  ]   ,
-                                   }
-      for dct in [EtaRangeDict,  PhiRangeDict, EtaPhiDiffDict]:
-        defTempDict['calo_condition_dict'].update(dct)
-
-    #### Esums Condition Template
-    if any_in([ "ETT","HTT","ETM","HTM"],condition):
-      defTempDict['esums_condition_dict'] =\
-                                   {
-                                            "EtThreshold"               :      [ "0" ]     , 
-                                            "PhiFullRange"              :      ['false' ]  ,
-                                            "PhiW1UpperLimit"          :      [ 0 ], 
-                                            "PhiW1LowerLimit"          :      [ 0 ], 
-                                            "PhiW2Ignore"               :      ['false' ] , 
-                                            "PhiW2UpperLimit"          :      [ 0 ], 
-                                            "PhiW2LowerLimit"          :      [ 0 ], 
-                                   }
-      #for dct in [EtaRangeDict,  PhiRangeDict, EtaPhiDiffDict]:
-      #  defTempDict['esums_condition_dict'].update(dct)
+def sortDictByKey(iDict, iKey, reverse):
+  return sorted(iDict, key=lambda x: iDict[x][iKey], reverse=reverse)
 
 
-    return defTempDict
-
-
-
-def any_in(stringList,string):
-  return any([x.lower() in string.lower() for x in stringList] )
-
-def getObjectType(condName):
-  objectType=[]
-  for objType in objectTypes:
-    if objType in condName:
-      objectType.append(objType)
-  assert len(objectType)==1
-  return objectType[0]
-
-
-def getReport(menu,vhdlVersion=False):
-    #conditionTypes=( "SingleMuon", "DoubleMuon", "TripleMuon", "QuadMuon", "SingleEgamma", "DoubleEgamma", "TripleEgamma", "QuadEgamma", "SingleTau", "DoubleTau", "TripleTau", "QuadTau", "SingleJet", "DoubleJet", "TripleJet", "QuadJet" )
-    #objectTypes= ("MU","EG","TAU","JET","ETT","HTT","ETM","HTM") ## which format in "Global Trigger Logic - description for emulator" and http://www.hephy.at/user/tmatsushita/utm/tmEventSetup/namespacetmeventsetup.html#a41abbc49e4f07549d47c2b9d8361baa8 dont match! 
-
-    menu.reporter={}
-    menuName = menu.getName()
-    tgDict= {'nBits':0, 'bits': set() }
-    menu.reporter["TriggerGroups"]= dict((key,  {'nBits':0, 'bits':[] } ) for key in conditionTypes)
-    menu.reporter["algoMap"]   = menu.getAlgorithmMap()
-    menu.reporter["condMap"]   = menu.getConditionMap()
-    menu.reporter["scaleMap"]  = menu.getScaleMap()
-    menu.reporter["algoDict"]   = dict( ( algo.getName()  , {
-                                                                "algo":algo, 
-                                                                "index":algo.getIndex(), 
-                                                                "exp":algo.getExpression(),
-                                                                "condDict":{} ,
-                                                                "moduleId":algo.getModuleId(),
-                                                                "moduleIndex":algo.getModuleIndex(),
-                                                            }) for key, algo in menu.reporter["algoMap"].iteritems())
-
-    if vhdlVersion:
-      version = vhdlVersion.rsplit(".")
-      menu.reporter["XxxDict"]   = {
-                                    "L1TMenuUUIDHex":  uuid.uuid5(uuid.NAMESPACE_DNS, menuName).hex, 
-                                    "L1TMenuUUID":  uuid.uuid5(uuid.NAMESPACE_DNS, menuName), 
-                                    "L1TMenuNameHex":   binascii.hexlify(menu.getName()).zfill(256) ,  
-                                    "L1TMenuFirmwareUUID":  uuid.uuid1()  ,  
-                                    "L1TMenuFirmwareUUIDHex":  uuid.uuid1().hex  ,  
-                                    "L1TMCompilerVersionMajor":     version[0],  
-                                    "L1TMCompilerVersionMinor":     version[1],  
-                                    "L1TMCompilerVersionRevision":  version[2],  
-                                    "L1TMenuName":        menuName,  
-                                    "L1TMenuScaleSet":    None,  
-                                  }
-
-    for algoName in menu.reporter["algoDict"]: 
-      #algo = menu.reporter["algoDict"][algoName]["algo"]
-      algoDict = menu.reporter["algoDict"][algoName]
-      for x in algoDict['algo'].getRpnVector():
-        #if tmGrammar.isGate(x): continue
-        if x in ["AND", "OR", "NOT", "XOR"]: continue
-        hash = menu.getHash(x)
-        cond = menu.reporter["condMap"][hash]
-        condName=cond.getName()
-        #condName.replace("_"+str(x),"")
-        algoDict["condDict"][condName]={    
-                                            'objType':getObjectType(condName) ,           
-                                            "cond":cond,
-                                            "hash":hash, 
-                                            "type":cond.getType(), 
-                                            "TriggerGroup":conditionTypes[cond.getType()],
-                                       }
-        if True:
-          algoDict["condDict"][condName].update( {
-                                                  'ConditionTemplates': _makeDefaultTemplateDictionaries(condName), 
-                                               } )
-      #for _condName in algoDict['condDict'].keys():
-      #  if condName != _condName:
-      #    print "########################################################################################"
-      #    print "########################################################################################"
-      #    print "########################################################################################"
-      #    print "######################                                             ####################"
-      #    print "######################            SOMETHING WRONGGGG!!!!!          ####################"
-      #    print "######################                                             #####################"
-      #    print "########################################################################################"
-      #    print "########################################################################################"
-      #    print condName, _condName
-      #    break
-        condDict = algoDict['condDict'][condName]
-        if any_in(["MU"],condName):
-          muCondDict= condDict['ConditionTemplates']['muon_condition_dict']
-        if any_in(["JET","TAU","EG"],condName):
-          caloCondDict = condDict['ConditionTemplates']['calo_condition_dict']
-        if any_in([ "ETT","HTT","ETM","HTM"],condName):
-          esumsCondDict = condDict['ConditionTemplates']['esums_condition_dict']
-
-        for cut in condDict['cond'].getCuts():
-          print cut
-        condDict['objDict']={}
-        condDict['objList']=[]
-        for obj in condDict['cond'].getObjects():
-          objName = obj.getName()
-          condDict['objDict'][objName]={  
-                                          'objType':objectTypes[obj.getType()],
-                                          'name':objName ,
-                                          'type':obj.getType(), 
-                                          'op': obj.getComparisonOperator()==0, 
-                                          'obj':obj, 
-                                          'Bx':bx_encode(obj.getBxOffset()), 
-                                          'bxOffset':obj.getBxOffset(), 
-                                       }
-          objDict = condDict['objDict'][objName]
-          #objDict['type']=obj.getType()
-          #objDict['op']=obj.getComparisonOperator()
-          objDict['cutDict']={}
-          for cut in obj.getCuts():
-            cutName = cut.getName()
-            objDict["cutDict"][cutName]={
-                                            'name'        :cutName,
-                                            'cut'         :cut, 
-                                            'target'      :cut.getObjectType(), 
-                                            "cutType"     :cutTypes[cut.getCutType()] , 
-                                            "type"        :cut.getCutType() , 
-                                            "minVal"      :cut.getMinimum().value, 
-                                            "minIndex"    :cut.getMinimum().index,  
-                                            "maxVal"      :cut.getMaximum().value ,
-                                            "maxIndex"    :cut.getMaximum().index , 
-                                            "data"        :cut.getData() 
-                                        }
-          condDict['objList'].append( condDict['objDict'][objName]  )
-
-          #print condDict['ConditionTemplates']['muon_condition_dict']
-
-        for iObj in range(len(condDict['objList'])):
-          objDict = condDict['objList'][iObj]
-          cutDict = condDict['objList'][iObj]['cutDict']
-
-          if any_in(["MU"],condName):  #do this only for muons
-            #muCondDict["PtThresholds"][iObj]                =  [cd[c]['minIndex'] for c in cd if cd[c]['cutType']=='Threshold'][0] 
-            muCondDict["PtThresholds"][iObj]                =  getCutDict(cutDict,"Threshold")[0]['minIndex'] 
-            assert getCutDict(cutDict,"Threshold")[0]['minIndex'] == [cutDict[c]['minIndex'] for c in cutDict if cutDict[c]['cutType']=='Threshold'][0]
-
-            #EtaCuts = [cd[c] for c in cd if cd[c]['cutType']=='Eta']
-            EtaCuts = getCutDict(cutDict,"Eta")
-            nEtaCuts = len(EtaCuts)
-            if nEtaCuts == 0:
-              muCondDict["EtaFullRange"][iObj]                = 'true'
-            if nEtaCuts >= 1:
-              muCondDict["EtaW1UpperLimits"][iObj]            =  EtaCuts[0]['maxIndex']                              
-              muCondDict["EtaW1LowerLimits"][iObj]            =  EtaCuts[0]['minIndex'] 
-              if nEtaCuts == 1:
-                muCondDict["EtaW2Ignore"][iObj]                 =  'true' 
-              if nEtaCuts == 2:
-                muCondDict["EtaW2UpperLimits"][iObj]            =  EtaCuts[1]['maxIndex']                              
-                muCondDict["EtaW2LowerLimits"][iObj]            =  EtaCuts[1]['minIndex'] 
-
-            #PhiCuts = [cd[c] for c in cd if cd[c]['cutType']=='Phi']
-            PhiCuts = getCutDict(cutDict,"Phi")
-            nPhiCuts = len(PhiCuts)
-            if nPhiCuts == 0:
-              muCondDict["PhiFullRange"][iObj]                = 'true'
-            if nPhiCuts >= 1:
-              muCondDict["PhiW1UpperLimits"][iObj]            =  PhiCuts[0]['maxIndex']                              
-              muCondDict["PhiW1LowerLimits"][iObj]            =  PhiCuts[0]['minIndex'] 
-              if nPhiCuts ==1:
-                esumsCondDict["PhiW2Ignore"][iObj]                 =  'true' 
-              if nPhiCuts == 2:
-                muCondDict["PhiW2UpperLimits"][iObj]            =  PhiCuts[1]['maxIndex']                              
-                muCondDict["PhiW2LowerLimits"][iObj]            =  PhiCuts[1]['minIndex'] 
-
-            ChargeCuts = getCutDict(cutDict,"Charge")
-            nChargeCuts = len(ChargeCuts)           
-            if nChargeCuts > 0:
-              muCondDict["RequestedCharges"][iObj]            = chargeFormat(ChargeCuts[0]['data'] )
-
-            QualityCuts = getCutDict(cutDict,"Quality")
-            nQualityCuts = len(QualityCuts)           
-            if nQualityCuts == 1:
-              muCondDict["QualityLuts"][iObj]                 = QualityCuts[0]["data"]
-
-            IsolationCuts = getCutDict(cutDict,"Isolation")
-            nIsolationCuts = len(IsolationCuts)           
-            if nIsolationCuts == 1:
-              muCondDict["IsolationLuts"][iObj]                 = IsolationCuts[0]["data"]
-
-
-            ChargeCorrelationCuts = getCutDict(cutDict,"ChargeCorrelation")
-            nChargeCorrelationCuts = len(ChargeCorrelationCuts)           
-            if nChargeCorrelationCuts == 1:
-              muCondDict["ChargeCorrelation"][iObj]                 = ChargeCorrelationCuts[0]["data"]
-              ## what is the actual output??
-
-            DeltaEtaCuts = getCutDict(cutDict,"DeltaEta")
-            nDeltaEtaCuts = len(DeltaEtaCuts)           
-            if nDeltaEtaCuts == 1:
-              muCondDict["DiffEtaUpperLimit"][iObj]                 = DeltaEtaCuts[0]["maxIndex"]
-              muCondDict["DiffEtaLowerLimit"][iObj]                 = DeltaEtaCuts[0]["minIndex"]
-
-            DeltaPhiCuts = getCutDict(cutDict,"DeltaPhi")
-            nDeltaPhiCuts = len(DeltaPhiCuts)           
-            if nDeltaPhiCuts == 1:
-              muCondDict["DiffPhiUpperLimit"][iObj]                 = DeltaPhiCuts[0]["maxIndex"]
-              muCondDict["DiffPhiLowerLimit"][iObj]                 = DeltaPhiCuts[0]["minIndex"]
-
-          if any_in(["JET","TAU","EG"],condName):
-            caloCondDict["EtThresholds"][iObj]                =  getCutDict(cutDict,"Threshold")[0]['minIndex'] 
-            #assert getCutDict(cutDict,"Threshold")[0]['minIndex'] == [cutDict[c]['minIndex'] for c in cutDict if cutDict[c]['cutType']=='Threshold'][0]
-            #EtaCuts = [cd[c] for c in cd if cd[c]['cutType']=='Eta']
-            EtaCuts = getCutDict(cutDict,"Eta")
-            nEtaCuts = len(EtaCuts)
-            if nEtaCuts == 0:
-              caloCondDict["EtaFullRange"][iObj]                = 'true'
-            if nEtaCuts >= 1:
-              caloCondDict["EtaW1UpperLimits"][iObj]            =  EtaCuts[0]['maxIndex']                              
-              caloCondDict["EtaW1LowerLimits"][iObj]            =  EtaCuts[0]['minIndex'] 
-              if nEtaCuts == 1:
-                caloCondDict["EtaW2Ignore"][iObj]                 =  'true' 
-              if nEtaCuts == 2:
-                caloCondDict["EtaW2UpperLimits"][iObj]            =  EtaCuts[1]['maxIndex']                              
-                caloCondDict["EtaW2LowerLimits"][iObj]            =  EtaCuts[1]['minIndex'] 
-
-            PhiCuts = getCutDict(cutDict,"Phi")
-            nPhiCuts = len(PhiCuts)
-            if nPhiCuts == 0:
-              caloCondDict["PhiFullRange"][iObj]                = 'true'
-            if nPhiCuts >= 1:
-              caloCondDict["PhiW1UpperLimits"][iObj]            =  PhiCuts[0]['maxIndex']                              
-              caloCondDict["PhiW1LowerLimits"][iObj]            =  PhiCuts[0]['minIndex'] 
-              if nPhiCuts == 1:
-                caloCondDict["PhiW2Ignore"][iObj]                 =  'true' 
-              if nPhiCuts == 2:
-                caloCondDict["PhiW2UpperLimits"][iObj]            =  PhiCuts[1]['maxIndex']                              
-                caloCondDict["PhiW2LowerLimits"][iObj]            =  PhiCuts[1]['minIndex'] 
-
-            IsoCuts = getCutDict(cutDict,"Isolation")
-            nIsoCuts = len(IsoCuts)           
-            if nIsoCuts == 1:
-              caloCondDict["IsoLuts"][iObj]                     = IsoCuts[0]["data"]
-
-            DeltaEtaCuts = getCutDict(cutDict,"DeltaEta")
-            nDeltaEtaCuts = len(DeltaEtaCuts)           
-            if nDeltaEtaCuts == 1:
-              caloCondDict["DiffEtaUpperLimit"][iObj]                 = DeltaEtaCuts[0]["maxIndex"]
-              caloCondDict["DiffEtaLowerLimit"][iObj]                 = DeltaEtaCuts[0]["minIndex"]
-
-            DeltaPhiCuts = getCutDict(cutDict,"DeltaPhi")
-            nDeltaPhiCuts = len(DeltaPhiCuts)           
-            if nDeltaPhiCuts == 1:
-              caloCondDict["DiffPhiUpperLimit"][iObj]                 = DeltaPhiCuts[0]["maxIndex"]
-              caloCondDict["DiffPhiLowerLimit"][iObj]                 = DeltaPhiCuts[0]["minIndex"]
-
-          if any_in([ "ETT","HTT","ETM","HTM"],condName):
-            esumsCondDict["EtThreshold"][iObj]                =  getCutDict(cutDict,"Threshold")[0]['minIndex'] 
-            #print "#######################################################################################"
-            #print "#######################################################################################"
-            #print getCutDict(cutDict,"Threshold")[0] , iObj,  len(condDict['objList'])
-            #print esumsCondDict["EtThreshold"]
-            #print "#######################################################################################"
-            #print "#######################################################################################"
-
-            #assert getCutDict(cutDict,"Threshold")[0]['minIndex'] == [cutDict[c]['minIndex'] for c in cutDict if cutDict[c]['cutType']=='Threshold'][0]
-            #EtaCuts = [cd[c] for c in cd if cd[c]['cutType']=='Eta']
-
-            PhiCuts = getCutDict(cutDict,"Phi")
-            nPhiCuts = len(PhiCuts)
-            if nPhiCuts == 0:
-              esumsCondDict["PhiFullRange"][iObj]                = 'true'
-            if nPhiCuts >= 1:
-              esumsCondDict["PhiW1UpperLimit"][iObj]            =  PhiCuts[0]['maxIndex']                              
-              esumsCondDict["PhiW1LowerLimit"][iObj]            =  PhiCuts[0]['minIndex'] 
-              if nPhiCuts ==1:
-                esumsCondDict["PhiW2Ignore"][iObj]                 =  'true' 
-              if nPhiCuts == 2:
-                esumsCondDict["PhiW2UpperLimit"][iObj]            =  PhiCuts[1]['maxIndex']                              
-                esumsCondDict["PhiW2LowerLimit"][iObj]            =  PhiCuts[1]['minIndex'] 
-
-    for algoName in menu.reporter["algoDict"]:
-      algo = menu.reporter["algoDict"][algoName]["algo"]
-      for condName in menu.reporter["algoDict"][algoName]["condDict"]:
-        condType=menu.reporter["algoDict"][algoName]["condDict"][condName]["TriggerGroup"]
-        menu.reporter["TriggerGroups"][condType]["nBits"]+=1
-        menu.reporter["TriggerGroups"][condType]["bits"].append( {"index":menu.reporter["algoDict"][algoName]["index"] , "algoName":algoName})
-    menu.reporter["nBits_sorted"]=sortDictByKey(menu.reporter['TriggerGroups'],"nBits",True)
-    menu.reporter["index_sorted"]=sortDictByKey(menu.reporter["algoDict"],"index",False)
-    menu.reporter["nAlgoDefined"] = sum([menu.reporter['TriggerGroups'][tg]['nBits'] for tg in menu.reporter['TriggerGroups']])
-    condList=[]
-    for algoName in menu.reporter['index_sorted']: 
-      condList.extend(menu.reporter['algoDict'][algoName]['condDict'].keys()) 
-    menu.reporter["conditionSet"] = set(condList) 
-    menu.reporter["__objects"] = [ [ [menu.reporter['algoDict'][algoName]['condDict'][condName]['objList'][iObj]['name'] for iObj in range( len( menu.reporter['algoDict'][algoName]['condDict'][condName]['objList'] )) ] for condName in menu.reporter['algoDict'][algoName]['condDict'].keys() ]  for algoName in menu.reporter['index_sorted']  ] 
-
-
-def pprint(x):
-  print "%%  ###############################################################################"
-  print "%%  ###############################################################################"
-  print x
-  print "%%  ###############################################################################"
-  print "%%  ###############################################################################"
+def getCutDict(cutDict, cutType):
+  rc = []
+  for c in cutDict:
+    if cutDict[c][keyCutType] == cutType:
+      rc.append(cutDict[c])
+  return rc
 
 
 def bx_encode(value):
@@ -436,12 +227,341 @@ def bx_encode(value):
   """
   # Prefix positive values greater then zero with p.
   if value > 0:
-      return 'p{0:d}'.format(value)
+    return 'p{0:d}'.format(value)
   # Prefix negative values with m instead of minus sign (abs).
   if value < 0:
-      return 'm{0:d}'.format(abs(value))
+    return 'm{0:d}'.format(abs(value))
   # Zero value is not prefixed according to VHDL documentation.
   return '0'
 
+
+def _makeDefaultTemplateDictionaries(condition):
+  defTempDict = {}
+
+  ####################     Common Dictionaries     ####################
+  EtaRangeDict = {
+    EtaFullRange:     [ 'false', 'false', 'false', 'false' ],
+    EtaW1UpperLimits: [ 0, 0, 0, 0 ],
+    EtaW1LowerLimits: [ 0, 0, 0, 0 ],
+    EtaW2Ignore:      [ 'false', 'false', 'false', 'false' ],
+    EtaW2UpperLimits: [ 0, 0, 0, 0 ],
+    EtaW2LowerLimits: [ 0, 0, 0, 0 ],
+  }
+
+  PhiRangeDict = {
+    PhiFullRange:     [ 'false', 'false', 'false', 'false' ],
+    PhiW1UpperLimits: [ 0, 0, 0, 0 ],
+    PhiW1LowerLimits: [ 0, 0, 0, 0 ],
+    PhiW2Ignore:      [ 'false', 'false', 'false', 'false' ],
+    PhiW2UpperLimits: [ 0, 0, 0, 0 ],
+    PhiW2LowerLimits: [ 0, 0, 0, 0 ],
+  }
+
+  EtaPhiDiffDict = {
+    DiffEtaUpperLimit: 0,
+    DiffEtaLowerLimit: 0,
+    DiffPhiUpperLimit: 0,
+    DiffPhiLowerLimit: 0,
+  }
+
+  #############################################################################
+
+
+  #### Muon Condition Template
+  if any_in([tmGrammar.MU], condition):
+    defTempDict[keyMuonConditionDict] = {
+      PtThresholds:               [ 0, 0, 0, 0 ],
+      RequestedCharges:           [ "ign","ign","ign","ign" ],
+      QualityLuts:                [ 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF ],
+      IsolationLuts:              [ 0xF, 0xF, 0xF, 0xF ],
+      RequestedChargeCorrelation: "ig",
+    }
+    for dct in [EtaRangeDict, PhiRangeDict, EtaPhiDiffDict]:
+      defTempDict[keyMuonConditionDict].update(dct)
+
+  #### Calo Condition Template
+  if any_in([tmGrammar.JET, tmGrammar.TAU, tmGrammar.EG], condition):
+    defTempDict[keyCaloConditionDict] = {
+      EtThresholds: [ 0, 0, 0, 0 ],
+      IsoLuts:      [ 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF ],
+    }
+    for dct in [EtaRangeDict,  PhiRangeDict, EtaPhiDiffDict]:
+      defTempDict[keyCaloConditionDict].update(dct)
+
+  #### Esums Condition Template
+  if any_in([tmGrammar.ETT, tmGrammar.HTT,
+             tmGrammar.ETM, tmGrammar.HTM], condition):
+    defTempDict[keyEsumsConditionDict] = {
+      EtThreshold:      [ "0" ],
+      PhiFullRange:     [ 'false' ],
+      PhiW1UpperLimit:  [ 0 ],
+      PhiW1LowerLimit:  [ 0 ],
+      PhiW2Ignore:      [ 'false' ],
+      PhiW2UpperLimit:  [ 0 ],
+      PhiW2LowerLimit:  [ 0 ],
+    }
+
+  return defTempDict
+
+
+def any_in(stringList, string):
+  for x in stringList:
+    if x.lower() in string.lower():
+      return True
+  return False
+
+
+def getObjectType(condName):
+  objectType = []
+  for objType in objectTypes:
+    if objType in condName:
+      objectType.append(objType)
+  assert len(objectType) == 1
+  return objectType[0]
+
+
+def setEtaCuts(ii, condDict, cutDict):
+  EtaCuts = getCutDict(cutDict, Eta)
+  nEtaCuts = len(EtaCuts)
+  if nEtaCuts == 0:
+    condDict[EtaFullRange][ii] = 'true'
+  else:
+    condDict[EtaW1UpperLimits][ii] = EtaCuts[0][keyMaxIndex]
+    condDict[EtaW1LowerLimits][ii] = EtaCuts[0][keyMinIndex]
+    if nEtaCuts == 1:
+      condDict[EtaW2Ignore][ii] = 'true'
+    if nEtaCuts == 2:
+      condDict[EtaW2UpperLimits][ii] = EtaCuts[1][keyMaxIndex]
+      condDict[EtaW2LowerLimits][ii] = EtaCuts[1][keyMinIndex]
+
+
+def setPhiCuts(ii, condDict, cutDict):
+  PhiCuts = getCutDict(cutDict, Phi)
+  nPhiCuts = len(PhiCuts)
+  if nPhiCuts == 0:
+    condDict[PhiFullRange][ii] = 'true'
+  else:
+    condDict[PhiW1UpperLimits][ii] = PhiCuts[0][keyMaxIndex]
+    condDict[PhiW1LowerLimits][ii] = PhiCuts[0][keyMinIndex]
+    if nPhiCuts == 1:
+      esumsCondDict[PhiW2Ignore][ii] = 'true'
+    if nPhiCuts == 2:
+      condDict[PhiW2UpperLimits][ii] = PhiCuts[1][keyMaxIndex]
+      condDict[PhiW2LowerLimits][ii] = PhiCuts[1][keyMinIndex]
+
+
+def setDeltaEtaCuts(ii, condDict, cutDict):
+  DeltaEtaCuts = getCutDict(cutDict, DeltaEta)
+  nDeltaEtaCuts = len(DeltaEtaCuts)
+  if nDeltaEtaCuts == 1:
+    condDict[DiffEtaUpperLimit][ii] = DeltaEtaCuts[0][keyMaxIndex]
+    condDict[DiffEtaLowerLimit][ii] = DeltaEtaCuts[0][keyMinIndex]
+
+
+def setDeltaPhiCuts(ii, condDict, cutDict):
+  DeltaPhiCuts = getCutDict(cutDict, DeltaPhi)
+  nDeltaPhiCuts = len(DeltaPhiCuts)
+  if nDeltaPhiCuts == 1:
+    condDict[DiffPhiUpperLimit][ii] = DeltaPhiCuts[0][keyMaxIndex]
+    condDict[DiffPhiLowerLimit][ii] = DeltaPhiCuts[0][keyMinIndex]
+
+
+def getMuonCondition(ii, condDict, cutDict):
+  condDict[PtThresholds][ii] = getCutDict(cutDict, Threshold)[0][keyMinIndex]
+
+  array = []
+  for c in cutDict:
+    x = cutDict[c][keyCutType]
+    if x == Threshold:
+      array.append(cutDict[c][keyMinIndex])
+  assert getCutDict(cutDict, Threshold)[0][keyMinIndex] == array[0]
+
+  setEtaCuts(ii, condDict, cutDict)
+  setPhiCuts(ii, condDict, cutDict)
+  setDeltaEtaCuts(ii, condDict, cutDict)
+  setDeltaPhiCuts(ii, condDict, cutDict)
+
+  ChargeCuts = getCutDict(cutDict, Charge)
+  nChargeCuts = len(ChargeCuts)
+  if nChargeCuts:
+    condDict[RequestedCharges][ii] = chargeFormat(ChargeCuts[0][keyData])
+
+  QualityCuts = getCutDict(cutDict, Quality)
+  nQualityCuts = len(QualityCuts)
+  if nQualityCuts == 1:
+    condDict[QualityLuts][ii] = QualityCuts[0][keyData]
+
+  IsolationCuts = getCutDict(cutDict, Isolation)
+  nIsolationCuts = len(IsolationCuts)
+  if nIsolationCuts == 1:
+    condDict[IsolationLuts][ii] = IsolationCuts[0][keyData]
+
+  ChargeCorrelationCuts = getCutDict(cutDict, ChargeCorrelation)
+  nChargeCorrelationCuts = len(ChargeCorrelationCuts)
+  if nChargeCorrelationCuts == 1:
+    condDict[ChargeCorrelation][ii] = ChargeCorrelationCuts[0][keyData]
+    ## what is the actual output??
+
+
+def getCaloCondition(ii, condDict, cutDict):
+  condDict[EtThresholds][ii] = getCutDict(cutDict, Threshold)[0][keyMinIndex]
+
+  setEtaCuts(ii, condDict, cutDict)
+  setPhiCuts(ii, condDict, cutDict)
+  setDeltaEtaCuts(ii, condDict, cutDict)
+  setDeltaPhiCuts(ii, condDict, cutDict)
+
+  IsoCuts = getCutDict(cutDict, Isolation)
+  nIsoCuts = len(IsoCuts)
+  if nIsoCuts == 1:
+    condDict[IsoLuts][ii] = IsoCuts[0][keyData]
+
+
+def getEsumCondition(ii, condDict, cutDict):
+  condDict[EtThreshold][ii] = getCutDict(cutDict, Threshold)[0][keyMinIndex]
+
+  setPhiCuts(ii, condDict, cutDict)
+
+
+def getReport(menu, vhdlVersion=False):
+  data = Object()
+  data.reporter = {}
+  menuName = menu.getName()
+
+  triggerGroups = {}
+  for key in conditionTypes:
+    triggerGroups[key] = {keyNBits: 0, keyBits: []}
+
+  data.reporter[keyTriggerGroups] = triggerGroups
+  data.reporter[keyAlgoMap] = menu.getAlgorithmMap()
+  data.reporter[keyCondMap] = menu.getConditionMap()
+  data.reporter[keyScaleMap] = menu.getScaleMap()
+
+  algoDict = {}
+  for key, algo in data.reporter[keyAlgoMap].iteritems():
+    value = {keyAlgo: algo}
+    value.update( {keyIndex: algo.getIndex()} )
+    value.update( {keyExp: algo.getExpression()} )
+    value.update( {keyCondDict: {}} )
+    value.update( {keyModuleId: algo.getModuleId()} )
+    value.update( {keyModuleIndex: algo.getModuleIndex()} )
+    algoDict[algo.getName()] =  value
+  data.reporter[keyAlgoDict] = algoDict
+
+  if vhdlVersion:
+    version = vhdlVersion.rsplit(".")
+    value = {"L1TMenuUUIDHex": uuid.uuid5(uuid.NAMESPACE_DNS, menuName).hex}
+    value.update( {"L1TMenuUUID": uuid.uuid5(uuid.NAMESPACE_DNS, menuName)} )
+    value.update( {"L1TMenuUUID": uuid.uuid5(uuid.NAMESPACE_DNS, menuName)} )
+    value.update( {"L1TMenuNameHex": hexlify(menu.getName()).zfill(256)} )
+    value.update( {"L1TMenuFirmwareUUID": uuid.uuid1()} )
+    value.update( {"L1TMenuFirmwareUUIDHex": uuid.uuid1().hex} )
+    value.update( {"L1TMCompilerVersionMajor": version[0]} )
+    value.update( {"L1TMCompilerVersionMinor": version[1]} )
+    value.update( {"L1TMCompilerVersionRevision": version[2]} )
+    value.update( {"L1TMenuName": menuName} )
+    value.update( {"L1TMenuScaleSet": None} )
+
+    data.reporter[keyXxxDict] = value
+
+  for algoName in data.reporter[keyAlgoDict]:
+    algoDict = data.reporter[keyAlgoDict][algoName]
+    condDict = {}
+    for x in algoDict[keyAlgo].getRpnVector():
+      if tmGrammar.isGate(x): continue
+      hash = menu.getHash(x)
+      cond = data.reporter[keyCondMap][hash]
+      condName = cond.getName()
+      condDict = { keyObjType: getObjectType(condName) }
+      condDict.update( {keyCond: cond} )
+      condDict.update( {keyHash: hash} )
+      condDict.update( {keyType: cond.getType()} )
+      condDict.update( {keyTriggerGroup: conditionTypes[cond.getType()]} )
+      condDict.update( {keyConditionTemplates:
+                          _makeDefaultTemplateDictionaries(condName)} )
+      algoDict[keyCondDict][condName] = condDict
+
+      if any_in([tmGrammar.MU], condName):
+        muCondDict = condDict[keyConditionTemplates][keyMuonConditionDict]
+
+      if any_in([tmGrammar.JET, tmGrammar.TAU, tmGrammar.EG], condName):
+        caloCondDict = condDict[keyConditionTemplates][keyCaloConditionDict]
+
+      if any_in([tmGrammar.ETT, tmGrammar.HTT,
+                 tmGrammar.ETM, tmGrammar.HTM], condName):
+        esumsCondDict = condDict[keyConditionTemplates][keyEsumsConditionDict]
+
+      for cut in condDict[keyCond].getCuts():
+        print cut
+      condDict[keyObjDict] = {}
+      condDict[keyObjList] = []
+      for obj in condDict[keyCond].getObjects():
+        objName = obj.getName()
+
+        objDict = { keyObjType: objectTypes[obj.getType()] }
+        objDict.update( {keyName: objName} )
+        objDict.update( {keyType: obj.getType()} )
+        objDict.update( {keyOp: obj.getComparisonOperator () == 0} )
+        objDict.update( {keyObj: obj} )
+        objDict.update( {keyBx: bx_encode(obj.getBxOffset())} )
+        objDict.update( {keyBxOffset: obj.getBxOffset()} )
+
+        condDict[keyObjDict][objName] = objDict
+
+        objDict[keyCutDict] = {}
+        for cut in obj.getCuts():
+          cutName = cut.getName()
+          value = { keyName: cutName }
+          value.update( {keyCut: cut } )
+          value.update( {keyTarget: cut.getObjectType()} )
+          value.update( {keyCutType: cutTypes[cut.getCutType()]} )
+          value.update( {keyType: cut.getCutType()} )
+          value.update( {keyMinVal: cut.getMinimum().value} )
+          value.update( {keyMinIndex: cut.getMinimum().index} )
+          value.update( {keyMaxVal: cut.getMaximum().value} )
+          value.update( {keyMaxIndex: cut.getMaximum().index} )
+          value.update( {keyData: cut.getData()} )
+          objDict[keyCutDict][cutName] = value
+
+        condDict[keyObjList].append( condDict[keyObjDict][objName] )
+
+      for ii in range(len(condDict[keyObjList])):
+        objDict = condDict[keyObjList][ii]
+        cutDict = condDict[keyObjList][ii][keyCutDict]
+
+        if any_in([tmGrammar.MU], condName):  #do this only for muons
+          getMuonCondition(ii, muCondDict, cutDict)
+
+        if any_in([tmGrammar.JET, tmGrammar.TAU, tmGrammar.EG], condName):
+          getCaloCondition(ii, caloCondDict, cutDict)
+
+        if any_in([tmGrammar.ETT, tmGrammar.HTT,
+                   tmGrammar.ETM, tmGrammar.HTM], condName):
+          getEsumCondition(ii, esumsCondDict, cutDict)
+         
+  for algoName in data.reporter[keyAlgoDict]:
+    algo = data.reporter[keyAlgoDict][algoName][keyAlgo]
+    for condName in data.reporter[keyAlgoDict][algoName][keyCondDict]:
+      condType = data.reporter[keyAlgoDict][algoName][keyCondDict][condName][keyTriggerGroup]
+      data.reporter[keyTriggerGroups][condType][keyNBits] += 1
+      value = {keyIndex: data.reporter[keyAlgoDict][algoName][keyIndex]}
+      value.update( {keyAlgoName: algoName} )
+      data.reporter[keyTriggerGroups][condType][keyBits].append(value)
+
+  data.reporter[keyNBitsSorted] = sortDictByKey(data.reporter[keyTriggerGroups],
+                                                keyNBits, True)
+  data.reporter[keyIndexSorted] = sortDictByKey(data.reporter[keyAlgoDict],
+                                                keyIndex, False)
+  n = 0
+  for tg in data.reporter[keyTriggerGroups]:
+    n += data.reporter[keyTriggerGroups][tg][keyNBits]
+  data.reporter[keyNAlgoDefined] = n
+
+  condList = []
+  for algoName in data.reporter[keyIndexSorted]:
+    condList.extend(data.reporter[keyAlgoDict][algoName][keyCondDict].keys())
+  data.reporter[keyConditionSet] = set(condList)
+
+  return data
 
 # eof

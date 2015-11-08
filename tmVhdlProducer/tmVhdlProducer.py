@@ -213,8 +213,8 @@ class VhdlProducer(object):
 
         algoMap = menu.getAlgorithmMap()
         self.nAlgos = algoMap.size()
-        util.getReport(self.menu,self.version)
-        #print "menu reporter keys:", self.menu.reporter.keys()
+        self.data = util.getReport(self.menu,self.version)
+        #print "data reporter keys:", self.data.reporter.keys()
 
     def _makeDirectories(self):
         mainDir = self.outputDir + "/" + self.menuName
@@ -249,9 +249,9 @@ class VhdlProducer(object):
           #print "writing %s Algos in %s Modules"%(self.nAlgos,self.nModules)
           while iAlgo < self.nAlgos:
             iMod = moduleCycle.next()
-            #algoName  =  self.menu.reporter['algoDict'].keys()[iAlgo]  ## Need to spread out the algos in a more logical way
-            algoName  =  self.menu.reporter['index_sorted'][iAlgo]  ## Need to spread out the algos in a more logical way
-            algoDict  =  self.menu.reporter['algoDict'][algoName]
+            #algoName  =  self.data.reporter['algoDict'].keys()[iAlgo]  ## Need to spread out the algos in a more logical way
+            algoName  =  self.data.reporter['index_sorted'][iAlgo]  ## Need to spread out the algos in a more logical way
+            algoDict  =  self.data.reporter['algoDict'][algoName]
             algoIndex =  algoDict['index']  ##global index
             #__oldmap[iMod].append(algoIndex)
             #__oldlocalalgoindex= __oldmap[iMod].index(algoIndex)
@@ -266,11 +266,11 @@ class VhdlProducer(object):
           print "-----------------------------------------------------------"
           print "Manually Distributing Algos in the Modules based on the menu"
           print "-----------------------------------------------------------"
-          for algoName in self.menu.reporter['index_sorted']:
-            algoDict  =  self.menu.reporter['algoDict'][algoName]
+          for algoName in self.data.reporter['index_sorted']:
+            algoDict  =  self.data.reporter['algoDict'][algoName]
             iMod = algoDict['moduleId']
             algoIndex = algoDict['index']  ##global index
-            #algoIndex = self.menu.reporter['algoDict'][algoName]['moduleIndex']
+            #algoIndex = self.data.reporter['algoDict'][algoName]['moduleIndex']
             #__oldmap[iMod].append(algoIndex)
             #a2m[algoIndex]=(iMod,__oldmap[iMod].index(algoIndex))
             localAlgoIndex= algoDict['moduleIndex']
@@ -282,26 +282,26 @@ class VhdlProducer(object):
             a2m[algoIndex]=(iMod,localAlgoIndex)
 
         #print "adding mapping", __oldmap, a2m
-        self.menu.reporter['m2a']=m2a
-        #self.menu.reporter['__oldmap']=__oldmap
-        self.menu.reporter['a2m']=a2m
+        self.data.reporter['m2a']=m2a
+        #self.data.reporter['__oldmap']=__oldmap
+        self.data.reporter['a2m']=a2m
         self.m2a=m2a
         self.a2m=a2m
 
     def update_reporter(self):
         """ Update Reporter here to reduce the logic required in the templates """
-        self.menu.reporter['moduleConds']= [{} for x in range(self.nModules)]
-        self.menu.reporter['moduleCondSet']= [set() for x in range(self.nModules)]
+        self.data.reporter['moduleConds']= [{} for x in range(self.nModules)]
+        self.data.reporter['moduleCondSet']= [set() for x in range(self.nModules)]
         for iMod in range(self.nModules):
-          for localAlgoIndex in self.menu.reporter['m2a'][iMod]:
-            algoIndex = self.menu.reporter['m2a'][iMod][localAlgoIndex]
-            algoName = filter(lambda x : self.menu.reporter['algoDict'][x]['index']==algoIndex ,self.menu.reporter['algoDict'])[0]
-            algoDict = self.menu.reporter['algoDict'][algoName]
-            self.menu.reporter['moduleConds'][iMod][localAlgoIndex]= [ condName for condName in algoDict['condDict']    ]
+          for localAlgoIndex in self.data.reporter['m2a'][iMod]:
+            algoIndex = self.data.reporter['m2a'][iMod][localAlgoIndex]
+            algoName = filter(lambda x : self.data.reporter['algoDict'][x]['index']==algoIndex ,self.data.reporter['algoDict'])[0]
+            algoDict = self.data.reporter['algoDict'][algoName]
+            self.data.reporter['moduleConds'][iMod][localAlgoIndex]= [ condName for condName in algoDict['condDict']    ]
 
             for condName in algoDict['condDict']:
-              self.menu.reporter['moduleCondSet'][iMod].add(condName)
-          self.menu.reporter['moduleCondSet'][iMod]= list(self.menu.reporter['moduleCondSet'][iMod] )
+              self.data.reporter['moduleCondSet'][iMod].add(condName)
+          self.data.reporter['moduleCondSet'][iMod]= list(self.data.reporter['moduleCondSet'][iMod] )
         pass
 
 
@@ -316,8 +316,8 @@ class VhdlProducer(object):
 
         #while iAlgo < self.nAlgos:
         #  iMod = moduleCycle.next()
-        #  algoName  =  self.menu.reporter['algoDict'].keys()[iAlgo]  ## Need to spread out the algos in a more logical way
-        #  algoDict  =  self.menu.reporter['algoDict'][algoName]
+        #  algoName  =  self.data.reporter['algoDict'].keys()[iAlgo]  ## Need to spread out the algos in a more logical way
+        #  algoDict  =  self.data.reporter['algoDict'][algoName]
         for iMod in range(self.nModules): 
           #if self.verbose: print "template: "
           #temp = "signal_eta_phi"
@@ -335,10 +335,10 @@ class VhdlProducer(object):
             #self.loader.env.filters.update(filters)
             #print self.loader.env.filters
             with open( tempOutput ,'a') as f:
-              f.write(self.loader.templateDict[temp].render(  {"menu":self.menu,"iMod":iMod } ))
+              f.write(self.loader.templateDict[temp].render(  {"menu":self.data,"iMod":iMod } ))
               if self.verbose:
                 print "###################################      Start Template:    %s       #################################"%temp
-                print(self.loader.templateDict[temp].render(  {"menu":self.menu,"iMod":iMod} ))
+                print(self.loader.templateDict[temp].render(  {"menu":self.data,"iMod":iMod} ))
                 print "###################################"
                 print "###################################      End   Template:    %s       #################################"%temp
               print temp, " "*(20-len(temp)) ,":  " ,  tempOutput 
