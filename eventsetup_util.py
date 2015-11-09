@@ -554,7 +554,6 @@ def getReport(menu, vhdlVersion=False):
         if any_in([tmGrammar.ETT, tmGrammar.HTT,
                    tmGrammar.ETM, tmGrammar.HTM], condName):
           getEsumCondition(ii, esumsCondDict, cutDict)
-          print esumsCondDict.keys()
          
   for algoName in data.reporter[keyAlgoDict]:
     algo = data.reporter[keyAlgoDict][algoName][keyAlgo]
