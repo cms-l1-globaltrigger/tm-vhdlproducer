@@ -1,20 +1,4 @@
---------------------------------------------------------------------------------
--- Synthesizer : ISE 14.6
--- Platform    : Linux Ubuntu 10.04
--- Targets     : Synthese
---------------------------------------------------------------------------------
--- This work is held in copyright as an unpublished work by HEPHY (Institute
--- of High Energy Physics) All rights reserved.  This work may not be used
--- except by authorized licensees of HEPHY. This work is the
--- confidential information of HEPHY.
---------------------------------------------------------------------------------
--- $HeadURL: svn://heros.hephy.at/GlobalTriggerUpgrade/l1tm/L1Menu_CaloMuonCorrelation_2015_hb_test/vhdl/module_0/src/gtl_module.vhd $
--- $Date: 2015-08-24 11:49:40 +0200 (Mon, 24 Aug 2015) $
--- $Author: bergauer $
--- $Revision: 4173 $
---------------------------------------------------------------------------------
-
--- Desription:
+-- Description:
 -- Global Trigger Logic module.
 
 -- ========================================================
@@ -37,9 +21,8 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
-use ieee.std_logic_unsigned.all; -- for function "CONV_INTEGER"
+use ieee.std_logic_unsigned.all;
 
--- use work.l1tm_pkg.all;
 use work.gtl_pkg.all;
 
 entity gtl_module is
@@ -77,13 +60,16 @@ architecture rtl of gtl_module is
 
 -- ==== Inserted by TME - begin =============================================================================================================
 
--- Signal definition for eta and phi (outputs of subtractors) for correlation conditions.
--- Insert signal_differences_correlation_conditions.vhd.j2 for at least one occurance of a correlation condition of the two ObjectTypes used in the correlation condition.
--- Insert as often as correlation conditions of different ObjectTypes occure.
-{#%- include  "subTemplates/signal_differences_correlation_conditions.vhd.j2"%#}
+-- Signal definition of pt, eta and phi for correlation conditions.
+-- Insert "signal_correlation_conditions_pt_eta_phi.vhd.j2" as often as an ObjectType at a certain Bx is used in a correlation condition.
+{#%- include  "subTemplates/signal_correlation_conditions_pt_eta_phi.vhd.j2"%#}
+
+-- Signal definition of differences for correlation conditions.
+-- Insert "signal_correlation_conditions_differences.vhd.j2" once for correlation conditions of different ObjectTypes and Bx.
+{#%- include  "subTemplates/signal_correlation_conditions_differences.vhd.j2"%#}
 
 -- Signal definition for muon charge correlations (only once for all muon conditions, except SingleMuon conditions)
--- Insert signal_muon_charge_correlations.vhd.j2 - only once in a certain Bx, if there is at least one DoubleMuon, TripleMuon or QuadMuon condition.
+-- Insert "signal_muon_charge_correlations.vhd.j2" only once in a certain Bx, if there is at least one DoubleMuon, TripleMuon or QuadMuon condition.
 {%- include  "subTemplates/signal_muon_charge_correlations.vhd.j2"%}
 
 -- Signal definition for conditions names
@@ -110,7 +96,7 @@ p_m_2_bx_pipeline_i: entity work.p_m_2_bx_pipeline
         external_conditions, ext_cond_bx_p2, ext_cond_bx_p1, ext_cond_bx_0, ext_cond_bx_m1, ext_cond_bx_m2
     );
 
--- Parameterized pipeline stages for External conditions, actually 2 stages (fixed) in conditions, see external_conditions_pipeline_stages
+-- Parameterized pipeline stages for External conditions, actually 2 stages (fixed) in conditions, see "constant external_conditions_pipeline_stages ..."
 ext_cond_pipe_p: process(lhc_clk, ext_cond_bx_p2, ext_cond_bx_p1, ext_cond_bx_0, ext_cond_bx_m1, ext_cond_bx_m2)
     type ext_cond_pipe_array is array (0 to external_conditions_pipeline_stages+1) of std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);
     variable ext_cond_bx_p2_pipe_temp : ext_cond_pipe_array := (others => (others => '0'));
@@ -145,12 +131,20 @@ end process;
 -- Instantiations of muon charge correlations - only once in a certain Bx, if there is at least one DoubleMuon, TripleMuon or QuadMuon condition
 {%- include  "subTemplates/instance_muon_charge_correlations.vhd.j2"%}
 
--- Instantiations of differences calculation for calo muon correlation conditions (used for DETA, DPHI and DR) - once for correlation conditions with two ObjectTypes in certain Bxs
-{#%- include  "subTemplates/instance_differences_correlation_conditions.vhd.j2"%#}
+-- Instantiations of pt, eta and phi for correlation conditions (used for DETA, DPHI and DR) - once for every ObjectType in certain Bx used in correlation conditions
+{#%- include  "subTemplates/instance_correlation_conditions_pt_eta_phi.vhd.j2"%#}
+
+-- Instantiations of eta and phi conversion to muon scale for calo-muon correlation conditions (used for DETA, DPHI and DR) - once for every calo ObjectType in certain Bx used in correlation conditions
+{#%- include  "subTemplates/instance_correlation_conditions_eta_phi_conversion.vhd.j2"%#}
+
+-- Instantiations of differences for correlation conditions (used for DETA, DPHI and DR) - once for correlation conditions with two ObjectTypes in certain Bxs
+{#%- include  "subTemplates/instance_correlation_conditions_differences.vhd.j2"%#}
+
+-- Instantiations of cosh-deta and cos-dphi LUTs for correlation conditions (used for invariant mass) - once for correlation conditions with two ObjectTypes in certain Bxs
+{#%- include  "subTemplates/instance_correlation_conditions_inv_mass.vhd.j2"%#}
 
 -- Instantiations of conditions
 {%- include  "subTemplates/instance_calo_condition_v3.vhd.j2"%}
-{#%- include  "subTemplates/instance_muon_condition_v2.vhd.j2"%#}
 {%- include  "subTemplates/instance_muon_condition_v3.vhd.j2"%}
 {%- include  "subTemplates/instance_esums_condition.vhd.j2"%}
 {#%- include  "subTemplates/instance_calo_calo_correlation_condition.vhd.j2"%#}

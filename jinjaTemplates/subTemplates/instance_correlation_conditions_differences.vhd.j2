@@ -1,0 +1,10 @@
+diff_{{objName1|lower}}_{{objName2|lower}}_eta_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_i: entity work.sub_eta_integer_obj_vs_obj
+    generic map(NR_{{objName1|upper}}_OBJECTS, NR_{{objName2|upper}}_OBJECTS)
+    port map({{objName1|lower}}_eta_integer_bx_{{Bx1|lower}}, {{objName2|lower}}_eta_integer_bx_{{Bx2|lower}}, diff_{{objName1|lower}}_{{objName2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_eta_integer);      
+
+{{objName1|lower}}_{{objName2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_l1: for i in 0 to NR_{{objName1|upper}}_OBJECTS-1 generate
+    {{objName1|lower}}_{{objName2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_l2: for j in 0 to NR_{{objName2|upper}}_OBJECTS-1 generate
+	diff_{{objName1|lower}}_{{objName2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_eta_integer_value(i,j) <= {{objName1|upper}}_{{objName2|upper}}_DIFF_ETA_LUT(diff_{{objName1|lower}}_{{objName2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_eta_integer(i,j));
+	diff_{{objName1|lower}}_{{objName2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_phi_integer_value(i,j) <= {{objName1|upper}}_{{objName2|upper}}_DIFF_PHI_LUT(diff_{{objName1|lower}}_{{objName2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_phi_integer(i,j));
+    end generate {{objName1|lower}}_{{objName2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_l2;
+end generate {{objName1|lower}}_{{objName2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_l1;

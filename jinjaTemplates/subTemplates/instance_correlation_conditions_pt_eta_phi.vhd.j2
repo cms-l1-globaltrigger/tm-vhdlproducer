@@ -1,0 +1,6 @@
+{{objName|lower}}_data_bx_{{Bx|lower}}_l: for i in 0 to NR_{{objName|upper}}_OBJECTS-1 generate
+    {{objName|lower}}_pt_vector_bx_{{Bx|lower}}(i)({{objName|lower}}_PT_VECTOR_WIDTH-1 downto 0) <= CONV_STD_LOGIC_VECTOR({{objName|upper}}_ET_LUT(CONV_INTEGER({{objName|lower}}_bx_0(i)(D_S_I_{{objName|upper}}_V2.et_high downto D_S_I_{{objName|upper}}_V2.et_low))), {{objName|lower}}_PT_VECTOR_WIDTH);
+    {{objName|lower}}_eta_integer_bx_{{Bx|lower}}(i) <= CONV_INTEGER({{objName|lower}}_bx_{{Bx|lower}}(i)(D_S_I_{{objName|upper}}_V2.eta_high downto D_S_I_{{objName|upper}}_V2.eta_low));
+    {{objName|lower}}_phi_integer_bx_{{Bx|lower}}(i) <= CONV_INTEGER({{objName|lower}}_bx_{{Bx|lower}}(i)(D_S_I_{{objName|upper}}_V2.phi_high downto D_S_I_{{objName|upper}}_V2.phi_low));
+end generate;
+

@@ -1,0 +1,4 @@
+{{objName|lower}}_data_bx_{{Bx|lower}}_l: for i in 0 to NR_{{objName|upper}}_OBJECTS-1 generate
+    {{objName|lower}}_eta_conv_2_muon_eta_integer_bx_{{Bx|lower}}(i) <= {{objName|upper}}_ETA_CONV_2_MUON_ETA_LUT(CONV_INTEGER({{objName|lower}}_bx_{{Bx|lower}}(i)(D_S_I_{{objName|upper}}_V2.eta_high downto D_S_I_{{objName|upper}}_V2.eta_low)));
+    {{objName|lower}}_phi_conv_2_muon_phi_integer_bx_{{Bx|lower}}(i) <= {{objName|upper}}_PHI_CONV_2_MUON_PHI_LUT(CONV_INTEGER({{objName|lower}}_bx_{{Bx|lower}}(i)(D_S_I_{{objName|upper}}_V2.phi_high downto D_S_I_{{objName|upper}}_V2.phi_low)));
+end generate;

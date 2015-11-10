@@ -1,20 +1,4 @@
---------------------------------------------------------------------------------
--- Synthesizer : ISE 14.6
--- Platform    : Linux Ubuntu 10.04
--- Targets     : Synthese
---------------------------------------------------------------------------------
--- This work is held in copyright as an unpublished work by HEPHY (Institute
--- of High Energy Physics) All rights reserved.  This work may not be used
--- except by authorized licensees of HEPHY. This work is the
--- confidential information of HEPHY.
---------------------------------------------------------------------------------
--- $HeadURL: svn://heros.hephy.at/GlobalTriggerUpgrade/l1tm/L1Menu_CaloMuonCorrelation_2015_hb_test/vhdl/module_0/src/gtl_pkg.vhd $
--- $Date: 2015-08-24 11:49:40 +0200 (Mon, 24 Aug 2015) $
--- $Author: bergauer $
--- $Revision: 4173 $
---------------------------------------------------------------------------------
-
--- Desription:
+-- Description:
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
 -- HB 2015-10-28: inserted constants and LUTs for correlation conditions
@@ -33,7 +17,6 @@
 
 -- Scale set:
 -- {{menu.reporter['XxxDict']['L1TMenuScaleSet']}}
-
 
 -- Version of L1 Trigger Menu Compiler:
 -- v{{menu.reporter['XxxDict']['L1TMCompilerVersionMajor']}}.{{menu.reporter['XxxDict']['L1TMCompilerVersionMinor']}}.{{menu.reporter['XxxDict']['L1TMCompilerVersionRevision']}}
@@ -114,21 +97,23 @@ constant FDL_FW_VERSION : std_logic_vector(31 downto 0) := X"00" &
 constant NR_MUON_TEMPLATES : positive range 1 to 4 := 4; -- number of max. templates for muon conditions
 constant NR_MUON_OBJECTS : positive := MUON_ARRAY_LENGTH; -- from lhc_data_pkg.vhd
 constant MAX_MUON_BITS : positive := MUON_DATA_WIDTH; -- from lhc_data_pkg.vhd
+constant MUON_TEMPLATES_WIDTH : positive range 1 to MUON_DATA_WIDTH := 16; -- bit width of templates for muon conditions
+constant MAX_MUON_TEMPLATES_BITS : positive range 1 to MUON_DATA_WIDTH := MUON_TEMPLATES_WIDTH;
 
-type d_s_i_muon_record is record
-    charge_high, charge_low, iso_high, iso_low, eta_high, eta_low, qual_high, qual_low, pt_high, pt_low, phi_high, phi_low : natural range MAX_MUON_BITS-1 downto 0;
+type d_s_i_muon_record is record -- record definition of muon data structure
+    charge_high, charge_low, iso_high, iso_low, eta_high, eta_low, qual_high, qual_low, pt_high, pt_low, phi_high, phi_low : natural range MUON_DATA_WIDTH-1 downto 0;
 end record d_s_i_muon_record;
 
-constant d_s_i_muon : d_s_i_muon_record := (35,34,33,32,31,23,22,19,18,10,9,0);
+constant d_s_i_muon : d_s_i_muon_record := (35,34,33,32,31,23,22,19,18,10,9,0); -- muon data structure
 
-type muon_objects_array is array (natural range <>) of std_logic_vector(MAX_MUON_BITS-1 downto 0);
-constant MAX_MUON_TEMPLATES_BITS : positive range 1 to MUON_DATA_WIDTH := 16;
-type muon_templates_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+type muon_objects_array is array (natural range <>) of std_logic_vector(MUON_DATA_WIDTH-1 downto 0); 
+-- type muon_templates_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
+type muon_templates_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(MUON_TEMPLATES_WIDTH-1 downto 0);
 
--- type muon_templates_quality_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector((2**(d_s_i_muon.qual_high-d_s_i_muon.qual_low+1))-1 downto 0);
-type muon_templates_quality_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(15 downto 0);
--- type muon_templates_iso_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector((2**(d_s_i_muon.iso_high-d_s_i_muon.iso_low+1))-1 downto 0);
-type muon_templates_iso_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(3 downto 0);
+type muon_templates_quality_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector((2**(d_s_i_muon.qual_high-d_s_i_muon.qual_low+1))-1 downto 0);
+-- type muon_templates_quality_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(15 downto 0);
+type muon_templates_iso_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector((2**(d_s_i_muon.iso_high-d_s_i_muon.iso_low+1))-1 downto 0);
+-- type muon_templates_iso_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(3 downto 0);
 
 type muon_templates_boolean_array is array (1 to NR_MUON_TEMPLATES) of boolean;
 type muon_templates_string_array is array (1 to NR_MUON_TEMPLATES) of string(1 to 3);
@@ -145,8 +130,9 @@ constant NR_CALO_TEMPLATES : positive range 1 to 4 := 4; -- number of max. templ
 constant NR_EG_OBJECTS : positive := EG_ARRAY_LENGTH; -- number eg objects, from lhc_data_pkg.vhd
 constant NR_JET_OBJECTS : positive := JET_ARRAY_LENGTH; -- number jet objects, from lhc_data_pkg.vhd
 constant NR_TAU_OBJECTS : positive := TAU_ARRAY_LENGTH; -- number tau objects, from lhc_data_pkg.vhd
-constant MAX_CALO_BITS : positive := max(EG_DATA_WIDTH, JET_DATA_WIDTH, TAU_DATA_WIDTH);
-constant MAX_CALO_ISO_BITS : positive range 1 to 2 := 2;
+constant MAX_CALO_BITS : positive := max(EG_DATA_WIDTH, JET_DATA_WIDTH, TAU_DATA_WIDTH); -- max. calo data bit width
+constant MAX_CALO_ISO_BITS : positive range 1 to 2 := 2; -- max. calo iso bit width
+constant MAX_CALO_TEMPLATES_BITS : positive range 1 to MAX_CALO_BITS := 16; 
 
 -- d_s_i_calo_record used for calo_conditions.vhd
 type d_s_i_calo_record is record
@@ -181,7 +167,6 @@ constant D_S_I_JET_V2 : d_s_i_jet_record := (26,19,18,11,10,0);
 constant D_S_I_TAU_V2 : d_s_i_tau_record := (26,25,24,17,16,9,8,0);
 
 type calo_objects_array is array (natural range <>) of std_logic_vector(MAX_CALO_BITS-1 downto 0);
-constant MAX_CALO_TEMPLATES_BITS : positive range 1 to MAX_CALO_BITS := 16;
 type calo_templates_array is array (1 to NR_CALO_TEMPLATES) of std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
 type calo_templates_boolean_array is array (1 to NR_CALO_TEMPLATES) of boolean;
 type calo_templates_iso_array is array (1 to NR_CALO_TEMPLATES) of std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0);
@@ -232,20 +217,22 @@ type diff_2dim_integer_array is array (natural range <>, natural range <>) of in
 -- ********************************************************
 -- deta, dphi and dr parameters
 
+constant CALO_PHI_HALF_RANGE_BINS : positive := 72; -- 144/2, because of phi bin width = 2*PI/144
+constant MUON_PHI_HALF_RANGE_BINS : positive := 288; -- 576/2, because of phi bin width = 2*PI/576
+constant DETA_DPHI_LIMITS_PRECISION_ALL : positive := 3; -- position after decimal point for DETA and DPHI
+constant DR_LIMITS_PRECISION_ALL : positive := 3; -- position after decimal point for DR - 3 => max. number, higher numbers exceed 32 bit integer values !!!
 constant PI : real :=  3.14159;
-
-constant PHI_HALF_RANGE_REAL : real := PI;
+-- constant PHI_HALF_RANGE_REAL : real := PI;
 constant ETA_RANGE_REAL : real := 10.0; -- eta range max.: -5.0 to +5.0
-subtype dr_squared_range_real is real range 0.0 to ((ETA_RANGE_REAL**2)+(PHI_HALF_RANGE_REAL**2));
+
+-- subtypes for ranges of limits
 subtype diff_eta_range_real is real range -ETA_RANGE_REAL to ETA_RANGE_REAL;
-subtype diff_phi_range_real is real range 0.0 to PHI_HALF_RANGE_REAL;
+subtype diff_phi_range_real is real range 0.0 to PI;
+subtype dr_squared_range_real is real range 0.0 to ((ETA_RANGE_REAL**2)+(PI**2)); 
 
-constant DETA_DPHI_LIMITS_PRECISION_ALL : positive := 3;
-constant DR_LIMITS_PRECISION_ALL : positive := 3; -- 3 => max. number, higher numbers exceed 32 bit integer values !!!
-
-subtype calo_diff_eta_range_integer is integer range 0 to 10005; -- range -5.0 to +5.0
-type calo_diff_eta_lut_array is array (0 to 255) of calo_diff_eta_range_integer;
-constant CALO_DIFF_ETA_LUT : calo_diff_eta_lut_array := (
+-- LUT for differences in eta of calos (values => rounded(DETA [bins] * 0.0870/2) * 10**DETA_DPHI_LIMITS_PRECISION_ALL)
+type calo_diff_eta_lut_array is array (0 to 255) of natural range 0 to 10005; -- range -5.0 to +5.0
+constant EG_EG_DIFF_ETA_LUT : calo_diff_eta_lut_array := (
 0, 44, 87, 131, 174, 218, 261, 305, 348, 392, 435, 479, 522, 566, 609, 653,
 696, 740, 783, 827, 870, 914, 957, 1001, 1044, 1088, 1131, 1175, 1218, 1262, 1305, 1349,
 1392, 1436, 1479, 1523, 1566, 1610, 1653, 1697, 1740, 1784, 1827, 1871, 1914, 1958, 2001, 2045,
@@ -264,11 +251,15 @@ constant CALO_DIFF_ETA_LUT : calo_diff_eta_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-constant CALO_PHI_HALF_RANGE_BINS : positive := 72;
-subtype calo_diff_phi_range_integer is natural range 0 to 6283; -- range 0 to 2*PI
+constant EG_JET_DIFF_ETA_LUT : calo_diff_eta_lut_array := EG_EG_DIFF_ETA_LUT;
+constant EG_TAU_DIFF_ETA_LUT : calo_diff_eta_lut_array := EG_EG_DIFF_ETA_LUT;
+constant JET_JET_DIFF_ETA_LUT : calo_diff_eta_lut_array := EG_EG_DIFF_ETA_LUT;
+constant JET_TAU_DIFF_ETA_LUT : calo_diff_eta_lut_array := EG_EG_DIFF_ETA_LUT;
+constant TAU_TAU_DIFF_ETA_LUT : calo_diff_eta_lut_array := EG_EG_DIFF_ETA_LUT;
 
-type calo_diff_phi_lut_array is array (0 to 255) of calo_diff_phi_range_integer;
-constant CALO_DIFF_PHI_LUT : calo_diff_phi_lut_array := (
+-- LUT for differences in phi of calos (values => rounded(DPHI [bins] * 2*PI/144) * 10**DETA_DPHI_LIMITS_PRECISION_ALL)
+type calo_diff_phi_lut_array is array (0 to 255) of natural range 0 to 6283; -- range 0 to 2*PI
+constant EG_EG_DIFF_PHI_LUT : calo_diff_phi_lut_array := (
 0, 44, 87, 131, 175, 218, 262, 305, 349, 393, 436, 480, 524, 567, 611, 654,
 698, 742, 785, 829, 873, 916, 960, 1004, 1047, 1091, 1134, 1178, 1222, 1265, 1309, 1353,
 1396, 1440, 1484, 1527, 1571, 1614, 1658, 1702, 1745, 1789, 1833, 1876, 1920, 1963, 2007, 2051,
@@ -287,10 +278,15 @@ constant CALO_DIFF_PHI_LUT : calo_diff_phi_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-subtype muon_diff_eta_range_integer is integer range 0 to 4905; -- range -2.45 to +2.45
+constant EG_JET_DIFF_PHI_LUT : calo_diff_phi_lut_array := EG_EG_DIFF_PHI_LUT;
+constant EG_TAU_DIFF_PHI_LUT : calo_diff_phi_lut_array := EG_EG_DIFF_PHI_LUT;
+constant JET_JET_DIFF_PHI_LUT : calo_diff_phi_lut_array := EG_EG_DIFF_PHI_LUT;
+constant JET_TAU_DIFF_PHI_LUT : calo_diff_phi_lut_array := EG_EG_DIFF_PHI_LUT;
+constant TAU_TAU_DIFF_PHI_LUT : calo_diff_phi_lut_array := EG_EG_DIFF_PHI_LUT;
 
-type muon_diff_eta_lut_array is array (0 to 511) of muon_diff_eta_range_integer;
-constant MUON_DIFF_ETA_LUT : muon_diff_eta_lut_array := (
+-- LUT for differences in eta of muon (values => rounded(DETA [bins] * 0.0870/8) * 10**DETA_DPHI_LIMITS_PRECISION_ALL)
+type muon_diff_eta_lut_array is array (0 to 511) of natural range 0 to 4905; -- range -2.45 to +2.45
+constant MUON_MUON_DIFF_ETA_LUT : muon_diff_eta_lut_array := (
 0, 11, 22, 33, 44, 54, 65, 76, 87, 98, 109, 120, 131, 141, 152, 163,
 174, 185, 196, 207, 218, 228, 239, 250, 261, 272, 283, 294, 305, 315, 326, 337,
 348, 359, 370, 381, 392, 402, 413, 424, 435, 446, 457, 468, 479, 489, 500, 511,
@@ -325,11 +321,9 @@ constant MUON_DIFF_ETA_LUT : muon_diff_eta_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-constant MUON_PHI_HALF_RANGE_BINS : positive := 288;
-subtype muon_diff_phi_range_integer is natural range 0 to 6283; -- range 0 to 2*PI
-
-type muon_diff_phi_lut_array is array (0 to 1023) of muon_diff_phi_range_integer;
-constant MUON_DIFF_PHI_LUT : muon_diff_phi_lut_array := (
+-- LUT for differences in phi of muon (values => rounded(DPHI [bins] * 2*PI/576) * 10**DETA_DPHI_LIMITS_PRECISION_ALL)
+type muon_diff_phi_lut_array is array (0 to 1023) of natural range 0 to 6283; -- range 0 to 2*PI
+constant MUON_MUON_DIFF_PHI_LUT : muon_diff_phi_lut_array := (
 0, 11, 22, 33, 44, 55, 65, 76, 87, 98, 109, 120, 131, 142, 153, 164,
 175, 185, 196, 207, 218, 229, 240, 251, 262, 273, 284, 295, 305, 316, 327, 338,
 349, 360, 371, 382, 393, 404, 415, 425, 436, 447, 458, 469, 480, 491, 502, 513,
@@ -396,45 +390,132 @@ constant MUON_DIFF_PHI_LUT : muon_diff_phi_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
+constant EG_MUON_DIFF_PHI_LUT : muon_diff_phi_lut_array := MUON_MUON_DIFF_PHI_LUT;
+constant JET_MUON_DIFF_PHI_LUT : muon_diff_phi_lut_array := MUON_MUON_DIFF_PHI_LUT;
+constant TAU_MUON_DIFF_PHI_LUT : muon_diff_phi_lut_array := MUON_MUON_DIFF_PHI_LUT;
+
+-- LUT for differences in eta of calo-muon (values => rounded(DETA [bins] * 0.0870/8) * 10**DETA_DPHI_LIMITS_PRECISION_ALL)
+type calo_muon_diff_eta_lut_array is array (0 to 1023) of natural range 0 to 10005; -- range -5.0 to +5.0
+constant EG_MUON_DIFF_ETA_LUT : calo_muon_diff_eta_lut_array := (
+0, 11, 22, 33, 44, 54, 65, 76, 87, 98, 109, 120, 131, 141, 152, 163,
+174, 185, 196, 207, 218, 228, 239, 250, 261, 272, 283, 294, 305, 315, 326, 337,
+348, 359, 370, 381, 392, 402, 413, 424, 435, 446, 457, 468, 479, 489, 500, 511,
+522, 533, 544, 555, 566, 576, 587, 598, 609, 620, 631, 642, 653, 663, 674, 685,
+696, 707, 718, 729, 740, 750, 761, 772, 783, 794, 805, 816, 827, 837, 848, 859,
+870, 881, 892, 903, 914, 924, 935, 946, 957, 968, 979, 990, 1001, 1011, 1022, 1033,
+1044, 1055, 1066, 1077, 1088, 1098, 1109, 1120, 1131, 1142, 1153, 1164, 1175, 1185, 1196, 1207,
+1218, 1229, 1240, 1251, 1262, 1272, 1283, 1294, 1305, 1316, 1327, 1338, 1349, 1359, 1370, 1381,
+1392, 1403, 1414, 1425, 1436, 1446, 1457, 1468, 1479, 1490, 1501, 1512, 1523, 1533, 1544, 1555,
+1566, 1577, 1588, 1599, 1610, 1620, 1631, 1642, 1653, 1664, 1675, 1686, 1697, 1707, 1718, 1729,
+1740, 1751, 1762, 1773, 1784, 1794, 1805, 1816, 1827, 1838, 1849, 1860, 1871, 1881, 1892, 1903,
+1914, 1925, 1936, 1947, 1958, 1968, 1979, 1990, 2001, 2012, 2023, 2034, 2045, 2055, 2066, 2077,
+2088, 2099, 2110, 2121, 2132, 2142, 2153, 2164, 2175, 2186, 2197, 2208, 2219, 2229, 2240, 2251,
+2262, 2273, 2284, 2295, 2306, 2316, 2327, 2338, 2349, 2360, 2371, 2382, 2393, 2403, 2414, 2425,
+2436, 2447, 2458, 2469, 2480, 2490, 2501, 2512, 2523, 2534, 2545, 2556, 2567, 2577, 2588, 2599,
+2610, 2621, 2632, 2643, 2654, 2664, 2675, 2686, 2697, 2708, 2719, 2730, 2741, 2751, 2762, 2773,
+2784, 2795, 2806, 2817, 2828, 2838, 2849, 2860, 2871, 2882, 2893, 2904, 2915, 2925, 2936, 2947,
+2958, 2969, 2980, 2991, 3002, 3012, 3023, 3034, 3045, 3056, 3067, 3078, 3089, 3099, 3110, 3121,
+3132, 3143, 3154, 3165, 3176, 3186, 3197, 3208, 3219, 3230, 3241, 3252, 3263, 3273, 3284, 3295,
+3306, 3317, 3328, 3339, 3350, 3360, 3371, 3382, 3393, 3404, 3415, 3426, 3437, 3447, 3458, 3469,
+3480, 3491, 3502, 3513, 3524, 3534, 3545, 3556, 3567, 3578, 3589, 3600, 3611, 3621, 3632, 3643,
+3654, 3665, 3676, 3687, 3698, 3708, 3719, 3730, 3741, 3752, 3763, 3774, 3785, 3795, 3806, 3817,
+3828, 3839, 3850, 3861, 3872, 3882, 3893, 3904, 3915, 3926, 3937, 3948, 3959, 3969, 3980, 3991,
+4002, 4013, 4024, 4035, 4046, 4056, 4067, 4078, 4089, 4100, 4111, 4122, 4133, 4143, 4154, 4165,
+4176, 4187, 4198, 4209, 4220, 4230, 4241, 4252, 4263, 4274, 4285, 4296, 4307, 4317, 4328, 4339,
+4350, 4361, 4372, 4383, 4394, 4404, 4415, 4426, 4437, 4448, 4459, 4470, 4481, 4491, 4502, 4513,
+4524, 4535, 4546, 4557, 4568, 4578, 4589, 4600, 4611, 4622, 4633, 4644, 4655, 4665, 4676, 4687,
+4698, 4709, 4720, 4731, 4742, 4752, 4763, 4774, 4785, 4796, 4807, 4818, 4829, 4839, 4850, 4861,
+4872, 4883, 4894, 4905, 4916, 4926, 4937, 4948, 4959, 4970, 4981, 4992, 5003, 5013, 5024, 5035,
+5046, 5057, 5068, 5079, 5090, 5100, 5111, 5122, 5133, 5144, 5155, 5166, 5177, 5187, 5198, 5209,
+5220, 5231, 5242, 5253, 5264, 5274, 5285, 5296, 5307, 5318, 5329, 5340, 5351, 5361, 5372, 5383,
+5394, 5405, 5416, 5427, 5438, 5448, 5459, 5470, 5481, 5492, 5503, 5514, 5525, 5535, 5546, 5557,
+5568, 5579, 5590, 5601, 5612, 5622, 5633, 5644, 5655, 5666, 5677, 5688, 5699, 5709, 5720, 5731,
+5742, 5753, 5764, 5775, 5786, 5796, 5807, 5818, 5829, 5840, 5851, 5862, 5873, 5883, 5894, 5905,
+5916, 5927, 5938, 5949, 5960, 5970, 5981, 5992, 6003, 6014, 6025, 6036, 6047, 6057, 6068, 6079,
+6090, 6101, 6112, 6123, 6134, 6144, 6155, 6166, 6177, 6188, 6199, 6210, 6221, 6231, 6242, 6253,
+6264, 6275, 6286, 6297, 6308, 6318, 6329, 6340, 6351, 6362, 6373, 6384, 6395, 6405, 6416, 6427,
+6438, 6449, 6460, 6471, 6482, 6492, 6503, 6514, 6525, 6536, 6547, 6558, 6569, 6579, 6590, 6601,
+6612, 6623, 6634, 6645, 6656, 6666, 6677, 6688, 6699, 6710, 6721, 6732, 6743, 6753, 6764, 6775,
+6786, 6797, 6808, 6819, 6830, 6840, 6851, 6862, 6873, 6884, 6895, 6906, 6917, 6927, 6938, 6949,
+6960, 6971, 6982, 6993, 7004, 7014, 7025, 7036, 7047, 7058, 7069, 7080, 7091, 7101, 7112, 7123,
+7134, 7145, 7156, 7167, 7178, 7188, 7199, 7210, 7221, 7232, 7243, 7254, 7265, 7275, 7286, 7297,
+7308, 7319, 7330, 7341, 7352, 7362, 7373, 7384, 7395, 7406, 7417, 7428, 7439, 7449, 7460, 7471,
+7482, 7493, 7504, 7515, 7526, 7536, 7547, 7558, 7569, 7580, 7591, 7602, 7613, 7623, 7634, 7645,
+7656, 7667, 7678, 7689, 7700, 7710, 7721, 7732, 7743, 7754, 7765, 7776, 7787, 7797, 7808, 7819,
+7830, 7841, 7852, 7863, 7874, 7884, 7895, 7906, 7917, 7928, 7939, 7950, 7961, 7971, 7982, 7993,
+8004, 8015, 8026, 8037, 8048, 8058, 8069, 8080, 8091, 8102, 8113, 8124, 8135, 8145, 8156, 8167,
+8178, 8189, 8200, 8211, 8222, 8232, 8243, 8254, 8265, 8276, 8287, 8298, 8309, 8319, 8330, 8341,
+8352, 8363, 8374, 8385, 8396, 8406, 8417, 8428, 8439, 8450, 8461, 8472, 8483, 8493, 8504, 8515,
+8526, 8537, 8548, 8559, 8570, 8580, 8591, 8602, 8613, 8624, 8635, 8646, 8657, 8667, 8678, 8689,
+8700, 8711, 8722, 8733, 8744, 8754, 8765, 8776, 8787, 8798, 8809, 8820, 8831, 8841, 8852, 8863,
+8874, 8885, 8896, 8907, 8918, 8928, 8939, 8950, 8961, 8972, 8983, 8994, 9005, 9015, 9026, 9037,
+9048, 9059, 9070, 9081, 9092, 9102, 9113, 9124, 9135, 9146, 9157, 9168, 9179, 9189, 9200, 9211,
+9222, 9233, 9244, 9255, 9266, 9276, 9287, 9298, 9309, 9320, 9331, 9342, 9353, 9363, 9374, 9385,
+9396, 9407, 9418, 9429, 9440, 9450, 9461, 9472, 9483, 9494, 9505, 9516, 9527, 9537, 9548, 9559,
+9570, 9581, 9592, 9603, 9614, 9624, 9635, 9646, 9657, 9668, 9679, 9690, 9701, 9711, 9722, 9733,
+9744, 9755, 9766, 9777, 9788, 9798, 9809, 9820, 9831, 9842, 9853, 9864, 9875, 9885, 9896, 9907,
+9918, 9929, 9940, 9951, 9962, 9972, 9983, 9994, 10005, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+);
+
+constant JET_MUON_DIFF_ETA_LUT : calo_muon_diff_eta_lut_array := EG_MUON_DIFF_ETA_LUT;
+constant TAU_MUON_DIFF_ETA_LUT : calo_muon_diff_eta_lut_array := EG_MUON_DIFF_ETA_LUT;
+
 -- ********************************************************
 -- invariant mass parameters
 
 -- HB 2105-10-21: INV_MASS_LIMITS_PRECISION_ALL must be less than 2*INV_MASS_PT_PRECISION+INV_MASS_COSH_COS_PRECISION !!!
 constant INV_MASS_LIMITS_PRECISION_ALL : positive range 1 to 3 := 1; -- 1 => first digit after decimal point
-constant EG_ET_VECTOR_WIDTH: positive := 12; -- max. value 255.5 GeV => 2555 => 0x9FB
-constant JET_ET_VECTOR_WIDTH: positive := 14; -- max. value 1023.5 GeV => 10235 => 0x27FB 
-constant TAU_ET_VECTOR_WIDTH: positive := 12; -- max. value 255.5 GeV => 2555 => 0x9FB 
+
+-- calo-calo-correlation
+constant EG_PT_VECTOR_WIDTH: positive := 12; -- max. value 255.5 GeV => 2555 (255.5 * 10**CALO_INV_MASS_ET_PRECISION) => 0x9FB
+constant JET_PT_VECTOR_WIDTH: positive := 14; -- max. value 1023.5 GeV => 10235 (1023.5 * 10**CALO_INV_MASS_ET_PRECISION) => 0x27FB 
+constant TAU_PT_VECTOR_WIDTH: positive := 12; -- max. value 255.5 GeV => 2555 (255.5 * 10**CALO_INV_MASS_ET_PRECISION) => 0x9FB 
 
 constant CALO_INV_MASS_ET_PRECISION : positive := 1; -- 1 digit after decimal point
 constant CALO_INV_MASS_COSH_COS_PRECISION : positive := 3; -- 3 digits after decimal point (after roundimg to the 5th digit)
 
 constant CALO_COSH_COS_VECTOR_WIDTH: positive := 25; -- max. value cosh_deta-cos_dphi => [32838366-(-999)]=32839365 => 0x1F516C5
+constant EG_EG_COSH_COS_VECTOR_WIDTH: positive := CALO_COSH_COS_VECTOR_WIDTH; -- for jinja template
+constant EG_JET_COSH_COS_VECTOR_WIDTH: positive := CALO_COSH_COS_VECTOR_WIDTH; -- for jinja template
+constant EG_TAU_COSH_COS_VECTOR_WIDTH: positive := CALO_COSH_COS_VECTOR_WIDTH; -- for jinja template
+constant JET_JET_COSH_COS_VECTOR_WIDTH: positive := CALO_COSH_COS_VECTOR_WIDTH; -- for jinja template
+constant JET_TAU_COSH_COS_VECTOR_WIDTH: positive := CALO_COSH_COS_VECTOR_WIDTH; -- for jinja template
+constant TAU_TAU_COSH_COS_VECTOR_WIDTH: positive := CALO_COSH_COS_VECTOR_WIDTH; -- for jinja template
 type calo_cosh_cos_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_COSH_COS_VECTOR_WIDTH-1 downto 0);
 
+-- muon-muon-correlation
 constant MUON_INV_MASS_PT_PRECISION : positive := 1; -- 1 digit after decimal point
 constant MUON_INV_MASS_COSH_COS_PRECISION : positive := 4; -- 4 digits after decimal point (after roundimg to the 5th digit)
-constant MUON_PT_VECTOR_WIDTH: positive := 12; -- max. value 255.5 GeV => 2555 => 0x9FB 
+constant MUON_PT_VECTOR_WIDTH: positive := 12; -- max. value 255.5 GeV => 2555 (255.5 * 10**MUON_INV_MASS_PT_PRECISION) => 0x9FB 
 
-constant MUON_COSH_COS_VECTOR_WIDTH: positive := 21; -- max. value cosh_deta-cos_dphi => [1295404-(-9999)]=1305403 => 0x13EB3B
-type muon_cosh_cos_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MUON_COSH_COS_VECTOR_WIDTH-1 downto 0);
+constant MUON_MUON_COSH_COS_VECTOR_WIDTH: positive := 21; -- max. value cosh_deta-cos_dphi => [1295404-(-9999)]=1305403 => 0x13EB3B
+type muon_cosh_cos_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MUON_MUON_COSH_COS_VECTOR_WIDTH-1 downto 0);
 
+-- calo-muon-correlation
 constant CALO_MUON_INV_MASS_PT_PRECISION : positive := 1; -- 1 digit after decimal point
 constant CALO_MUON_INV_MASS_COSH_COS_PRECISION : positive := 4; -- 4 digits after decimal point (after roundimg to the 5th digit)
 
-constant CALO_MUON_COSH_COS_VECTOR_WIDTH: positive := 21; -- max. value cosh_deta-cos_dphi => [1295404-(-9999)]=1305403 => 0x13EB3B
+constant CALO_MUON_COSH_COS_VECTOR_WIDTH: positive := 29; -- max. value cosh_deta-cos_dphi => [339273862-(-9999)]=339283861 => 0x14390F95
+constant EG_MUON_COSH_COS_VECTOR_WIDTH: positive := CALO_MUON_COSH_COS_VECTOR_WIDTH; -- for jinja template
+constant JET_MUON_COSH_COS_VECTOR_WIDTH: positive := CALO_MUON_COSH_COS_VECTOR_WIDTH; -- for jinja template
+constant TAU_MUON_COSH_COS_VECTOR_WIDTH: positive := CALO_MUON_COSH_COS_VECTOR_WIDTH; -- for jinja template
 type calo_muon_cosh_cos_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_MUON_COSH_COS_VECTOR_WIDTH-1 downto 0);
 
-subtype max_eta_range_integer is integer range 0 to 511;
+-- subtypes used in sub_eta_integer_obj_vs_obj.vhd and sub_phi_integer_obj_vs_obj
+subtype max_eta_range_integer is integer range 0 to 920; -- 10.0/0.010875 = 919.54
 type dim2_max_eta_range_array is array (natural range <>, natural range <>) of max_eta_range_integer;
-
 subtype max_phi_range_integer is integer range 0 to 575;
 type dim2_max_phi_range_array is array (natural range <>, natural range <>) of max_phi_range_integer;
 
--- ********************************************************
-
-subtype eg_et_range_integer is integer range 0 to 2555;
-type eg_et_lut_array is array (0 to 2**(D_S_I_EG_V2.et_high-D_S_I_EG_V2.et_low+1)-1) of eg_et_range_integer;
-constant EG_ET_LUT: eg_et_lut_array := (
+-- LUT for eg et (values => et [GeV] * 10**CALO_INV_MASS_ET_PRECISION)
+type eg_et_lut_array is array (0 to 2**(D_S_I_EG_V2.et_high-D_S_I_EG_V2.et_low+1)-1) of natural range 0 to 2555;
+constant EG_PT_LUT: eg_et_lut_array := (
 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75,
 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155,
 160, 165, 170, 175, 180, 185, 190, 195, 200, 205, 210, 215, 220, 225, 230, 235,
@@ -469,9 +550,9 @@ constant EG_ET_LUT: eg_et_lut_array := (
 2480, 2485, 2490, 2495, 2500, 2505, 2510, 2515, 2520, 2525, 2530, 2535, 2540, 2545, 2550, 2555
 );
 
-subtype tau_et_range_integer is integer range 0 to 2555;
-type tau_et_lut_array is array (0 to 2**(D_S_I_TAU_V2.et_high-D_S_I_TAU_V2.et_low+1)-1) of tau_et_range_integer;
-constant TAU_ET_LUT: tau_et_lut_array := (
+-- LUT for jet et (values => et [GeV] * 10**CALO_INV_MASS_ET_PRECISION)
+type jet_et_lut_array is array (0 to 2**(D_S_I_JET_V2.et_high-D_S_I_JET_V2.et_low+1)-1) of natural range 0 to 10235;
+constant JET_PT_LUT: jet_et_lut_array := (
 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75,
 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155,
 160, 165, 170, 175, 180, 185, 190, 195, 200, 205, 210, 215, 220, 225, 230, 235,
@@ -503,10 +584,181 @@ constant TAU_ET_LUT: tau_et_lut_array := (
 2240, 2245, 2250, 2255, 2260, 2265, 2270, 2275, 2280, 2285, 2290, 2295, 2300, 2305, 2310, 2315,
 2320, 2325, 2330, 2335, 2340, 2345, 2350, 2355, 2360, 2365, 2370, 2375, 2380, 2385, 2390, 2395,
 2400, 2405, 2410, 2415, 2420, 2425, 2430, 2435, 2440, 2445, 2450, 2455, 2460, 2465, 2470, 2475,
-2480, 2485, 2490, 2495, 2500, 2505, 2510, 2515, 2520, 2525, 2530, 2535, 2540, 2545, 2550, 2555
+2480, 2485, 2490, 2495, 2500, 2505, 2510, 2515, 2520, 2525, 2530, 2535, 2540, 2545, 2550, 2555,
+2560, 2565, 2570, 2575, 2580, 2585, 2590, 2595, 2600, 2605, 2610, 2615, 2620, 2625, 2630, 2635,
+2640, 2645, 2650, 2655, 2660, 2665, 2670, 2675, 2680, 2685, 2690, 2695, 2700, 2705, 2710, 2715,
+2720, 2725, 2730, 2735, 2740, 2745, 2750, 2755, 2760, 2765, 2770, 2775, 2780, 2785, 2790, 2795,
+2800, 2805, 2810, 2815, 2820, 2825, 2830, 2835, 2840, 2845, 2850, 2855, 2860, 2865, 2870, 2875,
+2880, 2885, 2890, 2895, 2900, 2905, 2910, 2915, 2920, 2925, 2930, 2935, 2940, 2945, 2950, 2955,
+2960, 2965, 2970, 2975, 2980, 2985, 2990, 2995, 3000, 3005, 3010, 3015, 3020, 3025, 3030, 3035,
+3040, 3045, 3050, 3055, 3060, 3065, 3070, 3075, 3080, 3085, 3090, 3095, 3100, 3105, 3110, 3115,
+3120, 3125, 3130, 3135, 3140, 3145, 3150, 3155, 3160, 3165, 3170, 3175, 3180, 3185, 3190, 3195,
+3200, 3205, 3210, 3215, 3220, 3225, 3230, 3235, 3240, 3245, 3250, 3255, 3260, 3265, 3270, 3275,
+3280, 3285, 3290, 3295, 3300, 3305, 3310, 3315, 3320, 3325, 3330, 3335, 3340, 3345, 3350, 3355,
+3360, 3365, 3370, 3375, 3380, 3385, 3390, 3395, 3400, 3405, 3410, 3415, 3420, 3425, 3430, 3435,
+3440, 3445, 3450, 3455, 3460, 3465, 3470, 3475, 3480, 3485, 3490, 3495, 3500, 3505, 3510, 3515,
+3520, 3525, 3530, 3535, 3540, 3545, 3550, 3555, 3560, 3565, 3570, 3575, 3580, 3585, 3590, 3595,
+3600, 3605, 3610, 3615, 3620, 3625, 3630, 3635, 3640, 3645, 3650, 3655, 3660, 3665, 3670, 3675,
+3680, 3685, 3690, 3695, 3700, 3705, 3710, 3715, 3720, 3725, 3730, 3735, 3740, 3745, 3750, 3755,
+3760, 3765, 3770, 3775, 3780, 3785, 3790, 3795, 3800, 3805, 3810, 3815, 3820, 3825, 3830, 3835,
+3840, 3845, 3850, 3855, 3860, 3865, 3870, 3875, 3880, 3885, 3890, 3895, 3900, 3905, 3910, 3915,
+3920, 3925, 3930, 3935, 3940, 3945, 3950, 3955, 3960, 3965, 3970, 3975, 3980, 3985, 3990, 3995,
+4000, 4005, 4010, 4015, 4020, 4025, 4030, 4035, 4040, 4045, 4050, 4055, 4060, 4065, 4070, 4075,
+4080, 4085, 4090, 4095, 4100, 4105, 4110, 4115, 4120, 4125, 4130, 4135, 4140, 4145, 4150, 4155,
+4160, 4165, 4170, 4175, 4180, 4185, 4190, 4195, 4200, 4205, 4210, 4215, 4220, 4225, 4230, 4235,
+4240, 4245, 4250, 4255, 4260, 4265, 4270, 4275, 4280, 4285, 4290, 4295, 4300, 4305, 4310, 4315,
+4320, 4325, 4330, 4335, 4340, 4345, 4350, 4355, 4360, 4365, 4370, 4375, 4380, 4385, 4390, 4395,
+4400, 4405, 4410, 4415, 4420, 4425, 4430, 4435, 4440, 4445, 4450, 4455, 4460, 4465, 4470, 4475,
+4480, 4485, 4490, 4495, 4500, 4505, 4510, 4515, 4520, 4525, 4530, 4535, 4540, 4545, 4550, 4555,
+4560, 4565, 4570, 4575, 4580, 4585, 4590, 4595, 4600, 4605, 4610, 4615, 4620, 4625, 4630, 4635,
+4640, 4645, 4650, 4655, 4660, 4665, 4670, 4675, 4680, 4685, 4690, 4695, 4700, 4705, 4710, 4715,
+4720, 4725, 4730, 4735, 4740, 4745, 4750, 4755, 4760, 4765, 4770, 4775, 4780, 4785, 4790, 4795,
+4800, 4805, 4810, 4815, 4820, 4825, 4830, 4835, 4840, 4845, 4850, 4855, 4860, 4865, 4870, 4875,
+4880, 4885, 4890, 4895, 4900, 4905, 4910, 4915, 4920, 4925, 4930, 4935, 4940, 4945, 4950, 4955,
+4960, 4965, 4970, 4975, 4980, 4985, 4990, 4995, 5000, 5005, 5010, 5015, 5020, 5025, 5030, 5035,
+5040, 5045, 5050, 5055, 5060, 5065, 5070, 5075, 5080, 5085, 5090, 5095, 5100, 5105, 5110, 5115,
+5120, 5125, 5130, 5135, 5140, 5145, 5150, 5155, 5160, 5165, 5170, 5175, 5180, 5185, 5190, 5195,
+5200, 5205, 5210, 5215, 5220, 5225, 5230, 5235, 5240, 5245, 5250, 5255, 5260, 5265, 5270, 5275,
+5280, 5285, 5290, 5295, 5300, 5305, 5310, 5315, 5320, 5325, 5330, 5335, 5340, 5345, 5350, 5355,
+5360, 5365, 5370, 5375, 5380, 5385, 5390, 5395, 5400, 5405, 5410, 5415, 5420, 5425, 5430, 5435,
+5440, 5445, 5450, 5455, 5460, 5465, 5470, 5475, 5480, 5485, 5490, 5495, 5500, 5505, 5510, 5515,
+5520, 5525, 5530, 5535, 5540, 5545, 5550, 5555, 5560, 5565, 5570, 5575, 5580, 5585, 5590, 5595,
+5600, 5605, 5610, 5615, 5620, 5625, 5630, 5635, 5640, 5645, 5650, 5655, 5660, 5665, 5670, 5675,
+5680, 5685, 5690, 5695, 5700, 5705, 5710, 5715, 5720, 5725, 5730, 5735, 5740, 5745, 5750, 5755,
+5760, 5765, 5770, 5775, 5780, 5785, 5790, 5795, 5800, 5805, 5810, 5815, 5820, 5825, 5830, 5835,
+5840, 5845, 5850, 5855, 5860, 5865, 5870, 5875, 5880, 5885, 5890, 5895, 5900, 5905, 5910, 5915,
+5920, 5925, 5930, 5935, 5940, 5945, 5950, 5955, 5960, 5965, 5970, 5975, 5980, 5985, 5990, 5995,
+6000, 6005, 6010, 6015, 6020, 6025, 6030, 6035, 6040, 6045, 6050, 6055, 6060, 6065, 6070, 6075,
+6080, 6085, 6090, 6095, 6100, 6105, 6110, 6115, 6120, 6125, 6130, 6135, 6140, 6145, 6150, 6155,
+6160, 6165, 6170, 6175, 6180, 6185, 6190, 6195, 6200, 6205, 6210, 6215, 6220, 6225, 6230, 6235,
+6240, 6245, 6250, 6255, 6260, 6265, 6270, 6275, 6280, 6285, 6290, 6295, 6300, 6305, 6310, 6315,
+6320, 6325, 6330, 6335, 6340, 6345, 6350, 6355, 6360, 6365, 6370, 6375, 6380, 6385, 6390, 6395,
+6400, 6405, 6410, 6415, 6420, 6425, 6430, 6435, 6440, 6445, 6450, 6455, 6460, 6465, 6470, 6475,
+6480, 6485, 6490, 6495, 6500, 6505, 6510, 6515, 6520, 6525, 6530, 6535, 6540, 6545, 6550, 6555,
+6560, 6565, 6570, 6575, 6580, 6585, 6590, 6595, 6600, 6605, 6610, 6615, 6620, 6625, 6630, 6635,
+6640, 6645, 6650, 6655, 6660, 6665, 6670, 6675, 6680, 6685, 6690, 6695, 6700, 6705, 6710, 6715,
+6720, 6725, 6730, 6735, 6740, 6745, 6750, 6755, 6760, 6765, 6770, 6775, 6780, 6785, 6790, 6795,
+6800, 6805, 6810, 6815, 6820, 6825, 6830, 6835, 6840, 6845, 6850, 6855, 6860, 6865, 6870, 6875,
+6880, 6885, 6890, 6895, 6900, 6905, 6910, 6915, 6920, 6925, 6930, 6935, 6940, 6945, 6950, 6955,
+6960, 6965, 6970, 6975, 6980, 6985, 6990, 6995, 7000, 7005, 7010, 7015, 7020, 7025, 7030, 7035,
+7040, 7045, 7050, 7055, 7060, 7065, 7070, 7075, 7080, 7085, 7090, 7095, 7100, 7105, 7110, 7115,
+7120, 7125, 7130, 7135, 7140, 7145, 7150, 7155, 7160, 7165, 7170, 7175, 7180, 7185, 7190, 7195,
+7200, 7205, 7210, 7215, 7220, 7225, 7230, 7235, 7240, 7245, 7250, 7255, 7260, 7265, 7270, 7275,
+7280, 7285, 7290, 7295, 7300, 7305, 7310, 7315, 7320, 7325, 7330, 7335, 7340, 7345, 7350, 7355,
+7360, 7365, 7370, 7375, 7380, 7385, 7390, 7395, 7400, 7405, 7410, 7415, 7420, 7425, 7430, 7435,
+7440, 7445, 7450, 7455, 7460, 7465, 7470, 7475, 7480, 7485, 7490, 7495, 7500, 7505, 7510, 7515,
+7520, 7525, 7530, 7535, 7540, 7545, 7550, 7555, 7560, 7565, 7570, 7575, 7580, 7585, 7590, 7595,
+7600, 7605, 7610, 7615, 7620, 7625, 7630, 7635, 7640, 7645, 7650, 7655, 7660, 7665, 7670, 7675,
+7680, 7685, 7690, 7695, 7700, 7705, 7710, 7715, 7720, 7725, 7730, 7735, 7740, 7745, 7750, 7755,
+7760, 7765, 7770, 7775, 7780, 7785, 7790, 7795, 7800, 7805, 7810, 7815, 7820, 7825, 7830, 7835,
+7840, 7845, 7850, 7855, 7860, 7865, 7870, 7875, 7880, 7885, 7890, 7895, 7900, 7905, 7910, 7915,
+7920, 7925, 7930, 7935, 7940, 7945, 7950, 7955, 7960, 7965, 7970, 7975, 7980, 7985, 7990, 7995,
+8000, 8005, 8010, 8015, 8020, 8025, 8030, 8035, 8040, 8045, 8050, 8055, 8060, 8065, 8070, 8075,
+8080, 8085, 8090, 8095, 8100, 8105, 8110, 8115, 8120, 8125, 8130, 8135, 8140, 8145, 8150, 8155,
+8160, 8165, 8170, 8175, 8180, 8185, 8190, 8195, 8200, 8205, 8210, 8215, 8220, 8225, 8230, 8235,
+8240, 8245, 8250, 8255, 8260, 8265, 8270, 8275, 8280, 8285, 8290, 8295, 8300, 8305, 8310, 8315,
+8320, 8325, 8330, 8335, 8340, 8345, 8350, 8355, 8360, 8365, 8370, 8375, 8380, 8385, 8390, 8395,
+8400, 8405, 8410, 8415, 8420, 8425, 8430, 8435, 8440, 8445, 8450, 8455, 8460, 8465, 8470, 8475,
+8480, 8485, 8490, 8495, 8500, 8505, 8510, 8515, 8520, 8525, 8530, 8535, 8540, 8545, 8550, 8555,
+8560, 8565, 8570, 8575, 8580, 8585, 8590, 8595, 8600, 8605, 8610, 8615, 8620, 8625, 8630, 8635,
+8640, 8645, 8650, 8655, 8660, 8665, 8670, 8675, 8680, 8685, 8690, 8695, 8700, 8705, 8710, 8715,
+8720, 8725, 8730, 8735, 8740, 8745, 8750, 8755, 8760, 8765, 8770, 8775, 8780, 8785, 8790, 8795,
+8800, 8805, 8810, 8815, 8820, 8825, 8830, 8835, 8840, 8845, 8850, 8855, 8860, 8865, 8870, 8875,
+8880, 8885, 8890, 8895, 8900, 8905, 8910, 8915, 8920, 8925, 8930, 8935, 8940, 8945, 8950, 8955,
+8960, 8965, 8970, 8975, 8980, 8985, 8990, 8995, 9000, 9005, 9010, 9015, 9020, 9025, 9030, 9035,
+9040, 9045, 9050, 9055, 9060, 9065, 9070, 9075, 9080, 9085, 9090, 9095, 9100, 9105, 9110, 9115,
+9120, 9125, 9130, 9135, 9140, 9145, 9150, 9155, 9160, 9165, 9170, 9175, 9180, 9185, 9190, 9195,
+9200, 9205, 9210, 9215, 9220, 9225, 9230, 9235, 9240, 9245, 9250, 9255, 9260, 9265, 9270, 9275,
+9280, 9285, 9290, 9295, 9300, 9305, 9310, 9315, 9320, 9325, 9330, 9335, 9340, 9345, 9350, 9355,
+9360, 9365, 9370, 9375, 9380, 9385, 9390, 9395, 9400, 9405, 9410, 9415, 9420, 9425, 9430, 9435,
+9440, 9445, 9450, 9455, 9460, 9465, 9470, 9475, 9480, 9485, 9490, 9495, 9500, 9505, 9510, 9515,
+9520, 9525, 9530, 9535, 9540, 9545, 9550, 9555, 9560, 9565, 9570, 9575, 9580, 9585, 9590, 9595,
+9600, 9605, 9610, 9615, 9620, 9625, 9630, 9635, 9640, 9645, 9650, 9655, 9660, 9665, 9670, 9675,
+9680, 9685, 9690, 9695, 9700, 9705, 9710, 9715, 9720, 9725, 9730, 9735, 9740, 9745, 9750, 9755,
+9760, 9765, 9770, 9775, 9780, 9785, 9790, 9795, 9800, 9805, 9810, 9815, 9820, 9825, 9830, 9835,
+9840, 9845, 9850, 9855, 9860, 9865, 9870, 9875, 9880, 9885, 9890, 9895, 9900, 9905, 9910, 9915,
+9920, 9925, 9930, 9935, 9940, 9945, 9950, 9955, 9960, 9965, 9970, 9975, 9980, 9985, 9990, 9995,
+10000, 10005, 10010, 10015, 10020, 10025, 10030, 10035, 10040, 10045, 10050, 10055, 10060, 10065, 10070, 10075,
+10080, 10085, 10090, 10095, 10100, 10105, 10110, 10115, 10120, 10125, 10130, 10135, 10140, 10145, 10150, 10155,
+10160, 10165, 10170, 10175, 10180, 10185, 10190, 10195, 10200, 10205, 10210, 10215, 10220, 10225, 10230, 10235
 );
 
-type eg_eg_cosh_deta_lut_array is array (0 to 255) of integer;
+-- LUT for tau et (values => et [GeV] * 10**CALO_INV_MASS_ET_PRECISION)
+constant TAU_PT_LUT: eg_et_lut_array := EG_PT_LUT; -- eg et and tau et scale are equivalent currently
+
+-- LUT for eg eta converted to muon eta scale (values eta [bins] => eg-eta [bins] * 4 + 2)
+type eg_eta_conv_2_muon_eta_lut_array is array (0 to 255) of natural range 2 to 1023;
+constant EG_ETA_CONV_2_MUON_ETA_LUT : eg_eta_conv_2_muon_eta_lut_array := (
+2, 6, 10, 14, 18, 22, 26, 30, 34, 38, 42, 46, 50, 54, 58, 62,
+66, 70, 74, 78, 82, 86, 90, 94, 98, 102, 106, 110, 114, 118, 122, 126,
+130, 134, 138, 142, 146, 150, 154, 158, 162, 166, 170, 174, 178, 182, 186, 190,
+194, 198, 202, 206, 210, 214, 218, 222, 226, 230, 234, 238, 242, 246, 250, 254,
+258, 262, 266, 270, 274, 278, 282, 286, 290, 294, 298, 302, 306, 310, 314, 318,
+322, 326, 330, 334, 338, 342, 346, 350, 354, 358, 362, 366, 370, 374, 378, 382,
+386, 390, 394, 398, 402, 406, 410, 414, 418, 422, 426, 430, 434, 438, 442, 446,
+450, 454, 458, 462, 466, 470, 474, 478, 482, 486, 490, 494, 498, 502, 506, 510,
+514, 518, 522, 526, 530, 534, 538, 542, 546, 550, 554, 558, 562, 566, 570, 574,
+578, 582, 586, 590, 594, 598, 602, 606, 610, 614, 618, 622, 626, 630, 634, 638,
+642, 646, 650, 654, 658, 662, 666, 670, 674, 678, 682, 686, 690, 694, 698, 702,
+706, 710, 714, 718, 722, 726, 730, 734, 738, 742, 746, 750, 754, 758, 762, 766,
+770, 774, 778, 782, 786, 790, 794, 798, 802, 806, 810, 814, 818, 822, 826, 830,
+834, 838, 842, 846, 850, 854, 858, 862, 866, 870, 874, 878, 882, 886, 890, 894,
+898, 902, 906, 910, 914, 918, 922, 926, 930, 934, 938, 942, 946, 950, 954, 958,
+962, 966, 970, 974, 978, 982, 986, 990, 994, 998, 1002, 1006, 1010, 1014, 1018, 1022
+);
+
+constant JET_ETA_CONV_2_MUON_ETA_LUT : eg_eta_conv_2_muon_eta_lut_array := EG_ETA_CONV_2_MUON_ETA_LUT;
+constant TAU_ETA_CONV_2_MUON_ETA_LUT : eg_eta_conv_2_muon_eta_lut_array := EG_ETA_CONV_2_MUON_ETA_LUT;
+
+-- HB 2015-11-09: variant 1 of eg phi conversion - eg phi = 0 converted to muon phi = 1, and so on
+-- LUT for eg phi converted to muon phi scale (values phi [bins] => eg-phi [bins] * 4 + 1)
+type eg_phi_conv_2_muon_phi_lut_array is array (0 to 255) of natural range 0 to 573;
+constant EG_PHI_CONV_2_MUON_PHI_LUT : eg_phi_conv_2_muon_phi_lut_array := (
+1, 5, 9, 13, 17, 21, 25, 29, 33, 37, 41, 45, 49, 53, 57, 61,
+65, 69, 73, 77, 81, 85, 89, 93, 97, 101, 105, 109, 113, 117, 121, 125,
+129, 133, 137, 141, 145, 149, 153, 157, 161, 165, 169, 173, 177, 181, 185, 189,
+193, 197, 201, 205, 209, 213, 217, 221, 225, 229, 233, 237, 241, 245, 249, 253,
+257, 261, 265, 269, 273, 277, 281, 285, 289, 293, 297, 301, 305, 309, 313, 317,
+321, 325, 329, 333, 337, 341, 345, 349, 353, 357, 361, 365, 369, 373, 377, 381,
+385, 389, 393, 397, 401, 405, 409, 413, 417, 421, 425, 429, 433, 437, 441, 445,
+449, 453, 457, 461, 465, 469, 473, 477, 481, 485, 489, 493, 497, 501, 505, 509,
+513, 517, 521, 525, 529, 533, 537, 541, 545, 549, 553, 557, 561, 565, 569, 573,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+);
+
+-- -- HB 2015-11-09: variant 2 of eg phi conversion - eg phi = 0 converted to muon phi = 2, and so on
+-- -- LUT for eg phi converted to muon phi scale (values phi [bins] => eg-phi [bins] * 4 + 2)
+-- type eg_phi_conv_2_muon_phi_lut_array is array (0 to 255) of integer range 0 to 574;
+-- constant EG_PHI_CONV_2_MUON_PHI_LUT : eg_phi_conv_2_muon_phi_lut_array := (
+-- 2, 6, 10, 14, 18, 22, 26, 30, 34, 38, 42, 46, 50, 54, 58, 62,
+-- 66, 70, 74, 78, 82, 86, 90, 94, 98, 102, 106, 110, 114, 118, 122, 126,
+-- 130, 134, 138, 142, 146, 150, 154, 158, 162, 166, 170, 174, 178, 182, 186, 190,
+-- 194, 198, 202, 206, 210, 214, 218, 222, 226, 230, 234, 238, 242, 246, 250, 254,
+-- 258, 262, 266, 270, 274, 278, 282, 286, 290, 294, 298, 302, 306, 310, 314, 318,
+-- 322, 326, 330, 334, 338, 342, 346, 350, 354, 358, 362, 366, 370, 374, 378, 382,
+-- 386, 390, 394, 398, 402, 406, 410, 414, 418, 422, 426, 430, 434, 438, 442, 446,
+-- 450, 454, 458, 462, 466, 470, 474, 478, 482, 486, 490, 494, 498, 502, 506, 510,
+-- 514, 518, 522, 526, 530, 534, 538, 542, 546, 550, 554, 558, 562, 566, 570, 574,
+-- 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+-- 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+-- 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+-- 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+-- 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+-- 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+-- 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+-- );
+
+constant JET_PHI_CONV_2_MUON_PHI_LUT : eg_phi_conv_2_muon_phi_lut_array := EG_PHI_CONV_2_MUON_PHI_LUT;
+constant TAU_PHI_CONV_2_MUON_PHI_LUT : eg_phi_conv_2_muon_phi_lut_array := EG_PHI_CONV_2_MUON_PHI_LUT;
+
+-- LUT for calo-calo cosh(deta) (values => rounded(cosh(deta[bins]) * 0.0870/2) * 10**CALO_INV_MASS_COSH_COS_PRECISION)
+type eg_eg_cosh_deta_lut_array is array (0 to 255) of natural range 1000 to 32838366;
 constant EG_EG_COSH_DETA_LUT: eg_eg_cosh_deta_lut_array := (
 1000, 1001, 1004, 1009, 1015, 1024, 1034, 1047, 1061, 1078, 1096, 1117, 1139, 1164, 1191, 1221,
 1252, 1286, 1323, 1361, 1403, 1447, 1494, 1544, 1596, 1652, 1711, 1773, 1838, 1907, 1979, 2056,
@@ -526,7 +778,14 @@ constant EG_EG_COSH_DETA_LUT: eg_eg_cosh_deta_lut_array := (
 17100326, 17860607, 18654689, 19484076, 20350338, 21255114, 22200117, 23187134, 24218033, 25294767, 26419372, 27593977, 28820806, 30102178, 31440521, 32838366
 );
 
-type eg_eg_cos_dphi_lut_array is array (0 to 127) of integer;
+constant EG_JET_COSH_DETA_LUT: eg_eg_cosh_deta_lut_array := EG_EG_COSH_DETA_LUT;
+constant EG_TAU_COSH_DETA_LUT: eg_eg_cosh_deta_lut_array := EG_EG_COSH_DETA_LUT;
+constant JET_JET_COSH_DETA_LUT: eg_eg_cosh_deta_lut_array := EG_EG_COSH_DETA_LUT;
+constant JET_TAU_COSH_DETA_LUT: eg_eg_cosh_deta_lut_array := EG_EG_COSH_DETA_LUT;
+constant TAU_TAU_COSH_DETA_LUT: eg_eg_cosh_deta_lut_array := EG_EG_COSH_DETA_LUT;
+
+-- LUT for calo-calo cos(dphi) (values => rounded(cos(dphi[bins]) * 0.0870/2) * 10**CALO_INV_MASS_COSH_COS_PRECISION)
+type eg_eg_cos_dphi_lut_array is array (0 to 127) of integer range -999 to 1000;
 constant EG_EG_COS_DPHI_LUT: eg_eg_cos_dphi_lut_array := (
 1000, 999, 996, 991, 985, 976, 966, 954, 940, 924, 906, 887, 866, 843, 819, 793,
 766, 737, 707, 676, 643, 609, 574, 537, 500, 462, 423, 383, 342, 301, 259, 216,
@@ -538,45 +797,17 @@ constant EG_EG_COS_DPHI_LUT: eg_eg_cos_dphi_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-subtype muon_pt_range_integer is integer range 0 to 2555;
+constant EG_JET_COS_DPHI_LUT: eg_eg_cos_dphi_lut_array := EG_EG_COS_DPHI_LUT;
+constant EG_TAU_COS_DPHI_LUT: eg_eg_cos_dphi_lut_array := EG_EG_COS_DPHI_LUT;
+constant JET_JET_COS_DPHI_LUT: eg_eg_cos_dphi_lut_array := EG_EG_COS_DPHI_LUT;
+constant JET_TAU_COS_DPHI_LUT: eg_eg_cos_dphi_lut_array := EG_EG_COS_DPHI_LUT;
+constant TAU_TAU_COS_DPHI_LUT: eg_eg_cos_dphi_lut_array := EG_EG_COS_DPHI_LUT;
 
-type muon_pt_lut_array is array (0 to 2**(d_s_i_muon.pt_high-d_s_i_muon.pt_low+1)-1) of muon_pt_range_integer;
-constant MUON_PT_LUT: muon_pt_lut_array := (
-0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75,
-80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155,
-160, 165, 170, 175, 180, 185, 190, 195, 200, 205, 210, 215, 220, 225, 230, 235,
-240, 245, 250, 255, 260, 265, 270, 275, 280, 285, 290, 295, 300, 305, 310, 315,
-320, 325, 330, 335, 340, 345, 350, 355, 360, 365, 370, 375, 380, 385, 390, 395,
-400, 405, 410, 415, 420, 425, 430, 435, 440, 445, 450, 455, 460, 465, 470, 475,
-480, 485, 490, 495, 500, 505, 510, 515, 520, 525, 530, 535, 540, 545, 550, 555,
-560, 565, 570, 575, 580, 585, 590, 595, 600, 605, 610, 615, 620, 625, 630, 635,
-640, 645, 650, 655, 660, 665, 670, 675, 680, 685, 690, 695, 700, 705, 710, 715,
-720, 725, 730, 735, 740, 745, 750, 755, 760, 765, 770, 775, 780, 785, 790, 795,
-800, 805, 810, 815, 820, 825, 830, 835, 840, 845, 850, 855, 860, 865, 870, 875,
-880, 885, 890, 895, 900, 905, 910, 915, 920, 925, 930, 935, 940, 945, 950, 955,
-960, 965, 970, 975, 980, 985, 990, 995, 1000, 1005, 1010, 1015, 1020, 1025, 1030, 1035,
-1040, 1045, 1050, 1055, 1060, 1065, 1070, 1075, 1080, 1085, 1090, 1095, 1100, 1105, 1110, 1115,
-1120, 1125, 1130, 1135, 1140, 1145, 1150, 1155, 1160, 1165, 1170, 1175, 1180, 1185, 1190, 1195,
-1200, 1205, 1210, 1215, 1220, 1225, 1230, 1235, 1240, 1245, 1250, 1255, 1260, 1265, 1270, 1275,
-1280, 1285, 1290, 1295, 1300, 1305, 1310, 1315, 1320, 1325, 1330, 1335, 1340, 1345, 1350, 1355,
-1360, 1365, 1370, 1375, 1380, 1385, 1390, 1395, 1400, 1405, 1410, 1415, 1420, 1425, 1430, 1435,
-1440, 1445, 1450, 1455, 1460, 1465, 1470, 1475, 1480, 1485, 1490, 1495, 1500, 1505, 1510, 1515,
-1520, 1525, 1530, 1535, 1540, 1545, 1550, 1555, 1560, 1565, 1570, 1575, 1580, 1585, 1590, 1595,
-1600, 1605, 1610, 1615, 1620, 1625, 1630, 1635, 1640, 1645, 1650, 1655, 1660, 1665, 1670, 1675,
-1680, 1685, 1690, 1695, 1700, 1705, 1710, 1715, 1720, 1725, 1730, 1735, 1740, 1745, 1750, 1755,
-1760, 1765, 1770, 1775, 1780, 1785, 1790, 1795, 1800, 1805, 1810, 1815, 1820, 1825, 1830, 1835,
-1840, 1845, 1850, 1855, 1860, 1865, 1870, 1875, 1880, 1885, 1890, 1895, 1900, 1905, 1910, 1915,
-1920, 1925, 1930, 1935, 1940, 1945, 1950, 1955, 1960, 1965, 1970, 1975, 1980, 1985, 1990, 1995,
-2000, 2005, 2010, 2015, 2020, 2025, 2030, 2035, 2040, 2045, 2050, 2055, 2060, 2065, 2070, 2075,
-2080, 2085, 2090, 2095, 2100, 2105, 2110, 2115, 2120, 2125, 2130, 2135, 2140, 2145, 2150, 2155,
-2160, 2165, 2170, 2175, 2180, 2185, 2190, 2195, 2200, 2205, 2210, 2215, 2220, 2225, 2230, 2235,
-2240, 2245, 2250, 2255, 2260, 2265, 2270, 2275, 2280, 2285, 2290, 2295, 2300, 2305, 2310, 2315,
-2320, 2325, 2330, 2335, 2340, 2345, 2350, 2355, 2360, 2365, 2370, 2375, 2380, 2385, 2390, 2395,
-2400, 2405, 2410, 2415, 2420, 2425, 2430, 2435, 2440, 2445, 2450, 2455, 2460, 2465, 2470, 2475,
-2480, 2485, 2490, 2495, 2500, 2505, 2510, 2515, 2520, 2525, 2530, 2535, 2540, 2545, 2550, 2555
-);
+-- LUT for muon pt (values => pt [GeV] * 10**CALO_INV_MASS_ET_PRECISION)
+constant MUON_PT_LUT: eg_et_lut_array := EG_PT_LUT; -- eg et and muon pt scale are equivalent currently
 
-type muon_muon_cosh_deta_lut_array is array (0 to 511) of integer;
+-- LUT for muon-muon cosh(deta) (values => rounded(cosh(deta[bins]) * 0.0870/8) * 10**MUON_INV_MASS_COSH_COS_PRECISION)
+type muon_muon_cosh_deta_lut_array is array (0 to 511) of natural range 10000 to 1295404;
 constant MUON_MUON_COSH_DETA_LUT: muon_muon_cosh_deta_lut_array := (
 10000, 10001, 10002, 10005, 10009, 10015, 10021, 10029, 10038, 10048, 10059, 10072, 10085, 10100, 10116, 10133,
 10152, 10171, 10192, 10214, 10237, 10262, 10288, 10314, 10343, 10372, 10402, 10434, 10467, 10501, 10537, 10574,
@@ -612,7 +843,8 @@ constant MUON_MUON_COSH_DETA_LUT: muon_muon_cosh_deta_lut_array := (
 1100432, 1112465, 1124628, 1136925, 1149356, 1161923, 1174627, 1187470, 1200454, 1213580, 1226849, 1240264, 1253825, 1267534, 1281393, 1295404
 );
 
-type muon_muon_cos_dphi_lut_array is array (0 to 511) of integer;
+-- LUT for muon-muon cos(dphi) (values => rounded(cos(dphi[bins]) * 0.0870/8) * 10**MUON_INV_MASS_COSH_COS_PRECISION)
+type muon_muon_cos_dphi_lut_array is array (0 to 511) of integer range -9999 to 10000;
 constant MUON_MUON_COS_DPHI_LUT: muon_muon_cos_dphi_lut_array := (
 10000, 9999, 9998, 9995, 9990, 9985, 9979, 9971, 9962, 9952, 9941, 9928, 9914, 9900, 9884, 9866,
 9848, 9829, 9808, 9786, 9763, 9739, 9713, 9687, 9659, 9630, 9600, 9569, 9537, 9504, 9469, 9434,
@@ -648,8 +880,9 @@ constant MUON_MUON_COS_DPHI_LUT: muon_muon_cos_dphi_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-type calo_muon_cosh_deta_lut_array is array (0 to 511) of integer;
-constant CALO_MUON_COSH_DETA_LUT: calo_muon_cosh_deta_lut_array := (
+-- LUT for calo-muon cosh(deta) (values => rounded(cosh(deta[bins]) * 0.0870/8) * 10**MUON_INV_MASS_COSH_COS_PRECISION)
+type calo_muon_cosh_deta_lut_array is array (0 to 1023) of natural range 10000 to 339273862;
+constant EG_MUON_COSH_DETA_LUT: calo_muon_cosh_deta_lut_array := (
 10000, 10001, 10002, 10005, 10009, 10015, 10021, 10029, 10038, 10048, 10059, 10072, 10085, 10100, 10116, 10133,
 10152, 10171, 10192, 10214, 10237, 10262, 10288, 10314, 10343, 10372, 10402, 10434, 10467, 10501, 10537, 10574,
 10612, 10651, 10691, 10733, 10776, 10821, 10866, 10913, 10961, 11011, 11061, 11113, 11167, 11222, 11278, 11335,
@@ -681,43 +914,47 @@ constant CALO_MUON_COSH_DETA_LUT: calo_muon_cosh_deta_lut_array := (
 652947, 660086, 667303, 674599, 681974, 689430, 696968, 704588, 712291, 720079, 727952, 735911, 743957, 752091, 760314, 768627,
 777030, 785526, 794114, 802797, 811574, 820448, 829418, 838486, 847654, 856922, 866291, 875763, 885338, 895018, 904804, 914697,
 924698, 934808, 945029, 955362, 965808, 976368, 987043, 997835, 1008745, 1019775, 1030925, 1042197, 1053592, 1065112, 1076757, 1088531,
-1100432, 1112465, 1124628, 1136925, 1149356, 1161923, 1174627, 1187470, 1200454, 1213580, 1226849, 1240264, 1253825, 1267534, 1281393, 1295404
+1100432, 1112465, 1124628, 1136925, 1149356, 1161923, 1174627, 1187470, 1200454, 1213580, 1226849, 1240264, 1253825, 1267534, 1281393, 1295404,
+1309568, 1323887, 1338362, 1352996, 1367790, 1382745, 1397864, 1413148, 1428600, 1444220, 1460012, 1475975, 1492114, 1508429, 1524922, 1541596,
+1558452, 1575492, 1592719, 1610134, 1627739, 1645537, 1663530, 1681719, 1700107, 1718696, 1737489, 1756487, 1775693, 1795108, 1814736, 1834579,
+1854639, 1874918, 1895418, 1916143, 1937095, 1958275, 1979688, 2001334, 2023217, 2045339, 2067703, 2090312, 2113168, 2136274, 2159632, 2183246,
+2207118, 2231252, 2255649, 2280312, 2305246, 2330452, 2355934, 2381694, 2407736, 2434063, 2460678, 2487583, 2514783, 2542280, 2570078, 2598180,
+2626590, 2655309, 2684343, 2713695, 2743367, 2773364, 2803688, 2834345, 2865336, 2896667, 2928340, 2960359, 2992728, 3025452, 3058533, 3091976,
+3125784, 3159962, 3194514, 3229444, 3264756, 3300454, 3336542, 3373025, 3409906, 3447191, 3484884, 3522989, 3561510, 3600453, 3639821, 3679620,
+3719854, 3760528, 3801647, 3843215, 3885238, 3927721, 3970668, 4014084, 4057975, 4102346, 4147203, 4192550, 4238392, 4284736, 4331587, 4378950,
+4426831, 4475235, 4524169, 4573637, 4623647, 4674204, 4725313, 4776981, 4829214, 4882018, 4935400, 4989365, 5043920, 5099072, 5154827, 5211192,
+5268173, 5325776, 5384010, 5442881, 5502395, 5562560, 5623383, 5684871, 5747031, 5809871, 5873398, 5937620, 6002544, 6068177, 6134529, 6201606,
+6269416, 6337968, 6407270, 6477329, 6548154, 6619754, 6692137, 6765311, 6839285, 6914068, 6989669, 7066096, 7143359, 7221467, 7300429, 7380254,
+7460952, 7542533, 7625006, 7708380, 7792666, 7877874, 7964013, 8051094, 8139128, 8228124, 8318093, 8409046, 8500993, 8593946, 8687915, 8782911,
+8878947, 8976032, 9074179, 9173399, 9273705, 9375106, 9477617, 9581248, 9686013, 9791923, 9898992, 10007231, 10116653, 10227272, 10339100, 10452152,
+10566439, 10681976, 10798777, 10916854, 11036223, 11156897, 11278890, 11402217, 11526893, 11652932, 11780349, 11909159, 12039378, 12171021, 12304103, 12438640,
+12574649, 12712144, 12851143, 12991662, 13133717, 13277326, 13422505, 13569271, 13717642, 13867636, 14019269, 14172561, 14327528, 14484191, 14642566, 14802673,
+14964530, 15128158, 15293574, 15460799, 15629853, 15800755, 15973526, 16148186, 16324756, 16503257, 16683709, 16866134, 17050554, 17236991, 17425466, 17616002,
+17808622, 18003347, 18200202, 18399210, 18600393, 18803776, 19009383, 19217238, 19427366, 19639792, 19854540, 20071636, 20291107, 20512977, 20737273, 20964021,
+21193249, 21424983, 21659252, 21896081, 22135501, 22377538, 22622222, 22869581, 23119645, 23372443, 23628005, 23886362, 24147544, 24411582, 24678506, 24948350,
+25221144, 25496920, 25775712, 26057553, 26342475, 26630513, 26921700, 27216072, 27513662, 27814506, 28118639, 28426098, 28736919, 29051138, 29368793, 29689922,
+30014562, 30342752, 30674530, 31009936, 31349009, 31691790, 32038319, 32388637, 32742786, 33100807, 33462743, 33828636, 34198530, 34572468, 34950496, 35332657,
+35718996, 36109560, 36504395, 36903546, 37307062, 37714991, 38127380, 38544278, 38965734, 39391799, 39822523, 40257956, 40698150, 41143158, 41593032, 42047824,
+42507590, 42972383, 43442258, 43917270, 44397477, 44882935, 45373700, 45869832, 46371389, 46878430, 47391015, 47909204, 48433060, 48962644, 49498019, 50039247,
+50586394, 51139523, 51698700, 52263992, 52835465, 53413186, 53997224, 54587649, 55184529, 55787936, 56397940, 57014615, 57638033, 58268267, 58905393, 59549485,
+60200619, 60858874, 61524326, 62197054, 62877139, 63564659, 64259697, 64962335, 65672656, 66390743, 67116683, 67850560, 68592462, 69342475, 70100690, 70867195,
+71642082, 72425441, 73217366, 74017950, 74827288, 75645476, 76472610, 77308788, 78154109, 79008673, 79872582, 80745936, 81628841, 82521399, 83423716, 84335900,
+85258058, 86190300, 87132734, 88085474, 89048631, 90022320, 91006655, 92001753, 93007733, 94024712, 95052810, 96092151, 97142856, 98205050, 99278858, 100364407,
+101461827, 102571246, 103692795, 104826608, 105972819, 107131563, 108302976, 109487199, 110684370, 111894631, 113118126, 114354999, 115605396, 116869466, 118147357, 119439221,
+120745211, 122065482, 123400188, 124749489, 126113543, 127492512, 128886560, 130295850, 131720550, 133160829, 134616855, 136088803, 137576845, 139081158, 140601920, 142139310,
+143693511, 145264706, 146853080, 148458823, 150082124, 151723174, 153382168, 155059302, 156754774, 158468785, 160201538, 161953237, 163724090, 165514306, 167324097, 169153677,
+171003262, 172873071, 174763326, 176674249, 178606066, 180559007, 182533302, 184529185, 186546891, 188586660, 190648732, 192733351, 194840765, 196971221, 199124973, 201302275,
+203503384, 205728561, 207978068, 210252173, 212551143, 214875251, 217224772, 219599983, 222001166, 224428604, 226882584, 229363397, 231871337, 234406698, 236969783, 239560893,
+242180335, 244828419, 247505458, 250211769, 252947671, 255713489, 258509549, 261336182, 264193723, 267082509, 270002882, 272955188, 275939775, 278956996, 282007209, 285090774,
+288208055, 291359422, 294545248, 297765908, 301021784, 304313261, 307640728, 311004578, 314405211, 317843027, 321318433, 324831840, 328383665, 331974326, 335604248, 339273862
 );
 
-type calo_muon_cos_dphi_lut_array is array (0 to 511) of integer;
-constant CALO_MUON_COS_DPHI_LUT: calo_muon_cos_dphi_lut_array := (
-10000, 9999, 9998, 9995, 9990, 9985, 9979, 9971, 9962, 9952, 9941, 9928, 9914, 9900, 9884, 9866,
-9848, 9829, 9808, 9786, 9763, 9739, 9713, 9687, 9659, 9630, 9600, 9569, 9537, 9504, 9469, 9434,
-9397, 9359, 9320, 9280, 9239, 9197, 9153, 9109, 9063, 9016, 8969, 8920, 8870, 8819, 8767, 8714,
-8660, 8605, 8549, 8492, 8434, 8375, 8315, 8254, 8192, 8128, 8064, 7999, 7934, 7867, 7799, 7730,
-7660, 7590, 7518, 7446, 7373, 7299, 7224, 7148, 7071, 6994, 6915, 6836, 6756, 6675, 6593, 6511,
-6428, 6344, 6259, 6174, 6088, 6001, 5913, 5825, 5736, 5646, 5556, 5465, 5373, 5281, 5188, 5094,
-5000, 4905, 4810, 4714, 4617, 4520, 4423, 4325, 4226, 4127, 4027, 3927, 3827, 3726, 3624, 3523,
-3420, 3318, 3214, 3111, 3007, 2903, 2798, 2693, 2588, 2483, 2377, 2271, 2164, 2058, 1951, 1844,
-1736, 1629, 1521, 1413, 1305, 1197, 1089, 980, 872, 763, 654, 545, 436, 327, 218, 109,
-0, -109, -218, -327, -436, -545, -654, -763, -872, -980, -1089, -1197, -1305, -1413, -1521, -1629,
--1736, -1844, -1951, -2058, -2164, -2271, -2377, -2483, -2588, -2693, -2798, -2903, -3007, -3111, -3214, -3317,
--3420, -3522, -3624, -3726, -3827, -3927, -4027, -4127, -4226, -4325, -4423, -4520, -4617, -4714, -4810, -4905,
--5000, -5094, -5188, -5281, -5373, -5465, -5556, -5646, -5736, -5825, -5913, -6001, -6088, -6174, -6259, -6344,
--6428, -6511, -6593, -6675, -6756, -6836, -6915, -6994, -7071, -7148, -7224, -7299, -7373, -7446, -7518, -7590,
--7660, -7730, -7799, -7867, -7934, -7999, -8064, -8128, -8192, -8254, -8315, -8375, -8434, -8492, -8549, -8605,
--8660, -8714, -8767, -8819, -8870, -8920, -8969, -9016, -9063, -9109, -9153, -9196, -9239, -9280, -9320, -9359,
--9397, -9434, -9469, -9504, -9537, -9569, -9600, -9630, -9659, -9687, -9713, -9739, -9763, -9786, -9808, -9829,
--9848, -9866, -9884, -9900, -9914, -9928, -9941, -9952, -9962, -9971, -9979, -9985, -9990, -9995, -9998, -9999,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-);
+constant JET_MUON_COSH_DETA_LUT: calo_muon_cosh_deta_lut_array := EG_MUON_COSH_DETA_LUT;
+constant TAU_MUON_COSH_DETA_LUT: calo_muon_cosh_deta_lut_array := EG_MUON_COSH_DETA_LUT;
+
+-- LUT for calo-muon cos(dphi) (values => rounded(cos(dphi[bins]) * 0.0870/8) * 10**MUON_INV_MASS_COSH_COS_PRECISION)
+constant EG_MUON_COS_DPHI_LUT: muon_muon_cos_dphi_lut_array := MUON_MUON_COS_DPHI_LUT;  -- CALO_MUON_COS_DPHI_LUT and MUON_MUON_COS_DPHI_LUT are equivalent for current scales
+constant JET_MUON_COS_DPHI_LUT: muon_muon_cos_dphi_lut_array := MUON_MUON_COS_DPHI_LUT;  -- CALO_MUON_COS_DPHI_LUT and MUON_MUON_COS_DPHI_LUT are equivalent for current scales
+constant TAU_MUON_COS_DPHI_LUT: muon_muon_cos_dphi_lut_array := MUON_MUON_COS_DPHI_LUT;  -- CALO_MUON_COS_DPHI_LUT and MUON_MUON_COS_DPHI_LUT are equivalent for current scales
 
 end package;

@@ -1,20 +1,4 @@
---------------------------------------------------------------------------------
--- Synthesizer : ISE 14.6
--- Platform    : Linux Ubuntu 10.04
--- Targets     : Synthese
---------------------------------------------------------------------------------
--- This work is held in copyright as an unpublished work by HEPHY (Institute
--- of High Energy Physics) All rights reserved.  This work may not be used
--- except by authorized licensees of HEPHY. This work is the
--- confidential information of HEPHY.
---------------------------------------------------------------------------------
--- $HeadURL: svn://heros.hephy.at/GlobalTriggerUpgrade/software/l1triggermenu/compiler/trunk/templates/mp7/algo_mapping_rop.vhd $
--- $Date: 2014-09-04 17:15:46 +0200 (Thu, 04 Sep 2014) $
--- $Author: arnold $
--- $Revision: 3144 $
---------------------------------------------------------------------------------
-
--- Desription:
+-- Description:
 -- Mapping of algo indexes for ROP
 
 -- ========================================================
@@ -29,12 +13,10 @@
 -- Scale set:
 -- {{menu.reporter['XxxDict']['L1TMenuScaleSet']}}
 
-
 -- Version of L1 Trigger Menu Compiler:
 -- v{{menu.reporter['XxxDict']['L1TMCompilerVersionMajor']}}.{{menu.reporter['XxxDict']['L1TMCompilerVersionMinor']}}.{{menu.reporter['XxxDict']['L1TMCompilerVersionRevision']}}
 
 -- ========================================================
-
 
 library ieee;
 use ieee.std_logic_1164.all;
