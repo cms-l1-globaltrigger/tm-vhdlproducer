@@ -65,7 +65,7 @@ architecture rtl of gtl_module is
 {#%- include  "subTemplates/signal_correlation_conditions_pt_eta_phi.vhd.j2"%#}
 
 -- Signal definition of differences for correlation conditions.
--- Insert "signal_correlation_conditions_differences.vhd.j2" once for correlation conditions of different ObjectTypes and Bx.
+-- Insert "signal_correlation_conditions_differences.vhd.j2" once for correlation conditions of different ObjectTypes and Bx combinations.
 {#%- include  "subTemplates/signal_correlation_conditions_differences.vhd.j2"%#}
 
 -- Signal definition for muon charge correlations (only once for all muon conditions, except SingleMuon conditions)

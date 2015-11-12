@@ -1,7 +1,7 @@
 {%- extends "templateLoops/objLoop_instance_calo_calo_correlation.j2" %}
 {%- block instance_calo_calo_correlation %}
 {{condName|lower}}_i: entity work.calo_calo_correlation
-    generic map(
+    generic map({{condInfo['same_bx']}},
 	{{ cutType['deta'] |lower}}, {{ cutType['dphi'] |lower}}, {{ cutType['dr'] |lower}}, {{ cutType['mass'] |lower}},
 	NR_{{ObjectType1|upper}}_OBJECTS, {{ objInfo1['op'] |lower}}, {{ObjectType1|upper}}_TYPE,
         X"{{calocaloCondDict['EtThreshold1']|X04}}",

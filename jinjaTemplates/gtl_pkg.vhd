@@ -110,9 +110,9 @@ type muon_objects_array is array (natural range <>) of std_logic_vector(MUON_DAT
 -- type muon_templates_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
 type muon_templates_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(MUON_TEMPLATES_WIDTH-1 downto 0);
 
-type muon_templates_quality_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector((2**(d_s_i_muon.qual_high-d_s_i_muon.qual_low+1))-1 downto 0);
+type muon_templates_quality_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(2**(d_s_i_muon.qual_high-d_s_i_muon.qual_low+1)-1 downto 0);
 -- type muon_templates_quality_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(15 downto 0);
-type muon_templates_iso_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector((2**(d_s_i_muon.iso_high-d_s_i_muon.iso_low+1))-1 downto 0);
+type muon_templates_iso_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(2**(d_s_i_muon.iso_high-d_s_i_muon.iso_low+1)-1 downto 0);
 -- type muon_templates_iso_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(3 downto 0);
 
 type muon_templates_boolean_array is array (1 to NR_MUON_TEMPLATES) of boolean;

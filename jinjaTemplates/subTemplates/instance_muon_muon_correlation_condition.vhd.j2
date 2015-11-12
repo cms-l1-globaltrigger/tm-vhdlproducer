@@ -1,7 +1,7 @@
 {%- extends "templateLoops/objLoop_instance_muon_muon_correlation.j2" %}
 {%- block instance_muon_muon_correlation %}
 {{condName|lower}}_i: entity work.muon_muon_correlation
-    generic map(
+    generic map({{condInfo['same_bx']}},
 	{{ cutType['deta'] |lower}}, {{ cutType['dphi'] |lower}}, {{ cutType['dr'] |lower}}, {{ cutType['mass'] |lower}},
 	{{ objInfo1['op'] |lower}}, X"{{muonmuonCondDict['PtThreshold1']|X04}}",
         {{muonmuonCondDict['EtaFullRange1']}}, X"{{muonmuonCondDict['EtaW1UpperLimit1']|X04}}",(X"{{muonmuonCondDict['EtaW1LowerLimit1']|X04}}",
