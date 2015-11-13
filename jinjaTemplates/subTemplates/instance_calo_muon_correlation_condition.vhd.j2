@@ -1,6 +1,6 @@
-{%- extends "templateLoops/objLoop_instance_calo_muon_correlation.j2" %}
-{%- block instance_calo_muon_correlation %}
-{{condName|lower}}_i: entity work.calo_muon_correlation
+{%- extends "templateLoops/objLoop_instance_calo_muon_correlation_condition.j2" %}
+{%- block instance_calo_muon_correlation_condition %}
+{{condName|lower}}_i: entity work.calo_muon_correlation_condition
     generic map(
 	{{ cutType['deta'] |lower}}, {{ cutType['dphi'] |lower}}, {{ cutType['dr'] |lower}}, {{ cutType['mass'] |lower}},
 	NR_{{ObjectType1|upper}}_OBJECTS, {{ objInfo1['op'] |lower}}, {{ObjectType1|upper}}_TYPE,
@@ -25,4 +25,4 @@
 	diff_calo_muon_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_eta_integer_value, diff_calo_muon_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_phi_integer_value, 
         {{ObjectType1|lower}}_et_vector_bx_{{Bx1|lower}}, muon_pt_vector_bx_{{Bx2|lower}}, calo_muon_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_cosh_deta_vector, calo_muon_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_cos_dphi_vector,
 	{{condName|lower}});
-{% endblock instance_calo_muon_correlation %}
+{% endblock instance_calo_muon_correlation_condition %}

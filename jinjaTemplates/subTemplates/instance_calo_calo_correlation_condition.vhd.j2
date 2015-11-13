@@ -1,6 +1,6 @@
-{%- extends "templateLoops/objLoop_instance_calo_calo_correlation.j2" %}
-{%- block instance_calo_calo_correlation %}
-{{condName|lower}}_i: entity work.calo_calo_correlation
+{%- extends "templateLoops/objLoop_instance_calo_calo_correlation_condition.j2" %}
+{%- block instance_calo_calo_correlation_condition %}
+{{condName|lower}}_i: entity work.calo_calo_correlation_condition
     generic map({{condInfo['same_bx']}},
 	{{ cutType['deta'] |lower}}, {{ cutType['dphi'] |lower}}, {{ cutType['dr'] |lower}}, {{ cutType['mass'] |lower}},
 	NR_{{ObjectType1|upper}}_OBJECTS, {{ objInfo1['op'] |lower}}, {{ObjectType1|upper}}_TYPE,
@@ -27,4 +27,4 @@
         {{ObjectType1|lower}}_et_vector_bx_{{Bx1|lower}}, {{ObjectType2|lower}}_et_vector_bx_{{Bx2|lower}}, 
         {{ObjectType1|lower}}_{{ObjectType2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_cosh_deta_vector, {{ObjectType1|lower}}_{{ObjectType2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_cos_dphi_vector,
 	{{condName|lower}});
-{% endblock instance_calo_calo_correlation %}
+{% endblock instance_calo_calo_correlation_condition %}
