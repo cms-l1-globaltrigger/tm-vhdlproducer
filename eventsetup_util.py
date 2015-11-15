@@ -449,9 +449,9 @@ def getReport(menu, vhdlVersion=False):
     triggerGroups[key] = {keyNBits: 0, keyBits: []}
 
   data.reporter[keyTriggerGroups] = triggerGroups
-  data.reporter[keyAlgoMap] = menu.getAlgorithmMap()
-  data.reporter[keyCondMap] = menu.getConditionMap()
-  data.reporter[keyScaleMap] = menu.getScaleMap()
+  data.reporter[keyAlgoMap] = menu.getAlgorithmMapPtr()
+  data.reporter[keyCondMap] = menu.getConditionMapPtr()
+  data.reporter[keyScaleMap] = menu.getScaleMapPtr()
 
   algoDict = {}
   for key, algo in data.reporter[keyAlgoMap].iteritems():
@@ -485,7 +485,7 @@ def getReport(menu, vhdlVersion=False):
     condDict = {}
     for x in algoDict[keyAlgo].getRpnVector():
       if tmGrammar.isGate(x): continue
-      hash = menu.getHash(x)
+      hash = tmEventSetup.getHash(x)
       cond = data.reporter[keyCondMap][hash]
       condName = cond.getName()
       condDict = { keyObjType: getObjectType(condName) }
