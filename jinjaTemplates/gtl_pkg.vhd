@@ -97,22 +97,34 @@ constant FDL_FW_VERSION : std_logic_vector(31 downto 0) := X"00" &
 constant NR_MUON_TEMPLATES : positive range 1 to 4 := 4; -- number of max. templates for muon conditions
 constant NR_MUON_OBJECTS : positive := MUON_ARRAY_LENGTH; -- from lhc_data_pkg.vhd
 constant MAX_MUON_BITS : positive := MUON_DATA_WIDTH; -- from lhc_data_pkg.vhd
-constant MUON_TEMPLATES_WIDTH : positive range 1 to MUON_DATA_WIDTH := 16; -- bit width of templates for muon conditions
-constant MAX_MUON_TEMPLATES_BITS : positive range 1 to MUON_DATA_WIDTH := MUON_TEMPLATES_WIDTH;
+constant MAX_MUON_TEMPLATES_BITS : positive range 1 to MUON_DATA_WIDTH := 16;
 
-type d_s_i_muon_record is record -- record definition of muon data structure
-    charge_high, charge_low, iso_high, iso_low, eta_high, eta_low, qual_high, qual_low, pt_high, pt_low, phi_high, phi_low : natural range MUON_DATA_WIDTH-1 downto 0;
+type d_s_i_muon_record is record
+    charge_high, charge_low, iso_high, iso_low, eta_high, eta_low, qual_high, qual_low, pt_high, pt_low, phi_high, phi_low : natural range MAX_MUON_BITS-1 downto 0;
 end record d_s_i_muon_record;
 
-constant d_s_i_muon : d_s_i_muon_record := (35,34,33,32,31,23,22,19,18,10,9,0); -- muon data structure
+constant MUON_PHI_LOW : natural := 0;
+constant MUON_PHI_HIGH : natural := 9;
+constant MUON_PT_LOW : natural := 10;
+constant MUON_PT_HIGH : natural := 18;
+constant MUON_QUAL_LOW : natural := 19;
+constant MUON_QUAL_HIGH : natural := 22;
+constant MUON_ETA_LOW : natural := 23;
+constant MUON_ETA_HIGH : natural := 31;
+constant MUON_ISO_LOW : natural := 32;
+constant MUON_ISO_HIGH : natural := 33;
+constant MUON_CHARGE_LOW : natural := 34;
+constant MUON_CHARGE_HIGH : natural := 35;
+constant d_s_i_muon : d_s_i_muon_record := (MUON_CHARGE_HIGH,MUON_CHARGE_LOW,MUON_ISO_HIGH,MUON_ISO_LOW,
+					    MUON_ETA_HIGH,MUON_ETA_LOW,MUON_QUAL_HIGH,MUON_QUAL_LOW,MUON_PT_HIGH,MUON_PT_LOW,MUON_PHI_HIGH,MUON_PHI_LOW);
+-- constant d_s_i_muon : d_s_i_muon_record := (35,34,33,32,31,23,22,19,18,10,9,0);
 
-type muon_objects_array is array (natural range <>) of std_logic_vector(MUON_DATA_WIDTH-1 downto 0); 
--- type muon_templates_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
-type muon_templates_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(MUON_TEMPLATES_WIDTH-1 downto 0);
+type muon_objects_array is array (natural range <>) of std_logic_vector(MAX_MUON_BITS-1 downto 0);
+type muon_templates_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
 
-type muon_templates_quality_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(2**(d_s_i_muon.qual_high-d_s_i_muon.qual_low+1)-1 downto 0);
+type muon_templates_quality_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector((2**(d_s_i_muon.qual_high-d_s_i_muon.qual_low+1))-1 downto 0);
 -- type muon_templates_quality_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(15 downto 0);
-type muon_templates_iso_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(2**(d_s_i_muon.iso_high-d_s_i_muon.iso_low+1)-1 downto 0);
+type muon_templates_iso_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector((2**(d_s_i_muon.iso_high-d_s_i_muon.iso_low+1))-1 downto 0);
 -- type muon_templates_iso_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(3 downto 0);
 
 type muon_templates_boolean_array is array (1 to NR_MUON_TEMPLATES) of boolean;
@@ -130,9 +142,7 @@ constant NR_CALO_TEMPLATES : positive range 1 to 4 := 4; -- number of max. templ
 constant NR_EG_OBJECTS : positive := EG_ARRAY_LENGTH; -- number eg objects, from lhc_data_pkg.vhd
 constant NR_JET_OBJECTS : positive := JET_ARRAY_LENGTH; -- number jet objects, from lhc_data_pkg.vhd
 constant NR_TAU_OBJECTS : positive := TAU_ARRAY_LENGTH; -- number tau objects, from lhc_data_pkg.vhd
-constant MAX_CALO_BITS : positive := max(EG_DATA_WIDTH, JET_DATA_WIDTH, TAU_DATA_WIDTH); -- max. calo data bit width
-constant MAX_CALO_ISO_BITS : positive range 1 to 2 := 2; -- max. calo iso bit width
-constant MAX_CALO_TEMPLATES_BITS : positive range 1 to MAX_CALO_BITS := 16; 
+constant MAX_CALO_BITS : positive := max(EG_DATA_WIDTH, JET_DATA_WIDTH, TAU_DATA_WIDTH);
 
 -- d_s_i_calo_record used for calo_conditions.vhd
 type d_s_i_calo_record is record
@@ -162,13 +172,40 @@ type d_s_i_tau_record is record
     iso_high, iso_low, phi_high, phi_low, eta_high, eta_low, et_high, et_low : natural range MAX_CALO_BITS-1 downto 0;
 end record d_s_i_tau_record;
 
-constant D_S_I_EG_V2: d_s_i_eg_record := (26,25,24,17,16,9,8,0);
-constant D_S_I_JET_V2 : d_s_i_jet_record := (26,19,18,11,10,0);
-constant D_S_I_TAU_V2 : d_s_i_tau_record := (26,25,24,17,16,9,8,0);
+constant EG_ET_LOW : natural := 0;
+constant EG_ET_HIGH : natural := 8;
+constant EG_ETA_LOW : natural := 9;
+constant EG_ETA_HIGH : natural := 16;
+constant EG_PHI_LOW : natural := 17;
+constant EG_PHI_HIGH : natural := 24;
+constant EG_ISO_LOW : natural := 25;
+constant EG_ISO_HIGH : natural := 26;
+constant D_S_I_EG_V2: d_s_i_eg_record := (EG_ISO_HIGH,EG_ISO_LOW,EG_PHI_HIGH,EG_PHI_LOW,EG_ETA_HIGH,EG_ETA_LOW,EG_ET_HIGH,EG_ET_LOW);
+-- constant D_S_I_EG_V2 : d_s_i_tau_record := (26,25,24,17,16,9,8,0);
+constant JET_ET_LOW : natural := 0;
+constant JET_ET_HIGH : natural := 10;
+constant JET_ETA_LOW : natural := 11;
+constant JET_ETA_HIGH : natural := 18;
+constant JET_PHI_LOW : natural := 19;
+constant JET_PHI_HIGH : natural := 26;
+constant D_S_I_JET_V2: d_s_i_jet_record := (JET_PHI_HIGH,JET_PHI_LOW,JET_ETA_HIGH,JET_ETA_LOW,JET_ET_HIGH,JET_ET_LOW);
+-- constant D_S_I_JET_V2 : d_s_i_jet_record := (26,19,18,11,10,0);
+constant TAU_ET_LOW : natural := 0;
+constant TAU_ET_HIGH : natural := 8;
+constant TAU_ETA_LOW : natural := 9;
+constant TAU_ETA_HIGH : natural := 16;
+constant TAU_PHI_LOW : natural := 17;
+constant TAU_PHI_HIGH : natural := 24;
+constant TAU_ISO_LOW : natural := 25;
+constant TAU_ISO_HIGH : natural := 26;
+constant D_S_I_TAU_V2: d_s_i_tau_record := (TAU_ISO_HIGH,TAU_ISO_LOW,TAU_PHI_HIGH,TAU_PHI_LOW,TAU_ETA_HIGH,TAU_ETA_LOW,TAU_ET_HIGH,TAU_ET_LOW);
+-- constant D_S_I_TAU_V2 : d_s_i_tau_record := (26,25,24,17,16,9,8,0);
 
 type calo_objects_array is array (natural range <>) of std_logic_vector(MAX_CALO_BITS-1 downto 0);
+constant MAX_CALO_TEMPLATES_BITS : positive range 1 to MAX_CALO_BITS := 16;
 type calo_templates_array is array (1 to NR_CALO_TEMPLATES) of std_logic_vector(MAX_CALO_TEMPLATES_BITS-1 downto 0);
 type calo_templates_boolean_array is array (1 to NR_CALO_TEMPLATES) of boolean;
+constant MAX_CALO_ISO_BITS : positive range 1 to 2 := max((D_S_I_EG_V2.iso_high-D_S_I_EG_V2.iso_low+1), (D_S_I_TAU_V2.iso_high-D_S_I_TAU_V2.iso_low+1));
 type calo_templates_iso_array is array (1 to NR_CALO_TEMPLATES) of std_logic_vector(2**MAX_CALO_ISO_BITS-1 downto 0);
 
 -- ESUMs
@@ -197,10 +234,26 @@ type d_s_i_htm_record is record
     phi_high, phi_low, et_high, et_low : natural range MAX_ESUMS_BITS-1 downto 0;
 end record d_s_i_htm_record;
 
-constant D_S_I_ETT : d_s_i_ett_record := (11,0);
-constant D_S_I_HTT : d_s_i_htt_record := (11,0);
-constant D_S_I_ETM : d_s_i_etm_record := (19,12,11,0);
-constant D_S_I_HTM : d_s_i_htm_record := (19,12,11,0);
+constant ETT_ET_LOW : natural := 0;
+constant ETT_ET_HIGH : natural := 11;
+constant D_S_I_ETT : d_s_i_ett_record := (ETT_ET_HIGH,ETT_ET_LOW);
+-- constant D_S_I_ETT : d_s_i_ett_record := (11,0);
+constant HTT_ET_LOW : natural := 0;
+constant HTT_ET_HIGH : natural := 11;
+constant D_S_I_HTT : d_s_i_htt_record := (HTT_ET_HIGH,HTT_ET_LOW);
+-- constant D_S_I_HTT : d_s_i_htt_record := (11,0);
+constant ETM_ET_LOW : natural := 0;
+constant ETM_ET_HIGH : natural := 11;
+constant ETM_PHI_LOW : natural := 12;
+constant ETM_PHI_HIGH : natural := 19;
+constant D_S_I_ETM : d_s_i_etm_record := (ETM_PHI_HIGH,ETM_PHI_LOW,ETM_ET_HIGH,ETM_ET_LOW);
+-- constant D_S_I_ETM : d_s_i_etm_record := (19,12,11,0);
+constant HTM_ET_LOW : natural := 0;
+constant HTM_ET_HIGH : natural := 11;
+constant HTM_PHI_LOW : natural := 12;
+constant HTM_PHI_HIGH : natural := 19;
+constant D_S_I_HTM : d_s_i_htm_record := (HTM_PHI_HIGH,HTM_PHI_LOW,HTM_ET_HIGH,HTM_ET_LOW);
+-- constant D_S_I_HTM : d_s_i_htm_record := (19,12,11,0);
 -- ==== CALOs - end ============================================================
 
 -- "External conditions" (former "Technical Triggers" and "External Algorithms") definitions
@@ -225,14 +278,19 @@ constant PI : real :=  3.14159;
 -- constant PHI_HALF_RANGE_REAL : real := PI;
 constant ETA_RANGE_REAL : real := 10.0; -- eta range max.: -5.0 to +5.0
 
+constant MAX_CALO_PHI_BITS : positive := max((EG_PHI_HIGH-EG_PHI_LOW+1), (JET_PHI_HIGH-JET_PHI_LOW+1), (TAU_PHI_HIGH-TAU_PHI_LOW+1));
+constant MAX_CALO_ETA_BITS : positive := max((EG_ETA_HIGH-EG_ETA_LOW+1), (JET_ETA_HIGH-JET_ETA_LOW+1), (TAU_ETA_HIGH-TAU_ETA_LOW+1));
+
 -- subtypes for ranges of limits
 subtype diff_eta_range_real is real range -ETA_RANGE_REAL to ETA_RANGE_REAL;
 subtype diff_phi_range_real is real range 0.0 to PI;
 subtype dr_squared_range_real is real range 0.0 to ((ETA_RANGE_REAL**2)+(PI**2)); 
 
+-- LUTs for deta, dphi and dr
+
 -- LUT for differences in eta of calos (values => rounded(DETA [bins] * 0.0870/2) * 10**DETA_DPHI_LIMITS_PRECISION_ALL)
-type calo_diff_eta_lut_array is array (0 to 255) of natural range 0 to 10005; -- range -5.0 to +5.0
-constant CALO_CALO_DIFF_ETA_LUT : calo_diff_eta_lut_array := (
+type calo_calo_diff_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of natural range 0 to 10005; -- calo eta bit width = 8 => 256 values, range -5.0 to +5.0 => max. difference = 10.0
+constant CALO_CALO_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := (
 0, 44, 87, 131, 174, 218, 261, 305, 348, 392, 435, 479, 522, 566, 609, 653,
 696, 740, 783, 827, 870, 914, 957, 1001, 1044, 1088, 1131, 1175, 1218, 1262, 1305, 1349,
 1392, 1436, 1479, 1523, 1566, 1610, 1653, 1697, 1740, 1784, 1827, 1871, 1914, 1958, 2001, 2045,
@@ -251,16 +309,16 @@ constant CALO_CALO_DIFF_ETA_LUT : calo_diff_eta_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-constant EG_EG_DIFF_ETA_LUT : calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
-constant EG_JET_DIFF_ETA_LUT : calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
-constant EG_TAU_DIFF_ETA_LUT : calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
-constant JET_JET_DIFF_ETA_LUT : calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
-constant JET_TAU_DIFF_ETA_LUT : calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
-constant TAU_TAU_DIFF_ETA_LUT : calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
+constant EG_EG_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
+constant EG_JET_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
+constant EG_TAU_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
+constant JET_JET_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
+constant JET_TAU_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
+constant TAU_TAU_DIFF_ETA_LUT : calo_calo_diff_eta_lut_array := CALO_CALO_DIFF_ETA_LUT;
 
 -- LUT for differences in phi of calos (values => rounded(DPHI [bins] * 2*PI/144) * 10**DETA_DPHI_LIMITS_PRECISION_ALL)
-type calo_diff_phi_lut_array is array (0 to 255) of natural range 0 to 6283; -- range 0 to 2*PI
-constant CALO_CALO_DIFF_PHI_LUT : calo_diff_phi_lut_array := (
+type calo_calo_diff_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natural range 0 to 6283; -- calo phi bit width = 8 => 256 values, range 0 to 2*PI
+constant CALO_CALO_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := (
 0, 44, 87, 131, 175, 218, 262, 305, 349, 393, 436, 480, 524, 567, 611, 654,
 698, 742, 785, 829, 873, 916, 960, 1004, 1047, 1091, 1134, 1178, 1222, 1265, 1309, 1353,
 1396, 1440, 1484, 1527, 1571, 1614, 1658, 1702, 1745, 1789, 1833, 1876, 1920, 1963, 2007, 2051,
@@ -279,16 +337,16 @@ constant CALO_CALO_DIFF_PHI_LUT : calo_diff_phi_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-constant EG_EG_DIFF_PHI_LUT : calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
-constant EG_JET_DIFF_PHI_LUT : calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
-constant EG_TAU_DIFF_PHI_LUT : calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
-constant JET_JET_DIFF_PHI_LUT : calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
-constant JET_TAU_DIFF_PHI_LUT : calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
-constant TAU_TAU_DIFF_PHI_LUT : calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
+constant EG_EG_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
+constant EG_JET_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
+constant EG_TAU_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
+constant JET_JET_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
+constant JET_TAU_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
+constant TAU_TAU_DIFF_PHI_LUT : calo_calo_diff_phi_lut_array := CALO_CALO_DIFF_PHI_LUT;
 
 -- LUT for differences in eta of muon (values => rounded(DETA [bins] * 0.0870/8) * 10**DETA_DPHI_LIMITS_PRECISION_ALL)
-type muon_diff_eta_lut_array is array (0 to 511) of natural range 0 to 4905; -- range -2.45 to +2.45
-constant MUON_MUON_DIFF_ETA_LUT : muon_diff_eta_lut_array := (
+type muon_muon_diff_eta_lut_array is array (0 to 2**(MUON_ETA_HIGH-MUON_ETA_LOW+1)-1) of natural range 0 to 4905; -- muon eta bit width = 9 => 512 values, range -2.45 to +2.45 => max. difference = 4.9
+constant MUON_MUON_DIFF_ETA_LUT : muon_muon_diff_eta_lut_array := (
 0, 11, 22, 33, 44, 54, 65, 76, 87, 98, 109, 120, 131, 141, 152, 163,
 174, 185, 196, 207, 218, 228, 239, 250, 261, 272, 283, 294, 305, 315, 326, 337,
 348, 359, 370, 381, 392, 402, 413, 424, 435, 446, 457, 468, 479, 489, 500, 511,
@@ -324,8 +382,8 @@ constant MUON_MUON_DIFF_ETA_LUT : muon_diff_eta_lut_array := (
 );
 
 -- LUT for differences in phi of muon (values => rounded(DPHI [bins] * 2*PI/576) * 10**DETA_DPHI_LIMITS_PRECISION_ALL)
-type muon_diff_phi_lut_array is array (0 to 1023) of natural range 0 to 6283; -- range 0 to 2*PI
-constant MUON_MUON_DIFF_PHI_LUT : muon_diff_phi_lut_array := (
+type muon_muon_diff_phi_lut_array is array (0 to 2**(MUON_PHI_HIGH-MUON_PHI_LOW+1)-1) of natural range 0 to 6283; -- muon phi bit width = 10 => 1024 values, range 0 to 2*PI
+constant MUON_MUON_DIFF_PHI_LUT : muon_muon_diff_phi_lut_array := (
 0, 11, 22, 33, 44, 55, 65, 76, 87, 98, 109, 120, 131, 142, 153, 164,
 175, 185, 196, 207, 218, 229, 240, 251, 262, 273, 284, 295, 305, 316, 327, 338,
 349, 360, 371, 382, 393, 404, 415, 425, 436, 447, 458, 469, 480, 491, 502, 513,
@@ -392,12 +450,12 @@ constant MUON_MUON_DIFF_PHI_LUT : muon_diff_phi_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-constant EG_MUON_DIFF_PHI_LUT : muon_diff_phi_lut_array := MUON_MUON_DIFF_PHI_LUT;
-constant JET_MUON_DIFF_PHI_LUT : muon_diff_phi_lut_array := MUON_MUON_DIFF_PHI_LUT;
-constant TAU_MUON_DIFF_PHI_LUT : muon_diff_phi_lut_array := MUON_MUON_DIFF_PHI_LUT;
+constant EG_MUON_DIFF_PHI_LUT : muon_muon_diff_phi_lut_array := MUON_MUON_DIFF_PHI_LUT;
+constant JET_MUON_DIFF_PHI_LUT : muon_muon_diff_phi_lut_array := MUON_MUON_DIFF_PHI_LUT;
+constant TAU_MUON_DIFF_PHI_LUT : muon_muon_diff_phi_lut_array := MUON_MUON_DIFF_PHI_LUT;
 
 -- LUT for differences in eta of calo-muon (values => rounded(DETA [bins] * 0.0870/8) * 10**DETA_DPHI_LIMITS_PRECISION_ALL)
-type calo_muon_diff_eta_lut_array is array (0 to 1023) of natural range 0 to 10005; -- range -5.0 to +5.0
+type calo_muon_diff_eta_lut_array is array (0 to 2**(MUON_ETA_HIGH-MUON_ETA_LOW+1+1)-1) of natural range 0 to 7460; -- muon eta bit width = 9 + 1 (for calo range) => 1024 values, range -2.45 to +5.0 or -5.0 to +2.45 => max. difference = 7.45
 constant CALO_MUON_DIFF_ETA_LUT : calo_muon_diff_eta_lut_array := (
 0, 11, 22, 33, 44, 54, 65, 76, 87, 98, 109, 120, 131, 141, 152, 163,
 174, 185, 196, 207, 218, 228, 239, 250, 261, 272, 283, 294, 305, 315, 326, 337,
@@ -441,22 +499,22 @@ constant CALO_MUON_DIFF_ETA_LUT : calo_muon_diff_eta_lut_array := (
 6786, 6797, 6808, 6819, 6830, 6840, 6851, 6862, 6873, 6884, 6895, 6906, 6917, 6927, 6938, 6949,
 6960, 6971, 6982, 6993, 7004, 7014, 7025, 7036, 7047, 7058, 7069, 7080, 7091, 7101, 7112, 7123,
 7134, 7145, 7156, 7167, 7178, 7188, 7199, 7210, 7221, 7232, 7243, 7254, 7265, 7275, 7286, 7297,
-7308, 7319, 7330, 7341, 7352, 7362, 7373, 7384, 7395, 7406, 7417, 7428, 7439, 7449, 7460, 7471,
-7482, 7493, 7504, 7515, 7526, 7536, 7547, 7558, 7569, 7580, 7591, 7602, 7613, 7623, 7634, 7645,
-7656, 7667, 7678, 7689, 7700, 7710, 7721, 7732, 7743, 7754, 7765, 7776, 7787, 7797, 7808, 7819,
-7830, 7841, 7852, 7863, 7874, 7884, 7895, 7906, 7917, 7928, 7939, 7950, 7961, 7971, 7982, 7993,
-8004, 8015, 8026, 8037, 8048, 8058, 8069, 8080, 8091, 8102, 8113, 8124, 8135, 8145, 8156, 8167,
-8178, 8189, 8200, 8211, 8222, 8232, 8243, 8254, 8265, 8276, 8287, 8298, 8309, 8319, 8330, 8341,
-8352, 8363, 8374, 8385, 8396, 8406, 8417, 8428, 8439, 8450, 8461, 8472, 8483, 8493, 8504, 8515,
-8526, 8537, 8548, 8559, 8570, 8580, 8591, 8602, 8613, 8624, 8635, 8646, 8657, 8667, 8678, 8689,
-8700, 8711, 8722, 8733, 8744, 8754, 8765, 8776, 8787, 8798, 8809, 8820, 8831, 8841, 8852, 8863,
-8874, 8885, 8896, 8907, 8918, 8928, 8939, 8950, 8961, 8972, 8983, 8994, 9005, 9015, 9026, 9037,
-9048, 9059, 9070, 9081, 9092, 9102, 9113, 9124, 9135, 9146, 9157, 9168, 9179, 9189, 9200, 9211,
-9222, 9233, 9244, 9255, 9266, 9276, 9287, 9298, 9309, 9320, 9331, 9342, 9353, 9363, 9374, 9385,
-9396, 9407, 9418, 9429, 9440, 9450, 9461, 9472, 9483, 9494, 9505, 9516, 9527, 9537, 9548, 9559,
-9570, 9581, 9592, 9603, 9614, 9624, 9635, 9646, 9657, 9668, 9679, 9690, 9701, 9711, 9722, 9733,
-9744, 9755, 9766, 9777, 9788, 9798, 9809, 9820, 9831, 9842, 9853, 9864, 9875, 9885, 9896, 9907,
-9918, 9929, 9940, 9951, 9962, 9972, 9983, 9994, 10005, 0, 0, 0, 0, 0, 0, 0,
+7308, 7319, 7330, 7341, 7352, 7362, 7373, 7384, 7395, 7406, 7417, 7428, 7439, 7449, 7460, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -511,10 +569,12 @@ constant TAU_MUON_COSH_COS_VECTOR_WIDTH: positive := CALO_MUON_COSH_COS_VECTOR_W
 type calo_muon_cosh_cos_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_MUON_COSH_COS_VECTOR_WIDTH-1 downto 0);
 
 -- subtypes used in sub_eta_integer_obj_vs_obj.vhd and sub_phi_integer_obj_vs_obj
-subtype max_eta_range_integer is integer range 0 to 920; -- 10.0/0.010875 = 919.54
+subtype max_eta_range_integer is integer range 0 to 920; -- 10.0/0.010875 = 919.54 - number of bins with muon bin width for full (calo) eta range
 type dim2_max_eta_range_array is array (natural range <>, natural range <>) of max_eta_range_integer;
-subtype max_phi_range_integer is integer range 0 to 575;
+subtype max_phi_range_integer is integer range 0 to 575; -- number of bins with muon bin width
 type dim2_max_phi_range_array is array (natural range <>, natural range <>) of max_phi_range_integer;
+
+-- LUTs for invariant mass
 
 -- LUT for eg et (values => et [GeV] * 10**CALO_INV_MASS_ET_PRECISION)
 type eg_et_lut_array is array (0 to 2**(D_S_I_EG_V2.et_high-D_S_I_EG_V2.et_low+1)-1) of natural range 0 to 2555;
@@ -690,7 +750,7 @@ constant JET_PT_LUT: jet_et_lut_array := (
 constant TAU_PT_LUT: eg_et_lut_array := EG_PT_LUT; -- eg et and tau et scale are equivalent currently
 
 -- LUT for calo eta converted to muon eta scale (values eta [bins] => calo-eta [bins] * 4 + 2)
-type calo_eta_conv_2_muon_eta_lut_array is array (0 to 255) of natural range 2 to 1023;
+type calo_eta_conv_2_muon_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of natural range 2 to 1023;
 constant CALO_ETA_CONV_2_MUON_ETA_LUT : calo_eta_conv_2_muon_eta_lut_array := (
 2, 6, 10, 14, 18, 22, 26, 30, 34, 38, 42, 46, 50, 54, 58, 62,
 66, 70, 74, 78, 82, 86, 90, 94, 98, 102, 106, 110, 114, 118, 122, 126,
@@ -716,7 +776,7 @@ constant TAU_ETA_CONV_2_MUON_ETA_LUT : calo_eta_conv_2_muon_eta_lut_array := CAL
 
 -- HB 2015-11-09: variant 1 of calo phi conversion - calo phi = 0 converted to muon phi = 1, and so on
 -- LUT for calo phi converted to muon phi scale (values phi [bins] => calo-phi [bins] * 4 + 1)
-type calo_phi_conv_2_muon_phi_lut_array is array (0 to 255) of natural range 0 to 573;
+type calo_phi_conv_2_muon_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natural range 0 to 573;
 constant CALO_PHI_CONV_2_MUON_PHI_LUT : calo_phi_conv_2_muon_phi_lut_array := (
 1, 5, 9, 13, 17, 21, 25, 29, 33, 37, 41, 45, 49, 53, 57, 61,
 65, 69, 73, 77, 81, 85, 89, 93, 97, 101, 105, 109, 113, 117, 121, 125,
@@ -738,7 +798,7 @@ constant CALO_PHI_CONV_2_MUON_PHI_LUT : calo_phi_conv_2_muon_phi_lut_array := (
 
 -- -- HB 2015-11-09: variant 2 of calo phi conversion - calo phi = 0 converted to muon phi = 2, and so on
 -- -- LUT for calo phi converted to muon phi scale (values phi [bins] => calo-phi [bins] * 4 + 2)
--- type calo_phi_conv_2_muon_phi_lut_array is array (0 to 255) of integer range 0 to 574;
+-- type calo_phi_conv_2_muon_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of integer range 0 to 574;
 -- constant CALO_PHI_CONV_2_MUON_PHI_LUT : calo_phi_conv_2_muon_phi_lut_array := (
 -- 2, 6, 10, 14, 18, 22, 26, 30, 34, 38, 42, 46, 50, 54, 58, 62,
 -- 66, 70, 74, 78, 82, 86, 90, 94, 98, 102, 106, 110, 114, 118, 122, 126,
@@ -758,12 +818,12 @@ constant CALO_PHI_CONV_2_MUON_PHI_LUT : calo_phi_conv_2_muon_phi_lut_array := (
 -- 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 -- );
 
-constant EG_PHI_CONV_2_MUON_PHI_LUT : eg_phi_conv_2_muon_phi_lut_array := CALO_PHI_CONV_2_MUON_PHI_LUT;
-constant JET_PHI_CONV_2_MUON_PHI_LUT : eg_phi_conv_2_muon_phi_lut_array := CALO_PHI_CONV_2_MUON_PHI_LUT;
-constant TAU_PHI_CONV_2_MUON_PHI_LUT : eg_phi_conv_2_muon_phi_lut_array := CALO_PHI_CONV_2_MUON_PHI_LUT;
+constant EG_PHI_CONV_2_MUON_PHI_LUT : calo_phi_conv_2_muon_phi_lut_array := CALO_PHI_CONV_2_MUON_PHI_LUT;
+constant JET_PHI_CONV_2_MUON_PHI_LUT : calo_phi_conv_2_muon_phi_lut_array := CALO_PHI_CONV_2_MUON_PHI_LUT;
+constant TAU_PHI_CONV_2_MUON_PHI_LUT : calo_phi_conv_2_muon_phi_lut_array := CALO_PHI_CONV_2_MUON_PHI_LUT;
 
 -- LUT for calo-calo cosh(deta) (values => rounded(cosh(deta[bins]) * 0.0870/2) * 10**CALO_INV_MASS_COSH_COS_PRECISION)
-type calo_calo_cosh_deta_lut_array is array (0 to 255) of natural range 1000 to 32838366;
+type calo_calo_cosh_deta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of natural range 1000 to 32838366;
 constant CALO_CALO_COSH_DETA_LUT: calo_calo_cosh_deta_lut_array := (
 1000, 1001, 1004, 1009, 1015, 1024, 1034, 1047, 1061, 1078, 1096, 1117, 1139, 1164, 1191, 1221,
 1252, 1286, 1323, 1361, 1403, 1447, 1494, 1544, 1596, 1652, 1711, 1773, 1838, 1907, 1979, 2056,
@@ -791,13 +851,21 @@ constant JET_TAU_COSH_DETA_LUT: calo_calo_cosh_deta_lut_array := CALO_CALO_COSH_
 constant TAU_TAU_COSH_DETA_LUT: calo_calo_cosh_deta_lut_array := CALO_CALO_COSH_DETA_LUT;
 
 -- LUT for calo-calo cos(dphi) (values => rounded(cos(dphi[bins]) * 0.0870/2) * 10**CALO_INV_MASS_COSH_COS_PRECISION)
-type calo_calo_cos_dphi_lut_array is array (0 to 127) of integer range -999 to 1000;
+type calo_calo_cos_dphi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of integer range -1000 to 1000;
 constant CALO_CALO_COS_DPHI_LUT: calo_calo_cos_dphi_lut_array := (
 1000, 999, 996, 991, 985, 976, 966, 954, 940, 924, 906, 887, 866, 843, 819, 793,
 766, 737, 707, 676, 643, 609, 574, 537, 500, 462, 423, 383, 342, 301, 259, 216,
 174, 131, 87, 44, 0, -44, -87, -131, -174, -216, -259, -301, -342, -383, -423, -462,
 -500, -537, -574, -609, -643, -676, -707, -737, -766, -793, -819, -843, -866, -887, -906, -924,
--940, -954, -966, -976, -985, -991, -996, -999, 0, 0, 0, 0, 0, 0, 0, 0,
+-940, -954, -966, -976, -985, -991, -996, -999, -1000, -999, -996, -991, -985, -976, -966, -954,
+-940, -924, -906, -887, -866, -843, -819, -793, -766, -737, -707, -676, -643, -609, -574, -537,
+-500, -462, -423, -383, -342, -301, -259, -216, -174, -131, -87, -44, 0, 44, 87, 131,
+174, 216, 259, 301, 342, 383, 423, 462, 500, 537, 574, 609, 643, 676, 707, 737,
+766, 793, 819, 843, 866, 887, 906, 924, 940, 954, 966, 976, 985, 991, 996, 999,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
@@ -814,7 +882,7 @@ constant TAU_TAU_COS_DPHI_LUT: calo_calo_cos_dphi_lut_array := CALO_CALO_COS_DPH
 constant MUON_PT_LUT: eg_et_lut_array := EG_PT_LUT; -- eg et and muon pt scale are equivalent currently
 
 -- LUT for muon-muon cosh(deta) (values => rounded(cosh(deta[bins]) * 0.0870/8) * 10**MUON_INV_MASS_COSH_COS_PRECISION)
-type muon_muon_cosh_deta_lut_array is array (0 to 511) of natural range 10000 to 1295404;
+type muon_muon_cosh_deta_lut_array is array (0 to 2**(MUON_ETA_HIGH-MUON_ETA_LOW+1)-1) of natural range 10000 to 1295404;
 constant MUON_MUON_COSH_DETA_LUT: muon_muon_cosh_deta_lut_array := (
 10000, 10001, 10002, 10005, 10009, 10015, 10021, 10029, 10038, 10048, 10059, 10072, 10085, 10100, 10116, 10133,
 10152, 10171, 10192, 10214, 10237, 10262, 10288, 10314, 10343, 10372, 10402, 10434, 10467, 10501, 10537, 10574,
@@ -851,7 +919,7 @@ constant MUON_MUON_COSH_DETA_LUT: muon_muon_cosh_deta_lut_array := (
 );
 
 -- LUT for muon-muon cos(dphi) (values => rounded(cos(dphi[bins]) * 0.0870/8) * 10**MUON_INV_MASS_COSH_COS_PRECISION)
-type muon_muon_cos_dphi_lut_array is array (0 to 511) of integer range -9999 to 10000;
+type muon_muon_cos_dphi_lut_array is array (0 to 2**(MUON_PHI_HIGH-MUON_PHI_LOW+1)-1) of integer range -10000 to 10000;
 constant MUON_MUON_COS_DPHI_LUT: muon_muon_cos_dphi_lut_array := (
 10000, 9999, 9998, 9995, 9990, 9985, 9979, 9971, 9962, 9952, 9941, 9928, 9914, 9900, 9884, 9866,
 9848, 9829, 9808, 9786, 9763, 9739, 9713, 9687, 9659, 9630, 9600, 9569, 9537, 9504, 9469, 9434,
@@ -871,6 +939,38 @@ constant MUON_MUON_COS_DPHI_LUT: muon_muon_cos_dphi_lut_array := (
 -8660, -8714, -8767, -8819, -8870, -8920, -8969, -9016, -9063, -9109, -9153, -9196, -9239, -9280, -9320, -9359,
 -9397, -9434, -9469, -9504, -9537, -9569, -9600, -9630, -9659, -9687, -9713, -9739, -9763, -9786, -9808, -9829,
 -9848, -9866, -9884, -9900, -9914, -9928, -9941, -9952, -9962, -9971, -9979, -9985, -9990, -9995, -9998, -9999,
+-10000, -9999, -9998, -9995, -9990, -9985, -9979, -9971, -9962, -9952, -9941, -9928, -9914, -9900, -9884, -9866,
+-9848, -9829, -9808, -9786, -9763, -9739, -9713, -9687, -9659, -9630, -9601, -9569, -9537, -9504, -9469, -9434,
+-9397, -9359, -9320, -9280, -9239, -9197, -9153, -9109, -9063, -9016, -8969, -8920, -8870, -8819, -8767, -8714,
+-8660, -8605, -8549, -8492, -8434, -8375, -8315, -8254, -8192, -8128, -8064, -7999, -7934, -7867, -7799, -7730,
+-7660, -7590, -7518, -7446, -7373, -7299, -7224, -7148, -7071, -6994, -6915, -6836, -6756, -6675, -6593, -6511,
+-6428, -6344, -6259, -6174, -6088, -6001, -5913, -5825, -5736, -5646, -5556, -5465, -5373, -5281, -5188, -5094,
+-5000, -4905, -4810, -4714, -4618, -4520, -4423, -4325, -4226, -4127, -4028, -3927, -3827, -3726, -3624, -3523,
+-3420, -3318, -3214, -3111, -3007, -2903, -2798, -2693, -2588, -2483, -2377, -2271, -2164, -2058, -1951, -1844,
+-1737, -1629, -1521, -1413, -1305, -1197, -1089, -980, -872, -763, -654, -545, -436, -327, -218, -109,
+0, 109, 218, 327, 436, 545, 654, 763, 872, 980, 1089, 1197, 1305, 1413, 1521, 1629,
+1736, 1844, 1951, 2058, 2164, 2271, 2377, 2483, 2588, 2693, 2798, 2903, 3007, 3111, 3214, 3317,
+3420, 3522, 3624, 3726, 3827, 3927, 4027, 4127, 4226, 4325, 4423, 4520, 4617, 4714, 4810, 4905,
+5000, 5094, 5188, 5281, 5373, 5465, 5556, 5646, 5736, 5825, 5913, 6001, 6088, 6174, 6259, 6344,
+6428, 6511, 6593, 6675, 6756, 6836, 6915, 6993, 7071, 7148, 7224, 7299, 7373, 7446, 7518, 7590,
+7660, 7730, 7799, 7867, 7934, 7999, 8064, 8128, 8191, 8254, 8315, 8375, 8434, 8492, 8549, 8605,
+8660, 8714, 8767, 8819, 8870, 8920, 8969, 9016, 9063, 9109, 9153, 9196, 9239, 9280, 9320, 9359,
+9397, 9434, 9469, 9504, 9537, 9569, 9600, 9630, 9659, 9687, 9713, 9739, 9763, 9786, 9808, 9829,
+9848, 9866, 9884, 9900, 9914, 9928, 9941, 9952, 9962, 9971, 9979, 9985, 9990, 9995, 9998, 9999,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -888,7 +988,7 @@ constant MUON_MUON_COS_DPHI_LUT: muon_muon_cos_dphi_lut_array := (
 );
 
 -- LUT for calo-muon cosh(deta) (values => rounded(cosh(deta[bins]) * 0.0870/8) * 10**MUON_INV_MASS_COSH_COS_PRECISION)
-type calo_muon_cosh_deta_lut_array is array (0 to 1023) of natural range 10000 to 339273862;
+type calo_muon_cosh_deta_lut_array is array (0 to 2**(MUON_ETA_HIGH-MUON_ETA_LOW+1+1)-1) of natural range 10000 to 339273862;
 constant CALO_MUON_COSH_DETA_LUT: calo_muon_cosh_deta_lut_array := (
 10000, 10001, 10002, 10005, 10009, 10015, 10021, 10029, 10038, 10048, 10059, 10072, 10085, 10100, 10116, 10133,
 10152, 10171, 10192, 10214, 10237, 10262, 10288, 10314, 10343, 10372, 10402, 10434, 10467, 10501, 10537, 10574,
