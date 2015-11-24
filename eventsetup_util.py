@@ -480,12 +480,15 @@ def getReport(menu, vhdlVersion=False):
 
     data.reporter[keyXxxDict] = value
 
+  condInUse = []
   for algoName in data.reporter[keyAlgoDict]:
     algoDict = data.reporter[keyAlgoDict][algoName]
     condDict = {}
     for x in algoDict[keyAlgo].getRpnVector():
       if tmGrammar.isGate(x): continue
       hash = tmEventSetup.getHash(x)
+      if hash in condInUse: continue
+      condInUse.append(hash)
       cond = data.reporter[keyCondMap][hash]
       condName = cond.getName()
       condDict = { keyObjType: getObjectType(condName) }
