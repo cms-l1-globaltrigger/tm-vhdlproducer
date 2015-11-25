@@ -1,7 +1,7 @@
 -- Description:
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
--- HB 2015-10-28: inserted constants and LUTs for correlation conditions
+-- HB 2015-11-25: inserted constants and LUTs for correlation conditions
 -- HB 2015-04-28: inserted records for energy summary objects and calorimeter conditions version 2 (calo_conditions_v2.vhd)
 -- HB 2014-09-09: GTL and FDL firmware major, minor and revision versions moved to gt_mp7_core_pkg.vhd (GTL_FW_MAJOR_VERSION, etc.)
 --                for creating a tag name by a script independent from L1Menu.
@@ -38,6 +38,10 @@ package gtl_pkg is
 -- ==== Inserted by TME - begin =============================================================================================================
 
 -- Algorithms
+-- -- HB 2015-11-25: move "constant MAX_NR_ALGOS" from gt_mp7_core_pkg.vhd, therefore use work.gtl_pkg.ALL; has to be inserted in frame.vhd !!!
+-- --                With this change MAX_NR_ALGOS could be replaced by VHDL-Producer for different menus.
+-- constant MAX_NR_ALGOS : positive := {{ ... }};
+
 constant NR_ALGOS : positive := {{ menu.reporter['m2a'][iMod] | length }}; -- number of algorithmns (min. 32 for FDL registers width !!!) - written by TME
 
 -- ==== FDL definitions - begin ============================================================
