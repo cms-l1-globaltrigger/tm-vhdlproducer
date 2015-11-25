@@ -17,8 +17,8 @@
         "{{muCondDict['RequestedChargeCorrelation']}}"
     )
     port map(lhc_clk, muon_bx_{{Bx|lower}},
-        ls_charcorr_double_bx_{{Bx|lower}}, os_charcorr_double_bx_{{Bx|lower}},
-        ls_charcorr_triple_bx_{{Bx|lower}}, os_charcorr_triple_bx_{{Bx|lower}},
-        ls_charcorr_quad_bx_{{Bx|lower}}, os_charcorr_quad_bx_{{Bx|lower}},
+        ls_charcorr_double_bx_{{Bx|lower}}_bx_{{Bx|lower}}, os_charcorr_double_bx_{{Bx|lower}}_bx_{{Bx|lower}},
+        ls_charcorr_triple_bx_{{Bx|lower}}_bx_{{Bx|lower}}, os_charcorr_triple_bx_{{Bx|lower}}_bx_{{Bx|lower}},
+        ls_charcorr_quad_bx_{{Bx|lower}}_bx_{{Bx|lower}}, os_charcorr_quad_bx_{{Bx|lower}}_bx_{{Bx|lower}},
         {{condName|lower}});
 {% endblock instance_muon_condition%}
