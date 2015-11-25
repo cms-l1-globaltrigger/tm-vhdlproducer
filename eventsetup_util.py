@@ -296,7 +296,7 @@ def _makeDefaultTemplateDictionaries(condition):
   if any_in([tmGrammar.JET, tmGrammar.TAU, tmGrammar.EG], condition):
     defTempDict[keyCaloConditionDict] = {
       EtThresholds: [ 0, 0, 0, 0 ],
-      IsoLuts:      [ 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF ],
+      IsoLuts:      [ 0xF, 0xF, 0xF, 0xF ],
     }
     for dct in [EtaRangeDict,  PhiRangeDict, EtaPhiDiffDict]:
       defTempDict[keyCaloConditionDict].update(dct)
