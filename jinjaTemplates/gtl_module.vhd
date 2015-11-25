@@ -69,7 +69,8 @@ architecture rtl of gtl_module is
 {#%- include  "subTemplates/signal_correlation_conditions_differences.vhd.j2"%#}
 
 -- Signal definition for muon charge correlations (only once for all muon conditions, except SingleMuon conditions)
--- Insert "signal_muon_charge_correlations.vhd.j2" only once in a certain Bx, if there is at least one DoubleMuon, TripleMuon, QuadMuon condition or a muon-muon correlation condition.
+-- Insert "signal_muon_charge_correlations.vhd.j2" only once for a certain Bx or Bx combination, if there is at least one DoubleMuon, TripleMuon, QuadMuon condition
+-- or a muon-muon correlation condition.
 {%- include  "subTemplates/signal_muon_charge_correlations.vhd.j2"%}
 
 -- Signal definition for conditions names
@@ -128,7 +129,8 @@ end process;
 
 -- ==== Inserted by TME - begin =============================================================================================================
 
--- Instantiations of muon charge correlations - only once in a certain Bx, if there is at least one DoubleMuon, TripleMuon, QuadMuon condition or a muon-muon correlation condition
+-- Instantiations of muon charge correlations - only once for a certain Bx or Bx combination, if there is at least one DoubleMuon, TripleMuon, QuadMuon condition
+-- or a muon-muon correlation condition.
 {%- include  "subTemplates/instance_muon_charge_correlations.vhd.j2"%}
 
 -- Instantiations of pt, eta and phi for correlation conditions (used for DETA, DPHI and DR) - once for every ObjectType in certain Bx used in correlation conditions
