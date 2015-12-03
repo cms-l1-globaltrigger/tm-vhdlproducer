@@ -1,16 +1,29 @@
+#!/bin/env python
 
-from tmVhdlProducer import *
-#from tmVhdlProducer.tmVhdlProducer import TemplateEngine, mkdir_p, ResourceLoader
-from tmVhdlProducer.tmVhdlProducer import TemplateEngine, mkdir_p, ResourceLoader,Loader
+import logging
+import os
+
+import tmVhdlProducer
 import tmEventSetup
 import tmGrammar
-import os
+
+
+conf = 'logging.conf'
+if os.path.isfile(conf):
+  import logging.config
+  logging.config.fileConfig(conf)
+
+logging.addLevelName(10, 'dbg')
+logging.addLevelName(20, 'inf')
+logging.addLevelName(30, 'war')
+logging.addLevelName(40, 'err')
+logging.addLevelName(50, 'fat')
+
+logging.info("VHDL producer")
 
 
 DIR              = os.environ["UTM_ROOT"]
 defaultMenu      = "/afs/cern.ch/user/t/tmatsush/public/tmGui/L1Menu_Collisions2015_25nsStage1_v6_uGT_v2.xml"
-                   #"/afs/cern.ch/user/t/tmatsush/public/tmGui/L1Menu_Collisions2015_25nsStage1_v6_uGT.xml"
-                   #"/afs/cern.ch/user/t/tmatsush/public/tmGui/L1Menu_Point5IntegrationTest_2015_v1.xml"
 
 from optparse import OptionParser
 parser = OptionParser()
@@ -20,14 +33,10 @@ parser.add_option("--manual_dist", dest="manual_dist",  action="store_true",    
 parser.add_option("--output",   dest="outputDir", default=DIR+"/tmVhdlProducer/test/vhdltest/" ,      type="string", action="store", help="directory for the VHDL producer output")
 parser.add_option("--verbose",   dest="verbose", action="store_true", help="prints template output")
 
-#parser.add_option("--overwrite", dest="overwrite", action="store_true", help="Overwrite?", default=True)
 (options, args) = parser.parse_args()
 
 
-
-
 ## -----------------------------------------------
-#DIR              = "/afs/cern.ch/user/n/nrad/tm/utm/"
 outputDir        = options.outputDir
 vhdlTemplateDir  = DIR+"/tmVhdlProducer/jinjaTemplates/"
 nModules         = options.nModules
@@ -35,19 +44,7 @@ verbose          = options.verbose
 menu             = tmEventSetup.getTriggerMenu(options.menu)
 
 
-
-#loader = ResourceLoader(DIR)
-#template = loader.get_source("","gtl_module.vhd.ja")
-
-
-
-#t = TemplateEngine(vhdlTemplateDir)
-#t.render("testTemplate.ja",{"name":"aa"})
-
-#loader = Loader(vhdlTemplateDir)
-#loader.getTemplateDict( templateDict )
-#loader.templateDict
-
-producer=VhdlProducer(menu,vhdlTemplateDir,nModules,outputDir,verbose,options.manual_dist)
+producer=tmVhdlProducer.VhdlProducer(menu,vhdlTemplateDir,nModules,outputDir,verbose,options.manual_dist)
 producer.write()
-#producer.makeDirectories()
+
+# eof
