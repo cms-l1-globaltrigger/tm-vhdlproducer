@@ -1,0 +1,21 @@
+{%- extends "templateLoops/objLoop_instance_calo_esums_correlation_condition.j2" %}
+{%- block instance_calo_esums_correlation_condition %}
+{{condName|lower}}_i: entity work.calo_esums_correlation_condition
+    generic map(
+	NR_{{ObjectType1|upper}}_OBJECTS, {{ objInfo1['op'] |lower}}, {{ObjectType1|upper}}_TYPE,
+        X"{{caloesumsCondDict['EtThreshold1']|X04}}",
+        {{caloesumsCondDict['EtaFullRange1']}}, X"{{caloesumsCondDict['EtaW1UpperLimit1']|X04}}",(X"{{caloesumsCondDict['EtaW1LowerLimit1']|X04}}",
+        {{caloesumsCondDict['EtaW2Ignore1']}}, X"{{caloesumsCondDict['EtaW2UpperLimit1']|X04}}", X"{{caloesumsCondDict['EtaW2LowerLimit1']|X04}}",
+        {{caloesumsCondDict['PhiFullRange1']}}, X"{{caloesumsCondDict['PhiW1UpperLimit1']|X04}}", X"{{caloesumsCondDict['PhiW1LowerLimit1']|X04}}",
+        {{caloesumsCondDict['PhiW2Ignore1']}}, X"{{caloesumsCondDict['PhiW2UpperLimit1']|X04}}", X"{{caloesumsCondDict['PhiW2LowerLimit1']|X04}}",  
+	X"{{caloesumsCondDict['IsoLut1']|X01}}",	
+	{{ objInfo2['op'] |lower}}, {{ObjectType2|upper}}_TYPE,
+        X"{{caloesumsCondDict['EtThreshold2']|X04}}",
+        {{caloesumsCondDict['PhiFullRange2']}}, X"{{caloesumsCondDict['PhiW1UpperLimit2']|X04}}", X"{{caloesumsCondDict['PhiW1LowerLimit2']|X04}}",
+        {{caloesumsCondDict['PhiW2Ignore2']}}, X"{{caloesumsCondDict['PhiW2UpperLimit2']|X04}}", X"{{caloesumsCondDict['PhiW2LowerLimit2']|X04}}",  
+        {{caloesumsCondDict['DiffPhiUpperLimit']}}, {{caloesumsCondDict['DiffPhiLowerLimit']}}, DETA_DPHI_VECTOR_WIDTH_ALL, DETA_DPHI_PRECISION_ALL
+    )
+    port map(lhc_clk, {{ObjectType1|lower}}_bx_{{Bx1|lower}}, {{ObjectType2|lower}}_bx_{{Bx2|lower}}, 
+	diff_{{ObjectType1|lower}}_{{ObjectType2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_phi_vector, 
+	{{condName|lower}});
+{% endblock instance_calo_calo_correlation_condition %}

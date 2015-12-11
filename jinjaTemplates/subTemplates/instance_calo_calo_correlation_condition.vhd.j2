@@ -18,12 +18,12 @@
         {{calocaloCondDict['PhiW2Ignore2']}}, X"{{calocaloCondDict['PhiW2UpperLimit2']|X04}}", X"{{calocaloCondDict['PhiW2LowerLimit2']|X04}}",  
 	X"{{calocaloCondDict['IsoLut2']|X01}}",
         {{calocaloCondDict['DiffEtaUpperLimit']}}, {{calocaloCondDict['DiffEtaLowerLimit']}}, {{calocaloCondDict['DiffPhiUpperLimit']}}, {{calocaloCondDict['DiffPhiLowerLimit']}}, DETA_DPHI_LIMITS_PRECISION_ALL,
-        {{calocaloCondDict['DeltaRUpperLimit']}}, {{calocaloCondDict['DeltaRLowerLimit']}}, DR_LIMITS_PRECISION_ALL, 
+        {{calocaloCondDict['DeltaRUpperLimit']}}, {{calocaloCondDict['DeltaRLowerLimit']}}, DETA_DPHI_VECTOR_WIDTH_ALL, DETA_DPHI_PRECISION_ALL, 
         {{calocaloCondDict['InvMassUpperLimit']}}, {{calocaloCondDict['InvMassLowerLimit']}}, INV_MASS_LIMITS_PRECISION_ALL,
         CALO_INV_MASS_ET_PRECISION, {{ObjectType1|upper}}_ET_VECTOR_WIDTH, {{ObjectType2|upper}}_ET_VECTOR_WIDTH, CALO_INV_MASS_COSH_COS_PRECISION, CALO_COSH_COS_VECTOR_WIDTH
     )
     port map(lhc_clk, {{ObjectType1|lower}}_bx_{{Bx1|lower}}, {{ObjectType2|lower}}_bx_{{Bx2|lower}}, 
-	diff_{{ObjectType1|lower}}_{{ObjectType2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_eta_integer_value, diff_{{ObjectType1|lower}}_{{ObjectType2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_phi_integer_value, 
+	diff_{{ObjectType1|lower}}_{{ObjectType2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_eta_vector, diff_{{ObjectType1|lower}}_{{ObjectType2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_phi_vector, 
         {{ObjectType1|lower}}_et_vector_bx_{{Bx1|lower}}, {{ObjectType2|lower}}_et_vector_bx_{{Bx2|lower}}, 
         {{ObjectType1|lower}}_{{ObjectType2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_cosh_deta_vector, {{ObjectType1|lower}}_{{ObjectType2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_cos_dphi_vector,
 	{{condName|lower}});
