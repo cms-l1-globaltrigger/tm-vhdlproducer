@@ -218,7 +218,9 @@ class VhdlProducer(object):
         #print "data reporter keys:", self.data.reporter.keys()
 
     def _makeDirectories(self):
-        mainDir = self.outputDir + "/" + self.menuName
+# HB 2015-11-06: bug fix to get correct "vhdlDir"
+        #mainDir = self.outputDir + "/" + self.menuName
+        mainDir = self.outputDir
         #testVectorDir = mainDir +"/testvector"
         vhdlDir = mainDir + "/vhdl"
         self.directoryDict= { 

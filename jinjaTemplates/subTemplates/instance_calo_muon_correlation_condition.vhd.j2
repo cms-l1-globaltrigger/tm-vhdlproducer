@@ -16,13 +16,13 @@
         {{calomuonCondDict['PhiFullRange2']}}, X"{{calomuonCondDict['PhiW1UpperLimit2']|X04}}", X"{{calomuonCondDict['PhiW1LowerLimit2']|X04}}",
         {{calomuonCondDict['PhiW2Ignore2']}}, X"{{calomuonCondDict['PhiW2UpperLimit2']|X04}}", X"{{calomuonCondDict['PhiW2LowerLimit2']|X04}}",  
 	"{{calomuonCondDict['RequestedCharge2']}}", X"{{calomuonCondDict['QualityLut2']|X04}}", X"{{calomuonCondDict['IsoLut2']|X01}}",
-        {{calomuonCondDict['DiffEtaUpperLimit']}}, {{calomuonCondDict['DiffEtaLowerLimit']}}, {{calomuonCondDict['DiffPhiUpperLimit']}}, {{calomuonCondDict['DiffPhiLowerLimit']}}, DETA_DPHI_LIMITS_PRECISION_ALL,
-        {{calomuonCondDict['DeltaRUpperLimit']}}, {{calomuonCondDict['DeltaRLowerLimit']}}, DETA_DPHI_VECTOR_WIDTH_ALL, DETA_DPHI_PRECISION_ALL,
-        {{calomuonCondDict['InvMassUpperLimit']}}, {{calomuonCondDict['InvMassLowerLimit']}}, INV_MASS_LIMITS_PRECISION_ALL,
-        CALO_MUON_INV_MASS_PT_PRECISION, {{ObjectType1|upper}}_ET_VECTOR_WIDTH, MUON_PT_VECTOR_WIDTH, CALO_MUON_COSH_COS_VECTOR_WIDTH
+        {{calomuonCondDict['DiffEtaUpperLimit']}}, {{calomuonCondDict['DiffEtaLowerLimit']}}, {{calomuonCondDict['DiffPhiUpperLimit']}}, {{calomuonCondDict['DiffPhiLowerLimit']}},
+        {{calomuonCondDict['DeltaRUpperLimit']}}, {{calomuonCondDict['DeltaRLowerLimit']}}, DETA_DPHI_VECTOR_WIDTH_ALL, {{ObjectType1|upper}}_MUON_DETA_DPHI_PRECISION,
+        {{calomuonCondDict['InvMassUpperLimit']}}, {{calomuonCondDict['InvMassLowerLimit']}}, {{ObjectType1|upper}}_MUON_INV_MASS_PRECISION,
+        {{ObjectType1|upper}}_PT_VECTOR_WIDTH, MUON_PT_VECTOR_WIDTH, {{ObjectType1|upper}}_MUON_COSH_COS_PRECISION, {{ObjectType1|upper}}_MUON_COSH_COS_VECTOR_WIDTH
     )
-    port map(lhc_clk, {{ObjectType1|lower}}_bx_{{Bx1|lower}}, muon_bx_{{Bx2|lower}}, ls_charcorr_double_{{Bx1|lower}}_{{Bx2|lower}}, os_charcorr_double_{{Bx1|lower}}_{{Bx2|lower}},
-	diff_calo_muon_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_eta_vector, diff_calo_muon_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_phi_vector, 
-        {{ObjectType1|lower}}_et_vector_bx_{{Bx1|lower}}, muon_pt_vector_bx_{{Bx2|lower}}, calo_muon_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_cosh_deta_vector, calo_muon_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_cos_dphi_vector,
+    port map(lhc_clk, {{ObjectType1|lower}}_bx_{{Bx1|lower}}, muon_bx_{{Bx2|lower}},
+	diff_{{ObjectType1|lower}}_muon_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_eta_vector, diff_{{ObjectType1|lower}}_muon_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_phi_vector, 
+        {{ObjectType1|lower}}_et_vector_bx_{{Bx1|lower}}, muon_pt_vector_bx_{{Bx2|lower}}, {{ObjectType1|lower}}_muon_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_cosh_deta_vector, {{ObjectType1|lower}}_muon_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_cos_dphi_vector,
 	{{condName|lower}});
 {% endblock instance_calo_muon_correlation_condition %}

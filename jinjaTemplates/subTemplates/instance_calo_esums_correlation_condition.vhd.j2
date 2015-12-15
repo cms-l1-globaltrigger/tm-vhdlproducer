@@ -13,7 +13,7 @@
         X"{{caloesumsCondDict['EtThreshold2']|X04}}",
         {{caloesumsCondDict['PhiFullRange2']}}, X"{{caloesumsCondDict['PhiW1UpperLimit2']|X04}}", X"{{caloesumsCondDict['PhiW1LowerLimit2']|X04}}",
         {{caloesumsCondDict['PhiW2Ignore2']}}, X"{{caloesumsCondDict['PhiW2UpperLimit2']|X04}}", X"{{caloesumsCondDict['PhiW2LowerLimit2']|X04}}",  
-        {{caloesumsCondDict['DiffPhiUpperLimit']}}, {{caloesumsCondDict['DiffPhiLowerLimit']}}, DETA_DPHI_VECTOR_WIDTH_ALL, DETA_DPHI_PRECISION_ALL
+        {{caloesumsCondDict['DiffPhiUpperLimit']}}, {{caloesumsCondDict['DiffPhiLowerLimit']}}, DETA_DPHI_VECTOR_WIDTH_ALL, {{ObjectType1|lower}}_{{ObjectType2|lower}}_DPHI_PRECISION
     )
     port map(lhc_clk, {{ObjectType1|lower}}_bx_{{Bx1|lower}}, {{ObjectType2|lower}}_bx_{{Bx2|lower}}, 
 	diff_{{ObjectType1|lower}}_{{ObjectType2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_phi_vector, 
