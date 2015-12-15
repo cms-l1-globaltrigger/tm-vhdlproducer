@@ -152,6 +152,8 @@ end process;
 {#%- include  "subTemplates/instance_calo_calo_correlation_condition.vhd.j2"%#}
 {#%- include  "subTemplates/instance_calo_muon_correlation_condition.vhd.j2"%#}
 {#%- include  "subTemplates/instance_muon_muon_correlation_condition.vhd.j2"%#}
+{#%- include  "subTemplates/instance_calo_esums_correlation_condition.vhd.j2"%#}
+{#%- include  "subTemplates/instance_muon_esums_correlation_condition.vhd.j2"%#}
 
 -- Instantiations of algorithms 
 {%- include  "subTemplates/instance_algorithm.vhd.j2"%}
