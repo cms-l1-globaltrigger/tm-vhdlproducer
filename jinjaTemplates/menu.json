@@ -1,6 +1,6 @@
 {
-"firmware_uuid" :   "{{menu.reporter['XxxDict']['L1TMenuFirmwareUUID'] }}"  , 
-"menu_uuid"     :   "{{menu.reporter['XxxDict']['L1TMenuUUID']}}"           ,
+"firmware_uuid" :   "{{menu.reporter['MenuInfo']['L1TMenuFirmwareUUID'] }}"  , 
+"menu_uuid"     :   "{{menu.reporter['MenuInfo']['L1TMenuUUID']}}"           ,
 "n_modules"     :   {{menu.reporter['m2a']  |length}}                     ,
 "guide"         :   ["AlgoName", "Global_Index","Module_Index", "Local_Index" ],
 "algorithms"    :   [

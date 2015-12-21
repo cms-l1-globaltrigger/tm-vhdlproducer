@@ -1,16 +1,19 @@
-{%- extends "templateLoops/objLoop_instance_muon_charge_correlations.j2" %}
+{%- set bxComb = menu.reporter['bxComb'] %}
+
 {%- block instance_muon_charge_correlation %}
 {%- endblock instance_muon_charge_correlation %}
+
 {%- block outerLoop %}
-{%- for objName in muonChargeCorrelationList %}
-  {%- for Bx in muonChargeCorrelationList[objName] %}
+
+{%- for bxPair in bxComb %}
+{%- set Bx1,Bx2 = bxPair %}
 muon_charge_correlations_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_i: entity work.muon_charge_correlations
-    port map(muon_bx_{{Bx1|lower}}, muon_bx_{{Bx2|lower}},
-        ls_charcorr_double_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}, os_charcorr_double_bx_{{Bx1|lower}}_bx_{{Bx2|lower}},
-        ls_charcorr_triple_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}, os_charcorr_triple_bx_{{Bx1|lower}}_bx_{{Bx2|lower}},
-        ls_charcorr_quad_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}, os_charcorr_quad_bx_{{Bx1|lower}}_bx_{{Bx2|lower}});
+  port map(muon_bx_{{Bx1|lower}}, muon_bx_{{Bx2|lower}},
+    ls_charcorr_double_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}, os_charcorr_double_bx_{{Bx1|lower}}_bx_{{Bx2|lower}},
+    ls_charcorr_triple_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}, os_charcorr_triple_bx_{{Bx1|lower}}_bx_{{Bx2|lower}},
+    ls_charcorr_quad_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}, os_charcorr_quad_bx_{{Bx1|lower}}_bx_{{Bx2|lower}});
 {%-endfor%}
-{%-endfor%}
+
 {%- endblock outerLoop%}
 {#-#}
 {#-#}

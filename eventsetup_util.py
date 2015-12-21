@@ -16,13 +16,15 @@ keyIndexSorted = "index_sorted"
 keyAlgoDict = "algoDict"
 keyScaleMap = "scaleMap"
 keyConditionSet = "conditionSet"
-keyXxxDict = "XxxDict"
+keyMenuInfo = "MenuInfo"
 keyTriggerGroups = "TriggerGroups"
 keyCondMap = "condMap"
 
 keyCutDict = "cutDict"
 keyObjDict = "objDict"
 keyObjList = "objList"
+
+keyBxComb = "bxComb"
 
 
 # keys for algoDict
@@ -37,7 +39,7 @@ keyCondDict = "condDict"
 
 # keys for condDict
 #   reporter[keyAlgoDict][<algoName>][keyCondDict][<condName>]
-keyHash = "hash"
+keyCondition = "condition"
 keyObjType = "objType"
 keyTriggerGroup = "TriggerGroup"
 keyCond = "cond"
@@ -502,6 +504,7 @@ def getMuonCondition(ii, condDict, cutDict):
     ## what is the actual output??
 
 
+
 def getCaloCondition(ii, condDict, cutDict):
   condDict[EtThresholds][ii] = getCutDict(cutDict, Threshold)[0][keyMinIndex]
 
@@ -520,6 +523,29 @@ def getEsumCondition(ii, condDict, cutDict):
   condDict[EtThreshold][ii] = getCutDict(cutDict, Threshold)[0][keyMinIndex]
 
   setPhiCuts(ii, condDict, cutDict)
+
+
+def setBxCombChgCor(dictionary):
+  dictionary[keyBxComb] = []
+
+  for algoName in dictionary[keyAlgoDict]:
+    algo = dictionary[keyAlgoDict][algoName][keyAlgo]
+    for condName in dictionary[keyAlgoDict][algoName][keyCondDict]:
+      condType = dictionary[keyAlgoDict][algoName][keyCondDict][condName][keyTriggerGroup]
+
+      bxSet = []
+      # TODO: handle MuonMuonCorrelation
+      if condType in (conditionTypes[tmEventSetup.DoubleMuon],
+                      conditionTypes[tmEventSetup.TripleMuon],
+                      conditionTypes[tmEventSetup.QuadMuon]):
+        for x in dictionary[keyAlgoDict][algoName][keyCondDict][condName][keyObjList]:
+          bxSet.append(x['Bx'])
+        bxSet = list(set(bxSet))
+        if len(bxSet) == 1:
+          bxCombination = bxSet[0], bxSet[0]
+          dictionary[keyBxComb].append(bxCombination)
+        else:
+          raise NotImplementedError
 
 
 def getReport(menu, vhdlVersion=False):
@@ -561,7 +587,7 @@ def getReport(menu, vhdlVersion=False):
     value.update( {"L1TMenuName": menuName} )
     value.update( {"L1TMenuScaleSet": None} )
 
-    data.reporter[keyXxxDict] = value
+    data.reporter[keyMenuInfo] = value
 
   condInUse = []
   for algoName in data.reporter[keyAlgoDict]:
@@ -569,14 +595,14 @@ def getReport(menu, vhdlVersion=False):
     condDict = {}
     for x in algoDict[keyAlgo].getRpnVector():
       if tmGrammar.isGate(x): continue
-      hash = tmEventSetup.getHash(x)
-      if hash in condInUse: continue
-      condInUse.append(hash)
-      cond = data.reporter[keyCondMap][hash]
+      condition = x
+      if condition in condInUse: continue
+      condInUse.append(condition)
+      cond = data.reporter[keyCondMap][condition]
       condName = cond.getName()
       condDict = { keyObjType: getObjectType(condName) }
       condDict.update( {keyCond: cond} )
-      condDict.update( {keyHash: hash} )
+      condDict.update( {keyCondition: condition} )
       condDict.update( {keyType: cond.getType()} )
       condDict.update( {keyTriggerGroup: conditionTypes[cond.getType()]} )
       condDict.update( {keyConditionTemplates: getDefaultTemplate(cond.getType())} )
@@ -668,6 +694,9 @@ def getReport(menu, vhdlVersion=False):
   for algoName in data.reporter[keyIndexSorted]:
     condList.extend(data.reporter[keyAlgoDict][algoName][keyCondDict].keys())
   data.reporter[keyConditionSet] = set(condList)
+
+  setBxCombChgCor(data.reporter)
+  print data.reporter[keyBxComb]
 
   return data
 
