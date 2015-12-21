@@ -526,7 +526,7 @@ def getEsumCondition(ii, condDict, cutDict):
 
 
 def setBxCombChgCor(dictionary):
-  dictionary[keyBxComb] = []
+  dictionary[keyBxComb] = set()
 
   for algoName in dictionary[keyAlgoDict]:
     algo = dictionary[keyAlgoDict][algoName][keyAlgo]
@@ -543,7 +543,7 @@ def setBxCombChgCor(dictionary):
         bxSet = list(set(bxSet))
         if len(bxSet) == 1:
           bxCombination = bxSet[0], bxSet[0]
-          dictionary[keyBxComb].append(bxCombination)
+          dictionary[keyBxComb].add(bxCombination)
         else:
           raise NotImplementedError
 

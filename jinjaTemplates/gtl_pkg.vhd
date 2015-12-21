@@ -40,7 +40,7 @@ package gtl_pkg is
 -- Algorithms
 -- -- HB 2015-11-25: move "constant MAX_NR_ALGOS" from gt_mp7_core_pkg.vhd, therefore use work.gtl_pkg.ALL; has to be inserted in frame.vhd !!!
 -- --                With this change MAX_NR_ALGOS could be replaced by VHDL-Producer for different menus.
--- constant MAX_NR_ALGOS : positive := {{ }};
+-- constant MAX_NR_ALGOS : positive := { };
 
 constant NR_ALGOS : positive := {{ menu.reporter['m2a'][iMod] | length }}; -- number of algorithmns (min. 32 for FDL registers width !!!) - written by TME
 
