@@ -18,8 +18,7 @@ def getSvnVersion(root):
   os.chdir(root)
   process = subprocess.Popen('svnversion', stdout=subprocess.PIPE)
   revision = process.stdout.readlines()[0].strip()
-  if type(revision) is types.ListType:
-    revision = revision.split(':')[-1]
+  revision = revision.split(':')[-1]
   try:
     int(revision)
   except ValueError:
