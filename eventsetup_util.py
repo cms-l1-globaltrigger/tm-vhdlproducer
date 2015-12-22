@@ -611,13 +611,13 @@ def getReport(menu, vhdlVersion=False):
       if tmGrammar.isGate(token): continue
 
       condition = token
-      if condition in condInUse: continue
-      condInUse.append(condition)
-
       cond = data.reporter[keyCondMap][condition]
       if cond.getType() == tmEventSetup.Externals:
         updateExpressionInCondition(algoDict, cond)
         continue
+
+      if condition in condInUse: continue
+      condInUse.append(condition)
 
       condName = cond.getName()
       condDict = { keyObjType: getObjectType(condName) }
