@@ -212,7 +212,6 @@ class VhdlProducer(object):
         #self.loader.templateDict
 
         algoMap = menu.getAlgorithmMapPtr()
-        print dir(algoMap)
         self.nAlgos = algoMap.size()
         self.data = util.getReport(self.menu,self.version)
         #print "data reporter keys:", self.data.reporter.keys()

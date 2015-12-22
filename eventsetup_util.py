@@ -599,7 +599,7 @@ def getReport(menu, vhdlVersion=False):
     value.update( {"L1TMCompilerVersionMinor": version[1]} )
     value.update( {"L1TMCompilerVersionRevision": version[2]} )
     value.update( {"L1TMenuName": menuName} )
-    value.update( {"L1TMenuScaleSet": None} )
+    value.update( {"L1TMenuScaleSet": menu.getScaleSetName()} )
 
     data.reporter[keyMenuInfo] = value
 
@@ -643,6 +643,7 @@ def getReport(menu, vhdlVersion=False):
 
       for cut in condDict[keyCond].getCuts():
         print cut
+
       condDict[keyObjDict] = {}
       condDict[keyObjList] = []
       for obj in condDict[keyCond].getObjects():
@@ -716,7 +717,6 @@ def getReport(menu, vhdlVersion=False):
   data.reporter[keyConditionSet] = set(condList)
 
   setBxCombChgCor(data.reporter)
-  print data.reporter[keyBxComb]
 
   return data
 
