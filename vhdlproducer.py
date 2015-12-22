@@ -31,7 +31,8 @@ def getSvnVersion(root):
   return revision
 
 
-def updateMenu(menu_path, json_path, nModules):
+def updateMenu(menu_path, json_dir, nModules):
+  json_path = os.path.join(json_dir, "menu.json")
   json_data = None
   with open(json_path) as fp:
     json_data = json.load(fp)
@@ -69,7 +70,9 @@ def updateMenu(menu_path, json_path, nModules):
     algorithm["module_index"] = str(module_index)
     menu.algorithms[id] = algorithm
 
-  tmTable.menu2xml(menu, scale, ext_signal, '%s_ugt_%sboard.xml' % (menu_path, nModules))
+  output = os.path.join(json_dir, os.path.basename(menu_path))
+  base, ext = os.path.splitext(output)
+  tmTable.menu2xml(menu, scale, ext_signal, '%s_ugt_%sboard%s' % (base, nModules, ext))
 
 
 def main():
@@ -97,13 +100,14 @@ def main():
   revision = getSvnVersion(utm_root)
 
   defaultMenu = "/afs/cern.ch/user/t/tmatsush/public/tmGui/L1Menu_Collisions2015_25nsStage1_v6_uGT_v2.xml"
+  defaultOut = os.path.join(utm_root, "tmVhdlProducer/test/vhdltest")
 
   parser = argparse.ArgumentParser()
 
   parser.add_argument("--menu", dest="menu", default=defaultMenu, type=str, action="store", help="path to the level1 trigger menu xml file")
   parser.add_argument("--nModules", dest="nModules", default=1, type=int, action="store", help="number of uGT modules")
   parser.add_argument("--manual_dist", dest="manual_dist", action="store_true", help="manual distribution of algorithms in uGT modules")
-  parser.add_argument("--output", dest="outputDir", default=utm_root+"/tmVhdlProducer/test/vhdltest/", type=str, action="store", help="directory for the VHDL producer output")
+  parser.add_argument("--output", dest="outputDir", default=defaultOut, type=str, action="store", help="directory for the VHDL producer output")
   parser.add_argument("--verbose", dest="verbose", action="store_true", help="prints teplate output")
 
   options = parser.parse_args()
@@ -111,7 +115,7 @@ def main():
 
   ## -----------------------------------------------
   outputDir = options.outputDir
-  vhdlTemplateDir = utm_root+"/tmVhdlProducer/jinjaTemplates/"
+  vhdlTemplateDir = os.path.join(utm_root, "tmVhdlProducer/jinjaTemplates/")
   nModules = options.nModules
   verbose = options.verbose
   menu = tmEventSetup.getTriggerMenu(options.menu)
@@ -120,7 +124,7 @@ def main():
   producer = tmVhdlProducer.VhdlProducer(menu, vhdlTemplateDir, nModules, outputDir, verbose, options.manual_dist)
   producer.write()
 
-  updateMenu(options.menu, outputDir+'/menu.json', nModules)
+  updateMenu(options.menu, os.path.join(outputDir, 'vhdl'), nModules)
 
 if __name__ == "__main__":
   main()

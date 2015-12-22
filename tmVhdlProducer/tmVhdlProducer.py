@@ -221,14 +221,14 @@ class VhdlProducer(object):
         #mainDir = self.outputDir + "/" + self.menuName
         mainDir = self.outputDir
         #testVectorDir = mainDir +"/testvector"
-        vhdlDir = mainDir + "/vhdl"
+        vhdlDir = os.path.join(mainDir, "vhdl")
         self.directoryDict= { 
                 'top' : mainDir, 
                 #"testvector" : testVectorDir,
                 "vhdl" : vhdlDir, 
                             }
         for iMod in range(self.nModules):
-            self.directoryDict["module_%s"%iMod] = vhdlDir + "/module_%s"%iMod+"/src/"
+            self.directoryDict["module_%s"%iMod] = os.path.join(vhdlDir, "module_%s/src/"%iMod)
         if os.path.exists(self.directoryDict['vhdl']):
           print self.directoryDict['vhdl'], "already exists. Will be replaced"
           shutil.rmtree(self.directoryDict['vhdl'])
@@ -330,9 +330,9 @@ class VhdlProducer(object):
             tempOutputName= basename(templateDict[temp])
             #tempOutput = self.directoryDict["module_%s"%(iMod)] +"/%s"%templateDict[temp] 
             if temp =="json":
-              tempOutput = self.directoryDict["top"] + "/%s"%tempOutputName
+              tempOutput = os.path.join(self.directoryDict["vhdl"], "%s"%tempOutputName)
             else: 
-              tempOutput = self.directoryDict["module_%s"%(iMod)] +"/%s"%tempOutputName 
+              tempOutput = os.path.join(self.directoryDict["module_%s"%(iMod)], "%s"%tempOutputName )
             #print temp, tempOutput
             #self.loader.env.filters.update(filters)
             #print self.loader.env.filters
