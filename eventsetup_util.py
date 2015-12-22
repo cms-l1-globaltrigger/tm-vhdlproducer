@@ -31,6 +31,7 @@ keyBxComb = "bxComb"
 #   reporter[keyAlgoDict][<algoName>]
 keyAlgo = "algo"
 keyExp = "exp"
+keyExpInCond = "expInCond"
 keyIndex = "index"
 keyModuleId = "moduleId"
 keyModuleIndex = "moduleIndex"
@@ -548,6 +549,18 @@ def setBxCombChgCor(dictionary):
           raise NotImplementedError
 
 
+def updateExpressionInCondition(algo, cond):
+  if cond.getType() != tmEventSetup.Externals:
+    raise NotImplementedError
+
+  if len(cond.getObjects()) != 1:
+    raise NotImplementedError
+
+  obj = cond.getObjects()[0]
+  signal = "ext_cond_bx_" + bx_encode(obj.getBxOffset()) + "(%s)" % obj.getExternalChannelId()
+  algo[keyExpInCond] = algo[keyExpInCond].replace(cond.getName(), signal)
+
+
 def getReport(menu, vhdlVersion=False):
   data = Object()
   data.reporter = {}
@@ -567,6 +580,7 @@ def getReport(menu, vhdlVersion=False):
     value = {keyAlgo: algo}
     value.update( {keyIndex: algo.getIndex()} )
     value.update( {keyExp: algo.getExpression()} )
+    value.update( {keyExpInCond: algo.getExpressionInCondition()} )
     value.update( {keyCondDict: {}} )
     value.update( {keyModuleId: algo.getModuleId()} )
     value.update( {keyModuleIndex: algo.getModuleIndex()} )
@@ -593,12 +607,18 @@ def getReport(menu, vhdlVersion=False):
   for algoName in data.reporter[keyAlgoDict]:
     algoDict = data.reporter[keyAlgoDict][algoName]
     condDict = {}
-    for x in algoDict[keyAlgo].getRpnVector():
-      if tmGrammar.isGate(x): continue
-      condition = x
+    for token in algoDict[keyAlgo].getRpnVector():
+      if tmGrammar.isGate(token): continue
+
+      condition = token
       if condition in condInUse: continue
       condInUse.append(condition)
+
       cond = data.reporter[keyCondMap][condition]
+      if cond.getType() == tmEventSetup.Externals:
+        updateExpressionInCondition(algoDict, cond)
+        continue
+
       condName = cond.getName()
       condDict = { keyObjType: getObjectType(condName) }
       condDict.update( {keyCond: cond} )
@@ -618,7 +638,7 @@ def getReport(menu, vhdlVersion=False):
         esumsCondDict = condDict[keyConditionTemplates][keyEsumsConditionDict]
 
       else:
-        logging.error("Unknown condition: %s" % condDcit[keyType])
+        logging.error("Unknown condition: %s" % condDict[keyType])
         raise NotImplementedError
 
       for cut in condDict[keyCond].getCuts():
