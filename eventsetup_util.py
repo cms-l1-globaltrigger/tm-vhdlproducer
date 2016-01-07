@@ -468,7 +468,7 @@ def setDeltaPhiCuts(ii, condDict, cutDict):
     condDict[DiffPhiLowerLimit][ii] = DeltaPhiCuts[0][keyMinIndex]
 
 
-def getMuonCondition(ii, condDict, cutDict):
+def getMuonCondition(ii, condDict, cutDict, condCuts):
   condDict[PtThresholds][ii] = getCutDict(cutDict, Threshold)[0][keyMinIndex]
 
   array = []
@@ -498,12 +498,16 @@ def getMuonCondition(ii, condDict, cutDict):
   if nIsolationCuts == 1:
     condDict[IsolationLuts][ii] = IsolationCuts[0][keyData]
 
-  ChargeCorrelationCuts = getCutDict(cutDict, ChargeCorrelation)
-  nChargeCorrelationCuts = len(ChargeCorrelationCuts)
-  if nChargeCorrelationCuts == 1:
-    condDict[ChargeCorrelation][ii] = ChargeCorrelationCuts[0][keyData]
-    ## what is the actual output??
-
+  nCondCuts = len(condCuts)
+  print "getMuonCondition: nCondCuts: ", nCondCuts
+  if nCondCuts == 0:
+    pass
+  elif nCondCuts == 1:
+    print condCuts[0]
+    print condCuts[0][keyData]
+    condDict[RequestedChargeCorrelation] = condCuts[0][keyData]
+  else:
+    raise NotImplementedError
 
 
 def getCaloCondition(ii, condDict, cutDict):
@@ -641,8 +645,18 @@ def getReport(menu, vhdlVersion=False):
         logging.error("Unknown condition: %s" % condDict[keyType])
         raise NotImplementedError
 
+      condCuts = []
       for cut in condDict[keyCond].getCuts():
-        print cut
+        dictionary = {}
+        dictionary.update( {keyName: cut.getName()} )
+        dictionary.update( {keyTarget: cut.getObjectType()} )
+        dictionary.update( {keyType: cut.getCutType()} )
+        dictionary.update( {keyMinVal: cut.getMinimum().value} )
+        dictionary.update( {keyMinIndex: cut.getMinimum().index} )
+        dictionary.update( {keyMaxVal: cut.getMaximum().value} )
+        dictionary.update( {keyMaxIndex: cut.getMaximum().index} )
+        dictionary.update( {keyData: cut.getData()} )
+        condCuts.append(dictionary)
 
       condDict[keyObjDict] = {}
       condDict[keyObjList] = []
@@ -680,7 +694,7 @@ def getReport(menu, vhdlVersion=False):
         cutDict = condDict[keyObjList][ii][keyCutDict]
 
         if condDict[keyType] in MuonCondition:
-          getMuonCondition(ii, muCondDict, cutDict)
+          getMuonCondition(ii, muCondDict, cutDict, condCuts)
 
         elif condDict[keyType] in CaloCondition:
           getCaloCondition(ii, caloCondDict, cutDict)

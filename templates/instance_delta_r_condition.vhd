@@ -1,1 +1,0 @@
--- future delta r condition
