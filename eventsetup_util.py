@@ -499,7 +499,6 @@ def getMuonCondition(ii, condDict, cutDict, condCuts):
     condDict[IsolationLuts][ii] = IsolationCuts[0][keyData]
 
   nCondCuts = len(condCuts)
-  print "getMuonCondition: nCondCuts: ", nCondCuts
   if nCondCuts == 0:
     pass
   elif nCondCuts == 1:
