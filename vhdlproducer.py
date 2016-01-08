@@ -124,7 +124,7 @@ def main():
   producer = tmVhdlProducer.VhdlProducer(menu, vhdlTemplateDir, nModules, outputDir, verbose, options.manual_dist)
   producer.write()
 
-  updateMenu(options.menu, os.path.join(outputDir, 'vhdl'), nModules)
+  updateMenu(options.menu, os.path.join(outputDir, 'xml'), nModules)
 
 if __name__ == "__main__":
   main()
