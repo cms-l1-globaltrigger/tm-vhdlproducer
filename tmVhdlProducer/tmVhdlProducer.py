@@ -251,11 +251,14 @@ class VhdlProducer(object):
 
         ##Loop over algos and insert them in each module.
 
+        writeJson = True
         for iMod in range(self.nModules): 
           print "Template Output:  "
           for temp in templatesToUse:
             tempOutputName= basename(templateDict[temp])
             if temp =="json":
+              if not writeJson: continue
+              if writeJson: writeJson = False
               tempOutput = os.path.join(self.directoryDict["xml"], "%s"%tempOutputName)
             else: 
               tempOutput = os.path.join(self.directoryDict["module_%s"%(iMod)], "%s"%tempOutputName )
