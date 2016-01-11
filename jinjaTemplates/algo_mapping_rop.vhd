@@ -60,10 +60,6 @@ algo_before_prescaler_rop_int <= (
 {%- if algoIndex in menu.reporter['m2a'][iMod].values()%}
 {%- set localAlgoIndex = menu.reporter['a2m'][algoIndex][1] %}
 {{algoIndex}} => a_b_p({{localAlgoIndex}}),
-{%- else %}
-------------------------------------
-{{algoDict}}
-{{algoDict}}
 {%-endif%}
 {%-endfor%}
 others => '0');
