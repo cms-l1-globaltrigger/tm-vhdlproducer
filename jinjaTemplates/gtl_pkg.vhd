@@ -78,6 +78,8 @@ constant L1TM_COMPILER_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(L1TM_COMPILER_MINOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(L1TM_COMPILER_REV_VERSION, 8));
 
+constant SVN_REVISION_NUMBER : std_logic_vector(31 downto 0) := std_logic_vector(to_unsigned({{menu.reporter['MenuInfo']['SvnRevisionNumber']|d}}, 32); 
+           
 -- ==== Inserted by TME - end ===============================================================================================================
 
 -- HB 2014-09-09: GTL and FDL firmware major, minor and revision versions moved to gt_mp7_core_pkg.vhd (GTL_FW_MAJOR_VERSION, etc.)
