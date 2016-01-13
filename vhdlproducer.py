@@ -115,6 +115,15 @@ def main():
 
   ## -----------------------------------------------
   outputDir = options.outputDir
+
+  dest = os.path.realpath(os.path.join(outputDir, 'xml'))
+  orig = os.path.dirname(os.path.realpath(options.menu))
+  if dest == orig:
+    print 'err> %s is in %s directory which will be deleted during the process' % (
+      options.menu, dest)
+    print '     specify menu not in %s directory' % dest
+    sys.exit(1)
+
   vhdlTemplateDir = os.path.join(utm_root, "tmVhdlProducer/jinjaTemplates/")
   nModules = options.nModules
   verbose = options.verbose
