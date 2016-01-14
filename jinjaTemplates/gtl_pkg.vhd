@@ -79,7 +79,7 @@ constant L1TM_COMPILER_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(L1TM_COMPILER_REV_VERSION, 8));
 
 -- HB 2016-01-14: for future use, proposed by TM 
--- constant SVN_REVISION_NUMBER : std_logic_vector(31 downto 0) := std_logic_vector(to_unsigned({{menu.reporter['MenuInfo']['SvnRevisionNumber']|d}}, 32)); 
+constant SVN_REVISION_NUMBER : std_logic_vector(31 downto 0) := std_logic_vector(to_unsigned({{menu.reporter['MenuInfo']['SvnRevisionNumber']|d}}, 32)); 
            
 -- ==== Inserted by TME - end ===============================================================================================================
 

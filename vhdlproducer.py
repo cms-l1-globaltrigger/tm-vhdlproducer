@@ -97,7 +97,7 @@ def main():
     print "error> Please set UTM_ROOT environmnet variable"
     sys.exit(1)
 
-  #revision = getSvnVersion(utm_root)
+  revision = getSvnVersion(utm_root)
 
   defaultMenu = "/afs/cern.ch/user/t/tmatsush/public/tmGui/L1Menu_Collisions2015_25nsStage1_v6_uGT_v2.xml"
   defaultOut = os.path.join(utm_root, "tmVhdlProducer/test/vhdltest")
@@ -128,6 +128,7 @@ def main():
   nModules = options.nModules
   verbose = options.verbose
   menu = tmEventSetup.getTriggerMenu(options.menu)
+  menu.sw_revision_svn = revision
 
 
   producer = tmVhdlProducer.VhdlProducer(menu, vhdlTemplateDir, nModules, outputDir, verbose, options.manual_dist)

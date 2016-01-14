@@ -728,6 +728,7 @@ def getReport(menu, vhdlVersion=False):
     value.update( {"L1TMCompilerVersionRevision": version[2]} )
     value.update( {"L1TMenuName": menuName} )
     value.update( {"L1TMenuScaleSet": menu.getScaleSetName()} )
+    value.update( {"SvnRevisionNumber": menu.sw_revision_svn} )
 
     data.reporter[keyMenuInfo] = value
 
