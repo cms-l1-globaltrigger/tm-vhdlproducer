@@ -16,7 +16,6 @@ keyIndexSorted = "index_sorted"
 keyAlgoDict = "algoDict"
 keyScaleMap = "scaleMap"
 keyConditionSet = "conditionSet"
-keyMenuInfo = "MenuInfo"
 keyTriggerGroups = "TriggerGroups"
 keyCondMap = "condMap"
 
@@ -200,34 +199,7 @@ _objectTypes[tmEventSetup.EXT] = tmGrammar.EXT
 objectTypes = tuple(_objectTypes)
 
 
-# list of cut types
-# should match esCutType enum in ../tmEventSetup/esTriggerMenu.hh
-Threshold = "Threshold"
-Eta = "Eta"
-Phi = "Phi"
-DeltaEta = "DeltaEta"
-DeltaPhi = "DeltaPhi"
-Charge = "Charge"
-Quality = "Quality"
-Isolation = "Isolation"
-ChargeCorrelation = "ChargeCorrelation"
-DeltaR = "DeltaR"
-Mass = "Mass"
-
-_cutTypes = [None]*tmEventSetup.nCutType
-_cutTypes[tmEventSetup.Threshold] = Threshold
-_cutTypes[tmEventSetup.Eta] = Eta
-_cutTypes[tmEventSetup.Phi] = Phi
-_cutTypes[tmEventSetup.Charge] = Charge
-_cutTypes[tmEventSetup.Quality] = Quality
-_cutTypes[tmEventSetup.Isolation] = Isolation
-_cutTypes[tmEventSetup.DeltaEta] = DeltaEta
-_cutTypes[tmEventSetup.DeltaPhi] = DeltaPhi
-_cutTypes[tmEventSetup.DeltaR] = DeltaR
-_cutTypes[tmEventSetup.Mass] = Mass
-_cutTypes[tmEventSetup.ChargeCorrelation] = ChargeCorrelation
-
-cutTypes = tuple(_cutTypes)
+# list of cut types: esCutType enum in ../tmEventSetup/esTypes.hh
 
 
 # template keywords
@@ -279,11 +251,10 @@ def sortDictByKey(iDict, iKey, reverse):
   return sorted(iDict, key=lambda x: iDict[x][iKey], reverse=reverse)
 
 
-def getCutDict(cutDict, cutType):
-  #logging.debug(cutType)
+def getCuts(cutDict, cutType):
   rc = []
   for c in cutDict:
-    if cutDict[c][keyCutType] == cutType:
+    if cutDict[c].type == cutType:
       rc.append(cutDict[c])
   return rc
 
@@ -540,88 +511,88 @@ def getObjectType(condName):
 
 
 def setEtaCuts(ii, condDict, cutDict):
-  EtaCuts = getCutDict(cutDict, Eta)
+  EtaCuts = getCuts(cutDict, tmEventSetup.Eta)
   nEtaCuts = len(EtaCuts)
   if nEtaCuts == 0:
     condDict[EtaFullRange][ii] = 'true'
 
   else:
-    condDict[EtaW1UpperLimits][ii] = EtaCuts[0][keyMaxIndex]
-    condDict[EtaW1LowerLimits][ii] = EtaCuts[0][keyMinIndex]
+    condDict[EtaW1UpperLimits][ii] = EtaCuts[0].max_idx
+    condDict[EtaW1LowerLimits][ii] = EtaCuts[0].min_idx
 
     if nEtaCuts == 1:
       condDict[EtaW2Ignore][ii] = 'true'
 
     elif nEtaCuts == 2:
-      condDict[EtaW2UpperLimits][ii] = EtaCuts[1][keyMaxIndex]
-      condDict[EtaW2LowerLimits][ii] = EtaCuts[1][keyMinIndex]
+      condDict[EtaW2UpperLimits][ii] = EtaCuts[1].max_idx
+      condDict[EtaW2LowerLimits][ii] = EtaCuts[1].min_idx
 
 
 def setPhiCuts(ii, condDict, cutDict):
-  PhiCuts = getCutDict(cutDict, Phi)
+  PhiCuts = getCuts(cutDict, tmEventSetup.Phi)
   nPhiCuts = len(PhiCuts)
   if nPhiCuts == 0:
     condDict[PhiFullRange][ii] = 'true'
 
   else:
-    condDict[PhiW1UpperLimits][ii] = PhiCuts[0][keyMaxIndex]
-    condDict[PhiW1LowerLimits][ii] = PhiCuts[0][keyMinIndex]
+    condDict[PhiW1UpperLimits][ii] = PhiCuts[0].max_idx
+    condDict[PhiW1LowerLimits][ii] = PhiCuts[0].min_idx
 
     if nPhiCuts == 1:
       condDict[PhiW2Ignore][ii] = 'true'
 
     elif nPhiCuts == 2:
-      condDict[PhiW2UpperLimits][ii] = PhiCuts[1][keyMaxIndex]
-      condDict[PhiW2LowerLimits][ii] = PhiCuts[1][keyMinIndex]
+      condDict[PhiW2UpperLimits][ii] = PhiCuts[1].max_idx
+      condDict[PhiW2LowerLimits][ii] = PhiCuts[1].min_idx
 
 
 def setDeltaEtaCuts(ii, condDict, cutDict):
-  DeltaEtaCuts = getCutDict(cutDict, DeltaEta)
+  DeltaEtaCuts = getCuts(cutDict, tmEventSetup.DeltaEta)
   nDeltaEtaCuts = len(DeltaEtaCuts)
 
   if nDeltaEtaCuts == 1:
-    condDict[DiffEtaUpperLimit][ii] = DeltaEtaCuts[0][keyMaxIndex]
-    condDict[DiffEtaLowerLimit][ii] = DeltaEtaCuts[0][keyMinIndex]
+    condDict[DiffEtaUpperLimit][ii] = DeltaEtaCuts[0].max_idx
+    condDict[DiffEtaLowerLimit][ii] = DeltaEtaCuts[0].min_idx
 
 
 def setDeltaPhiCuts(ii, condDict, cutDict):
-  DeltaPhiCuts = getCutDict(cutDict, DeltaPhi)
+  DeltaPhiCuts = getCuts(cutDict, tmEventSetup.DeltaPhi)
   nDeltaPhiCuts = len(DeltaPhiCuts)
 
   if nDeltaPhiCuts == 1:
-    condDict[DiffPhiUpperLimit][ii] = DeltaPhiCuts[0][keyMaxIndex]
-    condDict[DiffPhiLowerLimit][ii] = DeltaPhiCuts[0][keyMinIndex]
+    condDict[DiffPhiUpperLimit][ii] = DeltaPhiCuts[0].max_idx
+    condDict[DiffPhiLowerLimit][ii] = DeltaPhiCuts[0].min_idx
 
 
 def getMuonCondition(ii, condDict, cutDict, condCuts):
-  condDict[PtThresholds][ii] = getCutDict(cutDict, Threshold)[0][keyMinIndex]
+  condDict[PtThresholds][ii] = getCuts(cutDict, tmEventSetup.Threshold)[0].min_idx
 
   array = []
   for c in cutDict:
-    x = cutDict[c][keyCutType]
-    if x == Threshold:
-      array.append(cutDict[c][keyMinIndex])
-  assert getCutDict(cutDict, Threshold)[0][keyMinIndex] == array[0]
+    x = cutDict[c].type
+    if x == tmEventSetup.Threshold:
+      array.append(cutDict[c].min_idx)
+  assert getCuts(cutDict, tmEventSetup.Threshold)[0].min_idx == array[0]
 
   setEtaCuts(ii, condDict, cutDict)
   setPhiCuts(ii, condDict, cutDict)
   setDeltaEtaCuts(ii, condDict, cutDict)
   setDeltaPhiCuts(ii, condDict, cutDict)
 
-  ChargeCuts = getCutDict(cutDict, Charge)
+  ChargeCuts = getCuts(cutDict, tmEventSetup.Charge)
   nChargeCuts = len(ChargeCuts)
   if nChargeCuts:
-    condDict[RequestedCharges][ii] = chargeFormat(ChargeCuts[0][keyData])
+    condDict[RequestedCharges][ii] = chargeFormat(ChargeCuts[0].data)
 
-  QualityCuts = getCutDict(cutDict, Quality)
+  QualityCuts = getCuts(cutDict, tmEventSetup.Quality)
   nQualityCuts = len(QualityCuts)
   if nQualityCuts == 1:
-    condDict[QualityLuts][ii] = QualityCuts[0][keyData]
+    condDict[QualityLuts][ii] = QualityCuts[0].data
 
-  IsolationCuts = getCutDict(cutDict, Isolation)
+  IsolationCuts = getCuts(cutDict, tmEventSetup.Isolation)
   nIsolationCuts = len(IsolationCuts)
   if nIsolationCuts == 1:
-    condDict[IsolationLuts][ii] = IsolationCuts[0][keyData]
+    condDict[IsolationLuts][ii] = IsolationCuts[0].data
 
   nCondCuts = len(condCuts)
   if nCondCuts == 0:
@@ -635,21 +606,21 @@ def getMuonCondition(ii, condDict, cutDict, condCuts):
 
 
 def getCaloCondition(ii, condDict, cutDict):
-  condDict[EtThresholds][ii] = getCutDict(cutDict, Threshold)[0][keyMinIndex]
+  condDict[EtThresholds][ii] = getCuts(cutDict, tmEventSetup.Threshold)[0].min_idx
 
   setEtaCuts(ii, condDict, cutDict)
   setPhiCuts(ii, condDict, cutDict)
   setDeltaEtaCuts(ii, condDict, cutDict)
   setDeltaPhiCuts(ii, condDict, cutDict)
 
-  IsoCuts = getCutDict(cutDict, Isolation)
+  IsoCuts = getCuts(cutDict, tmEventSetup.Isolation)
   nIsoCuts = len(IsoCuts)
   if nIsoCuts == 1:
-    condDict[IsoLuts][ii] = IsoCuts[0][keyData]
+    condDict[IsoLuts][ii] = IsoCuts[0].data
 
 
 def getEsumCondition(ii, condDict, cutDict):
-  condDict[EtThreshold][ii] = getCutDict(cutDict, Threshold)[0][keyMinIndex]
+  condDict[EtThreshold][ii] = getCuts(cutDict, tmEventSetup.Threshold)[0].min_idx
 
   setPhiCuts(ii, condDict, cutDict)
 
@@ -705,6 +676,21 @@ def setMenuInfo(menu, data, version="0.0.0"):
   data.info.sw_version_major, data.info.sw_version_minor, data.info.sw_version_patch = version.rsplit('.')
 
   return
+
+
+def getCutInfo(cut):
+  o = Object()
+  o.name = cut.getName()
+  o.cut = cut
+  o.target = cut.getObjectType()
+  o.type = cut.getCutType()
+  o.min_val = cut.getMinimum().value
+  o.min_idx = cut.getMinimum().index
+  o.max_val = cut.getMaximum().value
+  o.max_idx = cut.getMaximum().index
+  o.data = cut.getData()
+
+  return o
 
 
 def getReport(menu, version=False):
@@ -787,17 +773,7 @@ def getReport(menu, version=False):
         objDict[keyCutDict] = {}
         for cut in obj.getCuts():
           cutName = cut.getName()
-          value = { keyName: cutName }
-          value.update( {keyCut: cut } )
-          value.update( {keyTarget: cut.getObjectType()} )
-          value.update( {keyCutType: cutTypes[cut.getCutType()]} )
-          value.update( {keyType: cut.getCutType()} )
-          value.update( {keyMinVal: cut.getMinimum().value} )
-          value.update( {keyMinIndex: cut.getMinimum().index} )
-          value.update( {keyMaxVal: cut.getMaximum().value} )
-          value.update( {keyMaxIndex: cut.getMaximum().index} )
-          value.update( {keyData: cut.getData()} )
-          objDict[keyCutDict][cutName] = value
+          objDict[keyCutDict][cutName] = getCutInfo(cut)
 
         condDict[keyObjDict][objName] = objDict
         condDict[keyObjList].append( condDict[keyObjDict][objName] )
