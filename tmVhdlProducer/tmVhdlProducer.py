@@ -1,18 +1,8 @@
-# -*- coding: utf-8 -*-
-#
-# Repository path   : $HeadURL: $
-# Last committed    : $Revision: $
-# Last changed by   : $Author: $
-# Last changed date : $Date: $
-#
-
-from jinja2 import Environment, BaseLoader, TemplateNotFound, FileSystemLoader,filters
-from os.path import join, exists, getmtime, basename
+from jinja2 import Environment, FileSystemLoader, filters
+from os.path import join, exists, basename
 from itertools import cycle
 
 import eventsetup_util as util
-
-#import template_rc
 
 __version__ = '0.0.1'
 __all__ = ['VhdlProducer', ]
@@ -27,14 +17,6 @@ def pprint(x):
   print x
   print "%%  ###############################################################################"
   print "%%  ###############################################################################"
-
-def str2hex(s):
-    """Convert a string into hex encoded value. Requires to reverse byte order, then encode."""
-    return int(s[::-1].encode("hex"), 16)
-
-def hex2str(i):
-    """Convert a hex encoded integer to string. Requires to reverse byte order and stripping pending zeros."""
-    return hex(i).decode("hex")[::-1].strip("\x00")
 
 extraFilters = {
         "X04"   : lambda x: "%04X"%int(float(x)) , 
@@ -68,40 +50,6 @@ def mkdir_p(path):
         else: raise
 
 
-# -----------------------------------------------------------------------------
-#  Jinja2 custom filters exposed to VHDL templates.
-# -----------------------------------------------------------------------------
-
-def hex_filter(i, chars = None):
-    if isinstance(i, str):
-        i = int(i, 16) if i.lower().startswith('0x') else int(i, 10)
-    return "{0:0{1}X}".format(i, chars)[:chars] if chars else "{0:X}".format(i)
-
-def hexstr_filter(s, chars = None):
-    return "{0:0{1}}".format(str2hex(s), chars)[:chars] if chars else "{0}".format(str2hex(s))
-
-# -----------------------------------------------------------------------------
-#  Custom resource loader.
-# -----------------------------------------------------------------------------
-
-class ResourceLoader(BaseLoader):
-    """Loads a template from python module resource compiled with tplrcc.
-
-    See also http://jinja.pocoo.org/docs/dev/api/#jinja2.BaseLoader
-    """
-    def __init__(self, path):
-        self.path = path
-
-    def get_source(self, environment, template):
-        path = join(self.path, template)
-        if not exists(path):
-          raise TemplateNotFound(template)
-        mtime = getmtime(path)
-        with file(path) as f:
-            source = f.read().decode('utf-8')
-        return source, path, lambda: mtime == getmtime(path)
-
-
 class Loader(FileSystemLoader):
 
     def __init__(self, searchpath, encoding='utf-8', followlinks=False):
@@ -121,26 +69,6 @@ class Loader(FileSystemLoader):
       for templateName in templateDict:
         templateFile = templateDict[templateName]
         self.getTemplate(templateName,templateFile)
-
-# -----------------------------------------------------------------------------
-#  Template engines with custom resource loader environment.
-# -----------------------------------------------------------------------------
-
-class TemplateEngine(object):
-
-    def __init__(self,path):
-        # Create Jinja environment.
-        self.environment = Environment(loader = ResourceLoader(path))
-        self.path = path
-
-        # Adding filters.
-        self.environment.filters['hex'] = hex_filter
-        self.environment.filters['hexstr'] = hexstr_filter
-        self.environment.filters['bool'] = lambda b: ('false', 'true')[bool(b)]
-
-    def render(self, template, data = {}):
-        template = self.environment.get_template(template)
-        return template.render(data)
 
 # -----------------------------------------------------------------------------
 #  VHDL producer class.
@@ -272,3 +200,4 @@ class VhdlProducer(object):
               print temp, " "*(20-len(temp)) ,":  " ,  tempOutput 
               f.close()
 
+# eof
