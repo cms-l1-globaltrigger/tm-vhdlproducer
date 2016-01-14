@@ -83,11 +83,11 @@ def main():
     import logging.config
     logging.config.fileConfig(conf)
 
-  logging.addLevelName(10, 'dbg')
-  logging.addLevelName(20, 'inf')
-  logging.addLevelName(30, 'war')
-  logging.addLevelName(40, 'err')
-  logging.addLevelName(50, 'fat')
+  logging.addLevelName(10, 'dbg> ')
+  logging.addLevelName(20, 'inf> ')
+  logging.addLevelName(30, 'war> ')
+  logging.addLevelName(40, 'err> ')
+  logging.addLevelName(50, 'fat> ')
 
   logging.info("VHDL producer")
 
@@ -97,7 +97,7 @@ def main():
     print "error> Please set UTM_ROOT environmnet variable"
     sys.exit(1)
 
-  revision = getSvnVersion(utm_root)
+  #revision = getSvnVersion(utm_root)
 
   defaultMenu = "/afs/cern.ch/user/t/tmatsush/public/tmGui/L1Menu_Collisions2015_25nsStage1_v6_uGT_v2.xml"
   defaultOut = os.path.join(utm_root, "tmVhdlProducer/test/vhdltest")

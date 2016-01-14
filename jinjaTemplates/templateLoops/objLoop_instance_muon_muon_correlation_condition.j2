@@ -1,0 +1,12 @@
+{%- extends "templateLoops/condLoop.j2" %}
+{%- block objLoop %}
+  {%- if condDict['objType'] == "MuonMuonCorrelation" %}
+    {%- set MuMuCondDict = condDict['ConditionTemplates']['muon_muon_correlation_condition_dict'] %}
+    {%- set obj1 = MuMuCondDict['obj1'] %}
+    {%- set obj2 = MuMuCondDict['obj2'] %}
+    {%- block instance_muon_muon_correlation_condition scoped%}
+      THIS SHOULD NOT APPEAR - objLoop_instance_muon_muon_correlation_condition
+    {%- endblock %}
+  {%- endif %}
+{%- endblock objLoop %}
+{# eof #}

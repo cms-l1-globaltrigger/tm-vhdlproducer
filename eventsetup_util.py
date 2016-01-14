@@ -53,7 +53,13 @@ keyConditionTemplates = "ConditionTemplates"
 keyMuonConditionDict = "muon_condition_dict"
 keyCaloConditionDict = "calo_condition_dict"
 keyEsumsConditionDict = "esums_condition_dict"
+keyEsumsConditionDict = "esums_condition_dict"
+keyMuonMuonCorrelationConditionDict = "muon_muon_correlation_condition_dict"
+keyMuonEsumCorrelationConditionDict = "muon_esum_correlation_condition_dict"
 keyCaloMuonCorrelationConditionDict = "calo_muon_correlation_condition_dict"
+keyCaloCaloCorrelationConditionDict = "calo_calo_correlation_condition_dict"
+keyCaloEsumCorrelationConditionDict = "calo_esum_correlation_condition_dict"
+keyInvariantMassConditionDict = "invariant_condition_dict"
 
 
 # keys for objDict
@@ -306,13 +312,13 @@ def chargeFormat(ch):
   elif str(ch).lower() in ["negative", "neg", "-1"]:
     charge = "neg"
   else:
-    print "CANT RECOGNIZE REQUESTED CHARGE. WILL BE IGNORED"
+    print "CAN'T RECOGNIZE REQUESTED CHARGE. WILL BE IGNORED"
     charge = "ign"
   return charge
 
 
-def getObjectTemplate(condition):
-  logging.debug(condition)
+def getObjectTemplate(index):
+  logging.debug(index)
 
   template = {}
 
@@ -343,7 +349,7 @@ def getObjectTemplate(condition):
   }
 
 
-  if condition in MuonCondition:
+  if index in MuonCondition:
     logging.debug("MuonCondition")
 
     template[keyMuonConditionDict] = {
@@ -356,7 +362,7 @@ def getObjectTemplate(condition):
     for dct in [EtaRangeDict, PhiRangeDict, EtaPhiDiffDict]:
       template[keyMuonConditionDict].update(dct)
 
-  elif condition in CaloCondition:
+  elif index in CaloCondition:
     logging.debug("CaloCondition")
 
     template[keyCaloConditionDict] = {
@@ -367,7 +373,7 @@ def getObjectTemplate(condition):
     for dct in [EtaRangeDict,  PhiRangeDict, EtaPhiDiffDict]:
       template[keyCaloConditionDict].update(dct)
 
-  elif condition in EsumCondition:
+  elif index in EsumCondition:
     logging.debug("EsumCondition")
 
     template[keyEsumsConditionDict] = {
@@ -381,20 +387,133 @@ def getObjectTemplate(condition):
     }
 
   else:
-    logging.error("Unknown condition: %s" % condition)
+    logging.error("Unknown condition: %s" % index)
     raise NotImplementedError
 
   return template
 
 
-def getDefaultTemplate(condition):
-  logging.debug(condition)
+def getMuonMuonCorrelationTemplate():
+  logging.debug("getMuonMuonCorrelationTemplate")
 
-  if condition in ObjectCondition:
-    return getObjectTemplate(condition)
+  template = {}
+  template[keyMuonMuonCorrelationConditionDict] = {}
+  object1 = {}
+  object2 = {}
+
+  conditionTemplate = {
+    'objectsInSameBx': 'true',
+    'hasDetaCut': 'false',
+    'hasDphiCut': 'false',
+    'hasDrCut': 'false',
+    'hasMassCut': 'false',
+    RequestedChargeCorrelation: "ig",
+    'DiffEtaUpperLimit': 0,
+    'DiffEtaLowerLimit': 0,
+    'DiffPhiUpperLimit': 0,
+    'DiffPhiLowerLimit': 0,
+    'DeltaRUpperLimit': 0,
+    'DeltaRLowerLimit': 0,
+    'InvMassUpperLimit': 0,
+    'InvMassLowerLimit': 0,
+  }
+
+  template[keyMuonMuonCorrelationConditionDict].update(conditionTemplate)
+
+  objectTemplate = {
+    keyOp: 'true',
+    EtThreshold: "0",
+    EtaFullRange:     'false',
+    EtaW1UpperLimits: 0,
+    EtaW1LowerLimits: 0,
+    EtaW2Ignore:      'false',
+    EtaW2UpperLimits: 0,
+    EtaW2LowerLimits: 0,
+    PhiFullRange:     'false',
+    PhiW1UpperLimits: 0,
+    PhiW1LowerLimits: 0,
+    PhiW2Ignore:      'false',
+    PhiW2UpperLimits: 0,
+    PhiW2LowerLimits: 0,
+    RequestedCharges: "ign",
+    QualityLuts:      0xFFFF,
+    IsolationLuts:    0xF,
+    keyBx: "0"
+  }
+
+  object1.update(objectTemplate)
+  object2.update(objectTemplate)
+
+  template[keyMuonMuonCorrelationConditionDict]['obj1'] = object1
+  template[keyMuonMuonCorrelationConditionDict]['obj2'] = object2
+
+  return template
+
+
+def getInvariantMassTemplate(index, condition):
+  logging.info("getInvariantMassTemplate")
+
+  objects = condition.getObjects()
+  if len(objects) != 2:
+    logging.error("# of objects != 2")
+    raise NotImplementedError
+
+  combination = tmEventSetup.getObjectCombination(objects[0].getType(), objects[1].getType())
+  if combination == tmEventSetup.MuonMuonCombination:
+    return getMuonMuonCorrelationTemplate()
+
+  elif combination == tmEventSetup.MuonEsumCombination:
+    return getMuonEsumCorrelationTemplate()
+
+  elif combination == tmEventSetup.CaloMuonCombination:
+    return getCaloMuonCorrelationTemplate()
+
+  elif combination == tmEventSetup.CaloCaloCombination:
+    return getCaloCaloCorrelationTemplate()
+
+  elif combination == tmEventSetup.CaloEsumCombination:
+    return getCaloEsumCorrelationTemplate()
 
   else:
-    logging.error("Unknown condition: %s" % condition)
+    logging.error("Unknown combination: %s" % combination)
+    raise NotImplementedError
+
+
+def getCorrelationTemplate(index):
+  if index == tmEventSetup.MuonMuonCorrelation:
+    return getMuonMuonCorrelationTemplate()
+
+  elif index == tmEventSetup.MuonEsumCorrelation:
+    return getMuonEsumCorrelationTemplate()
+
+  elif index == tmEventSetup.CaloMuonCorrelation:
+    return getCaloMuonCorrelationTemplate()
+
+  elif index == tmEventSetup.CaloCaloCorrelation:
+    return getCaloCaloCorrelationTemplate()
+
+  elif index == tmEventSetup.CaloEsumCorrelation:
+    return getCaloEsumCorrelationTemplate()
+
+  else:
+    logging.error("Unknown condition: %s" % index)
+    raise NotImplementedError
+
+
+def getDefaultTemplate(index, condition):
+  logging.debug(index)
+
+  if index in ObjectCondition:
+    return getObjectTemplate(index)
+
+  elif index in CorrelationCondition:
+    return getCorrelationTemplate(index)
+
+  elif index == tmEventSetup.InvariantMass:
+    return getInvariantMassTemplate(index, condition)
+
+  else:
+    logging.error("Unknown condition: %s" % index)
     raise NotImplementedError
 
 
@@ -410,6 +529,12 @@ def getObjectType(condName):
     return objectType[0]
 
   else:
+    for ii in CorrelationCondition:
+      if _conditionTypes[ii] in condName:
+        return _conditionTypes[ii]
+    if _conditionTypes[tmEventSetup.InvariantMass] in condName:
+      return _conditionTypes[tmEventSetup.InvariantMass]
+
     logging.error("Unknown condition: %s" % condName)
     raise NotImplementedError
 
@@ -626,23 +751,8 @@ def getReport(menu, vhdlVersion=False):
       condDict = { keyObjType: getObjectType(condName) }
       condDict.update( {keyCond: cond} )
       condDict.update( {keyCondition: condition} )
-      condDict.update( {keyType: cond.getType()} )
       condDict.update( {keyTriggerGroup: conditionTypes[cond.getType()]} )
-      condDict.update( {keyConditionTemplates: getDefaultTemplate(cond.getType())} )
       algoDict[keyCondDict][condName] = condDict
-
-      if condDict[keyType] in MuonCondition:
-        muCondDict = condDict[keyConditionTemplates][keyMuonConditionDict]
-
-      elif condDict[keyType] in CaloCondition:
-        caloCondDict = condDict[keyConditionTemplates][keyCaloConditionDict]
-
-      elif condDict[keyType] in EsumCondition:
-        esumsCondDict = condDict[keyConditionTemplates][keyEsumsConditionDict]
-
-      else:
-        logging.error("Unknown condition: %s" % condDict[keyType])
-        raise NotImplementedError
 
       condCuts = []
       for cut in condDict[keyCond].getCuts():
@@ -688,24 +798,69 @@ def getReport(menu, vhdlVersion=False):
         condDict[keyObjDict][objName] = objDict
         condDict[keyObjList].append( condDict[keyObjDict][objName] )
 
-      for ii in range(len(condDict[keyObjList])):
-        objDict = condDict[keyObjList][ii]
-        cutDict = condDict[keyObjList][ii][keyCutDict]
 
+      condDict.update( {keyType: cond.getType()} )
+      condDict.update( {keyConditionTemplates: getDefaultTemplate(cond.getType(), cond)} )
+      if condDict[keyType] in ObjectCondition:
         if condDict[keyType] in MuonCondition:
-          getMuonCondition(ii, muCondDict, cutDict, condCuts)
+          muCondDict = condDict[keyConditionTemplates][keyMuonConditionDict]
 
         elif condDict[keyType] in CaloCondition:
-          getCaloCondition(ii, caloCondDict, cutDict)
+          caloCondDict = condDict[keyConditionTemplates][keyCaloConditionDict]
 
         elif condDict[keyType] in EsumCondition:
-          getEsumCondition(ii, esumsCondDict, cutDict)
+          esumsCondDict = condDict[keyConditionTemplates][keyEsumsConditionDict]
 
         else:
-          logging.error("unknown condition: %s" % condDict[keyType])
+          logging.error("Unknown condition: %s" % condDict[keyType])
           raise NotImplementedError
 
-         
+        for ii in range(len(condDict[keyObjList])):
+          objDict = condDict[keyObjList][ii]
+          cutDict = condDict[keyObjList][ii][keyCutDict]
+
+          if condDict[keyType] in MuonCondition:
+            getMuonCondition(ii, muCondDict, cutDict, condCuts)
+
+          elif condDict[keyType] in CaloCondition:
+            getCaloCondition(ii, caloCondDict, cutDict)
+
+          elif condDict[keyType] in EsumCondition:
+            getEsumCondition(ii, esumsCondDict, cutDict)
+
+          else:
+            logging.error("unknown condition: %s" % condDict[keyType])
+            raise NotImplementedError
+
+      else:
+        combination = tmEventSetup.getObjectCombination(cond.getObjects()[0].getType(), cond.getObjects()[1].getType())
+        if combination == tmEventSetup.MuonMuonCombination:
+          condDict[keyType] = tmEventSetup.MuonMuonCorrelation
+          print condDict[keyObjType]
+          print condDict[keyConditionTemplates]
+          corrCondDict = condDict[keyConditionTemplates][keyMuonMuonCorrelationConditionDict]
+
+        elif combination == tmEventSetup.MuonEsumCombination:
+          condDict[keyType] = tmEventSetup.MuonEsumCorrelation
+          corrCondDict = condDict[keyConditionTemplates][keyMuonEsumCorrelationConditionDict]
+
+        elif combination == tmEventSetup.CaloMuonCombination:
+          condDict[keyType] = tmEventSetup.CaloMuonCorrelation
+          corrCondDict = condDict[keyConditionTemplates][keyCaloMuonCorrelationConditionDict]
+
+        elif combination == tmEventSetup.CaloCaloCombination:
+          condDict[keyType] = tmEventSetup.CaloCaloCorrelation
+          corrCondDict = condDict[keyConditionTemplates][keyCaloCaloCorrelationConditionDict]
+
+        elif combination == tmEventSetup.CaloEsumCombination:
+          condDict[keyType] = tmEventSetup.CaloEsumCorrelation
+          corrCondDict = condDict[keyConditionTemplates][keyCaloEsumCorrelationConditionDict]
+
+        else:
+          logging.error("Unknown combination: %s" % combination)
+          raise NotImplementedError
+
+
   for algoName in data.reporter[keyAlgoDict]:
     algo = data.reporter[keyAlgoDict][algoName][keyAlgo]
     for condName in data.reporter[keyAlgoDict][algoName][keyCondDict]:

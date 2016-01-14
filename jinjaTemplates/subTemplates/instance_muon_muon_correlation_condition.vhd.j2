@@ -1,28 +1,34 @@
 {%- extends "templateLoops/objLoop_instance_muon_muon_correlation_condition.j2" %}
 {%- block instance_muon_muon_correlation_condition %}
 {{condName|lower}}_i: entity work.muon_muon_correlation_condition
-    generic map({{condInfo['same_bx']}},
-	{{ cutType['deta'] |lower}}, {{ cutType['dphi'] |lower}}, {{ cutType['dr'] |lower}}, {{ cutType['mass'] |lower}},
-	{{ objInfo1['op'] |lower}}, X"{{muonmuonCondDict['PtThreshold1']|X04}}",
-        {{muonmuonCondDict['EtaFullRange1']}}, X"{{muonmuonCondDict['EtaW1UpperLimit1']|X04}}",(X"{{muonmuonCondDict['EtaW1LowerLimit1']|X04}}",
-        {{muonmuonCondDict['EtaW2Ignore1']}}, X"{{muonmuonCondDict['EtaW2UpperLimit1']|X04}}", X"{{muonmuonCondDict['EtaW2LowerLimit1']|X04}}",
-        {{muonmuonCondDict['PhiFullRange1']}}, X"{{muonmuonCondDict['PhiW1UpperLimit1']|X04}}", X"{{muonmuonCondDict['PhiW1LowerLimit1']|X04}}",
-        {{muonmuonCondDict['PhiW2Ignore1']}}, X"{{muonmuonCondDict['PhiW2UpperLimit1']|X04}}", X"{{muonmuonCondDict['PhiW2LowerLimit1']|X04}}",  
-	"{{muonmuonCondDict['RequestedCharge1']}}", X"{{muonmuonCondDict['QualityLut1']|X04}}", X"{{muonmuonCondDict['IsoLut1']|X01}}",	
-	{{ objInfo2['op'] |lower}}, X"{{muonmuonCondDict['PtThreshold2']|X04}}",
-        {{muonmuonCondDict['EtaFullRange2']}}, X"{{muonmuonCondDict['EtaW1UpperLimit2']|X04}}",(X"{{muonmuonCondDict['EtaW1LowerLimit2']|X04}}",
-        {{muonmuonCondDict['EtaW2Ignore2']}}, X"{{muonmuonCondDict['EtaW2UpperLimit2']|X04}}", X"{{muonmuonCondDict['EtaW2LowerLimit2']|X04}}",
-        {{muonmuonCondDict['PhiFullRange2']}}, X"{{muonmuonCondDict['PhiW1UpperLimit2']|X04}}", X"{{muonmuonCondDict['PhiW1LowerLimit2']|X04}}",
-        {{muonmuonCondDict['PhiW2Ignore2']}}, X"{{muonmuonCondDict['PhiW2UpperLimit2']|X04}}", X"{{muonmuonCondDict['PhiW2LowerLimit2']|X04}}",  
-	"{{muonmuonCondDict['RequestedCharge2']}}", X"{{muonmuonCondDict['QualityLut2']|X04}}", X"{{muonmuonCondDict['IsoLut2']|X01}}",
-	"{{muonmuonCondDict['RequestedChargeCorrelation']}}",
-        {{muonmuonCondDict['DiffEtaUpperLimit']}}, {{muonmuonCondDict['DiffEtaLowerLimit']}}, {{muonmuonCondDict['DiffPhiUpperLimit']}}, {{muonmuonCondDict['DiffPhiLowerLimit']}},
-        {{muonmuonCondDict['DeltaRUpperLimit']}}, {{muonmuonCondDict['DeltaRLowerLimit']}}, DETA_DPHI_VECTOR_WIDTH_ALL, MUON_MUON_DETA_DPHI_PRECISION,
-        {{muonmuonCondDict['InvMassUpperLimit']}}, {{muonmuonCondDict['InvMassLowerLimit']}}, MUON_MUON_INV_MASS_PRECISION, 
-        MUON_PT_VECTOR_WIDTH, MUON_MUON_COSH_COS_PRECISION, MUON_MUON_COSH_COS_VECTOR_WIDTH
-    )
-    port map(lhc_clk, muon_bx_{{Bx1|lower}}, muon_bx_{{Bx2|lower}}, ls_charcorr_double_{{Bx1|lower}}_{{Bx2|lower}}, os_charcorr_double_{{Bx1|lower}}_{{Bx2|lower}},
-	diff_muon_muon_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_eta_vector, diff_muon_muon_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_phi_vector, 
-        muon_pt_vector_bx_{{Bx1|lower}}, muon_pt_vector_bx_{{Bx2|lower}}, muon_muon_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_cosh_deta_vector, muon_muon_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_cos_dphi_vector,
-	{{condName|lower}});
+  generic map(
+    {{MuMuCondDict['objectsInSameBx']}},
+	  {{MuMuCondDict['hasDetaCut'] |lower}}, {{MuMuCondDict['hasDphiCut'] |lower}}, {{MuMuCondDict['hasDrCut'] |lower}}, {{MuMuCondDict['hasMassCut'] |lower}},
+	  {{obj1['op'] |lower}},
+    X"{{obj1['EtThreshold']|X04}}",
+    {{obj1['EtaFullRange']}}, X"{{obj1['EtaW1UpperLimits']|X04}}", X"{{obj1['EtaW1LowerLimits']|X04}}",
+    {{obj1['EtaW2Ignore']}}, X"{{obj1['EtaW2UpperLimits']|X04}}", X"{{obj1['EtaW2LowerLimits']|X04}}",
+    {{obj1['PhiFullRange']}}, X"{{obj1['PhiW1UpperLimits']|X04}}", X"{{obj1['PhiW1LowerLimits']|X04}}",
+    {{obj1['PhiW2Ignore']}}, X"{{obj1['PhiW2UpperLimits']|X04}}", X"{{obj1['PhiW2LowerLimits']|X04}}",  
+	  "{{obj1['RequestedCharges']}}", X"{{obj1['QualityLuts']|X04}}", X"{{obj1['IsolationLuts']|X01}}",	
+	  {{ obj2['op'] |lower}},
+    X"{{obj2['EtThreshold']|X04}}",
+    {{obj2['EtaFullRange']}}, X"{{obj2['EtaW1UpperLimits']|X04}}",X"{{obj2['EtaW1LowerLimits']|X04}}",
+    {{obj2['EtaW2Ignore']}}, X"{{obj2['EtaW2UpperLimits']|X04}}", X"{{obj2['EtaW2LowerLimits']|X04}}",
+    {{obj2['PhiFullRange']}}, X"{{obj2['PhiW1UpperLimits']|X04}}", X"{{obj2['PhiW1LowerLimits']|X04}}",
+    {{obj2['PhiW2Ignore']}}, X"{{obj2['PhiW2UpperLimits']|X04}}", X"{{obj2['PhiW2LowerLimits']|X04}}",  
+	  "{{obj2['RequestedCharges']}}", X"{{obj2['QualityLuts']|X04}}", X"{{obj2['IsolationLuts']|X01}}",
+	  "{{MuMuCondDict['RequestedChargeCorrelation']}}",
+    {{MuMuCondDict['DiffEtaUpperLimit']}}, {{MuMuCondDict['DiffEtaLowerLimit']}},
+    {{MuMuCondDict['DiffPhiUpperLimit']}}, {{MuMuCondDict['DiffPhiLowerLimit']}},
+    {{MuMuCondDict['DeltaRUpperLimit']}}, {{MuMuCondDict['DeltaRLowerLimit']}}, DETA_DPHI_VECTOR_WIDTH_ALL, MUON_MUON_DETA_DPHI_PRECISION,
+    {{MuMuCondDict['InvMassUpperLimit']}}, {{MuMuCondDict['InvMassLowerLimit']}}, MUON_MUON_INV_MASS_PRECISION, MUON_PT_VECTOR_WIDTH, MUON_MUON_COSH_COS_PRECISION, MUON_MUON_COSH_COS_VECTOR_WIDTH
+  )
+  port map(lhc_clk, muon_bx_{{obj1['Bx']|lower}}, muon_bx_{{obj2['Bx']|lower}},
+           ls_charcorr_double_{{obj1['Bx']|lower}}_{{obj2['Bx']|lower}}, os_charcorr_double_{{obj1['Bx']|lower}}_{{obj2['Bx']|lower}},
+	         diff_muon_muon_bx_{{obj1['Bx']|lower}}_bx_{{obj2['Bx']|lower}}_eta_vector, diff_muon_muon_bx_{{obj1['Bx']|lower}}_bx_{{obj2['Bx']|lower}}_phi_vector, 
+           muon_pt_vector_bx_{{obj1['Bx']|lower}}, muon_pt_vector_bx_{{obj2['Bx']|lower}},
+           muon_muon_bx_{{obj1['Bx']|lower}}_bx_{{obj2['Bx']|lower}}_cosh_deta_vector, muon_muon_bx_{{obj1['Bx']|lower}}_bx_{{obj2['Bx']|lower}}_cos_dphi_vector,
+	         {{condName|lower}});
 {% endblock instance_muon_muon_correlation_condition %}
+{# eof #}
