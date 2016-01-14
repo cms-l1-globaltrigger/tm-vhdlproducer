@@ -20,7 +20,6 @@ keyTriggerGroups = "TriggerGroups"
 keyCondMap = "condMap"
 
 keyCutDict = "cutDict"
-keyObjDict = "objDict"
 keyObjList = "objList"
 
 keyBxComb = "bxComb"
@@ -63,13 +62,6 @@ keyInvariantMassConditionDict = "invariant_condition_dict"
 
 # keys for objDict
 #   reporter[keyAlgoDict][keyCondDict][<condName>][keyObjDict][<objName>]
-keyObj = "obj"
-keyName = "name"
-keyBxOffset = "bxOffset"
-keyObjType
-keyBx = "Bx"
-keyType
-keyOp = "op"
 
 
 # keys for cutDict
@@ -77,7 +69,7 @@ keyOp = "op"
 keyMinIndex = "minIndex"
 keyMaxVal = "maxVal"
 keyCut = "cut"
-keyName
+keyName = "name"
 keyTarget = "target"
 keyData = "data"
 keyMinVal = "minVal"
@@ -639,7 +631,7 @@ def setBxCombChgCor(dictionary):
                       conditionTypes[tmEventSetup.TripleMuon],
                       conditionTypes[tmEventSetup.QuadMuon]):
         for x in dictionary[keyAlgoDict][algoName][keyCondDict][condName][keyObjList]:
-          bxSet.append(x['Bx'])
+          bxSet.append(x.bx)
         bxSet = list(set(bxSet))
         if len(bxSet) == 1:
           bxCombination = bxSet[0], bxSet[0]
@@ -689,6 +681,22 @@ def getCutInfo(cut):
   o.max_val = cut.getMaximum().value
   o.max_idx = cut.getMaximum().index
   o.data = cut.getData()
+
+  return o
+
+
+def getObjectInfo(obj):
+  o = Object()
+  o.type = obj.getType()
+  o.name = obj.getName()
+  o.operator = obj.getComparisonOperator() == 0
+  o.object = obj
+  o.bx = bx_encode(obj.getBxOffset())
+  o.bx_offset = obj.getBxOffset()
+  o.cuts = {}
+
+  for cut in obj.getCuts():
+    o.cuts[cut.getName()] = getCutInfo(cut)
 
   return o
 
@@ -757,26 +765,9 @@ def getReport(menu, version=False):
         dictionary.update( {keyData: cut.getData()} )
         condCuts.append(dictionary)
 
-      condDict[keyObjDict] = {}
       condDict[keyObjList] = []
       for obj in condDict[keyCond].getObjects():
-        objName = obj.getName()
-
-        objDict = { keyObjType: objectTypes[obj.getType()] }
-        objDict.update( {keyName: objName} )
-        objDict.update( {keyType: obj.getType()} )
-        objDict.update( {keyOp: obj.getComparisonOperator () == 0} )
-        objDict.update( {keyObj: obj} )
-        objDict.update( {keyBx: bx_encode(obj.getBxOffset())} )
-        objDict.update( {keyBxOffset: obj.getBxOffset()} )
-
-        objDict[keyCutDict] = {}
-        for cut in obj.getCuts():
-          cutName = cut.getName()
-          objDict[keyCutDict][cutName] = getCutInfo(cut)
-
-        condDict[keyObjDict][objName] = objDict
-        condDict[keyObjList].append( condDict[keyObjDict][objName] )
+        condDict[keyObjList].append( getObjectInfo(obj) )
 
 
       condDict.update( {keyType: cond.getType()} )
@@ -797,7 +788,7 @@ def getReport(menu, version=False):
 
         for ii in range(len(condDict[keyObjList])):
           objDict = condDict[keyObjList][ii]
-          cutDict = condDict[keyObjList][ii][keyCutDict]
+          cutDict = condDict[keyObjList][ii].cuts
 
           if condDict[keyType] in MuonCondition:
             getMuonCondition(ii, muCondDict, cutDict, condCuts)

@@ -6,10 +6,10 @@
     {%- set nObj = menu.reporter['algoDict'][algoName]['condDict'][condName]['objList'] | count %}
     {%- set muCondDict = condDict['ConditionTemplates']['muon_condition_dict']  %}
     {%- set objInfo={}%}
-    {%- for iObj in range(nObj) if objType in condDict['objList'][iObj]['name']%}
+    {%- for iObj in range(nObj) if objType in condDict['objList'][iObj].name%}
       {%- set objDict = condDict['objList'][iObj] %}
             {%-if loop.index0==0 %}
-              {%- if objInfo.update({"Bx": objDict['Bx']  , "op":objDict["op"] }) %}
+              {%- if objInfo.update({"Bx": objDict.bx  , "op":objDict.operator }) %}
                 {%-endif%}{#- dirty way of doing "do" #}
             {%- endif %}
     {%- endfor%}

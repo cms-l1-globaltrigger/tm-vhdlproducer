@@ -97,7 +97,8 @@ def main():
     print "error> Please set UTM_ROOT environmnet variable"
     sys.exit(1)
 
-  revision = getSvnVersion(utm_root)
+  #revision = getSvnVersion(utm_root)
+  revision = 0
 
   defaultMenu = "/afs/cern.ch/user/t/tmatsush/public/tmGui/L1Menu_Collisions2015_25nsStage1_v6_uGT_v2.xml"
   defaultOut = os.path.join(utm_root, "tmVhdlProducer/test/vhdltest")
