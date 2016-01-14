@@ -2,19 +2,19 @@
 -- Global Trigger Logic module.
 
 -- ========================================================
--- from TME:
+-- from VHDL producer:
       
 -- Unique ID of L1 Trigger Menu:
--- X"{{menu.reporter['MenuInfo']['L1TMenuUUIDHex']}}"
+-- X"{{menu.info.uuid_hex}}"
     
 -- Name of L1 Trigger Menu:
--- {{menu.reporter['MenuInfo']['L1TMenuName']}}
+-- {{menu.info.name}}
     
 -- Scale set:
--- {{menu.reporter['MenuInfo']['L1TMenuScaleSet']}}
+-- {{menu.info.scale_set}}
     
--- Version of L1 Trigger Menu Compiler:
--- v{{menu.reporter['MenuInfo']['L1TMCompilerVersionMajor']}}.{{menu.reporter['MenuInfo']['L1TMCompilerVersionMinor']}}.{{menu.reporter['MenuInfo']['L1TMCompilerVersionRevision']}}
+-- VHDL producer version
+-- v{{menu.info.sw_version_major}}.{{menu.info.sw_version_minor}}.{{menu.info.sw_version_patch}}
 
 -- ========================================================
 

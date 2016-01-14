@@ -689,10 +689,29 @@ def updateExpressionInCondition(algo, cond):
   algo[keyExpInCond] = algo[keyExpInCond].replace(cond.getName(), signal)
 
 
-def getReport(menu, vhdlVersion=False):
+def setMenuInfo(menu, data, version="0.0.0"):
+  menuName = menu.getName()
+
+  data.info = Object()
+  data.info.uuid = uuid.uuid5(uuid.NAMESPACE_DNS, menuName)
+  data.info.uuid_hex = data.info.uuid.hex
+  data.info.name_in_hex = hexlify(menu.getName()[::-1]).zfill(256)
+  data.info.fw_uuid = uuid.uuid1()
+  data.info.fw_uuid_hex = data.info.fw_uuid.hex
+  data.info.name = menuName
+  data.info.scale_set = menu.getScaleSetName()
+  data.info.svn_revision_number = menu.sw_revision_svn
+
+  data.info.sw_version_major, data.info.sw_version_minor, data.info.sw_version_patch = version.rsplit('.')
+
+  return
+
+
+def getReport(menu, version=False):
   data = Object()
   data.reporter = {}
-  menuName = menu.getName()
+
+  setMenuInfo(menu, data, version)
 
   triggerGroups = {}
   for key in conditionTypes:
@@ -715,22 +734,6 @@ def getReport(menu, vhdlVersion=False):
     algoDict[algo.getName()] =  value
   data.reporter[keyAlgoDict] = algoDict
 
-  if vhdlVersion:
-    version = vhdlVersion.rsplit(".")
-    value = {"L1TMenuUUIDHex": uuid.uuid5(uuid.NAMESPACE_DNS, menuName).hex }
-    value.update( {"L1TMenuUUID": uuid.uuid5(uuid.NAMESPACE_DNS, menuName)} )
-    value.update( {"L1TMenuUUID": uuid.uuid5(uuid.NAMESPACE_DNS, menuName)} )
-    value.update( {"L1TMenuNameHex": hexlify(menu.getName()[::-1]).zfill(256)} )
-    value.update( {"L1TMenuFirmwareUUID": uuid.uuid1()} )
-    value.update( {"L1TMenuFirmwareUUIDHex": uuid.uuid1().hex} )
-    value.update( {"L1TMCompilerVersionMajor": version[0]} )
-    value.update( {"L1TMCompilerVersionMinor": version[1]} )
-    value.update( {"L1TMCompilerVersionRevision": version[2]} )
-    value.update( {"L1TMenuName": menuName} )
-    value.update( {"L1TMenuScaleSet": menu.getScaleSetName()} )
-    value.update( {"SvnRevisionNumber": menu.sw_revision_svn} )
-
-    data.reporter[keyMenuInfo] = value
 
   condInUse = []
   for algoName in data.reporter[keyAlgoDict]:
