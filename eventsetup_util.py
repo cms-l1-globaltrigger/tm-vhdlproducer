@@ -687,7 +687,7 @@ def getCutInfo(cut):
 
 def getObjectInfo(obj):
   o = Object()
-  o.type = obj.getType()
+  o.type = objectTypes[obj.getType()]
   o.name = obj.getName()
   o.operator = obj.getComparisonOperator() == 0
   o.object = obj

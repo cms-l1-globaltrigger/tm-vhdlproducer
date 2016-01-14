@@ -1,28 +1,12 @@
 {%- extends "templateLoops/condLoop.j2" %}
-  {%- block objLoop %}
-  {%- if condDict['objType'] in ["ETT","HTT","ETM","HTM" ] %}
-    {%- if not moduleConditionSet.has_key(condName)%}
-        {# ---------------------- OBJTYPE ADDED{{objType}}  #}
-        {%-if moduleConditionSet.__setitem__(condName,[]) %} {%-endif %}
-    {#-%- if condName in menu.reporter['moduleCondSet'][iMod] %#}
-      {%- set objType=condDict['objType'] %}
-      {%- set ObjectType= objType %}
-      {%- set nObj = menu.reporter['algoDict'][algoName]['condDict'][condName]['objList'] | count %}
-      {%- set esumsCondDict = condDict['ConditionTemplates']['esums_condition_dict'].copy()  %}
-      {%- set objInfo={}%}
-      {%- for iObj in range(nObj) if objType in condDict['objList'][iObj].name%}
-        {%- set objDict = condDict['objList'][iObj] %}
-              {%-if loop.index0==0 %}
-                {%- if objInfo.update({"Bx": objDict.bx , "op":objDict.operator>0 }) %}
-                  {%-endif%}{#- dirty way of doing "do" #}
-              {%- endif %}
-      {%- endfor%}
-      {%- set Bx = objInfo['Bx'] %}
-{#-#}
-        {%- block instance_esums_condition scoped%}
-        THIS SHOULD NOT APPEAR
-        {%- endblock instance_esums_condition%}
-    {%- endif%}
+{%- block objLoop %}
+  {%- if condDict['objType'] in ("ETT", "HTT", "ETM", "HTM") %}
+    {%- set objects = condDict['objList'] %}
+    {%- set esumsCondDict = condDict['ConditionTemplates']['esums_condition_dict'].copy() %}
+    {%- set Bx = objects[0].bx %}
+    {%- block instance_esums_condition scoped%}
+      THIS SHOULD NOT APPEAR
+    {%- endblock instance_esums_condition%}
   {%- endif%}
 {%- endblock objLoop %}
-
+{#- eof #}

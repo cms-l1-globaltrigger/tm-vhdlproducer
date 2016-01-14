@@ -1,10 +1,11 @@
 {%- extends "templateLoops/objLoop_instance_esums_condition.j2" %}
 {%- block instance_esums_condition %}
 {{condName|lower}}_i: entity work.esums_conditions
-    generic map({{ objInfo['op'] | lower  }}, {{ObjectType}}_TYPE,
+    generic map({{ objects[0].operator | lower  }}, {{objects[0].type}}_TYPE,
         X"{{esumsCondDict["EtThreshold"][0]|X04}}",
         {{esumsCondDict["PhiFullRange"][0]}}, X"{{esumsCondDict["PhiW1UpperLimits"][0]|X04}}", X"{{esumsCondDict["PhiW1LowerLimits"][0]|X04}}",
         {{esumsCondDict["PhiW2Ignore"][0]}}, X"{{esumsCondDict["PhiW2UpperLimits"][0]|X04}}", X"{{esumsCondDict["PhiW2LowerLimits"][0]|X04}}"
         )
-    port map(lhc_clk, {{ObjectType|lower}}_bx_{{Bx|lower}}, {{condName|lower}});
+    port map(lhc_clk, {{objects[0].type|lower}}_bx_{{Bx|lower}}, {{condName|lower}});
 {%endblock instance_esums_condition %}
+{#- eof #}
