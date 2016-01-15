@@ -1,5 +1,8 @@
 {%- extends "templateLoops/objLoop_instance_muon_condition.j2" %}
 {%- block instance_muon_condition %}
+    {%- set muCondDict = condition.template['muon_condition_dict']  %}
+    {%- set objects = condition.objects %}
+    {%- set Bx = objects[0].bx %}
 {{condName|lower}}_i: entity work.muon_conditions_v3
     generic map({{objects | count}} , {{ objects[0].operator |lower}},
         (X"{{muCondDict['PtThresholds'][0]|X04}}", X"{{muCondDict['PtThresholds'][1]|X04}}", X"{{muCondDict['PtThresholds'][2]|X04}}", X"{{muCondDict['PtThresholds'][3]|X04}}"),

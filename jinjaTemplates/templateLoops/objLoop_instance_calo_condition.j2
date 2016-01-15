@@ -1,9 +1,10 @@
 {%- extends "templateLoops/condLoop.j2" %}
 {%- block objLoop %}
-  {%- if condDict['objType'] in ("EG", "JET", "TAU") %}
-    {%- set objects = condDict['objList'] %}
-    {%- set Bx = objects[0].bx %}
-    {%- set caloCondDict = condDict['ConditionTemplates']['calo_condition_dict']  %}
+  {%- set condition = algoDict['condDict'][condName]%}
+  {%- if condition.type in (
+    "SingleEgamma", "DoubleEgamma", "TripleEgamma", "QuadEgamma",
+    "SingleTau", "DoubleTau", "TripleTau", "QuadTau",
+    "SingleJet", "DoubleJet", "TripleJet", "QuadJet") %}
     {%- block instance_calo_condition scoped%}
       THIS SHOULD NOT APPEAR
     {%- endblock %}

@@ -1,9 +1,7 @@
 {%- extends "templateLoops/condLoop.j2" %}
 {%- block objLoop %}
-  {%- if condDict['objType'] in ("ETT", "HTT", "ETM", "HTM") %}
-    {%- set objects = condDict['objList'] %}
-    {%- set esumsCondDict = condDict['ConditionTemplates']['esums_condition_dict'].copy() %}
-    {%- set Bx = objects[0].bx %}
+  {%- set condition = algoDict['condDict'][condName]%}
+  {%- if condition.type in ("TotalEt", "TotalHt", "MissingEt", "MissingHt") %}
     {%- block instance_esums_condition scoped%}
       THIS SHOULD NOT APPEAR
     {%- endblock instance_esums_condition%}

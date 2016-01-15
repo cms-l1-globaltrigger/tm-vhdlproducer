@@ -1,9 +1,8 @@
 {%- extends "templateLoops/condLoop.j2" %}
 {%- block objLoop %}
-  {%- if condDict['objType'] in ("MU", ) %}
-    {%- set muCondDict = condDict['ConditionTemplates']['muon_condition_dict']  %}
-    {%- set objects = condDict['objList'] %}
-    {%- set Bx = objects[0].bx %}
+  {%- set condition = algoDict['condDict'][condName]%}
+  {%- if condition.type in (
+    "SingleMuon", "DoubleMuon", "TripleMuon", "QuadMuon") %}
     {%- block instance_muon_condition scoped%}
       THIS SHOULD NOT APPEAR
     {%- endblock instance_muon_condition%}

@@ -1,5 +1,8 @@
 {%- extends "templateLoops/objLoop_instance_calo_condition.j2" %}
 {%- block instance_calo_condition %}
+    {%- set objects = condition.objects %}
+    {%- set Bx = objects[0].bx %}
+    {%- set caloCondDict = condition.template['calo_condition_dict']  %}
 {{condName|lower}}_i: entity work.calo_conditions_v3
     generic map(NR_{{objects[0].type}}_OBJECTS, {{objects | count}}, {{ objects[0].operator |lower}}, {{objects[0].type}}_TYPE,
         (X"{{caloCondDict['EtThresholds'][0]|X04}}", X"{{caloCondDict['EtThresholds'][1]|X04}}", X"{{caloCondDict['EtThresholds'][2]|X04}}", X"{{caloCondDict['EtThresholds'][3]|X04}}"),

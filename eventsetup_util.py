@@ -623,14 +623,14 @@ def setBxCombChgCor(dictionary):
   for algoName in dictionary[keyAlgoDict]:
     algo = dictionary[keyAlgoDict][algoName][keyAlgo]
     for condName in dictionary[keyAlgoDict][algoName][keyCondDict]:
-      condType = dictionary[keyAlgoDict][algoName][keyCondDict][condName][keyTriggerGroup]
+      condType = dictionary[keyAlgoDict][algoName][keyCondDict][condName].type
 
       bxSet = []
       # TODO: handle MuonMuonCorrelation
       if condType in (conditionTypes[tmEventSetup.DoubleMuon],
                       conditionTypes[tmEventSetup.TripleMuon],
                       conditionTypes[tmEventSetup.QuadMuon]):
-        for x in dictionary[keyAlgoDict][algoName][keyCondDict][condName][keyObjList]:
+        for x in dictionary[keyAlgoDict][algoName][keyCondDict][condName].objects:
           bxSet.append(x.bx)
         bxSet = list(set(bxSet))
         if len(bxSet) == 1:
@@ -732,71 +732,69 @@ def getReport(menu, version=False):
   condInUse = []
   for algoName in data.reporter[keyAlgoDict]:
     algoDict = data.reporter[keyAlgoDict][algoName]
-    condDict = {}
     for token in algoDict[keyAlgo].getRpnVector():
       if tmGrammar.isGate(token): continue
 
-      condition = token
-      cond = data.reporter[keyCondMap][condition]
+      cond_token = token
+      cond = data.reporter[keyCondMap][cond_token]
       if cond.getType() == tmEventSetup.Externals:
         updateExpressionInCondition(algoDict, cond)
         continue
 
-      if condition in condInUse: continue
-      condInUse.append(condition)
+      if cond_token in condInUse: continue
+      condInUse.append(cond_token)
 
-      condName = cond.getName()
-      condDict = { keyObjType: getObjectType(condName) }
-      condDict.update( {keyCond: cond} )
-      condDict.update( {keyCondition: condition} )
-      condDict.update( {keyTriggerGroup: conditionTypes[cond.getType()]} )
-      algoDict[keyCondDict][condName] = condDict
+      condition = Object()
+      condition.name = cond.getName()
+      condition.token = token
+      condition.type = conditionTypes[cond.getType()]
+      condition.type_id = cond.getType()
+      condition.cuts = []
+      condition.template = getDefaultTemplate(condition.type_id, cond)
+      algoDict[keyCondDict][condition.name] = condition
 
       condCuts = []
-      for cut in condDict[keyCond].getCuts():
-        dictionary = {}
-        dictionary.update( {keyName: cut.getName()} )
-        dictionary.update( {keyTarget: cut.getObjectType()} )
-        dictionary.update( {keyType: cut.getCutType()} )
-        dictionary.update( {keyMinVal: cut.getMinimum().value} )
-        dictionary.update( {keyMinIndex: cut.getMinimum().index} )
-        dictionary.update( {keyMaxVal: cut.getMaximum().value} )
-        dictionary.update( {keyMaxIndex: cut.getMaximum().index} )
-        dictionary.update( {keyData: cut.getData()} )
-        condCuts.append(dictionary)
+      for cut in cond.getCuts():
+        o = Object()
+        o.name = cut.getName()
+        o.target = cut.getObjectType()
+        o.type = cut.getCutType()
+        o.min_val = cut.getMinimum().value
+        o.min_idx = cut.getMinimum().index
+        o.max_val = cut.getMaximum().value
+        o.max_idx = cut.getMaximum().index
+        o.data = cut.getData()
+        condition.cuts.append(o)
 
-      condDict[keyObjList] = []
-      for obj in condDict[keyCond].getObjects():
-        condDict[keyObjList].append( getObjectInfo(obj) )
+      condition.objects = []
+      for obj in cond.getObjects():
+        condition.objects.append(getObjectInfo(obj))
 
+      if condition.type_id in ObjectCondition:
+        if condition.type_id in MuonCondition:
+          muCondDict = condition.template[keyMuonConditionDict]
 
-      condDict.update( {keyType: cond.getType()} )
-      condDict.update( {keyConditionTemplates: getDefaultTemplate(cond.getType(), cond)} )
-      if condDict[keyType] in ObjectCondition:
-        if condDict[keyType] in MuonCondition:
-          muCondDict = condDict[keyConditionTemplates][keyMuonConditionDict]
+        elif condition.type_id in CaloCondition:
+          caloCondDict = condition.template[keyCaloConditionDict]
 
-        elif condDict[keyType] in CaloCondition:
-          caloCondDict = condDict[keyConditionTemplates][keyCaloConditionDict]
-
-        elif condDict[keyType] in EsumCondition:
-          esumsCondDict = condDict[keyConditionTemplates][keyEsumsConditionDict]
+        elif condition.type_id in EsumCondition:
+          esumsCondDict = condition.template[keyEsumsConditionDict]
 
         else:
-          logging.error("Unknown condition: %s" % condDict[keyType])
+          logging.error("Unknown condition: %s" % condition.type)
           raise NotImplementedError
 
-        for ii in range(len(condDict[keyObjList])):
-          objDict = condDict[keyObjList][ii]
-          cutDict = condDict[keyObjList][ii].cuts
+        for ii in range(len(condition.objects)):
+          objDict = condition.objects[ii]
+          cutDict = objDict.cuts
 
-          if condDict[keyType] in MuonCondition:
+          if condition.type_id in MuonCondition:
             getMuonCondition(ii, muCondDict, cutDict, condCuts)
 
-          elif condDict[keyType] in CaloCondition:
+          elif condition.type_id in CaloCondition:
             getCaloCondition(ii, caloCondDict, cutDict)
 
-          elif condDict[keyType] in EsumCondition:
+          elif condition.type_id in EsumCondition:
             getEsumCondition(ii, esumsCondDict, cutDict)
 
           else:
@@ -835,7 +833,7 @@ def getReport(menu, version=False):
   for algoName in data.reporter[keyAlgoDict]:
     algo = data.reporter[keyAlgoDict][algoName][keyAlgo]
     for condName in data.reporter[keyAlgoDict][algoName][keyCondDict]:
-      condType = data.reporter[keyAlgoDict][algoName][keyCondDict][condName][keyTriggerGroup]
+      condType = data.reporter[keyAlgoDict][algoName][keyCondDict][condName].type
       data.reporter[keyTriggerGroups][condType][keyNBits] += 1
       value = {keyIndex: data.reporter[keyAlgoDict][algoName][keyIndex]}
       value.update( {keyAlgoName: algoName} )
