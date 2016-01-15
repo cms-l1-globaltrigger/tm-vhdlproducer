@@ -287,40 +287,40 @@ def chargeFormat(ch):
   return charge
 
 
-def addThresholdTemplate(template):
+def addThresholdTemplate(template, n=4):
   logging.debug("addThresholdTemplate")
 
-  template.Thresholds = [ 0, 0, 0, 0 ]
+  template.Thresholds = [ 0 ] * n
 
 
-def addIsolationTemplate(template):
+def addIsolationTemplate(template, n=4):
   logging.debug("addIsolationTemplate")
 
-  template.IsolationLUTs = [ 0xF, 0xF, 0xF, 0xF ]
+  template.IsolationLUTs = [ 0xF ] * n
 
 
-def addEtaTemplate(template):
+def addEtaTemplate(template, n=4):
   logging.debug("addEtaTemplate")
 
-  template.EtaFullRange = [ 'false', 'false', 'false', 'false' ]
-  template.EtaW1LowerLimits = [ 0, 0, 0, 0 ]
-  template.EtaW1UpperLimits = [ 0, 0, 0, 0 ]
+  template.EtaFullRange = [ 'false' ] * n
+  template.EtaW1LowerLimits = [ 0 ] * n
+  template.EtaW1UpperLimits = [ 0 ] * n
 
-  template.EtaW2Ignore = [ 'false', 'false', 'false', 'false' ]
-  template.EtaW2LowerLimits = [ 0, 0, 0, 0 ]
-  template.EtaW2UpperLimits = [ 0, 0, 0, 0 ]
+  template.EtaW2Ignore = [ 'false' ] * n
+  template.EtaW2LowerLimits = [ 0 ] * n
+  template.EtaW2UpperLimits = [ 0 ] * n
 
 
-def addPhiTemplate(template):
+def addPhiTemplate(template, n=4):
   logging.debug("addPhiTemplate")
 
-  template.PhiFullRange = [ 'false', 'false', 'false', 'false' ]
-  template.PhiW1LowerLimits = [ 0, 0, 0, 0 ]
-  template.PhiW1UpperLimits = [ 0, 0, 0, 0 ]
+  template.PhiFullRange = [ 'false' ] * n
+  template.PhiW1LowerLimits = [ 0 ] * n
+  template.PhiW1UpperLimits = [ 0 ] * n
 
-  template.PhiW2Ignore =      [ 'false', 'false', 'false', 'false' ]
-  template.PhiW2LowerLimits = [ 0, 0, 0, 0 ]
-  template.PhiW2UpperLimits = [ 0, 0, 0, 0 ]
+  template.PhiW2Ignore =      [ 'false' ] * n
+  template.PhiW2LowerLimits = [ 0 ] * n
+  template.PhiW2UpperLimits = [ 0 ] * n
 
 
 def getCalorimeterTemplate():
@@ -359,6 +359,17 @@ def getMuonTemplate():
   template.DiffEtaLowerLimit = 0
   template.DiffPhiUpperLimit = 0
   template.DiffPhiLowerLimit = 0
+
+  return template
+
+
+def getEsumTemplate():
+  logging.debug("getEsumTemplate")
+
+  template = Object()
+
+  addThresholdTemplate(template, n=1)
+  addPhiTemplate(template, n=1)
 
   return template
 
@@ -504,6 +515,15 @@ def setMuonTemplate(condition):
     setQualityLUT(template, ii, cuts)
     setCharge(template, ii, cuts)
   setChargeCorrelation(template, condition.cuts)
+  condition.template = template
+
+
+def setEsumTemplate(condition):
+  template = getEsumTemplate()
+  for ii in range(len(condition.objects)):
+    cuts = condition.objects[ii].cuts
+    setThreshold(template, ii, cuts)
+    setPhiRange(template, ii, cuts)
   condition.template = template
 
 
@@ -1030,7 +1050,7 @@ def getReport(menu, version=False):
             setCalorimeterTemplate(condition)
 
           elif condition.type_id in EsumCondition:
-            getEsumCondition(ii, esumsCondDict, cutDict)
+            setEsumTemplate(condition)
 
           else:
             logging.error("unknown condition: %s" % condDict[keyType])
