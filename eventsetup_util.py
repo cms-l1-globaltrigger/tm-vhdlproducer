@@ -8,69 +8,66 @@ import tmGrammar
 import tmEventSetup
 
 
-# keys for reporter
-keyNAlgoDefined = "nAlgoDefined"
-keyNBitsSorted = "nBits_sorted"
+# data.reporter[keys]
+#   keys for reporter
 keyAlgoMap = "algoMap"
-keyIndexSorted = "index_sorted"
-keyAlgoDict = "algoDict"
-keyScaleMap = "scaleMap"
-keyConditionSet = "conditionSet"
-keyTriggerGroups = "TriggerGroups"
 keyCondMap = "condMap"
+keyScaleMap = "scaleMap"
+
+keyTriggerGroups = "TriggerGroups"
+keyAlgoDict = "algoDict"
+
+keyNBitsSorted = "nBits_sorted"
+keyIndexSorted = "index_sorted"
+keyNAlgoDefined = "nAlgoDefined"
+keyConditionSet = "conditionSet"
 keyBxComb = "bxComb"
 
-
-# keys for algoDict
-#   reporter[keyAlgoDict][<algoName>]
-keyAlgo = "algo"
-keyExp = "exp"
-keyExpInCond = "expInCond"
-keyIndex = "index"
-keyModuleId = "moduleId"
-keyModuleIndex = "moduleIndex"
-keyCondDict = "condDict"
-
-
-keyType = "type"
-
-
-# keys for template
-#  reporter[keyAlgoDict][<algoName>][keyCondDict][<condName>][keyConditionTemplates]
-keyMuonMuonCorrelationConditionDict = "muon_muon_correlation_condition_dict"
-keyMuonEsumCorrelationConditionDict = "muon_esum_correlation_condition_dict"
-keyCaloMuonCorrelationConditionDict = "calo_muon_correlation_condition_dict"
-keyCaloCaloCorrelationConditionDict = "calo_calo_correlation_condition_dict"
-keyCaloEsumCorrelationConditionDict = "calo_esum_correlation_condition_dict"
-keyInvariantMassConditionDict = "invariant_condition_dict"
-
-
-# keys for objDict
-#   reporter[keyAlgoDict][keyCondDict][<condName>][keyObjDict][<objName>]
-
-
-# keys for cutDict
-#   reporter[keyAlgoDict][<algoName>][keyCondDict][<condName>][keyObjList][ii][keyCutDict][<cutName>]
-keyMinIndex = "minIndex"
-keyMaxVal = "maxVal"
-keyCut = "cut"
-keyName = "name"
-keyTarget = "target"
-keyData = "data"
-keyMinVal = "minVal"
-keyType
-keyMaxIndex = "maxIndex"
-keyCutType = "cutType"
-
+# data.reporter[keyAlgoDict] = {<algoName>}
+#
+# algorithm = data.reporter[keyAlgoDict][<algoName>]
+# algorithm.index
+#          .module_id
+#          .module_index
+#          .rpn_vector
+#          .expression
+#          .expression_in_condition
+#          .conditions{<condName>}
+#
+# condition = algorithm.conditions[<condName>]
+# condition.name
+#          .token
+#          .type
+#          .type_id
+#          .template
+#          .objects[]
+#          .cuts[]
+#
+# object.name
+#       .type
+#       .type_id
+#       .operator
+#       .bx
+#       .bx_offset
+#       .cuts{<cutName>}
+#
+# cut.name
+#    .target
+#    .type
+#    .min_val
+#    .min_idx
+#    .max_val
+#    .max_idx
+#    .data
+#
 
 # keys for reporter[keyTriggerGroups][<conditionType>]
+keyIndex = "index"
 keyNBits = "nBits"
 keyBits = "bits"
 
-
 # keys for reporter[keyTriggerGroups][<conditionType>][keyBits][ii]
 keyAlgoName = 'algoName'
-keyIndex
 
 
 # list of condition types
@@ -701,10 +698,9 @@ def getConditionInfo(esCond, token):
   condition.token = token
   condition.type = conditionTypes[esCond.getType()]
   condition.type_id = esCond.getType()
-  condition.cuts = []
   condition.template = None
 
-  condCuts = []
+  condition.cuts = []
   for esCut in esCond.getCuts():
     condition.cuts.append(getCutInfo(esCut))
 
