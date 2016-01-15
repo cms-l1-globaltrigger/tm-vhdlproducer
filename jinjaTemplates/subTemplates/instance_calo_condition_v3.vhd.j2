@@ -1,8 +1,8 @@
 {%- extends "templateLoops/objLoop_instance_calo_condition.j2" %}
 {%- block instance_calo_condition %}
-    {%- set objects = condition.objects %}
-    {%- set Bx = objects[0].bx %}
-    {%- set cuts = condition.template %}
+  {%- set objects = condition.objects %}
+  {%- set Bx = objects[0].bx %}
+  {%- set cuts = condition.template %}
 {{condName|lower}}_i: entity work.calo_conditions_v3
     generic map(NR_{{objects[0].type}}_OBJECTS, {{objects | count}}, {{ objects[0].operator |lower}}, {{objects[0].type}}_TYPE,
         (X"{{cuts.Thresholds[0]|X04}}", X"{{cuts.Thresholds[1]|X04}}", X"{{cuts.Thresholds[2]|X04}}", X"{{cuts.Thresholds[3]|X04}}"),

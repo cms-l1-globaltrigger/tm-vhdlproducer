@@ -274,21 +274,33 @@ def bx_encode(value):
 def chargeFormat(ch):
   logging.debug(ch)
 
-  if str(ch).lower() in ["positive", "pos", "1"]:
+  if str(ch).lower() in ("positive", "pos", "1"):
     charge = "pos"
-  elif str(ch).lower() in ["negative", "neg", "-1"]:
+
+  elif str(ch).lower() in ("negative", "neg", "-1"):
     charge = "neg"
+
   else:
     print "CAN'T RECOGNIZE REQUESTED CHARGE. WILL BE IGNORED"
     charge = "ign"
+
   return charge
 
 
-def getCalorimeterTemplate():
-  logging.debug("getCalorimeterTemplate")
-  template = Object()
+def addThresholdTemplate(template):
+  logging.debug("addThresholdTemplate")
 
   template.Thresholds = [ 0, 0, 0, 0 ]
+
+
+def addIsolationTemplate(template):
+  logging.debug("addIsolationTemplate")
+
+  template.IsolationLUTs = [ 0xF, 0xF, 0xF, 0xF ]
+
+
+def addEtaTemplate(template):
+  logging.debug("addEtaTemplate")
 
   template.EtaFullRange = [ 'false', 'false', 'false', 'false' ]
   template.EtaW1LowerLimits = [ 0, 0, 0, 0 ]
@@ -298,6 +310,10 @@ def getCalorimeterTemplate():
   template.EtaW2LowerLimits = [ 0, 0, 0, 0 ]
   template.EtaW2UpperLimits = [ 0, 0, 0, 0 ]
 
+
+def addPhiTemplate(template):
+  logging.debug("addPhiTemplate")
+
   template.PhiFullRange = [ 'false', 'false', 'false', 'false' ]
   template.PhiW1LowerLimits = [ 0, 0, 0, 0 ]
   template.PhiW1UpperLimits = [ 0, 0, 0, 0 ]
@@ -306,12 +322,43 @@ def getCalorimeterTemplate():
   template.PhiW2LowerLimits = [ 0, 0, 0, 0 ]
   template.PhiW2UpperLimits = [ 0, 0, 0, 0 ]
 
+
+def getCalorimeterTemplate():
+  logging.debug("getCalorimeterTemplate")
+
+  template = Object()
+
+  addThresholdTemplate(template)
+  addIsolationTemplate(template)
+  addEtaTemplate(template)
+  addPhiTemplate(template)
+
   template.DiffEtaUpperLimit = 0
   template.DiffEtaLowerLimit = 0
   template.DiffPhiUpperLimit = 0
   template.DiffPhiLowerLimit = 0
 
-  template.IsolationLUTs = [ 0xF, 0xF, 0xF, 0xF ]
+  return template
+
+
+def getMuonTemplate():
+  logging.debug("getMuonTemplate")
+
+  template = Object()
+
+  addThresholdTemplate(template)
+  addIsolationTemplate(template)
+  addEtaTemplate(template)
+  addPhiTemplate(template)
+
+  template.QualityLUTs = [ 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF ]
+  template.Charges = [ "ign", "ign", "ign", "ign" ]
+  template.ChargeCorrelation = "ig"
+
+  template.DiffEtaUpperLimit = 0
+  template.DiffEtaLowerLimit = 0
+  template.DiffPhiUpperLimit = 0
+  template.DiffPhiLowerLimit = 0
 
   return template
 
@@ -322,7 +369,8 @@ def setThreshold(template, index, cuts):
     if cuts[name].type == tmEventSetup.Threshold:
       array.append(cuts[name])
 
-  if len(array) != 1:
+  n = len(array)
+  if n != 1:
     raise NotImplementedError
 
   template.Thresholds[index] = array[0].min_idx
@@ -384,11 +432,54 @@ def setIsolationLUT(template, index, cuts):
     if cuts[name].type == tmEventSetup.Isolation:
       array.append(cuts[name])
 
-  if len(array) > 1:
+  n = len(array)
+  if n > 1:
     raise NotImplementedError
 
-  elif len(array) == 1:
+  elif n == 1:
     template.IsolationLUTs[index] = array[0].data
+
+
+def setQualityLUT(template, index, cuts):
+  array = []
+  for name in cuts:
+    if cuts[name].type == tmEventSetup.Quality:
+      array.append(cuts[name])
+
+  n = len(array)
+  if n > 1:
+    raise NotImplementedError
+
+  elif n == 1:
+    template.QualityLUTs[index] = array[0].data
+
+
+def setCharge(template, index, cuts):
+  array = []
+  for name in cuts:
+    if cuts[name].type == tmEventSetup.Charge:
+      array.append(cuts[name])
+
+  n = len(array)
+  if n > 1:
+    raise NotImplementedError
+
+  elif n == 1:
+    template.Charges[index] = chargeFormat(array[0].data)
+
+
+def setChargeCorrelation(template, cuts):
+  array = []
+  for name in cuts:
+    if cuts[name].type == tmEventSetup.ChargeCorrelation:
+      array.append(cuts[name])
+
+  n = len(array)
+  if n > 1:
+    raise NotImplemenedError
+
+  elif n == 1:
+    template.ChargeCorrelation = array[0].data
 
 
 def setCalorimeterTemplate(condition):
@@ -399,6 +490,20 @@ def setCalorimeterTemplate(condition):
     setEtaRange(template, ii, cuts)
     setPhiRange(template, ii, cuts)
     setIsolationLUT(template, ii, cuts)
+  condition.template = template
+
+
+def setMuonTemplate(condition):
+  template = getMuonTemplate()
+  for ii in range(len(condition.objects)):
+    cuts = condition.objects[ii].cuts
+    setThreshold(template, ii, cuts)
+    setEtaRange(template, ii, cuts)
+    setPhiRange(template, ii, cuts)
+    setIsolationLUT(template, ii, cuts)
+    setQualityLUT(template, ii, cuts)
+    setCharge(template, ii, cuts)
+  setChargeCorrelation(template, condition.cuts)
   condition.template = template
 
 
@@ -919,10 +1024,9 @@ def getReport(menu, version=False):
           cutDict = objDict.cuts
 
           if condition.type_id in MuonCondition:
-            getMuonCondition(ii, muCondDict, cutDict, condition.cuts)
+            setMuonTemplate(condition)
 
           elif condition.type_id in CaloCondition:
-            getCaloCondition(ii, caloCondDict, cutDict)
             setCalorimeterTemplate(condition)
 
           elif condition.type_id in EsumCondition:
