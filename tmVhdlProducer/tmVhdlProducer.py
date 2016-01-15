@@ -131,7 +131,7 @@ class VhdlProducer(object):
             iMod = moduleCycle.next()
             algoName  =  self.data.reporter['index_sorted'][iAlgo]  ## Need to spread out the algos in a more logical way
             algoDict  =  self.data.reporter['algoDict'][algoName]
-            algoIndex =  algoDict['index']  ##global index
+            algoIndex =  algoDict.index ##global index
             localAlgoIndex= len(m2a[iMod])
             m2a[iMod][localAlgoIndex]=algoIndex
             a2m[algoIndex]=(iMod, localAlgoIndex)
@@ -142,9 +142,9 @@ class VhdlProducer(object):
           print "-----------------------------------------------------------"
           for algoName in self.data.reporter['index_sorted']:
             algoDict  =  self.data.reporter['algoDict'][algoName]
-            iMod = algoDict['moduleId']
-            algoIndex = algoDict['index']  ##global index
-            localAlgoIndex= algoDict['moduleIndex']
+            iMod = algoDict.module_id
+            algoIndex = algoDict.index  ##global index
+            localAlgoIndex= algoDict.module_index
             m2a[iMod][localAlgoIndex]=algoIndex
             a2m[algoIndex]=(iMod,localAlgoIndex)
 
@@ -160,11 +160,11 @@ class VhdlProducer(object):
         for iMod in range(self.nModules):
           for localAlgoIndex in self.data.reporter['m2a'][iMod]:
             algoIndex = self.data.reporter['m2a'][iMod][localAlgoIndex]
-            algoName = filter(lambda x : self.data.reporter['algoDict'][x]['index']==algoIndex ,self.data.reporter['algoDict'])[0]
+            algoName = filter(lambda x : self.data.reporter['algoDict'][x].index==algoIndex ,self.data.reporter['algoDict'])[0]
             algoDict = self.data.reporter['algoDict'][algoName]
-            self.data.reporter['moduleConds'][iMod][localAlgoIndex]= [ condName for condName in algoDict['condDict']    ]
+            self.data.reporter['moduleConds'][iMod][localAlgoIndex]= [ condName for condName in algoDict.conditions    ]
 
-            for condName in algoDict['condDict']:
+            for condName in algoDict.conditions:
               self.data.reporter['moduleCondSet'][iMod].add(condName)
           self.data.reporter['moduleCondSet'][iMod]= list(self.data.reporter['moduleCondSet'][iMod] )
         pass

@@ -1,6 +1,6 @@
 {%- extends "templateLoops/condLoop.j2" %}
 {%- block objLoop %}
-  {%- set condition = algoDict['condDict'][condName]%}
+  {%- set condition = algoDict.conditions[condName]%}
   {%- if condition.type in ("TotalEt", "TotalHt", "MissingEt", "MissingHt") %}
     {%- block instance_esums_condition scoped%}
       THIS SHOULD NOT APPEAR

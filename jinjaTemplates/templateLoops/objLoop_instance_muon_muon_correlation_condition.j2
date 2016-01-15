@@ -1,6 +1,6 @@
 {%- extends "templateLoops/condLoop.j2" %}
 {%- block objLoop %}
-  {%- set condition = algoDict['condDict'][condName]%}
+  {%- set condition = algoDict.conditions[condName]%}
   {%- if condition.type == "MuonMuonCorrelation" %}
     {%- set MuMuCondDict = condition.template['muon_muon_correlation_condition_dict'] %}
     {%- set obj1 = MuMuCondDict['obj1'] %}

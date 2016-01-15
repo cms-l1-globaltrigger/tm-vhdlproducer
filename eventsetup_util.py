@@ -243,6 +243,10 @@ def sortDictByKey(iDict, iKey, reverse):
   return sorted(iDict, key=lambda x: iDict[x][iKey], reverse=reverse)
 
 
+def sortDictByIndex(iDict, reverse):
+  return sorted(iDict, key=lambda x: iDict[x].index, reverse=reverse)
+
+
 def getCuts(cutDict, cutType):
   rc = []
   for c in cutDict:
@@ -590,8 +594,6 @@ def getMuonCondition(ii, condDict, cutDict, condCuts):
   if nCondCuts == 0:
     pass
   elif nCondCuts == 1:
-    print condCuts[0]
-    print condCuts[0][keyData]
     condDict[RequestedChargeCorrelation] = condCuts[0][keyData]
   else:
     raise NotImplementedError
@@ -621,16 +623,15 @@ def setBxCombChgCor(dictionary):
   dictionary[keyBxComb] = set()
 
   for algoName in dictionary[keyAlgoDict]:
-    algo = dictionary[keyAlgoDict][algoName][keyAlgo]
-    for condName in dictionary[keyAlgoDict][algoName][keyCondDict]:
-      condType = dictionary[keyAlgoDict][algoName][keyCondDict][condName].type
+    for condName in dictionary[keyAlgoDict][algoName].conditions:
+      condType = dictionary[keyAlgoDict][algoName].conditions[condName].type
 
       bxSet = []
       # TODO: handle MuonMuonCorrelation
       if condType in (conditionTypes[tmEventSetup.DoubleMuon],
                       conditionTypes[tmEventSetup.TripleMuon],
                       conditionTypes[tmEventSetup.QuadMuon]):
-        for x in dictionary[keyAlgoDict][algoName][keyCondDict][condName].objects:
+        for x in dictionary[keyAlgoDict][algoName].conditions[condName].objects:
           bxSet.append(x.bx)
         bxSet = list(set(bxSet))
         if len(bxSet) == 1:
@@ -649,7 +650,7 @@ def updateExpressionInCondition(algo, cond):
 
   obj = cond.getObjects()[0]
   signal = "ext_cond_bx_" + bx_encode(obj.getBxOffset()) + "(%s)" % obj.getExternalChannelId()
-  algo[keyExpInCond] = algo[keyExpInCond].replace(cond.getName(), signal)
+  algo.expression_in_condition = algo.expression_in_condition.replace(cond.getName(), signal)
 
 
 def setMenuInfo(menu, data, version="0.0.0"):
@@ -701,6 +702,47 @@ def getObjectInfo(obj):
   return o
 
 
+def getConditionInfo(cond, token):
+  condition = Object()
+  condition.name = cond.getName()
+  condition.token = token
+  condition.type = conditionTypes[cond.getType()]
+  condition.type_id = cond.getType()
+  condition.cuts = []
+  condition.template = getDefaultTemplate(condition.type_id, cond)
+
+  condCuts = []
+  for cut in cond.getCuts():
+    o = Object()
+    o.name = cut.getName()
+    o.target = cut.getObjectType()
+    o.type = cut.getCutType()
+    o.min_val = cut.getMinimum().value
+    o.min_idx = cut.getMinimum().index
+    o.max_val = cut.getMaximum().value
+    o.max_idx = cut.getMaximum().index
+    o.data = cut.getData()
+    condition.cuts.append(o)
+
+  condition.objects = []
+  for obj in cond.getObjects():
+    condition.objects.append(getObjectInfo(obj))
+
+  return condition
+
+
+def getAlgorithmInfo(algo):
+  algorithm = Object()
+  algorithm.index = algo.getIndex()
+  algorithm.expression = algo.getExpression()
+  algorithm.expression_in_condition = algo.getExpressionInCondition()
+  algorithm.conditions = {}
+  algorithm.module_id = algo.getModuleId()
+  algorithm.module_index = algo.getModuleIndex()
+  algorithm.rpn_vector = algo.getRpnVector()
+  return algorithm
+
+
 def getReport(menu, version=False):
   data = Object()
   data.reporter = {}
@@ -718,57 +760,27 @@ def getReport(menu, version=False):
 
   algoDict = {}
   for key, algo in data.reporter[keyAlgoMap].iteritems():
-    value = {keyAlgo: algo}
-    value.update( {keyIndex: algo.getIndex()} )
-    value.update( {keyExp: algo.getExpression()} )
-    value.update( {keyExpInCond: algo.getExpressionInCondition()} )
-    value.update( {keyCondDict: {}} )
-    value.update( {keyModuleId: algo.getModuleId()} )
-    value.update( {keyModuleIndex: algo.getModuleIndex()} )
-    algoDict[algo.getName()] =  value
+    algoDict[algo.getName()] = getAlgorithmInfo(algo)
   data.reporter[keyAlgoDict] = algoDict
 
 
   condInUse = []
   for algoName in data.reporter[keyAlgoDict]:
-    algoDict = data.reporter[keyAlgoDict][algoName]
-    for token in algoDict[keyAlgo].getRpnVector():
+    algorithm = data.reporter[keyAlgoDict][algoName]
+    for token in algorithm.rpn_vector:
       if tmGrammar.isGate(token): continue
 
       cond_token = token
       cond = data.reporter[keyCondMap][cond_token]
       if cond.getType() == tmEventSetup.Externals:
-        updateExpressionInCondition(algoDict, cond)
+        updateExpressionInCondition(algorithm, cond)
         continue
 
       if cond_token in condInUse: continue
       condInUse.append(cond_token)
 
-      condition = Object()
-      condition.name = cond.getName()
-      condition.token = token
-      condition.type = conditionTypes[cond.getType()]
-      condition.type_id = cond.getType()
-      condition.cuts = []
-      condition.template = getDefaultTemplate(condition.type_id, cond)
-      algoDict[keyCondDict][condition.name] = condition
-
-      condCuts = []
-      for cut in cond.getCuts():
-        o = Object()
-        o.name = cut.getName()
-        o.target = cut.getObjectType()
-        o.type = cut.getCutType()
-        o.min_val = cut.getMinimum().value
-        o.min_idx = cut.getMinimum().index
-        o.max_val = cut.getMaximum().value
-        o.max_idx = cut.getMaximum().index
-        o.data = cut.getData()
-        condition.cuts.append(o)
-
-      condition.objects = []
-      for obj in cond.getObjects():
-        condition.objects.append(getObjectInfo(obj))
+      condition = getConditionInfo(cond, cond_token)
+      algorithm.conditions[condition.name] = condition
 
       if condition.type_id in ObjectCondition:
         if condition.type_id in MuonCondition:
@@ -789,7 +801,7 @@ def getReport(menu, version=False):
           cutDict = objDict.cuts
 
           if condition.type_id in MuonCondition:
-            getMuonCondition(ii, muCondDict, cutDict, condCuts)
+            getMuonCondition(ii, muCondDict, cutDict, condition.cuts)
 
           elif condition.type_id in CaloCondition:
             getCaloCondition(ii, caloCondDict, cutDict)
@@ -805,8 +817,6 @@ def getReport(menu, version=False):
         combination = tmEventSetup.getObjectCombination(cond.getObjects()[0].getType(), cond.getObjects()[1].getType())
         if combination == tmEventSetup.MuonMuonCombination:
           condDict[keyType] = tmEventSetup.MuonMuonCorrelation
-          print condDict[keyObjType]
-          print condDict[keyConditionTemplates]
           corrCondDict = condDict[keyConditionTemplates][keyMuonMuonCorrelationConditionDict]
 
         elif combination == tmEventSetup.MuonEsumCombination:
@@ -831,18 +841,17 @@ def getReport(menu, version=False):
 
 
   for algoName in data.reporter[keyAlgoDict]:
-    algo = data.reporter[keyAlgoDict][algoName][keyAlgo]
-    for condName in data.reporter[keyAlgoDict][algoName][keyCondDict]:
-      condType = data.reporter[keyAlgoDict][algoName][keyCondDict][condName].type
+    for condName in data.reporter[keyAlgoDict][algoName].conditions:
+      condType = data.reporter[keyAlgoDict][algoName].conditions[condName].type
       data.reporter[keyTriggerGroups][condType][keyNBits] += 1
-      value = {keyIndex: data.reporter[keyAlgoDict][algoName][keyIndex]}
+      value = {keyIndex: data.reporter[keyAlgoDict][algoName].index}
       value.update( {keyAlgoName: algoName} )
       data.reporter[keyTriggerGroups][condType][keyBits].append(value)
 
   data.reporter[keyNBitsSorted] = sortDictByKey(data.reporter[keyTriggerGroups],
                                                 keyNBits, True)
-  data.reporter[keyIndexSorted] = sortDictByKey(data.reporter[keyAlgoDict],
-                                                keyIndex, False)
+  data.reporter[keyIndexSorted] = sortDictByIndex(data.reporter[keyAlgoDict],
+                                                  False)
   n = 0
   for tg in data.reporter[keyTriggerGroups]:
     n += data.reporter[keyTriggerGroups][tg][keyNBits]
@@ -850,7 +859,7 @@ def getReport(menu, version=False):
 
   condList = []
   for algoName in data.reporter[keyIndexSorted]:
-    condList.extend(data.reporter[keyAlgoDict][algoName][keyCondDict].keys())
+    condList.extend(data.reporter[keyAlgoDict][algoName].conditions.keys())
   data.reporter[keyConditionSet] = set(condList)
 
   setBxCombChgCor(data.reporter)

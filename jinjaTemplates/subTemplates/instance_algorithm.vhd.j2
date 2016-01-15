@@ -2,7 +2,7 @@
 {%- block condLoop %}
 {%- if algoIndex in menu.reporter['m2a'][iMod].values() %}
 {%- set localAlgoIndex = menu.reporter['a2m'][algoIndex][1] %}
-{{algoName}} <= {{algoDict['expInCond']|lower }};
+{{algoName}} <= {{algoDict.expression_in_condition|lower }};
 algo({{localAlgoIndex|d}}) <= {{algoName}};
 {%- endif %}
 {%- endblock condLoop %}
