@@ -18,10 +18,6 @@ keyScaleMap = "scaleMap"
 keyConditionSet = "conditionSet"
 keyTriggerGroups = "TriggerGroups"
 keyCondMap = "condMap"
-
-keyCutDict = "cutDict"
-keyObjList = "objList"
-
 keyBxComb = "bxComb"
 
 
@@ -36,22 +32,11 @@ keyModuleIndex = "moduleIndex"
 keyCondDict = "condDict"
 
 
-# keys for condDict
-#   reporter[keyAlgoDict][<algoName>][keyCondDict][<condName>]
-keyCondition = "condition"
-keyObjType = "objType"
-keyTriggerGroup = "TriggerGroup"
-keyCond = "cond"
 keyType = "type"
-keyConditionTemplates = "ConditionTemplates"
 
 
 # keys for template
 #  reporter[keyAlgoDict][<algoName>][keyCondDict][<condName>][keyConditionTemplates]
-keyMuonConditionDict = "muon_condition_dict"
-keyCaloConditionDict = "calo_condition_dict"
-keyEsumsConditionDict = "esums_condition_dict"
-keyEsumsConditionDict = "esums_condition_dict"
 keyMuonMuonCorrelationConditionDict = "muon_muon_correlation_condition_dict"
 keyMuonEsumCorrelationConditionDict = "muon_esum_correlation_condition_dict"
 keyCaloMuonCorrelationConditionDict = "calo_muon_correlation_condition_dict"
@@ -190,44 +175,7 @@ _objectTypes[tmEventSetup.EXT] = tmGrammar.EXT
 
 objectTypes = tuple(_objectTypes)
 
-
 # list of cut types: esCutType enum in ../tmEventSetup/esTypes.hh
-
-
-# template keywords
-EtaFullRange = "EtaFullRange"
-EtaW1UpperLimits = "EtaW1UpperLimits"
-EtaW1LowerLimits = "EtaW1LowerLimits"
-EtaW2Ignore = "EtaW2Ignore"
-EtaW2UpperLimits = "EtaW2UpperLimits"
-EtaW2LowerLimits = "EtaW2LowerLimits"
-
-PhiFullRange = "PhiFullRange"
-PhiW1UpperLimits = "PhiW1UpperLimits"
-PhiW1LowerLimits = "PhiW1LowerLimits"
-PhiW2Ignore = "PhiW2Ignore"
-PhiW2UpperLimits = "PhiW2UpperLimits"
-PhiW2LowerLimits = "PhiW2LowerLimits"
-
-PhiW1UpperLimit = "PhiW1UpperLimit"
-PhiW1LowerLimit = "PhiW1LowerLimit"
-PhiW2UpperLimit = "PhiW2UpperLimit"
-PhiW2LowerLimit = "PhiW2LowerLimit"
-
-DiffEtaUpperLimit = "DiffEtaUpperLimit"
-DiffEtaLowerLimit = "DiffEtaLowerLimit"
-DiffPhiUpperLimit = "DiffPhiUpperLimit"
-DiffPhiLowerLimit = "DiffPhiLowerLimit"
-
-PtThresholds = "PtThresholds"
-RequestedCharges = "RequestedCharges"
-QualityLuts = "QualityLuts"
-IsolationLuts = "IsolationLuts"
-RequestedChargeCorrelation = "RequestedChargeCorrelation"
-EtThreshold = "EtThreshold"
-EtThresholds = "EtThresholds"
-IsoLuts = "IsoLuts"
-
 
 
 # -----------------------------------------------------------------------------
@@ -245,14 +193,6 @@ def sortDictByKey(iDict, iKey, reverse):
 
 def sortDictByIndex(iDict, reverse):
   return sorted(iDict, key=lambda x: iDict[x].index, reverse=reverse)
-
-
-def getCuts(cutDict, cutType):
-  rc = []
-  for c in cutDict:
-    if cutDict[c].type == cutType:
-      rc.append(cutDict[c])
-  return rc
 
 
 def bx_encode(value):
@@ -527,82 +467,6 @@ def setEsumTemplate(condition):
   condition.template = template
 
 
-def getObjectTemplate(index):
-  logging.debug(index)
-
-  template = {}
-
-  ####################     Common Dictionaries     ####################
-  EtaRangeDict = {
-    EtaFullRange:     [ 'false', 'false', 'false', 'false' ],
-    EtaW1UpperLimits: [ 0, 0, 0, 0 ],
-    EtaW1LowerLimits: [ 0, 0, 0, 0 ],
-    EtaW2Ignore:      [ 'false', 'false', 'false', 'false' ],
-    EtaW2UpperLimits: [ 0, 0, 0, 0 ],
-    EtaW2LowerLimits: [ 0, 0, 0, 0 ],
-  }
-
-  PhiRangeDict = {
-    PhiFullRange:     [ 'false', 'false', 'false', 'false' ],
-    PhiW1UpperLimits: [ 0, 0, 0, 0 ],
-    PhiW1LowerLimits: [ 0, 0, 0, 0 ],
-    PhiW2Ignore:      [ 'false', 'false', 'false', 'false' ],
-    PhiW2UpperLimits: [ 0, 0, 0, 0 ],
-    PhiW2LowerLimits: [ 0, 0, 0, 0 ],
-  }
-
-  EtaPhiDiffDict = {
-    DiffEtaUpperLimit: 0,
-    DiffEtaLowerLimit: 0,
-    DiffPhiUpperLimit: 0,
-    DiffPhiLowerLimit: 0,
-  }
-
-
-  if index in MuonCondition:
-    logging.debug("MuonCondition")
-
-    template[keyMuonConditionDict] = {
-      PtThresholds:               [ 0, 0, 0, 0 ],
-      RequestedCharges:           [ "ign","ign","ign","ign" ],
-      QualityLuts:                [ 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF ],
-      IsolationLuts:              [ 0xF, 0xF, 0xF, 0xF ],
-      RequestedChargeCorrelation: "ig",
-    }
-    for dct in [EtaRangeDict, PhiRangeDict, EtaPhiDiffDict]:
-      template[keyMuonConditionDict].update(dct)
-
-  elif index in CaloCondition:
-    logging.debug("CaloCondition")
-
-    template[keyCaloConditionDict] = {
-      EtThresholds: [ 0, 0, 0, 0 ],
-      IsoLuts:      [ 0xF, 0xF, 0xF, 0xF ],
-      #IsoLuts:      [ 0xF, 0xF, 0xF, 0xF ],
-    }
-    for dct in [EtaRangeDict,  PhiRangeDict, EtaPhiDiffDict]:
-      template[keyCaloConditionDict].update(dct)
-
-  elif index in EsumCondition:
-    logging.debug("EsumCondition")
-
-    template[keyEsumsConditionDict] = {
-      EtThreshold:      [ "0" ],
-      PhiFullRange:     [ 'false' ],
-      PhiW1UpperLimits: [ 0 ],
-      PhiW1LowerLimits: [ 0 ],
-      PhiW2Ignore:      [ 'false' ],
-      PhiW2UpperLimits: [ 0 ],
-      PhiW2LowerLimits: [ 0 ],
-    }
-
-  else:
-    logging.error("Unknown condition: %s" % index)
-    raise NotImplementedError
-
-  return template
-
-
 def getMuonMuonCorrelationTemplate():
   logging.debug("getMuonMuonCorrelationTemplate")
 
@@ -710,158 +574,6 @@ def getCorrelationTemplate(index):
     raise NotImplementedError
 
 
-def getDefaultTemplate(index, condition):
-  logging.debug(index)
-
-  if index in ObjectCondition:
-    return getObjectTemplate(index)
-
-  elif index in CorrelationCondition:
-    return getCorrelationTemplate(index)
-
-  elif index == tmEventSetup.InvariantMass:
-    return getInvariantMassTemplate(index, condition)
-
-  else:
-    logging.error("Unknown condition: %s" % index)
-    raise NotImplementedError
-
-
-def getObjectType(condName):
-  logging.debug(condName)
-
-  objectType = []
-  for objType in objectTypes:
-    if objType in condName:
-      objectType.append(objType)
-
-  if len(objectType) == 1:
-    return objectType[0]
-
-  else:
-    for ii in CorrelationCondition:
-      if _conditionTypes[ii] in condName:
-        return _conditionTypes[ii]
-    if _conditionTypes[tmEventSetup.InvariantMass] in condName:
-      return _conditionTypes[tmEventSetup.InvariantMass]
-
-    logging.error("Unknown condition: %s" % condName)
-    raise NotImplementedError
-
-
-def setEtaCuts(ii, condDict, cutDict):
-  EtaCuts = getCuts(cutDict, tmEventSetup.Eta)
-  nEtaCuts = len(EtaCuts)
-  if nEtaCuts == 0:
-    condDict[EtaFullRange][ii] = 'true'
-
-  else:
-    condDict[EtaW1UpperLimits][ii] = EtaCuts[0].max_idx
-    condDict[EtaW1LowerLimits][ii] = EtaCuts[0].min_idx
-
-    if nEtaCuts == 1:
-      condDict[EtaW2Ignore][ii] = 'true'
-
-    elif nEtaCuts == 2:
-      condDict[EtaW2UpperLimits][ii] = EtaCuts[1].max_idx
-      condDict[EtaW2LowerLimits][ii] = EtaCuts[1].min_idx
-
-
-def setPhiCuts(ii, condDict, cutDict):
-  PhiCuts = getCuts(cutDict, tmEventSetup.Phi)
-  nPhiCuts = len(PhiCuts)
-  if nPhiCuts == 0:
-    condDict[PhiFullRange][ii] = 'true'
-
-  else:
-    condDict[PhiW1UpperLimits][ii] = PhiCuts[0].max_idx
-    condDict[PhiW1LowerLimits][ii] = PhiCuts[0].min_idx
-
-    if nPhiCuts == 1:
-      condDict[PhiW2Ignore][ii] = 'true'
-
-    elif nPhiCuts == 2:
-      condDict[PhiW2UpperLimits][ii] = PhiCuts[1].max_idx
-      condDict[PhiW2LowerLimits][ii] = PhiCuts[1].min_idx
-
-
-def setDeltaEtaCuts(ii, condDict, cutDict):
-  DeltaEtaCuts = getCuts(cutDict, tmEventSetup.DeltaEta)
-  nDeltaEtaCuts = len(DeltaEtaCuts)
-
-  if nDeltaEtaCuts == 1:
-    condDict[DiffEtaUpperLimit][ii] = DeltaEtaCuts[0].max_idx
-    condDict[DiffEtaLowerLimit][ii] = DeltaEtaCuts[0].min_idx
-
-
-def setDeltaPhiCuts(ii, condDict, cutDict):
-  DeltaPhiCuts = getCuts(cutDict, tmEventSetup.DeltaPhi)
-  nDeltaPhiCuts = len(DeltaPhiCuts)
-
-  if nDeltaPhiCuts == 1:
-    condDict[DiffPhiUpperLimit][ii] = DeltaPhiCuts[0].max_idx
-    condDict[DiffPhiLowerLimit][ii] = DeltaPhiCuts[0].min_idx
-
-
-def getMuonCondition(ii, condDict, cutDict, condCuts):
-  condDict[PtThresholds][ii] = getCuts(cutDict, tmEventSetup.Threshold)[0].min_idx
-
-  array = []
-  for c in cutDict:
-    x = cutDict[c].type
-    if x == tmEventSetup.Threshold:
-      array.append(cutDict[c].min_idx)
-  assert getCuts(cutDict, tmEventSetup.Threshold)[0].min_idx == array[0]
-
-  setEtaCuts(ii, condDict, cutDict)
-  setPhiCuts(ii, condDict, cutDict)
-  setDeltaEtaCuts(ii, condDict, cutDict)
-  setDeltaPhiCuts(ii, condDict, cutDict)
-
-  ChargeCuts = getCuts(cutDict, tmEventSetup.Charge)
-  nChargeCuts = len(ChargeCuts)
-  if nChargeCuts:
-    condDict[RequestedCharges][ii] = chargeFormat(ChargeCuts[0].data)
-
-  QualityCuts = getCuts(cutDict, tmEventSetup.Quality)
-  nQualityCuts = len(QualityCuts)
-  if nQualityCuts == 1:
-    condDict[QualityLuts][ii] = QualityCuts[0].data
-
-  IsolationCuts = getCuts(cutDict, tmEventSetup.Isolation)
-  nIsolationCuts = len(IsolationCuts)
-  if nIsolationCuts == 1:
-    condDict[IsolationLuts][ii] = IsolationCuts[0].data
-
-  nCondCuts = len(condCuts)
-  if nCondCuts == 0:
-    pass
-  elif nCondCuts == 1:
-    condDict[RequestedChargeCorrelation] = condCuts[0][keyData]
-  else:
-    raise NotImplementedError
-
-
-def getCaloCondition(ii, condDict, cutDict):
-  condDict[EtThresholds][ii] = getCuts(cutDict, tmEventSetup.Threshold)[0].min_idx
-
-  setEtaCuts(ii, condDict, cutDict)
-  setPhiCuts(ii, condDict, cutDict)
-  setDeltaEtaCuts(ii, condDict, cutDict)
-  setDeltaPhiCuts(ii, condDict, cutDict)
-
-  IsoCuts = getCuts(cutDict, tmEventSetup.Isolation)
-  nIsoCuts = len(IsoCuts)
-  if nIsoCuts == 1:
-    condDict[IsoLuts][ii] = IsoCuts[0].data
-
-
-def getEsumCondition(ii, condDict, cutDict):
-  condDict[EtThreshold][ii] = getCuts(cutDict, tmEventSetup.Threshold)[0].min_idx
-
-  setPhiCuts(ii, condDict, cutDict)
-
-
 def setBxCombChgCor(dictionary):
   dictionary[keyBxComb] = set()
 
@@ -952,20 +664,11 @@ def getConditionInfo(cond, token):
   condition.type = conditionTypes[cond.getType()]
   condition.type_id = cond.getType()
   condition.cuts = []
-  condition.template = getDefaultTemplate(condition.type_id, cond)
+  condition.template = None
 
   condCuts = []
   for cut in cond.getCuts():
-    o = Object()
-    o.name = cut.getName()
-    o.target = cut.getObjectType()
-    o.type = cut.getCutType()
-    o.min_val = cut.getMinimum().value
-    o.min_idx = cut.getMinimum().index
-    o.max_val = cut.getMaximum().value
-    o.max_idx = cut.getMaximum().index
-    o.data = cut.getData()
-    condition.cuts.append(o)
+    condition.cuts.append(getCutInfo(cut))
 
   condition.objects = []
   for obj in cond.getObjects():
@@ -990,8 +693,6 @@ def getReport(menu, version=False):
   data = Object()
   data.reporter = {}
 
-  setMenuInfo(menu, data, version)
-
   triggerGroups = {}
   for key in conditionTypes:
     triggerGroups[key] = {keyNBits: 0, keyBits: []}
@@ -1001,11 +702,12 @@ def getReport(menu, version=False):
   data.reporter[keyCondMap] = menu.getConditionMapPtr()
   data.reporter[keyScaleMap] = menu.getScaleMapPtr()
 
+  setMenuInfo(menu, data, version)
+
   algoDict = {}
   for key, algo in data.reporter[keyAlgoMap].iteritems():
     algoDict[algo.getName()] = getAlgorithmInfo(algo)
   data.reporter[keyAlgoDict] = algoDict
-
 
   condInUse = []
   for algoName in data.reporter[keyAlgoDict]:
@@ -1013,48 +715,30 @@ def getReport(menu, version=False):
     for token in algorithm.rpn_vector:
       if tmGrammar.isGate(token): continue
 
-      cond_token = token
-      cond = data.reporter[keyCondMap][cond_token]
+      cond = data.reporter[keyCondMap][token]
       if cond.getType() == tmEventSetup.Externals:
         updateExpressionInCondition(algorithm, cond)
         continue
 
-      if cond_token in condInUse: continue
-      condInUse.append(cond_token)
+      if token in condInUse: continue
+      condInUse.append(token)
 
-      condition = getConditionInfo(cond, cond_token)
+      condition = getConditionInfo(cond, token)
       algorithm.conditions[condition.name] = condition
 
       if condition.type_id in ObjectCondition:
         if condition.type_id in MuonCondition:
-          muCondDict = condition.template[keyMuonConditionDict]
+          setMuonTemplate(condition)
 
         elif condition.type_id in CaloCondition:
-          caloCondDict = condition.template[keyCaloConditionDict]
+          setCalorimeterTemplate(condition)
 
         elif condition.type_id in EsumCondition:
-          esumsCondDict = condition.template[keyEsumsConditionDict]
+          setEsumTemplate(condition)
 
         else:
-          logging.error("Unknown condition: %s" % condition.type)
+          logging.error("unknown condition: %s" % condition.type)
           raise NotImplementedError
-
-        for ii in range(len(condition.objects)):
-          objDict = condition.objects[ii]
-          cutDict = objDict.cuts
-
-          if condition.type_id in MuonCondition:
-            setMuonTemplate(condition)
-
-          elif condition.type_id in CaloCondition:
-            setCalorimeterTemplate(condition)
-
-          elif condition.type_id in EsumCondition:
-            setEsumTemplate(condition)
-
-          else:
-            logging.error("unknown condition: %s" % condDict[keyType])
-            raise NotImplementedError
 
       else:
         combination = tmEventSetup.getObjectCombination(cond.getObjects()[0].getType(), cond.getObjects()[1].getType())
