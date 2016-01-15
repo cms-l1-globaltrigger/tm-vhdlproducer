@@ -284,6 +284,124 @@ def chargeFormat(ch):
   return charge
 
 
+def getCalorimeterTemplate():
+  logging.debug("getCalorimeterTemplate")
+  template = Object()
+
+  template.Thresholds = [ 0, 0, 0, 0 ]
+
+  template.EtaFullRange = [ 'false', 'false', 'false', 'false' ]
+  template.EtaW1LowerLimits = [ 0, 0, 0, 0 ]
+  template.EtaW1UpperLimits = [ 0, 0, 0, 0 ]
+
+  template.EtaW2Ignore = [ 'false', 'false', 'false', 'false' ]
+  template.EtaW2LowerLimits = [ 0, 0, 0, 0 ]
+  template.EtaW2UpperLimits = [ 0, 0, 0, 0 ]
+
+  template.PhiFullRange = [ 'false', 'false', 'false', 'false' ]
+  template.PhiW1LowerLimits = [ 0, 0, 0, 0 ]
+  template.PhiW1UpperLimits = [ 0, 0, 0, 0 ]
+
+  template.PhiW2Ignore =      [ 'false', 'false', 'false', 'false' ]
+  template.PhiW2LowerLimits = [ 0, 0, 0, 0 ]
+  template.PhiW2UpperLimits = [ 0, 0, 0, 0 ]
+
+  template.DiffEtaUpperLimit = 0
+  template.DiffEtaLowerLimit = 0
+  template.DiffPhiUpperLimit = 0
+  template.DiffPhiLowerLimit = 0
+
+  template.IsolationLUTs = [ 0xF, 0xF, 0xF, 0xF ]
+
+  return template
+
+
+def setThreshold(template, index, cuts):
+  array = []
+  for name in cuts:
+    if cuts[name].type == tmEventSetup.Threshold:
+      array.append(cuts[name])
+
+  if len(array) != 1:
+    raise NotImplementedError
+
+  template.Thresholds[index] = array[0].min_idx
+
+
+def setEtaRange(template, index, cuts):
+  array = []
+  for name in cuts:
+    if cuts[name].type == tmEventSetup.Eta:
+      array.append(cuts[name])
+
+  n = len(array)
+  if n == 0:
+    template.EtaFullRange[index] = 'true'
+
+  else:
+    template.EtaW1LowerLimits[index] = array[0].min_idx
+    template.EtaW1UpperLimits[index] = array[0].max_idx
+
+    if n == 1:
+      template.EtaW2Ignore[index] = 'true'
+
+    elif n == 2:
+      template.EtaW2LowerLimits[index] = array[1].min_idx
+      template.EtaW2UpperLimits[index] = array[1].max_idx
+
+    else:
+      raise NotImplementedError
+
+
+def setPhiRange(template, index, cuts):
+  array = []
+  for name in cuts:
+    if cuts[name].type == tmEventSetup.Phi:
+      array.append(cuts[name])
+
+  n = len(array)
+  if n == 0:
+    template.PhiFullRange[index] = 'true'
+
+  else:
+    template.PhiW1LowerLimits[index] = array[0].min_idx
+    template.PhiW1UpperLimits[index] = array[0].max_idx
+
+    if n == 1:
+      template.PhiW2Ignore[index] = 'true'
+
+    elif n == 2:
+      template.PhiW2LowerLimits[index] = array[1].min_idx
+      template.PhiW2UpperLimits[index] = array[1].max_idx
+
+    else:
+      raise NotImplementedError
+
+
+def setIsolationLUT(template, index, cuts):
+  array = []
+  for name in cuts:
+    if cuts[name].type == tmEventSetup.Isolation:
+      array.append(cuts[name])
+
+  if len(array) > 1:
+    raise NotImplementedError
+
+  elif len(array) == 1:
+    template.IsolationLUTs[index] = array[0].data
+
+
+def setCalorimeterTemplate(condition):
+  template = getCalorimeterTemplate()
+  for ii in range(len(condition.objects)):
+    cuts = condition.objects[ii].cuts
+    setThreshold(template, ii, cuts)
+    setEtaRange(template, ii, cuts)
+    setPhiRange(template, ii, cuts)
+    setIsolationLUT(template, ii, cuts)
+  condition.template = template
+
+
 def getObjectTemplate(index):
   logging.debug(index)
 
@@ -805,6 +923,7 @@ def getReport(menu, version=False):
 
           elif condition.type_id in CaloCondition:
             getCaloCondition(ii, caloCondDict, cutDict)
+            setCalorimeterTemplate(condition)
 
           elif condition.type_id in EsumCondition:
             getEsumCondition(ii, esumsCondDict, cutDict)

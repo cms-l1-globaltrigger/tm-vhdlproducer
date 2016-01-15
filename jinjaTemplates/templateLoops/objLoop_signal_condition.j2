@@ -1,10 +1,11 @@
-{%-  extends "templateLoops/condLoop.j2" %}
+{%- extends "templateLoops/condLoop.j2" %}
 {%- block objLoop %}
-    {#-%-set conditionName = condName | alpha%#}
-    {%- set conditionName = condName%}
-    {%- if conditionName not in conditionSet %}
-      {%- if conditionSet.append(conditionName)%}{%- endif %}
+  {%- set conditionName = condName%}
+  {%- if conditionName not in conditionSet %}
+    {%- if conditionSet.append(conditionName)%}
     {%- endif %}
-{%- block instance_signal_condition scoped%}
-{%- endblock instance_signal_condition%}
+  {%- endif %}
+  {%- block instance_signal_condition scoped%}
+  {%- endblock instance_signal_condition%}
 {%- endblock %}
+{# eof #}

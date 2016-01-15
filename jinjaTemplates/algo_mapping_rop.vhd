@@ -55,35 +55,32 @@ a_a_f <= algo_after_finor_mask;
 
 algo_before_prescaler_rop_int <= (
 {%- for algoName in menu.reporter['index_sorted'] %}
-{%- set algoDict = menu.reporter['algoDict'][algoName] %}
-{%- set algoIndex = algoDict.index %}
-{%- if algoIndex in menu.reporter['m2a'][iMod].values()%}
-{%- set localAlgoIndex = menu.reporter['a2m'][algoIndex][1] %}
-{{algoIndex}} => a_b_p({{localAlgoIndex}}),
-{%-endif%}
-{%-endfor%}
+  {%- set algorithm = menu.reporter['algoDict'][algoName] %}
+  {%- if algorithm.index in menu.reporter['m2a'][iMod].values() %}
+    {%- set localAlgoIndex = menu.reporter['a2m'][algorithm.index][1] %}
+{{algorithm.index}} => a_b_p({{localAlgoIndex}}),
+  {%- endif %}
+{%- endfor %}
 others => '0');
 
 algo_after_prescaler_rop_int <= (
 {%- for algoName in menu.reporter['index_sorted'] %}
-{%- set algoDict = menu.reporter['algoDict'][algoName] %}
-{%- set algoIndex = algoDict.index %}
-{%- if algoIndex in menu.reporter['m2a'][iMod].values()%}
-{%- set localAlgoIndex = menu.reporter['a2m'][algoIndex][1] %}
-{{algoIndex}} => a_a_p({{localAlgoIndex}}),
-{%-endif%}
-{%-endfor%}
+  {%- set algorithm = menu.reporter['algoDict'][algoName] %}
+  {%- if algorithm.index in menu.reporter['m2a'][iMod].values() %}
+    {%- set localAlgoIndex = menu.reporter['a2m'][algorithm.index][1] %}
+{{algorithm.index}} => a_a_p({{localAlgoIndex}}),
+  {%- endif %}
+{%- endfor %}
 others => '0');
 
 algo_after_finor_mask_rop_int <= (
 {%- for algoName in menu.reporter['index_sorted'] %}
-{%- set algoDict = menu.reporter['algoDict'][algoName] %}
-{%- set algoIndex = algoDict.index %}
-{%- if algoIndex in menu.reporter['m2a'][iMod].values()%}
-{%- set localAlgoIndex = menu.reporter['a2m'][algoIndex][1] %}
-{{algoIndex}} => a_a_f({{localAlgoIndex}}),
-{%-endif%}
-{%-endfor%}
+  {%- set algorithm = menu.reporter['algoDict'][algoName] %}
+  {%- if algorithm.index in menu.reporter['m2a'][iMod].values() %}
+    {%- set localAlgoIndex = menu.reporter['a2m'][algorithm.index][1] %}
+{{algorithm.index}} => a_a_f({{localAlgoIndex}}),
+  {%- endif %}
+{%- endfor %}
 others => '0');
 
 {#-{AlgoIndexRop:d} => a_a_f({AlgoIndexGtl:d}),#}

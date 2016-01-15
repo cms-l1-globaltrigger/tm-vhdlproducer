@@ -1,5 +1,5 @@
 {%- extends "templateLoops/condLoop.j2" %}
-  {%- block objLoop%}
+{%- block objLoop%}
   {#
   ############
   {{signalEtaPhiList}}
@@ -7,21 +7,20 @@
   ###############
   #}
   {%- if condName=="wsc"%} {# WscCondition not set yet --- to be changed  #}
-  {%- set objType = algoDict['condDict'][condName]['objType'] %} 
-  {%- if not signalEtaPhiList.has_key(objType)%}
+    {%- set objType = algoDict['condDict'][condName]['objType'] %} 
+    {%- if not signalEtaPhiList.has_key(objType)%}
       {# ---------------------- OBJTYPE ADDED{{objType}}  #} 
-      {%-if signalEtaPhiList.__setitem__(objType,[]) %} {%-endif %}
-  {%- set nObj = condDict['objList'] | count %}
-  {%- for iObj in range(nObj) %}
-    {%- set objDict = condDict['objList'][iObj] %}
-          {%-if not objDict['Bx'] in signalEtaPhiList[objType] %}
-            {%-if signalEtaPhiList[objType].append(objDict['Bx'])%}
-            {%-endif%}
+      {%-if signalEtaPhiList.__setitem__(objType,[]) %}
+      {%-endif %}
+      {%- set nObj = condDict['objList'] | count %}
+      {%- for iObj in range(nObj) %}
+        {%- set objDict = condDict['objList'][iObj] %}
+        {%-if not objDict['Bx'] in signalEtaPhiList[objType] %}
+          {%-if signalEtaPhiList[objType].append(objDict['Bx'])%}
           {%-endif%}
-  {%-endfor%}
-  {%- endif%}
+        {%-endif%}
+      {%-endfor%}
+    {%- endif%}
   {%- endif%}
 {%- endblock objLoop %}
-
-
-
+{# eof #}

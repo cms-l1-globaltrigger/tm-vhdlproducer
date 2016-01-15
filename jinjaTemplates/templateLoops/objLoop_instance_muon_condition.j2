@@ -1,11 +1,11 @@
 {%- extends "templateLoops/condLoop.j2" %}
 {%- block objLoop %}
-  {%- set condition = algoDict.conditions[condName]%}
+  {%- set condition = algoDict.conditions[condName] %}
   {%- if condition.type in (
     "SingleMuon", "DoubleMuon", "TripleMuon", "QuadMuon") %}
-    {%- block instance_muon_condition scoped%}
+    {%- block instance_muon_condition scoped %}
       THIS SHOULD NOT APPEAR
-    {%- endblock instance_muon_condition%}
-  {%- endif%}
+    {%- endblock instance_muon_condition %}
+  {%- endif %}
 {%- endblock objLoop %}
 {#- eof #}

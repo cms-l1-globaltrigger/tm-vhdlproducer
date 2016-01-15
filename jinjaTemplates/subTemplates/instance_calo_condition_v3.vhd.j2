@@ -2,19 +2,19 @@
 {%- block instance_calo_condition %}
     {%- set objects = condition.objects %}
     {%- set Bx = objects[0].bx %}
-    {%- set caloCondDict = condition.template['calo_condition_dict']  %}
+    {%- set cuts = condition.template %}
 {{condName|lower}}_i: entity work.calo_conditions_v3
     generic map(NR_{{objects[0].type}}_OBJECTS, {{objects | count}}, {{ objects[0].operator |lower}}, {{objects[0].type}}_TYPE,
-        (X"{{caloCondDict['EtThresholds'][0]|X04}}", X"{{caloCondDict['EtThresholds'][1]|X04}}", X"{{caloCondDict['EtThresholds'][2]|X04}}", X"{{caloCondDict['EtThresholds'][3]|X04}}"),
-        ({{caloCondDict['EtaFullRange'][0]}}, {{caloCondDict['EtaFullRange'][1]}}, {{caloCondDict['EtaFullRange'][2]}}, {{caloCondDict['EtaFullRange'][3]}}),
-        (X"{{caloCondDict['EtaW1UpperLimits'][0]|X04}}", X"{{caloCondDict['EtaW1UpperLimits'][1]|X04}}", X"{{caloCondDict['EtaW1UpperLimits'][2]|X04}}", X"{{caloCondDict['EtaW1UpperLimits'][3]|X04}}"), (X"{{caloCondDict['EtaW1LowerLimits'][0]|X04}}", X"{{caloCondDict['EtaW1LowerLimits'][1]|X04}}", X"{{caloCondDict['EtaW1LowerLimits'][2]|X04}}", X"{{caloCondDict['EtaW1LowerLimits'][3]|X04}}"),
-        ({{caloCondDict['EtaW2Ignore'][0]}}, {{caloCondDict['EtaW2Ignore'][1]}}, {{caloCondDict['EtaW2Ignore'][2]}}, {{caloCondDict['EtaW2Ignore'][3]}}),
-        (X"{{caloCondDict['EtaW2UpperLimits'][0]|X04}}", X"{{caloCondDict['EtaW2UpperLimits'][1]|X04}}", X"{{caloCondDict['EtaW2UpperLimits'][2]|X04}}", X"{{caloCondDict['EtaW2UpperLimits'][3]|X04}}"), (X"{{caloCondDict['EtaW2LowerLimits'][0]|X04}}", X"{{caloCondDict['EtaW2LowerLimits'][1]|X04}}", X"{{caloCondDict['EtaW2LowerLimits'][2]|X04}}", X"{{caloCondDict['EtaW2LowerLimits'][3]|X04}}"),
-        ({{caloCondDict['PhiFullRange'][0]}}, {{caloCondDict['PhiFullRange'][1]}}, {{caloCondDict['PhiFullRange'][2]}}, {{caloCondDict['PhiFullRange'][3]}}),
-        (X"{{caloCondDict['PhiW1UpperLimits'][0]|X04}}", X"{{caloCondDict['PhiW1UpperLimits'][1]|X04}}", X"{{caloCondDict['PhiW1UpperLimits'][2]|X04}}", X"{{caloCondDict['PhiW1UpperLimits'][3]|X04}}"), (X"{{caloCondDict['PhiW1LowerLimits'][0]|X04}}", X"{{caloCondDict['PhiW1LowerLimits'][1]|X04}}", X"{{caloCondDict['PhiW1LowerLimits'][2]|X04}}", X"{{caloCondDict['PhiW1LowerLimits'][3]|X04}}"),
-        ({{caloCondDict['PhiW2Ignore'][0]}}, {{caloCondDict['PhiW2Ignore'][1]}}, {{caloCondDict['PhiW2Ignore'][2]}}, {{caloCondDict['PhiW2Ignore'][3]}}),
-        (X"{{caloCondDict['PhiW2UpperLimits'][0]|X04}}", X"{{caloCondDict['PhiW2UpperLimits'][1]|X04}}", X"{{caloCondDict['PhiW2UpperLimits'][2]|X04}}", X"{{caloCondDict['PhiW2UpperLimits'][3]|X04}}"), (X"{{caloCondDict['PhiW2LowerLimits'][0]|X04}}", X"{{caloCondDict['PhiW2LowerLimits'][1]|X04}}", X"{{caloCondDict['PhiW2LowerLimits'][2]|X04}}", X"{{caloCondDict['PhiW2LowerLimits'][3]|X04}}"),   
-        (X"{{caloCondDict['IsoLuts'][0]|X01}}", X"{{caloCondDict['IsoLuts'][1]|X01}}", X"{{caloCondDict['IsoLuts'][2]|X01}}", X"{{caloCondDict['IsoLuts'][3]|X01}}")
+        (X"{{cuts.Thresholds[0]|X04}}", X"{{cuts.Thresholds[1]|X04}}", X"{{cuts.Thresholds[2]|X04}}", X"{{cuts.Thresholds[3]|X04}}"),
+        ({{cuts.EtaFullRange[0]}}, {{cuts.EtaFullRange[1]}}, {{cuts.EtaFullRange[2]}}, {{cuts.EtaFullRange[3]}}),
+        (X"{{cuts.EtaW1UpperLimits[0]|X04}}", X"{{cuts.EtaW1UpperLimits[1]|X04}}", X"{{cuts.EtaW1UpperLimits[2]|X04}}", X"{{cuts.EtaW1UpperLimits[3]|X04}}"), (X"{{cuts.EtaW1LowerLimits[0]|X04}}", X"{{cuts.EtaW1LowerLimits[1]|X04}}", X"{{cuts.EtaW1LowerLimits[2]|X04}}", X"{{cuts.EtaW1LowerLimits[3]|X04}}"),
+        ({{cuts.EtaW2Ignore[0]}}, {{cuts.EtaW2Ignore[1]}}, {{cuts.EtaW2Ignore[2]}}, {{cuts.EtaW2Ignore[3]}}),
+        (X"{{cuts.EtaW2UpperLimits[0]|X04}}", X"{{cuts.EtaW2UpperLimits[1]|X04}}", X"{{cuts.EtaW2UpperLimits[2]|X04}}", X"{{cuts.EtaW2UpperLimits[3]|X04}}"), (X"{{cuts.EtaW2LowerLimits[0]|X04}}", X"{{cuts.EtaW2LowerLimits[1]|X04}}", X"{{cuts.EtaW2LowerLimits[2]|X04}}", X"{{cuts.EtaW2LowerLimits[3]|X04}}"),
+        ({{cuts.PhiFullRange[0]}}, {{cuts.PhiFullRange[1]}}, {{cuts.PhiFullRange[2]}}, {{cuts.PhiFullRange[3]}}),
+        (X"{{cuts.PhiW1UpperLimits[0]|X04}}", X"{{cuts.PhiW1UpperLimits[1]|X04}}", X"{{cuts.PhiW1UpperLimits[2]|X04}}", X"{{cuts.PhiW1UpperLimits[3]|X04}}"), (X"{{cuts.PhiW1LowerLimits[0]|X04}}", X"{{cuts.PhiW1LowerLimits[1]|X04}}", X"{{cuts.PhiW1LowerLimits[2]|X04}}", X"{{cuts.PhiW1LowerLimits[3]|X04}}"),
+        ({{cuts.PhiW2Ignore[0]}}, {{cuts.PhiW2Ignore[1]}}, {{cuts.PhiW2Ignore[2]}}, {{cuts.PhiW2Ignore[3]}}),
+        (X"{{cuts.PhiW2UpperLimits[0]|X04}}", X"{{cuts.PhiW2UpperLimits[1]|X04}}", X"{{cuts.PhiW2UpperLimits[2]|X04}}", X"{{cuts.PhiW2UpperLimits[3]|X04}}"), (X"{{cuts.PhiW2LowerLimits[0]|X04}}", X"{{cuts.PhiW2LowerLimits[1]|X04}}", X"{{cuts.PhiW2LowerLimits[2]|X04}}", X"{{cuts.PhiW2LowerLimits[3]|X04}}"),   
+        (X"{{cuts.IsolationLUTs[0]|X01}}", X"{{cuts.IsolationLUTs[1]|X01}}", X"{{cuts.IsolationLUTs[2]|X01}}", X"{{cuts.IsolationLUTs[3]|X01}}")
     )
     port map(lhc_clk, {{objects[0].type|lower}}_bx_{{Bx|lower}}, {{condName|lower}});
 {% endblock instance_calo_condition %}

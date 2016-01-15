@@ -1,7 +1,7 @@
-{%-  extends "templateLoops/algoLoop.j2" %}
+{%- extends "templateLoops/algoLoop.j2" %}
 {%- block condLoop %}
-{%- if algoIndex in menu.reporter['m2a'][iMod].values()%}
+  {%- if algoIndex in menu.reporter['m2a'][iMod].values() %}
     signal {{algoName}} : std_logic;
-{%- endif %}
+  {%- endif %}
 {%- endblock %}
-
+{# eof #}
