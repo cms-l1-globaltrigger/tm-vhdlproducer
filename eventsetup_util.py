@@ -233,10 +233,28 @@ def addThresholdTemplate(template, n=4):
   template.Thresholds = [ 0 ] * n
 
 
-def addIsolationTemplate(template, n=4):
+def addIsolationTemplate(template, lut=0xF, n=4):
   logging.debug("addIsolationTemplate")
 
-  template.IsolationLUTs = [ 0xF ] * n
+  template.IsolationLUTs = [ lut ] * n
+
+
+def addQualityTemplate(template, lut=0xFFFF, n=4):
+  logging.debug("addIsolationTemplate")
+
+  template.QualityLUTs = [ lut ] * n
+
+
+def addChargeTemplate(template, n=4):
+  logging.debug("addChargeTemplate")
+
+  template.Charges = [ "ign" ] * n
+
+
+def addChargeCorrelationTemplate(template):
+  logging.debug("addChargeCorrelationTemplate")
+
+  template.ChargeCorrelation = "ig"
 
 
 def addEtaTemplate(template, n=4):
@@ -290,10 +308,9 @@ def getMuonTemplate():
   addIsolationTemplate(template)
   addEtaTemplate(template)
   addPhiTemplate(template)
-
-  template.QualityLUTs = [ 0xFFFF, 0xFFFF, 0xFFFF, 0xFFFF ]
-  template.Charges = [ "ign", "ign", "ign", "ign" ]
-  template.ChargeCorrelation = "ig"
+  addQualityTemplate(template)
+  addChargeTemplate(template)
+  addChargeCorrelationTemplate(template)
 
   template.DiffEtaUpperLimit = 0
   template.DiffEtaLowerLimit = 0
@@ -310,6 +327,53 @@ def getEsumTemplate():
 
   addThresholdTemplate(template, n=1)
   addPhiTemplate(template, n=1)
+
+  return template
+
+
+def getCorrelationTemplate():
+  logging.debug("getCorrelationTemplate")
+
+  template = Object()
+
+  addChargeCorrelationTemplate(template)
+
+  template.objectsInSameBx = 'true'
+
+  template.hasDetaCut = 'false'
+  template.hasDphiCut = 'false'
+  template.hasDrCut = 'false'
+  template.hasMassCut = 'false'
+
+  template.DiffEtaLowerLimit = 0
+  template.DiffEtaUpperLimit = 0
+
+  template.DiffPhiLowerLimit = 0
+  template.DiffPhiUpperLimit = 0
+
+  template.DeltaRUpperLimit = 0
+  template.DeltaRLowerLimit = 0
+
+  template.InvMassUpperLimit = 0
+  template.InvMassLowerLimit = 0
+
+  return template
+
+
+def getObjectTemplate():
+  logging.debug("getObjectTemplate")
+
+  template = Object()
+
+  template.operator = 'true'
+  template.bx = "0"
+
+  addThresholdTemplate(template, n=1)
+  addEtaTemplate(template, n=1)
+  addPhiTemplate(template, n=1)
+  addChargeTemplate(template, n=1)
+  addQualityTemplate(template, n=1)
+  addIsolationTemplate(template, n=1)
 
   return template
 
@@ -421,9 +485,9 @@ def setCharge(template, index, cuts):
 
 def setChargeCorrelation(template, cuts):
   array = []
-  for name in cuts:
-    if cuts[name].type == tmEventSetup.ChargeCorrelation:
-      array.append(cuts[name])
+  for o in cuts:
+    if o.type == tmEventSetup.ChargeCorrelation:
+      array.append(o)
 
   n = len(array)
   if n > 1:
@@ -467,110 +531,83 @@ def setEsumTemplate(condition):
   condition.template = template
 
 
-def getMuonMuonCorrelationTemplate():
-  logging.debug("getMuonMuonCorrelationTemplate")
+def setMuonMuonTemplate(condition):
+  logging.debug("setMuonMuonTemplate")
 
-  template = {}
-  template[keyMuonMuonCorrelationConditionDict] = {}
-  object1 = {}
-  object2 = {}
+  template = getCorrelationTemplate()
+  template.object1 = getObjectTemplate()
+  template.object2 = getObjectTemplate()
 
-  conditionTemplate = {
-    'objectsInSameBx': 'true',
-    'hasDetaCut': 'false',
-    'hasDphiCut': 'false',
-    'hasDrCut': 'false',
-    'hasMassCut': 'false',
-    RequestedChargeCorrelation: "ig",
-    'DiffEtaUpperLimit': 0,
-    'DiffEtaLowerLimit': 0,
-    'DiffPhiUpperLimit': 0,
-    'DiffPhiLowerLimit': 0,
-    'DeltaRUpperLimit': 0,
-    'DeltaRLowerLimit': 0,
-    'InvMassUpperLimit': 0,
-    'InvMassLowerLimit': 0,
-  }
-
-  template[keyMuonMuonCorrelationConditionDict].update(conditionTemplate)
-
-  objectTemplate = {
-    keyOp: 'true',
-    EtThreshold: "0",
-    EtaFullRange:     'false',
-    EtaW1UpperLimits: 0,
-    EtaW1LowerLimits: 0,
-    EtaW2Ignore:      'false',
-    EtaW2UpperLimits: 0,
-    EtaW2LowerLimits: 0,
-    PhiFullRange:     'false',
-    PhiW1UpperLimits: 0,
-    PhiW1LowerLimits: 0,
-    PhiW2Ignore:      'false',
-    PhiW2UpperLimits: 0,
-    PhiW2LowerLimits: 0,
-    RequestedCharges: "ign",
-    QualityLuts:      0xFFFF,
-    IsolationLuts:    0xF,
-    keyBx: "0"
-  }
-
-  object1.update(objectTemplate)
-  object2.update(objectTemplate)
-
-  template[keyMuonMuonCorrelationConditionDict]['obj1'] = object1
-  template[keyMuonMuonCorrelationConditionDict]['obj2'] = object2
-
-  return template
+  condition.template = template
 
 
-def getInvariantMassTemplate(index, condition):
-  logging.info("getInvariantMassTemplate")
+def setMuonEsumTemplate(condition):
+  logging.debug("setMuonEsumTemplate")
 
-  objects = condition.getObjects()
+  template = getCorrelationTemplate()
+  template.object1 = getObjectTemplate()
+  template.object2 = getObjectTemplate()
+
+  condition.template = template
+
+
+def setCaloMuonTemplate(condition):
+  logging.debug("setCaloMuonTemplate")
+
+  template = getCorrelationTemplate()
+  template.object1 = getObjectTemplate()
+  template.object2 = getObjectTemplate()
+
+  condition.template = template
+
+
+def setCaloCaloTemplate(condition):
+  logging.debug("setCaloCaloTemplate")
+
+  template = getCorrelationTemplate()
+  template.object1 = getObjectTemplate()
+  template.object2 = getObjectTemplate()
+
+  condition.template = template
+
+
+def setCaloEsumTemplate(condition):
+  logging.debug("setCaloEsumTemplate")
+
+  template = getCorrelationTemplate()
+  template.object1 = getObjectTemplate()
+  template.object2 = getObjectTemplate()
+
+  condition.template = template
+
+
+def setInvariantMassTemplate(condition):
+  logging.info("setInvariantMassTemplate")
+
+  objects = condition.objects
   if len(objects) != 2:
     logging.error("# of objects != 2")
     raise NotImplementedError
 
-  combination = tmEventSetup.getObjectCombination(objects[0].getType(), objects[1].getType())
+  combination = tmEventSetup.getObjectCombination(objects[0].type_id, objects[1].type_id)
   if combination == tmEventSetup.MuonMuonCombination:
-    return getMuonMuonCorrelationTemplate()
+    setMuonMuonTemplate(condition)
+    condition.type = conditionTypes[tmEventSetup.MuonMuonCorrelation]
 
   elif combination == tmEventSetup.MuonEsumCombination:
-    return getMuonEsumCorrelationTemplate()
+    setMuonEsumTemplate(condition)
 
   elif combination == tmEventSetup.CaloMuonCombination:
-    return getCaloMuonCorrelationTemplate()
+    setCaloMuonTemplate(condition)
 
   elif combination == tmEventSetup.CaloCaloCombination:
-    return getCaloCaloCorrelationTemplate()
+    setCaloCaloTemplate(condition)
 
   elif combination == tmEventSetup.CaloEsumCombination:
-    return getCaloEsumCorrelationTemplate()
+    setCaloEsumTemplate(condition)
 
   else:
     logging.error("Unknown combination: %s" % combination)
-    raise NotImplementedError
-
-
-def getCorrelationTemplate(index):
-  if index == tmEventSetup.MuonMuonCorrelation:
-    return getMuonMuonCorrelationTemplate()
-
-  elif index == tmEventSetup.MuonEsumCorrelation:
-    return getMuonEsumCorrelationTemplate()
-
-  elif index == tmEventSetup.CaloMuonCorrelation:
-    return getCaloMuonCorrelationTemplate()
-
-  elif index == tmEventSetup.CaloCaloCorrelation:
-    return getCaloCaloCorrelationTemplate()
-
-  elif index == tmEventSetup.CaloEsumCorrelation:
-    return getCaloEsumCorrelationTemplate()
-
-  else:
-    logging.error("Unknown condition: %s" % index)
     raise NotImplementedError
 
 
@@ -626,66 +663,67 @@ def setMenuInfo(menu, data, version="0.0.0"):
   return
 
 
-def getCutInfo(cut):
-  o = Object()
-  o.name = cut.getName()
-  o.cut = cut
-  o.target = cut.getObjectType()
-  o.type = cut.getCutType()
-  o.min_val = cut.getMinimum().value
-  o.min_idx = cut.getMinimum().index
-  o.max_val = cut.getMaximum().value
-  o.max_idx = cut.getMaximum().index
-  o.data = cut.getData()
+def getCutInfo(esCut):
+  cut = Object()
+  cut.name = esCut.getName()
+  cut.cut = esCut
+  cut.target = esCut.getObjectType()
+  cut.type = esCut.getCutType()
+  cut.min_val = esCut.getMinimum().value
+  cut.min_idx = esCut.getMinimum().index
+  cut.max_val = esCut.getMaximum().value
+  cut.max_idx = esCut.getMaximum().index
+  cut.data = esCut.getData()
 
-  return o
-
-
-def getObjectInfo(obj):
-  o = Object()
-  o.type = objectTypes[obj.getType()]
-  o.name = obj.getName()
-  o.operator = obj.getComparisonOperator() == 0
-  o.object = obj
-  o.bx = bx_encode(obj.getBxOffset())
-  o.bx_offset = obj.getBxOffset()
-  o.cuts = {}
-
-  for cut in obj.getCuts():
-    o.cuts[cut.getName()] = getCutInfo(cut)
-
-  return o
+  return cut
 
 
-def getConditionInfo(cond, token):
+def getObjectInfo(esObj):
+  object = Object()
+  object.type = objectTypes[esObj.getType()]
+  object.type_id = esObj.getType()
+  object.name = esObj.getName()
+  object.operator = esObj.getComparisonOperator() == 0
+  object.object = esObj
+  object.bx = bx_encode(esObj.getBxOffset())
+  object.bx_offset = esObj.getBxOffset()
+  object.cuts = {}
+
+  for esCut in esObj.getCuts():
+    object.cuts[esCut.getName()] = getCutInfo(esCut)
+
+  return object
+
+
+def getConditionInfo(esCond, token):
   condition = Object()
-  condition.name = cond.getName()
+  condition.name = esCond.getName()
   condition.token = token
-  condition.type = conditionTypes[cond.getType()]
-  condition.type_id = cond.getType()
+  condition.type = conditionTypes[esCond.getType()]
+  condition.type_id = esCond.getType()
   condition.cuts = []
   condition.template = None
 
   condCuts = []
-  for cut in cond.getCuts():
-    condition.cuts.append(getCutInfo(cut))
+  for esCut in esCond.getCuts():
+    condition.cuts.append(getCutInfo(esCut))
 
   condition.objects = []
-  for obj in cond.getObjects():
-    condition.objects.append(getObjectInfo(obj))
+  for esObj in esCond.getObjects():
+    condition.objects.append(getObjectInfo(esObj))
 
   return condition
 
 
-def getAlgorithmInfo(algo):
+def getAlgorithmInfo(esAlgo):
   algorithm = Object()
-  algorithm.index = algo.getIndex()
-  algorithm.expression = algo.getExpression()
-  algorithm.expression_in_condition = algo.getExpressionInCondition()
+  algorithm.index = esAlgo.getIndex()
+  algorithm.expression = esAlgo.getExpression()
+  algorithm.expression_in_condition = esAlgo.getExpressionInCondition()
   algorithm.conditions = {}
-  algorithm.module_id = algo.getModuleId()
-  algorithm.module_index = algo.getModuleIndex()
-  algorithm.rpn_vector = algo.getRpnVector()
+  algorithm.module_id = esAlgo.getModuleId()
+  algorithm.module_index = esAlgo.getModuleIndex()
+  algorithm.rpn_vector = esAlgo.getRpnVector()
   return algorithm
 
 
@@ -705,8 +743,8 @@ def getReport(menu, version=False):
   setMenuInfo(menu, data, version)
 
   algoDict = {}
-  for key, algo in data.reporter[keyAlgoMap].iteritems():
-    algoDict[algo.getName()] = getAlgorithmInfo(algo)
+  for key, esAlgo in data.reporter[keyAlgoMap].iteritems():
+    algoDict[esAlgo.getName()] = getAlgorithmInfo(esAlgo)
   data.reporter[keyAlgoDict] = algoDict
 
   condInUse = []
@@ -715,15 +753,15 @@ def getReport(menu, version=False):
     for token in algorithm.rpn_vector:
       if tmGrammar.isGate(token): continue
 
-      cond = data.reporter[keyCondMap][token]
-      if cond.getType() == tmEventSetup.Externals:
-        updateExpressionInCondition(algorithm, cond)
+      esCond = data.reporter[keyCondMap][token]
+      if esCond.getType() == tmEventSetup.Externals:
+        updateExpressionInCondition(algorithm, esCond)
         continue
 
       if token in condInUse: continue
       condInUse.append(token)
 
-      condition = getConditionInfo(cond, token)
+      condition = getConditionInfo(esCond, token)
       algorithm.conditions[condition.name] = condition
 
       if condition.type_id in ObjectCondition:
@@ -740,31 +778,39 @@ def getReport(menu, version=False):
           logging.error("unknown condition: %s" % condition.type)
           raise NotImplementedError
 
-      else:
-        combination = tmEventSetup.getObjectCombination(cond.getObjects()[0].getType(), cond.getObjects()[1].getType())
+      elif condition.type_id in CorrelationCondition:
+        esObjs = esCond.getObjects()
+        if len(esObjs) != 2:
+          logging.error("# of esObjs != 2")
+          raise NotImplementedError
+
+        combination = tmEventSetup.getObjectCombination(esObjs[0].getType(),
+                                                        esObjs[1].getType())
         if combination == tmEventSetup.MuonMuonCombination:
-          condDict[keyType] = tmEventSetup.MuonMuonCorrelation
-          corrCondDict = condDict[keyConditionTemplates][keyMuonMuonCorrelationConditionDict]
+          setMuonMuonTemplate(condition)
 
         elif combination == tmEventSetup.MuonEsumCombination:
-          condDict[keyType] = tmEventSetup.MuonEsumCorrelation
-          corrCondDict = condDict[keyConditionTemplates][keyMuonEsumCorrelationConditionDict]
+          setMuonEsumTemplate(condition)
 
         elif combination == tmEventSetup.CaloMuonCombination:
-          condDict[keyType] = tmEventSetup.CaloMuonCorrelation
-          corrCondDict = condDict[keyConditionTemplates][keyCaloMuonCorrelationConditionDict]
+          setCaloMuonTemplate(condition)
 
         elif combination == tmEventSetup.CaloCaloCombination:
-          condDict[keyType] = tmEventSetup.CaloCaloCorrelation
-          corrCondDict = condDict[keyConditionTemplates][keyCaloCaloCorrelationConditionDict]
+          setCaloCaloTemplate(condition)
 
         elif combination == tmEventSetup.CaloEsumCombination:
-          condDict[keyType] = tmEventSetup.CaloEsumCorrelation
-          corrCondDict = condDict[keyConditionTemplates][keyCaloEsumCorrelationConditionDict]
+          setCaloEsumTemplate(condition)
 
         else:
           logging.error("Unknown combination: %s" % combination)
           raise NotImplementedError
+
+      elif condition.type_id == tmEventSetup.InvariantMass:
+        setInvariantMassTemplate(condition)
+
+      else:
+        logging.error("Unknown condition: %s" % condition)
+        raise NotImplementedError
 
 
   for algoName in data.reporter[keyAlgoDict]:
