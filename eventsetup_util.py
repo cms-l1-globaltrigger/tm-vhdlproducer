@@ -666,6 +666,7 @@ def setInvariantMassTemplate(condition):
 
   elif combination == tmEventSetup.CaloCaloCombination:
     setCaloCaloTemplate(condition)
+    condition.type = conditionTypes[tmEventSetup.CaloCaloCorrelation]
 
   elif combination == tmEventSetup.CaloEsumCombination:
     setCaloEsumTemplate(condition)
