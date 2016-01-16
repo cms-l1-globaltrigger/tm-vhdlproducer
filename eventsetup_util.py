@@ -328,6 +328,24 @@ def getEsumTemplate():
   return template
 
 
+def getObjectTemplate():
+  logging.debug("getObjectTemplate")
+
+  template = Object()
+
+  template.operator = 'true'
+  template.bx = "0"
+
+  addThresholdTemplate(template, n=1)
+  addEtaTemplate(template, n=1)
+  addPhiTemplate(template, n=1)
+  addChargeTemplate(template, n=1)
+  addQualityTemplate(template, n=1)
+  addIsolationTemplate(template, n=1)
+
+  return template
+
+
 def getCorrelationTemplate():
   logging.debug("getCorrelationTemplate")
 
@@ -354,23 +372,9 @@ def getCorrelationTemplate():
   template.InvMassUpperLimit = 0
   template.InvMassLowerLimit = 0
 
-  return template
-
-
-def getObjectTemplate():
-  logging.debug("getObjectTemplate")
-
-  template = Object()
-
-  template.operator = 'true'
-  template.bx = "0"
-
-  addThresholdTemplate(template, n=1)
-  addEtaTemplate(template, n=1)
-  addPhiTemplate(template, n=1)
-  addChargeTemplate(template, n=1)
-  addQualityTemplate(template, n=1)
-  addIsolationTemplate(template, n=1)
+  template.objects = []
+  template.objects.append(getObjectTemplate())
+  template.objects.append(getObjectTemplate())
 
   return template
 
@@ -494,6 +498,47 @@ def setChargeCorrelation(template, cuts):
     template.ChargeCorrelation = array[0].data
 
 
+def setCorrelation(template, objects, cuts):
+  logging.debug("setCorrelation")
+
+  setChargeCorrelation(template, cuts)
+  template.objectsInSameBx = 'true' if objects[0].bx_offset == objects[1].bx_offset else 'false'
+
+  for o in cuts:
+    x = o.type
+    if x == tmEventSetup.DeltaEta:
+      template.hasDetaCut = 'true'
+      template.DiffEtaLowerLimit = o.min_val
+      template.DiffEtaUpperLimit = o.max_val
+
+    elif x == tmEventSetup.DeltaPhi:
+      template.hasDphiCut = 'true'
+      template.DiffPhiLowerLimit = o.min_val
+      template.DiffPhiUpperLimit = o.max_val
+
+    elif x == tmEventSetup.DeltaR:
+      template.hasDrCut = 'true'
+      template.DeltaRLowerLimit = o.min_val
+      template.DeltaRUpperLimit = o.max_val
+
+    elif x == tmEventSetup.Mass:
+      template.hasMassCut = 'true'
+      template.InvMassLowerLimit = o.min_val
+      template.InvMassUpperLimit = o.max_val
+
+  if template.hasDrCut == 'true':
+    if template.hasDetaCut == 'true': raise NotImplementedError
+    if template.hasDphiCut == 'true': raise NotImplementedError
+    if template.hasMassCut == 'true': raise NotImplementedError
+
+  if template.hasMassCut == 'true':
+    if template.hasDetaCut == 'true': raise NotImplementedError
+    if template.hasDphiCut == 'true': raise NotImplementedError
+    if template.hasDrCut == 'true': raise NotImplementedError
+
+  return template
+
+
 def setCalorimeterTemplate(condition):
   template = getCalorimeterTemplate()
   for ii in range(len(condition.objects)):
@@ -532,8 +577,22 @@ def setMuonMuonTemplate(condition):
   logging.debug("setMuonMuonTemplate")
 
   template = getCorrelationTemplate()
-  template.object1 = getObjectTemplate()
-  template.object2 = getObjectTemplate()
+  setCorrelation(template, condition.objects, condition.cuts)
+
+  for ii in range(len(condition.objects)):
+    tmp = template.objects[ii]
+    obj = condition.objects[ii]
+
+    tmp.operator = 'true' if obj.operator else 'false'
+    tmp.bx = bx_encode(obj.bx_offset)
+
+    cuts = condition.objects[ii].cuts
+    setThreshold(tmp, 0, cuts)
+    setEtaRange(tmp, 0, cuts)
+    setPhiRange(tmp, 0, cuts)
+    setCharge(tmp, 0, cuts)
+    setQualityLUT(tmp, 0, cuts)
+    setIsolationLUT(tmp, 0, cuts)
 
   condition.template = template
 
@@ -562,8 +621,20 @@ def setCaloCaloTemplate(condition):
   logging.debug("setCaloCaloTemplate")
 
   template = getCorrelationTemplate()
-  template.object1 = getObjectTemplate()
-  template.object2 = getObjectTemplate()
+  setCorrelation(template, condition.objects, condition.cuts)
+
+  for ii in range(len(condition.objects)):
+    tmp = template.objects[ii]
+    obj = condition.objects[ii]
+
+    tmp.operator = 'true' if obj.operator else 'false'
+    tmp.bx = bx_encode(obj.bx_offset)
+
+    cuts = condition.objects[ii].cuts
+    setThreshold(tmp, 0, cuts)
+    setEtaRange(tmp, 0, cuts)
+    setPhiRange(tmp, 0, cuts)
+    setIsolationLUT(tmp, 0, cuts)
 
   condition.template = template
 
@@ -581,12 +652,8 @@ def setCaloEsumTemplate(condition):
 def setInvariantMassTemplate(condition):
   logging.info("setInvariantMassTemplate")
 
-  objects = condition.objects
-  if len(objects) != 2:
-    logging.error("# of objects != 2")
-    raise NotImplementedError
-
-  combination = tmEventSetup.getObjectCombination(objects[0].type_id, objects[1].type_id)
+  combination = tmEventSetup.getObjectCombination(condition.objects[0].type_id,
+                                                  condition.objects[1].type_id)
   if combination == tmEventSetup.MuonMuonCombination:
     setMuonMuonTemplate(condition)
     condition.type = conditionTypes[tmEventSetup.MuonMuonCorrelation]
@@ -761,6 +828,11 @@ def getReport(menu, version=False):
       algorithm.conditions[condition.name] = condition
 
       if condition.type_id in ObjectCondition:
+        n = len(esCond.getObjects())
+        if not n or n > 4:
+          logging.error("# of objects not in [1,4]: %s" % n)
+          raise NotImplementedError
+
         if condition.type_id in MuonCondition:
           setMuonTemplate(condition)
 
@@ -776,8 +848,9 @@ def getReport(menu, version=False):
 
       elif condition.type_id in CorrelationCondition:
         esObjs = esCond.getObjects()
-        if len(esObjs) != 2:
-          logging.error("# of esObjs != 2")
+        n = len(esObjs)
+        if n != 2:
+          logging.error("# of esObjs != 2: %s" % n)
           raise NotImplementedError
 
         combination = tmEventSetup.getObjectCombination(esObjs[0].getType(),
@@ -802,6 +875,11 @@ def getReport(menu, version=False):
           raise NotImplementedError
 
       elif condition.type_id == tmEventSetup.InvariantMass:
+        n = len(esCond.getObjects())
+        if n != 2:
+          logging.error("# of esObjs != 2: %s" % n)
+          raise NotImplementedError
+
         setInvariantMassTemplate(condition)
 
       else:
