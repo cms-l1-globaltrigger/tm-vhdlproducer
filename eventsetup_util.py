@@ -498,6 +498,41 @@ def setChargeCorrelation(template, cuts):
     template.ChargeCorrelation = array[0].data
 
 
+def reorderObjects(condition):
+  if len(condition.objects) != 2:
+    raise NotImplementedError
+
+  o1 = condition.objects[0]
+  o2 = condition.objects[1]
+
+  logging.info("-reorderObjects: %s, %s" % (o1.type, o2.type))
+
+  if o1.type_id == o2.type_id:
+    pass
+
+  elif o1.type_id == tmEventSetup.Muon:
+    if o2.type_id not in (tmEventSetup.ETM, tmEventSetup.HTM):
+      condition.objects[0], condition.objects[1] = condition.objects[1], condition.objects[0]
+
+  elif o1.type_id == tmEventSetup.Jet:
+    if o2.type_id not in (tmEventSetup.Tau, tmEventSetup.ETM,
+                          tmEventSetup.HTM, tmEventSetup.Muon):
+      condition.objects[0], condition.objects[1] = condition.objects[1], condition.objects[0]
+
+  elif o1.type_id == tmEventSetup.Tau:
+    if o2.type_id not in (tmEventSetup.ETM, tmEventSetup.HTM,
+                          tmEventSetup.Muon):
+      condition.objects[0], condition.objects[1] = condition.objects[1], condition.objects[0]
+    pass
+
+  elif o1.type_id in (tmEventSetup.ETM, tmEventSetup.HTM):
+      condition.objects[0], condition.objects[1] = condition.objects[1], condition.objects[0]
+
+  logging.info("+reorderObjects: %s, %s" % (o1.type, o2.type))
+
+  return
+
+
 def setCorrelation(template, objects, cuts):
   logging.debug("setCorrelation")
 
@@ -854,6 +889,8 @@ def getReport(menu, version=False):
           logging.error("# of esObjs != 2: %s" % n)
           raise NotImplementedError
 
+        reorderObjects(condition)
+
         combination = tmEventSetup.getObjectCombination(esObjs[0].getType(),
                                                         esObjs[1].getType())
         if combination == tmEventSetup.MuonMuonCombination:
@@ -880,6 +917,8 @@ def getReport(menu, version=False):
         if n != 2:
           logging.error("# of esObjs != 2: %s" % n)
           raise NotImplementedError
+
+        reorderObjects(condition)
 
         setInvariantMassTemplate(condition)
 
