@@ -693,8 +693,21 @@ def setCaloEsumTemplate(condition):
   logging.debug("setCaloEsumTemplate")
 
   template = getCorrelationTemplate()
-  template.object1 = getObjectTemplate()
-  template.object2 = getObjectTemplate()
+  setCorrelation(template, condition.objects, condition.cuts)
+
+  for ii in range(len(condition.objects)):
+    tmp = template.objects[ii]
+    obj = condition.objects[ii]
+
+    tmp.operator = 'true' if obj.operator else 'false'
+    tmp.bx = bx_encode(obj.bx_offset)
+
+    cuts = condition.objects[ii].cuts
+    setThreshold(tmp, 0, cuts)
+    setPhiRange(tmp, 0, cuts)
+    if obj.type_id in CaloCondition:
+      setEtaRange(tmp, 0, cuts)
+      setIsolationLUT(tmp, 0, cuts)
 
   condition.template = template
 
@@ -708,9 +721,6 @@ def setInvariantMassTemplate(condition):
     setMuonMuonTemplate(condition)
     condition.type = conditionTypes[tmEventSetup.MuonMuonCorrelation]
 
-  elif combination == tmEventSetup.MuonEsumCombination:
-    setMuonEsumTemplate(condition)
-
   elif combination == tmEventSetup.CaloMuonCombination:
     setCaloMuonTemplate(condition)
     condition.type = conditionTypes[tmEventSetup.CaloMuonCorrelation]
@@ -718,9 +728,6 @@ def setInvariantMassTemplate(condition):
   elif combination == tmEventSetup.CaloCaloCombination:
     setCaloCaloTemplate(condition)
     condition.type = conditionTypes[tmEventSetup.CaloCaloCorrelation]
-
-  elif combination == tmEventSetup.CaloEsumCombination:
-    setCaloEsumTemplate(condition)
 
   else:
     logging.error("Unknown combination: %s" % combination)

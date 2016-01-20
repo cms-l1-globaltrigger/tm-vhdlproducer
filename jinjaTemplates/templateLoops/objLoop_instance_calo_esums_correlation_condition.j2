@@ -1,0 +1,10 @@
+{%- extends "templateLoops/condLoop.j2" %}
+{%- block objLoop %}
+  {%- set condition = algoDict.conditions[condName] %}
+  {%- if condition.type == "CaloEsumCorrelation" %}
+    {%- block instance_calo_esums_correlation_condition scoped %}
+      THIS SHOULD NOT APPEAR - objLoop_instance_calo_esums_correlation_condition
+    {%- endblock %}
+  {%- endif %}
+{%- endblock objLoop %}
+{# eof #}
