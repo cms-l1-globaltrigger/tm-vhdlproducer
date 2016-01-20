@@ -1,10 +1,10 @@
 {%- extends "templateLoops/objLoop_instance_calo_calo_correlation_condition.j2" %}
 {%- block instance_calo_calo_correlation_condition %}
   {%- set cuts = condition.template %}
-  {%- set type1 = condition.objects[0].type %}
-  {%- set type2 = condition.objects[1].type %}
   {%- set obj1 = cuts.objects[0] %}
   {%- set obj2 = cuts.objects[1] %}
+  {%- set type1 = condition.objects[0].type %}
+  {%- set type2 = condition.objects[1].type %}
 {{condName|lower}}_i: entity work.calo_calo_correlation_condition
   generic map(
     {{cuts.objectsInSameBx}},
@@ -14,12 +14,14 @@
     {{obj1.EtaFullRange[0]}}, X"{{obj1.EtaW1UpperLimits[0]|X04}}", X"{{obj1.EtaW1LowerLimits[0]|X04}}",
     {{obj1.EtaW2Ignore[0]}}, X"{{obj1.EtaW2UpperLimits[0]|X04}}", X"{{obj1.EtaW2LowerLimits[0]|X04}}",
     {{obj1.PhiFullRange[0]}}, X"{{obj1.PhiW1UpperLimits[0]|X04}}", X"{{obj1.PhiW1LowerLimits[0]|X04}}",
+    {{obj1.PhiW2Ignore[0]}}, X"{{obj1.PhiW2UpperLimits[0]|X04}}", X"{{obj1.PhiW2LowerLimits[0]|X04}}",
 	  X"{{obj1.IsolationLUTs[0]|X01}}",
 	  NR_{{type2 |upper}}_OBJECTS, {{obj2.operator |lower}}, {{type2 |upper}}_TYPE,
     X"{{obj2.Thresholds[0]|X04}}",
     {{obj2.EtaFullRange[0]}}, X"{{obj2.EtaW1UpperLimits[0]|X04}}", X"{{obj2.EtaW1LowerLimits[0]|X04}}",
     {{obj2.EtaW2Ignore[0]}}, X"{{obj2.EtaW2UpperLimits[0]|X04}}", X"{{obj2.EtaW2LowerLimits[0]|X04}}",
     {{obj2.PhiFullRange[0]}}, X"{{obj2.PhiW1UpperLimits[0]|X04}}", X"{{obj2.PhiW1LowerLimits[0]|X04}}",
+    {{obj2.PhiW2Ignore[0]}}, X"{{obj2.PhiW2UpperLimits[0]|X04}}", X"{{obj2.PhiW2LowerLimits[0]|X04}}",
 	  X"{{obj2.IsolationLUTs[0]|X01}}",
     {{cuts.DiffEtaUpperLimit}}, {{cuts.DiffEtaLowerLimit}},
     {{cuts.DiffPhiUpperLimit}}, {{cuts.DiffPhiLowerLimit}},

@@ -505,7 +505,7 @@ def reorderObjects(condition):
   o1 = condition.objects[0]
   o2 = condition.objects[1]
 
-  logging.info("-reorderObjects: %s, %s" % (o1.type, o2.type))
+  logging.info("-reorderObjects: %s, %s" % (condition.objects[0].type, condition.objects[1].type))
 
   if o1.type_id == o2.type_id:
     pass
@@ -528,7 +528,7 @@ def reorderObjects(condition):
   elif o1.type_id in (tmEventSetup.ETM, tmEventSetup.HTM):
       condition.objects[0], condition.objects[1] = condition.objects[1], condition.objects[0]
 
-  logging.info("+reorderObjects: %s, %s" % (o1.type, o2.type))
+  logging.info("+reorderObjects: %s, %s" % (condition.objects[0].type, condition.objects[1].type))
 
   return
 
@@ -625,9 +625,9 @@ def setMuonMuonTemplate(condition):
     setThreshold(tmp, 0, cuts)
     setEtaRange(tmp, 0, cuts)
     setPhiRange(tmp, 0, cuts)
+    setIsolationLUT(tmp, 0, cuts)
     setCharge(tmp, 0, cuts)
     setQualityLUT(tmp, 0, cuts)
-    setIsolationLUT(tmp, 0, cuts)
 
   condition.template = template
 
@@ -646,8 +646,23 @@ def setCaloMuonTemplate(condition):
   logging.debug("setCaloMuonTemplate")
 
   template = getCorrelationTemplate()
-  template.object1 = getObjectTemplate()
-  template.object2 = getObjectTemplate()
+  setCorrelation(template, condition.objects, condition.cuts)
+
+  for ii in range(len(condition.objects)):
+    tmp = template.objects[ii]
+    obj = condition.objects[ii]
+
+    tmp.operator = 'true' if obj.operator else 'false'
+    tmp.bx = bx_encode(obj.bx_offset)
+
+    cuts = condition.objects[ii].cuts
+    setThreshold(tmp, 0, cuts)
+    setEtaRange(tmp, 0, cuts)
+    setPhiRange(tmp, 0, cuts)
+    setIsolationLUT(tmp, 0, cuts)
+    if obj.type_id == tmEventSetup.Muon:
+      setCharge(tmp, 0, cuts)
+      setQualityLUT(tmp, 0, cuts)
 
   condition.template = template
 
@@ -698,6 +713,7 @@ def setInvariantMassTemplate(condition):
 
   elif combination == tmEventSetup.CaloMuonCombination:
     setCaloMuonTemplate(condition)
+    condition.type = conditionTypes[tmEventSetup.CaloMuonCorrelation]
 
   elif combination == tmEventSetup.CaloCaloCombination:
     setCaloCaloTemplate(condition)
