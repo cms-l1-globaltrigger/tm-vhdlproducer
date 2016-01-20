@@ -618,9 +618,6 @@ def setMuonMuonTemplate(condition):
     tmp = template.objects[ii]
     obj = condition.objects[ii]
 
-    tmp.operator = 'true' if obj.operator else 'false'
-    tmp.bx = bx_encode(obj.bx_offset)
-
     cuts = condition.objects[ii].cuts
     setThreshold(tmp, 0, cuts)
     setEtaRange(tmp, 0, cuts)
@@ -636,8 +633,20 @@ def setMuonEsumTemplate(condition):
   logging.debug("setMuonEsumTemplate")
 
   template = getCorrelationTemplate()
-  template.object1 = getObjectTemplate()
-  template.object2 = getObjectTemplate()
+  setCorrelation(template, condition.objects, condition.cuts)
+
+  for ii in range(len(condition.objects)):
+    tmp = template.objects[ii]
+    obj = condition.objects[ii]
+
+    cuts = condition.objects[ii].cuts
+    setThreshold(tmp, 0, cuts)
+    setPhiRange(tmp, 0, cuts)
+    if obj.type_id in MuonCondition:
+      setEtaRange(tmp, 0, cuts)
+      setIsolationLUT(tmp, 0, cuts)
+      setQualityLUT(template, ii, cuts)
+      setCharge(template, ii, cuts)
 
   condition.template = template
 
@@ -651,9 +660,6 @@ def setCaloMuonTemplate(condition):
   for ii in range(len(condition.objects)):
     tmp = template.objects[ii]
     obj = condition.objects[ii]
-
-    tmp.operator = 'true' if obj.operator else 'false'
-    tmp.bx = bx_encode(obj.bx_offset)
 
     cuts = condition.objects[ii].cuts
     setThreshold(tmp, 0, cuts)
@@ -677,9 +683,6 @@ def setCaloCaloTemplate(condition):
     tmp = template.objects[ii]
     obj = condition.objects[ii]
 
-    tmp.operator = 'true' if obj.operator else 'false'
-    tmp.bx = bx_encode(obj.bx_offset)
-
     cuts = condition.objects[ii].cuts
     setThreshold(tmp, 0, cuts)
     setEtaRange(tmp, 0, cuts)
@@ -698,9 +701,6 @@ def setCaloEsumTemplate(condition):
   for ii in range(len(condition.objects)):
     tmp = template.objects[ii]
     obj = condition.objects[ii]
-
-    tmp.operator = 'true' if obj.operator else 'false'
-    tmp.bx = bx_encode(obj.bx_offset)
 
     cuts = condition.objects[ii].cuts
     setThreshold(tmp, 0, cuts)

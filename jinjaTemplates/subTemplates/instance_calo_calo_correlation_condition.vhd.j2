@@ -5,34 +5,36 @@
   {%- set obj2 = cuts.objects[1] %}
   {%- set type1 = condition.objects[0].type %}
   {%- set type2 = condition.objects[1].type %}
-{{condName|lower}}_i: entity work.calo_calo_correlation_condition
+  {%- set bx1 = condition.objects[0].bx %}
+  {%- set bx2 = condition.objects[1].bx %}
+{{condName | lower}}_i: entity work.calo_calo_correlation_condition
   generic map(
     {{cuts.objectsInSameBx}},
-	  {{cuts.hasDetaCut |lower}}, {{cuts.hasDphiCut |lower}}, {{cuts.hasDrCut |lower}}, {{cuts.hasMassCut |lower}},
-	  NR_{{type1 |upper}}_OBJECTS, {{obj1.operator |lower}}, {{type1 |upper}}_TYPE,
-    X"{{obj1.Thresholds[0]|X04}}",
-    {{obj1.EtaFullRange[0]}}, X"{{obj1.EtaW1UpperLimits[0]|X04}}", X"{{obj1.EtaW1LowerLimits[0]|X04}}",
-    {{obj1.EtaW2Ignore[0]}}, X"{{obj1.EtaW2UpperLimits[0]|X04}}", X"{{obj1.EtaW2LowerLimits[0]|X04}}",
-    {{obj1.PhiFullRange[0]}}, X"{{obj1.PhiW1UpperLimits[0]|X04}}", X"{{obj1.PhiW1LowerLimits[0]|X04}}",
-    {{obj1.PhiW2Ignore[0]}}, X"{{obj1.PhiW2UpperLimits[0]|X04}}", X"{{obj1.PhiW2LowerLimits[0]|X04}}",
-	  X"{{obj1.IsolationLUTs[0]|X01}}",
-	  NR_{{type2 |upper}}_OBJECTS, {{obj2.operator |lower}}, {{type2 |upper}}_TYPE,
-    X"{{obj2.Thresholds[0]|X04}}",
-    {{obj2.EtaFullRange[0]}}, X"{{obj2.EtaW1UpperLimits[0]|X04}}", X"{{obj2.EtaW1LowerLimits[0]|X04}}",
-    {{obj2.EtaW2Ignore[0]}}, X"{{obj2.EtaW2UpperLimits[0]|X04}}", X"{{obj2.EtaW2LowerLimits[0]|X04}}",
-    {{obj2.PhiFullRange[0]}}, X"{{obj2.PhiW1UpperLimits[0]|X04}}", X"{{obj2.PhiW1LowerLimits[0]|X04}}",
-    {{obj2.PhiW2Ignore[0]}}, X"{{obj2.PhiW2UpperLimits[0]|X04}}", X"{{obj2.PhiW2LowerLimits[0]|X04}}",
-	  X"{{obj2.IsolationLUTs[0]|X01}}",
+	  {{cuts.hasDetaCut | lower}}, {{cuts.hasDphiCut | lower}}, {{cuts.hasDrCut | lower}}, {{cuts.hasMassCut | lower}},
+	  NR_{{type1 | upper}}_OBJECTS, {{condition.objects[0].operator | lower}}, {{type1 | upper}}_TYPE,
+    X"{{obj1.Thresholds[0] | X04}}",
+    {{obj1.EtaFullRange[0]}}, X"{{obj1.EtaW1UpperLimits[0] | X04}}", X"{{obj1.EtaW1LowerLimits[0] | X04}}",
+    {{obj1.EtaW2Ignore[0]}}, X"{{obj1.EtaW2UpperLimits[0] | X04}}", X"{{obj1.EtaW2LowerLimits[0] | X04}}",
+    {{obj1.PhiFullRange[0]}}, X"{{obj1.PhiW1UpperLimits[0] | X04}}", X"{{obj1.PhiW1LowerLimits[0] | X04}}",
+    {{obj1.PhiW2Ignore[0]}}, X"{{obj1.PhiW2UpperLimits[0] | X04}}", X"{{obj1.PhiW2LowerLimits[0] | X04}}",
+	  X"{{obj1.IsolationLUTs[0] | X01}}",
+	  NR_{{type2 | upper}}_OBJECTS, {{condition.objects[1].operator | lower}}, {{type2 | upper}}_TYPE,
+    X"{{obj2.Thresholds[0] | X04}}",
+    {{obj2.EtaFullRange[0]}}, X"{{obj2.EtaW1UpperLimits[0] | X04}}", X"{{obj2.EtaW1LowerLimits[0] | X04}}",
+    {{obj2.EtaW2Ignore[0]}}, X"{{obj2.EtaW2UpperLimits[0] | X04}}", X"{{obj2.EtaW2LowerLimits[0] | X04}}",
+    {{obj2.PhiFullRange[0]}}, X"{{obj2.PhiW1UpperLimits[0] | X04}}", X"{{obj2.PhiW1LowerLimits[0] | X04}}",
+    {{obj2.PhiW2Ignore[0]}}, X"{{obj2.PhiW2UpperLimits[0] | X04}}", X"{{obj2.PhiW2LowerLimits[0] | X04}}",
+	  X"{{obj2.IsolationLUTs[0] | X01}}",
     {{cuts.DiffEtaUpperLimit}}, {{cuts.DiffEtaLowerLimit}},
     {{cuts.DiffPhiUpperLimit}}, {{cuts.DiffPhiLowerLimit}},
-    {{cuts.DeltaRUpperLimit}}, {{cuts.DeltaRLowerLimit}}, DETA_DPHI_VECTOR_WIDTH_ALL, {{type1 |upper}}_{{type2 |upper}}_DETA_DPHI_PRECISION,
-    {{cuts.InvMassUpperLimit}}, {{cuts.InvMassLowerLimit}}, {{type1 |upper}}_{{type2 |upper}}_INV_MASS_PRECISION,
-    {{type1 |upper}}_PT_VECTOR_WIDTH, {{type2 |upper}}_PT_VECTOR_WIDTH, {{type1 |upper}}_{{type2 |upper}}_COSH_COS_PRECISION, {{type1 |upper}}_{{type2 |upper}}_COSH_COS_VECTOR_WIDTH
+    {{cuts.DeltaRUpperLimit}}, {{cuts.DeltaRLowerLimit}}, DETA_DPHI_VECTOR_WIDTH_ALL, {{type1 | upper}}_{{type2 | upper}}_DETA_DPHI_PRECISION,
+    {{cuts.InvMassUpperLimit}}, {{cuts.InvMassLowerLimit}}, {{type1 | upper}}_{{type2 | upper}}_INV_MASS_PRECISION,
+    {{type1 | upper}}_PT_VECTOR_WIDTH, {{type2 | upper}}_PT_VECTOR_WIDTH, {{type1 | upper}}_{{type2 | upper}}_COSH_COS_PRECISION, {{type1 | upper}}_{{type2 | upper}}_COSH_COS_VECTOR_WIDTH
   )
-  port map(lhc_clk, {{type1|lower}}_bx_{{obj1.bx|lower}}, {{type2|lower}}_bx_{{obj2.bx|lower}},
-	         diff_{{type1|lower}}_{{type2|lower}}_bx_{{obj1.bx|lower}}_bx_{{obj2.bx|lower}}_eta_vector, diff_{{type1|lower}}_{{type2|lower}}_bx_{{obj1.bx|lower}}_bx_{{obj2.bx|lower}}_phi_vector,
-           {{type1|lower}}_et_vector_bx_{{obj1.bx|lower}}, {{type2|lower}}_et_vector_bx_{{obj2.bx|lower}}, 
-           {{type1|lower}}_{{type2|lower}}_bx_{{obj1.bx|lower}}_bx_{{obj2.bx|lower}}_cosh_deta_vector, {{type1|lower}}_{{type2|lower}}_bx_{{obj1.bx|lower}}_bx_{{obj2.bx|lower}}_cos_dphi_vector,
-	         {{condName|lower}});
-{% endblock instance_calo_calo_correlation_condition %}
+  port map(lhc_clk, {{type1 | lower}}_bx_{{bx1 | lower}}, {{type2 | lower}}_bx_{{bx2 | lower}},
+	         diff_{{type1 | lower}}_{{type2 | lower}}_bx_{{bx1 | lower}}_bx_{{bx2 | lower}}_eta_vector, diff_{{type1 | lower}}_{{type2 | lower}}_bx_{{bx1 | lower}}_bx_{{bx2 | lower}}_phi_vector,
+           {{type1 | lower}}_et_vector_bx_{{bx1 | lower}}, {{type2 | lower}}_et_vector_bx_{{bx2 | lower}}, 
+           {{type1 | lower}}_{{type2 | lower}}_bx_{{bx1 | lower}}_bx_{{bx2 | lower}}_cosh_deta_vector, {{type1 | lower}}_{{type2 | lower}}_bx_{{bx1 | lower}}_bx_{{bx2 | lower}}_cos_dphi_vector,
+	         {{condName | lower}});
+{%- endblock instance_calo_calo_correlation_condition %}
 {# eof #}

@@ -3,7 +3,7 @@
 {%- endblock instance_signal_condition %}
 {%- block outerLoop %}
   {%- for condName in conditionSet %}
-    signal {{condName|lower}} : std_logic;
+    signal {{condName | lower}} : std_logic;
   {%- endfor %}
 {%- endblock outerLoop %}
 {# eof #}
