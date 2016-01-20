@@ -1,9 +1,9 @@
 {%- extends "templateLoops/condLoop.j2" %}
-{%- block objLoop%}
+{%- block instantiation%}
   {#
   ############
   {{signalEtaPhiList}}
-  {{algoName}}   {{condName}}
+  {{algorithm_name}}   {{condName}}
   ###############
   #}
   {%- if condName=="wsc"%} {# WscCondition not set yet --- to be changed  #}
@@ -22,5 +22,5 @@
       {%-endfor%}
     {%- endif%}
   {%- endif%}
-{%- endblock objLoop %}
+{%- endblock instantiation %}
 {# eof #}

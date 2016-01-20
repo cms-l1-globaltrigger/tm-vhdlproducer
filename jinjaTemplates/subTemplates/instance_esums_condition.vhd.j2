@@ -1,13 +1,13 @@
-{%- extends "templateLoops/objLoop_instance_esums_condition.j2" %}
+{%- extends "templateLoops/instantiate_esums_condition.j2" %}
 {%- block instance_esums_condition %}
   {%- set objects = condition.objects %}
   {%- set cuts = condition.template %}
-{{condName | lower}}_i: entity work.esums_conditions
+{{condition_name | lower}}_i: entity work.esums_conditions
     generic map({{ objects[0].operator | lower  }}, {{objects[0].type}}_TYPE,
         X"{{cuts.Thresholds[0] | X04}}",
         {{cuts.PhiFullRange[0]}}, X"{{cuts.PhiW1UpperLimits[0] | X04}}", X"{{cuts.PhiW1LowerLimits[0] | X04}}",
         {{cuts.PhiW2Ignore[0]}}, X"{{cuts.PhiW2UpperLimits[0] | X04}}", X"{{cuts.PhiW2LowerLimits[0] | X04}}"
         )
-    port map(lhc_clk, {{objects[0].type | lower}}_bx_{{objects[0].bx | lower}}, {{condName | lower}});
+    port map(lhc_clk, {{objects[0].type | lower}}_bx_{{objects[0].bx | lower}}, {{condition_name | lower}});
 {% endblock instance_esums_condition %}
 {# eof #}

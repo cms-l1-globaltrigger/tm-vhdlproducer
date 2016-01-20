@@ -1,10 +1,10 @@
 {%- extends "templateLoops/condLoop.j2" %}
-{%- block objLoop %}
-  {%- set condition = algoDict.conditions[condName] %}
+{%- block instantiation %}
+  {%- set condition = algorithm.conditions[condition_name] %}
   {%- if condition.type == "CaloCaloCorrelation" %}
     {%- block instance_calo_calo_correlation_condition scoped %}
-      THIS SHOULD NOT APPEAR - objLoop_instance_calo_calo_correlation_condition
+      THIS SHOULD NOT APPEAR - instance_calo_calo_correlation_condition
     {%- endblock %}
   {%- endif %}
-{%- endblock objLoop %}
+{%- endblock instantiation %}
 {# eof #}

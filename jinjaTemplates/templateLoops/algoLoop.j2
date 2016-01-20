@@ -2,10 +2,10 @@
 {%- set muonChargeCorrelationList = {} %}
 {%- set moduleConditionSet = {} %}
 {%- set conditionSet = [] %}
-{%- for algoName in menu.reporter['index_sorted'] %}
-  {%- set algoDict = menu.reporter['algoDict'][algoName] %}
-  {%- set algoIndex = algoDict.index %}
-  {%- block condLoop scoped %}
+{%- for algorithm_name in menu.reporter['index_sorted'] %}
+  {%- set algorithm = menu.reporter['algoDict'][algorithm_name] %}
+  {%- set algorithm_index = algorithm.index %}
+  {%- block condition_loop scoped %}
   {%- endblock %}
 {%- endfor %}
 {% block outerLoop %}

@@ -1,11 +1,11 @@
-{%- extends "templateLoops/objLoop_instance_muon_muon_correlation_condition.j2" %}
+{%- extends "templateLoops/instantiate_muon_muon_correlation_condition.j2" %}
 {%- block instance_muon_muon_correlation_condition %}
   {%- set cuts = condition.template %}
   {%- set obj1 = cuts.objects[0] %}
   {%- set obj2 = cuts.objects[1] %}
   {%- set bx1 = condition.objects[0].bx %}
   {%- set bx2 = condition.objects[1].bx %}
-{{condName | lower}}_i: entity work.muon_muon_correlation_condition
+{{condition_name | lower}}_i: entity work.muon_muon_correlation_condition
   generic map(
     {{cuts.objectsInSameBx}},
 	  {{cuts.hasDetaCut | lower}}, {{cuts.hasDphiCut | lower}}, {{cuts.hasDrCut | lower}}, {{cuts.hasMassCut | lower}},
@@ -34,6 +34,6 @@
 	         diff_muon_muon_bx_{{bx1 | lower}}_bx_{{bx2 | lower}}_eta_vector, diff_muon_muon_bx_{{bx1 | lower}}_bx_{{bx2 | lower}}_phi_vector, 
            muon_pt_vector_bx_{{bx1 | lower}}, muon_pt_vector_bx_{{bx2 | lower}},
            muon_muon_bx_{{bx1 | lower}}_bx_{{bx2 | lower}}_cosh_deta_vector, muon_muon_bx_{{bx1 | lower}}_bx_{{bx2 | lower}}_cos_dphi_vector,
-	         {{condName | lower}});
+	         {{condition_name | lower}});
 {%- endblock instance_muon_muon_correlation_condition %}
 {# eof #}

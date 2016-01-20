@@ -1,13 +1,13 @@
 {%- extends "templateLoops/condLoop.j2" %}
-{%- block objLoop %}
-  {%- set condition = algoDict.conditions[condName] %}
+{%- block instantiation %}
+  {%- set condition = algorithm.conditions[condition_name] %}
   {%- if condition.type in (
     "SingleEgamma", "DoubleEgamma", "TripleEgamma", "QuadEgamma",
     "SingleTau", "DoubleTau", "TripleTau", "QuadTau",
     "SingleJet", "DoubleJet", "TripleJet", "QuadJet") %}
     {%- block instance_calo_condition scoped %}
-      THIS SHOULD NOT APPEAR
+      THIS SHOULD NOT APPEAR - instance_calo_condition
     {%- endblock %}
   {%- endif %}
-{%- endblock objLoop %}
+{%- endblock instantiation %}
 {# eof #}

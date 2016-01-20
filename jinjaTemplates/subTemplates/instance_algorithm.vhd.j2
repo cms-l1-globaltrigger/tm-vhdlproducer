@@ -1,9 +1,9 @@
 {%- extends "templateLoops/algoLoop.j2" %}
-{%- block condLoop %}
-{%- if algoIndex in menu.reporter['m2a'][iMod].values() %}
-{%- set localAlgoIndex = menu.reporter['a2m'][algoIndex][1] %}
-{{algoName}} <= {{algoDict.expression_in_condition | lower}};
-algo({{localAlgoIndex | d}}) <= {{algoName}};
+{%- block condition_loop %}
+{%- if algorithm_index in menu.reporter['m2a'][iMod].values() %}
+{%- set localAlgoIndex = menu.reporter['a2m'][algorithm_index][1] %}
+{{algorithm_name}} <= {{algorithm.expression_in_condition | lower}};
+algo({{localAlgoIndex | d}}) <= {{algorithm_name}};
 {%- endif %}
-{%- endblock condLoop %}
+{%- endblock condition_loop %}
 {# eof #}

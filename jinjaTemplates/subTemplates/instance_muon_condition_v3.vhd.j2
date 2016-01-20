@@ -1,9 +1,9 @@
-{%- extends "templateLoops/objLoop_instance_muon_condition.j2" %}
+{%- extends "templateLoops/instantiate_muon_condition.j2" %}
 {%- block instance_muon_condition %}
   {%- set objects = condition.objects %}
   {%- set bx = objects[0].bx %}
   {%- set cuts = condition.template %}
-{{condName | lower}}_i: entity work.muon_conditions_v3
+{{condition_name | lower}}_i: entity work.muon_conditions_v3
     generic map({{objects | count}} , {{ objects[0].operator | lower}},
         (X"{{cuts.Thresholds[0] | X04}}", X"{{cuts.Thresholds[1] | X04}}", X"{{cuts.Thresholds[2] | X04}}", X"{{cuts.Thresholds[3] | X04}}"),
         ({{cuts.EtaFullRange[0]}}, {{cuts.EtaFullRange[1]}}, {{cuts.EtaFullRange[2]}}, {{cuts.EtaFullRange[3]}}),
@@ -23,6 +23,6 @@
         ls_charcorr_double_bx_{{bx | lower}}_bx_{{bx | lower}}, os_charcorr_double_bx_{{bx | lower}}_bx_{{bx | lower}},
         ls_charcorr_triple_bx_{{bx | lower}}_bx_{{bx | lower}}, os_charcorr_triple_bx_{{bx | lower}}_bx_{{bx | lower}},
         ls_charcorr_quad_bx_{{bx | lower}}_bx_{{bx | lower}}, os_charcorr_quad_bx_{{bx | lower}}_bx_{{bx | lower}},
-        {{condName | lower}});
+        {{condition_name | lower}});
 {% endblock instance_muon_condition%}
 {# eof #}
