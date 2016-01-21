@@ -22,19 +22,22 @@ keyIndexSorted = "index_sorted"
 keyNAlgoDefined = "nAlgoDefined"
 keyConditionSet = "conditionSet"
 keyBxComb = "bxComb"
+keyObjInCorr = "ObjectsInCorrelations"
+keyObjForScaleConv = "ObjectsForScaleConversion"
+keyObjPairForCorr = "ObjectPairForCorrelation"
 
-# data.reporter[keyAlgoDict] = {<algoName>}
+# data.reporter[keyAlgoDict] = {<algorithm_name>}
 #
-# algorithm = data.reporter[keyAlgoDict][<algoName>]
+# algorithm = data.reporter[keyAlgoDict][<algorithm_name>]
 # algorithm.index
 #          .module_id
 #          .module_index
 #          .rpn_vector
 #          .expression
 #          .expression_in_condition
-#          .conditions{<condName>}
+#          .conditions{<condition_name>}
 #
-# condition = algorithm.conditions[<condName>]
+# condition = algorithm.conditions[<condition_name>]
 # condition.name
 #          .token
 #          .type
@@ -505,7 +508,8 @@ def reorderObjects(condition):
   o1 = condition.objects[0]
   o2 = condition.objects[1]
 
-  logging.info("-reorderObjects: %s, %s" % (condition.objects[0].type, condition.objects[1].type))
+  logging.info("-reorderObjects: %s, %s" %
+               (condition.objects[0].type, condition.objects[1].type))
 
   if o1.type_id == o2.type_id:
     pass
@@ -553,13 +557,13 @@ def setCorrelation(template, objects, cuts):
 
     elif x == tmEventSetup.DeltaR:
       template.hasDrCut = 'true'
-      template.DeltaRLowerLimit = o.min_val
-      template.DeltaRUpperLimit = o.max_val
+      template.DeltaRLowerLimit = o.min_val*o.min_val
+      template.DeltaRUpperLimit = o.max_val*o.max_val
 
     elif x == tmEventSetup.Mass:
       template.hasMassCut = 'true'
-      template.InvMassLowerLimit = o.min_val
-      template.InvMassUpperLimit = o.max_val
+      template.InvMassLowerLimit = o.min_val*o.min_val*0.5
+      template.InvMassUpperLimit = o.max_val*o.max_val*0.5
 
   if template.hasDrCut == 'true':
     if template.hasDetaCut == 'true': raise NotImplementedError
@@ -734,19 +738,19 @@ def setInvariantMassTemplate(condition):
     raise NotImplementedError
 
 
-def setBxCombChgCor(dictionary):
+def setBxCombination(dictionary):
   dictionary[keyBxComb] = set()
 
-  for algoName in dictionary[keyAlgoDict]:
-    for condName in dictionary[keyAlgoDict][algoName].conditions:
-      condType = dictionary[keyAlgoDict][algoName].conditions[condName].type
+  for algorithm_name in dictionary[keyAlgoDict]:
+    for condition_name in dictionary[keyAlgoDict][algorithm_name].conditions:
+      condition_type = dictionary[keyAlgoDict][algorithm_name].conditions[condition_name].type_id
 
       bxSet = []
-      # TODO: handle MuonMuonCorrelation
-      if condType in (conditionTypes[tmEventSetup.DoubleMuon],
-                      conditionTypes[tmEventSetup.TripleMuon],
-                      conditionTypes[tmEventSetup.QuadMuon]):
-        for x in dictionary[keyAlgoDict][algoName].conditions[condName].objects:
+      if condition_type in (tmEventSetup.DoubleMuon,
+                            tmEventSetup.TripleMuon,
+                            tmEventSetup.QuadMuon,
+                            tmEventSetup.MuonMuonCorrelation):
+        for x in dictionary[keyAlgoDict][algorithm_name].conditions[condition_name].objects:
           bxSet.append(x.bx)
         bxSet = list(set(bxSet))
         if len(bxSet) == 1:
@@ -754,6 +758,39 @@ def setBxCombChgCor(dictionary):
           dictionary[keyBxComb].add(bxCombination)
         else:
           raise NotImplementedError
+
+
+def setObjectsForCorrelationConditions(dictionary):
+  dictionary[keyObjInCorr] = set()
+  dictionary[keyObjForScaleConv] = set()
+  dictionary[keyObjPairForCorr] = set()
+
+  objects = []
+  conversion = []
+  object_map = {}
+  object_set = set()
+
+  for algorithm_name in dictionary[keyAlgoDict]:
+    for condition_name in dictionary[keyAlgoDict][algorithm_name].conditions:
+      condition_type = dictionary[keyAlgoDict][algorithm_name].conditions[condition_name].type_id
+      if condition_type in CorrelationCondition:
+        pair = []
+        for o in dictionary[keyAlgoDict][algorithm_name].conditions[condition_name].objects:
+          key = "%s%s" % (o.type, o.bx)
+          pair.append(key)
+          object_map.update({key: o})
+          if condition_type in (tmEventSetup.CaloMuonCorrelation, tmEventSetup.MuonEsumCorrelation):
+            if key not in conversion:
+              conversion.append(key)
+              dictionary[keyObjForScaleConv].add(o)
+
+          if key not in objects:
+            objects.append(key)
+            dictionary[keyObjInCorr].add(o)
+        object_set.add((pair[0], pair[1]))
+
+  for o1, o2 in object_set:
+    dictionary[keyObjPairForCorr].add((object_map[o1], object_map[o2]))
 
 
 def updateExpressionInCondition(algo, cond):
@@ -870,8 +907,8 @@ def getReport(menu, version=False):
   data.reporter[keyAlgoDict] = algoDict
 
   condInUse = []
-  for algoName in data.reporter[keyAlgoDict]:
-    algorithm = data.reporter[keyAlgoDict][algoName]
+  for algorithm_name in data.reporter[keyAlgoDict]:
+    algorithm = data.reporter[keyAlgoDict][algorithm_name]
     for token in algorithm.rpn_vector:
       if tmGrammar.isGate(token): continue
 
@@ -950,13 +987,13 @@ def getReport(menu, version=False):
         raise NotImplementedError
 
 
-  for algoName in data.reporter[keyAlgoDict]:
-    for condName in data.reporter[keyAlgoDict][algoName].conditions:
-      condType = data.reporter[keyAlgoDict][algoName].conditions[condName].type
-      data.reporter[keyTriggerGroups][condType][keyNBits] += 1
-      value = {keyIndex: data.reporter[keyAlgoDict][algoName].index}
-      value.update( {keyAlgoName: algoName} )
-      data.reporter[keyTriggerGroups][condType][keyBits].append(value)
+  for algorithm_name in data.reporter[keyAlgoDict]:
+    for condition_name in data.reporter[keyAlgoDict][algorithm_name].conditions:
+      condition_type = data.reporter[keyAlgoDict][algorithm_name].conditions[condition_name].type
+      data.reporter[keyTriggerGroups][condition_type][keyNBits] += 1
+      value = {keyIndex: data.reporter[keyAlgoDict][algorithm_name].index}
+      value.update( {keyAlgoName: algorithm_name} )
+      data.reporter[keyTriggerGroups][condition_type][keyBits].append(value)
 
   data.reporter[keyNBitsSorted] = sortDictByKey(data.reporter[keyTriggerGroups],
                                                 keyNBits, True)
@@ -968,11 +1005,12 @@ def getReport(menu, version=False):
   data.reporter[keyNAlgoDefined] = n
 
   condList = []
-  for algoName in data.reporter[keyIndexSorted]:
-    condList.extend(data.reporter[keyAlgoDict][algoName].conditions.keys())
+  for algorithm_name in data.reporter[keyIndexSorted]:
+    condList.extend(data.reporter[keyAlgoDict][algorithm_name].conditions.keys())
   data.reporter[keyConditionSet] = set(condList)
 
-  setBxCombChgCor(data.reporter)
+  setBxCombination(data.reporter)
+  setObjectsForCorrelationConditions(data.reporter)
 
   return data
 

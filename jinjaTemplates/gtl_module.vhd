@@ -64,22 +64,22 @@ architecture rtl of gtl_module is
 
 -- Signal definition of pt, eta and phi for correlation conditions.
 -- Insert "signal_correlation_conditions_pt_eta_phi.vhd.j2" as often as an ObjectType at a certain Bx is used in a correlation condition.
-{#%- include  "subTemplates/signal_correlation_conditions_pt_eta_phi.vhd.j2"%#}
+{%- include  "subTemplates/signal_correlation_conditions_pt_eta_phi.vhd.j2" %}
 
 -- Signal definition of differences for correlation conditions.
 -- Insert "signal_correlation_conditions_differences.vhd.j2" once for correlation conditions of different ObjectTypes and Bx combinations.
-{#%- include  "subTemplates/signal_correlation_conditions_differences.vhd.j2"%#}
+{%- include  "subTemplates/signal_correlation_conditions_differences.vhd.j2" %}
 
 -- Signal definition for muon charge correlations (only once for all muon conditions, except SingleMuon conditions)
 -- Insert "signal_muon_charge_correlations.vhd.j2" only once for a certain Bx or Bx combination, if there is at least one DoubleMuon, TripleMuon, QuadMuon condition
 -- or a muon-muon correlation condition.
-{%- include  "subTemplates/signal_muon_charge_correlations.vhd.j2"%}
+{%- include  "subTemplates/signal_muon_charge_correlations.vhd.j2" %}
 
 -- Signal definition for conditions names
-{%- include  "subTemplates/signal_condition.vhd.j2"%}
+{%- include  "subTemplates/signal_condition.vhd.j2" %}
 
 -- Signal definition for algorithms names
-{%- include  "subTemplates/signal_algorithm.vhd.j2"%}
+{%- include  "subTemplates/signal_algorithm.vhd.j2" %}
 
 -- ==== Inserted by TME - end ===============================================================================================================
 
@@ -135,32 +135,32 @@ end process;
 
 -- Instantiations of muon charge correlations - only once for a certain Bx or Bx combination, if there is at least one DoubleMuon, TripleMuon, QuadMuon condition
 -- or a muon-muon correlation condition.
-{%- include  "subTemplates/muon_charge_correlations.vhd.j2"%}
+{%- include  "subTemplates/muon_charge_correlations.vhd.j2" %}
 
 -- Instantiations of pt, eta and phi for correlation conditions (used for DETA, DPHI and DR) - once for every ObjectType in certain Bx used in correlation conditions
-{#%- include  "subTemplates/correlation_conditions_pt_eta_phi.vhd.j2"%#}
+{%- include  "subTemplates/correlation_conditions_pt_eta_phi.vhd.j2" %}
 
 -- Instantiations of eta and phi conversion to muon scale for calo-muon correlation conditions (used for DETA, DPHI and DR) - once for every calo ObjectType in certain Bx used in correlation conditions
-{#%- include  "subTemplates/correlation_conditions_eta_phi_conversion.vhd.j2"%#}
+{%- include  "subTemplates/correlation_conditions_eta_phi_conversion.vhd.j2" %}
 
 -- Instantiations of differences for correlation conditions (used for DETA, DPHI and DR) - once for correlation conditions with two ObjectTypes in certain Bxs
-{#%- include  "subTemplates/correlation_conditions_differences.vhd.j2"%#}
+{%- include  "subTemplates/correlation_conditions_differences.vhd.j2" %}
 
 -- Instantiations of cosh-deta and cos-dphi LUTs for correlation conditions (used for invariant mass) - once for correlation conditions with two ObjectTypes in certain Bxs
-{#%- include  "subTemplates/correlation_conditions_inv_mass.vhd.j2"%#}
+{%- include  "subTemplates/correlation_conditions_inv_mass.vhd.j2" %}
 
 -- Instantiations of conditions
-{%- include  "subTemplates/calo_condition_v3.vhd.j2"%}
-{%- include  "subTemplates/muon_condition_v3.vhd.j2"%}
-{%- include  "subTemplates/esums_condition.vhd.j2"%}
-{%- include  "subTemplates/calo_calo_correlation_condition.vhd.j2"%}
-{%- include  "subTemplates/calo_muon_correlation_condition.vhd.j2"%}
-{%- include  "subTemplates/muon_muon_correlation_condition.vhd.j2"%}
-{%- include  "subTemplates/calo_esums_correlation_condition.vhd.j2"%}
-{%- include  "subTemplates/muon_esums_correlation_condition.vhd.j2"%}
+{%- include  "subTemplates/calo_condition_v3.vhd.j2" %}
+{%- include  "subTemplates/muon_condition_v3.vhd.j2" %}
+{%- include  "subTemplates/esums_condition.vhd.j2" %}
+{%- include  "subTemplates/calo_calo_correlation_condition.vhd.j2" %}
+{%- include  "subTemplates/calo_muon_correlation_condition.vhd.j2" %}
+{%- include  "subTemplates/muon_muon_correlation_condition.vhd.j2" %}
+{%- include  "subTemplates/calo_esums_correlation_condition.vhd.j2" %}
+{%- include  "subTemplates/muon_esums_correlation_condition.vhd.j2" %}
 
 -- Instantiations of algorithms 
-{%- include  "subTemplates/algorithm.vhd.j2"%}
+{%- include  "subTemplates/algorithm.vhd.j2" %}
 
 -- ==== Inserted by TME - end ===============================================================================================================
 

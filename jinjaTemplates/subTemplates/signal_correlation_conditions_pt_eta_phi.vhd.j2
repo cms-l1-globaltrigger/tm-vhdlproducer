@@ -1,6 +1,13 @@
-    signal {{objName|lower}}_pt_vector_bx_{{Bx|lower}}: diff_inputs_array(0 to NR_{{objName|upper}}_OBJECTS-1) := (others => (others => '0'));
-    signal {{objName|lower}}_eta_integer_bx_{{Bx|lower}}: diff_integer_inputs_array(0 to NR_{{objName|upper}}_OBJECTS-1) := (others => 0);
-    signal {{objName|lower}}_phi_integer_bx_{{Bx|lower}}: diff_integer_inputs_array(0 to NR_{{objName|upper}}_OBJECTS-1) := (others => 0);
-    signal {{objName|lower}}_eta_conv_2_muon_eta_integer_bx_{{Bx|lower}}: diff_integer_inputs_array(0 to NR_{{objName|upper}}_OBJECTS-1) := (others => 0);
-    signal {{objName|lower}}_phi_conv_2_muon_phi_integer_bx_{{Bx|lower}}: diff_integer_inputs_array(0 to NR_{{objName|upper}}_OBJECTS-1) := (others => 0);
+{%- block signal_correlation_conditions_pt_eta_phi_loop %}
+  {%- set objects = menu.reporter['ObjectsInCorrelations'] %}
+  {%- for o in objects %}
+signal {{o.type | lower}}_pt_vector_bx_{{o.bx|lower}}: diff_inputs_array(0 to NR_{{o.type | upper}}_OBJECTS-1) := (others => (others => '0'));
+signal {{o.type | lower}}_eta_integer_bx_{{o.bx|lower}}: diff_integer_inputs_array(0 to NR_{{o.type | upper}}_OBJECTS-1) := (others => 0);
+signal {{o.type | lower}}_phi_integer_bx_{{o.bx|lower}}: diff_integer_inputs_array(0 to NR_{{o.type | upper}}_OBJECTS-1) := (others => 0);
+    {%- if 'MU' not in o.type %}
+signal {{o.type | lower}}_eta_conv_2_muon_eta_integer_bx_{{o.bx | lower}}: diff_integer_inputs_array(0 to NR_{{o.type | upper}}_OBJECTS-1) := (others => 0);
+signal {{o.type | lower}}_phi_conv_2_muon_phi_integer_bx_{{o.bx | lower}}: diff_integer_inputs_array(0 to NR_{{o.type | upper}}_OBJECTS-1) := (others => 0);
+    {%- endif %}
+  {%- endfor %}
+{%- endblock signal_correlation_conditions_pt_eta_phi_loop %}
 {# eof #}

@@ -1,10 +1,17 @@
-diff_{{objName1|lower}}_{{objName2|lower}}_eta_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_i: entity work.sub_eta_integer_obj_vs_obj
-    generic map(NR_{{objName1|upper}}_OBJECTS, NR_{{objName2|upper}}_OBJECTS)
-    port map({{objName1|lower}}_eta_integer_bx_{{Bx1|lower}}, {{objName2|lower}}_eta_integer_bx_{{Bx2|lower}}, diff_{{objName1|lower}}_{{objName2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_eta_integer);      
+{%- block signal_correlation_conditions_differences %}
+  {%- set combinations = menu.reporter['ObjectPairForCorrelation'] %}
+  {%- for o1, o2 in combinations %}
+diff_{{o1.type|lower}}_{{o2.type|lower}}_eta_bx_{{o1.bx|lower}}_bx_{{o2.bx|lower}}_i: entity work.sub_eta_integer_obj_vs_obj
+  generic map(NR_{{o1.type|upper}}_OBJECTS, NR_{{o2.type|upper}}_OBJECTS)
+  port map({{o1.type|lower}}_eta_integer_bx_{{o1.bx|lower}}, {{o2.type|lower}}_eta_integer_bx_{{o2.bx|lower}}, diff_{{o1.type|lower}}_{{o2.type|lower}}_bx_{{o1.bx|lower}}_bx_{{o2.bx|lower}}_eta_integer);      
 
-{{objName1|lower}}_{{objName2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_l1: for i in 0 to NR_{{objName1|upper}}_OBJECTS-1 generate
-    {{objName1|lower}}_{{objName2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_l2: for j in 0 to NR_{{objName2|upper}}_OBJECTS-1 generate
-	diff_{{objName1|lower}}_{{objName2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_eta_integer_value(i,j) <= {{objName1|upper}}_{{objName2|upper}}_DIFF_ETA_LUT(diff_{{objName1|lower}}_{{objName2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_eta_integer(i,j));
-	diff_{{objName1|lower}}_{{objName2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_phi_integer_value(i,j) <= {{objName1|upper}}_{{objName2|upper}}_DIFF_PHI_LUT(diff_{{objName1|lower}}_{{objName2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_phi_integer(i,j));
-    end generate {{objName1|lower}}_{{objName2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_l2;
-end generate {{objName1|lower}}_{{objName2|lower}}_bx_{{Bx1|lower}}_bx_{{Bx2|lower}}_l1;
+  {{o1.type|lower}}_{{o2.type|lower}}_bx_{{o1.bx|lower}}_bx_{{o2.bx|lower}}_l1: for i in 0 to NR_{{o1.type|upper}}_OBJECTS-1 generate
+    {{o1.type|lower}}_{{o2.type|lower}}_bx_{{o1.bx|lower}}_bx_{{o2.bx|lower}}_l2: for j in 0 to NR_{{o2.type|upper}}_OBJECTS-1 generate
+      diff_{{o1.type|lower}}_{{o2.type|lower}}_bx_{{o1.bx|lower}}_bx_{{o2.bx|lower}}_eta_integer_value(i,j) <= {{o1.type|upper}}_{{o2.type|upper}}_DIFF_ETA_LUT(diff_{{o1.type|lower}}_{{o2.type|lower}}_bx_{{o1.bx|lower}}_bx_{{o2.bx|lower}}_eta_integer(i,j));
+      diff_{{o1.type|lower}}_{{o2.type|lower}}_bx_{{o1.bx|lower}}_bx_{{o2.bx|lower}}_phi_integer_value(i,j) <= {{o1.type|upper}}_{{o2.type|upper}}_DIFF_PHI_LUT(diff_{{o1.type|lower}}_{{o2.type|lower}}_bx_{{o1.bx|lower}}_bx_{{o2.bx|lower}}_phi_integer(i,j));
+    end generate {{o1.type|lower}}_{{o2.type|lower}}_bx_{{o1.bx|lower}}_bx_{{o2.bx|lower}}_l2;
+  end generate {{o1.type|lower}}_{{o2.type|lower}}_bx_{{o1.bx|lower}}_bx_{{o2.bx|lower}}_l1;
+
+  {%- endfor %}
+{%- endblock signal_correlation_conditions_differences %}
+{# eof #}
