@@ -135,32 +135,32 @@ end process;
 
 -- Instantiations of muon charge correlations - only once for a certain Bx or Bx combination, if there is at least one DoubleMuon, TripleMuon, QuadMuon condition
 -- or a muon-muon correlation condition.
-{%- include  "subTemplates/instance_muon_charge_correlations.vhd.j2"%}
+{%- include  "subTemplates/muon_charge_correlations.vhd.j2"%}
 
 -- Instantiations of pt, eta and phi for correlation conditions (used for DETA, DPHI and DR) - once for every ObjectType in certain Bx used in correlation conditions
-{#%- include  "subTemplates/instance_correlation_conditions_pt_eta_phi.vhd.j2"%#}
+{#%- include  "subTemplates/correlation_conditions_pt_eta_phi.vhd.j2"%#}
 
 -- Instantiations of eta and phi conversion to muon scale for calo-muon correlation conditions (used for DETA, DPHI and DR) - once for every calo ObjectType in certain Bx used in correlation conditions
-{#%- include  "subTemplates/instance_correlation_conditions_eta_phi_conversion.vhd.j2"%#}
+{#%- include  "subTemplates/correlation_conditions_eta_phi_conversion.vhd.j2"%#}
 
 -- Instantiations of differences for correlation conditions (used for DETA, DPHI and DR) - once for correlation conditions with two ObjectTypes in certain Bxs
-{#%- include  "subTemplates/instance_correlation_conditions_differences.vhd.j2"%#}
+{#%- include  "subTemplates/correlation_conditions_differences.vhd.j2"%#}
 
 -- Instantiations of cosh-deta and cos-dphi LUTs for correlation conditions (used for invariant mass) - once for correlation conditions with two ObjectTypes in certain Bxs
-{#%- include  "subTemplates/instance_correlation_conditions_inv_mass.vhd.j2"%#}
+{#%- include  "subTemplates/correlation_conditions_inv_mass.vhd.j2"%#}
 
 -- Instantiations of conditions
-{%- include  "subTemplates/instance_calo_condition_v3.vhd.j2"%}
-{%- include  "subTemplates/instance_muon_condition_v3.vhd.j2"%}
-{%- include  "subTemplates/instance_esums_condition.vhd.j2"%}
-{%- include  "subTemplates/instance_calo_calo_correlation_condition.vhd.j2"%}
-{%- include  "subTemplates/instance_calo_muon_correlation_condition.vhd.j2"%}
-{%- include  "subTemplates/instance_muon_muon_correlation_condition.vhd.j2"%}
-{%- include  "subTemplates/instance_calo_esums_correlation_condition.vhd.j2"%}
-{%- include  "subTemplates/instance_muon_esums_correlation_condition.vhd.j2"%}
+{%- include  "subTemplates/calo_condition_v3.vhd.j2"%}
+{%- include  "subTemplates/muon_condition_v3.vhd.j2"%}
+{%- include  "subTemplates/esums_condition.vhd.j2"%}
+{%- include  "subTemplates/calo_calo_correlation_condition.vhd.j2"%}
+{%- include  "subTemplates/calo_muon_correlation_condition.vhd.j2"%}
+{%- include  "subTemplates/muon_muon_correlation_condition.vhd.j2"%}
+{%- include  "subTemplates/calo_esums_correlation_condition.vhd.j2"%}
+{%- include  "subTemplates/muon_esums_correlation_condition.vhd.j2"%}
 
 -- Instantiations of algorithms 
-{%- include  "subTemplates/instance_algorithm.vhd.j2"%}
+{%- include  "subTemplates/algorithm.vhd.j2"%}
 
 -- ==== Inserted by TME - end ===============================================================================================================
 
