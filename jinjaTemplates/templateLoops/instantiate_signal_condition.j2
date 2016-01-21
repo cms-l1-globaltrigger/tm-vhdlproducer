@@ -1,12 +1,8 @@
-{%- extends "templateLoops/condLoop.j2" %}
+{%- extends "templateLoops/iterate_condition.j2" %}
 {%- block instantiation %}
-  {%- set conditionName = condition_name %}
-  {%- if conditionName not in conditionSet %}
-    {%- if conditionSet.append(conditionName)%}
+  {%- if condition_name not in conditionSet %}
+    {%- if conditionSet.append(condition_name)%}
     {%- endif %}
   {%- endif %}
-  {%- block instance_signal_condition scoped %}
-    THIS SHOULD NOT APPEAR - instance_signal_condition
-  {%- endblock instance_signal_condition %}
-{%- endblock %}
+{%- endblock instantiation %}
 {# eof #}

@@ -10,5 +10,5 @@
     signal {{objName|lower}}_phi_common_bx_{{bx|lower}} : diff_inputs_array(0 to NR_{{objName}}_OBJECTS-1) := (others => (others => '0'));
     {%- endfor %}
   {%- endfor %}
-{%- endblock %}
+{%- endblock outerLoop %}
 {# eof #}

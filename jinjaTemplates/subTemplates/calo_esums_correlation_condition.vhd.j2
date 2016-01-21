@@ -1,5 +1,5 @@
 {%- extends "templateLoops/instantiate_calo_esums_correlation_condition.j2" %}
-{%- block instance_calo_esums_correlation_condition %}
+{%- block instantiate_calo_esums_correlation_condition %}
   {%- set cuts = condition.template %}
   {%- set obj1 = cuts.objects[0] %}
   {%- set obj2 = cuts.objects[1] %}
@@ -25,5 +25,5 @@
   port map(lhc_clk, {{type1 | lower}}_bx_{{bx1 | lower}}, {{type2 | lower}}_bx_{{bx2 | lower}},
 	         diff_{{type1 | lower}}_{{type2 | lower}}_bx_{{bx1 | lower}}_bx_{{bx2 | lower}}_phi_vector,
 	         {{condition_name | lower}});
-{%- endblock instance_calo_esums_correlation_condition %}
+{%- endblock instantiate_calo_esums_correlation_condition %}
 {# eof #}

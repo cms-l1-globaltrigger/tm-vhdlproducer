@@ -1,5 +1,5 @@
 {%- extends "templateLoops/instantiate_muon_condition.j2" %}
-{%- block instance_muon_condition %}
+{%- block instantiate_muon_condition %}
   {%- set objects = condition.objects %}
   {%- set bx = objects[0].bx %}
   {%- set cuts = condition.template %}
@@ -24,5 +24,5 @@
         ls_charcorr_triple_bx_{{bx | lower}}_bx_{{bx | lower}}, os_charcorr_triple_bx_{{bx | lower}}_bx_{{bx | lower}},
         ls_charcorr_quad_bx_{{bx | lower}}_bx_{{bx | lower}}, os_charcorr_quad_bx_{{bx | lower}}_bx_{{bx | lower}},
         {{condition_name | lower}});
-{% endblock instance_muon_condition%}
+{% endblock instantiate_muon_condition %}
 {# eof #}

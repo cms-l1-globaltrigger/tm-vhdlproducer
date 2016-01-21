@@ -1,10 +1,10 @@
-{%- extends "templateLoops/condLoop.j2" %}
+{%- extends "templateLoops/iterate_condition.j2" %}
 {%- block instantiation %}
   {%- set condition = algorithm.conditions[condition_name] %}
   {%- if condition.type == "MuonMuonCorrelation" %}
-    {%- block instance_muon_muon_correlation_condition scoped %}
-      THIS SHOULD NOT APPEAR - instance_muon_muon_correlation_condition
-    {%- endblock %}
+    {%- block instantiate_muon_muon_correlation_condition scoped %}
+      THIS SHOULD NOT APPEAR - instantiate_muon_muon_correlation_condition
+    {%- endblock instantiate_muon_muon_correlation_condition %}
   {%- endif %}
 {%- endblock instantiation %}
 {# eof #}

@@ -1,7 +1,7 @@
-{%- extends "templateLoops/algoLoop.j2" %}
-{%- block condition_loop %}
+{%- extends "templateLoops/iterate_algorithm.j2" %}
+{%- block algorithm_loop %}
   {%- if algorithm_index in menu.reporter['m2a'][iMod].values() %}
     signal {{algorithm_name}} : std_logic;
   {%- endif %}
-{%- endblock %}
+{%- endblock algorithm_loop %}
 {# eof #}

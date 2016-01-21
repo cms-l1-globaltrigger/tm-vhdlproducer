@@ -1,11 +1,12 @@
-{%- extends "templateLoops/algoLoop.j2" %}
-{%- block condition_loop %}
+{%- extends "templateLoops/iterate_algorithm.j2" %}
+{%- block algorithm_loop %}
   {%- if algorithm_index in menu.reporter['m2a'][iMod].values() %}
     {%- for condition_name in algorithm.conditions.keys() %} 
       {%- set condition = algorithm.conditions[condition_name] %}
       {%- block instantiation scoped %}
-      {%- endblock %}
+        THIS SHOULD NOT APPEAR - iterate_algorithm
+      {%- endblock instantiation %}
     {%- endfor%}
   {%- endif %}
-{%- endblock %}
+{%- endblock algorithm_loop %}
 {# eof #}

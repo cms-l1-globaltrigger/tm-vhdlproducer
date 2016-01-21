@@ -1,5 +1,5 @@
 {%- extends "templateLoops/instantiate_calo_condition.j2" %}
-{%- block instance_calo_condition %}
+{%- block instantiate_calo_condition %}
   {%- set objects = condition.objects %}
   {%- set cuts = condition.template %}
 {{condition_name | lower}}_i: entity work.calo_conditions_v3
@@ -16,5 +16,5 @@
         (X"{{cuts.IsolationLUTs[0] | X01}}", X"{{cuts.IsolationLUTs[1] | X01}}", X"{{cuts.IsolationLUTs[2] | X01}}", X"{{cuts.IsolationLUTs[3] | X01}}")
     )
     port map(lhc_clk, {{objects[0].type | lower}}_bx_{{objects[0].bx | lower}}, {{condition_name | lower}});
-{% endblock instance_calo_condition %}
+{% endblock instantiate_calo_condition %}
 {# eof #}
