@@ -1,0 +1,80 @@
+{%- extends "reporterTemplates/condition_details.j2.html" %} 
+{%- block object_details%} 
+      object: {{object_name}}  <ul> 
+        {#-%- set sorted = sort(object.cuts) %#}
+        {%- for cut_name in object.cuts | sort %} 
+        {%- set cut = object.cuts[cut_name].cut %}
+        {%- set cut_type = menu.reporter["cutTypes"][cut.getCutType()] %}
+        <li>{{ cut_type }} :
+        {%- if cut_type in ["Eta", "Phi", "DeltaEta", "DeltaPhi", "DeltaR", "Mass"] %}
+          [{{ cut.getMinimum().value}}, {{ cut.getMaximum().value}}]
+        {%- elif cut_type in ["Threshold"] %}
+          {{ cut.getMinimum().value}} GeV
+        {%- elif cut_type in ["Quality", "Isolation"] %}
+          0x{{ cut.getData() | X04 }}
+        {%- elif cut_type in ["Charge", "ChargeCorrelation"] %}
+          {{ cut.getData() }}
+        {%- endif %}
+      {%- endfor %} 
+      </ul> 
+{%- endblock object_details %} 
+
+
+
+
+
+
+
+{# eof #}
+
+{#
+{%- for algorithm_name in menu.reporter["index_sorted"] %}
+  {%- set algorithm = menu.reporter["algoDict"][algorithm_name] %}
+<a name={{algorithm_name}}></a><h3 style="color: rgb(51, 51, 255); font-family:Lucida Grande, Verdana;"   >{{algorithm.index}}:{{algorithm_name}}</h3>
+<a href=#top><B>[TOP]</B></a><BR><BR><font style="font-size: 14px;">
+<B>Logical Expression: </B>{{algorithm.exp}}</font>
+<BR>
+<BR>
+<!-- <font style="font-size: 14px;"><B>{{algorithm.exp}}: </B><BR></font> --!>
+
+  {%- for condition_name in algorithm.conditions %} 
+    {%- set condition = algorithm.conditions[condition_name]%}  
+    {%- for object in condition.objects %} 
+      {%-set object_name = object.name %}
+        <hr> 
+bject: {{object_name}} </p> 
+      <ul> 
+        {%- for cut_name in object.cuts  %} 
+        {%- set cut = object.cuts[cut_name].cut %}
+        <li> cut: {{cut_name}} 
+          <br>target =  {{ cut.getObjectType() }}  
+          <br>type   =  {{ cut.getCutType() }}    
+          <br>min value,index =  {{ cut.getMinimum().value}} ,  {{cut.getMinimum().index }}   
+          <br>max value,index =  {{cut.getMaximum().value}}, {{cut.getMaximum().index}}      
+          <br>data =  {{cut.getData()}}         
+        </li> 
+      {%- endfor %} 
+
+      <p> object: {{object_name}} </p> 
+      <ul> 
+        {%- for cut_name in object.cuts  %} 
+        {%- set cut = object.cuts[cut_name].cut %}
+        <li> cut: {{cut_name}} 
+          <br>target =  {{ cut.getObjectType() }}  
+          <br>type   =  {{ cut.getCutType() }}    
+          <br>min value,index =  {{ cut.getMinimum().value}} ,  {{cut.getMinimum().index }}   
+          <br>max value,index =  {{cut.getMaximum().value}}, {{cut.getMaximum().index}}      
+          <br>data =  {{cut.getData()}}         
+        </li> 
+      {%- endfor %} 
+      </ul> 
+    {%- endfor %} 
+  {%- endfor %} 
+{%- endfor %} 
+
+#}
+
+
+
+
+

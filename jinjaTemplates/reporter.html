@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>{{menu.info.name}}</title>
+<STYLE type="text/css">
+table, td
+{
+    border-color: #000000;
+    border-style: solid;
+    font-size: 12px;
+}
+
+table
+{
+    border-width: 0 0 1px 1px;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+.u
+{  
+   margin: 0;
+   padding: 4px;
+   border-width: 1px 1px 0 0;
+   background-color: #C6E2FF;
+}
+
+.activ
+{  
+   margin: 0;
+   padding: 4px;
+   border-width: 1px 1px 0 0;
+   background-color: rgb(51, 255, 0);
+}
+
+.inactiv
+{  
+   margin: 0;
+   padding: 4px;
+   border-width: 1px 1px 0 0;
+   background-color: rgb(255, 0, 0);
+}
+
+.y
+{  
+   margin: 0;
+   padding: 4px;
+   border-width: 1px 1px 0 0;
+   background-color: #F4FF5E;
+}
+
+.g
+{  
+   margin: 0;
+   padding: 4px;
+   border-width: 1px 1px 0 0;
+   background-color: #5EFF89;
+}
+
+.v
+{  
+   margin: 0;
+   padding: 4px;
+   border-width: 1px 1px 0 0;
+   background-color: #E085FC;
+}
+
+.r
+{  
+   margin: 0;
+   padding: 4px;
+   border-width: 1px 1px 0 0;
+   background-color: #FF7D8E;
+}
+
+td
+{
+    margin: 0;
+    padding: 4px;
+    border-width: 1px 1px 0 0;
+}
+
+.p
+{
+    margin: 0;
+    padding: 4px;
+    border-width: 1px 1px 0 0;
+    background-color: #FFFFFF;
+}
+ul
+{ 
+    margin-top: 0; 
+}
+
+</STYLE>
+</head>
+<body><link rel=stylesheet type=text/css href=styles.css />
+<h3 style="color: rgb(51, 51, 255); font-family:Lucida Grande, Verdana;"   ><a name="top"></a>{{menu.info.name}}</h3>
+<BR>
+<a href=#scales>Scales</a>
+<BR>
+<!--   All bitmasks in this file have a mouse over effect! (NO THEY DONT!)   --!>
+
+
+<HR>
+<BR> date: {{menu.info.datetime}} 
+<BR> version: {{menu.info.version}}
+<BR> Firmware: {{menu.info.firmwareUuid}}
+<BR> Comment: {{menu.info.comment}} 
+<HR>
+
+{%- include  "reporterTemplates/algos.j2.html" %}
+
+{%- include  "reporterTemplates/object_details.j2.html" %}
+
+{#%- include  "reporterTemplates/algoDetails.j2.html" %#}
+
+</body>
+</html>
+
+
