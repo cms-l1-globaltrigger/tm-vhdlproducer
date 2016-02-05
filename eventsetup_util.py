@@ -16,6 +16,7 @@ keyScaleMap = "scaleMap"
 
 keyTriggerGroups = "TriggerGroups"
 keyAlgoDict = "algoDict"
+keyCondDict = "condDict"
 
 keyNBitsSorted = "nBits_sorted"
 keyIndexSorted = "index_sorted"
@@ -36,7 +37,9 @@ keyObjPairForCorr = "ObjectPairForCorrelation"
 #          .expression
 #          .expression_in_condition
 #          .conditions{<condition_name>}
+#          .conditionNames[]
 #
+# condition = data.reporter[keyCondDict][<condition_name>]
 # condition = algorithm.conditions[<condition_name>]
 # condition.name
 #          .token
@@ -775,6 +778,16 @@ def setBxCombination(dictionary):
           raise NotImplementedError
 
 
+def setConditionsInMenu(dictionary):
+  condition_map = {}
+  for algorithm_name in dictionary[keyAlgoDict]:
+    for condition_name in dictionary[keyAlgoDict][algorithm_name].conditions:
+      condition = dictionary[keyAlgoDict][algorithm_name].conditions[condition_name]
+      condition_map.update({condition_name: condition})
+
+  dictionary[keyCondDict] = condition_map
+
+
 def setObjectsForCorrelationConditions(dictionary):
   dictionary[keyObjInCorr] = set()
   dictionary[keyObjForScaleConv] = set()
@@ -903,6 +916,7 @@ def getAlgorithmInfo(esAlgo):
   algorithm.expression = esAlgo.getExpression()
   algorithm.expression_in_condition = esAlgo.getExpressionInCondition()
   algorithm.conditions = {}
+  algorithm.conditionNames = []
   algorithm.module_id = esAlgo.getModuleId()
   algorithm.module_index = esAlgo.getModuleIndex()
   algorithm.rpn_vector = esAlgo.getRpnVector()
@@ -940,6 +954,7 @@ def getReport(menu, version=False):
         updateExpressionInCondition(algorithm, esCond)
         continue
 
+      algorithm.conditionNames.append(esCond.getName())
       if token in condInUse: continue
       condInUse.append(token)
 
@@ -1034,8 +1049,10 @@ def getReport(menu, version=False):
 
   setBxCombination(data.reporter)
   setObjectsForCorrelationConditions(data.reporter)
+  setConditionsInMenu(data.reporter)
 
-  data.reporter["cutTypes"]= cutTypes
+  data.reporter["cutTypes"] = cutTypes
+
   return data
 
 # eof
