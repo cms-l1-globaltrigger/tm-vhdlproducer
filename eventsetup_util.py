@@ -176,6 +176,21 @@ _objectTypes[tmEventSetup.EXT] = tmGrammar.EXT
 objectTypes = tuple(_objectTypes)
 
 # list of cut types: esCutType enum in ../tmEventSetup/esTypes.hh
+_cutTypes = [None] * tmEventSetup.nCutType
+_cutTypes[tmEventSetup.Threshold] = "Threshold"
+_cutTypes[tmEventSetup.Eta] = "Eta"
+_cutTypes[tmEventSetup.Phi] = "Phi"
+_cutTypes[tmEventSetup.Charge] = "Charge"
+_cutTypes[tmEventSetup.Quality] = "Quality"
+_cutTypes[tmEventSetup.Isolation] = "Isolation"
+_cutTypes[tmEventSetup.DeltaEta] = "DeltaEta"
+_cutTypes[tmEventSetup.DeltaPhi] = "DeltaPhi"
+_cutTypes[tmEventSetup.DeltaR] = "DeltaR"
+_cutTypes[tmEventSetup.Mass] = "Mass"
+_cutTypes[tmEventSetup.ChargeCorrelation] = "ChargeCorrelation"
+
+cutTypes = tuple(_cutTypes)
+
 
 
 # -----------------------------------------------------------------------------
@@ -820,6 +835,14 @@ def setMenuInfo(menu, data, version="0.0.0"):
 
   data.info.sw_version_major, data.info.sw_version_minor, data.info.sw_version_patch = version.rsplit('.')
 
+  #for the reporter:
+  data.info.datetime       = menu.getDatetime()
+  data.info.version        = menu.getVersion()
+  data.info.firmwareUuid   = menu.getFirmwareUuid()
+  data.info.comment        = menu.getComment()
+
+
+
   return
 
 
@@ -1012,6 +1035,7 @@ def getReport(menu, version=False):
   setBxCombination(data.reporter)
   setObjectsForCorrelationConditions(data.reporter)
 
+  data.reporter["cutTypes"]= cutTypes
   return data
 
 # eof
