@@ -1,0 +1,85 @@
+{%-set info = menu.info %}
+{%-set menu_name = info.name %}
+{%- set nAlgorithms = menu.reporter['index_sorted'] | length %}
+{%- set URL = "http://nrad.web.cern.ch/nrad/tm/reporter/L1Menu_Collisions2015_25nsStage1_v7_uGT.html" %}
+---+!! !{{menu_name}}
+
+%SET{ "REPORTER_URL" value="{{URL}}" }%
+
+%TOC%
+
+---++ Introduction
+
+|  *Trigger Menu Interface Key*  | *File Name*                        |*Revision*| *Compatible releases* | *Date* | *Obs* |
+|!{{menu_name}}  |N/A |Rev. {{info.version}}   | >= 3_3_3 FIXME  | {{info.datetime}} | XML version, Rev. FIXME |
+
+
+---+++ Menu availability in a CMSSW job
+
+---++ List and description of algorithm and technical triggers 
+
+
+A complete description of the algorithm and technical trigger implementation is available in the attached  
+[[%GET{"REPORTER_URL"}%][HTML Description of L1 Menu]]. %ICON{updated}%
+
+---+++ L1 menu identification
+
+"!!!!!not sure how to get these from menu!!!!!"
+|L1 Trigger Menu Interface: |!FIXME |
+|L1 Trigger Menu Name: | !{{menu_name}} |
+|L1 Trigger Menu Implementation: | !FIXME  |
+|Associated L1 scale DB key: |FIXME |
+
+
+---+++ Summary
+
+   * Number of algorithm triggers: {{nAlgorithms}} defined, {{nAlgPos}} FIXME possible.
+   * Number of technical triggers: {{nTechDefined}} defined,  {{nTechPos}} possible.<BR><BR>
+   * Number of free bits for algorithm triggers: {{nFreeAlgBits}}
+   * Number of free bits for technical triggers: {{nFreeTechBits}}<BR>
+
+Number of algorithm triggers per trigger group:
+
+    | *Trigger group* | *Number of bits used*|
+    {%- for tg_name in menu.reporter['TriggerGroups']  %}
+      {%- set tg = menu.reporter['TriggerGroups'][tg_name]%}
+      {%-if tg['nBits'] >0 %}
+      | {{ tg_name }} algorithm triggers:| {{tg['nBits']}} |  
+      {%-endif %}
+    {%-endfor%}
+
+<p style="page-break-before: always">&nbsp;</p>
+
+---+++ List of algorithm triggers sorted by trigger groups
+
+<p style="page-break-before: always">&nbsp;</p>
+
+
+        {%- for tg_name in menu.reporter['TriggerGroups'].keys()  %}
+        {%- set tg = menu.reporter['TriggerGroups'][tg_name]%}
+        {%-if tg['nBits'] >0 %}
+---++++ !{{tg_name}} algorithm triggers
+|  *Trigger Name*  |  *Trigger Alias*  |  *Bit*  |  *Comments*  |
+          {%-for algorithm in tg['bits'] %}
+|[[%GET{"REPORTER_URL"}%#{{algorithm.name}} ][{{algorithm.name}}]]   | {{algorithm.name}}  | {{algorithm.index}} | |
+          {%-endfor %}
+!{{tg_name}} algorithm triggers: {{tg['nBits']}} bits defined
+
+        {%-endif %}
+        {%-endfor %}
+
+
+
+<p style="page-break-before: always">&nbsp;</p>
+
+---+++ List of algorithm triggers sorted by bits
+
+| *Algorithm* | *Alias* | *Bit number* |
+{%- for algorithm_name in menu.reporter['index_sorted']%}
+{%- set algorithm = menu.reporter['algoDict'][algorithm_name] %}
+|[[%GET{"REPORTER_URL"}%#{{algorithm_name}} ][{{algorithm_name}}]]   |{{algorithm_name}} |  {{algorithm.index}}| 
+{%- endfor%}
+
+
+<p style="page-break-before: always">&nbsp;</p>
+

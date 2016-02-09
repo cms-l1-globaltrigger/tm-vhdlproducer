@@ -14,7 +14,9 @@ keyAlgoMap = "algoMap"
 keyCondMap = "condMap"
 keyScaleMap = "scaleMap"
 
+keyTriggerGroupsDict = "TriggerGroupsDict"
 keyTriggerGroups = "TriggerGroups"
+
 keyAlgoDict = "algoDict"
 keyCondDict = "condDict"
 
@@ -67,14 +69,14 @@ keyObjPairForCorr = "ObjectPairForCorrelation"
 #    .data
 #
 
-# keys for reporter[keyTriggerGroups][<conditionType>]
+# keys for reporter[keyTriggerGroupsDict][<conditionType>]
 keyIndex = "index"
 keyNBits = "nBits"
 keyBits = "bits"
 
-# keys for reporter[keyTriggerGroups][<conditionType>][keyBits][ii]
+# keys for reporter[keyTriggerGroupsDict][<conditionType>][keyBits][ii]
 keyAlgoName = 'algoName'
-
+keyAlgo     = 'algo'
 
 # list of condition types
 # should match esConditionType enum in ../tmEventSetup/esTriggerMenu.hh
@@ -912,6 +914,7 @@ def getConditionInfo(esCond, token):
 
 def getAlgorithmInfo(esAlgo):
   algorithm = Object()
+  algorithm.name = esAlgo.getName()
   algorithm.index = esAlgo.getIndex()
   algorithm.expression = esAlgo.getExpression()
   algorithm.expression_in_condition = esAlgo.getExpressionInCondition()
@@ -928,9 +931,13 @@ def getReport(menu, version=False):
   data.reporter = {}
 
   triggerGroups = {}
+  triggerGroupsDict = {}
+  
   for key in conditionTypes:
     triggerGroups[key] = {keyNBits: 0, keyBits: []}
+    triggerGroupsDict[key] = {keyNBits: 0, keyBits: []}
 
+  data.reporter[keyTriggerGroupsDict] = triggerGroupsDict
   data.reporter[keyTriggerGroups] = triggerGroups
   data.reporter[keyAlgoMap] = menu.getAlgorithmMapPtr()
   data.reporter[keyCondMap] = menu.getConditionMapPtr()
@@ -1028,18 +1035,24 @@ def getReport(menu, version=False):
   for algorithm_name in data.reporter[keyAlgoDict]:
     for condition_name in data.reporter[keyAlgoDict][algorithm_name].conditions:
       condition_type = data.reporter[keyAlgoDict][algorithm_name].conditions[condition_name].type
+
+      data.reporter[keyTriggerGroupsDict][condition_type][keyNBits] += 1
       data.reporter[keyTriggerGroups][condition_type][keyNBits] += 1
+
       value = {keyIndex: data.reporter[keyAlgoDict][algorithm_name].index}
       value.update( {keyAlgoName: algorithm_name} )
-      data.reporter[keyTriggerGroups][condition_type][keyBits].append(value)
+      value.update( {keyAlgo: data.reporter[keyAlgoDict][algorithm_name]} )
 
-  data.reporter[keyNBitsSorted] = sortDictByKey(data.reporter[keyTriggerGroups],
+      data.reporter[keyTriggerGroupsDict][condition_type][keyBits].append(value)
+      data.reporter[keyTriggerGroups][condition_type][keyBits].append( data.reporter[keyAlgoDict][algorithm_name]  )
+
+  data.reporter[keyNBitsSorted] = sortDictByKey(data.reporter[keyTriggerGroupsDict],
                                                 keyNBits, True)
   data.reporter[keyIndexSorted] = sortDictByIndex(data.reporter[keyAlgoDict],
                                                   False)
   n = 0
-  for tg in data.reporter[keyTriggerGroups]:
-    n += data.reporter[keyTriggerGroups][tg][keyNBits]
+  for tg in data.reporter[keyTriggerGroupsDict]:
+    n += data.reporter[keyTriggerGroupsDict][tg][keyNBits]
   data.reporter[keyNAlgoDefined] = n
 
   condList = []
