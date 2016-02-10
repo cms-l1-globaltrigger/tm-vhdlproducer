@@ -1,17 +1,20 @@
 {%- extends "reporterTemplates/iterate_all_conditions.j2" %} 
 {%- block condition_details %}
   {%- set condition = menu.reporter['condDict'][condition_name] %}
+  {%- set token = menu.reporter['translate'][condition_name] %}
   {%- if condition_loop.first %}
     <HR>
-    <a name={{algorithm_name}}></a><h3 style="color: rgb(51, 51, 255); font-family:Lucida Grande, Verdana;"   >{{algorithm.index}}:{{algorithm_name}}</h3>
-    <a href=#top><B>[TOP]</B></a><BR><BR><font style="font-size: 14px;">
-    <B>Logical Expression: </B>{{algorithm.expression}}</font><br>
-    <B>Logical Expression in Firmware Conditions: </B>{{algorithm.expression_in_condition}}</font>
+    <a name={{algorithm_name}}></a><h3 style="color: rgb(51, 51, 255); font-family:Lucida Grande, Verdana;">{{algorithm.index}}:{{algorithm_name}}</h3>
+    <a href=#top><B>[TOP]</B></a><BR><BR>
+    <B>Logical Expression: </B>{{algorithm.expression}}<br>
+    <BR>
+    <font style="font-size: 14px;">
+      <B>Logical Expression in Firmware Conditions: </B><i>{{algorithm.expression_in_condition}}</i></font>
     <BR>
     <BR>
     <!-- <font style="font-size: 14px;"><B>{{algorithm.expression}}: </B><BR></font> --!>
   {%- endif %}
-    {{ condition.name }}
+    {{token}}  :=  <font style="font-size: 14px;"><i>{{ condition.name }}</i></font>
     <BR><BR>
     <div style="margin-left: 2em;">
     {%- for object in condition.objects %} 

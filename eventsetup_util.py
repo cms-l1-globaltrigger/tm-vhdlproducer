@@ -19,6 +19,7 @@ keyTriggerGroups = "TriggerGroups"
 
 keyAlgoDict = "algoDict"
 keyCondDict = "condDict"
+keyTranslate = "translate"
 
 keyNBitsSorted = "nBits_sorted"
 keyIndexSorted = "index_sorted"
@@ -788,6 +789,29 @@ def setConditionsInMenu(dictionary):
       condition_map.update({condition_name: condition})
 
   dictionary[keyCondDict] = condition_map
+
+  translator = {}
+  for x in condition_map.keys():
+    hash = x.split('_')[1]
+    translator.update({hash: [x,]})
+
+  for algorithm_name in dictionary[keyAlgoDict]:
+    algorithm = dictionary[keyAlgoDict][algorithm_name]
+    tmGrammar.Algorithm_Logic.clear()
+    tmGrammar.Algorithm_parser(algorithm.expression)
+
+    for token in tmGrammar.Algorithm_Logic.getTokens():
+      if token in tmGrammar.gateName: continue;
+      if token[:3] == 'EXT': continue
+      hash = "%s" % tmEventSetup.getHashUlong(token)
+      if len(translator[hash]) == 2:
+        if translator[hash][1] != token: raise NotImplementedError
+        continue
+      translator[hash].append(token)
+
+  dictionary[keyTranslate] = {}
+  for k, v in translator.iteritems():
+    dictionary[keyTranslate].update({v[0]: v[1]})
 
 
 def setObjectsForCorrelationConditions(dictionary):
