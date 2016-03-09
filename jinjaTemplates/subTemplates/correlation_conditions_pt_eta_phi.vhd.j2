@@ -1,11 +1,23 @@
 {%- set objects = menu.reporter['ObjectsInCorrelations'] %}
 {%- block object_loop scoped %}
   {%- for o in objects %}
+    {%- if 'EG' in o.type or 'JET' in o.type or 'TAU' in o.type %}
 {{o.type | lower}}_data_bx_{{o.bx | lower}}_l: for i in 0 to NR_{{o.type | upper}}_OBJECTS-1 generate
-  {{o.type | lower}}_pt_vector_bx_{{o.bx | lower}}(i)({{o.type | lower}}_PT_VECTOR_WIDTH-1 downto 0) <= CONV_STD_LOGIC_VECTOR({{o.type | upper}}_ET_LUT(CONV_INTEGER({{o.type | lower}}_bx_0(i)(D_S_I_{{o.type | upper}}_V2.et_high downto D_S_I_{{o.type | upper}}_V2.et_low))), {{o.type | lower}}_PT_VECTOR_WIDTH);
+  {{o.type | lower}}_pt_vector_bx_{{o.bx | lower}}(i)({{o.type | upper}}_PT_VECTOR_WIDTH-1 downto 0) <= CONV_STD_LOGIC_VECTOR({{o.type | upper}}_PT_LUT(CONV_INTEGER({{o.type | lower}}_bx_0(i)(D_S_I_{{o.type | upper}}_V2.et_high downto D_S_I_{{o.type | upper}}_V2.et_low))), {{o.type | upper}}_PT_VECTOR_WIDTH);
   {{o.type | lower}}_eta_integer_bx_{{o.bx | lower}}(i) <= CONV_INTEGER(signed({{o.type | lower}}_bx_{{o.bx | lower}}(i)(D_S_I_{{o.type | upper}}_V2.eta_high downto D_S_I_{{o.type | upper}}_V2.eta_low)));
   {{o.type | lower}}_phi_integer_bx_{{o.bx | lower}}(i) <= CONV_INTEGER({{o.type | lower}}_bx_{{o.bx | lower}}(i)(D_S_I_{{o.type | upper}}_V2.phi_high downto D_S_I_{{o.type | upper}}_V2.phi_low));
 end generate;
+    {%- elif 'MU' in o.type %}
+{{o.type | lower}}_data_bx_{{o.bx | lower}}_l: for i in 0 to NR_{{o.type | upper}}_OBJECTS-1 generate
+  {{o.type | lower}}_pt_vector_bx_{{o.bx | lower}}(i)({{o.type | upper}}_PT_VECTOR_WIDTH-1 downto 0) <= CONV_STD_LOGIC_VECTOR({{o.type | upper}}_PT_LUT(CONV_INTEGER({{o.type | lower}}_bx_0(i)(D_S_I_{{o.type | upper}}_V2.pt_high downto D_S_I_{{o.type | upper}}_V2.pt_low))), {{o.type | upper}}_PT_VECTOR_WIDTH);
+  {{o.type | lower}}_eta_integer_bx_{{o.bx | lower}}(i) <= CONV_INTEGER(signed({{o.type | lower}}_bx_{{o.bx | lower}}(i)(D_S_I_{{o.type | upper}}_V2.eta_high downto D_S_I_{{o.type | upper}}_V2.eta_low)));
+  {{o.type | lower}}_phi_integer_bx_{{o.bx | lower}}(i) <= CONV_INTEGER({{o.type | lower}}_bx_{{o.bx | lower}}(i)(D_S_I_{{o.type | upper}}_V2.phi_high downto D_S_I_{{o.type | upper}}_V2.phi_low));
+end generate;
+    {%- elif 'ETM' in o.type or 'HTM' in o.type  %}
+{{o.type | lower}}_data_bx_{{o.bx | lower}}_l: for i in 0 to NR_{{o.type | upper}}_OBJECTS-1 generate
+  {{o.type | lower}}_phi_integer_bx_{{o.bx | lower}}(i) <= CONV_INTEGER({{o.type | lower}}_bx_{{o.bx | lower}}(D_S_I_{{o.type | upper}}_V2.phi_high downto D_S_I_{{o.type | upper}}_V2.phi_low));
+end generate;
+    {%- endif %}
   {%- endfor %}
 {%- endblock object_loop %}
 {# eof #}

@@ -47,12 +47,20 @@ constant NR_ALGOS : positive := {{ menu.reporter['m2a'][iMod] | length }}; -- nu
 -- ==== FDL definitions - begin ============================================================
 -- Definitions for prescalers (for FDL !)
 constant PRESCALER_COUNTER_WIDTH : integer := 24;
+
+-- HB HB 2016-03-02: type definition for "global" index use.
+type prescale_factor_global_array is array (MAX_NR_ALGOS-1 downto 0) of std_logic_vector(31 downto 0);
+
 type prescale_factor_array is array (NR_ALGOS-1 downto 0) of std_logic_vector(31 downto 0); -- same width as PCIe data
 -- constant PRESCALE_FACTOR_INIT : ipb_regs_array(0 to MAX_NR_ALGOS-1) := ({{AssignmentPrescaleFactors}} others => X"00000001"); -- written by TME
 constant PRESCALE_FACTOR_INIT : ipb_regs_array(0 to MAX_NR_ALGOS-1) := (others => X"00000001"); -- written by TME
 
 -- Definitions for rate counters
 constant RATE_COUNTER_WIDTH : integer := 32;
+
+-- HB HB 2016-03-02: type definition for "global" index use.
+type rate_counter_global_array is array (MAX_NR_ALGOS-1 downto 0) of std_logic_vector(RATE_COUNTER_WIDTH-1 downto 0);
+
 type rate_counter_array is array (NR_ALGOS-1 downto 0) of std_logic_vector(RATE_COUNTER_WIDTH-1 downto 0);
 
 -- HB 2014-02-28: changed vector length of init values for finor- and veto-maks, because of min. 32 bits for register
@@ -127,6 +135,7 @@ constant d_s_i_muon : d_s_i_muon_record := (MUON_CHARGE_HIGH,MUON_CHARGE_LOW,MUO
 -- constant d_s_i_muon : d_s_i_muon_record := (35,34,33,32,31,23,22,19,18,10,9,0);
 -- HB 2015-11-25: renamed d_s_i_muon to D_S_I_MUON_V2 for use in Jinja2 templates similar as D_S_I_EG_V2, etc.
 constant D_S_I_MUON_V2 : d_s_i_muon_record := d_s_i_muon;
+constant D_S_I_MU_V2 : d_s_i_muon_record := d_s_i_muon; -- dummy for VHDL-Producer output (correlation conditions)
 
 type muon_objects_array is array (natural range <>) of std_logic_vector(MAX_MUON_BITS-1 downto 0);
 type muon_templates_array is array (1 to NR_MUON_TEMPLATES) of std_logic_vector(MAX_MUON_TEMPLATES_BITS-1 downto 0);
@@ -222,6 +231,11 @@ constant MAX_ESUMS_BITS_TEMP : positive := max(ETT_DATA_WIDTH, HT_DATA_WIDTH, ET
 constant MAX_ESUMS_BITS : positive := max(MAX_ESUMS_BITS_TEMP, HTM_DATA_WIDTH);
 constant MAX_ESUMS_TEMPLATES_BITS : positive range 1 to MAX_ESUMS_BITS := 16;
 
+constant NR_ETT_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (correlation conditions)
+constant NR_HTT_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (correlation conditions)
+constant NR_ETM_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (correlation conditions)
+constant NR_HTM_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (correlation conditions)
+
 constant ETT_TYPE : natural range 0 to 3 := 0;
 constant HTT_TYPE : natural range 0 to 3 := 1;
 constant ETM_TYPE : natural range 0 to 3 := 2;
@@ -246,22 +260,26 @@ end record d_s_i_htm_record;
 constant ETT_ET_LOW : natural := 0;
 constant ETT_ET_HIGH : natural := 11;
 constant D_S_I_ETT : d_s_i_ett_record := (ETT_ET_HIGH,ETT_ET_LOW);
+constant D_S_I_ETT_V2 : d_s_i_ett_record := D_S_I_ETT; -- dummy for VHDL-Producer output (correlation conditions) 
 -- constant D_S_I_ETT : d_s_i_ett_record := (11,0);
 constant HTT_ET_LOW : natural := 0;
 constant HTT_ET_HIGH : natural := 11;
 constant D_S_I_HTT : d_s_i_htt_record := (HTT_ET_HIGH,HTT_ET_LOW);
+constant D_S_I_HTT_V2 : d_s_i_htt_record := D_S_I_HTT; -- dummy for VHDL-Producer output (correlation conditions) 
 -- constant D_S_I_HTT : d_s_i_htt_record := (11,0);
 constant ETM_ET_LOW : natural := 0;
 constant ETM_ET_HIGH : natural := 11;
 constant ETM_PHI_LOW : natural := 12;
 constant ETM_PHI_HIGH : natural := 19;
 constant D_S_I_ETM : d_s_i_etm_record := (ETM_PHI_HIGH,ETM_PHI_LOW,ETM_ET_HIGH,ETM_ET_LOW);
+constant D_S_I_ETM_V2 : d_s_i_etm_record := D_S_I_ETM; -- dummy for VHDL-Producer output (correlation conditions) 
 -- constant D_S_I_ETM : d_s_i_etm_record := (19,12,11,0);
 constant HTM_ET_LOW : natural := 0;
 constant HTM_ET_HIGH : natural := 11;
 constant HTM_PHI_LOW : natural := 12;
 constant HTM_PHI_HIGH : natural := 19;
 constant D_S_I_HTM : d_s_i_htm_record := (HTM_PHI_HIGH,HTM_PHI_LOW,HTM_ET_HIGH,HTM_ET_LOW);
+constant D_S_I_HTM_V2 : d_s_i_htm_record := D_S_I_HTM; -- dummy for VHDL-Producer output (correlation conditions) 
 -- constant D_S_I_HTM : d_s_i_htm_record := (19,12,11,0);
 -- ==== CALOs - end ============================================================
 
@@ -409,6 +427,7 @@ constant MUON_PT_PRECISION : positive := 1; -- 1 digit after decimal point
 constant MUON_MUON_COSH_COS_PRECISION : positive := 4; -- 4 digits after decimal point (after roundimg to the 5th digit)
 
 constant MUON_PT_VECTOR_WIDTH: positive := log2c((2**(D_S_I_MUON_V2.pt_high-D_S_I_MUON_V2.pt_low+1)-1)*(10**MUON_PT_PRECISION)); -- max. value 255.5 GeV => 2555 => 0x9FB 
+constant MU_PT_VECTOR_WIDTH: positive := MUON_PT_VECTOR_WIDTH; -- dummy for VHDL-Producer output (correlation conditions) 
 -- constant MUON_PT_VECTOR_WIDTH: positive := 12; -- max. value 255.5 GeV => 2555 (255.5 * 10**MUON_INV_MASS_PT_PRECISION) => 0x9FB 
 
 constant MUON_MUON_COSH_COS_VECTOR_WIDTH: positive := log2c(677303); -- max. value cosh_deta-cos_dphi => [667303-(-10000)]=677303 => 0xA55B7 - highest value in LUT 
@@ -878,7 +897,9 @@ constant JET_TAU_DIFF_PHI_LUT : jet_tau_diff_phi_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-constant MUON_MUON_DIFF_ETA_LUT : muon_muon_diff_eta_lut_array := (
+-- HB 2016-03-08: VHDL-Producer output (correlation conditions) with 'MU'
+-- constant MUON_MUON_DIFF_ETA_LUT : muon_muon_diff_eta_lut_array := (
+constant MU_MU_DIFF_ETA_LUT : muon_muon_diff_eta_lut_array := (
 0, 11, 22, 33, 44, 54, 65, 76, 87, 98, 109, 120, 131, 141, 152, 163,
 174, 185, 196, 207, 217, 228, 239, 250, 261, 272, 283, 294, 305, 315, 326, 337,
 348, 359, 370, 381, 391, 402, 413, 424, 435, 446, 457, 468, 479, 489, 500, 511,
@@ -913,7 +934,8 @@ constant MUON_MUON_DIFF_ETA_LUT : muon_muon_diff_eta_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-constant MUON_MUON_DIFF_PHI_LUT : muon_muon_diff_phi_lut_array := (
+-- constant MUON_MUON_DIFF_PHI_LUT : muon_muon_diff_phi_lut_array := (
+constant MU_MU_DIFF_PHI_LUT : muon_muon_diff_phi_lut_array := (
 0, 11, 22, 33, 44, 55, 65, 76, 87, 98, 109, 120, 131, 142, 153, 164,
 175, 185, 196, 207, 218, 229, 240, 251, 262, 273, 284, 295, 305, 316, 327, 338,
 349, 360, 371, 382, 393, 404, 415, 425, 436, 447, 458, 469, 480, 491, 502, 513,
@@ -980,7 +1002,8 @@ constant MUON_MUON_DIFF_PHI_LUT : muon_muon_diff_phi_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-constant EG_MUON_DIFF_ETA_LUT : eg_muon_diff_eta_lut_array := (
+-- constant EG_MUON_DIFF_ETA_LUT : eg_muon_diff_eta_lut_array := (
+constant EG_MU_DIFF_ETA_LUT : eg_muon_diff_eta_lut_array := (
 0, 11, 22, 33, 44, 54, 65, 76, 87, 98, 109, 120, 131, 141, 152, 163,
 174, 185, 196, 207, 217, 228, 239, 250, 261, 272, 283, 294, 305, 315, 326, 337,
 348, 359, 370, 381, 391, 402, 413, 424, 435, 446, 457, 468, 479, 489, 500, 511,
@@ -1047,7 +1070,8 @@ constant EG_MUON_DIFF_ETA_LUT : eg_muon_diff_eta_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-constant EG_MUON_DIFF_PHI_LUT : eg_muon_diff_phi_lut_array := (
+-- constant EG_MUON_DIFF_PHI_LUT : eg_muon_diff_phi_lut_array := (
+constant EG_MU_DIFF_PHI_LUT : eg_muon_diff_phi_lut_array := (
 0, 11, 22, 33, 44, 55, 65, 76, 87, 98, 109, 120, 131, 142, 153, 164,
 175, 185, 196, 207, 218, 229, 240, 251, 262, 273, 284, 295, 305, 316, 327, 338,
 349, 360, 371, 382, 393, 404, 415, 425, 436, 447, 458, 469, 480, 491, 502, 513,
@@ -1114,7 +1138,8 @@ constant EG_MUON_DIFF_PHI_LUT : eg_muon_diff_phi_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-constant TAU_MUON_DIFF_ETA_LUT : tau_muon_diff_eta_lut_array := (
+-- constant TAU_MUON_DIFF_ETA_LUT : tau_muon_diff_eta_lut_array := (
+constant TAU_MU_DIFF_ETA_LUT : tau_muon_diff_eta_lut_array := (
 0, 11, 22, 33, 44, 54, 65, 76, 87, 98, 109, 120, 131, 141, 152, 163,
 174, 185, 196, 207, 217, 228, 239, 250, 261, 272, 283, 294, 305, 315, 326, 337,
 348, 359, 370, 381, 391, 402, 413, 424, 435, 446, 457, 468, 479, 489, 500, 511,
@@ -1181,7 +1206,8 @@ constant TAU_MUON_DIFF_ETA_LUT : tau_muon_diff_eta_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-constant TAU_MUON_DIFF_PHI_LUT : tau_muon_diff_phi_lut_array := (
+-- constant TAU_MUON_DIFF_PHI_LUT : tau_muon_diff_phi_lut_array := (
+constant TAU_MU_DIFF_PHI_LUT : tau_muon_diff_phi_lut_array := (
 0, 11, 22, 33, 44, 55, 65, 76, 87, 98, 109, 120, 131, 142, 153, 164,
 175, 185, 196, 207, 218, 229, 240, 251, 262, 273, 284, 295, 305, 316, 327, 338,
 349, 360, 371, 382, 393, 404, 415, 425, 436, 447, 458, 469, 480, 491, 502, 513,
@@ -1248,7 +1274,8 @@ constant TAU_MUON_DIFF_PHI_LUT : tau_muon_diff_phi_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-constant JET_MUON_DIFF_ETA_LUT : jet_muon_diff_eta_lut_array := (
+-- constant JET_MUON_DIFF_ETA_LUT : jet_muon_diff_eta_lut_array := (
+constant JET_MU_DIFF_ETA_LUT : jet_muon_diff_eta_lut_array := (
 0, 11, 22, 33, 44, 54, 65, 76, 87, 98, 109, 120, 131, 141, 152, 163,
 174, 185, 196, 207, 217, 228, 239, 250, 261, 272, 283, 294, 305, 315, 326, 337,
 348, 359, 370, 381, 391, 402, 413, 424, 435, 446, 457, 468, 479, 489, 500, 511,
@@ -1315,7 +1342,8 @@ constant JET_MUON_DIFF_ETA_LUT : jet_muon_diff_eta_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-constant JET_MUON_DIFF_PHI_LUT : jet_muon_diff_phi_lut_array := (
+-- constant JET_MUON_DIFF_PHI_LUT : jet_muon_diff_phi_lut_array := (
+constant JET_MU_DIFF_PHI_LUT : jet_muon_diff_phi_lut_array := (
 0, 11, 22, 33, 44, 55, 65, 76, 87, 98, 109, 120, 131, 142, 153, 164,
 175, 185, 196, 207, 218, 229, 240, 251, 262, 273, 284, 295, 305, 316, 327, 338,
 349, 360, 371, 382, 393, 404, 415, 425, 436, 447, 458, 469, 480, 491, 502, 513,
@@ -1496,7 +1524,8 @@ constant JET_ETM_DIFF_PHI_LUT : jet_etm_diff_phi_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-constant MUON_HTM_DIFF_PHI_LUT : muon_htm_diff_phi_lut_array := (
+-- constant MUON_HTM_DIFF_PHI_LUT : muon_htm_diff_phi_lut_array := (
+constant MU_HTM_DIFF_PHI_LUT : muon_htm_diff_phi_lut_array := (
 0, 11, 22, 33, 44, 55, 65, 76, 87, 98, 109, 120, 131, 142, 153, 164,
 175, 185, 196, 207, 218, 229, 240, 251, 262, 273, 284, 295, 305, 316, 327, 338,
 349, 360, 371, 382, 393, 404, 415, 425, 436, 447, 458, 469, 480, 491, 502, 513,
@@ -1563,7 +1592,8 @@ constant MUON_HTM_DIFF_PHI_LUT : muon_htm_diff_phi_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-constant MUON_ETM_DIFF_PHI_LUT : muon_etm_diff_phi_lut_array := (
+-- constant MUON_ETM_DIFF_PHI_LUT : muon_etm_diff_phi_lut_array := (
+constant MU_ETM_DIFF_PHI_LUT : muon_etm_diff_phi_lut_array := (
 0, 11, 22, 33, 44, 55, 65, 76, 87, 98, 109, 120, 131, 142, 153, 164,
 175, 185, 196, 207, 218, 229, 240, 251, 262, 273, 284, 295, 305, 316, 327, 338,
 349, 360, 371, 382, 393, 404, 415, 425, 436, 447, 458, 469, 480, 491, 502, 513,
@@ -1832,7 +1862,8 @@ constant JET_PT_LUT : jet_pt_lut_array := (
 10160, 10165, 10170, 10175, 10180, 10185, 10190, 10195, 10200, 10205, 10210, 10215, 10220, 10225, 0, 0
 );
 
-constant MUON_PT_LUT : muon_pt_lut_array := (
+-- constant MUON_PT_LUT : muon_pt_lut_array := (
+constant MU_PT_LUT : muon_pt_lut_array := (
 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75,
 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155,
 160, 165, 170, 175, 180, 185, 190, 195, 200, 205, 210, 215, 220, 225, 230, 235,
@@ -2095,7 +2126,8 @@ constant JET_TAU_COS_DPHI_LUT : jet_tau_cos_dphi_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-constant MUON_MUON_COSH_DETA_LUT : muon_muon_cosh_deta_lut_array := (
+-- constant MUON_MUON_COSH_DETA_LUT : muon_muon_cosh_deta_lut_array := (
+constant MU_MU_COSH_DETA_LUT : muon_muon_cosh_deta_lut_array := (
 10000, 10001, 10002, 10005, 10009, 10015, 10021, 10029, 10038, 10048, 10059, 10072, 10085, 10100, 10116, 10133,
 10152, 10171, 10192, 10214, 10237, 10262, 10288, 10314, 10343, 10372, 10402, 10434, 10467, 10501, 10537, 10574,
 10612, 10651, 10691, 10733, 10776, 10821, 10866, 10913, 10961, 11011, 11061, 11113, 11167, 11222, 11278, 11335,
@@ -2130,7 +2162,8 @@ constant MUON_MUON_COSH_DETA_LUT : muon_muon_cosh_deta_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-constant MUON_MUON_COS_DPHI_LUT : muon_muon_cos_dphi_lut_array := (
+-- constant MUON_MUON_COS_DPHI_LUT : muon_muon_cos_dphi_lut_array := (
+constant MU_MU_COS_DPHI_LUT : muon_muon_cos_dphi_lut_array := (
 10000, 9999, 9998, 9995, 9990, 9985, 9979, 9971, 9962, 9952, 9941, 9928, 9914, 9900, 9884, 9866,
 9848, 9829, 9808, 9786, 9763, 9739, 9713, 9687, 9659, 9630, 9600, 9569, 9537, 9504, 9469, 9434,
 9397, 9359, 9320, 9280, 9239, 9197, 9153, 9109, 9063, 9016, 8969, 8920, 8870, 8819, 8767, 8714,
@@ -2197,7 +2230,8 @@ constant MUON_MUON_COS_DPHI_LUT : muon_muon_cos_dphi_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-constant EG_MUON_COSH_DETA_LUT : eg_muon_cosh_deta_lut_array := (
+-- constant EG_MUON_COSH_DETA_LUT : eg_muon_cosh_deta_lut_array := (
+constant EG_MU_COSH_DETA_LUT : eg_muon_cosh_deta_lut_array := (
 10000, 10001, 10002, 10005, 10009, 10015, 10021, 10029, 10038, 10048, 10059, 10072, 10085, 10100, 10116, 10133,
 10152, 10171, 10192, 10214, 10237, 10262, 10288, 10314, 10343, 10372, 10402, 10434, 10467, 10501, 10537, 10574,
 10612, 10651, 10691, 10733, 10776, 10821, 10866, 10913, 10961, 11011, 11061, 11113, 11167, 11222, 11278, 11335,
@@ -2264,7 +2298,8 @@ constant EG_MUON_COSH_DETA_LUT : eg_muon_cosh_deta_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-constant EG_MUON_COS_DPHI_LUT : eg_muon_cos_dphi_lut_array := (
+-- constant EG_MUON_COS_DPHI_LUT : eg_muon_cos_dphi_lut_array := (
+constant EG_MU_COS_DPHI_LUT : eg_muon_cos_dphi_lut_array := (
 10000, 9999, 9998, 9995, 9990, 9985, 9979, 9971, 9962, 9952, 9941, 9928, 9914, 9900, 9884, 9866,
 9848, 9829, 9808, 9786, 9763, 9739, 9713, 9687, 9659, 9630, 9600, 9569, 9537, 9504, 9469, 9434,
 9397, 9359, 9320, 9280, 9239, 9197, 9153, 9109, 9063, 9016, 8969, 8920, 8870, 8819, 8767, 8714,
@@ -2331,7 +2366,8 @@ constant EG_MUON_COS_DPHI_LUT : eg_muon_cos_dphi_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-constant TAU_MUON_COSH_DETA_LUT : tau_muon_cosh_deta_lut_array := (
+-- constant TAU_MUON_COSH_DETA_LUT : tau_muon_cosh_deta_lut_array := (
+constant TAU_MU_COSH_DETA_LUT : tau_muon_cosh_deta_lut_array := (
 10000, 10001, 10002, 10005, 10009, 10015, 10021, 10029, 10038, 10048, 10059, 10072, 10085, 10100, 10116, 10133,
 10152, 10171, 10192, 10214, 10237, 10262, 10288, 10314, 10343, 10372, 10402, 10434, 10467, 10501, 10537, 10574,
 10612, 10651, 10691, 10733, 10776, 10821, 10866, 10913, 10961, 11011, 11061, 11113, 11167, 11222, 11278, 11335,
@@ -2398,7 +2434,8 @@ constant TAU_MUON_COSH_DETA_LUT : tau_muon_cosh_deta_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-constant TAU_MUON_COS_DPHI_LUT : tau_muon_cos_dphi_lut_array := (
+-- constant TAU_MUON_COS_DPHI_LUT : tau_muon_cos_dphi_lut_array := (
+constant TAU_MU_COS_DPHI_LUT : tau_muon_cos_dphi_lut_array := (
 10000, 9999, 9998, 9995, 9990, 9985, 9979, 9971, 9962, 9952, 9941, 9928, 9914, 9900, 9884, 9866,
 9848, 9829, 9808, 9786, 9763, 9739, 9713, 9687, 9659, 9630, 9600, 9569, 9537, 9504, 9469, 9434,
 9397, 9359, 9320, 9280, 9239, 9197, 9153, 9109, 9063, 9016, 8969, 8920, 8870, 8819, 8767, 8714,
@@ -2465,7 +2502,8 @@ constant TAU_MUON_COS_DPHI_LUT : tau_muon_cos_dphi_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-constant JET_MUON_COSH_DETA_LUT : jet_muon_cosh_deta_lut_array := (
+-- constant JET_MUON_COSH_DETA_LUT : jet_muon_cosh_deta_lut_array := (
+constant JET_MU_COSH_DETA_LUT : jet_muon_cosh_deta_lut_array := (
 10000, 10001, 10002, 10005, 10009, 10015, 10021, 10029, 10038, 10048, 10059, 10072, 10085, 10100, 10116, 10133,
 10152, 10171, 10192, 10214, 10237, 10262, 10288, 10314, 10343, 10372, 10402, 10434, 10467, 10501, 10537, 10574,
 10612, 10651, 10691, 10733, 10776, 10821, 10866, 10913, 10961, 11011, 11061, 11113, 11167, 11222, 11278, 11335,
@@ -2532,7 +2570,8 @@ constant JET_MUON_COSH_DETA_LUT : jet_muon_cosh_deta_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
-constant JET_MUON_COS_DPHI_LUT : jet_muon_cos_dphi_lut_array := (
+-- constant JET_MUON_COS_DPHI_LUT : jet_muon_cos_dphi_lut_array := (
+constant JET_MU_COS_DPHI_LUT : jet_muon_cos_dphi_lut_array := (
 10000, 9999, 9998, 9995, 9990, 9985, 9979, 9971, 9962, 9952, 9941, 9928, 9914, 9900, 9884, 9866,
 9848, 9829, 9808, 9786, 9763, 9739, 9713, 9687, 9659, 9630, 9600, 9569, 9537, 9504, 9469, 9434,
 9397, 9359, 9320, 9280, 9239, 9197, 9153, 9109, 9063, 9016, 8969, 8920, 8870, 8819, 8767, 8714,

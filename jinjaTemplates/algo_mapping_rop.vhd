@@ -29,6 +29,21 @@ use work.gt_mp7_core_pkg.all;
 entity algo_mapping_rop is
     port(
         lhc_clk : in std_logic;
+-- HB 2016-03-02: inserted with fdl version (v0.0.21) for global index. Types definition in gtl_pkg.
+	algo_bx_masks_global :  in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+	algo_bx_masks_local :  out std_logic_vector(NR_ALGOS-1 downto 0);
+	rate_cnt_before_prescaler_local :  in rate_counter_array;
+	rate_cnt_before_prescaler_global :  out rate_counter_global_array; -- to be defined in gt_mp7_core_pkg
+	prescale_factor_global :  in prescale_factor_global_array; -- to be defined in gt_mp7_core_pkg
+	prescale_factor_local :  out prescale_factor_array;
+	rate_cnt_after_prescaler_local :  in rate_counter_array;
+	rate_cnt_after_prescaler_global :  out rate_counter_global_array; -- to be defined in gt_mp7_core_pkg
+	rate_cnt_post_dead_time_local :  in rate_counter_array;
+	rate_cnt_post_dead_time_global :  out rate_counter_global_array; -- to be defined in gt_mp7_core_pkg
+	finor_masks_global :  in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+	finor_masks_local :  out std_logic_vector(NR_ALGOS-1 downto 0);
+	veto_masks_global :  in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+	veto_masks_local :  out std_logic_vector(NR_ALGOS-1 downto 0);
         algo_before_prescaler : in std_logic_vector(NR_ALGOS-1 downto 0);
         algo_after_prescaler : in std_logic_vector(NR_ALGOS-1 downto 0);
         algo_after_finor_mask : in std_logic_vector(NR_ALGOS-1 downto 0);
@@ -39,54 +54,51 @@ entity algo_mapping_rop is
 end algo_mapping_rop;
 
 architecture rtl of algo_mapping_rop is
-    signal a_b_p: std_logic_vector(NR_ALGOS-1 downto 0);
-    signal a_a_p: std_logic_vector(NR_ALGOS-1 downto 0);
-    signal a_a_f: std_logic_vector(NR_ALGOS-1 downto 0);
-    signal algo_before_prescaler_rop_int: std_logic_vector(MAX_NR_ALGOS-1 downto 0);
-    signal algo_after_prescaler_rop_int: std_logic_vector(MAX_NR_ALGOS-1 downto 0);
-    signal algo_after_finor_mask_rop_int: std_logic_vector(MAX_NR_ALGOS-1 downto 0);
+    type global_index_array is array (0 to NR_ALGOS-1) of integer;
+
+-- HB 2016-03-02: inserted for global index
+    constant global_index: global_index_array := (
+-- ==== Inserted by TME - begin
+{% for algoName in menu.reporter['index_sorted'] %}
+  {%- set algorithm = menu.reporter['algoDict'][algoName] %}
+  {%- if algorithm.index in menu.reporter['m2a'][iMod].values() -%}
+    {{algorithm.index}}, {% if loop.index0 % 20 == 19 %}
+    {% endif %}
+  {%- endif %}
+{%- endfor %}
+-- ==== Inserted by TME - end
+	others => 0
+    );	    
+
+-- HB 2016-03-02: inserted for global index
+    signal rate_cnt_before_prescaler_global_int: rate_counter_global_array := (others => (others => '0'));
+    signal rate_cnt_after_prescaler_global_int: rate_counter_global_array := (others => (others => '0'));
+    signal rate_cnt_post_dead_time_global_int: rate_counter_global_array := (others => (others => '0'));
+
+    signal algo_before_prescaler_rop_int: std_logic_vector(MAX_NR_ALGOS-1 downto 0) := (others => '0');
+    signal algo_after_prescaler_rop_int: std_logic_vector(MAX_NR_ALGOS-1 downto 0) := (others => '0');
+    signal algo_after_finor_mask_rop_int: std_logic_vector(MAX_NR_ALGOS-1 downto 0) := (others => '0');
+
 begin
 
-a_b_p <= algo_before_prescaler;
-a_a_p <= algo_after_prescaler;
-a_a_f <= algo_after_finor_mask;
+nr_algos_l: for i in 0 to NR_ALGOS-1 generate
+-- HB 2016-03-02: inserted for global index
+    algo_bx_masks_local(i) <= algo_bx_masks_global(global_index(i));
+    rate_cnt_before_prescaler_global_int(global_index(i)) <= rate_cnt_before_prescaler_local(i);
+    prescale_factor_local(i) <= prescale_factor_global(global_index(i));
+    rate_cnt_after_prescaler_global_int(global_index(i)) <= rate_cnt_after_prescaler_local(i);
+    rate_cnt_post_dead_time_global_int(global_index(i)) <= rate_cnt_post_dead_time_local(i);
+    finor_masks_local(i) <= finor_masks_global(global_index(i));
+    veto_masks_local(i) <= veto_masks_global(global_index(i));
+    algo_before_prescaler_rop_int(global_index(i)) <= algo_before_prescaler(i);
+    algo_after_prescaler_rop_int(global_index(i)) <= algo_after_prescaler(i);
+    algo_after_finor_mask_rop_int(global_index(i)) <= algo_after_finor_mask(i);
+end generate;
 
--- ==== Inserted by TME - begin =============================================================================================================
-
-algo_before_prescaler_rop_int <= (
-{%- for algoName in menu.reporter['index_sorted'] %}
-  {%- set algorithm = menu.reporter['algoDict'][algoName] %}
-  {%- if algorithm.index in menu.reporter['m2a'][iMod].values() %}
-    {%- set localAlgoIndex = menu.reporter['a2m'][algorithm.index][1] %}
-{{algorithm.index}} => a_b_p({{localAlgoIndex}}),
-  {%- endif %}
-{%- endfor %}
-others => '0');
-
-algo_after_prescaler_rop_int <= (
-{%- for algoName in menu.reporter['index_sorted'] %}
-  {%- set algorithm = menu.reporter['algoDict'][algoName] %}
-  {%- if algorithm.index in menu.reporter['m2a'][iMod].values() %}
-    {%- set localAlgoIndex = menu.reporter['a2m'][algorithm.index][1] %}
-{{algorithm.index}} => a_a_p({{localAlgoIndex}}),
-  {%- endif %}
-{%- endfor %}
-others => '0');
-
-algo_after_finor_mask_rop_int <= (
-{%- for algoName in menu.reporter['index_sorted'] %}
-  {%- set algorithm = menu.reporter['algoDict'][algoName] %}
-  {%- if algorithm.index in menu.reporter['m2a'][iMod].values() %}
-    {%- set localAlgoIndex = menu.reporter['a2m'][algorithm.index][1] %}
-{{algorithm.index}} => a_a_f({{localAlgoIndex}}),
-  {%- endif %}
-{%- endfor %}
-others => '0');
-
-{#-{AlgoIndexRop:d} => a_a_f({AlgoIndexGtl:d}),#}
-{#-      algo_before_prescaler_rop_int <= ({AssignmentAbp} others => '0');       #}
-{#-      algo_after_prescaler_rop_int <= ({AssignmentAap} others => '0');       #}
--- ==== Inserted by TME - end ===============================================================================================================
+-- HB 2016-03-02: inserted for global index
+rate_cnt_before_prescaler_global <= rate_cnt_before_prescaler_global_int;
+rate_cnt_after_prescaler_global <= rate_cnt_after_prescaler_global_int;
+rate_cnt_post_dead_time_global <= rate_cnt_post_dead_time_global_int;
 
 algo_2_rop_p: process(lhc_clk, algo_before_prescaler_rop_int, algo_after_prescaler_rop_int, algo_after_finor_mask_rop_int)
     begin

@@ -33,7 +33,7 @@
   )
   port map(lhc_clk, {{type1 | lower}}_bx_{{bx1 | lower}}, {{type2 | lower}}_bx_{{bx2 | lower}},
 	         diff_{{type1 | lower}}_{{type2 | lower}}_bx_{{bx1 | lower}}_bx_{{bx2 | lower}}_eta_vector, diff_{{type1 | lower}}_{{type2 | lower}}_bx_{{bx1 | lower}}_bx_{{bx2 | lower}}_phi_vector,
-           {{type1 | lower}}_et_vector_bx_{{bx1 | lower}}, {{type2 | lower}}_et_vector_bx_{{bx2 | lower}}, 
+           {{type1 | lower}}_pt_vector_bx_{{bx1 | lower}}, {{type2 | lower}}_pt_vector_bx_{{bx2 | lower}}, 
            {{type1 | lower}}_{{type2 | lower}}_bx_{{bx1 | lower}}_bx_{{bx2 | lower}}_cosh_deta_vector, {{type1 | lower}}_{{type2 | lower}}_bx_{{bx1 | lower}}_bx_{{bx2 | lower}}_cos_dphi_vector,
 	         {{condition_name | lower}});
 {%- endblock instantiate_calo_calo_correlation_condition %}

@@ -3,6 +3,7 @@
   {%- set cuts = condition.template %}
   {%- set obj1 = cuts.objects[0] %}
   {%- set obj2 = cuts.objects[1] %}
+  {%- set type1 = condition.objects[0].type %}
   {%- set type2 = condition.objects[1].type %}
   {%- set bx1 = condition.objects[0].bx %}
   {%- set bx2 = condition.objects[1].bx %}
@@ -21,8 +22,8 @@
     {{obj2.PhiW2Ignore[0]}}, X"{{obj2.PhiW2UpperLimits[0] | X04}}", X"{{obj2.PhiW2LowerLimits[0] | X04}}",  
     {{cuts.DiffPhiUpperLimit}}, {{cuts.DiffPhiLowerLimit}}, DETA_DPHI_VECTOR_WIDTH_ALL, MUON_{{type2 | upper}}_DPHI_PRECISION
   )
-  port map(lhc_clk, muon_bx_{{bx1 | lower}}, {{type2 | lower}}_bx_{{bx2 | lower}},
-	         diff_muon_{{type2 | lower}}_bx_{{bx1 | lower}}_bx_{{bx2 | lower}}_phi_vector, 
+  port map(lhc_clk, mu_bx_{{bx1 | lower}}, {{type2 | lower}}_bx_{{bx2 | lower}},
+	         diff_{{type1 | lower}}_{{type2 | lower}}_bx_{{bx1 | lower}}_bx_{{bx2 | lower}}_phi_vector, 
 	         {{condition_name | lower}});
 {%- endblock instantiate_muon_esums_correlation_condition %}
 {# eof #}

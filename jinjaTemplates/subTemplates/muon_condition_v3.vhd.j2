@@ -19,7 +19,7 @@
         (X"{{cuts.IsolationLUTs[0] | X01}}", X"{{cuts.IsolationLUTs[1] | X01}}", X"{{cuts.IsolationLUTs[2] | X01}}", X"{{cuts.IsolationLUTs[3] | X01}}"),
         "{{cuts.ChargeCorrelation}}"
     )
-    port map(lhc_clk, muon_bx_{{bx | lower}},
+    port map(lhc_clk, mu_bx_{{bx | lower}},
         ls_charcorr_double_bx_{{bx | lower}}_bx_{{bx | lower}}, os_charcorr_double_bx_{{bx | lower}}_bx_{{bx | lower}},
         ls_charcorr_triple_bx_{{bx | lower}}_bx_{{bx | lower}}, os_charcorr_triple_bx_{{bx | lower}}_bx_{{bx | lower}},
         ls_charcorr_quad_bx_{{bx | lower}}_bx_{{bx | lower}}, os_charcorr_quad_bx_{{bx | lower}}_bx_{{bx | lower}},
