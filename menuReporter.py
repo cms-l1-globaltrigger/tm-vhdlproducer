@@ -90,6 +90,7 @@ if True:
   verbose = options.verbose
   menu = tmEventSetup.getTriggerMenu(options.menu)
   menu.sw_revision_svn = revision
+  menu.uuid_firmware = menu.getFirmwareUuid()
 
   
   #producer = tmVhdlProducer.VhdlProducer(menu, vhdlTemplateDir, nModules, outputDir, verbose, options.manual_dist)
