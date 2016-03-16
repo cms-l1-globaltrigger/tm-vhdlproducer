@@ -30,7 +30,7 @@
     {{cuts.InvMassUpperLimit}}, {{cuts.InvMassLowerLimit}}, MUON_MUON_INV_MASS_PRECISION, MUON_PT_VECTOR_WIDTH, MUON_MUON_COSH_COS_PRECISION, MUON_MUON_COSH_COS_VECTOR_WIDTH
   )
   port map(lhc_clk, mu_bx_{{bx1 | lower}}, mu_bx_{{bx2 | lower}},
-           ls_charcorr_double_{{bx1 | lower}}_{{bx2 | lower}}, os_charcorr_double_{{bx1 | lower}}_{{bx2 | lower}},
+           ls_charcorr_double_bx_{{bx1 | lower}}_bx_{{bx2 | lower}}, os_charcorr_double_bx_{{bx1 | lower}}_bx_{{bx2 | lower}},
 	         diff_mu_mu_bx_{{bx1 | lower}}_bx_{{bx2 | lower}}_eta_vector, diff_mu_mu_bx_{{bx1 | lower}}_bx_{{bx2 | lower}}_phi_vector, 
            mu_pt_vector_bx_{{bx1 | lower}}, mu_pt_vector_bx_{{bx2 | lower}},
            mu_mu_bx_{{bx1 | lower}}_bx_{{bx2 | lower}}_cosh_deta_vector, mu_mu_bx_{{bx1 | lower}}_bx_{{bx2 | lower}}_cos_dphi_vector,

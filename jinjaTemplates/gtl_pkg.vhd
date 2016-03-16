@@ -425,12 +425,14 @@ type calo_cosh_cos_vector_array is array (natural range <>, natural range <>) of
 -- muon-muon-correlation
 constant MUON_PT_PRECISION : positive := 1; -- 1 digit after decimal point
 constant MUON_MUON_COSH_COS_PRECISION : positive := 4; -- 4 digits after decimal point (after roundimg to the 5th digit)
+constant MU_MU_COSH_COS_PRECISION : positive := MUON_MUON_COSH_COS_PRECISION; -- 4 digits after decimal point (after roundimg to the 5th digit)
 
 constant MUON_PT_VECTOR_WIDTH: positive := log2c((2**(D_S_I_MUON_V2.pt_high-D_S_I_MUON_V2.pt_low+1)-1)*(10**MUON_PT_PRECISION)); -- max. value 255.5 GeV => 2555 => 0x9FB 
 constant MU_PT_VECTOR_WIDTH: positive := MUON_PT_VECTOR_WIDTH; -- dummy for VHDL-Producer output (correlation conditions) 
 -- constant MUON_PT_VECTOR_WIDTH: positive := 12; -- max. value 255.5 GeV => 2555 (255.5 * 10**MUON_INV_MASS_PT_PRECISION) => 0x9FB 
 
 constant MUON_MUON_COSH_COS_VECTOR_WIDTH: positive := log2c(677303); -- max. value cosh_deta-cos_dphi => [667303-(-10000)]=677303 => 0xA55B7 - highest value in LUT 
+constant MU_MU_COSH_COS_VECTOR_WIDTH: positive := MUON_MUON_COSH_COS_VECTOR_WIDTH; -- max. value cosh_deta-cos_dphi => [667303-(-10000)]=677303 => 0xA55B7 - highest value in LUT 
 -- constant MUON_MUON_COSH_COS_VECTOR_WIDTH: positive := 20; -- max. value cosh_deta-cos_dphi => [667303-(-10000)]=677303 => 0xA55B7 
 type muon_cosh_cos_vector_array is array (natural range <>, natural range <>) of std_logic_vector(MUON_MUON_COSH_COS_VECTOR_WIDTH-1 downto 0);
 
@@ -440,11 +442,17 @@ type muon_cosh_cos_vector_array is array (natural range <>, natural range <>) of
 constant EG_MUON_COSH_COS_PRECISION : positive := 4;
 constant JET_MUON_COSH_COS_PRECISION : positive := 4;
 constant TAU_MUON_COSH_COS_PRECISION : positive := 4;
+constant EG_MU_COSH_COS_PRECISION : positive := EG_MUON_COSH_COS_PRECISION;
+constant JET_MU_COSH_COS_PRECISION : positive := JET_MUON_COSH_COS_PRECISION;
+constant TAU_MU_COSH_COS_PRECISION : positive := TAU_MUON_COSH_COS_PRECISION;
 
 -- constant CALO_MUON_COSH_COS_VECTOR_WIDTH: positive := log2c(109497199); -- = 27 -> max. value cosh_deta-cos_dphi => [109487199-(-10000)]=109497199 => 0x686CB6F
 constant EG_MUON_COSH_COS_VECTOR_WIDTH: positive := log2c(109487199-(-10000));
 constant JET_MUON_COSH_COS_VECTOR_WIDTH: positive := log2c(109487199-(-10000));
 constant TAU_MUON_COSH_COS_VECTOR_WIDTH: positive := log2c(109487199-(-10000));
+constant EG_MU_COSH_COS_VECTOR_WIDTH: positive := EG_MUON_COSH_COS_VECTOR_WIDTH;
+constant JET_MU_COSH_COS_VECTOR_WIDTH: positive := JET_MUON_COSH_COS_VECTOR_WIDTH;
+constant TAU_MU_COSH_COS_VECTOR_WIDTH: positive := TAU_MUON_COSH_COS_VECTOR_WIDTH;
 constant CALO_MUON_COSH_COS_VECTOR_WIDTH: positive := max(EG_MUON_COSH_COS_VECTOR_WIDTH, JET_MUON_COSH_COS_VECTOR_WIDTH, TAU_MUON_COSH_COS_VECTOR_WIDTH);
 type calo_muon_cosh_cos_vector_array is array (natural range <>, natural range <>) of std_logic_vector(CALO_MUON_COSH_COS_VECTOR_WIDTH-1 downto 0);
 

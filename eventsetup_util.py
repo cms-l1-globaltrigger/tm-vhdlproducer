@@ -1,6 +1,7 @@
 #!/bin/env python
 
 import logging
+import math
 import uuid
 from binascii import hexlify as hexlify
 
@@ -384,17 +385,17 @@ def getCorrelationTemplate():
   template.hasDrCut = 'false'
   template.hasMassCut = 'false'
 
-  template.DiffEtaLowerLimit = 0
-  template.DiffEtaUpperLimit = 0
+  template.DiffEtaLowerLimit = 0.0
+  template.DiffEtaUpperLimit = 0.0
 
-  template.DiffPhiLowerLimit = 0
-  template.DiffPhiUpperLimit = 0
+  template.DiffPhiLowerLimit = 0.0
+  template.DiffPhiUpperLimit = 0.0
 
-  template.DeltaRUpperLimit = 0
-  template.DeltaRLowerLimit = 0
+  template.DeltaRUpperLimit = 0.0
+  template.DeltaRLowerLimit = 0.0
 
-  template.InvMassUpperLimit = 0
-  template.InvMassLowerLimit = 0
+  template.InvMassUpperLimit = 0.0
+  template.InvMassLowerLimit = 0.0
 
   template.objects = []
   template.objects.append(getObjectTemplate())
@@ -561,6 +562,14 @@ def reorderObjects(condition):
 def setCorrelation(template, objects, cuts):
   logging.debug("setCorrelation")
 
+  def minimum(x, precision=1):
+    scale = 10.**precision
+    return math.floor(x*scale)/scale
+
+  def maximum(x, precision=1):
+    scale = 10.**precision
+    return math.ceil(x*scale)/scale
+
   setChargeCorrelation(template, cuts)
   template.objectsInSameBx = 'true' if objects[0].bx_offset == objects[1].bx_offset else 'false'
 
@@ -568,23 +577,23 @@ def setCorrelation(template, objects, cuts):
     x = o.type
     if x == tmEventSetup.DeltaEta:
       template.hasDetaCut = 'true'
-      template.DiffEtaLowerLimit = o.min_val
-      template.DiffEtaUpperLimit = o.max_val
+      template.DiffEtaLowerLimit = minimum(o.min_val, 3)
+      template.DiffEtaUpperLimit = maximum(o.max_val, 3)
 
     elif x == tmEventSetup.DeltaPhi:
       template.hasDphiCut = 'true'
-      template.DiffPhiLowerLimit = o.min_val
-      template.DiffPhiUpperLimit = o.max_val
+      template.DiffPhiLowerLimit = minimum(o.min_val, 3)
+      template.DiffPhiUpperLimit = maximum(o.max_val, 3)
 
     elif x == tmEventSetup.DeltaR:
       template.hasDrCut = 'true'
-      template.DeltaRLowerLimit = o.min_val*o.min_val
-      template.DeltaRUpperLimit = o.max_val*o.max_val
+      template.DeltaRLowerLimit = minimum(o.min_val*o.min_val, 3)
+      template.DeltaRUpperLimit = maximum(o.max_val*o.max_val, 3)
 
     elif x == tmEventSetup.Mass:
       template.hasMassCut = 'true'
-      template.InvMassLowerLimit = o.min_val*o.min_val*0.5
-      template.InvMassUpperLimit = o.max_val*o.max_val*0.5
+      template.InvMassLowerLimit = minimum(o.min_val*o.min_val*0.5)
+      template.InvMassUpperLimit = maximum(o.max_val*o.max_val*0.5)
 
   if template.hasDrCut == 'true':
     if template.hasDetaCut == 'true': raise NotImplementedError
@@ -745,14 +754,17 @@ def setInvariantMassTemplate(condition):
   if combination == tmEventSetup.MuonMuonCombination:
     setMuonMuonTemplate(condition)
     condition.type = conditionTypes[tmEventSetup.MuonMuonCorrelation]
+    condition.type_id = tmEventSetup.MuonMuonCorrelation
 
   elif combination == tmEventSetup.CaloMuonCombination:
     setCaloMuonTemplate(condition)
     condition.type = conditionTypes[tmEventSetup.CaloMuonCorrelation]
+    condition.type_id = tmEventSetup.CaloMuonCorrelation
 
   elif combination == tmEventSetup.CaloCaloCombination:
     setCaloCaloTemplate(condition)
     condition.type = conditionTypes[tmEventSetup.CaloCaloCorrelation]
+    condition.type_id = tmEventSetup.CaloCaloCorrelation
 
   else:
     logging.error("Unknown combination: %s" % combination)
