@@ -577,23 +577,23 @@ def setCorrelation(template, objects, cuts):
     x = o.type
     if x == tmEventSetup.DeltaEta:
       template.hasDetaCut = 'true'
-      template.DiffEtaLowerLimit = minimum(o.min_val, 3)
-      template.DiffEtaUpperLimit = maximum(o.max_val, 3)
+      template.DiffEtaLowerLimit = minimum(o.min_val, o.min_idx)
+      template.DiffEtaUpperLimit = maximum(o.max_val, o.max_idx)
 
     elif x == tmEventSetup.DeltaPhi:
       template.hasDphiCut = 'true'
-      template.DiffPhiLowerLimit = minimum(o.min_val, 3)
-      template.DiffPhiUpperLimit = maximum(o.max_val, 3)
+      template.DiffPhiLowerLimit = minimum(o.min_val, o.min_idx)
+      template.DiffPhiUpperLimit = maximum(o.max_val, o.max_idx)
 
     elif x == tmEventSetup.DeltaR:
       template.hasDrCut = 'true'
-      template.DeltaRLowerLimit = minimum(o.min_val*o.min_val, 3)
-      template.DeltaRUpperLimit = maximum(o.max_val*o.max_val, 3)
+      template.DeltaRLowerLimit = minimum(o.min_val, o.min_idx)
+      template.DeltaRUpperLimit = maximum(o.max_val, o.max_idx)
 
     elif x == tmEventSetup.Mass:
       template.hasMassCut = 'true'
-      template.InvMassLowerLimit = minimum(o.min_val*o.min_val*0.5)
-      template.InvMassUpperLimit = maximum(o.max_val*o.max_val*0.5)
+      template.InvMassLowerLimit = minimum(o.min_val, o.min_idx)
+      template.InvMassUpperLimit = maximum(o.max_val, o.max_idx)
 
   if template.hasDrCut == 'true':
     if template.hasDetaCut == 'true': raise NotImplementedError
