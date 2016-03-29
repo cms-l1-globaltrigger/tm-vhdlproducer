@@ -779,10 +779,10 @@ def setBxCombination(dictionary):
       condition_type = dictionary[keyAlgoDict][algorithm_name].conditions[condition_name].type_id
 
       bxSet = []
-      if condition_type in (tmEventSetup.DoubleMuon,
+      if condition_type in (tmEventSetup.SingleMuon,
+                            tmEventSetup.DoubleMuon,
                             tmEventSetup.TripleMuon,
-                            tmEventSetup.QuadMuon,
-                            tmEventSetup.MuonMuonCorrelation):
+                            tmEventSetup.QuadMuon):
         for x in dictionary[keyAlgoDict][algorithm_name].conditions[condition_name].objects:
           bxSet.append(x.bx)
         bxSet = list(set(bxSet))
@@ -791,6 +791,14 @@ def setBxCombination(dictionary):
           dictionary[keyBxComb].add(bxCombination)
         else:
           raise NotImplementedError
+
+      elif condition_type == tmEventSetup.MuonMuonCorrelation:
+        for x in dictionary[keyAlgoDict][algorithm_name].conditions[condition_name].objects:
+          bxSet.append(x.bx)
+        if len(bxSet) != 2:
+          raise NotImplementedError
+        bxCombination = bxSet[0], bxSet[1]
+        dictionary[keyBxComb].add(bxCombination)
 
 
 def setConditionsInMenu(dictionary):
