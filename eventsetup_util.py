@@ -739,7 +739,7 @@ def setCaloEsumTemplate(condition):
     cuts = condition.objects[ii].cuts
     setThreshold(tmp, 0, cuts)
     setPhiRange(tmp, 0, cuts)
-    if obj.type_id in CaloCondition:
+    if obj.type_id in (tmEventSetup.Egamma, tmEventSetup.Tau, tmEventSetup.Jet):
       setEtaRange(tmp, 0, cuts)
       setIsolationLUT(tmp, 0, cuts)
 
