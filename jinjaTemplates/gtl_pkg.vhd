@@ -297,7 +297,8 @@ type diff_2dim_integer_array is array (natural range <>, natural range <>) of in
 -- ********************************************************
 -- deta, dphi and dr parameters
 
-constant PI : real :=  3.14159;
+-- constant PI : real :=  3.14159;
+constant PI : real :=  3.15; -- TM used this value for PI
 
 constant CALO_ETA_STEP : real := 0.087/2.0; -- values from scales
 constant MUON_ETA_STEP : real := 0.087/8.0; -- values from scales
@@ -307,8 +308,8 @@ constant MUON_PHI_BINS : positive := 576; -- values from scales
 constant CALO_PHI_HALF_RANGE_BINS : positive := CALO_PHI_BINS/2; -- 144/2, because of phi bin width = 2*PI/144
 constant MUON_PHI_HALF_RANGE_BINS : positive := MUON_PHI_BINS/2; -- 576/2, because of phi bin width = 2*PI/576
 
-constant PHI_MIN : real := 0.0; -- eta min.: 0.0
-constant PHI_MAX : real := 2.0*PI; -- eta max.: 2*PI
+constant PHI_MIN : real := 0.0; -- phi min.: 0.0
+constant PHI_MAX : real := 2.0*PI; -- phi max.: 2*PI
 
 constant ETA_MIN : real := -5.0; -- eta min.: -5.0
 constant ETA_MAX : real := 5.0; -- eta max.: +5.0
@@ -498,10 +499,16 @@ type tau_etm_diff_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natura
 type eg_htm_diff_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natural range 0 to 6240;
 type jet_htm_diff_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natural range 0 to 6240;
 type tau_htm_diff_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natural range 0 to 6240;
-type eg_pt_lut_array is array (0 to 2**(D_S_I_EG_V2.et_high-D_S_I_EG_V2.et_low+1)-1) of natural range 0 to 2545;
-type jet_pt_lut_array is array (0 to 2**(D_S_I_JET_V2.et_high-D_S_I_JET_V2.et_low+1)-1) of natural range 0 to 10225;
-type tau_pt_lut_array is array (0 to 2**(D_S_I_TAU_V2.et_high-D_S_I_TAU_V2.et_low+1)-1) of natural range 0 to 2545;
-type muon_pt_lut_array is array (0 to 2**(D_S_I_MUON_V2.pt_high-D_S_I_MUON_V2.pt_low+1)-1) of natural range 0 to 2545;
+-- type eg_pt_lut_array is array (0 to 2**(D_S_I_EG_V2.et_high-D_S_I_EG_V2.et_low+1)-1) of natural range 0 to 2545;
+-- type jet_pt_lut_array is array (0 to 2**(D_S_I_JET_V2.et_high-D_S_I_JET_V2.et_low+1)-1) of natural range 0 to 10225;
+-- type tau_pt_lut_array is array (0 to 2**(D_S_I_TAU_V2.et_high-D_S_I_TAU_V2.et_low+1)-1) of natural range 0 to 2545;
+-- type muon_pt_lut_array is array (0 to 2**(D_S_I_MUON_V2.pt_high-D_S_I_MUON_V2.pt_low+1)-1) of natural range 0 to 2545;
+-- HB 2016-04-07: TM updated LUTs for PTto the center of bins, so max. values increased by 3 
+-- (bin width = 0.5 => 0.5/2 = 0.25 => selected 0.3, multiplied by 10 because of one digit after comma)
+type eg_pt_lut_array is array (0 to 2**(D_S_I_EG_V2.et_high-D_S_I_EG_V2.et_low+1)-1) of natural range 0 to 2548;
+type jet_pt_lut_array is array (0 to 2**(D_S_I_JET_V2.et_high-D_S_I_JET_V2.et_low+1)-1) of natural range 0 to 10228;
+type tau_pt_lut_array is array (0 to 2**(D_S_I_TAU_V2.et_high-D_S_I_TAU_V2.et_low+1)-1) of natural range 0 to 2548;
+type muon_pt_lut_array is array (0 to 2**(D_S_I_MUON_V2.pt_high-D_S_I_MUON_V2.pt_low+1)-1) of natural range 0 to 2548;
 type eg_eg_cosh_deta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of natural range 0 to 10597282;
 type eg_jet_cosh_deta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of natural range 0 to 10597282;
 type eg_tau_cosh_deta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of natural range 0 to 10597282;
