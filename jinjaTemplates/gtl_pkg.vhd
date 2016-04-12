@@ -90,10 +90,8 @@ constant L1TM_COMPILER_VERSION : std_logic_vector(31 downto 0) := X"00" &
 constant SVN_REVISION_NUMBER : std_logic_vector(31 downto 0) := std_logic_vector(to_unsigned({{menu.info.svn_revision_number|d}}, 32)); 
            
 -- HB 2016-04-12: proposed by TM 
--- constant L1TM_UID_HASH : std_logic_vector(31 downto 0) := std_logic_vector(to_unsigned({{menu.info.l1tm_uid_hash|d}}, 32)); 
--- constant FW_UID_HASH : std_logic_vector(31 downto 0) := std_logic_vector(to_unsigned({{menu.info.fw_uid_hash|d}}, 32)); 
-constant L1TM_UID_HASH : std_logic_vector(31 downto 0) := (others => '0'); 
-constant FW_UID_HASH : std_logic_vector(31 downto 0) := (others => '0'); 
+constant L1TM_UID_HASH : std_logic_vector(31 downto 0) := std_logic_vector(to_unsigned({{menu.info.menu_name_hash|d}}, 32)); 
+constant FW_UID_HASH : std_logic_vector(31 downto 0) := std_logic_vector(to_unsigned({{menu.info.fw_uuid_hash|d}}, 32)); 
            
 -- ==== Inserted by TME - end ===============================================================================================================
 
