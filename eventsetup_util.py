@@ -209,6 +209,14 @@ class Object:
     pass
 
 
+def toSigned(x, bitLength=32):
+  mask = (2 ** bitLength) - 1
+  if x & (1 << (bitLength - 1)):
+    return x | ~mask
+  else:
+    return x & mask
+
+
 def sortDictByKey(iDict, iKey, reverse):
   return sorted(iDict, key=lambda x: iDict[x][iKey], reverse=reverse)
 
@@ -891,8 +899,8 @@ def setMenuInfo(menu, data, version="0.0.0"):
   data.info.name = menuName
   data.info.scale_set = menu.getScaleSetName()
   data.info.svn_revision_number = menu.sw_revision_svn
-  data.info.menu_name_hash = tmEventSetup.getMmHashN(menuName)
-  data.info.fw_uuid_hash = tmEventSetup.getMmHashN(str(data.info.fw_uuid))
+  data.info.menu_name_hash = toSigned(tmEventSetup.getMmHashN(menuName))
+  data.info.fw_uuid_hash = toSigned(tmEventSetup.getMmHashN(str(data.info.fw_uuid)))
 
   data.info.sw_version_major, data.info.sw_version_minor, data.info.sw_version_patch = version.rsplit('.')
 
