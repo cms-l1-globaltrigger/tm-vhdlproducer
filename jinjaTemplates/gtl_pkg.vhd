@@ -86,12 +86,12 @@ constant L1TM_COMPILER_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(L1TM_COMPILER_MINOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(L1TM_COMPILER_REV_VERSION, 8));
 
--- HB 2016-01-14: proposed by TM 
-constant SVN_REVISION_NUMBER : std_logic_vector(31 downto 0) := std_logic_vector(to_unsigned({{menu.info.svn_revision_number|d}}, 32)); 
+-- HB 2016-01-14: proposed by TM, conv_std_logic_vector used, because to_unsigned does not accept neg. values
+constant SVN_REVISION_NUMBER : std_logic_vector(31 downto 0) := conv_std_logic_vector({{menu.info.svn_revision_number|d}}, 32); 
            
 -- HB 2016-04-12: proposed by TM 
-constant L1TM_UID_HASH : std_logic_vector(31 downto 0) := std_logic_vector(to_unsigned({{menu.info.menu_name_hash|d}}, 32)); 
-constant FW_UID_HASH : std_logic_vector(31 downto 0) := std_logic_vector(to_unsigned({{menu.info.fw_uuid_hash|d}}, 32)); 
+constant L1TM_UID_HASH : std_logic_vector(31 downto 0) := conv_std_logic_vector({{menu.info.menu_name_hash|d}}, 32); 
+constant FW_UID_HASH : std_logic_vector(31 downto 0) := conv_std_logic_vector({{menu.info.fw_uuid_hash|d}}, 32); 
            
 -- ==== Inserted by TME - end ===============================================================================================================
 
