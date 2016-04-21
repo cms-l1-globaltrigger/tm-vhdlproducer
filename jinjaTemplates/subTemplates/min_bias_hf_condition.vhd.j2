@@ -1,0 +1,8 @@
+{%- extends "templateLoops/instantiate_esums_condition.j2" %}
+{%- block instantiate_esums_condition %}
+  {%- set objects = condition.objects %}
+{{condition_name | lower}}_i: entity work.min_bias_hf_conditions
+    generic map({{ objects[0].operator | lower  }}, {{objects[0].type}}_TYPE, X"{{cuts.Thresholds[0] | X01}}")
+    port map(lhc_clk, {{objects[0].type | lower}}_bx_{{objects[0].bx | lower}}, {{condition_name | lower}});
+{% endblock instantiate_esums_condition %}
+{# eof #}
