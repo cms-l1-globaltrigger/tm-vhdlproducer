@@ -285,6 +285,69 @@ constant HTM_PHI_HIGH : natural := 19;
 constant D_S_I_HTM : d_s_i_htm_record := (HTM_PHI_HIGH,HTM_PHI_LOW,HTM_ET_HIGH,HTM_ET_LOW);
 constant D_S_I_HTM_V2 : d_s_i_htm_record := D_S_I_HTM; -- dummy for VHDL-Producer output (correlation conditions) 
 -- constant D_S_I_HTM : d_s_i_htm_record := (19,12,11,0);
+
+-- HB 2016-04-18: updates for "min bias trigger" objects (quantities) for Low-pileup-run May 2016
+-- HB 2016-04-21: see email from Johannes (Andrew Rose), 2016-04-20 15:34
+-- Frame 0: (HF+ thresh 0) ... ... (Scalar ET) - 4 MSBs
+-- Frame 1: (HF- thresh 0) ... ... (Scalar HT) - 4 MSBs
+-- Frame 2: (HF+ thresh 1) ... ... (Vector ET) - 4 MSBs
+-- Frame 3: (HF- thresh 1) ... ... (Vector HT) - 4 MSBs
+-- HB 2016-04-18: Takashi's notation
+-- HF+ thresh 0 => MBHFPT0
+-- HF- thresh 0 => MBHFMT0
+-- HF+ thresh 1 => MBHFPT1
+-- HF- thresh 1 => MBHFMT1
+
+constant MBHFPT0_IN_ETT_HIGH : natural := 31;
+constant MBHFPT0_IN_ETT_LOW : natural := 28;
+constant MBHFMT0_IN_HTT_HIGH : natural := 31;
+constant MBHFMT0_IN_HTT_LOW : natural := 28;
+constant MBHFPT1_IN_ETM_HIGH : natural := 31;
+constant MBHFPT1_IN_ETM_LOW : natural := 28;
+constant MBHFMT1_IN_HTM_HIGH : natural := 31;
+constant MBHFMT1_IN_HTM_LOW : natural := 28;
+
+constant MBHFPT0_TYPE : natural range 0 to 3 := 0;
+constant MBHFMT0_TYPE : natural range 0 to 3 := 1;
+constant MBHFPT1_TYPE : natural range 0 to 3 := 2;
+constant MBHFMT1_TYPE : natural range 0 to 3 := 3;
+
+constant MAX_MBHF_BITS : positive range 1 to 4 := 4;
+constant MAX_MBHF_TEMPLATES_BITS : positive range 1 to MAX_MBHF_BITS := 4;
+
+-- Type definitions for "min bias trigger" objects
+type d_s_i_mbhfpt0_record is record
+    count_high, count_low : natural range MAX_ESUMS_BITS-1 downto 0;
+end record d_s_i_mbhfpt0_record;
+
+type d_s_i_mbhfmt0_record is record
+    count_high, count_low : natural range MAX_ESUMS_BITS-1 downto 0;
+end record d_s_i_mbhfmt0_record;
+
+type d_s_i_mbhfpt1_record is record
+    count_high, count_low : natural range MAX_ESUMS_BITS-1 downto 0;
+end record d_s_i_mbhfpt1_record;
+
+type d_s_i_mbhfmt1_record is record
+    count_high, count_low : natural range MAX_ESUMS_BITS-1 downto 0;
+end record d_s_i_mbhfmt1_record;
+
+constant MBHFPT0_COUNT_LOW : natural := 0;
+constant MBHFPT0_COUNT_HIGH : natural := 3;
+constant D_S_I_MBHFPT0_V2 : d_s_i_mbhfpt0_record := (MBHFPT0_COUNT_HIGH,MBHFPT0_COUNT_LOW);
+
+constant MBHFMT0_COUNT_LOW : natural := 0;
+constant MBHFMT0_COUNT_HIGH : natural := 3;
+constant D_S_I_MBHFMT0_V2 : d_s_i_mbhfmt0_record := (MBHFMT0_COUNT_HIGH,MBHFMT0_COUNT_LOW);
+
+constant MBHFPT1_COUNT_LOW : natural := 0;
+constant MBHFPT1_COUNT_HIGH : natural := 3;
+constant D_S_I_MBHFPT1_V2 : d_s_i_mbhfpt1_record := (MBHFPT1_COUNT_HIGH,MBHFPT1_COUNT_LOW);
+
+constant MBHFMT1_COUNT_LOW : natural := 0;
+constant MBHFMT1_COUNT_HIGH : natural := 3;
+constant D_S_I_MBHFMT1_V2 : d_s_i_mbhfmt1_record := (MBHFMT1_COUNT_HIGH,MBHFMT1_COUNT_LOW);
+
 -- ==== CALOs - end ============================================================
 
 -- "External conditions" (former "Technical Triggers" and "External Algorithms") definitions
