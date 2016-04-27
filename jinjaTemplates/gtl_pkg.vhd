@@ -1,6 +1,7 @@
 -- Description:
 -- Package for constant and type definitions of GTL firmware in Global Trigger Upgrade system.
 
+-- HB 2016-04-26: updated minimum bias Hf types to same notation as in grammar
 -- HB 2015-11-25: inserted constants and LUTs for correlation conditions
 -- HB 2015-04-28: inserted records for energy summary objects and calorimeter conditions version 2 (calo_conditions_v2.vhd)
 -- HB 2014-09-09: GTL and FDL firmware major, minor and revision versions moved to gt_mp7_core_pkg.vhd (GTL_FW_MAJOR_VERSION, etc.)
@@ -292,61 +293,61 @@ constant D_S_I_HTM_V2 : d_s_i_htm_record := D_S_I_HTM; -- dummy for VHDL-Produce
 -- Frame 1: (HF- thresh 0) ... ... (Scalar HT) - 4 MSBs
 -- Frame 2: (HF+ thresh 1) ... ... (Vector ET) - 4 MSBs
 -- Frame 3: (HF- thresh 1) ... ... (Vector HT) - 4 MSBs
--- HB 2016-04-18: Takashi's notation
--- HF+ thresh 0 => MBHFPT0
--- HF- thresh 0 => MBHFMT0
--- HF+ thresh 1 => MBHFPT1
--- HF- thresh 1 => MBHFMT1
+-- HB 2016-04-26: grammar notation
+-- HF+ thresh 0 => MBT0HFP
+-- HF- thresh 0 => MBT0HFM
+-- HF+ thresh 1 => MBT1HFP
+-- HF- thresh 1 => MBT1HFM
 
-constant MBHFPT0_IN_ETT_HIGH : natural := 31;
-constant MBHFPT0_IN_ETT_LOW : natural := 28;
-constant MBHFMT0_IN_HTT_HIGH : natural := 31;
-constant MBHFMT0_IN_HTT_LOW : natural := 28;
-constant MBHFPT1_IN_ETM_HIGH : natural := 31;
-constant MBHFPT1_IN_ETM_LOW : natural := 28;
-constant MBHFMT1_IN_HTM_HIGH : natural := 31;
-constant MBHFMT1_IN_HTM_LOW : natural := 28;
+constant MBT0HFP_IN_ETT_HIGH : natural := 31;
+constant MBT0HFP_IN_ETT_LOW : natural := 28;
+constant MBT0HFM_IN_HTT_HIGH : natural := 31;
+constant MBT0HFM_IN_HTT_LOW : natural := 28;
+constant MBT1HFP_IN_ETM_HIGH : natural := 31;
+constant MBT1HFP_IN_ETM_LOW : natural := 28;
+constant MBT1HFM_IN_HTM_HIGH : natural := 31;
+constant MBT1HFM_IN_HTM_LOW : natural := 28;
 
-constant MBHFPT0_TYPE : natural range 0 to 3 := 0;
-constant MBHFMT0_TYPE : natural range 0 to 3 := 1;
-constant MBHFPT1_TYPE : natural range 0 to 3 := 2;
-constant MBHFMT1_TYPE : natural range 0 to 3 := 3;
+constant MBT0HFP_TYPE : natural range 0 to 3 := 0;
+constant MBT0HFM_TYPE : natural range 0 to 3 := 1;
+constant MBT1HFP_TYPE : natural range 0 to 3 := 2;
+constant MBT1HFM_TYPE : natural range 0 to 3 := 3;
 
 constant MAX_MBHF_BITS : positive range 1 to 4 := 4;
 constant MAX_MBHF_TEMPLATES_BITS : positive range 1 to MAX_MBHF_BITS := 4;
 
 -- Type definitions for "min bias trigger" objects
-type d_s_i_mbhfpt0_record is record
+type d_s_i_mbt0hfp_record is record
     count_high, count_low : natural range MAX_ESUMS_BITS-1 downto 0;
-end record d_s_i_mbhfpt0_record;
+end record d_s_i_mbt0hfp_record;
 
-type d_s_i_mbhfmt0_record is record
+type d_s_i_mbt0hfm_record is record
     count_high, count_low : natural range MAX_ESUMS_BITS-1 downto 0;
-end record d_s_i_mbhfmt0_record;
+end record d_s_i_mbt0hfm_record;
 
-type d_s_i_mbhfpt1_record is record
+type d_s_i_mbt1hfp_record is record
     count_high, count_low : natural range MAX_ESUMS_BITS-1 downto 0;
-end record d_s_i_mbhfpt1_record;
+end record d_s_i_mbt1hfp_record;
 
-type d_s_i_mbhfmt1_record is record
+type d_s_i_mbt1hfm_record is record
     count_high, count_low : natural range MAX_ESUMS_BITS-1 downto 0;
-end record d_s_i_mbhfmt1_record;
+end record d_s_i_mbt1hfm_record;
 
-constant MBHFPT0_COUNT_LOW : natural := 0;
-constant MBHFPT0_COUNT_HIGH : natural := 3;
-constant D_S_I_MBHFPT0_V2 : d_s_i_mbhfpt0_record := (MBHFPT0_COUNT_HIGH,MBHFPT0_COUNT_LOW);
+constant MBT0HFP_COUNT_LOW : natural := 0;
+constant MBT0HFP_COUNT_HIGH : natural := 3;
+constant D_S_I_MBT0HFP_V2 : d_s_i_mbt0hfp_record := (MBT0HFP_COUNT_HIGH,MBT0HFP_COUNT_LOW);
 
-constant MBHFMT0_COUNT_LOW : natural := 0;
-constant MBHFMT0_COUNT_HIGH : natural := 3;
-constant D_S_I_MBHFMT0_V2 : d_s_i_mbhfmt0_record := (MBHFMT0_COUNT_HIGH,MBHFMT0_COUNT_LOW);
+constant MBT0HFM_COUNT_LOW : natural := 0;
+constant MBT0HFM_COUNT_HIGH : natural := 3;
+constant D_S_I_MBT0HFM_V2 : d_s_i_mbt0hfm_record := (MBT0HFM_COUNT_HIGH,MBT0HFM_COUNT_LOW);
 
-constant MBHFPT1_COUNT_LOW : natural := 0;
-constant MBHFPT1_COUNT_HIGH : natural := 3;
-constant D_S_I_MBHFPT1_V2 : d_s_i_mbhfpt1_record := (MBHFPT1_COUNT_HIGH,MBHFPT1_COUNT_LOW);
+constant MBT1HFP_COUNT_LOW : natural := 0;
+constant MBT1HFP_COUNT_HIGH : natural := 3;
+constant D_S_I_MBT1HFP_V2 : d_s_i_mbt1hfp_record := (MBT1HFP_COUNT_HIGH,MBT1HFP_COUNT_LOW);
 
-constant MBHFMT1_COUNT_LOW : natural := 0;
-constant MBHFMT1_COUNT_HIGH : natural := 3;
-constant D_S_I_MBHFMT1_V2 : d_s_i_mbhfmt1_record := (MBHFMT1_COUNT_HIGH,MBHFMT1_COUNT_LOW);
+constant MBT1HFM_COUNT_LOW : natural := 0;
+constant MBT1HFM_COUNT_HIGH : natural := 3;
+constant D_S_I_MBT1HFM_V2 : d_s_i_mbt1hfm_record := (MBT1HFM_COUNT_HIGH,MBT1HFM_COUNT_LOW);
 
 -- ==== CALOs - end ============================================================
 

@@ -37,10 +37,10 @@ entity gtl_module is
         htm_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
 -- ****************************************************************************************
 -- HB 2016-04-18: updates for "min bias trigger" objects (quantities) for Low-pileup-run May 2016
-        mbhfpt1_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        mbhfmt1_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        mbhfpt0_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        mbhfmt0_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+        mbt1hfp_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+        mbt1hfm_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+        mbt0hfp_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+        mbt0hfm_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
 -- ****************************************************************************************
         muon_data : in muon_objects_array(0 to NR_MUON_OBJECTS-1);
         external_conditions : in std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);
@@ -65,10 +65,10 @@ architecture rtl of gtl_module is
     signal htm_bx_p2, htm_bx_p1, htm_bx_0, htm_bx_m1, htm_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
 -- ****************************************************************************************
 -- HB 2016-04-18: updates for "min bias trigger" objects (quantities) for Low-pileup-run May 2016
-    signal mbhfpt1_bx_p2, mbhfpt1_bx_p1, mbhfpt1_bx_0, mbhfpt1_bx_m1, mbhfpt1_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-    signal mbhfmt1_bx_p2, mbhfmt1_bx_p1, mbhfmt1_bx_0, mbhfmt1_bx_m1, mbhfmt1_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-    signal mbhfpt0_bx_p2, mbhfpt0_bx_p1, mbhfpt0_bx_0, mbhfpt0_bx_m1, mbhfpt0_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-    signal mbhfmt0_bx_p2, mbhfmt0_bx_p1, mbhfmt0_bx_0, mbhfmt0_bx_m1, mbhfmt0_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+    signal mbt1hfp_bx_p2, mbt1hfp_bx_p1, mbt1hfp_bx_0, mbt1hfp_bx_m1, mbt1hfp_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+    signal mbt1hfm_bx_p2, mbt1hfm_bx_p1, mbt1hfm_bx_0, mbt1hfm_bx_m1, mbt1hfm_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+    signal mbt0hfp_bx_p2, mbt0hfp_bx_p1, mbt0hfp_bx_0, mbt0hfp_bx_m1, mbt0hfp_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+    signal mbt0hfm_bx_p2, mbt0hfm_bx_p1, mbt0hfm_bx_0, mbt0hfm_bx_m1, mbt0hfm_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
 -- ****************************************************************************************
 -- HB 2016-01-08: renamed ext_cond after +/-2bx to ext_cond_bx_p2_int, etc., because ext_cond_bx_p2, etc. used in algos (names coming from TME grammar).
     signal ext_cond_bx_p2_int, ext_cond_bx_p1_int, ext_cond_bx_0_int, ext_cond_bx_m1_int, ext_cond_bx_m2_int : std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);
@@ -117,10 +117,10 @@ p_m_2_bx_pipeline_i: entity work.p_m_2_bx_pipeline
         htm_data, htm_bx_p2, htm_bx_p1, htm_bx_0, htm_bx_m1, htm_bx_m2,
 -- ****************************************************************************************
 -- HB 2016-04-18: updates for "min bias trigger" objects (quantities) for Low-pileup-run May 2016
-	mbhfpt1_data, mbhfpt1_bx_p2, mbhfpt1_bx_p1, mbhfpt1_bx_0, mbhfpt1_bx_m1, mbhfpt1_bx_m2,
-	mbhfmt1_data, mbhfmt1_bx_p2, mbhfmt1_bx_p1, mbhfmt1_bx_0, mbhfmt1_bx_m1, mbhfmt1_bx_m2,
-	mbhfpt0_data, mbhfpt0_bx_p2, mbhfpt0_bx_p1, mbhfpt0_bx_0, mbhfpt0_bx_m1, mbhfpt0_bx_m2,
-	mbhfmt0_data, mbhfmt0_bx_p2, mbhfmt0_bx_p1, mbhfmt0_bx_0, mbhfmt0_bx_m1, mbhfmt0_bx_m2,
+	mbt1hfp_data, mbt1hfp_bx_p2, mbt1hfp_bx_p1, mbt1hfp_bx_0, mbt1hfp_bx_m1, mbt1hfp_bx_m2,
+	mbt1hfm_data, mbt1hfm_bx_p2, mbt1hfm_bx_p1, mbt1hfm_bx_0, mbt1hfm_bx_m1, mbt1hfm_bx_m2,
+	mbt0hfp_data, mbt0hfp_bx_p2, mbt0hfp_bx_p1, mbt0hfp_bx_0, mbt0hfp_bx_m1, mbt0hfp_bx_m2,
+	mbt0hfm_data, mbt0hfm_bx_p2, mbt0hfm_bx_p1, mbt0hfm_bx_0, mbt0hfm_bx_m1, mbt0hfm_bx_m2,
 -- ****************************************************************************************
 -- HB 2016-01-08: renamed ext_cond after +/-2bx to ext_cond_bx_p2_int, etc., because ext_cond_bx_p2, etc. used in algos (names coming from TME grammar).
         external_conditions, ext_cond_bx_p2_int, ext_cond_bx_p1_int, ext_cond_bx_0_int, ext_cond_bx_m1_int, ext_cond_bx_m2_int
