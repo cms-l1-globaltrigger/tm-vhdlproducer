@@ -144,8 +144,20 @@ EsumCondition = (
   tmEventSetup.MissingHt,
 )
 
+_conditionTypes[tmEventSetup.MinBiasHFP0] = "MinBiasHFP0"
+_conditionTypes[tmEventSetup.MinBiasHFP1] = "MinBiasHFP1"
+_conditionTypes[tmEventSetup.MinBiasHFM0] = "MinBiasHFM0"
+_conditionTypes[tmEventSetup.MinBiasHFM1] = "MinBiasHFM1"
+
+MinimumBiasCondition = (
+  tmEventSetup.MinBiasHFP0,
+  tmEventSetup.MinBiasHFP1,
+  tmEventSetup.MinBiasHFM0,
+  tmEventSetup.MinBiasHFM1,
+)
+
 CaloCondition = EgammaCondition + TauCondition + JetCondition
-ObjectCondition = MuonCondition + CaloCondition + EsumCondition
+ObjectCondition = MuonCondition + CaloCondition + EsumCondition + MinimumBiasCondition
 
 _conditionTypes[tmEventSetup.MuonMuonCorrelation] = "MuonMuonCorrelation"
 _conditionTypes[tmEventSetup.MuonEsumCorrelation] = "MuonEsumCorrelation"
@@ -166,21 +178,24 @@ _conditionTypes[tmEventSetup.InvariantMass] = "InvariantMass"
 conditionTypes = tuple(_conditionTypes)
 
 
-# list of object types
+# dictionary of object types
 # should match index in esConditionType enum of ../tmEventSetup/esTriggerMenu.hh
 # should match names in ../tmGrammar/Object.hh
-_objectTypes = [None] * tmEventSetup.nObjectType
-_objectTypes[tmEventSetup.Muon] = tmGrammar.MU
-_objectTypes[tmEventSetup.Egamma] = tmGrammar.EG
-_objectTypes[tmEventSetup.Tau] = tmGrammar.TAU
-_objectTypes[tmEventSetup.Jet] = tmGrammar.JET
-_objectTypes[tmEventSetup.ETT] = tmGrammar.ETT
-_objectTypes[tmEventSetup.HTT] = tmGrammar.HTT
-_objectTypes[tmEventSetup.ETM] = tmGrammar.ETM
-_objectTypes[tmEventSetup.HTM] = tmGrammar.HTM
-_objectTypes[tmEventSetup.EXT] = tmGrammar.EXT
+objectTypes = {}
+objectTypes[tmEventSetup.Muon] = tmGrammar.MU
+objectTypes[tmEventSetup.Egamma] = tmGrammar.EG
+objectTypes[tmEventSetup.Tau] = tmGrammar.TAU
+objectTypes[tmEventSetup.Jet] = tmGrammar.JET
+objectTypes[tmEventSetup.ETT] = tmGrammar.ETT
+objectTypes[tmEventSetup.HTT] = tmGrammar.HTT
+objectTypes[tmEventSetup.ETM] = tmGrammar.ETM
+objectTypes[tmEventSetup.HTM] = tmGrammar.HTM
+objectTypes[tmEventSetup.EXT] = tmGrammar.EXT
+objectTypes[tmEventSetup.MBT0HFP] = tmGrammar.MBT0HFP
+objectTypes[tmEventSetup.MBT1HFP] = tmGrammar.MBT1HFP
+objectTypes[tmEventSetup.MBT0HFM] = tmGrammar.MBT0HFM
+objectTypes[tmEventSetup.MBT1HFM] = tmGrammar.MBT1HFM
 
-objectTypes = tuple(_objectTypes)
 
 # list of cut types: esCutType enum in ../tmEventSetup/esTypes.hh
 _cutTypes = [None] * tmEventSetup.nCutType
@@ -361,6 +376,16 @@ def getEsumTemplate():
   return template
 
 
+def getMinimumBiasTemplate():
+  logging.debug("getMinimumBiasTemplate")
+
+  template = Object()
+
+  addThresholdTemplate(template, n=1)
+
+  return template
+
+
 def getObjectTemplate():
   logging.debug("getObjectTemplate")
 
@@ -415,7 +440,8 @@ def getCorrelationTemplate():
 def setThreshold(template, index, cuts):
   array = []
   for name in cuts:
-    if cuts[name].type == tmEventSetup.Threshold:
+    if ((cuts[name].type == tmEventSetup.Threshold) or
+        (cuts[name].type == tmEventSetup.Count)):
       array.append(cuts[name])
 
   n = len(array)
@@ -647,6 +673,14 @@ def setEsumTemplate(condition):
     cuts = condition.objects[ii].cuts
     setThreshold(template, ii, cuts)
     setPhiRange(template, ii, cuts)
+  condition.template = template
+
+
+def setMinimumBiasTemplate(condition):
+  template = getMinimumBiasTemplate()
+  for ii in range(len(condition.objects)):
+    cuts = condition.objects[ii].cuts
+    setThreshold(template, ii, cuts)
   condition.template = template
 
 
@@ -1036,6 +1070,9 @@ def getReport(menu, version=False):
 
         elif condition.type_id in EsumCondition:
           setEsumTemplate(condition)
+
+        elif condition.type_id in MinimumBiasCondition:
+          setMinimumBiasTemplate(condition)
 
         else:
           logging.error("unknown condition: %s" % condition.type)

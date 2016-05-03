@@ -184,6 +184,7 @@ end process;
 {%- include  "subTemplates/muon_muon_correlation_condition.vhd.j2" %}
 {%- include  "subTemplates/calo_esums_correlation_condition.vhd.j2" %}
 {%- include  "subTemplates/muon_esums_correlation_condition.vhd.j2" %}
+{%- include  "subTemplates/min_bias_hf_condition.vhd.j2" %}
 
 -- Instantiations of algorithms 
 {%- include  "subTemplates/algorithm.vhd.j2" %}
