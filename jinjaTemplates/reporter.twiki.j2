@@ -38,7 +38,7 @@ Number of algorithm triggers per trigger group:
     {%- for tg_name in menu.reporter['TriggerGroups']  %}
       {%- set tg = menu.reporter['TriggerGroups'][tg_name]%}
       {%-if tg['nBits'] >0 %}
-      | {{ tg_name }} algorithm triggers:| {{tg['nBits']}} |  
+      | !{{ tg_name }} algorithm triggers:| {{tg['nBits']}} |  
       {%-endif %}
     {%-endfor%}
 

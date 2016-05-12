@@ -210,6 +210,7 @@ _cutTypes[tmEventSetup.DeltaPhi] = "DeltaPhi"
 _cutTypes[tmEventSetup.DeltaR] = "DeltaR"
 _cutTypes[tmEventSetup.Mass] = "Mass"
 _cutTypes[tmEventSetup.ChargeCorrelation] = "ChargeCorrelation"
+_cutTypes[tmEventSetup.Count] = "Count"
 
 cutTypes = tuple(_cutTypes)
 

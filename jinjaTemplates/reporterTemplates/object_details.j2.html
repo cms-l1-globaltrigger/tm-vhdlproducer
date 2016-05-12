@@ -10,6 +10,8 @@
           [{{ cut.getMinimum().value}}, {{ cut.getMaximum().value}}]
         {%- elif cut_type in ["Threshold"] %}
           {{ cut.getMinimum().value}} GeV
+        {%- elif cut_type in ["Count"] %}
+          {{ '%d' | format(cut.getMinimum().value) }}
         {%- elif cut_type in ["Quality", "Isolation"] %}
           0x{{ cut.getData() | X04 }}
         {%- elif cut_type in ["Charge", "ChargeCorrelation"] %}
