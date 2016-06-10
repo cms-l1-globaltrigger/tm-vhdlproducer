@@ -1,7 +1,7 @@
 {%- extends "templateLoops/iterate_condition.j2" %}
 {%- block instantiation %}
   {%- set condition = algorithm.conditions[condition_name] %}
-  {%- if condition.type in ("TotalEt", "TotalHt", "MissingEt", "MissingHt") %}
+  {%- if condition.type in ("TotalEt", "TotalHt", "MissingEt", "MissingHt", "TotalEtEM", "MissingEtHF") %}
     {%- block instantiate_esums_condition scoped %}
       THIS SHOULD NOT APPEAR - instantiate_esums_condition
     {%- endblock instantiate_esums_condition %}

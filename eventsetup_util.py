@@ -136,12 +136,16 @@ _conditionTypes[tmEventSetup.TotalEt] = "TotalEt"
 _conditionTypes[tmEventSetup.TotalHt] = "TotalHt"
 _conditionTypes[tmEventSetup.MissingEt] = "MissingEt"
 _conditionTypes[tmEventSetup.MissingHt] = "MissingHt"
+_conditionTypes[tmEventSetup.TotalEtEM] = "TotalEtEM"
+_conditionTypes[tmEventSetup.MissingEtHF] = "MissingEtHF"
 
 EsumCondition = (
   tmEventSetup.TotalEt,
   tmEventSetup.TotalHt,
   tmEventSetup.MissingEt,
   tmEventSetup.MissingHt,
+  tmEventSetup.TotalEtEM,
+  tmEventSetup.MissingEtHF,
 )
 
 _conditionTypes[tmEventSetup.MinBiasHFP0] = "MinBiasHFP0"
@@ -179,7 +183,7 @@ conditionTypes = tuple(_conditionTypes)
 
 
 # dictionary of object types
-# should match index in esConditionType enum of ../tmEventSetup/esTriggerMenu.hh
+# should match index in esObjectType enum of ../tmEventSetup/esTypes.hh
 # should match names in ../tmGrammar/Object.hh
 objectTypes = {}
 objectTypes[tmEventSetup.Muon] = tmGrammar.MU
@@ -195,6 +199,8 @@ objectTypes[tmEventSetup.MBT0HFP] = tmGrammar.MBT0HFP
 objectTypes[tmEventSetup.MBT1HFP] = tmGrammar.MBT1HFP
 objectTypes[tmEventSetup.MBT0HFM] = tmGrammar.MBT0HFM
 objectTypes[tmEventSetup.MBT1HFM] = tmGrammar.MBT1HFM
+objectTypes[tmEventSetup.ETTEM] = tmGrammar.ETTEM
+objectTypes[tmEventSetup.ETMHF] = tmGrammar.ETMHF
 
 
 # list of cut types: esCutType enum in ../tmEventSetup/esTypes.hh
