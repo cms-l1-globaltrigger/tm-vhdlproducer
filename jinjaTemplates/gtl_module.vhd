@@ -41,6 +41,9 @@ entity gtl_module is
         mbt1hfm_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
         mbt0hfp_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
         mbt0hfm_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+-- HB 2016-06-07: inserted new esums quantities (ETTEM and ETMHF).
+        ettem_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+        etmhf_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
 -- ****************************************************************************************
         muon_data : in muon_objects_array(0 to NR_MUON_OBJECTS-1);
         external_conditions : in std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);
@@ -69,6 +72,9 @@ architecture rtl of gtl_module is
     signal mbt1hfm_bx_p2, mbt1hfm_bx_p1, mbt1hfm_bx_0, mbt1hfm_bx_m1, mbt1hfm_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
     signal mbt0hfp_bx_p2, mbt0hfp_bx_p1, mbt0hfp_bx_0, mbt0hfp_bx_m1, mbt0hfp_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
     signal mbt0hfm_bx_p2, mbt0hfm_bx_p1, mbt0hfm_bx_0, mbt0hfm_bx_m1, mbt0hfm_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+-- HB 2016-06-07: inserted new esums quantities (ETTEM and ETMHF).
+    signal ettem_bx_p2, ettem_bx_p1, ettem_bx_0, ettem_bx_m1, ettem_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+    signal etmhf_bx_p2, etmhf_bx_p1, etmhf_bx_0, etmhf_bx_m1, etmhf_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
 -- ****************************************************************************************
 -- HB 2016-01-08: renamed ext_cond after +/-2bx to ext_cond_bx_p2_int, etc., because ext_cond_bx_p2, etc. used in algos (names coming from TME grammar).
     signal ext_cond_bx_p2_int, ext_cond_bx_p1_int, ext_cond_bx_0_int, ext_cond_bx_m1_int, ext_cond_bx_m2_int : std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);
@@ -121,6 +127,9 @@ p_m_2_bx_pipeline_i: entity work.p_m_2_bx_pipeline
 	mbt1hfm_data, mbt1hfm_bx_p2, mbt1hfm_bx_p1, mbt1hfm_bx_0, mbt1hfm_bx_m1, mbt1hfm_bx_m2,
 	mbt0hfp_data, mbt0hfp_bx_p2, mbt0hfp_bx_p1, mbt0hfp_bx_0, mbt0hfp_bx_m1, mbt0hfp_bx_m2,
 	mbt0hfm_data, mbt0hfm_bx_p2, mbt0hfm_bx_p1, mbt0hfm_bx_0, mbt0hfm_bx_m1, mbt0hfm_bx_m2,
+-- HB 2016-06-07: inserted new esums quantities (ETTEM and ETMHF).
+        ettem_data, ettem_bx_p2, ettem_bx_p1, ettem_bx_0, ettem_bx_m1, ettem_bx_m2,
+        etmhf_data, etmhf_bx_p2, etmhf_bx_p1, etmhf_bx_0, etmhf_bx_m1, etmhf_bx_m2,
 -- ****************************************************************************************
 -- HB 2016-01-08: renamed ext_cond after +/-2bx to ext_cond_bx_p2_int, etc., because ext_cond_bx_p2, etc. used in algos (names coming from TME grammar).
         external_conditions, ext_cond_bx_p2_int, ext_cond_bx_p1_int, ext_cond_bx_0_int, ext_cond_bx_m1_int, ext_cond_bx_m2_int

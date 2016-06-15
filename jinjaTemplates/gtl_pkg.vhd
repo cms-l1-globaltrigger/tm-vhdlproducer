@@ -240,11 +240,16 @@ constant NR_ETT_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (corr
 constant NR_HTT_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (correlation conditions)
 constant NR_ETM_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (correlation conditions)
 constant NR_HTM_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (correlation conditions)
+-- HB 2016-06-07: inserted ETMHF
+constant NR_ETMHF_OBJECTS : positive := 1; -- dummy for VHDL-Producer output (correlation conditions)
 
-constant ETT_TYPE : natural range 0 to 3 := 0;
-constant HTT_TYPE : natural range 0 to 3 := 1;
-constant ETM_TYPE : natural range 0 to 3 := 2;
-constant HTM_TYPE : natural range 0 to 3 := 3;
+constant ETT_TYPE : natural range 0 to 5 := 0;
+constant HTT_TYPE : natural range 0 to 5 := 1;
+constant ETM_TYPE : natural range 0 to 5 := 2;
+constant HTM_TYPE : natural range 0 to 5 := 3;
+-- HB 2016-06-07: inserted ETTEM and ETMHF
+constant ETTEM_TYPE : natural range 0 to 5 := 4;
+constant ETMHF_TYPE : natural range 0 to 5 := 5;
 
 type d_s_i_ett_record is record
     et_high, et_low : natural range MAX_ESUMS_BITS-1 downto 0;
@@ -261,6 +266,16 @@ end record d_s_i_etm_record;
 type d_s_i_htm_record is record
     phi_high, phi_low, et_high, et_low : natural range MAX_ESUMS_BITS-1 downto 0;
 end record d_s_i_htm_record;
+
+-- HB 2016-06-07: inserted ETTEM
+type d_s_i_ettem_record is record
+    et_high, et_low : natural range MAX_ESUMS_BITS-1 downto 0;
+end record d_s_i_ettem_record;
+
+-- HB 2016-06-07: inserted ETMHF
+type d_s_i_etmhf_record is record
+    phi_high, phi_low, et_high, et_low : natural range MAX_ESUMS_BITS-1 downto 0;
+end record d_s_i_etmhf_record;
 
 constant ETT_ET_LOW : natural := 0;
 constant ETT_ET_HIGH : natural := 11;
@@ -286,6 +301,20 @@ constant HTM_PHI_HIGH : natural := 19;
 constant D_S_I_HTM : d_s_i_htm_record := (HTM_PHI_HIGH,HTM_PHI_LOW,HTM_ET_HIGH,HTM_ET_LOW);
 constant D_S_I_HTM_V2 : d_s_i_htm_record := D_S_I_HTM; -- dummy for VHDL-Producer output (correlation conditions) 
 -- constant D_S_I_HTM : d_s_i_htm_record := (19,12,11,0);
+-- HB 2016-06-07: inserted ETTEM
+constant ETTEM_IN_ETT_LOW : natural := 12;
+constant ETTEM_IN_ETT_HIGH : natural := 23;
+constant ETTEM_ET_LOW : natural := 0;
+constant ETTEM_ET_HIGH : natural := 11;
+constant D_S_I_ETTEM : d_s_i_ettem_record := (ETTEM_ET_HIGH,ETTEM_ET_LOW);
+constant D_S_I_ETTEM_V2 : d_s_i_ettem_record := D_S_I_ETTEM; -- dummy for VHDL-Producer output (correlation conditions) 
+-- HB 2016-06-07: inserted ETMHF
+constant ETMHF_ET_LOW : natural := 0;
+constant ETMHF_ET_HIGH : natural := 11;
+constant ETMHF_PHI_LOW : natural := 12;
+constant ETMHF_PHI_HIGH : natural := 19;
+constant D_S_I_ETMHF : d_s_i_etmhf_record := (ETMHF_PHI_HIGH,ETMHF_PHI_LOW,ETMHF_ET_HIGH,ETMHF_ET_LOW);
+constant D_S_I_ETMHF_V2 : d_s_i_etmhf_record := D_S_I_ETMHF; -- dummy for VHDL-Producer output (correlation conditions) 
 
 -- HB 2016-04-18: updates for "min bias trigger" objects (quantities) for Low-pileup-run May 2016
 -- HB 2016-04-21: see email from Johannes (Andrew Rose), 2016-04-20 15:34
@@ -417,6 +446,10 @@ constant EG_HTM_DPHI_PRECISION: positive := 3;
 constant JET_HTM_DPHI_PRECISION: positive := 3;
 constant TAU_HTM_DPHI_PRECISION: positive := 3;
 constant MUON_HTM_DPHI_PRECISION: positive := 3;
+constant EG_ETMHF_DPHI_PRECISION: positive := 3;
+constant JET_ETMHF_DPHI_PRECISION: positive := 3;
+constant TAU_ETMHF_DPHI_PRECISION: positive := 3;
+constant MUON_ETMHF_DPHI_PRECISION: positive := 3;
 
 constant EG_EG_DETA_DPHI_PRECISION: positive := max(EG_EG_DETA_PRECISION, EG_EG_DPHI_PRECISION);
 constant EG_JET_DETA_DPHI_PRECISION: positive := max(EG_JET_DETA_PRECISION, EG_JET_DPHI_PRECISION);
@@ -538,6 +571,7 @@ type eg_phi_conv_2_muon_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of 
 type jet_phi_conv_2_muon_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of integer range 0 to 574;
 type tau_phi_conv_2_muon_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of integer range 0 to 574;
 type etm_phi_conv_2_muon_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of integer range 0 to 574;
+type etmhf_phi_conv_2_muon_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of integer range 0 to 574;
 type htm_phi_conv_2_muon_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of integer range 0 to 574;
 type eg_eg_diff_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of natural range 0 to 9962;
 type eg_jet_diff_eta_lut_array is array (0 to 2**MAX_CALO_ETA_BITS-1) of natural range 0 to 9962;
@@ -560,10 +594,14 @@ type eg_muon_diff_phi_lut_array is array (0 to 2**(MUON_PHI_HIGH-MUON_PHI_LOW+1)
 type jet_muon_diff_phi_lut_array is array (0 to 2**(MUON_PHI_HIGH-MUON_PHI_LOW+1)-1) of natural range 0 to 6272;
 type tau_muon_diff_phi_lut_array is array (0 to 2**(MUON_PHI_HIGH-MUON_PHI_LOW+1)-1) of natural range 0 to 6272;
 type muon_etm_diff_phi_lut_array is array (0 to 2**(MUON_PHI_HIGH-MUON_PHI_LOW+1)-1) of natural range 0 to 6272;
+type muon_etmhf_diff_phi_lut_array is array (0 to 2**(MUON_PHI_HIGH-MUON_PHI_LOW+1)-1) of natural range 0 to 6272;
 type muon_htm_diff_phi_lut_array is array (0 to 2**(MUON_PHI_HIGH-MUON_PHI_LOW+1)-1) of natural range 0 to 6272;
 type eg_etm_diff_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natural range 0 to 6240;
 type jet_etm_diff_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natural range 0 to 6240;
 type tau_etm_diff_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natural range 0 to 6240;
+type eg_etmhf_diff_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natural range 0 to 6240;
+type jet_etmhf_diff_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natural range 0 to 6240;
+type tau_etmhf_diff_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natural range 0 to 6240;
 type eg_htm_diff_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natural range 0 to 6240;
 type jet_htm_diff_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natural range 0 to 6240;
 type tau_htm_diff_phi_lut_array is array (0 to 2**MAX_CALO_PHI_BITS-1) of natural range 0 to 6240;
@@ -733,6 +771,25 @@ constant HTM_PHI_CONV_2_MUON_PHI_LUT : htm_phi_conv_2_muon_phi_lut_array := (
 );
 
 constant ETM_PHI_CONV_2_MUON_PHI_LUT : etm_phi_conv_2_muon_phi_lut_array := (
+2, 6, 10, 14, 18, 22, 26, 30, 34, 38, 42, 46, 50, 54, 58, 62,
+66, 70, 74, 78, 82, 86, 90, 94, 98, 102, 106, 110, 114, 118, 122, 126,
+130, 134, 138, 142, 146, 150, 154, 158, 162, 166, 170, 174, 178, 182, 186, 190,
+194, 198, 202, 206, 210, 214, 218, 222, 226, 230, 234, 238, 242, 246, 250, 254,
+258, 262, 266, 270, 274, 278, 282, 286, 290, 294, 298, 302, 306, 310, 314, 318,
+322, 326, 330, 334, 338, 342, 346, 350, 354, 358, 362, 366, 370, 374, 378, 382,
+386, 390, 394, 398, 402, 406, 410, 414, 418, 422, 426, 430, 434, 438, 442, 446,
+450, 454, 458, 462, 466, 470, 474, 478, 482, 486, 490, 494, 498, 502, 506, 510,
+514, 518, 522, 526, 530, 534, 538, 542, 546, 550, 554, 558, 562, 566, 570, 574,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+);
+
+constant ETMHF_PHI_CONV_2_MUON_PHI_LUT : etmhf_phi_conv_2_muon_phi_lut_array := (
 2, 6, 10, 14, 18, 22, 26, 30, 34, 38, 42, 46, 50, 54, 58, 62,
 66, 70, 74, 78, 82, 86, 90, 94, 98, 102, 106, 110, 114, 118, 122, 126,
 130, 134, 138, 142, 146, 150, 154, 158, 162, 166, 170, 174, 178, 182, 186, 190,
@@ -1531,6 +1588,25 @@ constant EG_ETM_DIFF_PHI_LUT : eg_etm_diff_phi_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
+constant EG_ETMHF_DIFF_PHI_LUT : eg_etmhf_diff_phi_lut_array := (
+0, 44, 87, 131, 175, 218, 262, 305, 349, 393, 436, 480, 524, 567, 611, 654,
+698, 742, 785, 829, 873, 916, 960, 1004, 1047, 1091, 1134, 1178, 1222, 1265, 1309, 1353,
+1396, 1440, 1484, 1527, 1571, 1614, 1658, 1702, 1745, 1789, 1833, 1876, 1920, 1963, 2007, 2051,
+2094, 2138, 2182, 2225, 2269, 2313, 2356, 2400, 2443, 2487, 2531, 2574, 2618, 2662, 2705, 2749,
+2793, 2836, 2880, 2923, 2967, 3011, 3054, 3098, 3142, 3185, 3229, 3272, 3316, 3360, 3403, 3447,
+3491, 3534, 3578, 3622, 3665, 3709, 3752, 3796, 3840, 3883, 3927, 3971, 4014, 4058, 4102, 4145,
+4189, 4232, 4276, 4320, 4363, 4407, 4451, 4494, 4538, 4581, 4625, 4669, 4712, 4756, 4800, 4843,
+4887, 4931, 4974, 5018, 5061, 5105, 5149, 5192, 5236, 5280, 5323, 5367, 5411, 5454, 5498, 5541,
+5585, 5629, 5672, 5716, 5760, 5803, 5847, 5890, 5934, 5978, 6021, 6065, 6109, 6152, 6196, 6240,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+);
+
 constant TAU_HTM_DIFF_PHI_LUT : tau_htm_diff_phi_lut_array := (
 0, 44, 87, 131, 175, 218, 262, 305, 349, 393, 436, 480, 524, 567, 611, 654,
 698, 742, 785, 829, 873, 916, 960, 1004, 1047, 1091, 1134, 1178, 1222, 1265, 1309, 1353,
@@ -1569,6 +1645,25 @@ constant TAU_ETM_DIFF_PHI_LUT : tau_etm_diff_phi_lut_array := (
 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 );
 
+constant TAU_ETMHF_DIFF_PHI_LUT : tau_etmhf_diff_phi_lut_array := (
+0, 44, 87, 131, 175, 218, 262, 305, 349, 393, 436, 480, 524, 567, 611, 654,
+698, 742, 785, 829, 873, 916, 960, 1004, 1047, 1091, 1134, 1178, 1222, 1265, 1309, 1353,
+1396, 1440, 1484, 1527, 1571, 1614, 1658, 1702, 1745, 1789, 1833, 1876, 1920, 1963, 2007, 2051,
+2094, 2138, 2182, 2225, 2269, 2313, 2356, 2400, 2443, 2487, 2531, 2574, 2618, 2662, 2705, 2749,
+2793, 2836, 2880, 2923, 2967, 3011, 3054, 3098, 3142, 3185, 3229, 3272, 3316, 3360, 3403, 3447,
+3491, 3534, 3578, 3622, 3665, 3709, 3752, 3796, 3840, 3883, 3927, 3971, 4014, 4058, 4102, 4145,
+4189, 4232, 4276, 4320, 4363, 4407, 4451, 4494, 4538, 4581, 4625, 4669, 4712, 4756, 4800, 4843,
+4887, 4931, 4974, 5018, 5061, 5105, 5149, 5192, 5236, 5280, 5323, 5367, 5411, 5454, 5498, 5541,
+5585, 5629, 5672, 5716, 5760, 5803, 5847, 5890, 5934, 5978, 6021, 6065, 6109, 6152, 6196, 6240,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+);
+
 constant JET_HTM_DIFF_PHI_LUT : jet_htm_diff_phi_lut_array := (
 0, 44, 87, 131, 175, 218, 262, 305, 349, 393, 436, 480, 524, 567, 611, 654,
 698, 742, 785, 829, 873, 916, 960, 1004, 1047, 1091, 1134, 1178, 1222, 1265, 1309, 1353,
@@ -1589,6 +1684,25 @@ constant JET_HTM_DIFF_PHI_LUT : jet_htm_diff_phi_lut_array := (
 );
 
 constant JET_ETM_DIFF_PHI_LUT : jet_etm_diff_phi_lut_array := (
+0, 44, 87, 131, 175, 218, 262, 305, 349, 393, 436, 480, 524, 567, 611, 654,
+698, 742, 785, 829, 873, 916, 960, 1004, 1047, 1091, 1134, 1178, 1222, 1265, 1309, 1353,
+1396, 1440, 1484, 1527, 1571, 1614, 1658, 1702, 1745, 1789, 1833, 1876, 1920, 1963, 2007, 2051,
+2094, 2138, 2182, 2225, 2269, 2313, 2356, 2400, 2443, 2487, 2531, 2574, 2618, 2662, 2705, 2749,
+2793, 2836, 2880, 2923, 2967, 3011, 3054, 3098, 3142, 3185, 3229, 3272, 3316, 3360, 3403, 3447,
+3491, 3534, 3578, 3622, 3665, 3709, 3752, 3796, 3840, 3883, 3927, 3971, 4014, 4058, 4102, 4145,
+4189, 4232, 4276, 4320, 4363, 4407, 4451, 4494, 4538, 4581, 4625, 4669, 4712, 4756, 4800, 4843,
+4887, 4931, 4974, 5018, 5061, 5105, 5149, 5192, 5236, 5280, 5323, 5367, 5411, 5454, 5498, 5541,
+5585, 5629, 5672, 5716, 5760, 5803, 5847, 5890, 5934, 5978, 6021, 6065, 6109, 6152, 6196, 6240,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+);
+
+constant JET_ETMHF_DIFF_PHI_LUT : jet_etmhf_diff_phi_lut_array := (
 0, 44, 87, 131, 175, 218, 262, 305, 349, 393, 436, 480, 524, 567, 611, 654,
 698, 742, 785, 829, 873, 916, 960, 1004, 1047, 1091, 1134, 1178, 1222, 1265, 1309, 1353,
 1396, 1440, 1484, 1527, 1571, 1614, 1658, 1702, 1745, 1789, 1833, 1876, 1920, 1963, 2007, 2051,
@@ -1677,6 +1791,73 @@ constant MU_HTM_DIFF_PHI_LUT : muon_htm_diff_phi_lut_array := (
 
 -- constant MUON_ETM_DIFF_PHI_LUT : muon_etm_diff_phi_lut_array := (
 constant MU_ETM_DIFF_PHI_LUT : muon_etm_diff_phi_lut_array := (
+0, 11, 22, 33, 44, 55, 65, 76, 87, 98, 109, 120, 131, 142, 153, 164,
+175, 185, 196, 207, 218, 229, 240, 251, 262, 273, 284, 295, 305, 316, 327, 338,
+349, 360, 371, 382, 393, 404, 415, 425, 436, 447, 458, 469, 480, 491, 502, 513,
+524, 535, 545, 556, 567, 578, 589, 600, 611, 622, 633, 644, 654, 665, 676, 687,
+698, 709, 720, 731, 742, 753, 764, 774, 785, 796, 807, 818, 829, 840, 851, 862,
+873, 884, 894, 905, 916, 927, 938, 949, 960, 971, 982, 993, 1004, 1014, 1025, 1036,
+1047, 1058, 1069, 1080, 1091, 1102, 1113, 1124, 1134, 1145, 1156, 1167, 1178, 1189, 1200, 1211,
+1222, 1233, 1244, 1254, 1265, 1276, 1287, 1298, 1309, 1320, 1331, 1342, 1353, 1364, 1374, 1385,
+1396, 1407, 1418, 1429, 1440, 1451, 1462, 1473, 1484, 1494, 1505, 1516, 1527, 1538, 1549, 1560,
+1571, 1582, 1593, 1604, 1614, 1625, 1636, 1647, 1658, 1669, 1680, 1691, 1702, 1713, 1724, 1734,
+1745, 1756, 1767, 1778, 1789, 1800, 1811, 1822, 1833, 1844, 1854, 1865, 1876, 1887, 1898, 1909,
+1920, 1931, 1942, 1953, 1963, 1974, 1985, 1996, 2007, 2018, 2029, 2040, 2051, 2062, 2073, 2083,
+2094, 2105, 2116, 2127, 2138, 2149, 2160, 2171, 2182, 2193, 2203, 2214, 2225, 2236, 2247, 2258,
+2269, 2280, 2291, 2302, 2313, 2323, 2334, 2345, 2356, 2367, 2378, 2389, 2400, 2411, 2422, 2433,
+2443, 2454, 2465, 2476, 2487, 2498, 2509, 2520, 2531, 2542, 2553, 2563, 2574, 2585, 2596, 2607,
+2618, 2629, 2640, 2651, 2662, 2673, 2683, 2694, 2705, 2716, 2727, 2738, 2749, 2760, 2771, 2782,
+2793, 2803, 2814, 2825, 2836, 2847, 2858, 2869, 2880, 2891, 2902, 2913, 2923, 2934, 2945, 2956,
+2967, 2978, 2989, 3000, 3011, 3022, 3033, 3043, 3054, 3065, 3076, 3087, 3098, 3109, 3120, 3131,
+3142, 3153, 3163, 3174, 3185, 3196, 3207, 3218, 3229, 3240, 3251, 3262, 3272, 3283, 3294, 3305,
+3316, 3327, 3338, 3349, 3360, 3371, 3382, 3392, 3403, 3414, 3425, 3436, 3447, 3458, 3469, 3480,
+3491, 3502, 3512, 3523, 3534, 3545, 3556, 3567, 3578, 3589, 3600, 3611, 3622, 3632, 3643, 3654,
+3665, 3676, 3687, 3698, 3709, 3720, 3731, 3742, 3752, 3763, 3774, 3785, 3796, 3807, 3818, 3829,
+3840, 3851, 3862, 3872, 3883, 3894, 3905, 3916, 3927, 3938, 3949, 3960, 3971, 3982, 3992, 4003,
+4014, 4025, 4036, 4047, 4058, 4069, 4080, 4091, 4102, 4112, 4123, 4134, 4145, 4156, 4167, 4178,
+4189, 4200, 4211, 4222, 4232, 4243, 4254, 4265, 4276, 4287, 4298, 4309, 4320, 4331, 4342, 4352,
+4363, 4374, 4385, 4396, 4407, 4418, 4429, 4440, 4451, 4461, 4472, 4483, 4494, 4505, 4516, 4527,
+4538, 4549, 4560, 4571, 4581, 4592, 4603, 4614, 4625, 4636, 4647, 4658, 4669, 4680, 4691, 4701,
+4712, 4723, 4734, 4745, 4756, 4767, 4778, 4789, 4800, 4811, 4821, 4832, 4843, 4854, 4865, 4876,
+4887, 4898, 4909, 4920, 4931, 4941, 4952, 4963, 4974, 4985, 4996, 5007, 5018, 5029, 5040, 5051,
+5061, 5072, 5083, 5094, 5105, 5116, 5127, 5138, 5149, 5160, 5171, 5181, 5192, 5203, 5214, 5225,
+5236, 5247, 5258, 5269, 5280, 5291, 5301, 5312, 5323, 5334, 5345, 5356, 5367, 5378, 5389, 5400,
+5411, 5421, 5432, 5443, 5454, 5465, 5476, 5487, 5498, 5509, 5520, 5531, 5541, 5552, 5563, 5574,
+5585, 5596, 5607, 5618, 5629, 5640, 5651, 5661, 5672, 5683, 5694, 5705, 5716, 5727, 5738, 5749,
+5760, 5770, 5781, 5792, 5803, 5814, 5825, 5836, 5847, 5858, 5869, 5880, 5890, 5901, 5912, 5923,
+5934, 5945, 5956, 5967, 5978, 5989, 6000, 6010, 6021, 6032, 6043, 6054, 6065, 6076, 6087, 6098,
+6109, 6120, 6130, 6141, 6152, 6163, 6174, 6185, 6196, 6207, 6218, 6229, 6240, 6250, 6261, 6272,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+);
+
+constant MU_ETMHF_DIFF_PHI_LUT : muon_etmhf_diff_phi_lut_array := (
 0, 11, 22, 33, 44, 55, 65, 76, 87, 98, 109, 120, 131, 142, 153, 164,
 175, 185, 196, 207, 218, 229, 240, 251, 262, 273, 284, 295, 305, 316, 327, 338,
 349, 360, 371, 382, 393, 404, 415, 425, 436, 447, 458, 469, 480, 491, 502, 513,
