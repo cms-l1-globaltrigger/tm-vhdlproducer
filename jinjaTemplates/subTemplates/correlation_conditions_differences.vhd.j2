@@ -15,7 +15,7 @@ diff_{{o1.type|lower}}_{{o2.type|lower}}_phi_bx_{{o1.bx|lower}}_bx_{{o2.bx|lower
   end generate {{o1.type|lower}}_{{o2.type|lower}}_bx_{{o1.bx|lower}}_bx_{{o2.bx|lower}}_l2;
 end generate {{o1.type|lower}}_{{o2.type|lower}}_bx_{{o1.bx|lower}}_bx_{{o2.bx|lower}}_l1;
 
-    {%- elif ('EG' in o1.type or 'JET' in o1.type or 'TAU' in o1.type) and ('ETM' in o2.type or 'HTM' in o2.type)  %}
+    {%- elif ('EG' in o1.type or 'JET' in o1.type or 'TAU' in o1.type) and ('ETM' in o2.type or 'HTM' in o2.type or 'ETMHF' in o2.type)  %}
 diff_{{o1.type|lower}}_{{o2.type|lower}}_phi_bx_{{o1.bx|lower}}_bx_{{o2.bx|lower}}_i: entity work.sub_phi_integer_obj_vs_obj
   generic map(NR_{{o1.type|upper}}_OBJECTS, NR_{{o2.type|upper}}_OBJECTS, CALO_PHI_HALF_RANGE_BINS)
   port map({{o1.type|lower}}_phi_integer_bx_{{o1.bx|lower}}, {{o2.type|lower}}_phi_integer_bx_{{o2.bx|lower}}, diff_{{o1.type|lower}}_{{o2.type|lower}}_bx_{{o1.bx|lower}}_bx_{{o2.bx|lower}}_phi_integer);      
@@ -39,7 +39,7 @@ diff_{{o1.type|lower}}_{{o2.type|lower}}_phi_bx_{{o1.bx|lower}}_bx_{{o2.bx|lower
   end generate {{o1.type|lower}}_{{o2.type|lower}}_bx_{{o1.bx|lower}}_bx_{{o2.bx|lower}}_l2;
 end generate {{o1.type|lower}}_{{o2.type|lower}}_bx_{{o1.bx|lower}}_bx_{{o2.bx|lower}}_l1;
 
-    {%- elif 'MU' in o1.type and ('ETM' in o2.type or 'HTM' in o2.type) %}
+    {%- elif 'MU' in o1.type and ('ETM' in o2.type or 'HTM' in o2.type or 'ETMHF' in o2.type) %}
 diff_{{o1.type|lower}}_{{o2.type|lower}}_phi_bx_{{o1.bx|lower}}_bx_{{o2.bx|lower}}_i: entity work.sub_phi_integer_obj_vs_obj
   generic map(NR_{{o1.type|upper}}_OBJECTS, NR_{{o2.type|upper}}_OBJECTS, MUON_PHI_HALF_RANGE_BINS)
   port map({{o1.type|lower}}_phi_integer_bx_{{o1.bx|lower}}, {{o2.type|lower}}_phi_conv_2_muon_phi_integer_bx_{{o2.bx|lower}}, diff_{{o1.type|lower}}_{{o2.type|lower}}_bx_{{o1.bx|lower}}_bx_{{o2.bx|lower}}_phi_integer);      

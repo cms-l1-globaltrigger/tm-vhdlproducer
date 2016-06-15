@@ -1,7 +1,7 @@
 {%- block signal_correlation_conditions_differences %}
   {%- set combinations = menu.reporter['ObjectPairForCorrelation'] %}
   {%- for o1, o2 in combinations %}
-    {%- if 'ETM' not in o2.type and 'HTM' not in o2.type %}
+    {%- if 'ETM' not in o2.type and 'HTM' not in o2.type and 'ETMHF' not in o2.type %}
 {{o1.type | lower}}_{{o2.type | lower}}_bx_{{o1.bx | lower}}_bx_{{o2.bx | lower}}_cosh_cos_l1: for i in 0 to NR_{{o1.type | upper}}_OBJECTS-1 generate
   {{o1.type | lower}}_{{o2.type | lower}}_bx_{{o1.bx | lower}}_bx_{{o2.bx | lower}}_cosh_cos_l2: for j in 0 to NR_{{o2.type | upper}}_OBJECTS-1 generate
     {{o1.type | lower}}_{{o2.type | lower}}_bx_{{o1.bx | lower}}_bx_{{o2.bx | lower}}_cosh_deta_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{o1.type | upper}}_{{o2.type | upper}}_COSH_DETA_LUT(diff_{{o1.type | lower}}_{{o2.type | lower}}_bx_{{o1.bx | lower}}_bx_{{o2.bx | lower}}_eta_integer(i,j)), {{o1.type | upper}}_{{o2.type | upper}}_COSH_COS_VECTOR_WIDTH);

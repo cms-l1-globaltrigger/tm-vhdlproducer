@@ -5,7 +5,7 @@
 signal {{o.type | lower}}_pt_vector_bx_{{o.bx|lower}}: diff_inputs_array(0 to NR_{{o.type | upper}}_OBJECTS-1) := (others => (others => '0'));
 signal {{o.type | lower}}_eta_integer_bx_{{o.bx|lower}}: diff_integer_inputs_array(0 to NR_{{o.type | upper}}_OBJECTS-1) := (others => 0);
 signal {{o.type | lower}}_phi_integer_bx_{{o.bx|lower}}: diff_integer_inputs_array(0 to NR_{{o.type | upper}}_OBJECTS-1) := (others => 0);
-    {%- elif 'ETM' in o.type or 'HTM' in o.type %}
+    {%- elif 'ETM' in o.type or 'HTM' in o.type or 'ETMHF' in o.type %}
 signal {{o.type | lower}}_phi_integer_bx_{{o.bx|lower}}: diff_integer_inputs_array(0 to NR_{{o.type | upper}}_OBJECTS-1) := (others => 0);
     {%- endif %}
     {%- if 'MU' not in o.type %}

@@ -578,21 +578,21 @@ def reorderObjects(condition):
     pass
 
   elif o1.type_id == tmEventSetup.Muon:
-    if o2.type_id not in (tmEventSetup.ETM, tmEventSetup.HTM):
+    if o2.type_id not in (tmEventSetup.ETM, tmEventSetup.HTM, tmEventSetup.ETMHF):
       condition.objects[0], condition.objects[1] = condition.objects[1], condition.objects[0]
 
   elif o1.type_id == tmEventSetup.Jet:
-    if o2.type_id not in (tmEventSetup.Tau, tmEventSetup.ETM,
-                          tmEventSetup.HTM, tmEventSetup.Muon):
+    if o2.type_id not in (tmEventSetup.Tau, tmEventSetup.ETM, tmEventSetup.HTM,
+                          tmEventSetup.ETMHF, tmEventSetup.Muon):
       condition.objects[0], condition.objects[1] = condition.objects[1], condition.objects[0]
 
   elif o1.type_id == tmEventSetup.Tau:
-    if o2.type_id not in (tmEventSetup.ETM, tmEventSetup.HTM,
+    if o2.type_id not in (tmEventSetup.ETM, tmEventSetup.HTM, tmEventSetup.ETMHF,
                           tmEventSetup.Muon):
       condition.objects[0], condition.objects[1] = condition.objects[1], condition.objects[0]
     pass
 
-  elif o1.type_id in (tmEventSetup.ETM, tmEventSetup.HTM):
+  elif o1.type_id in (tmEventSetup.ETM, tmEventSetup.HTM, tmEventSetup.ETMHF):
       condition.objects[0], condition.objects[1] = condition.objects[1], condition.objects[0]
 
   logging.info("+reorderObjects: %s, %s" % (condition.objects[0].type, condition.objects[1].type))

@@ -3,7 +3,7 @@
   {%- for o1, o2 in combinations %}
 signal diff_{{o1.type | lower}}_{{o2.type | lower}}_bx_{{o1.bx | lower}}_bx_{{o2.bx | lower}}_eta_integer: dim2_max_eta_range_array(0 to NR_{{o1.type | upper}}_OBJECTS-1, 0 to NR_{{o2.type|upper}}_OBJECTS-1) := (others => (others => 0));
 signal diff_{{o1.type | lower}}_{{o2.type | lower}}_bx_{{o1.bx | lower}}_bx_{{o2.bx | lower}}_eta_vector: deta_dphi_vector_array(0 to NR_{{o1.type | upper}}_OBJECTS-1, 0 to NR_{{o2.type|upper}}_OBJECTS-1) := (others => (others => (others => '0')));
-    {%- if ('EG' in o1.type or 'JET' in o1.type or 'TAU' in o1.type) and ('EG' in o2.type or 'JET' in o2.type or 'TAU' in o2.type or 'ETM' in o2.type or 'HTM' in o2.type) %}
+    {%- if ('EG' in o1.type or 'JET' in o1.type or 'TAU' in o1.type) and ('EG' in o2.type or 'JET' in o2.type or 'TAU' in o2.type or 'ETM' in o2.type or 'HTM' in o2.type or 'ETMHF' in o2.type) %}
 signal {{o1.type | lower}}_{{o2.type | lower}}_bx_{{o1.bx | lower}}_bx_{{o2.bx | lower}}_cosh_deta_vector : calo_cosh_cos_vector_array(0 to NR_{{o1.type | upper}}_OBJECTS-1, 0 to NR_{{o2.type|upper}}_OBJECTS-1) := (others => (others => (others => '0')));
 signal {{o1.type | lower}}_{{o2.type | lower}}_bx_{{o1.bx | lower}}_bx_{{o2.bx | lower}}_cos_dphi_vector : calo_cosh_cos_vector_array(0 to NR_{{o1.type | upper}}_OBJECTS-1, 0 to NR_{{o2.type|upper}}_OBJECTS-1) := (others => (others => (others => '0')));
     {%- elif ('EG' in o1.type or 'JET' in o1.type or 'TAU' in o1.type) and 'MU' in o2.type %}
