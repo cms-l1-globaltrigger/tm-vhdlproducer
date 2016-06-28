@@ -928,20 +928,23 @@ def updateExpressionInCondition(algo, cond):
   algo.expression_in_condition = algo.expression_in_condition.replace(cond.getName(), signal)
 
 
-def setMenuInfo(menu, data, version="0.0.0"):
+def setMenuInfo(menu, data, version="0.0.0", genFwUuid=True):
   menuName = menu.getName()
 
   data.info = Object()
   data.info.uuid = uuid.uuid5(uuid.NAMESPACE_DNS, menuName)
   data.info.uuid_hex = data.info.uuid.hex
-  data.info.name_in_hex = hexlify(menu.getName()[::-1]).zfill(256)
-  data.info.fw_uuid = uuid.uuid1()
+  if genFwUuid:
+    data.info.fw_uuid = uuid.uuid1()
+  else:
+    data.info.fw_uuid = uuid.UUID(menu.getFirmwareUuid())
   data.info.fw_uuid_hex = data.info.fw_uuid.hex
+  data.info.fw_uuid_hash = toSigned(tmEventSetup.getMmHashN(str(data.info.fw_uuid)))
   data.info.name = menuName
+  data.info.name_in_hex = hexlify(menu.getName()[::-1]).zfill(256)
+  data.info.menu_name_hash = toSigned(tmEventSetup.getMmHashN(menuName))
   data.info.scale_set = menu.getScaleSetName()
   data.info.svn_revision_number = menu.sw_revision_svn
-  data.info.menu_name_hash = toSigned(tmEventSetup.getMmHashN(menuName))
-  data.info.fw_uuid_hash = toSigned(tmEventSetup.getMmHashN(str(data.info.fw_uuid)))
 
   data.info.sw_version_major, data.info.sw_version_minor, data.info.sw_version_patch = version.rsplit('.')
 
@@ -1021,7 +1024,7 @@ def getAlgorithmInfo(esAlgo):
   return algorithm
 
 
-def getReport(menu, version=False):
+def getReport(menu, version=False, genFwUuid=True):
   data = Object()
   data.reporter = {}
 
@@ -1038,7 +1041,7 @@ def getReport(menu, version=False):
   data.reporter[keyCondMap] = menu.getConditionMapPtr()
   data.reporter[keyScaleMap] = menu.getScaleMapPtr()
 
-  setMenuInfo(menu, data, version)
+  setMenuInfo(menu, data, version, genFwUuid)
 
   algoDict = {}
   for key, esAlgo in data.reporter[keyAlgoMap].iteritems():

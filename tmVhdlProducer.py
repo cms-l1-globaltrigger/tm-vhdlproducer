@@ -77,7 +77,7 @@ class Loader(FileSystemLoader):
 class VhdlProducer(object):
     """VHDL producer class."""
 
-    def __init__(self,menu,templateDir,nModules,outputDir,verbose=False,manual_dist=False):
+    def __init__(self,menu,templateDir,nModules,outputDir,verbose=False,manual_dist=False,genFwUuid=True):
         self.menu     = menu
         self.menuName = menu.getName()
         self.nModules = nModules  ##how to get these?
@@ -93,7 +93,7 @@ class VhdlProducer(object):
 
         algoMap = menu.getAlgorithmMapPtr()
         self.nAlgos = algoMap.size()
-        self.data = util.getReport(self.menu,self.version)
+        self.data = util.getReport(self.menu,self.version,genFwUuid)
 
     def _makeDirectories(self):
         mainDir = self.outputDir
