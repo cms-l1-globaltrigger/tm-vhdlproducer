@@ -3,20 +3,27 @@
 
 -- ========================================================
 -- from VHDL producer:
-      
+
+-- Module ID: {{module.id|d}}
+
 -- Unique ID of L1 Trigger Menu:
--- X"{{menu.info.uuid_hex}}"
-    
+-- {{menu.info.uuid_hex}}
+
 -- Name of L1 Trigger Menu:
 -- {{menu.info.name}}
-    
+
 -- Scale set:
 -- {{menu.info.scale_set}}
-    
+
 -- VHDL producer version
 -- v{{menu.info.sw_version_major}}.{{menu.info.sw_version_minor}}.{{menu.info.sw_version_patch}}
 
 -- ========================================================
+
+-- Version-history:
+-- HB 2016-04-22: v0.0.10: Implemented min_bias_hf_conditions.vhd for minimum bias trigger conditions for low-pileup-run in May 2016.
+--                         Updated gtl_fdl_wrapper.vhd and p_m_2_bx_pipeline.vhd for minimum bias trigger objects.
+-- HB 2016-04-07: v0.0.9: Cleaned-up typing in muon_muon_correlation_condition.vhd (D_S_I_MUON_V2 instead of D_S_I_MUON in some lines).
 
 library ieee;
 use ieee.std_logic_1164.all;
@@ -41,9 +48,6 @@ entity gtl_module is
         mbt1hfm_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
         mbt0hfp_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
         mbt0hfm_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
--- HB 2016-06-07: inserted new esums quantities (ETTEM and ETMHF).
-        ettem_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-        etmhf_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
 -- ****************************************************************************************
         muon_data : in muon_objects_array(0 to NR_MUON_OBJECTS-1);
         external_conditions : in std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);
@@ -72,9 +76,6 @@ architecture rtl of gtl_module is
     signal mbt1hfm_bx_p2, mbt1hfm_bx_p1, mbt1hfm_bx_0, mbt1hfm_bx_m1, mbt1hfm_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
     signal mbt0hfp_bx_p2, mbt0hfp_bx_p1, mbt0hfp_bx_0, mbt0hfp_bx_m1, mbt0hfp_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
     signal mbt0hfm_bx_p2, mbt0hfm_bx_p1, mbt0hfm_bx_0, mbt0hfm_bx_m1, mbt0hfm_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
--- HB 2016-06-07: inserted new esums quantities (ETTEM and ETMHF).
-    signal ettem_bx_p2, ettem_bx_p1, ettem_bx_0, ettem_bx_m1, ettem_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
-    signal etmhf_bx_p2, etmhf_bx_p1, etmhf_bx_0, etmhf_bx_m1, etmhf_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
 -- ****************************************************************************************
 -- HB 2016-01-08: renamed ext_cond after +/-2bx to ext_cond_bx_p2_int, etc., because ext_cond_bx_p2, etc. used in algos (names coming from TME grammar).
     signal ext_cond_bx_p2_int, ext_cond_bx_p1_int, ext_cond_bx_0_int, ext_cond_bx_m1_int, ext_cond_bx_m2_int : std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);
@@ -100,10 +101,14 @@ architecture rtl of gtl_module is
 {%- include  "subTemplates/signal_muon_charge_correlations.vhd.j2" %}
 
 -- Signal definition for conditions names
-{%- include  "subTemplates/signal_condition.vhd.j2" %}
+{%- for condition in module.conditions %}
+    signal {{ condition.name }} : std_logic;
+{%- endfor %}
 
 -- Signal definition for algorithms names
-{%- include  "subTemplates/signal_algorithm.vhd.j2" %}
+{%- for algorithm in module | sort(attribute='index') %}
+    signal {{ algorithm.name }} : std_logic;
+{%- endfor %}
 
 -- ==== Inserted by TME - end ===============================================================================================================
 
@@ -127,9 +132,6 @@ p_m_2_bx_pipeline_i: entity work.p_m_2_bx_pipeline
 	mbt1hfm_data, mbt1hfm_bx_p2, mbt1hfm_bx_p1, mbt1hfm_bx_0, mbt1hfm_bx_m1, mbt1hfm_bx_m2,
 	mbt0hfp_data, mbt0hfp_bx_p2, mbt0hfp_bx_p1, mbt0hfp_bx_0, mbt0hfp_bx_m1, mbt0hfp_bx_m2,
 	mbt0hfm_data, mbt0hfm_bx_p2, mbt0hfm_bx_p1, mbt0hfm_bx_0, mbt0hfm_bx_m1, mbt0hfm_bx_m2,
--- HB 2016-06-07: inserted new esums quantities (ETTEM and ETMHF).
-        ettem_data, ettem_bx_p2, ettem_bx_p1, ettem_bx_0, ettem_bx_m1, ettem_bx_m2,
-        etmhf_data, etmhf_bx_p2, etmhf_bx_p1, etmhf_bx_0, etmhf_bx_m1, etmhf_bx_m2,
 -- ****************************************************************************************
 -- HB 2016-01-08: renamed ext_cond after +/-2bx to ext_cond_bx_p2_int, etc., because ext_cond_bx_p2, etc. used in algos (names coming from TME grammar).
         external_conditions, ext_cond_bx_p2_int, ext_cond_bx_p1_int, ext_cond_bx_0_int, ext_cond_bx_m1_int, ext_cond_bx_m2_int
@@ -150,7 +152,7 @@ ext_cond_pipe_p: process(lhc_clk, ext_cond_bx_p2_int, ext_cond_bx_p1_int, ext_co
         ext_cond_bx_0_pipe_temp(external_conditions_pipeline_stages+1) := ext_cond_bx_0_int;
         ext_cond_bx_m1_pipe_temp(external_conditions_pipeline_stages+1) := ext_cond_bx_m1_int;
         ext_cond_bx_m2_pipe_temp(external_conditions_pipeline_stages+1) := ext_cond_bx_m2_int;
-        if (external_conditions_pipeline_stages > 0) then 
+        if (external_conditions_pipeline_stages > 0) then
             if (lhc_clk'event and (lhc_clk = '1') ) then
                 ext_cond_bx_p2_pipe_temp(0 to external_conditions_pipeline_stages) := ext_cond_bx_p2_pipe_temp(1 to external_conditions_pipeline_stages+1);
                 ext_cond_bx_p1_pipe_temp(0 to external_conditions_pipeline_stages) := ext_cond_bx_p1_pipe_temp(1 to external_conditions_pipeline_stages+1);
@@ -167,6 +169,11 @@ ext_cond_pipe_p: process(lhc_clk, ext_cond_bx_p2_int, ext_cond_bx_p1_int, ext_co
 end process;
 
 -- ==== Inserted by TME - begin =============================================================================================================
+
+-- External condition assignment
+{%- for condition in module.conditions if condition.isExternalCondition() %}
+    {{ condition.name }} <= ext_cond_bx_{{ condition.ptr.getObjects()[0].getBxOffset() | bx_offset }}({{ condition.ptr.getObjects()[0].getExternalChannelId() }});
+{%- endfor %}
 
 -- Instantiations of muon charge correlations - only once for a certain Bx combination, if there is at least one DoubleMuon, TripleMuon, QuadMuon condition
 -- or muon-muon correlation condition.
@@ -185,18 +192,48 @@ end process;
 {%- include  "subTemplates/correlation_conditions_inv_mass.vhd.j2" %}
 
 -- Instantiations of conditions
+{% for condition in module.conditions if condition.isCaloCondition() %}
 {%- include  "subTemplates/calo_condition_v3.vhd.j2" %}
-{%- include  "subTemplates/muon_condition_v3.vhd.j2" %}
-{%- include  "subTemplates/esums_condition.vhd.j2" %}
-{%- include  "subTemplates/calo_calo_correlation_condition.vhd.j2" %}
-{%- include  "subTemplates/calo_muon_correlation_condition.vhd.j2" %}
-{%- include  "subTemplates/muon_muon_correlation_condition.vhd.j2" %}
-{%- include  "subTemplates/calo_esums_correlation_condition.vhd.j2" %}
-{%- include  "subTemplates/muon_esums_correlation_condition.vhd.j2" %}
-{%- include  "subTemplates/min_bias_hf_condition.vhd.j2" %}
+{% endfor %}
 
--- Instantiations of algorithms 
-{%- include  "subTemplates/algorithm.vhd.j2" %}
+{% for condition in module.conditions if condition.isMuonCondition() %}
+{%- include  "subTemplates/muon_condition_v3.vhd.j2" %}
+{% endfor %}
+
+{% for condition in module.conditions if condition.isEsumsCondition() %}
+{%- include  "subTemplates/esums_condition.vhd.j2" %}
+{% endfor %}
+
+{% for condition in module.conditions if condition.type == 'CaloCaloCorrelation' %}
+{%- include  "subTemplates/calo_calo_correlation_condition.vhd.j2" %}
+{% endfor %}
+
+{% for condition in module.conditions if condition.type == 'CaloMuonCorrelation' %}
+{%- include  "subTemplates/calo_muon_correlation_condition.vhd.j2" %}
+{% endfor %}
+
+{% for condition in module.conditions if condition.type == 'MuonMuonCorrelation' %}
+{%- include  "subTemplates/muon_muon_correlation_condition.vhd.j2" %}
+{% endfor %}
+
+{% for condition in module.conditions if condition.type == 'CaloEsumCorrelation' %}
+{%- include  "subTemplates/calo_esums_correlation_condition.vhd.j2" %}
+{% endfor %}
+
+{% for condition in module.conditions if condition.type == 'MuonEsumCorrelation' %}
+{%- include  "subTemplates/muon_esums_correlation_condition.vhd.j2" %}
+{% endfor %}
+
+{% for condition in module.conditions if condition.isMinBiasCondition() %}
+{%- include  "subTemplates/min_bias_hf_condition.vhd.j2" %}
+{% endfor %}
+
+-- Instantiations of algorithms
+{% for algorithm in module %}
+-- {{ algorithm.index }} {{ algorithm.name }} : {{ algorithm.expression }}
+{{ algorithm.name | lower }} <= {{ algorithm.expression_in_condition | lower }};
+algo({{ algorithm.module_index | d}}) <= {{ algorithm.name | lower }};
+{% endfor %}
 
 -- ==== Inserted by TME - end ===============================================================================================================
 
