@@ -3,18 +3,16 @@
 
 -- ========================================================
 -- from VHDL producer:
-
--- Module ID: {{module.id|d}}
-
+      
 -- Unique ID of L1 Trigger Menu:
--- {{menu.info.uuid_hex}}
-
+-- X"{{menu.info.uuid_hex}}"
+    
 -- Name of L1 Trigger Menu:
 -- {{menu.info.name}}
-
+    
 -- Scale set:
 -- {{menu.info.scale_set}}
-
+    
 -- VHDL producer version
 -- v{{menu.info.sw_version_major}}.{{menu.info.sw_version_minor}}.{{menu.info.sw_version_patch}}
 
@@ -101,14 +99,10 @@ architecture rtl of gtl_module is
 {%- include  "subTemplates/signal_muon_charge_correlations.vhd.j2" %}
 
 -- Signal definition for conditions names
-{%- for condition in module.conditions %}
-    signal {{ condition.name }} : std_logic;
-{%- endfor %}
+{%- include  "subTemplates/signal_condition.vhd.j2" %}
 
 -- Signal definition for algorithms names
-{%- for algorithm in module | sort(attribute='index') %}
-    signal {{ algorithm.name }} : std_logic;
-{%- endfor %}
+{%- include  "subTemplates/signal_algorithm.vhd.j2" %}
 
 -- ==== Inserted by TME - end ===============================================================================================================
 
@@ -170,11 +164,6 @@ end process;
 
 -- ==== Inserted by TME - begin =============================================================================================================
 
--- External condition assignment
-{%- for condition in module.conditions if condition.isExternalCondition() %}
-    {{ condition.name }} <= ext_cond_bx_{{ condition.ptr.getObjects()[0].getBxOffset() | bx_offset }}({{ condition.ptr.getObjects()[0].getExternalChannelId() }});
-{%- endfor %}
-
 -- Instantiations of muon charge correlations - only once for a certain Bx combination, if there is at least one DoubleMuon, TripleMuon, QuadMuon condition
 -- or muon-muon correlation condition.
 {%- include  "subTemplates/muon_charge_correlations.vhd.j2" %}
@@ -192,48 +181,18 @@ end process;
 {%- include  "subTemplates/correlation_conditions_inv_mass.vhd.j2" %}
 
 -- Instantiations of conditions
-{% for condition in module.conditions if condition.isCaloCondition() %}
 {%- include  "subTemplates/calo_condition_v3.vhd.j2" %}
-{% endfor %}
-
-{% for condition in module.conditions if condition.isMuonCondition() %}
 {%- include  "subTemplates/muon_condition_v3.vhd.j2" %}
-{% endfor %}
-
-{% for condition in module.conditions if condition.isEsumsCondition() %}
 {%- include  "subTemplates/esums_condition.vhd.j2" %}
-{% endfor %}
-
-{% for condition in module.conditions if condition.type == 'CaloCaloCorrelation' %}
 {%- include  "subTemplates/calo_calo_correlation_condition.vhd.j2" %}
-{% endfor %}
-
-{% for condition in module.conditions if condition.type == 'CaloMuonCorrelation' %}
 {%- include  "subTemplates/calo_muon_correlation_condition.vhd.j2" %}
-{% endfor %}
-
-{% for condition in module.conditions if condition.type == 'MuonMuonCorrelation' %}
 {%- include  "subTemplates/muon_muon_correlation_condition.vhd.j2" %}
-{% endfor %}
-
-{% for condition in module.conditions if condition.type == 'CaloEsumCorrelation' %}
 {%- include  "subTemplates/calo_esums_correlation_condition.vhd.j2" %}
-{% endfor %}
-
-{% for condition in module.conditions if condition.type == 'MuonEsumCorrelation' %}
 {%- include  "subTemplates/muon_esums_correlation_condition.vhd.j2" %}
-{% endfor %}
-
-{% for condition in module.conditions if condition.isMinBiasCondition() %}
 {%- include  "subTemplates/min_bias_hf_condition.vhd.j2" %}
-{% endfor %}
 
--- Instantiations of algorithms
-{% for algorithm in module %}
--- {{ algorithm.index }} {{ algorithm.name }} : {{ algorithm.expression }}
-{{ algorithm.name | lower }} <= {{ algorithm.expression_in_condition | lower }};
-algo({{ algorithm.module_index | d}}) <= {{ algorithm.name | lower }};
-{% endfor %}
+-- Instantiations of algorithms 
+{%- include  "subTemplates/algorithm.vhd.j2" %}
 
 -- ==== Inserted by TME - end ===============================================================================================================
 
