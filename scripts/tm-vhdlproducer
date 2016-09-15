@@ -1,0 +1,181 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+#
+# Repository path   : $HeadURL: $
+# Last committed    : $Revision: $
+# Last changed by   : $Author: $
+# Last changed date : $Date: $
+#
+
+import tmEventSetup
+from tmVhdlProducer.vhdlproducer import VhdlProducer, write_xml_menu, getMenuUuid, __version__
+
+from tmVhdlProducer.algodist import distribute
+
+import argparse
+import subprocess
+import logging
+import sys, os
+import re
+
+EXIT_SUCCESS = 0
+EXIT_FAILURE = 1
+LOGFILE = 'tm-vhdlproducer.log'
+MIN_MODULES = 1
+MAX_MODULES = 6
+
+DefaultRatio = 0.25
+DefaultOutputDir = os.getcwd()
+from tmVhdlProducer.algodist import DefaultConfigFile
+
+# -----------------------------------------------------------------------------
+#  Helpers
+# -----------------------------------------------------------------------------
+
+def modules_t(value):
+    """Validate number of modules input."""
+    value = int(value)
+    if 1 <= value <= MAX_MODULES:
+        return value
+    raise ValueError(value)
+
+def ratio_t(value):
+    """Validates shadow ratio input."""
+    value = float(value)
+    if .0 <= value <= 1.:
+        return value
+    raise ValueError(value)
+
+def getSvnRevision():
+    # TODO
+    rootdir = os.environ.get("UTM_ROOT")
+    if not rootdir:
+        raise RuntimeError("UTM_ROOT not set.")
+    process = subprocess.Popen(['svnversion', rootdir], stdout=subprocess.PIPE)
+    output = process.stdout.readlines()[0].strip()
+    # match on 12345:12444MS -> ('12444', 'MS')
+    result = re.match('(?:\w+\:)?(\d+)([A-Z]+)?', output)
+    if not result:
+        raise RuntimeError("utm directory is not an SVN directory")
+    revision, modified = result.groups()
+    return int(revision)
+
+# -----------------------------------------------------------------------------
+#  Command line parser
+# -----------------------------------------------------------------------------
+
+def parse():
+    """Parse command line options."""
+    parser = argparse.ArgumentParser(
+        prog='tm-vhdlreporter',
+        description="Trigger Menu VHDL Producer for uGT upgrade",
+        epilog="Report bugs to <bernhard.arnold@cern.ch>"
+    )
+    parser.add_argument('menu',
+        type=os.path.abspath,
+        help="XML menu file to be loaded"
+    )
+    parser.add_argument('--modules',
+        metavar='<n>',
+        default=MIN_MODULES,
+        type=modules_t,
+        help="number of modules ({0}-{1}, default is {0})".format(MIN_MODULES, MAX_MODULES),
+    )
+    parser.add_argument('--ratio',
+        metavar='<f>',
+        default=DefaultRatio,
+        type=ratio_t,
+        help="algorithm shadow ratio (0.0 < ratio <= 1.0, default is {0})".format(DefaultRatio),
+    )
+    parser.add_argument('--config',
+        metavar='<file>',
+        default=DefaultConfigFile,
+        type=os.path.abspath,
+        help="JSON resource configuration file, default is {0}".format(DefaultConfigFile),
+    )
+    parser.add_argument('--output',
+        metavar='<dir>',
+        default=DefaultOutputDir,
+        type=os.path.abspath,
+        help="directory to write VHDL producer output, default is {0}".format(DefaultOutputDir),
+    )
+    parser.add_argument('--dryrun',
+        action='store_true',
+        help="do not write any output to the file system"
+    )
+    parser.add_argument("--verbose",
+        dest="verbose",
+        action="store_true",
+    )
+    parser.add_argument('--version',
+        action='version',
+        version="L1 Trigger Menu VHDL producer version {0}".format(__version__),
+    )
+    return parser.parse_args()
+
+# -----------------------------------------------------------------------------
+#  Main routine
+# -----------------------------------------------------------------------------
+
+def main():
+    """Main routine."""
+    args = parse()
+
+    # Setup console logging
+    logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
+
+    logging.info("running VHDL producer")
+
+    utm_root = os.environ.get("UTM_ROOT")
+    if not utm_root:
+        logging.error("no `UTM_ROOT' environment variable defined")
+        return EXIT_FAILURE
+
+    revision = getSvnRevision()
+    logging.info("svn revison r%s", revision)
+
+    eventSetup = tmEventSetup.getTriggerMenu(args.menu)
+    eventSetup.menuUuid = getMenuUuid(args.menu) # HACK
+    eventSetup.svnRevision = revision # HACK
+    output_dir = os.path.join(args.output, "{name}_m{modules}".format(name=eventSetup.getName(), modules=args.modules))
+
+    # TODO: not convenient...
+    dest = os.path.realpath(os.path.join(output_dir, 'xml'))
+    orig = os.path.dirname(os.path.realpath(args.menu))
+    if dest == orig:
+        logging.error("%s is in %s directory which will be deleted during the process", args.menu, dest)
+        logging.error("     specified menu not in %s directory", dest)
+        return EXIT_FAILURE
+
+    if os.path.isdir(output_dir):
+        logging.error("directory `%s' already exists", output_dir)
+        return EXIT_FAILURE
+    else:
+        os.makedirs(output_dir)
+
+    # Forward logs to file
+    handler = logging.FileHandler(os.path.join(output_dir, LOGFILE), mode='a')
+    handler.setFormatter(logging.Formatter(fmt='%(asctime)s %(levelname)s : %(message)s', datefmt='%Y-%m-%d %H:%M:%S'))
+    handler.setLevel(logging.DEBUG)
+    logging.getLogger().addHandler(handler)
+
+    # Distribute algorithms
+    collection = distribute(eventSetup, args.modules, args.config, args.ratio)
+
+    if args.dryrun:
+        logging.info("skipped writing output (dryrun mode)")
+    else:
+        logging.info("writing VHDL modules...")
+        template_dir = os.path.join(utm_root, 'tmVhdlProducer', 'templates')
+        producer = VhdlProducer(template_dir, args.verbose)
+        producer.write(collection, output_dir)
+
+        logging.info("writing updated XML file %s", args.menu)
+        write_xml_menu(args.menu, os.path.join(output_dir, 'xml'))
+
+    logging.info("done")
+
+    return EXIT_SUCCESS
+
+if __name__ == '__main__':
+    sys.exit(main())

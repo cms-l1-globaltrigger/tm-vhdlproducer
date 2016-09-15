@@ -38,7 +38,7 @@ options = parser.parse_args()
 
 ## -----------------------------------------------
 outputDir = options.outputDir
-vhdlTemplateDir = BASE_DIR+"/tmVhdlProducer/jinjaTemplates/"
+vhdlTemplateDir = BASE_DIR+"/tmVhdlProducer/templates/"
 nModules = options.nModules
 verbose = options.verbose
 menu = tmEventSetup.getTriggerMenu(options.menu)

@@ -1,9 +1,0 @@
-{%- extends "templateLoops/instantiate_minbiashf_condition.j2" %}
-{%- block instantiate_minbiashf_condition %}
-  {%- set objects = condition.objects %}
-  {%- set cuts = condition.template %}
-{{condition_name | lower}}_i: entity work.min_bias_hf_conditions
-    generic map({{ objects[0].operator | lower  }}, {{objects[0].type}}_TYPE, X"{{cuts.Thresholds[0] | X01}}")
-    port map(lhc_clk, {{objects[0].type | lower}}_bx_{{objects[0].bx | lower}}, {{condition_name | lower}});
-{% endblock instantiate_minbiashf_condition %}
-{# eof #}

@@ -1,0 +1,36 @@
+VHDL Producer
+=============
+
+## Usage
+
+Generate VHDL output from XML trigger menu.
+
+    $ tm-vhdlproducer <menu> [--modules <n>] [--outdir <dir>]
+
+### Distribute to multiple modules
+
+Example for distributing on two modules:
+
+    $ tm-vhdlproducer L1Menu_sample.xml --modules 2
+
+This will create a directory L1Menu_sample/ in the current directory.
+
+### Specifiying output locations
+
+To specifiy a different output location use the --outdir flag. For example
+
+    $ tm-vhdlproducer L1Menu_sample.xml --modules 2 --outdir /tmp
+
+will create the output directory in /tmp/L1Menu_sample/.
+
+### Optimizations
+
+Adjust the shadow ratio to optimize the distribution of algorithms. A good
+starting point is a ratio between 0.0 and 0.25, although it depends
+heavily on the individual menu's content.
+
+To try out different optimizations use the --dryrun flag to prevent
+writing output to the filesystem.
+
+    $ tm-vhdlproducer L1Menu_sample.xml --modules 2 --ratio 0 --dryrun
+

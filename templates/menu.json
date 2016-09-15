@@ -1,0 +1,11 @@
+{
+  "firmware_uuid" : "{{ menu.info.uuid_firmware }}",
+  "menu_uuid"     : "{{ menu.info.uuid_menu }}",
+  "n_modules"     : {{ menu.modules|count }}                     ,
+  "guide"         : ["AlgoName", "Global_Index", "Module_Index", "Local_Index"],
+  "algorithms"    : [
+{%- for algorithm in menu.algorithms|sort_by_attribute('index') %}
+    ["{{ algorithm.name }}", {{ algorithm.index }}, {{ algorithm.module_id }}, {{ algorithm.module_index }}]{% if not loop.last %},{% endif %}
+{%-endfor%}
+  ]
+}

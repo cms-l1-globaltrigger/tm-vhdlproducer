@@ -1,7 +1,0 @@
-{%- extends "templateLoops/instantiate_signal_condition.j2" %}
-{%- block supplementary_loop %}
-  {%- for condition_name in conditionSet %}
-    signal {{condition_name | lower}} : std_logic;
-  {%- endfor %}
-{%- endblock supplementary_loop %}
-{# eof #}

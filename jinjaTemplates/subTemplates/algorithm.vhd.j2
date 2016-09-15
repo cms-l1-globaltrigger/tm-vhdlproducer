@@ -1,9 +1,0 @@
-{%- extends "templateLoops/iterate_algorithm.j2" %}
-{%- block algorithm_loop %}
-  {%- if algorithm_index in menu.reporter['m2a'][iMod].values() %}
-    {%- set localAlgoIndex = menu.reporter['a2m'][algorithm_index][1] %}
-{{algorithm_name}} <= {{algorithm.expression_in_condition | lower}};
-algo({{localAlgoIndex | d}}) <= {{algorithm_name}};
-  {%- endif %}
-{%- endblock algorithm_loop %}
-{# eof #}

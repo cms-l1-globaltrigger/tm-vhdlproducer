@@ -1,0 +1,332 @@
+{
+    "resources": {
+        "floor": {
+            "processors": 0.0,
+            "sliceLUTs": 0.39
+        },
+        "ceiling": {
+            "processors": 1.0,
+            "sliceLUTs": 0.9
+        },
+        "instances": [
+            {
+                "type": "SingleMuon",
+                "objects": ["Muon"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0004
+            },
+            {
+                "type": "DoubleMuon",
+                "objects": ["Muon", "Muon"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0005
+            },
+            {
+                "type": "TripleMuon",
+                "objects": ["Muon", "Muon", "Muon"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0006
+            },
+            {
+                "type": "QuadMuon",
+                "objects": ["Muon", "Muon", "Muon", "Muon"],
+                "processors": 0.0,
+                "sliceLUTs": 0.003
+            },
+            {
+                "type": "SingleEgamma",
+                "objects": ["Egamma"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0005
+            },
+            {
+                "type": "DoubleEgamma",
+                "objects": ["Egamma", "Egamma"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0007
+            },
+            {
+                "type": "TripleEgamma",
+                "objects": ["Egamma", "Egamma", "Egamma"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0009
+            },
+            {
+                "type": "QuadEgamma",
+                "objects": ["Egamma", "Egamma", "Egamma", "Egamma"],
+                "processors": 0.0,
+                "sliceLUTs": 0.035
+            },
+            {
+                "type": "SingleJet",
+                "objects": ["Jet"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0005
+            },
+            {
+                "type": "DoubleJet",
+                "objects": ["Jet", "Jet"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0007
+            },
+            {
+                "type": "TripleJet",
+                "objects": ["Jet", "Jet", "Jet"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0009
+            },
+            {
+                "type": "QuadJet",
+                "objects": ["Jet", "Jet", "Jet", "Jet"],
+                "processors": 0.0,
+                "sliceLUTs": 0.035
+            },
+            {
+                "type": "SingleTau",
+                "objects": ["Tau"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0004
+            },
+            {
+                "type": "DoubleTau",
+                "objects": ["Tau", "Tau"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0005
+            },
+            {
+                "type": "TripleTau",
+                "objects": ["Tau", "Tau", "Tau"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0006
+            },
+            {
+                "type": "QuadTau",
+                "objects": ["Tau", "Tau", "Tau", "Tau"],
+                "processors": 0.0,
+                "sliceLUTs": 0.003
+            },
+            {
+                "type": "TotalEt",
+                "objects": ["ETT"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0001
+            },
+            {
+                "type": "TotalHt",
+                "objects": ["HTT"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0001
+            },
+            {
+                "type": "MissingEt",
+                "objects": ["ETM"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0001
+            },
+            {
+                "type": "MissingHt",
+                "objects": ["HTM"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0001
+            },
+            {
+                "type": "MinBiasHFM0",
+                "objects": ["MBT0HFM"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0001
+            },
+            {
+                "type": "MinBiasHFM1",
+                "objects": ["MBT1HFM"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0001
+            },
+            {
+                "type": "MinBiasHFP0",
+                "objects": ["MBT0HFP"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0001
+            },
+            {
+                "type": "MinBiasHFP1",
+                "objects": ["MBT1HFP"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0001
+            },
+            {
+                "type": "Externals",
+                "objects": ["EXT"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0
+            },
+            {
+                "type": "MuonMuonCorrelation",
+                "objects": ["Muon", "Muon"],
+                "processors": 0.0,
+                "sliceLUTs": 0.015
+            },
+            {
+                "type": "MuonEsumCorrelation",
+                "objects": ["Muon", "ETM"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0
+            },
+            {
+                "type": "MuonEsumCorrelation",
+                "objects": ["Muon", "HTM"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0
+            },
+            {
+                "type": "CaloMuonCorrelation",
+                "objects": ["Egamma", "Muon"],
+                "processors": 0.0,
+                "sliceLUTs": 0.025
+            },
+            {
+                "type": "CaloMuonCorrelation",
+                "objects": ["Jet", "Muon"],
+                "processors": 0.0,
+                "sliceLUTs": 0.025
+            },
+            {
+                "type": "CaloMuonCorrelation",
+                "objects": ["Tau", "Muon"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0
+            },
+            {
+                "type": "CaloCaloCorrelation",
+                "objects": ["Egamma", "Egamma"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0
+            },
+            {
+                "type": "CaloCaloCorrelation",
+                "objects": ["Egamma", "Tau"],
+                "processors": 0.0,
+                "sliceLUTs": 0.025
+            },
+            {
+                "type": "CaloCaloCorrelation",
+                "objects": ["Egamma", "Jet"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0
+            },
+            {
+                "type": "CaloCaloCorrelation",
+                "objects": ["Jet", "Jet"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0
+            },
+            {
+                "type": "CaloCaloCorrelation",
+                "objects": ["Jet", "Tau"],
+                "processors": 0.0,
+                "sliceLUTs": 0.025
+            },
+            {
+                "type": "CaloCaloCorrelation",
+                "objects": ["Tau", "Tau"],
+                "processors": 0.0,
+                "sliceLUTs": 0.025
+            },
+            {
+                "type": "CaloEsumCorrelation",
+                "objects": ["Egamma", "ETM"],
+                "processors": 0.0,
+                "sliceLUTs": 0.005
+            },
+            {
+                "type": "CaloEsumCorrelation",
+                "objects": ["Tau", "ETM"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0
+            },
+            {
+                "type": "CaloEsumCorrelation",
+                "objects": ["Jet", "ETM"],
+                "processors": 0.0,
+                "sliceLUTs": 0.005
+            },
+            {
+                "type": "CaloEsumCorrelation",
+                "objects": ["Egamma", "HTM"],
+                "processors": 0.0,
+                "sliceLUTs": 0.005
+            },
+            {
+                "type": "CaloEsumCorrelation",
+                "objects": ["Tau", "HTM"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0
+            },
+            {
+                "type": "CaloEsumCorrelation",
+                "objects": ["Jet", "HTM"],
+                "processors": 0.0,
+                "sliceLUTs": 0.005
+            },
+            {
+                "type": "InvariantMass",
+                "objects": ["Muon", "Muon"],
+                "processors": 0.1,
+                "sliceLUTs": 0.1
+            },
+            {
+                "type": "InvariantMass",
+                "objects": ["Egamma", "Muon"],
+                "processors": 0.1,
+                "sliceLUTs": 0.1
+            },
+            {
+                "type": "InvariantMass",
+                "objects": ["Jet", "Muon"],
+                "processors": 0.1,
+                "sliceLUTs": 0.1
+            },
+            {
+                "type": "InvariantMass",
+                "objects": ["Tau", "Muon"],
+                "processors": 0.1,
+                "sliceLUTs": 0.1
+            },
+            {
+                "type": "InvariantMass",
+                "objects": ["Egamma", "Egamma"],
+                "processors": 0.01,
+                "sliceLUTs": 0.012
+            },
+            {
+                "type": "InvariantMass",
+                "objects": ["Egamma", "Tau"],
+                "processors": 0.1,
+                "sliceLUTs": 0.1
+            },
+            {
+                "type": "InvariantMass",
+                "objects": ["Egamma", "Jet"],
+                "processors": 0.01,
+                "sliceLUTs": 0.012
+            },
+            {
+                "type": "InvariantMass",
+                "objects": ["Jet", "Jet"],
+                "processors": 0.01,
+                "sliceLUTs": 0.012
+            },
+            {
+                "type": "InvariantMass",
+                "objects": ["Jet", "Tau"],
+                "processors": 0.1,
+                "sliceLUTs": 0.1
+            },
+            {
+                "type": "InvariantMass",
+                "objects": ["Tau", "Tau"],
+                "processors": 0.1,
+                "sliceLUTs": 0.1
+            }
+        ]
+    }
+}

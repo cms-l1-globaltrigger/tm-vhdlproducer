@@ -1,8 +1,0 @@
-{%- extends "templateLoops/iterate_condition.j2" %}
-{%- block instantiation %}
-  {%- if condition_name not in conditionSet %}
-    {%- if conditionSet.append(condition_name) %}
-    {%- endif %}
-  {%- endif %}
-{%- endblock instantiation %}
-{# eof #}
