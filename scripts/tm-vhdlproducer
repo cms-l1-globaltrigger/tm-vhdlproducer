@@ -8,7 +8,8 @@
 #
 
 import tmEventSetup
-from tmVhdlProducer.vhdlproducer import VhdlProducer, write_xml_menu, getMenuUuid, __version__
+from tmVhdlProducer.vhdlproducer import VhdlProducer, writeXmlMenu, getMenuUuid
+from tmVhdlProducer import __version__
 
 from tmVhdlProducer.algodist import distribute
 
@@ -171,7 +172,7 @@ def main():
         producer.write(collection, output_dir)
 
         logging.info("writing updated XML file %s", args.menu)
-        write_xml_menu(args.menu, os.path.join(output_dir, 'xml'))
+        writeXmlMenu(args.menu, os.path.join(output_dir, 'xml'))
 
     logging.info("done")
 

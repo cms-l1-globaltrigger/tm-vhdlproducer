@@ -1,4 +1,10 @@
-#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+#
+# Repository path   : $HeadURL: $
+# Last committed    : $Revision: $
+# Last changed by   : $Author: $
+# Last changed date : $Date: $
+#
 
 """Template helper classes.
 
@@ -29,7 +35,7 @@ import tmEventSetup
 import tmGrammar  # import after tmEventSetup else crashes *wtf*
 import algodist
 
-__version__ = '0.0.1'
+from tmVhdlProducer import __version__
 
 # -----------------------------------------------------------------------------
 #  Precompiled regular expressions

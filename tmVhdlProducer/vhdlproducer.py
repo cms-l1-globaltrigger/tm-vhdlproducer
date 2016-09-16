@@ -1,7 +1,16 @@
+# -*- coding: utf-8 -*-
+#
+# Repository path   : $HeadURL: $
+# Last committed    : $Revision: $
+# Last changed by   : $Author: $
+# Last changed date : $Date: $
+#
+
 from jinja2 import Environment, FileSystemLoader, filters, StrictUndefined
 from os.path import join, exists, basename
 from itertools import cycle
 from binascii import hexlify
+
 import os, errno
 import json
 import shutil
@@ -13,8 +22,8 @@ import tmTable
 import vhdlhelper
 import algodist
 
-__version__ = '0.0.1'
-__all__ = ['VhdlProducer', 'write_xml_menu', 'getMenuUuid']
+from tmVhdlProducer import __version__
+__all__ = ['VhdlProducer', 'writeXmlMenu', 'getMenuUuid']
 
 # -----------------------------------------------------------------------------
 #  Jinja2 custom filters exposed to VHDL templates.
@@ -111,7 +120,7 @@ def getMenuUuid(filename):
     menu = loadMenu(filename)
     return menu.menu["uuid_menu"]
 
-def write_xml_menu(filename, json_dir):
+def writeXmlMenu(filename, json_dir):
     """Updates a XML menu file based on inforamtion from a JSON file (used to apply
     a previously calculated algorithm distribution over multiple modules).
     """
