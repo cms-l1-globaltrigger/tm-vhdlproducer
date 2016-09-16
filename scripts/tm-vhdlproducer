@@ -25,7 +25,7 @@ LOGFILE = 'tm-vhdlproducer.log'
 MIN_MODULES = 1
 MAX_MODULES = 6
 
-DefaultRatio = 0.25
+DefaultRatio = 0.0
 DefaultOutputDir = os.getcwd()
 from tmVhdlProducer.algodist import DefaultConfigFile
 
@@ -68,7 +68,7 @@ def getSvnRevision():
 def parse():
     """Parse command line options."""
     parser = argparse.ArgumentParser(
-        prog='tm-vhdlreporter',
+        prog='tm-vhdlproducer',
         description="Trigger Menu VHDL Producer for uGT upgrade",
         epilog="Report bugs to <bernhard.arnold@cern.ch>"
     )
@@ -78,7 +78,7 @@ def parse():
     )
     parser.add_argument('--modules',
         metavar='<n>',
-        default=MIN_MODULES,
+        required=True,
         type=modules_t,
         help="number of modules ({0}-{1}, default is {0})".format(MIN_MODULES, MAX_MODULES),
     )
@@ -148,17 +148,19 @@ def main():
         logging.error("     specified menu not in %s directory", dest)
         return EXIT_FAILURE
 
-    if os.path.isdir(output_dir):
-        logging.error("directory `%s' already exists", output_dir)
-        return EXIT_FAILURE
-    else:
-        os.makedirs(output_dir)
+    if not args.dryrun:
+        if os.path.isdir(output_dir):
+            logging.error("directory `%s' already exists", output_dir)
+            return EXIT_FAILURE
+        else:
+            os.makedirs(output_dir)
 
-    # Forward logs to file
-    handler = logging.FileHandler(os.path.join(output_dir, LOGFILE), mode='a')
-    handler.setFormatter(logging.Formatter(fmt='%(asctime)s %(levelname)s : %(message)s', datefmt='%Y-%m-%d %H:%M:%S'))
-    handler.setLevel(logging.DEBUG)
-    logging.getLogger().addHandler(handler)
+    if not args.dryrun:
+        # Forward logs to file
+        handler = logging.FileHandler(os.path.join(output_dir, LOGFILE), mode='a')
+        handler.setFormatter(logging.Formatter(fmt='%(asctime)s %(levelname)s : %(message)s', datefmt='%Y-%m-%d %H:%M:%S'))
+        handler.setLevel(logging.DEBUG)
+        logging.getLogger().addHandler(handler)
 
     # Distribute algorithms
     collection = distribute(eventSetup, args.modules, args.config, args.ratio)
@@ -174,7 +176,7 @@ def main():
         logging.info("writing updated XML file %s", args.menu)
         writeXmlMenu(args.menu, os.path.join(output_dir, 'xml'))
 
-    logging.info("done")
+    logging.info("done.")
 
     return EXIT_SUCCESS
 
