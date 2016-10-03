@@ -32,7 +32,7 @@ import re, math
 import sys, os
 
 import tmEventSetup
-import tmGrammar  # import after tmEventSetup else crashes *wtf*
+import tmGrammar  # import after tmEventSetup
 import algodist
 
 from tmVhdlProducer import __version__
@@ -152,13 +152,15 @@ def vhdl_expression(expression): # TODO add to filters
     return ' '.join([vhdl_label(token) if token not in ['(', ')'] else token for token in re.sub(r'([\(\)])', r' \1 ', expression).split()])
 
 def charge_encode(value):
+    """Encode charge value to VHDL string literal."""
     if value in ('positive', 'pos', '1'):
         return 'pos' # positive
     if value in ('negative', 'neg', '-1'):
         return 'neg' # negative
     return 'ign' # ignore
 
-def charge_correlaton_encode(value):
+def charge_correlation_encode(value):
+    """Encode charge correlation value to VHDL string literal."""
     if value in ('like', 'ls', '0'):
         return 'ls' # like sign
     if value in ('opposite', 'os', '1'):
@@ -394,9 +396,9 @@ class ModuleHelper(VhdlHelper):
         """Iterate over modules."""
         return iter([algorithm for algorithm in self.algorithms])
 
-#
+# -----------------------------------------------------------------------------
 #  Algorithm helpers
-#
+# -----------------------------------------------------------------------------
 
 class AlgorithmHelper(VhdlHelper):
     """Algorithm template helper class.
@@ -441,9 +443,9 @@ class AlgorithmHelper(VhdlHelper):
         """Iterate over conditions."""
         return iter([condition for condition in self.conditions])
 
-#
+# -----------------------------------------------------------------------------
 #  Condition helpers
-#
+# -----------------------------------------------------------------------------
 
 class ConditionHelper(VhdlHelper):
     """Generic condition template helper class.
@@ -561,7 +563,7 @@ class CorrelationConditionHelper(ConditionHelper):
         self.invMassLowerLimit = .0
         self.invMassUpperLimit = .0
         #
-        self.chargeCorrelation = charge_correlaton_encode('ig')
+        self.chargeCorrelation = charge_correlation_encode('ig')
         self.update(condition)
 
     @property
@@ -593,18 +595,18 @@ class CorrelationConditionHelper(ConditionHelper):
                 self.diffPhiUpperLimit = upperLimit(esCut)
             elif esCut.getCutType() == tmEventSetup.DeltaR:
                 self.hasDrCut = vhdl_bool(True)
-                self.DeltaRLowerLimit = lowerLimit(esCut)
-                self.DeltaRUpperLimit = upperLimit(esCut)
+                self.deltaRLowerLimit = lowerLimit(esCut)
+                self.deltaRUpperLimit = upperLimit(esCut)
             elif esCut.getCutType() == tmEventSetup.Mass:
                 self.hasMassCut = vhdl_bool(True)
-                self.InvMassLowerLimit = lowerLimit(esCut)
-                self.InvMassUpperLimit = upperLimit(esCut)
+                self.invMassLowerLimit = lowerLimit(esCut)
+                self.invMassUpperLimit = upperLimit(esCut)
             elif esCut.getCutType() == tmEventSetup.ChargeCorrelation:
-                self.chargeCorrelation = charge_correlaton_encode(esCut.getData())
+                self.chargeCorrelation = charge_correlation_encode(esCut.getData())
 
-#
+# -----------------------------------------------------------------------------
 #  Object helpers
-#
+# -----------------------------------------------------------------------------
 
 class ObjectHelper(VhdlHelper):
     """Generic object helper.
@@ -710,6 +712,10 @@ class ObjectHelper(VhdlHelper):
             self.phiW2LowerLimit = phiCuts[1][0]
             self.phiW2UpperLimit = phiCuts[1][1]
         self.isValid = True
+
+# -----------------------------------------------------------------------------
+#  Tests
+# -----------------------------------------------------------------------------
 
 if __name__ == '__main__':
     # Create tray
