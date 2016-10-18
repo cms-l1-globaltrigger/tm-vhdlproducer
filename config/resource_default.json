@@ -112,14 +112,32 @@
                 "sliceLUTs": 0.0001
             },
             {
+                "type": "TotalEtEM",
+                "objects": ["ETTEM"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0001
+            },
+            {
                 "type": "TotalHt",
                 "objects": ["HTT"],
                 "processors": 0.0,
                 "sliceLUTs": 0.0001
             },
             {
+                "type": "TowerCount",
+                "objects": ["TOWERCOUNT"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0001
+            },
+            {
                 "type": "MissingEt",
                 "objects": ["ETM"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0001
+            },
+            {
+                "type": "MissingEtHF",
+                "objects": ["ETMHF"],
                 "processors": 0.0,
                 "sliceLUTs": 0.0001
             },
@@ -168,6 +186,12 @@
             {
                 "type": "MuonEsumCorrelation",
                 "objects": ["Muon", "ETM"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0
+            },
+            {
+                "type": "MuonEsumCorrelation",
+                "objects": ["Muon", "ETMHF"],
                 "processors": 0.0,
                 "sliceLUTs": 0.0
             },
@@ -239,13 +263,31 @@
             },
             {
                 "type": "CaloEsumCorrelation",
+                "objects": ["Egamma", "ETMHF"],
+                "processors": 0.0,
+                "sliceLUTs": 0.005
+            },
+            {
+                "type": "CaloEsumCorrelation",
                 "objects": ["Tau", "ETM"],
                 "processors": 0.0,
                 "sliceLUTs": 0.0
             },
             {
                 "type": "CaloEsumCorrelation",
+                "objects": ["Tau", "ETMHF"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0
+            },
+            {
+                "type": "CaloEsumCorrelation",
                 "objects": ["Jet", "ETM"],
+                "processors": 0.0,
+                "sliceLUTs": 0.005
+            },
+            {
+                "type": "CaloEsumCorrelation",
+                "objects": ["Jet", "ETMHF"],
                 "processors": 0.0,
                 "sliceLUTs": 0.005
             },

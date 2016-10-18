@@ -1,28 +1,6 @@
 -- Description:
 -- Mapping of algo indexes for ROP
 
--- ========================================================
--- from VHDL producer:
-
--- Module ID: {{ module.id }}
-
--- Name of L1 Trigger Menu:
--- {{ menu.info.name }}
-
--- Unique ID of L1 Trigger Menu:
--- {{ menu.info.uuid_menu }}
-
--- Unique ID of firmware implementation:
--- {{ menu.info.uuid_firmware }}
-
--- Scale set:
--- {{ menu.info.scale_set }}
-
--- VHDL producer version
--- v{{ menu.info.sw_version }}
-
--- ========================================================
-
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_arith.all;
@@ -34,7 +12,6 @@ use work.gt_mp7_core_pkg.all;
 entity algo_mapping_rop is
     port(
         lhc_clk : in std_logic;
--- HB 2016-03-02: inserted with fdl version (v0.0.22) for global index. Types definition in gtl_pkg.
         algo_bx_masks_global :  in std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_bx_masks_local :  out std_logic_vector(NR_ALGOS-1 downto 0);
         rate_cnt_before_prescaler_local :  in rate_counter_array;
@@ -52,11 +29,9 @@ entity algo_mapping_rop is
         algo_after_gtLogic : in std_logic_vector(NR_ALGOS-1 downto 0);
         algo_after_bxomask : in std_logic_vector(NR_ALGOS-1 downto 0);
         algo_after_prescaler : in std_logic_vector(NR_ALGOS-1 downto 0);
-        algo_after_finor_mask : in std_logic_vector(NR_ALGOS-1 downto 0);
         algo_after_gtLogic_rop : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
         algo_after_bxomask_rop : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
-        algo_after_prescaler_rop : out std_logic_vector(MAX_NR_ALGOS-1 downto 0);
-        algo_after_finor_mask_rop : out std_logic_vector(MAX_NR_ALGOS-1 downto 0)
+        algo_after_prescaler_rop : out std_logic_vector(MAX_NR_ALGOS-1 downto 0)
     );
 end algo_mapping_rop;
 
@@ -82,7 +57,6 @@ architecture rtl of algo_mapping_rop is
     signal algo_after_gtLogic_rop_int: std_logic_vector(MAX_NR_ALGOS-1 downto 0) := (others => '0');
     signal algo_after_bxomask_rop_int: std_logic_vector(MAX_NR_ALGOS-1 downto 0) := (others => '0');
     signal algo_after_prescaler_rop_int: std_logic_vector(MAX_NR_ALGOS-1 downto 0) := (others => '0');
-    signal algo_after_finor_mask_rop_int: std_logic_vector(MAX_NR_ALGOS-1 downto 0) := (others => '0');
 
 begin
 
@@ -98,7 +72,6 @@ nr_algos_l: for i in 0 to NR_ALGOS-1 generate
     algo_after_gtLogic_rop_int(global_index(i)) <= algo_after_gtLogic(i);
     algo_after_bxomask_rop_int(global_index(i)) <= algo_after_bxomask(i);
     algo_after_prescaler_rop_int(global_index(i)) <= algo_after_prescaler(i);
-    algo_after_finor_mask_rop_int(global_index(i)) <= algo_after_finor_mask(i);
 end generate;
 
 -- HB 2016-03-02: inserted for global index
@@ -106,13 +79,13 @@ rate_cnt_before_prescaler_global <= rate_cnt_before_prescaler_global_int;
 rate_cnt_after_prescaler_global <= rate_cnt_after_prescaler_global_int;
 rate_cnt_post_dead_time_global <= rate_cnt_post_dead_time_global_int;
 
-algo_2_rop_p: process(lhc_clk, algo_after_gtLogic_rop_int, algo_after_bxomask_rop_int, algo_after_prescaler_rop_int, algo_after_finor_mask_rop_int)
+-- algo_2_rop_p: process(lhc_clk, algo_after_gtLogic_rop_int, algo_after_bxomask_rop_int, algo_after_prescaler_rop_int, algo_after_finor_mask_rop_int)
+algo_2_rop_p: process(lhc_clk, algo_after_gtLogic_rop_int, algo_after_bxomask_rop_int, algo_after_prescaler_rop_int)
     begin
     if lhc_clk'event and lhc_clk = '1' then
         algo_after_gtLogic_rop <= algo_after_gtLogic_rop_int;
         algo_after_bxomask_rop <= algo_after_bxomask_rop_int;
         algo_after_prescaler_rop <= algo_after_prescaler_rop_int;
-        algo_after_finor_mask_rop <= algo_after_finor_mask_rop_int;
     end if;
 end process;
 

@@ -49,6 +49,7 @@ regexVhdlLabel=re.compile('[^A-Za-z0-9_]')
 #  Conversion dictionaries
 # -----------------------------------------------------------------------------
 
+# HB 2016-10-13: inserted TOWERCOUNT
 ObjectTypes = {
     tmEventSetup.Muon: tmGrammar.MU,
     tmEventSetup.Egamma: tmGrammar.EG,
@@ -65,6 +66,7 @@ ObjectTypes = {
     tmEventSetup.MBT1HFP: tmGrammar.MBT1HFP,
     tmEventSetup.MBT0HFM: tmGrammar.MBT0HFM,
     tmEventSetup.MBT1HFM: tmGrammar.MBT1HFM,
+    tmEventSetup.TOWERCOUNT: tmGrammar.TOWERCOUNT,
 }
 
 CaloTypes = [
@@ -86,6 +88,11 @@ EsumsTypes = [
     tmGrammar.HTM,
 ]
 
+# HB 2016-10-13: inserted TOWERCOUNT
+TowerCountTypes = [
+    tmGrammar.TOWERCOUNT,
+]
+
 MinBiasTypes = [
     tmGrammar.MBT0HFP,
     tmGrammar.MBT1HFP,
@@ -93,15 +100,19 @@ MinBiasTypes = [
     tmGrammar.MBT1HFM,
 ]
 
+# HB 2016-10-13: inserted ETTEM, TOWERCOUNT and ETMHF
 ObjectsOrder = [
     tmEventSetup.Egamma,
     tmEventSetup.Jet,
     tmEventSetup.Tau,
     tmEventSetup.Muon,
     tmEventSetup.ETT,
+    tmEventSetup.ETTEM,
     tmEventSetup.HTT,
+    tmEventSetup.TOWERCOUNT,
     tmEventSetup.ETM,
     tmEventSetup.HTM,
+    tmEventSetup.ETMHF,
     tmEventSetup.MBT0HFM,
     tmEventSetup.MBT0HFP,
     tmEventSetup.MBT1HFM,
@@ -195,6 +206,8 @@ def conditionFactory(condition):
         return ExternalConditionHelper(condition)
     elif condition.isMinBiasCondition():
         return MinBiasConditionHelper(condition)
+    elif condition.isTowerCountCondition():
+        return TowerCountConditionHelper(condition)
     elif condition.isCorrelationCondition():
         return CorrelationConditionHelper(condition)
     else:
@@ -343,6 +356,10 @@ class ModuleHelper(VhdlHelper):
     @property
     def minBiasConditions(self):
         return filter(lambda condition: condition.type in algodist.MinBiasConditionTypes, self.conditions)
+
+    @property
+    def towerCountConditions(self):
+        return filter(lambda condition: condition.type in algodist.TowerCountConditionTypes, self.conditions)
 
     @property
     def correlationCombinations(self):
@@ -540,6 +557,10 @@ class MinBiasConditionHelper(ConditionHelper):
     ReqObjects = 1
     """Number of required objects."""
 
+class TowerCountConditionHelper(ConditionHelper):
+    """Minimum bias condition template helper class."""
+    ReqObjects = 1
+    """Number of required objects."""
 
 class CorrelationConditionHelper(ConditionHelper):
     """Correlation condition template helper class."""

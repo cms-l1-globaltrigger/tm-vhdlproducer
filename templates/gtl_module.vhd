@@ -24,8 +24,8 @@
 -- ========================================================
 
 -- Version-history:
--- HB 2016-06-29: v0.0.11: Added BGo "test-enable" not synchronized (!) occures at bx=~3300 (used to suppress counting algos caused by calibration trigger at bx=3490).
---                         Inserted new esums quantities (ETTEM and ETMHF).
+-- HB 2016-09-16: v1.1.0: Implemented new esums with ETTEM, "TOWERCNT" (ECAL sum), ETMHF and HTMHF.
+-- HB 2016-08-31: v1.0.0: Same version as v0.0.10
 -- HB 2016-04-22: v0.0.10: Implemented min_bias_hf_conditions.vhd for minimum bias trigger conditions for low-pileup-run in May 2016.
 --                         Updated gtl_fdl_wrapper.vhd and p_m_2_bx_pipeline.vhd for minimum bias trigger objects.
 -- HB 2016-04-07: v0.0.9: Cleaned-up typing in muon_muon_correlation_condition.vhd (D_S_I_MUON_V2 instead of D_S_I_MUON in some lines).
@@ -53,6 +53,12 @@ entity gtl_module is
         mbt1hfm_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
         mbt0hfp_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
         mbt0hfm_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+-- HB 2016-06-07: inserted new esums quantities (ETTEM and ETMHF).
+        ettem_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+        etmhf_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+-- HB 2016-09-16: inserted HTMHF and TOWERCNT
+        htmhf_data : in std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+        towercount_data : in std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
 -- ****************************************************************************************
         muon_data : in muon_objects_array(0 to NR_MUON_OBJECTS-1);
         external_conditions : in std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);
@@ -81,12 +87,16 @@ architecture rtl of gtl_module is
     signal mbt1hfm_bx_p2, mbt1hfm_bx_p1, mbt1hfm_bx_0, mbt1hfm_bx_m1, mbt1hfm_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
     signal mbt0hfp_bx_p2, mbt0hfp_bx_p1, mbt0hfp_bx_0, mbt0hfp_bx_m1, mbt0hfp_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
     signal mbt0hfm_bx_p2, mbt0hfm_bx_p1, mbt0hfm_bx_0, mbt0hfm_bx_m1, mbt0hfm_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+-- HB 2016-06-07: inserted new esums quantities (ETTEM and ETMHF).
+    signal ettem_bx_p2, ettem_bx_p1, ettem_bx_0, ettem_bx_m1, ettem_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+    signal etmhf_bx_p2, etmhf_bx_p1, etmhf_bx_0, etmhf_bx_m1, etmhf_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+-- HB 2016-09-16: inserted HTMHF and TOWERCNT
+    signal htmhf_bx_p2, htmhf_bx_p1, htmhf_bx_0, htmhf_bx_m1, htmhf_bx_m2 : std_logic_vector(MAX_ESUMS_BITS-1 downto 0);
+    signal towercount_bx_p2, towercount_bx_p1, towercount_bx_0, towercount_bx_m1, towercount_bx_m2 : std_logic_vector(MAX_TOWERCOUNT_BITS-1 downto 0);
 -- ****************************************************************************************
 -- HB 2016-01-08: renamed ext_cond after +/-2bx to ext_cond_bx_p2_int, etc., because ext_cond_bx_p2, etc. used in algos (names coming from TME grammar).
     signal ext_cond_bx_p2_int, ext_cond_bx_p1_int, ext_cond_bx_0_int, ext_cond_bx_m1_int, ext_cond_bx_m2_int : std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);
     signal ext_cond_bx_p2, ext_cond_bx_p1, ext_cond_bx_0, ext_cond_bx_m1, ext_cond_bx_m2 : std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);
-
---     signal ext_cond_bx_p2_pipe, ext_cond_bx_p1_pipe, ext_cond_bx_0_pipe, ext_cond_bx_m1_pipe, ext_cond_bx_m2_pipe : std_logic_vector(NR_EXTERNAL_CONDITIONS-1 downto 0);
 
     signal algo : std_logic_vector(NR_ALGOS-1 downto 0) := (others => '0');
 
@@ -137,6 +147,12 @@ p_m_2_bx_pipeline_i: entity work.p_m_2_bx_pipeline
 	mbt1hfm_data, mbt1hfm_bx_p2, mbt1hfm_bx_p1, mbt1hfm_bx_0, mbt1hfm_bx_m1, mbt1hfm_bx_m2,
 	mbt0hfp_data, mbt0hfp_bx_p2, mbt0hfp_bx_p1, mbt0hfp_bx_0, mbt0hfp_bx_m1, mbt0hfp_bx_m2,
 	mbt0hfm_data, mbt0hfm_bx_p2, mbt0hfm_bx_p1, mbt0hfm_bx_0, mbt0hfm_bx_m1, mbt0hfm_bx_m2,
+-- HB 2016-06-07: inserted new esums quantities (ETTEM and ETMHF).
+        ettem_data, ettem_bx_p2, ettem_bx_p1, ettem_bx_0, ettem_bx_m1, ettem_bx_m2,
+        etmhf_data, etmhf_bx_p2, etmhf_bx_p1, etmhf_bx_0, etmhf_bx_m1, etmhf_bx_m2,
+-- HB 2016-09-16: inserted HTMHF and TOWERCNT
+        htmhf_data, htmhf_bx_p2, htmhf_bx_p1, htmhf_bx_0, htmhf_bx_m1, htmhf_bx_m2,
+        towercount_data, towercount_bx_p2, towercount_bx_p1, towercount_bx_0, towercount_bx_m1, towercount_bx_m2,
 -- ****************************************************************************************
 -- HB 2016-01-08: renamed ext_cond after +/-2bx to ext_cond_bx_p2_int, etc., because ext_cond_bx_p2, etc. used in algos (names coming from TME grammar).
         external_conditions, ext_cond_bx_p2_int, ext_cond_bx_p1_int, ext_cond_bx_0_int, ext_cond_bx_m1_int, ext_cond_bx_m2_int
@@ -157,7 +173,7 @@ ext_cond_pipe_p: process(lhc_clk, ext_cond_bx_p2_int, ext_cond_bx_p1_int, ext_co
         ext_cond_bx_0_pipe_temp(external_conditions_pipeline_stages+1) := ext_cond_bx_0_int;
         ext_cond_bx_m1_pipe_temp(external_conditions_pipeline_stages+1) := ext_cond_bx_m1_int;
         ext_cond_bx_m2_pipe_temp(external_conditions_pipeline_stages+1) := ext_cond_bx_m2_int;
-        if (external_conditions_pipeline_stages > 0) then
+        if (external_conditions_pipeline_stages > 0) then 
             if (lhc_clk'event and (lhc_clk = '1') ) then
                 ext_cond_bx_p2_pipe_temp(0 to external_conditions_pipeline_stages) := ext_cond_bx_p2_pipe_temp(1 to external_conditions_pipeline_stages+1);
                 ext_cond_bx_p1_pipe_temp(0 to external_conditions_pipeline_stages) := ext_cond_bx_p1_pipe_temp(1 to external_conditions_pipeline_stages+1);
@@ -231,6 +247,10 @@ end process;
 
 {%- for condition in module.minBiasConditions %}
 {%- include  "subTemplates/min_bias_hf_condition.vhd.j2" %}
+{%- endfor %}
+
+{%- for condition in module.towerCountConditions %}
+{%- include  "subTemplates/towercount_condition.vhd.j2" %}
 {%- endfor %}
 
 -- Instantiations of algorithms

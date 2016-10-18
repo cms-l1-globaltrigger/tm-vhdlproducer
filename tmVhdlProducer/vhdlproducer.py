@@ -83,13 +83,19 @@ CustomFilters = {
     'mmhashn': murmurhash,
 }
 
+# HB 2016-09-29: used new files, to contains of the files are inserted in "algo_mapping_rop_tpl.vhd", "gtl_module_tpl.vhd" and "gtl_pkg_tpl.vhd"
+# HB 2016-10-11: used gtl_module, algo_mapping_rop and gtl_pkg for "Ion run 2016"
 UsedTemplates = [
+    #'algo_index.vhd',
+    #'gtl_module_signals.vhd',
+    #'gtl_module_instances.vhd',
+    #'ugt_constants.vhd',
     'gtl_module.vhd',
+    #'ugt_constant_pkg.vhd',
     'algo_mapping_rop.vhd',
     'gtl_pkg.vhd',
     'menu.json',
 ]
-
 
 # -----------------------------------------------------------------------------
 # Additional Helpers

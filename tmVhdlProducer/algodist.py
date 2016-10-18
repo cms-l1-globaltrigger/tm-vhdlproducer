@@ -40,6 +40,66 @@ DefaultConfigDir = os.path.join(ProjectDir, 'config')
 
 DefaultConfigFile = os.path.join(DefaultConfigDir, 'resource_default.json')
 """Default resource configuration file."""
+#
+# Keys for object types
+#
+
+kMuon = 'Muon'
+kEgamma = 'Egamma'
+kTau = 'Tau'
+kJet = 'Jet'
+kETT = 'ETT'
+kETTEM = 'ETTEM'
+kHTT = 'HTT'
+kTOWERCOUNT = 'TOWERCOUNT'
+kETM = 'ETM'
+kHTM = 'HTM'
+kETMHF = 'ETMHF'
+kMBT0HFM = 'MBT0HFM'
+kMBT0HFP = 'MBT0HFP'
+kMBT1HFM = 'MBT1HFM'
+kMBT1HFP = 'MBT1HFP'
+kEXT = 'EXT'
+kPrecision = 'Precision'
+
+#
+# Keys for condition types
+#
+
+kSingleMuon = 'SingleMuon'
+kDoubleMuon = 'DoubleMuon'
+kTripleMuon = 'TripleMuon'
+kQuadMuon = 'QuadMuon'
+kSingleEgamma = 'SingleEgamma'
+kDoubleEgamma = 'DoubleEgamma'
+kTripleEgamma = 'TripleEgamma'
+kQuadEgamma = 'QuadEgamma'
+kSingleTau = 'SingleTau'
+kDoubleTau = 'DoubleTau'
+kTripleTau = 'TripleTau'
+kQuadTau = 'QuadTau'
+kSingleJet = 'SingleJet'
+kDoubleJet = 'DoubleJet'
+kTripleJet = 'TripleJet'
+kQuadJet = 'QuadJet'
+kTotalEt = 'TotalEt'
+kTotalEtEM = 'TotalEtEM'
+kTotalHt = 'TotalHt'
+kTowerCount = 'TowerCount'
+kMissingEt = 'MissingEt'
+kMissingHt = 'MissingHt'
+kMissingEtHF = 'MissingEtHF'
+kMinBiasHFM0 = 'MinBiasHFM0'
+kMinBiasHFM1 = 'MinBiasHFM1'
+kMinBiasHFP0 = 'MinBiasHFP0'
+kMinBiasHFP1 = 'MinBiasHFP1'
+kExternals = 'Externals'
+kMuonMuonCorrelation = 'MuonMuonCorrelation'
+kMuonEsumCorrelation = 'MuonEsumCorrelation'
+kCaloMuonCorrelation = 'CaloMuonCorrelation'
+kCaloCaloCorrelation = 'CaloCaloCorrelation'
+kCaloEsumCorrelation = 'CaloEsumCorrelation'
+kInvariantMass = 'InvariantMass'
 
 Operators = (
     tmGrammar.AND,
@@ -65,123 +125,139 @@ esCutType = {
 """Dictionary for cut type enumerations."""
 
 esObjectType = {
-    tmEventSetup.Muon: 'Muon',
-    tmEventSetup.Egamma: 'Egamma',
-    tmEventSetup.Tau: 'Tau',
-    tmEventSetup.Jet: 'Jet',
-    tmEventSetup.ETT: 'ETT',
-    tmEventSetup.HTT: 'HTT',
-    tmEventSetup.ETM: 'ETM',
-    tmEventSetup.HTM: 'HTM',
-    tmEventSetup.MBT0HFM: 'MBT0HFM',
-    tmEventSetup.MBT0HFP: 'MBT0HFP',
-    tmEventSetup.MBT1HFM: 'MBT1HFM',
-    tmEventSetup.MBT1HFP: 'MBT1HFP',
-    tmEventSetup.EXT: 'EXT',
-    tmEventSetup.Precision: 'Precision',
+    tmEventSetup.Muon: kMuon,
+    tmEventSetup.Egamma: kEgamma,
+    tmEventSetup.Tau: kTau,
+    tmEventSetup.Jet: kJet,
+    tmEventSetup.ETT: kETT,
+    tmEventSetup.ETTEM: kETTEM,
+    tmEventSetup.HTT: kHTT,
+    tmEventSetup.TOWERCOUNT: kTOWERCOUNT,
+    tmEventSetup.ETM: kETM,
+    tmEventSetup.HTM: kHTM,
+    tmEventSetup.ETMHF: kETMHF,
+    tmEventSetup.MBT0HFM: kMBT0HFM,
+    tmEventSetup.MBT0HFP: kMBT0HFP,
+    tmEventSetup.MBT1HFM: kMBT1HFM,
+    tmEventSetup.MBT1HFP: kMBT1HFP,
+    tmEventSetup.EXT: kEXT,
+    tmEventSetup.Precision: kPrecision,
 }
 """Dictionary for object type enumerations."""
 
 esConditionType = {
-    tmEventSetup.SingleMuon: 'SingleMuon',
-    tmEventSetup.DoubleMuon: 'DoubleMuon',
-    tmEventSetup.TripleMuon: 'TripleMuon',
-    tmEventSetup.QuadMuon: 'QuadMuon',
-    tmEventSetup.SingleEgamma: 'SingleEgamma',
-    tmEventSetup.DoubleEgamma: 'DoubleEgamma',
-    tmEventSetup.TripleEgamma: 'TripleEgamma',
-    tmEventSetup.QuadEgamma: 'QuadEgamma',
-    tmEventSetup.SingleTau: 'SingleTau',
-    tmEventSetup.DoubleTau: 'DoubleTau',
-    tmEventSetup.TripleTau: 'TripleTau',
-    tmEventSetup.QuadTau: 'QuadTau',
-    tmEventSetup.SingleJet: 'SingleJet',
-    tmEventSetup.DoubleJet: 'DoubleJet',
-    tmEventSetup.TripleJet: 'TripleJet',
-    tmEventSetup.QuadJet: 'QuadJet',
-    tmEventSetup.TotalEt: 'TotalEt',
-    tmEventSetup.TotalHt: 'TotalHt',
-    tmEventSetup.MissingEt: 'MissingEt',
-    tmEventSetup.MissingHt: 'MissingHt',
-    tmEventSetup.MinBiasHFM0: 'MinBiasHFM0',
-    tmEventSetup.MinBiasHFM1: 'MinBiasHFM1',
-    tmEventSetup.MinBiasHFP0: 'MinBiasHFP0',
-    tmEventSetup.MinBiasHFP1: 'MinBiasHFP1',
-    tmEventSetup.Externals: 'Externals',
-    tmEventSetup.MuonMuonCorrelation: 'MuonMuonCorrelation',
-    tmEventSetup.MuonEsumCorrelation: 'MuonEsumCorrelation',
-    tmEventSetup.CaloMuonCorrelation: 'CaloMuonCorrelation',
-    tmEventSetup.CaloCaloCorrelation: 'CaloCaloCorrelation',
-    tmEventSetup.CaloEsumCorrelation: 'CaloEsumCorrelation',
-    tmEventSetup.InvariantMass: 'InvariantMass',
+    tmEventSetup.SingleMuon: kSingleMuon,
+    tmEventSetup.DoubleMuon: kDoubleMuon,
+    tmEventSetup.TripleMuon: kTripleMuon,
+    tmEventSetup.QuadMuon: kQuadMuon,
+    tmEventSetup.SingleEgamma: kSingleEgamma,
+    tmEventSetup.DoubleEgamma: kDoubleEgamma,
+    tmEventSetup.TripleEgamma: kTripleEgamma,
+    tmEventSetup.QuadEgamma: kQuadEgamma,
+    tmEventSetup.SingleTau: kSingleTau,
+    tmEventSetup.DoubleTau: kDoubleTau,
+    tmEventSetup.TripleTau: kTripleTau,
+    tmEventSetup.QuadTau: kQuadTau,
+    tmEventSetup.SingleJet: kSingleJet,
+    tmEventSetup.DoubleJet: kDoubleJet,
+    tmEventSetup.TripleJet: kTripleJet,
+    tmEventSetup.QuadJet: kQuadJet,
+    tmEventSetup.TotalEt: kTotalEt,
+    tmEventSetup.TotalEtEM: kTotalEtEM,
+    tmEventSetup.TotalHt: kTotalHt,
+    tmEventSetup.TowerCount: kTowerCount,
+    tmEventSetup.MissingEt: kMissingEt,
+    tmEventSetup.MissingHt: kMissingHt,
+    tmEventSetup.MissingEtHF: kMissingEtHF,
+    tmEventSetup.MinBiasHFM0: kMinBiasHFM0,
+    tmEventSetup.MinBiasHFM1: kMinBiasHFM1,
+    tmEventSetup.MinBiasHFP0: kMinBiasHFP0,
+    tmEventSetup.MinBiasHFP1: kMinBiasHFP1,
+    tmEventSetup.Externals: kExternals,
+    tmEventSetup.MuonMuonCorrelation: kMuonMuonCorrelation,
+    tmEventSetup.MuonEsumCorrelation: kMuonEsumCorrelation,
+    tmEventSetup.CaloMuonCorrelation: kCaloMuonCorrelation,
+    tmEventSetup.CaloCaloCorrelation: kCaloCaloCorrelation,
+    tmEventSetup.CaloEsumCorrelation: kCaloEsumCorrelation,
+    tmEventSetup.InvariantMass: kInvariantMass,
 }
 """Dictionary for condition type enumerations."""
 
 MuonConditionTypes = [
-    'SingleMuon',
-    'DoubleMuon',
-    'TripleMuon',
-    'QuadMuon',
+    kSingleMuon,
+    kDoubleMuon,
+    kTripleMuon,
+    kQuadMuon,
 ]
 
 CaloConditionTypes = [
-    'SingleEgamma',
-    'DoubleEgamma',
-    'TripleEgamma',
-    'QuadEgamma',
-    'SingleTau',
-    'DoubleTau',
-    'TripleTau',
-    'QuadTau',
-    'SingleJet',
-    'DoubleJet',
-    'TripleJet',
-    'QuadJet',
+    kSingleEgamma,
+    kDoubleEgamma,
+    kTripleEgamma,
+    kQuadEgamma,
+    kSingleTau,
+    kDoubleTau,
+    kTripleTau,
+    kQuadTau,
+    kSingleJet,
+    kDoubleJet,
+    kTripleJet,
+    kQuadJet,
 ]
 
 EsumsConditionTypes = [
-    'TotalEt',
-    'TotalHt',
-    'MissingEt',
-    'MissingHt',
+    kTotalEt,
+    kTotalEtEM,
+    kTotalHt,
+    kMissingEt,
+    kMissingHt,
+    kMissingEtHF,
 ]
 
 ExternalConditionTypes = [
-    'Externals',
+    kExternals,
 ]
 
 MinBiasConditionTypes = [
-    'MinBiasHFM0',
-    'MinBiasHFM1',
-    'MinBiasHFP0',
-    'MinBiasHFP1',
+    kMinBiasHFM0,
+    kMinBiasHFM1,
+    kMinBiasHFP0,
+    kMinBiasHFP1,
+]
+
+TowerCountConditionTypes = [
+    kTowerCount,
 ]
 
 CorrelationConditionTypes = [
-    'MuonMuonCorrelation',
-    'MuonEsumCorrelation',
-    'CaloMuonCorrelation',
-    'CaloCaloCorrelation',
-    'CaloEsumCorrelation',
-    'InvariantMass',
+    kMuonMuonCorrelation,
+    kMuonEsumCorrelation,
+    kCaloMuonCorrelation,
+    kCaloCaloCorrelation,
+    kCaloEsumCorrelation,
+    kInvariantMass,
 ]
 
 ObjectsOrder = [
-    'Egamma',
-    'Jet',
-    'Tau',
-    'Muon',
-    'ETT',
-    'HTT',
-    'ETM',
-    'HTM',
-    'MBT0HFM',
-    'MBT0HFP',
-    'MBT1HFM',
-    'MBT1HFP',
-    'EXT',
-    'Precision',
+    kEgamma,
+    kJet,
+    kTau,
+    kMuon,
+    kETT,
+    kETTEM,
+    kHTT,
+    kTOWERCOUNT,
+    kETM,
+    kHTM,
+    kETMHF,
+    kMBT0HFM,
+    kMBT0HFP,
+    kMBT1HFM,
+    kMBT1HFP,
+    kEXT,
+    kPrecision,
 ]
+"""Order of object types required by VHDL correlation conditions."""
 
 #
 # Functions
@@ -252,6 +328,7 @@ class ResourceTray(object):
         with open(filename, 'rb') as fp:
             resources = json.load(fp, object_hook=self._object_hook).resources
         self.resources = resources
+        self.filename = filename
 
     def _object_hook(self, d):
         """Convert a dict into a namedtuple, used to convert JSON input.
@@ -267,10 +344,16 @@ class ResourceTray(object):
         if isinstance(condition, tmEventSetup.esCondition):
             condition = ConditionStub(condition, Payload()) # cast to stub with empty payload
         def compare(instance):
+            """Find resources of same type and objects. Used with filter function."""
             if instance.type != condition.type: return False
             if set(instance.objects) != set(condition.objects): return False
             return True
-        instance = filter(compare, self.resources.instances)[0]
+        result = filter(compare, self.resources.instances)
+        if not result:
+            message = "Missing configuration for condition of type '{0}' with " \
+                      "objects {1} in file '{2}'.".format(condition.type, condition.objects, self.filename)
+            raise RuntimeError(message)
+        instance = result[0]
         payload = Payload(instance.sliceLUTs, instance.processors)
         return payload
 
@@ -286,8 +369,10 @@ class ConditionStub(object):
         self.ptr = condition
 
     def sortedObjects(self, objects):
-        """Returns list of condition objects sorted by VHDL notation."""
-        return sorted(objects, key = lambda key: ObjectsOrder.index(key))
+        """Returns list of condition objects sorted by VHDL notation (object order
+        required by correlation conditions).
+        """
+        return sorted(objects, key=lambda key: ObjectsOrder.index(key))
 
     def isMuonCondition(self):
         return self.type in MuonConditionTypes
@@ -303,6 +388,9 @@ class ConditionStub(object):
 
     def isMinBiasCondition(self):
         return self.type in MinBiasConditionTypes
+
+    def isTowerCountCondition(self):
+        return self.type in TowerCountConditionTypes
 
     def isCorrelationCondition(self):
         return self.type in CorrelationConditionTypes
