@@ -141,18 +141,34 @@ def snakecase(label, separator='_'):
     subbed = regexCamelSnake1.sub(r'\1{sep}\2'.format(sep=separator), label)
     return regexCamelSnake2.sub(r'\1{sep}\2'.format(sep=separator), subbed).lower()
 
+def unique_name(name, names):
+    """Generate unique signal name to prevent name collisions."""
+    count = 1
+    def suffixed():
+        if count > 1:
+            return '{name}_{count}'.format(**locals())
+        return name
+    while suffixed() in names:
+        count += 1
+    return suffixed()
+
 def vhdl_bool(value): # TODO add to filters
     """Returns VHDL boolean equivalent to value."""
     return 'true' if bool(value) else 'false'
 
 def vhdl_label(label): # TODO add to filters
     """Return normalized VHDL label for signal or instance names.
-    >>> vhdl_label('001FooBar.value')
-    '_001_foo_bar_value'
+    >>> vhdl_label('001FooBar.value__@2_')
+    'd001_foo_bar_value_2'
     """
     label = regexVhdlLabel.sub('_', label.strip()) # Replace unsave characters by underscore.
+    # Suppress multible underlines (VHDL spec)
+    label = re.sub(r'[_]+', r'_', label)
+    # Suppress leading/trailing underlines (VHDL spec)
+    label = label.strip('_')
+    # Prepend char if starts with digit (starting with underline not allowed in VHDL spec).
     if label[0] in string.digits:
-        label = ''.join(('_', label)) # Prepend underscore if starts with digit.
+        label = ''.join(('d', label))
     return snakecase(label) # Convert to spaced lower case
 
 def vhdl_expression(expression): # TODO add to filters
@@ -160,7 +176,14 @@ def vhdl_expression(expression): # TODO add to filters
     >>> vhdl_expression('(singleMu_1 and doubleMu_2)')
     '( single_mu_1 and double_mu_2 )'
     """
-    return ' '.join([vhdl_label(token) if token not in ['(', ')'] else token for token in re.sub(r'([\(\)])', r' \1 ', expression).split()])
+    expression = re.sub(r'([\(\)])', r' \1 ', expression) # separate braces
+    expression = re.sub(r'[\ ]+', r' ', expression) # suppress multiple spaces
+    tokens = []
+    for token in expression.split():
+        if token not in ['(', ')']:
+            token = vhdl_label(token)
+        tokens.append(token)
+    return ' '.join(tokens)
 
 def charge_encode(value):
     """Encode charge value to VHDL string literal."""
@@ -298,7 +321,21 @@ class ModuleHelper(VhdlHelper):
 
     def __init__(self, module):
         self.id = module.id
-        self.algorithms = [AlgorithmHelper(algorithm) for algorithm in module]
+        self.algorithms = []
+
+        def vhdl_signals():
+            """Returns all signal names."""
+            return [algorithm.vhdl_signal for algorithm in self.algorithms]
+
+        def add_algorithm(algorithm):
+            """Add algorithm helper asigning a unique name."""
+            helper = AlgorithmHelper(algorithm)
+            # Prevent name collisions
+            helper.vhdl_signal = unique_name(helper.vhdl_signal, vhdl_signals())
+            self.algorithms.append(helper)
+
+        for algorithm in module:
+            add_algorithm(algorithm)
 
     @property
     def conditions(self):
@@ -437,7 +474,7 @@ class AlgorithmHelper(VhdlHelper):
         self.module_id = algorithm.module_id
         self.module_index = algorithm.module_index
         self.expression = algorithm.expression
-        self.vhdl_signal = vhdl_label( algorithm.name )
+        self.vhdl_signal = vhdl_label(algorithm.name)
         self.vhdl_expression =  vhdl_expression( algorithm.expression_in_condition )
         self.conditions = self.collect_conditions(algorithm)
 
