@@ -2,7 +2,7 @@
     "resources": {
         "floor": {
             "processors": 0.0,
-            "sliceLUTs": 0.39
+            "sliceLUTs": 0.30
         },
         "ceiling": {
             "processors": 1.0,
@@ -187,19 +187,19 @@
                 "type": "MuonEsumCorrelation",
                 "objects": ["Muon", "ETM"],
                 "processors": 0.0,
-                "sliceLUTs": 0.0
+                "sliceLUTs": 0.005
             },
             {
                 "type": "MuonEsumCorrelation",
                 "objects": ["Muon", "ETMHF"],
                 "processors": 0.0,
-                "sliceLUTs": 0.0
+                "sliceLUTs": 0.005
             },
             {
                 "type": "MuonEsumCorrelation",
                 "objects": ["Muon", "HTM"],
                 "processors": 0.0,
-                "sliceLUTs": 0.0
+                "sliceLUTs": 0.005
             },
             {
                 "type": "CaloMuonCorrelation",
@@ -217,13 +217,13 @@
                 "type": "CaloMuonCorrelation",
                 "objects": ["Tau", "Muon"],
                 "processors": 0.0,
-                "sliceLUTs": 0.0
+                "sliceLUTs": 0.025
             },
             {
                 "type": "CaloCaloCorrelation",
                 "objects": ["Egamma", "Egamma"],
                 "processors": 0.0,
-                "sliceLUTs": 0.0
+                "sliceLUTs": 0.025
             },
             {
                 "type": "CaloCaloCorrelation",
@@ -235,13 +235,13 @@
                 "type": "CaloCaloCorrelation",
                 "objects": ["Egamma", "Jet"],
                 "processors": 0.0,
-                "sliceLUTs": 0.0
+                "sliceLUTs": 0.025
             },
             {
                 "type": "CaloCaloCorrelation",
                 "objects": ["Jet", "Jet"],
                 "processors": 0.0,
-                "sliceLUTs": 0.0
+                "sliceLUTs": 0.025
             },
             {
                 "type": "CaloCaloCorrelation",
@@ -271,13 +271,13 @@
                 "type": "CaloEsumCorrelation",
                 "objects": ["Tau", "ETM"],
                 "processors": 0.0,
-                "sliceLUTs": 0.0
+                "sliceLUTs": 0.005
             },
             {
                 "type": "CaloEsumCorrelation",
                 "objects": ["Tau", "ETMHF"],
                 "processors": 0.0,
-                "sliceLUTs": 0.0
+                "sliceLUTs": 0.005
             },
             {
                 "type": "CaloEsumCorrelation",
@@ -301,7 +301,7 @@
                 "type": "CaloEsumCorrelation",
                 "objects": ["Tau", "HTM"],
                 "processors": 0.0,
-                "sliceLUTs": 0.0
+                "sliceLUTs": 0.005
             },
             {
                 "type": "CaloEsumCorrelation",
@@ -312,26 +312,26 @@
             {
                 "type": "InvariantMass",
                 "objects": ["Muon", "Muon"],
-                "processors": 0.1,
-                "sliceLUTs": 0.1
+                "processors": 0.05,
+                "sliceLUTs": 0.05
             },
             {
                 "type": "InvariantMass",
                 "objects": ["Egamma", "Muon"],
-                "processors": 0.1,
-                "sliceLUTs": 0.1
+                "processors": 0.05,
+                "sliceLUTs": 0.05
             },
             {
                 "type": "InvariantMass",
                 "objects": ["Jet", "Muon"],
-                "processors": 0.1,
-                "sliceLUTs": 0.1
+                "processors": 0.05,
+                "sliceLUTs": 0.05
             },
             {
                 "type": "InvariantMass",
                 "objects": ["Tau", "Muon"],
-                "processors": 0.1,
-                "sliceLUTs": 0.1
+                "processors": 0.05,
+                "sliceLUTs": 0.05
             },
             {
                 "type": "InvariantMass",
@@ -342,8 +342,8 @@
             {
                 "type": "InvariantMass",
                 "objects": ["Egamma", "Tau"],
-                "processors": 0.1,
-                "sliceLUTs": 0.1
+                "processors": 0.01,
+                "sliceLUTs": 0.012
             },
             {
                 "type": "InvariantMass",
@@ -360,14 +360,14 @@
             {
                 "type": "InvariantMass",
                 "objects": ["Jet", "Tau"],
-                "processors": 0.1,
-                "sliceLUTs": 0.1
+                "processors": 0.01,
+                "sliceLUTs": 0.012
             },
             {
                 "type": "InvariantMass",
                 "objects": ["Tau", "Tau"],
-                "processors": 0.1,
-                "sliceLUTs": 0.1
+                "processors": 0.01,
+                "sliceLUTs": 0.012
             }
         ]
     }
