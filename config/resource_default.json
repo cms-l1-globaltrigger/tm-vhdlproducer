@@ -312,62 +312,62 @@
             {
                 "type": "InvariantMass",
                 "objects": ["Muon", "Muon"],
-                "processors": 0.05,
+                "processors": 0.06,
                 "sliceLUTs": 0.05
             },
             {
                 "type": "InvariantMass",
                 "objects": ["Egamma", "Muon"],
-                "processors": 0.05,
-                "sliceLUTs": 0.05
+                "processors": 0.06,
+                "sliceLUTs": 0.06
             },
             {
                 "type": "InvariantMass",
                 "objects": ["Jet", "Muon"],
-                "processors": 0.05,
-                "sliceLUTs": 0.05
+                "processors": 0.06,
+                "sliceLUTs": 0.06
             },
             {
                 "type": "InvariantMass",
                 "objects": ["Tau", "Muon"],
-                "processors": 0.05,
-                "sliceLUTs": 0.05
+                "processors": 0.06,
+                "sliceLUTs": 0.06
             },
             {
                 "type": "InvariantMass",
                 "objects": ["Egamma", "Egamma"],
-                "processors": 0.01,
-                "sliceLUTs": 0.012
+                "processors": 0.11,
+                "sliceLUTs": 0.022
             },
             {
                 "type": "InvariantMass",
                 "objects": ["Egamma", "Tau"],
-                "processors": 0.01,
-                "sliceLUTs": 0.012
+                "processors": 0.11,
+                "sliceLUTs": 0.022
             },
             {
                 "type": "InvariantMass",
                 "objects": ["Egamma", "Jet"],
-                "processors": 0.01,
-                "sliceLUTs": 0.012
+                "processors": 0.11,
+                "sliceLUTs": 0.022
             },
             {
                 "type": "InvariantMass",
                 "objects": ["Jet", "Jet"],
-                "processors": 0.01,
-                "sliceLUTs": 0.012
+                "processors": 0.11,
+                "sliceLUTs": 0.022
             },
             {
                 "type": "InvariantMass",
                 "objects": ["Jet", "Tau"],
-                "processors": 0.01,
-                "sliceLUTs": 0.012
+                "processors": 0.11,
+                "sliceLUTs": 0.022
             },
             {
                 "type": "InvariantMass",
                 "objects": ["Tau", "Tau"],
-                "processors": 0.01,
-                "sliceLUTs": 0.012
+                "processors": 0.11,
+                "sliceLUTs": 0.022
             }
         ]
     }
