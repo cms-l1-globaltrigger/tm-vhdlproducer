@@ -85,25 +85,25 @@
                 "type": "SingleTau",
                 "objects": ["Tau"],
                 "processors": 0.0,
-                "sliceLUTs": 0.0004
+                "sliceLUTs": 0.0005
             },
             {
                 "type": "DoubleTau",
                 "objects": ["Tau", "Tau"],
                 "processors": 0.0,
-                "sliceLUTs": 0.0005
+                "sliceLUTs": 0.0007
             },
             {
                 "type": "TripleTau",
                 "objects": ["Tau", "Tau", "Tau"],
                 "processors": 0.0,
-                "sliceLUTs": 0.0006
+                "sliceLUTs": 0.0009
             },
             {
                 "type": "QuadTau",
                 "objects": ["Tau", "Tau", "Tau", "Tau"],
                 "processors": 0.0,
-                "sliceLUTs": 0.003
+                "sliceLUTs": 0.035
             },
             {
                 "type": "TotalEt",
