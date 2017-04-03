@@ -100,6 +100,7 @@ kCaloMuonCorrelation = 'CaloMuonCorrelation'
 kCaloCaloCorrelation = 'CaloCaloCorrelation'
 kCaloEsumCorrelation = 'CaloEsumCorrelation'
 kInvariantMass = 'InvariantMass'
+kTransverseMass = 'TransverseMass'
 
 Operators = (
     tmGrammar.AND,
@@ -120,6 +121,8 @@ esCutType = {
   tmEventSetup.DeltaPhi: 'DeltaPhi',
   tmEventSetup.DeltaR: 'DeltaR',
   tmEventSetup.Mass: 'Mass',
+  tmEventSetup.TwoBodyPt: 'TwoBodyPt',
+  tmEventSetup.Slice: 'Slice',
   tmEventSetup.ChargeCorrelation: 'ChargeCorrelation',
 }
 """Dictionary for cut type enumerations."""
@@ -180,6 +183,7 @@ esConditionType = {
     tmEventSetup.CaloCaloCorrelation: kCaloCaloCorrelation,
     tmEventSetup.CaloEsumCorrelation: kCaloEsumCorrelation,
     tmEventSetup.InvariantMass: kInvariantMass,
+    tmEventSetup.TransverseMass: kTransverseMass,
 }
 """Dictionary for condition type enumerations."""
 
@@ -236,6 +240,7 @@ CorrelationConditionTypes = [
     kCaloCaloCorrelation,
     kCaloEsumCorrelation,
     kInvariantMass,
+    kTransverseMass,
 ]
 
 ObjectsOrder = [

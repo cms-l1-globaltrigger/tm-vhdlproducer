@@ -69,6 +69,26 @@ ObjectTypes = {
     tmEventSetup.TOWERCOUNT: tmGrammar.TOWERCOUNT,
 }
 
+# Has the number of Objects of each Type
+ObjectCount = {
+    tmEventSetup.Muon:       8,
+    tmEventSetup.Egamma:    12,
+    tmEventSetup.Tau:       12,
+    tmEventSetup.Jet:       12,
+    tmEventSetup.ETT:        1,
+    tmEventSetup.ETTEM:      1,
+    tmEventSetup.HTT:        1,
+    tmEventSetup.ETM:        1,
+    tmEventSetup.ETMHF:      1,
+    tmEventSetup.HTM:        1,
+    tmEventSetup.EXT:        1,
+    tmEventSetup.MBT0HFP:    1,
+    tmEventSetup.MBT1HFP:    1,
+    tmEventSetup.MBT0HFM:    1,
+    tmEventSetup.MBT1HFM:    1,
+    tmEventSetup.TOWERCOUNT: 1,
+}
+
 CaloTypes = [
     tmGrammar.EG,
     tmGrammar.TAU,
@@ -611,6 +631,7 @@ class CorrelationConditionHelper(ConditionHelper):
         self.hasDphiCut = vhdl_bool(False)
         self.hasDrCut = vhdl_bool(False)
         self.hasMassCut = vhdl_bool(False)
+        self.massType = 0
         # Limits
         self.diffEtaLowerLimit = .0
         self.diffEtaUpperLimit = .0
@@ -620,6 +641,7 @@ class CorrelationConditionHelper(ConditionHelper):
         self.deltaRUpperLimit = .0
         self.invMassLowerLimit = .0
         self.invMassUpperLimit = .0
+        self.twoBodyPtThres = .0
         #
         self.chargeCorrelation = charge_correlation_encode('ig')
         self.update(condition)
@@ -642,6 +664,8 @@ class CorrelationConditionHelper(ConditionHelper):
             precision = esCut.getMaximum().index
             scale = 10.**precision
             return math.ceil(value * scale) / scale
+          
+        hasTwoBodyPtCut = False
         for esCut in condition.ptr.getCuts():
             if esCut.getCutType() == tmEventSetup.DeltaEta:
                 self.hasDetaCut = vhdl_bool(True)
@@ -658,10 +682,29 @@ class CorrelationConditionHelper(ConditionHelper):
             elif esCut.getCutType() == tmEventSetup.Mass:
                 self.hasMassCut = vhdl_bool(True)
                 self.invMassLowerLimit = lowerLimit(esCut)
-                self.invMassUpperLimit = upperLimit(esCut)
+                self.invMassUpperLimit = upperLimit(esCut)            
+            elif esCut.getCutType() == tmEventSetup.TwoBodyPt:
+                hasTwoBodyPtCut = True
+                self.twoBodyPtThres = lowerLimit(esCut)
             elif esCut.getCutType() == tmEventSetup.ChargeCorrelation:
                 self.chargeCorrelation = charge_correlation_encode(esCut.getData())
 
+        # Definition of mass_type:
+        # 0 => invariant mass
+        # 1 => invariant mass with twobody_pt cut
+        # 2 => transverse mass
+        # 3 => transverse mass with twobody_pt cut 
+        if condition.ptr.getType == tmEventSetup.InvariantMass:
+          if hasTwoBodyPtCut:
+            self.massType = 1
+          else:
+            self.massType = 0
+        elif condition.ptr.getType == tmEventSetup.TransverseMass:
+          if hasTwoBodyPtCut:
+            self.massType = 3
+          else:
+            self.massType = 2
+            
 # -----------------------------------------------------------------------------
 #  Object helpers
 # -----------------------------------------------------------------------------
@@ -723,6 +766,8 @@ class ObjectHelper(VhdlHelper):
         self.phiW2Ignore = vhdl_bool(True)
         self.phiW2LowerLimit = 0
         self.phiW2UpperLimit = 0
+        self.sliceLow = 0
+        self.sliceHigh = 0
         # State of object
         self.isValid = False
 
@@ -733,6 +778,8 @@ class ObjectHelper(VhdlHelper):
         self.bx = bx_encode(esObject.getBxOffset())
         self.externalSignalName = esObject.getExternalSignalName()
         self.externalChannelId = esObject.getExternalChannelId()
+        # set the default slice range to maxNum - 1 (e.g. 0-11)
+        self.sliceHigh = ObjectCount[esObject.getType()] - 1
         etaCuts = []
         phiCuts = []
         # setup cuts
@@ -751,6 +798,10 @@ class ObjectHelper(VhdlHelper):
                 self.charge = charge_encode(cut.getData())
             if cut.getCutType() == tmEventSetup.Count:
                 self.count = cut.getMinimumIndex()
+            if cut.getCutType() == tmEventSetup.Slice:
+                sliceData = cut.getData().split(",")
+                self.sliceLow  =  int(sliceData[0])
+                self.sliceHigh =  int(sliceData[-1])
         # setup eta windows
         if len(etaCuts) > 0:
             self.etaFullRange = vhdl_bool(False)

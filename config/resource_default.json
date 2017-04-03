@@ -368,6 +368,66 @@
                 "objects": ["Tau", "Tau"],
                 "processors": 0.11,
                 "sliceLUTs": 0.022
+            },
+            {
+                "type": "TransverseMass",
+                "objects": ["Muon", "Muon"],
+                "processors": 0.06,
+                "sliceLUTs": 0.05
+            },
+            {
+                "type": "TransverseMass",
+                "objects": ["Egamma", "Muon"],
+                "processors": 0.06,
+                "sliceLUTs": 0.06
+            },
+            {
+                "type": "TransverseMass",
+                "objects": ["Jet", "Muon"],
+                "processors": 0.06,
+                "sliceLUTs": 0.06
+            },
+            {
+                "type": "TransverseMass",
+                "objects": ["Tau", "Muon"],
+                "processors": 0.06,
+                "sliceLUTs": 0.06
+            },
+            {
+                "type": "TransverseMass",
+                "objects": ["Egamma", "Egamma"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "TransverseMass",
+                "objects": ["Egamma", "Tau"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "TransverseMass",
+                "objects": ["Egamma", "Jet"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "TransverseMass",
+                "objects": ["Jet", "Jet"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "TransverseMass",
+                "objects": ["Jet", "Tau"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "TransverseMass",
+                "objects": ["Tau", "Tau"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
             }
         ]
     }
