@@ -655,13 +655,13 @@ class CorrelationConditionHelper(ConditionHelper):
         def lowerLimit(esCut):
             """Returns rounded floating point for minimum."""
             value = esCut.getMinimum().value
-            precision = esCut.getMinimum().index
+            precision = esCut.getPrecision()
             scale = 10.**precision
             return math.floor(value * scale) / scale
         def upperLimit(esCut):
             """Returns rounded floating point for maximum."""
             value = esCut.getMaximum().value
-            precision = esCut.getMaximum().index
+            precision = esCut.getPrecision()
             scale = 10.**precision
             return math.ceil(value * scale) / scale
           
@@ -681,8 +681,8 @@ class CorrelationConditionHelper(ConditionHelper):
                 self.deltaRUpperLimit = upperLimit(esCut)
             elif esCut.getCutType() == tmEventSetup.Mass:
                 self.hasMassCut = vhdl_bool(True)
-                self.invMassLowerLimit = lowerLimit(esCut)
-                self.invMassUpperLimit = upperLimit(esCut)            
+                self.massLowerLimit = lowerLimit(esCut)
+                self.massUpperLimit = upperLimit(esCut)            
             elif esCut.getCutType() == tmEventSetup.TwoBodyPt:
                 hasTwoBodyPtCut = True
                 self.twoBodyPtThres = lowerLimit(esCut)
@@ -694,12 +694,12 @@ class CorrelationConditionHelper(ConditionHelper):
         # 1 => invariant mass with twobody_pt cut
         # 2 => transverse mass
         # 3 => transverse mass with twobody_pt cut 
-        if condition.ptr.getType == tmEventSetup.InvariantMass:
+        if condition.ptr.getType() == tmEventSetup.InvariantMass:
           if hasTwoBodyPtCut:
             self.massType = 1
           else:
             self.massType = 0
-        elif condition.ptr.getType == tmEventSetup.TransverseMass:
+        elif condition.ptr.getType() == tmEventSetup.TransverseMass:
           if hasTwoBodyPtCut:
             self.massType = 3
           else:
@@ -884,8 +884,8 @@ if __name__ == '__main__':
             print "condition.vhdl_signal :", condition.vhdl_signal
             print "condition.type :", condition.type
             if condition.type == 'InvariantMass':
-                print "condition.invMassLowerLimit :", condition.invMassLowerLimit
-                print "condition.invMassUpperLimit :", condition.invMassUpperLimit
+                print "condition.massLowerLimit :", condition.massLowerLimit
+                print "condition.massUpperLimit :", condition.massUpperLimit
             print "condition.objects:"
             for object in condition.objects:
                 print "  name      :", object.name
