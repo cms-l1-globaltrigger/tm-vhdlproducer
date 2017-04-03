@@ -4,12 +4,12 @@
 {{ o.type|lower }}_cos_sin_phi_bx_{{ o.bx }}_l: for i in 0 to NR_{{ o.type|upper }}_OBJECTS-1 generate
     {{ o.type|lower }}_cos_phi_bx_{{ o.bx }}(i) <= CALO_COS_PHI_LUT(CONV_INTEGER({{ o.type|lower }}_bx_{{ o.bx }}(i)(D_S_I_{{ o.type|upper }}_V2.phi_high downto D_S_I_{{ o.type|upper }}_V2.phi_low)));
     {{ o.type|lower }}_sin_phi_bx_{{ o.bx }}(i) <= CALO_SIN_PHI_LUT(CONV_INTEGER({{ o.type|lower }}_bx_{{ o.bx }}(i)(D_S_I_{{ o.type|upper }}_V2.phi_high downto D_S_I_{{ o.type|upper }}_V2.phi_low)));
-end generate;
+end generate {{ o.type|lower }}_cos_sin_phi_bx_{{ o.bx }}_l;
     {%- elif o.type == 'MU' %}
 {{ o.type|lower }}_cos_sin_phi_bx_{{ o.bx }}_l: for i in 0 to NR_{{ o.type|upper }}_OBJECTS-1 generate
     {{ o.type|lower }}_cos_phi_bx_{{ o.bx }}(i) <= MUON_COS_PHI_LUT(CONV_INTEGER({{ o.type|lower }}_bx_{{ o.bx }}(D_S_I_{{ o.type|upper }}_V2.phi_high downto D_S_I_{{ o.type|upper }}_V2.phi_low)));
     {{ o.type|lower }}_sin_phi_bx_{{ o.bx }}(i) <= MUON_SIN_PHI_LUT(CONV_INTEGER({{ o.type|lower }}_bx_{{ o.bx }}(D_S_I_{{ o.type|upper }}_V2.phi_high downto D_S_I_{{ o.type|upper }}_V2.phi_low)));
-end generate;
+end generate {{ o.type|lower }}_cos_sin_phi_bx_{{ o.bx }}_l;
     {%- elif o.type in ('ETM', 'HTM', 'ETMHF') %}
     {{ o.type|lower }}_cos_phi_bx_{{ o.bx }}(0) <= CALO_COS_PHI_LUT(CONV_INTEGER({{ o.type|lower }}_bx_{{ o.bx }}(D_S_I_{{ o.type|upper }}_V2.phi_high downto D_S_I_{{ o.type|upper }}_V2.phi_low)));
     {{ o.type|lower }}_sin_phi_bx_{{ o.bx }}(0) <= CALO_SIN_PHI_LUT(CONV_INTEGER({{ o.type|lower }}_bx_{{ o.bx }}(D_S_I_{{ o.type|upper }}_V2.phi_high downto D_S_I_{{ o.type|upper }}_V2.phi_low)));

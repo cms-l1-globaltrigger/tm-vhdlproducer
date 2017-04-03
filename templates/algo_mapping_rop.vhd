@@ -72,7 +72,7 @@ nr_algos_l: for i in 0 to NR_ALGOS-1 generate
     algo_after_gtLogic_rop_int(global_index(i)) <= algo_after_gtLogic(i);
     algo_after_bxomask_rop_int(global_index(i)) <= algo_after_bxomask(i);
     algo_after_prescaler_rop_int(global_index(i)) <= algo_after_prescaler(i);
-end generate;
+end generate nr_algos_l;
 
 -- HB 2016-03-02: inserted for global index
 rate_cnt_before_prescaler_global <= rate_cnt_before_prescaler_global_int;

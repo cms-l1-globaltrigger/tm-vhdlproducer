@@ -72,14 +72,6 @@
 {%- include  "subTemplates/muon_esums_correlation_condition_v2.vhd.j2" %}
 {%- endfor %}
 
-{%- for condition in module.caloCaloOverlapRemoverConditions %}
-{%- include  "subTemplates/calo_calo_overlap_remover_condition.vhd.j2" %}
-{%- endfor %}
-
-{%- for condition in module.btaggingConditions %}
-{%- include  "subTemplates/b_tagging_condition.vhd.j2" %}
-{%- endfor %}
-
 {%- for condition in module.minBiasConditions %}
 {%- include  "subTemplates/min_bias_hf_condition.vhd.j2" %}
 {%- endfor %}

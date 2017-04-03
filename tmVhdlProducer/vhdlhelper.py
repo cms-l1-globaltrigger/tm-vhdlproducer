@@ -639,8 +639,8 @@ class CorrelationConditionHelper(ConditionHelper):
         self.diffPhiUpperLimit = .0
         self.deltaRLowerLimit = .0
         self.deltaRUpperLimit = .0
-        self.invMassLowerLimit = .0
-        self.invMassUpperLimit = .0
+        self.massLowerLimit = .0
+        self.massUpperLimit = .0
         self.twoBodyPtThres = .0
         #
         self.chargeCorrelation = charge_correlation_encode('ig')
