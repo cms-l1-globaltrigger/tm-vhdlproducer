@@ -27,25 +27,25 @@
 -- or muon-muon correlation condition.
 {%- include  "subTemplates/muon_charge_correlations.vhd.j2" %}
 
--- Instantiations of pt, eta and phi for correlation conditions (used for DETA, DPHI and DR) - once for every ObjectType in certain Bx used in correlation conditions
-{%- include  "subTemplates/correlation_conditions_pt_eta_phi.vhd.j2" %}
-
--- Instantiations of eta and phi conversion to muon scale for calo-muon and muon-esums correlation conditions (used for DETA, DPHI and DR) - once for every calo ObjectType in certain Bx used in correlation conditions
+-- Instantiations of eta and phi conversion to muon scale for calo-muon and muon-esums correlation conditions (used for DETA, DPHI, DR and mass) - once for every calo ObjectType in certain Bx used in correlation conditions
 {%- include  "subTemplates/correlation_conditions_eta_phi_conversion.vhd.j2" %}
 
--- Instantiations of differences for correlation conditions (used for DETA, DPHI and DR) - once for correlation conditions with two ObjectTypes in certain Bxs
+-- Instantiations of differences for correlation conditions (used for DETA, DPHI, DR, mass, overlap_remover and b_tagging) - once for correlation conditions with two ObjectTypes in certain Bxs
 {%- include  "subTemplates/correlation_conditions_differences.vhd.j2" %}
 
--- Instantiations of cosh-deta and cos-dphi LUTs for correlation conditions (used for invariant mass) - once for correlation conditions with two ObjectTypes in certain Bxs
-{%- include  "subTemplates/correlation_conditions_inv_mass.vhd.j2" %}
+-- Instantiations of cosh-deta and cos-dphi LUTs for correlation conditions (used for mass and overlap_remover) - once for correlation conditions with two ObjectTypes in certain Bxs
+{%- include  "subTemplates/correlation_conditions_mass_cuts.vhd.j2" %}
+
+-- Instantiations of pt, eta, phi, cos-phi and sin-phi for correlation conditions (used for DETA, DPHI, DR, mass, overlap_remover and b_tagging) - once for every ObjectType in certain Bx used in correlation conditions
+{%- include  "subTemplates/correlation_conditions_pt_eta_phi_cos_sin_phi.vhd.j2" %}
 
 -- Instantiations of conditions
 {%- for condition in module.caloConditions %}
-{%- include  "subTemplates/calo_condition_v3.vhd.j2" %}
+{%- include  "subTemplates/calo_condition_v4.vhd.j2" %}
 {%- endfor %}
 
 {%- for condition in module.muonConditions %}
-{%- include  "subTemplates/muon_condition_v3.vhd.j2" %}
+{%- include  "subTemplates/muon_condition_v4.vhd.j2" %}
 {%- endfor %}
 
 {%- for condition in module.esumsConditions %}
@@ -53,23 +53,31 @@
 {%- endfor %}
 
 {%- for condition in module.caloCaloCorrConditions %}
-{%- include  "subTemplates/calo_calo_correlation_condition.vhd.j2" %}
+{%- include  "subTemplates/calo_calo_correlation_condition_v2.vhd.j2" %}
 {%- endfor %}
 
 {%- for condition in module.caloMuonCorrConditions %}
-{%- include  "subTemplates/calo_muon_correlation_condition.vhd.j2" %}
+{%- include  "subTemplates/calo_muon_correlation_condition_v2.vhd.j2" %}
 {%- endfor %}
 
 {%- for condition in module.muonMuonCorrConditions %}
-{%- include  "subTemplates/muon_muon_correlation_condition.vhd.j2" %}
+{%- include  "subTemplates/muon_muon_correlation_condition_v2.vhd.j2" %}
 {%- endfor %}
 
 {%- for condition in module.caloEsumCorrConditions %}
-{%- include  "subTemplates/calo_esums_correlation_condition.vhd.j2" %}
+{%- include  "subTemplates/calo_esums_correlation_condition_v2.vhd.j2" %}
 {%- endfor %}
 
 {%- for condition in module.muonEsumCorrConditions %}
-{%- include  "subTemplates/muon_esums_correlation_condition.vhd.j2" %}
+{%- include  "subTemplates/muon_esums_correlation_condition_v2.vhd.j2" %}
+{%- endfor %}
+
+{%- for condition in module.caloCaloOverlapRemoverConditions %}
+{%- include  "subTemplates/calo_calo_overlap_remover_condition.vhd.j2" %}
+{%- endfor %}
+
+{%- for condition in module.btaggingConditions %}
+{%- include  "subTemplates/b_tagging_condition.vhd.j2" %}
 {%- endfor %}
 
 {%- for condition in module.minBiasConditions %}

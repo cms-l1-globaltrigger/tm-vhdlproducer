@@ -19,8 +19,8 @@
 -- v{{ menu.info.sw_version }}
 
 -- Signal definition of pt, eta and phi for correlation conditions.
--- Insert "signal_correlation_conditions_pt_eta_phi.vhd.j2" as often as an ObjectType at a certain Bx is used in a correlation condition.
-{%- include  "subTemplates/signal_correlation_conditions_pt_eta_phi.vhd.j2" %}
+-- Insert "signal_correlation_conditions_pt_eta_phi_cos_sin_phi.vhd.j2" as often as an ObjectType at a certain Bx is used in a correlation condition.
+{%- include  "subTemplates/signal_correlation_conditions_pt_eta_phi_cos_sin_phi.vhd.j2" %}
 
 -- Signal definition of differences for correlation conditions.
 -- Insert "signal_correlation_conditions_differences.vhd.j2" once for correlation conditions of different ObjectTypes and Bx combinations.
