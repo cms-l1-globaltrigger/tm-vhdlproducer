@@ -19,7 +19,7 @@ end generate {{ o.type|lower }}_data_bx_{{ o.bx }}_l;
     {{ o.type|lower }}_sin_phi_bx_{{ o.bx }}(i) <= MUON_SIN_PHI_LUT(CONV_INTEGER({{ o.type|lower }}_bx_{{ o.bx }}(i)(D_S_I_{{ o.type|upper }}_V2.phi_high downto D_S_I_{{ o.type|upper }}_V2.phi_low)));
 end generate {{ o.type|lower }}_data_bx_{{ o.bx }}_l;
     {%- elif o.type in ('ETM', 'HTM', 'ETMHF') %}
-    {{ o.type|lower }}_pt_vector_bx_{{ o.bx }}(0)({{ o.type|upper }}_PT_VECTOR_WIDTH-1 downto 0) <= CONV_STD_LOGIC_VECTOR({{ o.type|upper }}_PT_LUT(CONV_INTEGER({{ o.type|lower }}_bx_0(D_S_I_{{ o.type|upper }}_V2.pt_high downto D_S_I_{{ o.type|upper }}_V2.pt_low))), {{ o.type|upper }}_PT_VECTOR_WIDTH);
+    {{ o.type|lower }}_pt_vector_bx_{{ o.bx }}(0)({{ o.type|upper }}_PT_VECTOR_WIDTH-1 downto 0) <= CONV_STD_LOGIC_VECTOR({{ o.type|upper }}_PT_LUT(CONV_INTEGER({{ o.type|lower }}_bx_0(D_S_I_{{ o.type|upper }}_V2.et_high downto D_S_I_{{ o.type|upper }}_V2.et_low))), {{ o.type|upper }}_PT_VECTOR_WIDTH);
     {{ o.type|lower }}_phi_integer_bx_{{ o.bx }}(0) <= CONV_INTEGER({{ o.type|lower }}_bx_{{ o.bx }}(D_S_I_{{ o.type|upper }}_V2.phi_high downto D_S_I_{{ o.type|upper }}_V2.phi_low));
     {{ o.type|lower }}_cos_phi_bx_{{ o.bx }}(0) <= CALO_COS_PHI_LUT(CONV_INTEGER({{ o.type|lower }}_bx_{{ o.bx }}(D_S_I_{{ o.type|upper }}_V2.phi_high downto D_S_I_{{ o.type|upper }}_V2.phi_low)));
     {{ o.type|lower }}_sin_phi_bx_{{ o.bx }}(0) <= CALO_SIN_PHI_LUT(CONV_INTEGER({{ o.type|lower }}_bx_{{ o.bx }}(D_S_I_{{ o.type|upper }}_V2.phi_high downto D_S_I_{{ o.type|upper }}_V2.phi_low)));
