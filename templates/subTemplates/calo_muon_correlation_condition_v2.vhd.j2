@@ -3,7 +3,7 @@
   {%- set o2 = condition.objects[1] %}
 {{ condition.vhdl_signal }}_i: entity work.calo_muon_correlation_condition_v2
     generic map(
-        {{ condition.hasDetaCut }}, {{ condition.hasDphiCut }}, {{ condition.hasDrCut }}, {{ condition.hasMassCut }}, {{ condition.massType }},
+        {{ condition.hasDetaCut }}, {{ condition.hasDphiCut }}, {{ condition.hasDrCut }}, {{ condition.hasMassCut }}, {{ condition.massType }}, {{ condition.hasTwoBodyPtCut }}, 
         {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o1.operator }}, {{ o1.type|upper }}_TYPE,
         X"{{ o1.threshold|X04 }}",
         {{ o1.etaFullRange }}, X"{{ o1.etaW1UpperLimit|X04 }}",X"{{ o1.etaW1LowerLimit|X04 }}",

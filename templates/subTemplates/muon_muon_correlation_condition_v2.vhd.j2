@@ -4,7 +4,7 @@
 {{ condition.vhdl_signal }}_i: entity work.muon_muon_correlation_condition_v2
     generic map(
         {{ condition.objectsInSameBx }},
-        {{ condition.hasDetaCut }}, {{ condition.hasDphiCut }}, {{ condition.hasDrCut }}, {{ condition.hasMassCut }}, {{ condition.massType }},
+        {{ condition.hasDetaCut }}, {{ condition.hasDphiCut }}, {{ condition.hasDrCut }}, {{ condition.hasMassCut }}, {{ condition.massType }}, {{ condition.hasTwoBodyPtCut }}, 
         {{ o1.sliceLow }}, {{ o1.sliceHigh }},{{ o1.operator }},
         X"{{ o1.threshold|X04 }}",
         {{ o1.etaFullRange }}, X"{{ o1.etaW1UpperLimit|X04 }}", X"{{ o1.etaW1LowerLimit|X04 }}",

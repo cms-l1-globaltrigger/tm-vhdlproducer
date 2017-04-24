@@ -5,7 +5,7 @@
 {{ condition.vhdl_signal }}_i: entity work.calo_2plus1_orm_condition
     generic map(
         {{ condition.hasDetaOrmCut }}, {{ condition.hasDphiOrmCut }}, {{ condition.hasDrOrmCut }},
-        {{ condition.hasDetaCut }}, {{ condition.hasDphiCut }}, {{ condition.hasDrCut }}, {{ condition.hasMassCut }}, {{ condition.massType }},
+        {{ condition.hasDetaCut }}, {{ condition.hasDphiCut }}, {{ condition.hasDrCut }}, {{ condition.hasMassCut }}, {{ condition.massType }}, {{ condition.hasTwoBodyPtCut }}, 
         {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o1.operator }}, {{ o1.type|upper }}_TYPE,
         (X"{{ o1.threshold|X04 }}", X"{{ o2.threshold|X04 }}", X"0000", X"0000"),
         ({{ o1.etaFullRange }}, {{ o2.etaFullRange }}, false, false),
