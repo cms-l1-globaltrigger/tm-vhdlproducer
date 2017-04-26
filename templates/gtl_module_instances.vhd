@@ -22,23 +22,17 @@
 {%- for condition in module.externalConditions %}
     {{ condition.vhdl_signal }} <= ext_cond_bx_{{ condition.objects[0].bx }}({{ condition.objects[0].externalChannelId }}); -- {{ condition.vhdl_signal }}
 {%- endfor %}
-
 -- Instantiations of muon charge correlations - only once for a certain Bx combination, if there is at least one DoubleMuon, TripleMuon, QuadMuon condition
 -- or muon-muon correlation condition.
 {%- include  "subTemplates/muon_charge_correlations.vhd.j2" %}
-
--- Instantiations of eta and phi conversion to muon scale for calo-muon and muon-esums correlation conditions (used for DETA, DPHI, DR and mass) - once for every calo ObjectType in certain Bx used in correlation conditions
-{%- include  "subTemplates/correlation_conditions_eta_phi_conversion.vhd.j2" %}
-
--- Instantiations of differences for correlation conditions (used for DETA, DPHI, DR, mass, overlap_remover and b_tagging) - once for correlation conditions with two ObjectTypes in certain Bxs
-{%- include  "subTemplates/correlation_conditions_differences.vhd.j2" %}
-
--- Instantiations of cosh-deta and cos-dphi LUTs for correlation conditions (used for mass and overlap_remover) - once for correlation conditions with two ObjectTypes in certain Bxs
-{%- include  "subTemplates/correlation_conditions_mass_cuts.vhd.j2" %}
-
 -- Instantiations of pt, eta, phi, cos-phi and sin-phi for correlation conditions (used for DETA, DPHI, DR, mass, overlap_remover and b_tagging) - once for every ObjectType in certain Bx used in correlation conditions
 {%- include  "subTemplates/correlation_conditions_pt_eta_phi_cos_sin_phi.vhd.j2" %}
-
+-- Instantiations of eta and phi conversion to muon scale for calo-muon and muon-esums correlation conditions (used for DETA, DPHI, DR and mass) - once for every calo ObjectType in certain Bx used in correlation conditions
+{%- include  "subTemplates/correlation_conditions_eta_phi_conversion.vhd.j2" %}
+-- Instantiations of differences for correlation conditions (used for DETA, DPHI, DR, mass, overlap_remover and b_tagging) - once for correlation conditions with two ObjectTypes in certain Bxs
+{%- include  "subTemplates/correlation_conditions_differences.vhd.j2" %}
+-- Instantiations of cosh-deta and cos-dphi LUTs for correlation conditions (used for mass and overlap_remover) - once for correlation conditions with two ObjectTypes in certain Bxs
+{%- include  "subTemplates/correlation_conditions_mass_cuts.vhd.j2" %}
 -- Instantiations of conditions
 {%- for condition in module.caloConditions %}
 {%- include  "subTemplates/calo_condition_v4.vhd.j2" %}

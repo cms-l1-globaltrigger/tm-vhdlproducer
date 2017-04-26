@@ -482,6 +482,24 @@
                 "objects": ["Tau", "HTM"],
                 "processors": 0.11,
                 "sliceLUTs": 0.022
+            },
+            {
+                "type": "TransverseMass",
+                "objects": ["Muon", "ETM"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "TransverseMass",
+                "objects": ["Muon", "ETMHF"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "TransverseMass",
+                "objects": ["Muon", "HTM"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
             }
         ]
     }

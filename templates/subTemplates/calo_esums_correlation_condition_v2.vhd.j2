@@ -4,7 +4,7 @@
 {{ condition.vhdl_signal }}_i: entity work.calo_esums_correlation_condition_v2
     generic map(
         {{ condition.hasDphiCut }}, {{ condition.hasMassCut }}, TRANSVERSE_MASS_TYPE, {{ condition.hasTwoBodyPtCut }}, 
-        {{ o1.sliceLow }}, {{ o1.sliceHigh }},{{ o1.operator }}, {{ o1.type|upper }}_TYPE,
+        {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o1.operator }}, {{ o1.type|upper }}_TYPE,
         X"{{ o1.threshold|X04 }}",
         {{ o1.etaFullRange }}, X"{{ o1.etaW1UpperLimit|X04 }}", X"{{o1.etaW1LowerLimit|X04 }}",
         {{ o1.etaW2Ignore }}, X"{{ o1.etaW2UpperLimit|X04 }}", X"{{o1.etaW2LowerLimit|X04 }}",
