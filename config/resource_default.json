@@ -413,7 +413,43 @@
             },
             {
                 "type": "TransverseMass",
+                "objects": ["Egamma", "ETM"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "TransverseMass",
+                "objects": ["Egamma", "ETMHF"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "TransverseMass",
+                "objects": ["Egamma", "HTM"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "TransverseMass",
                 "objects": ["Jet", "Jet"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "TransverseMass",
+                "objects": ["Jet", "ETM"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "TransverseMass",
+                "objects": ["Jet", "ETMHF"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "TransverseMass",
+                "objects": ["Jet", "HTM"],
                 "processors": 0.11,
                 "sliceLUTs": 0.022
             },
@@ -426,6 +462,24 @@
             {
                 "type": "TransverseMass",
                 "objects": ["Tau", "Tau"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "TransverseMass",
+                "objects": ["Tau", "ETM"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "TransverseMass",
+                "objects": ["Tau", "ETMHF"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "TransverseMass",
+                "objects": ["Tau", "HTM"],
                 "processors": 0.11,
                 "sliceLUTs": 0.022
             }
