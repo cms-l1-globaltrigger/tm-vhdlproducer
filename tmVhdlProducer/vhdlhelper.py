@@ -631,6 +631,7 @@ class CorrelationConditionHelper(ConditionHelper):
         self.hasDphiCut = vhdl_bool(False)
         self.hasDrCut = vhdl_bool(False)
         self.hasMassCut = vhdl_bool(False)
+        self.hasTwoBodyPtCut = vhdl_bool(False)
         self.massType = 0
         # Limits
         self.diffEtaLowerLimit = .0
@@ -664,8 +665,7 @@ class CorrelationConditionHelper(ConditionHelper):
             precision = esCut.getPrecision()
             scale = 10.**precision
             return math.ceil(value * scale) / scale
-          
-        hasTwoBodyPtCut = False
+
         for esCut in condition.ptr.getCuts():
             if esCut.getCutType() == tmEventSetup.DeltaEta:
                 self.hasDetaCut = vhdl_bool(True)
@@ -682,29 +682,21 @@ class CorrelationConditionHelper(ConditionHelper):
             elif esCut.getCutType() == tmEventSetup.Mass:
                 self.hasMassCut = vhdl_bool(True)
                 self.massLowerLimit = lowerLimit(esCut)
-                self.massUpperLimit = upperLimit(esCut)            
+                self.massUpperLimit = upperLimit(esCut)
             elif esCut.getCutType() == tmEventSetup.TwoBodyPt:
-                hasTwoBodyPtCut = True
+                self.hasTwoBodyPtCut = vhdl_bool(True)
                 self.twoBodyPtThres = lowerLimit(esCut)
             elif esCut.getCutType() == tmEventSetup.ChargeCorrelation:
                 self.chargeCorrelation = charge_correlation_encode(esCut.getData())
 
         # Definition of mass_type:
         # 0 => invariant mass
-        # 1 => invariant mass with twobody_pt cut
-        # 2 => transverse mass
-        # 3 => transverse mass with twobody_pt cut 
+        # 1 => transverse mass
         if condition.ptr.getType() == tmEventSetup.InvariantMass:
-          if hasTwoBodyPtCut:
-            self.massType = 1
-          else:
             self.massType = 0
         elif condition.ptr.getType() == tmEventSetup.TransverseMass:
-          if hasTwoBodyPtCut:
-            self.massType = 3
-          else:
-            self.massType = 2
-            
+            self.massType = 1
+
 # -----------------------------------------------------------------------------
 #  Object helpers
 # -----------------------------------------------------------------------------
