@@ -1,4 +1,4 @@
-{%- block signal_correlation_conditions_differences %}
+{%- block instantiate_correlation_conditions_differences %}
   {%- for o1, o2 in module.correlationCombinations %}
     {%- if o1.type in ('EG', 'JET', 'TAU') and o2.type == 'MU' %}
 diff_{{ o1.type|lower }}_{{ o2.type|lower }}_eta_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.sub_eta_integer_obj_vs_obj
@@ -64,5 +64,5 @@ end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx 
     {%- endif %}
 
   {%- endfor %}
-{%- endblock signal_correlation_conditions_differences %}
+{%- endblock instantiate_correlation_conditions_differences %}
 {# eof #}

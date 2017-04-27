@@ -1,0 +1,70 @@
+{%- block instantiate_correlation_conditions_orm_differences %}
+  {%- for o1, o2, o3 in module.correlationOrmCombinations %}
+    diff_{{ o1.type|lower }}_{{ o2.type|lower }}_eta_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.sub_eta_integer_obj_vs_obj
+	generic map(NR_{{ o1.type|upper }}_OBJECTS, NR_{{ o2.type|upper }}_OBJECTS)
+	port map({{ o1.type|lower }}_eta_integer_bx_{{ o1.bx }}, {{ o2.type|lower }}_eta_integer_bx_{{ o2.bx }}, diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_eta_integer);
+    diff_{{ o1.type|lower }}_{{ o2.type|lower }}_phi_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.sub_phi_integer_obj_vs_obj
+	generic map(NR_{{ o1.type|upper }}_OBJECTS, NR_{{ o2.type|upper }}_OBJECTS, CALO_PHI_HALF_RANGE_BINS)
+	port map({{ o1.type|lower }}_phi_integer_bx_{{ o1.bx }}, {{ o2.type|lower }}_phi_integer_bx_{{ o2.bx }}, diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_integer);
+    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l1: for i in 0 to NR_{{ o1.type|upper }}_OBJECTS-1 generate
+	{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l2: for j in 0 to NR_{{ o2.type|upper }}_OBJECTS-1 generate
+	    diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_eta_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type|upper }}_{{ o2.type|upper }}_DIFF_ETA_LUT(diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_eta_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
+	    diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type|upper }}_{{ o2.type|upper }}_DIFF_PHI_LUT(diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
+	end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l2;
+    end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l1;
+    {%- if o1.type == 'EG' and o3.type in ('JET', 'TAU') %}
+    diff_{{ o1.type|lower }}_{{ o3.type|lower }}_eta_bx_{{ o1.bx }}_bx_{{ o3.bx }}_i: entity work.sub_eta_integer_obj_vs_obj
+	generic map(NR_{{ o1.type|upper }}_OBJECTS, NR_{{ o3.type|upper }}_OBJECTS)
+	port map({{ o1.type|lower }}_eta_integer_bx_{{ o1.bx }}, {{ o3.type|lower }}_eta_integer_bx_{{ o3.bx }}, diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_eta_integer);
+    diff_{{ o1.type|lower }}_{{ o3.type|lower }}_phi_bx_{{ o1.bx }}_bx_{{ o3.bx }}_i: entity work.sub_phi_integer_obj_vs_obj
+	generic map(NR_{{ o1.type|upper }}_OBJECTS, NR_{{ o3.type|upper }}_OBJECTS, CALO_PHI_HALF_RANGE_BINS)
+	port map({{ o1.type|lower }}_phi_integer_bx_{{ o1.bx }}, {{ o3.type|lower }}_phi_integer_bx_{{ o3.bx }}, diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_phi_integer);
+    {{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_l1: for i in 0 to NR_{{ o1.type|upper }}_OBJECTS-1 generate
+	{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_l2: for j in 0 to NR_{{ o3.type|upper }}_OBJECTS-1 generate
+	    diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_eta_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type|upper }}_{{ o3.type|upper }}_DIFF_ETA_LUT(diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_eta_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
+	    diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_phi_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type|upper }}_{{ o3.type|upper }}_DIFF_PHI_LUT(diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_phi_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
+	end generate {{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_l2;
+    end generate {{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_l1;
+    {%- elif o1.type == 'JET' and o3.type == 'EG'  %}
+    diff_{{ o3.type|lower }}_{{ o1.type|lower }}_eta_bx_{{ o3.bx }}_bx_{{ o1.bx }}_i: entity work.sub_eta_integer_obj_vs_obj
+	generic map(NR_{{ o3.type|upper }}_OBJECTS, NR_{{ o1.type|upper }}_OBJECTS)
+	port map({{ o3.type|lower }}_eta_integer_bx_{{ o3.bx }}, {{ o1.type|lower }}_eta_integer_bx_{{ o1.bx }}, diff_{{ o3.type|lower }}_{{ o1.type|lower }}_bx_{{ o3.bx }}_bx_{{ o1.bx }}_eta_integer);
+    diff_{{ o3.type|lower }}_{{ o1.type|lower }}_phi_bx_{{ o3.bx }}_bx_{{ o1.bx }}_i: entity work.sub_phi_integer_obj_vs_obj
+	generic map(NR_{{ o3.type|upper }}_OBJECTS, NR_{{ o1.type|upper }}_OBJECTS, CALO_PHI_HALF_RANGE_BINS)
+	port map({{ o3.type|lower }}_phi_integer_bx_{{ o3.bx }}, {{ o1.type|lower }}_phi_integer_bx_{{ o1.bx }}, diff_{{ o3.type|lower }}_{{ o1.type|lower }}_bx_{{ o3.bx }}_bx_{{ o1.bx }}_phi_integer);
+    {{ o3.type|lower }}_{{ o1.type|lower }}_bx_{{ o3.bx }}_bx_{{ o1.bx }}_l1: for i in 0 to NR_{{ o3.type|upper }}_OBJECTS-1 generate
+	{{ o3.type|lower }}_{{ o1.type|lower }}_bx_{{ o3.bx }}_bx_{{ o1.bx }}_l2: for j in 0 to NR_{{ o1.type|upper }}_OBJECTS-1 generate
+	    diff_{{ o3.type|lower }}_{{ o1.type|lower }}_bx_{{ o3.bx }}_bx_{{ o1.bx }}_eta_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o3.type|upper }}_{{ o1.type|upper }}_DIFF_ETA_LUT(diff_{{ o3.type|lower }}_{{ o1.type|lower }}_bx_{{ o3.bx }}_bx_{{ o1.bx }}_eta_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
+	    diff_{{ o3.type|lower }}_{{ o1.type|lower }}_bx_{{ o3.bx }}_bx_{{ o1.bx }}_phi_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o3.type|upper }}_{{ o1.type|upper }}_DIFF_PHI_LUT(diff_{{ o3.type|lower }}_{{ o1.type|lower }}_bx_{{ o3.bx }}_bx_{{ o1.bx }}_phi_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
+	end generate {{ o3.type|lower }}_{{ o1.type|lower }}_bx_{{ o3.bx }}_bx_{{ o1.bx }}_l2;
+    end generate {{ o3.type|lower }}_{{ o1.type|lower }}_bx_{{ o3.bx }}_bx_{{ o1.bx }}_l1;
+    {%- elif o1.type == 'JET' and o3.type == 'TAU' %}
+    diff_{{ o1.type|lower }}_{{ o3.type|lower }}_eta_bx_{{ o1.bx }}_bx_{{ o3.bx }}_i: entity work.sub_eta_integer_obj_vs_obj
+	generic map(NR_{{ o1.type|upper }}_OBJECTS, NR_{{ o3.type|upper }}_OBJECTS)
+	port map({{ o1.type|lower }}_eta_integer_bx_{{ o1.bx }}, {{ o3.type|lower }}_eta_integer_bx_{{ o3.bx }}, diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_eta_integer);
+    diff_{{ o1.type|lower }}_{{ o3.type|lower }}_phi_bx_{{ o1.bx }}_bx_{{ o3.bx }}_i: entity work.sub_phi_integer_obj_vs_obj
+	generic map(NR_{{ o1.type|upper }}_OBJECTS, NR_{{ o3.type|upper }}_OBJECTS, CALO_PHI_HALF_RANGE_BINS)
+	port map({{ o1.type|lower }}_phi_integer_bx_{{ o1.bx }}, {{ o3.type|lower }}_phi_integer_bx_{{ o3.bx }}, diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_phi_integer);
+    {{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_l1: for i in 0 to NR_{{ o1.type|upper }}_OBJECTS-1 generate
+	{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_l2: for j in 0 to NR_{{ o3.type|upper }}_OBJECTS-1 generate
+	    diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_eta_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type|upper }}_{{ o3.type|upper }}_DIFF_ETA_LUT(diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_eta_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
+	    diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_phi_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type|upper }}_{{ o3.type|upper }}_DIFF_PHI_LUT(diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_phi_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
+	end generate {{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_l2;
+    end generate {{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_l1;
+    {%- elif o1.type == 'TAU' and o3.type in ('EG', 'JET')  %}
+    diff_{{ o3.type|lower }}_{{ o1.type|lower }}_eta_bx_{{ o3.bx }}_bx_{{ o1.bx }}_i: entity work.sub_eta_integer_obj_vs_obj
+	generic map(NR_{{ o3.type|upper }}_OBJECTS, NR_{{ o1.type|upper }}_OBJECTS)
+	port map({{ o3.type|lower }}_eta_integer_bx_{{ o3.bx }}, {{ o1.type|lower }}_eta_integer_bx_{{ o1.bx }}, diff_{{ o3.type|lower }}_{{ o1.type|lower }}_bx_{{ o3.bx }}_bx_{{ o1.bx }}_eta_integer);
+    diff_{{ o3.type|lower }}_{{ o1.type|lower }}_phi_bx_{{ o3.bx }}_bx_{{ o1.bx }}_i: entity work.sub_phi_integer_obj_vs_obj
+	generic map(NR_{{ o3.type|upper }}_OBJECTS, NR_{{ o1.type|upper }}_OBJECTS, CALO_PHI_HALF_RANGE_BINS)
+	port map({{ o3.type|lower }}_phi_integer_bx_{{ o3.bx }}, {{ o1.type|lower }}_phi_integer_bx_{{ o1.bx }}, diff_{{ o3.type|lower }}_{{ o1.type|lower }}_bx_{{ o3.bx }}_bx_{{ o1.bx }}_phi_integer);
+    {{ o3.type|lower }}_{{ o1.type|lower }}_bx_{{ o3.bx }}_bx_{{ o1.bx }}_l1: for i in 0 to NR_{{ o3.type|upper }}_OBJECTS-1 generate
+	{{ o3.type|lower }}_{{ o1.type|lower }}_bx_{{ o3.bx }}_bx_{{ o1.bx }}_l2: for j in 0 to NR_{{ o1.type|upper }}_OBJECTS-1 generate
+	    diff_{{ o3.type|lower }}_{{ o1.type|lower }}_bx_{{ o3.bx }}_bx_{{ o1.bx }}_eta_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o3.type|upper }}_{{ o1.type|upper }}_DIFF_ETA_LUT(diff_{{ o3.type|lower }}_{{ o1.type|lower }}_bx_{{ o3.bx }}_bx_{{ o1.bx }}_eta_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
+	    diff_{{ o3.type|lower }}_{{ o1.type|lower }}_bx_{{ o3.bx }}_bx_{{ o1.bx }}_phi_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o3.type|upper }}_{{ o1.type|upper }}_DIFF_PHI_LUT(diff_{{ o3.type|lower }}_{{ o1.type|lower }}_bx_{{ o3.bx }}_bx_{{ o1.bx }}_phi_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
+	end generate {{ o3.type|lower }}_{{ o1.type|lower }}_bx_{{ o3.bx }}_bx_{{ o1.bx }}_l2;
+    end generate {{ o3.type|lower }}_{{ o1.type|lower }}_bx_{{ o3.bx }}_bx_{{ o1.bx }}_l1;
+    {%- endif %}
+  {%- endfor %}
+{%- endblock instantiate_correlation_conditions_orm_differences %}
+{# eof #}

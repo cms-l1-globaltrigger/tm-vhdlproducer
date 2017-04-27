@@ -28,7 +28,9 @@
         {{ o1.type|upper }}_{{ o3.type|upper }}_DETA_DPHI_PRECISION,
 	{%- elif o1.type == 'JET' and o3.type == 'EG'  %}
         {{ o3.type|upper }}_{{ o1.type|upper }}_DETA_DPHI_PRECISION,
-	{%- elif o1.type == 'TAU' and o2.type in ('EG', 'JET')  %}
+	{%- elif o1.type == 'JET' and o3.type == 'TAU' %}
+        {{ o1.type|upper }}_{{ o3.type|upper }}_DETA_DPHI_PRECISION,
+	{%- elif o1.type == 'TAU' and o3.type in ('EG', 'JET')  %}
         {{ o3.type|upper }}_{{ o1.type|upper }}_DETA_DPHI_PRECISION,
 	{%- endif %}
         {{ condition.diffEtaOrmUpperLimit }}, {{ condition.diffEtaOrmLowerLimit }},
@@ -47,7 +49,9 @@
 	diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_eta_vector, diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_phi_vector,
 	{%- elif o1.type == 'JET' and o3.type == 'EG'  %}
 	diff_{{ o3.type|lower }}_{{ o1.type|lower }}_bx_{{ o3.bx }}_bx_{{ o1.bx }}_eta_vector, diff_{{ o3.type|lower }}_{{ o1.type|lower }}_bx_{{ o3.bx }}_bx_{{ o1.bx }}_phi_vector,
-	{%- elif o1.type == 'TAU' and o2.type in ('EG', 'JET')  %}
+	{%- elif o1.type == 'JET' and o3.type == 'TAU' %}
+	diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_eta_vector, diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_phi_vector,
+	{%- elif o1.type == 'TAU' and o3.type in ('EG', 'JET')  %}
 	diff_{{ o3.type|lower }}_{{ o1.type|lower }}_bx_{{ o3.bx }}_bx_{{ o1.bx }}_eta_vector, diff_{{ o3.type|lower }}_{{ o1.type|lower }}_bx_{{ o3.bx }}_bx_{{ o1.bx }}_phi_vector,
 	{%- endif %}
         diff_{{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_eta_vector, diff_{{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_phi_vector,

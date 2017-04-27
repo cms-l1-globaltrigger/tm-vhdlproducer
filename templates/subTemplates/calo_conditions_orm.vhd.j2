@@ -1,0 +1,55 @@
+{%- block instantiate_calo_conditions_orm %}
+  {%- set o1 = condition.objects[0] %}
+  {%- set o2 = condition.objects[1] %}
+  {%- set o3 = condition.objects[2] %}
+  {%- set o4 = condition.objects[3] %}
+  {%- set o5 = condition.objects[4] %}
+{{ condition.vhdl_signal }}_i: entity work.calo_conditions_orm
+    generic map(
+        {{ condition.hasDetaOrmCut }}, {{ condition.hasDphiOrmCut }}, {{ condition.hasDrOrmCut }},
+	{{ o1.sliceLow }}, {{ o1.sliceHigh }},  
+	{{ condition.nr_objects }}, {{ o1.operator }}, {{ o1.type }}_TYPE,
+        (X"{{ o1.threshold|X04 }}", X"{{ o2.threshold|X04 }}", X"{{ o3.threshold|X04 }}", X"{{ o4.threshold|X04 }}"),
+        ({{ o1.etaFullRange }}, {{ o2.etaFullRange }}, {{ o3.etaFullRange }}, {{ o4.etaFullRange }}),
+        (X"{{ o1.etaW1UpperLimit|X04 }}", X"{{ o2.etaW1UpperLimit|X04 }}", X"{{ o3.etaW1UpperLimit|X04 }}", X"{{ o4.etaW1UpperLimit|X04 }}"), (X"{{ o1.etaW1LowerLimit|X04 }}", X"{{ o2.etaW1LowerLimit|X04 }}", X"{{ o3.etaW1LowerLimit|X04 }}", X"{{ o4.etaW1LowerLimit|X04 }}"),
+        ({{ o1.etaW2Ignore }}, {{ o2.etaW2Ignore }}, {{ o3.etaW2Ignore }}, {{ o4.etaW2Ignore }}),
+        (X"{{ o1.etaW2UpperLimit|X04 }}", X"{{ o2.etaW2UpperLimit|X04 }}", X"{{ o3.etaW2UpperLimit|X04 }}", X"{{ o4.etaW2UpperLimit|X04 }}"), (X"{{ o1.etaW2LowerLimit|X04 }}", X"{{ o2.etaW2LowerLimit|X04 }}", X"{{ o3.etaW2LowerLimit|X04 }}", X"{{ o4.etaW2LowerLimit|X04 }}"),
+        ({{ o1.phiFullRange }}, {{ o2.phiFullRange }}, {{ o3.phiFullRange }}, {{ o4.phiFullRange }}),
+        (X"{{ o1.phiW1UpperLimit|X04 }}", X"{{ o2.phiW1UpperLimit|X04 }}", X"{{ o3.phiW1UpperLimit|X04 }}", X"{{ o4.phiW1UpperLimit|X04 }}"), (X"{{ o1.phiW1LowerLimit|X04 }}", X"{{ o2.phiW1LowerLimit|X04 }}", X"{{ o3.phiW1LowerLimit|X04 }}", X"{{ o4.phiW1LowerLimit|X04 }}"),
+        ({{ o1.phiW2Ignore }}, {{ o2.phiW2Ignore }}, {{ o3.phiW2Ignore }}, {{ o4.phiW2Ignore }}),
+        (X"{{ o1.phiW2UpperLimit|X04 }}", X"{{ o2.phiW2UpperLimit|X04 }}", X"{{ o3.phiW2UpperLimit|X04 }}", X"{{ o4.phiW2UpperLimit|X04 }}"), (X"{{ o1.phiW2LowerLimit|X04 }}", X"{{ o2.phiW2LowerLimit|X04 }}", X"{{ o3.phiW2LowerLimit|X04 }}", X"{{ o4.phiW2LowerLimit|X04 }}"),
+        (X"{{ o1.isolationLUT|X01 }}", X"{{ o2.isolationLUT|X01 }}", X"{{ o3.isolationLUT|X01 }}", X"{{ o4.isolationLUT|X01 }}"),        
+        {{ o5.sliceLow }}, {{ o5.sliceHigh }}, {{ o5.operator }}, {{ o5.type|upper }}_TYPE,
+        X"{{ o5.threshold|X04 }}",
+        {{ o5.etaFullRange }}, X"{{ o5.etaW1UpperLimit|X04 }}", X"{{ o5.etaW1LowerLimit|X04 }}",
+        {{ o5.etaW2Ignore }}, X"{{ o5.etaW2UpperLimit|X04 }}", X"{{ o5.etaW2LowerLimit|X04 }}",
+        {{ o5.phiFullRange }}, X"{{ o5.phiW1UpperLimit|X04 }}", X"{{ o5.phiW1LowerLimit|X04 }}",
+        {{ o5.phiW2Ignore }}, X"{{ o5.phiW2UpperLimit|X04 }}", X"{{ o5.phiW2LowerLimit|X04 }}",
+        X"{{ o5.isolationLUT|X01 }}",
+	DETA_DPHI_VECTOR_WIDTH_ALL,
+	{%- if o1.type == 'EG' and o5.type in ('JET', 'TAU') %}
+        {{ o1.type|upper }}_{{ o5.type|upper }}_DETA_DPHI_PRECISION,
+	{%- elif o1.type == 'JET' and o5.type == 'EG'  %}
+        {{ o5.type|upper }}_{{ o1.type|upper }}_DETA_DPHI_PRECISION,
+	{%- elif o1.type == 'JET' and o5.type == 'TAU' %}
+        {{ o1.type|upper }}_{{ o5.type|upper }}_DETA_DPHI_PRECISION,
+	{%- elif o1.type == 'TAU' and o5.type in ('EG', 'JET')  %}
+        {{ o5.type|upper }}_{{ o1.type|upper }}_DETA_DPHI_PRECISION,
+	{%- endif %}
+        {{ condition.diffEtaOrmUpperLimit }}, {{ condition.diffEtaOrmLowerLimit }},
+        {{ condition.diffPhiOrmUpperLimit }}, {{ condition.diffPhiOrmLowerLimit }},
+        {{ condition.deltaOrmRUpperLimit }}, {{ condition.deltaROrmLowerLimit }} 
+    )
+    port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o5.type|lower }}_bx_{{ o5.bx }}, 
+	{%- if o1.type == 'EG' and o5.type in ('JET', 'TAU') %}
+	diff_{{ o1.type|lower }}_{{ o5.type|lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_eta_vector, diff_{{ o1.type|lower }}_{{ o5.type|lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_phi_vector,
+	{%- elif o1.type == 'JET' and o5.type == 'EG'  %}
+	diff_{{ o5.type|lower }}_{{ o1.type|lower }}_bx_{{ o5.bx }}_bx_{{ o1.bx }}_eta_vector, diff_{{ o5.type|lower }}_{{ o1.type|lower }}_bx_{{ o5.bx }}_bx_{{ o1.bx }}_phi_vector,
+	{%- elif o1.type == 'JET' and o5.type == 'TAU' %}
+	diff_{{ o1.type|lower }}_{{ o5.type|lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_eta_vector, diff_{{ o1.type|lower }}_{{ o5.type|lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_phi_vector,
+	{%- elif o1.type == 'TAU' and o5.type in ('EG', 'JET')  %}
+	diff_{{ o5.type|lower }}_{{ o1.type|lower }}_bx_{{ o5.bx }}_bx_{{ o1.bx }}_eta_vector, diff_{{ o5.type|lower }}_{{ o1.type|lower }}_bx_{{ o5.bx }}_bx_{{ o1.bx }}_phi_vector,
+	{%- endif %}
+	{{ condition.vhdl_signal }});
+{% endblock instantiate_calo_conditions_orm %}
+{# eof #}

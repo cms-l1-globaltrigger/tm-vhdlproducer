@@ -20,7 +20,7 @@
         CALO_SIN_COS_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o1.type|upper }}_PT_PRECISION, {{ o1.type|upper }}_{{ o1.type|upper }}_SIN_COS_PRECISION
     )
     port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, 
-        {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }},{{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }},
+        {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }},
 	{{ condition.vhdl_signal }});
 {% endblock instantiate_calo_condition %}
 {# eof #}
