@@ -16,7 +16,7 @@
         (X"{{ o1.phiW1UpperLimit|X04 }}", X"{{ o2.phiW1UpperLimit|X04 }}", X"0000", X"0000"), (X"{{ o1.phiW1LowerLimit|X04 }}", X"{{ o2.phiW1LowerLimit|X04 }}", X"0000", X"0000"),
         ({{ o1.phiW2Ignore }}, {{ o2.phiW2Ignore }}, false, false),
         (X"{{ o1.phiW2UpperLimit|X04 }}", X"{{ o2.phiW2UpperLimit|X04 }}", X"0000", X"0000"), (X"{{ o1.phiW2LowerLimit|X04 }}", X"{{ o2.phiW2LowerLimit|X04 }}", X"0000", X"0000"),
-        (X"{{ o1.isolationLUT|X01 }}", X"{{ o2.isolationLUT|X01 }}", X"0", X"0")
+        (X"{{ o1.isolationLUT|X01 }}", X"{{ o2.isolationLUT|X01 }}", X"0", X"0"),
         {{ o3.sliceLow }}, {{ o3.sliceHigh }}, {{ o3.operator }}, {{ o3.type|upper }}_TYPE,
         X"{{ o3.threshold|X04 }}",
         {{ o3.etaFullRange }}, X"{{ o3.etaW1UpperLimit|X04 }}", X"{{ o3.etaW1LowerLimit|X04 }}",
@@ -35,7 +35,7 @@
 	{%- endif %}
         {{ condition.diffEtaOrmUpperLimit }}, {{ condition.diffEtaOrmLowerLimit }},
         {{ condition.diffPhiOrmUpperLimit }}, {{ condition.diffPhiOrmLowerLimit }},
-        {{ condition.deltaOrmRUpperLimit }}, {{ condition.deltaROrmLowerLimit }}, 
+        {{ condition.deltaROrmUpperLimit }}, {{ condition.deltaROrmLowerLimit }}, 
         DETA_DPHI_VECTOR_WIDTH_ALL, {{ o1.type|upper }}_{{ o1.type|upper }}_DETA_DPHI_PRECISION,
         {{ condition.diffEtaUpperLimit }}, {{ condition.diffEtaLowerLimit }},
         {{ condition.diffPhiUpperLimit }}, {{ condition.diffPhiLowerLimit }},
