@@ -25,11 +25,11 @@
 -- Instantiations of muon charge correlations - only once for a certain Bx combination, if there is at least one DoubleMuon, TripleMuon, QuadMuon condition
 -- or muon-muon correlation condition.
 {%- include  "subTemplates/muon_charge_correlations.vhd.j2" %}
--- Instantiations of pt, eta, phi, cos-phi and sin-phi for correlation conditions (used for DETA, DPHI, DR, mass, overlap_remover and b_tagging) - once for every ObjectType in certain Bx used in correlation conditions
-{%- include  "subTemplates/correlation_conditions_pt_eta_phi_cos_sin_phi.vhd.j2" %}
 -- Instantiations of eta and phi conversion to muon scale for calo-muon and muon-esums correlation conditions (used for DETA, DPHI, DR and mass) - once for every calo ObjectType in certain Bx used in correlation conditions
 {%- include  "subTemplates/correlation_conditions_eta_phi_conversion.vhd.j2" %}
--- Instantiations of differences for correlation conditions (used for DETA, DPHI, DR, mass, overlap_remover and b_tagging) - once for correlation conditions with two ObjectTypes in certain Bxs
+-- Instantiations of pt, eta, phi, cos-phi and sin-phi for correlation conditions (used for DETA, DPHI, DR, mass, overlap_remover and b_tagging) - once for every ObjectType in certain Bx used in correlation conditions
+{%- include  "subTemplates/correlation_conditions_pt_eta_phi_cos_sin_phi.vhd.j2" %}
+-- Instantiations of differences for correlation conditions (used for DETA, DPHI, DR, mass and b_tagging) - once for correlation conditions with two ObjectTypes in certain Bxs
 {%- include  "subTemplates/correlation_conditions_differences.vhd.j2" %}
 -- Instantiations of cosh-deta and cos-dphi LUTs for correlation conditions (used for mass and overlap_remover) - once for correlation conditions with two ObjectTypes in certain Bxs
 {%- include  "subTemplates/correlation_conditions_mass_cuts.vhd.j2" %}
@@ -48,6 +48,10 @@
 
 {%- for condition in module.caloCaloCorrConditions %}
 {%- include  "subTemplates/calo_calo_correlation_condition_v2.vhd.j2" %}
+{%- endfor %}
+
+{%- for condition in module.caloCaloCorrOvRmConditions %}
+{%- include  "subTemplates/calo_2plus1_orm_condition.vhd.j2" %}
 {%- endfor %}
 
 {%- for condition in module.caloMuonCorrConditions %}

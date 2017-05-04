@@ -22,7 +22,8 @@ Overview of class hierarchy:
         class MuonConditionHelper
         class ExternalConditionHelper
         class CorrelationConditionHelper
-    class ObjectHelper
+	class CorrelationConditionOvRmHelper
+	class ObjectHelper
 
 """
 
@@ -253,6 +254,8 @@ def conditionFactory(condition):
         return TowerCountConditionHelper(condition)
     elif condition.isCorrelationCondition():
         return CorrelationConditionHelper(condition)
+    elif condition.isCorrelationConditionOvRm():
+        return CorrelationConditionOvRmHelper(condition)
     else:
         raise RuntimeError("unknown condition type")
 
@@ -390,6 +393,11 @@ class ModuleHelper(VhdlHelper):
              (condition.objects[0].type in CaloTypes and condition.objects[1].type in CaloTypes), self.conditions)
 
     @property
+    def caloCaloCorrOvRmConditions(self):
+        return filter(lambda condition: condition.type in algodist.CorrelationConditionOvRmTypes and \
+             (condition.objects[0].type in CaloTypes and condition.objects[1].type in CaloTypes), self.conditions)
+
+    @property
     def caloMuonCorrConditions(self):
         return filter(lambda condition: condition.type in algodist.CorrelationConditionTypes and \
              (condition.objects[0].type in CaloTypes and condition.objects[1].type in MuonTypes), self.conditions)
@@ -430,13 +438,21 @@ class ModuleHelper(VhdlHelper):
                 a, b = condition.objects
                 key = (a.type, b.type, a.bx, b.bx) # create custom hash
                 combinations[key] = (ObjectHelperStub(a), ObjectHelperStub(b))
+            if isinstance(condition, CorrelationConditionOvRmHelper):
+                a, b, c = condition.objects
+                key = (a.type, b.type, a.bx, b.bx) # a-b combination
+                combinations[key] = (ObjectHelperStub(a), ObjectHelperStub(b))
+                key = (a.type, c.type, a.bx, c.bx) # a-c combination
+                combinations[key] = (ObjectHelperStub(a), ObjectHelperStub(c))
+                key = (b.type, c.type, b.bx, c.bx) # b-c combination
+                combinations[key] = (ObjectHelperStub(b), ObjectHelperStub(c))
         return combinations.values()
 
     @property
     def correlationObjects(self):
         objects = {}
         for condition in self.conditions:
-            if isinstance(condition, CorrelationConditionHelper):
+            if isinstance(condition, CorrelationConditionHelper) or isinstance(condition, CorrelationConditionOvRmHelper):
                 for object in condition.objects:
                     key = (object.type, object.bx) # create custom hash
                     objects[key] = object
@@ -563,6 +579,48 @@ class ConditionHelper(VhdlHelper):
         """Iterate over objects."""
         return iter([object for object in self.objects])
 
+class ConditionOvRmHelper(VhdlHelper):
+    """Generic condition template helper class.
+
+    Attributes:
+        name         condition name from event setup [str]
+        type         condition type name [str]
+        vhdl_signal  VHDL safe condition signal name [str]
+        objects      list of object template helpers contained by condition [list]
+        nr_objects   number of actually used objects [int]
+    """
+    ReqObjects = 1
+    """Number of required objects."""
+
+    def __init__(self, condition):
+        # Default attributes
+        self.name = condition.name
+        self.type = condition.type
+        self.vhdl_signal = vhdl_label(condition.name)
+        self.objects = [ObjectHelper() for _ in range(self.ReqObjects)]
+        self.update_objects(condition)
+
+    def update_objects(self, condition):
+        """Update objects assigned to this condition."""
+        esObjects = list(condition.ptr.getObjects())
+        assert 0 < len(esObjects) <= self.ReqObjects, "condition object count missmatch"
+        #esObjects.sort(key=lambda key: ObjectsOrder.index(key.getType()))
+        for i, esObject in enumerate(esObjects):
+            self.objects[i].update(esObject)
+
+    @property
+    def nr_objects(self):
+        """Returns number of valid objects."""
+        return len([object for object in self.objects if object.isValid])
+
+    def __len__(self):
+        """Returns count of objects assigned to this condition."""
+        return len(self.objects)
+
+    def __iter__(self):
+        """Iterate over objects."""
+        return iter([object for object in self.objects])
+
 class CaloConditionHelper(ConditionHelper):
     """Calorimeter condition template helper class.
 
@@ -631,8 +689,8 @@ class CorrelationConditionHelper(ConditionHelper):
         self.hasDphiCut = vhdl_bool(False)
         self.hasDrCut = vhdl_bool(False)
         self.hasMassCut = vhdl_bool(False)
-        self.hasTwoBodyPtCut = vhdl_bool(False)
         self.massType = 0
+        self.hasTwoBodyPtCut = vhdl_bool(False)
         # Limits
         self.diffEtaLowerLimit = .0
         self.diffEtaUpperLimit = .0
@@ -665,7 +723,8 @@ class CorrelationConditionHelper(ConditionHelper):
             precision = esCut.getPrecision()
             scale = 10.**precision
             return math.ceil(value * scale) / scale
-
+          
+        #hasTwoBodyPtCut = False
         for esCut in condition.ptr.getCuts():
             if esCut.getCutType() == tmEventSetup.DeltaEta:
                 self.hasDetaCut = vhdl_bool(True)
@@ -682,7 +741,7 @@ class CorrelationConditionHelper(ConditionHelper):
             elif esCut.getCutType() == tmEventSetup.Mass:
                 self.hasMassCut = vhdl_bool(True)
                 self.massLowerLimit = lowerLimit(esCut)
-                self.massUpperLimit = upperLimit(esCut)
+                self.massUpperLimit = upperLimit(esCut)            
             elif esCut.getCutType() == tmEventSetup.TwoBodyPt:
                 self.hasTwoBodyPtCut = vhdl_bool(True)
                 self.twoBodyPtThres = lowerLimit(esCut)
@@ -692,11 +751,113 @@ class CorrelationConditionHelper(ConditionHelper):
         # Definition of mass_type:
         # 0 => invariant mass
         # 1 => transverse mass
-        if condition.ptr.getType() == tmEventSetup.InvariantMass:
-            self.massType = 0
-        elif condition.ptr.getType() == tmEventSetup.TransverseMass:
-            self.massType = 1
 
+        if condition.ptr.getType() == tmEventSetup.InvariantMass:
+	  self.massType = 0
+        elif condition.ptr.getType() == tmEventSetup.TransverseMass:
+	  self.massType = 1
+            
+class CorrelationConditionOvRmHelper(ConditionOvRmHelper):
+    """Correlation condition template helper class."""
+    ReqObjects = 3
+    """Number of required objects."""
+
+    def __init__(self, condition):
+        super(CorrelationConditionOvRmHelper, self).__init__(condition)
+        # Flags
+        self.hasDetaOrmCut = vhdl_bool(False)
+        self.hasDphiOrmCut = vhdl_bool(False)
+        self.hasDrOrmCut = vhdl_bool(False)
+        self.hasDetaCut = vhdl_bool(False)
+        self.hasDphiCut = vhdl_bool(False)
+        self.hasDrCut = vhdl_bool(False)
+        self.hasMassCut = vhdl_bool(False)
+        self.massType = 0
+        self.hasTwoBodyPtCut = vhdl_bool(False)
+        # Limits
+        self.diffEtaOrmLowerLimit = .0
+        self.diffEtaOrmUpperLimit = .0
+        self.diffPhiOrmLowerLimit = .0
+        self.diffPhiOrmUpperLimit = .0
+        self.deltaROrmLowerLimit = .0
+        self.deltaROrmUpperLimit = .0
+        self.diffEtaLowerLimit = .0
+        self.diffEtaUpperLimit = .0
+        self.diffPhiLowerLimit = .0
+        self.diffPhiUpperLimit = .0
+        self.deltaRLowerLimit = .0
+        self.deltaRUpperLimit = .0
+        self.massLowerLimit = .0
+        self.massUpperLimit = .0
+        self.twoBodyPtThres = .0
+        #
+        self.chargeCorrelation = charge_correlation_encode('ig')
+        self.update(condition)
+
+    @property
+    def objectsInSameBx(self):
+        """Returns 'true' if all objects of same BX offset else returns 'false'."""
+        return vhdl_bool(len(set([object.bx for object in self.objects])) == 1)
+
+    def update(self, condition):
+        def lowerLimit(esCut):
+            """Returns rounded floating point for minimum."""
+            value = esCut.getMinimum().value
+            precision = esCut.getPrecision()
+            scale = 10.**precision
+            return math.floor(value * scale) / scale
+        def upperLimit(esCut):
+            """Returns rounded floating point for maximum."""
+            value = esCut.getMaximum().value
+            precision = esCut.getPrecision()
+            scale = 10.**precision
+            return math.ceil(value * scale) / scale
+          
+        #hasTwoBodyPtCut = False
+        for esCut in condition.ptr.getCuts():
+            if esCut.getCutType() == tmEventSetup.DeltaEta:
+                self.hasDetaCut = vhdl_bool(True)
+                self.diffEtaLowerLimit = lowerLimit(esCut)
+                self.diffEtaUpperLimit = upperLimit(esCut)
+            elif esCut.getCutType() == tmEventSetup.DeltaPhi:
+                self.hasDphiCut = vhdl_bool(True)
+                self.diffPhiLowerLimit = lowerLimit(esCut)
+                self.diffPhiUpperLimit = upperLimit(esCut)
+            elif esCut.getCutType() == tmEventSetup.DeltaR:
+                self.hasDrCut = vhdl_bool(True)
+                self.deltaRLowerLimit = lowerLimit(esCut)
+                self.deltaRUpperLimit = upperLimit(esCut)
+            elif esCut.getCutType() == tmEventSetup.Mass:
+                self.hasMassCut = vhdl_bool(True)
+                self.massLowerLimit = lowerLimit(esCut)
+                self.massUpperLimit = upperLimit(esCut)            
+            elif esCut.getCutType() == tmEventSetup.TwoBodyPt:
+                self.hasTwoBodyPtCut = vhdl_bool(True)
+                self.twoBodyPtThres = lowerLimit(esCut)
+            elif esCut.getCutType() == tmEventSetup.ChargeCorrelation:
+                self.chargeCorrelation = charge_correlation_encode(esCut.getData())
+            elif esCut.getCutType() == tmEventSetup.OvRmDeltaEta:
+                self.hasDetaOrmCut = vhdl_bool(True)
+                self.diffEtaOrmLowerLimit = lowerLimit(esCut)
+                self.diffEtaOrmUpperLimit = upperLimit(esCut)
+            elif esCut.getCutType() == tmEventSetup.OvRmDeltaPhi:
+                self.hasDphiOrmCut = vhdl_bool(True)
+                self.diffPhiOrmLowerLimit = lowerLimit(esCut)
+                self.diffPhiOrmUpperLimit = upperLimit(esCut)
+            elif esCut.getCutType() == tmEventSetup.OvRmDeltaR:
+                self.hasDrOrmCut = vhdl_bool(True)
+                self.deltaROrmLowerLimit = lowerLimit(esCut)
+                self.deltaROrmUpperLimit = upperLimit(esCut)
+
+        # Definition of mass_type:
+        # 0 => invariant mass
+        # 1 => transverse mass
+
+        if condition.ptr.getType() == tmEventSetup.InvariantMass:
+	  self.massType = 0
+        elif condition.ptr.getType() == tmEventSetup.TransverseMass:
+	  self.massType = 1
+            
 # -----------------------------------------------------------------------------
 #  Object helpers
 # -----------------------------------------------------------------------------

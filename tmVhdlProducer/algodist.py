@@ -101,6 +101,9 @@ kCaloCaloCorrelation = 'CaloCaloCorrelation'
 kCaloEsumCorrelation = 'CaloEsumCorrelation'
 kInvariantMass = 'InvariantMass'
 kTransverseMass = 'TransverseMass'
+kCaloCaloCorrelationOvRm = 'CaloCaloCorrelationOvRm'
+kInvariantMassOvRm = 'InvariantMassOvRm'
+kTransverseMassOvRm = 'TransverseMassOvRm'
 
 Operators = (
     tmGrammar.AND,
@@ -124,6 +127,9 @@ esCutType = {
   tmEventSetup.TwoBodyPt: 'TwoBodyPt',
   tmEventSetup.Slice: 'Slice',
   tmEventSetup.ChargeCorrelation: 'ChargeCorrelation',
+  tmEventSetup.OvRmDeltaEta: 'DeltaEtaOvRm',
+  tmEventSetup.OvRmDeltaPhi: 'DeltaPhiOvRm',
+  tmEventSetup.OvRmDeltaR: 'DeltaROvRm',
 }
 """Dictionary for cut type enumerations."""
 
@@ -184,6 +190,9 @@ esConditionType = {
     tmEventSetup.CaloEsumCorrelation: kCaloEsumCorrelation,
     tmEventSetup.InvariantMass: kInvariantMass,
     tmEventSetup.TransverseMass: kTransverseMass,
+    tmEventSetup.CaloCaloCorrelationOvRm: kCaloCaloCorrelationOvRm,
+    tmEventSetup.InvariantMassOvRm: kInvariantMassOvRm,
+    tmEventSetup.TransverseMassOvRm: kTransverseMassOvRm,
 }
 """Dictionary for condition type enumerations."""
 
@@ -241,6 +250,12 @@ CorrelationConditionTypes = [
     kCaloEsumCorrelation,
     kInvariantMass,
     kTransverseMass,
+]
+
+CorrelationConditionOvRmTypes = [
+    kCaloCaloCorrelationOvRm,
+    kInvariantMassOvRm,
+    kTransverseMassOvRm,
 ]
 
 ObjectsOrder = [
@@ -399,6 +414,9 @@ class ConditionStub(object):
 
     def isCorrelationCondition(self):
         return self.type in CorrelationConditionTypes
+
+    def isCorrelationConditionOvRm(self):
+        return self.type in CorrelationConditionOvRmTypes
 
     def __repr__(self):
         return "{self.__class__.__name__}(name={self.name}, payload={self.payload})".format(**locals())

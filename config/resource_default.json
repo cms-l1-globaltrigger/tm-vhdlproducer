@@ -500,6 +500,78 @@
                 "objects": ["Muon", "HTM"],
                 "processors": 0.11,
                 "sliceLUTs": 0.022
+            },
+            {
+                "type": "InvariantMassOvRm",
+                "objects": ["Egamma", "Egamma"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "InvariantMassOvRm",
+                "objects": ["Egamma", "Tau"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "InvariantMassOvRm",
+                "objects": ["Egamma", "Jet"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "InvariantMassOvRm",
+                "objects": ["Jet", "Jet"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "InvariantMassOvRm",
+                "objects": ["Jet", "Tau"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "InvariantMassOvRm",
+                "objects": ["Tau", "Tau"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "TransverseMassOvRm",
+                "objects": ["Egamma", "Egamma"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "TransverseMassOvRm",
+                "objects": ["Egamma", "Tau"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "TransverseMassOvRm",
+                "objects": ["Egamma", "Jet"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "TransverseMassOvRm",
+                "objects": ["Jet", "Jet"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "TransverseMassOvRm",
+                "objects": ["Jet", "Tau"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
+            },
+            {
+                "type": "TransverseMassOvRm",
+                "objects": ["Tau", "Tau"],
+                "processors": 0.11,
+                "sliceLUTs": 0.022
             }
         ]
     }
