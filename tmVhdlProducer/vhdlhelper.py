@@ -442,10 +442,13 @@ class ModuleHelper(VhdlHelper):
                 a, b, c = condition.objects
                 key = (a.type, b.type, a.bx, b.bx) # a-b combination
                 combinations[key] = (ObjectHelperStub(a), ObjectHelperStub(b))
+		print "CorrelationConditionOvRmHelper key:", key
                 key = (a.type, c.type, a.bx, c.bx) # a-c combination
                 combinations[key] = (ObjectHelperStub(a), ObjectHelperStub(c))
+		print "CorrelationConditionOvRmHelper key:", key
                 key = (b.type, c.type, b.bx, c.bx) # b-c combination
                 combinations[key] = (ObjectHelperStub(b), ObjectHelperStub(c))
+		print "CorrelationConditionOvRmHelper key:", key
         return combinations.values()
 
     @property
@@ -562,7 +565,7 @@ class ConditionHelper(VhdlHelper):
         """Update objects assigned to this condition."""
         esObjects = list(condition.ptr.getObjects())
         assert 0 < len(esObjects) <= self.ReqObjects, "condition object count missmatch"
-        esObjects.sort(key=lambda key: ObjectsOrder.index(key.getType()))
+        #esObjects.sort(key=lambda key: ObjectsOrder.index(key.getType()))
         for i, esObject in enumerate(esObjects):
             self.objects[i].update(esObject)
 
@@ -811,9 +814,9 @@ class CorrelationConditionOvRmHelper(ConditionHelper):
         # 0 => invariant mass
         # 1 => transverse mass
 
-        if condition.ptr.getType() == tmEventSetup.InvariantMass:
+        if condition.ptr.getType() == tmEventSetup.InvariantMassOvRm:
 	  self.massType = 0
-        elif condition.ptr.getType() == tmEventSetup.TransverseMass:
+        elif condition.ptr.getType() == tmEventSetup.TransverseMassOvRm:
 	  self.massType = 1
             
 # -----------------------------------------------------------------------------

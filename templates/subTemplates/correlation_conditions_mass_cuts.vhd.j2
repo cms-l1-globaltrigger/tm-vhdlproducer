@@ -1,47 +1,14 @@
 {%- block instantiate_correlation_conditions_differences %}
   {%- for o1, o2 in module.correlationCombinations %}
 
-    {%- if o1.type == 'EG' and o2.type in ('JET', 'TAU') %}
-    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_cos_l1: for i in 0 to NR_{{ o1.type|upper }}_OBJECTS-1 generate
-	{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_cos_l2: for j in 0 to NR_{{ o2.type|upper }}_OBJECTS-1 generate
-	    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type|upper }}_{{ o2.type|upper }}_COSH_DETA_LUT(diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_eta_integer(i,j)), {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH);
-	    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type|upper }}_{{ o2.type|upper }}_COS_DPHI_LUT(diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_integer(i,j)), {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH);
-	end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_cos_l2;
-    end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_cos_l1;
-
-    {%- elif o1.type == 'JET' and o2.type in ('EG', 'JET', 'TAU') %}
-      {%- if o2.type == 'EG' %}
-    {{ o2.type|lower }}_{{ o1.type|lower }}_bx_{{ o2.bx }}_bx_{{ o1.bx }}_cosh_cos_l1: for i in 0 to NR_{{ o2.type|upper }}_OBJECTS-1 generate
-	{{ o2.type|lower }}_{{ o1.type|lower }}_bx_{{ o2.bx }}_bx_{{ o1.bx }}_cosh_cos_l2: for j in 0 to NR_{{ o1.type|upper }}_OBJECTS-1 generate
-	    {{ o2.type|lower }}_{{ o1.type|lower }}_bx_{{ o2.bx }}_bx_{{ o1.bx }}_cosh_deta_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o2.type|upper }}_{{ o1.type|upper }}_COSH_DETA_LUT(diff_{{ o2.type|lower }}_{{ o1.type|lower }}_bx_{{ o2.bx }}_bx_{{ o1.bx }}_eta_integer(i,j)), {{ o2.type|upper }}_{{ o1.type|upper }}_COSH_COS_VECTOR_WIDTH);
-	    {{ o2.type|lower }}_{{ o1.type|lower }}_bx_{{ o2.bx }}_bx_{{ o1.bx }}_cos_dphi_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o2.type|upper }}_{{ o1.type|upper }}_COS_DPHI_LUT(diff_{{ o2.type|lower }}_{{ o1.type|lower }}_bx_{{ o2.bx }}_bx_{{ o1.bx }}_phi_integer(i,j)), {{ o2.type|upper }}_{{ o1.type|upper }}_COSH_COS_VECTOR_WIDTH);
-	end generate {{ o2.type|lower }}_{{ o1.type|lower }}_bx_{{ o2.bx }}_bx_{{ o1.bx }}_cosh_cos_l2;
-    end generate {{ o2.type|lower }}_{{ o1.type|lower }}_bx_{{ o2.bx }}_bx_{{ o1.bx }}_cosh_cos_l1;
-      {%- elif o2.type in ('JET', 'TAU') %}
-    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_cos_l1: for i in 0 to NR_{{ o1.type|upper }}_OBJECTS-1 generate
-	{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_cos_l2: for j in 0 to NR_{{ o2.type|upper }}_OBJECTS-1 generate
-	    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type|upper }}_{{ o2.type|upper }}_COSH_DETA_LUT(diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_eta_integer(i,j)), {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH);
-	    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type|upper }}_{{ o2.type|upper }}_COS_DPHI_LUT(diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_integer(i,j)), {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH);
-	end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_cos_l2;
-    end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_cos_l1;
-      {%- endif %}
-    
-    {%- elif o1.type == 'TAU' and o2.type in ('EG', 'TAU', 'JET')  %}
-    {{ o2.type|lower }}_{{ o1.type|lower }}_bx_{{ o2.bx }}_bx_{{ o1.bx }}_cosh_cos_l1: for i in 0 to NR_{{ o2.type|upper }}_OBJECTS-1 generate
-	{{ o2.type|lower }}_{{ o1.type|lower }}_bx_{{ o2.bx }}_bx_{{ o1.bx }}_cosh_cos_l2: for j in 0 to NR_{{ o1.type|upper }}_OBJECTS-1 generate
-	    {{ o2.type|lower }}_{{ o1.type|lower }}_bx_{{ o2.bx }}_bx_{{ o1.bx }}_cosh_deta_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o2.type|upper }}_{{ o1.type|upper }}_COSH_DETA_LUT(diff_{{ o2.type|lower }}_{{ o1.type|lower }}_bx_{{ o2.bx }}_bx_{{ o1.bx }}_eta_integer(i,j)), {{ o2.type|upper }}_{{ o1.type|upper }}_COSH_COS_VECTOR_WIDTH);
-	    {{ o2.type|lower }}_{{ o1.type|lower }}_bx_{{ o2.bx }}_bx_{{ o1.bx }}_cos_dphi_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o2.type|upper }}_{{ o1.type|upper }}_COS_DPHI_LUT(diff_{{ o2.type|lower }}_{{ o1.type|lower }}_bx_{{ o2.bx }}_bx_{{ o1.bx }}_phi_integer(i,j)), {{ o2.type|upper }}_{{ o1.type|upper }}_COSH_COS_VECTOR_WIDTH);
-	end generate {{ o2.type|lower }}_{{ o1.type|lower }}_bx_{{ o2.bx }}_bx_{{ o1.bx }}_cosh_cos_l2;
-    end generate {{ o2.type|lower }}_{{ o1.type|lower }}_bx_{{ o2.bx }}_bx_{{ o1.bx }}_cosh_cos_l1;
-
-    {%- elif o1.type in ('EG', 'TAU', 'JET', 'MU') and o2.type in ('ETM', 'HTM', 'ETMHF') %}
+    {%- if o2.type in ('ETM', 'HTM', 'ETMHF') %}
     {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_l1: for i in 0 to NR_{{ o1.type|upper }}_OBJECTS-1 generate
 	{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_l2: for j in 0 to NR_{{ o2.type|upper }}_OBJECTS-1 generate
 	    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type|upper }}_{{ o2.type|upper }}_COS_DPHI_LUT(diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_integer(i,j)), {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH);
 	end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_l2;
     end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_l1;
     
-    {%- elif o1.type in ('EG', 'TAU', 'JET', 'MU') and o2.type == 'MU' %}
+    {%- else %}
     {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_cos_l1: for i in 0 to NR_{{ o1.type|upper }}_OBJECTS-1 generate
 	{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_cos_l2: for j in 0 to NR_{{ o2.type|upper }}_OBJECTS-1 generate
 	    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type|upper }}_{{ o2.type|upper }}_COSH_DETA_LUT(diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_eta_integer(i,j)), {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH);
