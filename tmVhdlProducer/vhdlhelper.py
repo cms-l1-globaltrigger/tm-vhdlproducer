@@ -438,18 +438,14 @@ class ModuleHelper(VhdlHelper):
                 a, b = condition.objects
                 key = (a.type, b.type, a.bx, b.bx) # create custom hash
                 combinations[key] = (ObjectHelperStub(a), ObjectHelperStub(b))
-		print "CorrelationConditionHelper key:", key
             if isinstance(condition, CorrelationConditionOvRmHelper):
                 a, b, c = condition.objects
                 key = (a.type, b.type, a.bx, b.bx) # a-b combination
                 combinations[key] = (ObjectHelperStub(a), ObjectHelperStub(b))
-		print "CorrelationConditionOvRmHelper key:", key
                 key = (a.type, c.type, a.bx, c.bx) # a-c combination
                 combinations[key] = (ObjectHelperStub(a), ObjectHelperStub(c))
-		print "CorrelationConditionOvRmHelper key:", key
                 key = (b.type, c.type, b.bx, c.bx) # b-c combination
                 combinations[key] = (ObjectHelperStub(b), ObjectHelperStub(c))
-		print "CorrelationConditionOvRmHelper key:", key
         return combinations.values()
 
     @property
