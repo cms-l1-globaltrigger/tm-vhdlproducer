@@ -438,6 +438,7 @@ class ModuleHelper(VhdlHelper):
                 a, b = condition.objects
                 key = (a.type, b.type, a.bx, b.bx) # create custom hash
                 combinations[key] = (ObjectHelperStub(a), ObjectHelperStub(b))
+		print "CorrelationConditionHelper key:", key
             if isinstance(condition, CorrelationConditionOvRmHelper):
                 a, b, c = condition.objects
                 key = (a.type, b.type, a.bx, b.bx) # a-b combination
@@ -541,6 +542,48 @@ class AlgorithmHelper(VhdlHelper):
 # -----------------------------------------------------------------------------
 
 class ConditionHelper(VhdlHelper):
+    """Generic condition template helper class.
+
+    Attributes:
+        name         condition name from event setup [str]
+        type         condition type name [str]
+        vhdl_signal  VHDL safe condition signal name [str]
+        objects      list of object template helpers contained by condition [list]
+        nr_objects   number of actually used objects [int]
+    """
+    ReqObjects = 1
+    """Number of required objects."""
+
+    def __init__(self, condition):
+        # Default attributes
+        self.name = condition.name
+        self.type = condition.type
+        self.vhdl_signal = vhdl_label(condition.name)
+        self.objects = [ObjectHelper() for _ in range(self.ReqObjects)]
+        self.update_objects(condition)
+
+    def update_objects(self, condition):
+        """Update objects assigned to this condition."""
+        esObjects = list(condition.ptr.getObjects())
+        assert 0 < len(esObjects) <= self.ReqObjects, "condition object count missmatch"
+        esObjects.sort(key=lambda key: ObjectsOrder.index(key.getType()))
+        for i, esObject in enumerate(esObjects):
+            self.objects[i].update(esObject)
+
+    @property
+    def nr_objects(self):
+        """Returns number of valid objects."""
+        return len([object for object in self.objects if object.isValid])
+
+    def __len__(self):
+        """Returns count of objects assigned to this condition."""
+        return len(self.objects)
+
+    def __iter__(self):
+        """Iterate over objects."""
+        return iter([object for object in self.objects])
+
+class ConditionOvRmHelper(VhdlHelper):
     """Generic condition template helper class.
 
     Attributes:
@@ -718,7 +761,7 @@ class CorrelationConditionHelper(ConditionHelper):
         elif condition.ptr.getType() == tmEventSetup.TransverseMass:
 	  self.massType = 1
             
-class CorrelationConditionOvRmHelper(ConditionHelper):
+class CorrelationConditionOvRmHelper(ConditionOvRmHelper):
     """Correlation condition template helper class."""
     ReqObjects = 3
     """Number of required objects."""
