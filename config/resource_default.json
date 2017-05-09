@@ -572,6 +572,150 @@
                 "objects": ["Tau", "Tau"],
                 "processors": 0.11,
                 "sliceLUTs": 0.022
+            },
+            {
+                "type": "SingleEgammaOvRm",
+                "objects": ["Egamma", "Jet"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0005
+            },
+            {
+                "type": "DoubleEgammaOvRm",
+                "objects": ["Egamma", "Egamma", "Jet"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0007
+            },
+            {
+                "type": "TripleEgammaOvRm",
+                "objects": ["Egamma", "Egamma", "Egamma", "Jet"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0009
+            },
+            {
+                "type": "QuadEgammaOvRm",
+                "objects": ["Egamma", "Egamma", "Egamma", "Egamma", "Jet"],
+                "processors": 0.0,
+                "sliceLUTs": 0.035
+            },
+            {
+                "type": "SingleEgammaOvRm",
+                "objects": ["Egamma", "Tau"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0005
+            },
+            {
+                "type": "DoubleEgammaOvRm",
+                "objects": ["Egamma", "Egamma", "Tau"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0007
+            },
+            {
+                "type": "TripleEgammaOvRm",
+                "objects": ["Egamma", "Egamma", "Egamma", "Tau"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0009
+            },
+            {
+                "type": "QuadEgammaOvRm",
+                "objects": ["Egamma", "Egamma", "Egamma", "Egamma", "Tau"],
+                "processors": 0.0,
+                "sliceLUTs": 0.035
+            },
+            {
+                "type": "SingleJetOvRm",
+                "objects": ["Jet", "Egamma"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0005
+            },
+            {
+                "type": "DoubleJetOvRm",
+                "objects": ["Jet", "Jet", "Egamma"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0007
+            },
+            {
+                "type": "TripleJetOvRm",
+                "objects": ["Jet", "Jet", "Jet", "Egamma"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0009
+            },
+            {
+                "type": "QuadJetOvRm",
+                "objects": ["Jet", "Jet", "Jet", "Jet", "Egamma"],
+                "processors": 0.0,
+                "sliceLUTs": 0.035
+            },
+            {
+                "type": "SingleJetOvRm",
+                "objects": ["Jet", "Tau"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0005
+            },
+            {
+                "type": "DoubleJetOvRm",
+                "objects": ["Jet", "Jet", "Tau"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0007
+            },
+            {
+                "type": "TripleJetOvRm",
+                "objects": ["Jet", "Jet", "Jet", "Tau"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0009
+            },
+            {
+                "type": "QuadJetOvRm",
+                "objects": ["Jet", "Jet", "Jet", "Jet", "Tau"],
+                "processors": 0.0,
+                "sliceLUTs": 0.035
+            },
+            {
+                "type": "SingleTauOvRm",
+                "objects": ["Tau", "Egamma"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0005
+            },
+            {
+                "type": "DoubleTauOvRm",
+                "objects": ["Tau", "Tau", "Egamma"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0007
+            },
+            {
+                "type": "TripleTauOvRm",
+                "objects": ["Tau", "Tau", "Tau", "Egamma"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0009
+            },
+            {
+                "type": "QuadTauOvRm",
+                "objects": ["Tau", "Tau", "Tau", "Tau", "Egamma"],
+                "processors": 0.0,
+                "sliceLUTs": 0.035
+            },
+            {
+                "type": "SingleTauOvRm",
+                "objects": ["Tau", "Jet"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0005
+            },
+            {
+                "type": "DoubleTauOvRm",
+                "objects": ["Tau", "Tau", "Jet"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0007
+            },
+            {
+                "type": "TripleTauOvRm",
+                "objects": ["Tau", "Tau", "Tau", "Jet"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0009
+            },
+            {
+                "type": "QuadTauOvRm",
+                "objects": ["Tau", "Tau", "Tau", "Tau", "Jet"],
+                "processors": 0.0,
+                "sliceLUTs": 0.035
             }
         ]
     }

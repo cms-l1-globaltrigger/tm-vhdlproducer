@@ -38,6 +38,10 @@
 {%- include  "subTemplates/calo_condition_v4.vhd.j2" %}
 {%- endfor %}
 
+{%- for condition in module.caloConditionsOvRm %}
+{%- include  "subTemplates/calo_conditions_orm.vhd.j2" %}
+{%- endfor %}
+
 {%- for condition in module.muonConditions %}
 {%- include  "subTemplates/muon_condition_v4.vhd.j2" %}
 {%- endfor %}

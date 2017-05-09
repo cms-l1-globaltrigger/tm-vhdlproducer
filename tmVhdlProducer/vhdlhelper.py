@@ -23,6 +23,7 @@ Overview of class hierarchy:
         class ExternalConditionHelper
         class CorrelationConditionHelper
 	class CorrelationConditionOvRmHelper
+	class CaloConditionOvRmHelper
 	class ObjectHelper
 
 """
@@ -256,6 +257,8 @@ def conditionFactory(condition):
         return CorrelationConditionHelper(condition)
     elif condition.isCorrelationConditionOvRm():
         return CorrelationConditionOvRmHelper(condition)
+    elif condition.isCaloConditionOvRm():
+        return CaloConditionOvRmHelper(condition)
     else:
         raise RuntimeError("unknown condition type")
 
@@ -380,6 +383,10 @@ class ModuleHelper(VhdlHelper):
         return filter(lambda condition: condition.type in algodist.CaloConditionTypes, self.conditions)
 
     @property
+    def caloConditionsOvRm(self):
+        return filter(lambda condition: condition.type in algodist.CaloConditionOvRmTypes, self.conditions)
+
+    @property
     def esumsConditions(self):
         return filter(lambda condition: condition.type in algodist.EsumsConditionTypes, self.conditions)
 
@@ -446,6 +453,11 @@ class ModuleHelper(VhdlHelper):
                 combinations[key] = (ObjectHelperStub(a), ObjectHelperStub(c))
                 key = (b.type, c.type, b.bx, c.bx) # b-c combination
                 combinations[key] = (ObjectHelperStub(b), ObjectHelperStub(c))
+            if isinstance(condition, CaloConditionOvRmHelper):
+                a = condition.objects[0]
+                b = condition.objects[condition.nr_objects-1]
+                key = (a.type, b.type, a.bx, b.bx)
+                combinations[key] = (ObjectHelperStub(a), ObjectHelperStub(b))
         return combinations.values()
 
     @property
@@ -604,6 +616,7 @@ class ConditionOvRmHelper(VhdlHelper):
         """Update objects assigned to this condition."""
         esObjects = list(condition.ptr.getObjects())
         assert 0 < len(esObjects) <= self.ReqObjects, "condition object count missmatch"
+## HB 2017-05-09: no sorting for OvRm conditions
         #esObjects.sort(key=lambda key: ObjectsOrder.index(key.getType()))
         for i, esObject in enumerate(esObjects):
             self.objects[i].update(esObject)
@@ -858,6 +871,59 @@ class CorrelationConditionOvRmHelper(ConditionOvRmHelper):
         elif condition.ptr.getType() == tmEventSetup.TransverseMassOvRm:
 	  self.massType = 1
             
+class CaloConditionOvRmHelper(ConditionOvRmHelper):
+    """Correlation condition template helper class."""
+    ReqObjects = 5
+    """Number of required objects."""
+
+    def __init__(self, condition):
+        super(CaloConditionOvRmHelper, self).__init__(condition)
+        # Flags
+        self.hasDetaOrmCut = vhdl_bool(False)
+        self.hasDphiOrmCut = vhdl_bool(False)
+        self.hasDrOrmCut = vhdl_bool(False)
+        # Limits
+        self.diffEtaOrmLowerLimit = .0
+        self.diffEtaOrmUpperLimit = .0
+        self.diffPhiOrmLowerLimit = .0
+        self.diffPhiOrmUpperLimit = .0
+        self.deltaROrmLowerLimit = .0
+        self.deltaROrmUpperLimit = .0
+        self.update(condition)
+
+    @property
+    def objectsInSameBx(self):
+        """Returns 'true' if all objects of same BX offset else returns 'false'."""
+        return vhdl_bool(len(set([object.bx for object in self.objects])) == 1)
+
+    def update(self, condition):
+        def lowerLimit(esCut):
+            """Returns rounded floating point for minimum."""
+            value = esCut.getMinimum().value
+            precision = esCut.getPrecision()
+            scale = 10.**precision
+            return math.floor(value * scale) / scale
+        def upperLimit(esCut):
+            """Returns rounded floating point for maximum."""
+            value = esCut.getMaximum().value
+            precision = esCut.getPrecision()
+            scale = 10.**precision
+            return math.ceil(value * scale) / scale
+          
+        for esCut in condition.ptr.getCuts():
+            if esCut.getCutType() == tmEventSetup.OvRmDeltaEta:
+                self.hasDetaOrmCut = vhdl_bool(True)
+                self.diffEtaOrmLowerLimit = lowerLimit(esCut)
+                self.diffEtaOrmUpperLimit = upperLimit(esCut)
+            elif esCut.getCutType() == tmEventSetup.OvRmDeltaPhi:
+                self.hasDphiOrmCut = vhdl_bool(True)
+                self.diffPhiOrmLowerLimit = lowerLimit(esCut)
+                self.diffPhiOrmUpperLimit = upperLimit(esCut)
+            elif esCut.getCutType() == tmEventSetup.OvRmDeltaR:
+                self.hasDrOrmCut = vhdl_bool(True)
+                self.deltaROrmLowerLimit = lowerLimit(esCut)
+                self.deltaROrmUpperLimit = upperLimit(esCut)
+
 # -----------------------------------------------------------------------------
 #  Object helpers
 # -----------------------------------------------------------------------------

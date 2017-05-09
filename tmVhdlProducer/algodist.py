@@ -104,6 +104,18 @@ kTransverseMass = 'TransverseMass'
 kCaloCaloCorrelationOvRm = 'CaloCaloCorrelationOvRm'
 kInvariantMassOvRm = 'InvariantMassOvRm'
 kTransverseMassOvRm = 'TransverseMassOvRm'
+kSingleEgammaOvRm = 'SingleEgammaOvRm'
+kDoubleEgammaOvRm = 'DoubleEgammaOvRm'
+kTripleEgammaOvRm = 'TripleEgammaOvRm'
+kQuadEgammaOvRm = 'QuadEgammaOvRm'
+kSingleTauOvRm = 'SingleTauOvRm'
+kDoubleTauOvRm = 'DoubleTauOvRm'
+kTripleTauOvRm = 'TripleTauOvRm'
+kQuadTauOvRm = 'QuadTauOvRm'
+kSingleJetOvRm = 'SingleJetOvRm'
+kDoubleJetOvRm = 'DoubleJetOvRm'
+kTripleJetOvRm = 'TripleJetOvRm'
+kQuadJetOvRm = 'QuadJetOvRm'
 
 Operators = (
     tmGrammar.AND,
@@ -193,6 +205,18 @@ esConditionType = {
     tmEventSetup.CaloCaloCorrelationOvRm: kCaloCaloCorrelationOvRm,
     tmEventSetup.InvariantMassOvRm: kInvariantMassOvRm,
     tmEventSetup.TransverseMassOvRm: kTransverseMassOvRm,
+    tmEventSetup.SingleEgammaOvRm: kSingleEgammaOvRm,
+    tmEventSetup.DoubleEgammaOvRm: kDoubleEgammaOvRm,
+    tmEventSetup.TripleEgammaOvRm: kTripleEgammaOvRm,
+    tmEventSetup.QuadEgammaOvRm: kQuadEgammaOvRm,
+    tmEventSetup.SingleTauOvRm: kSingleTauOvRm,
+    tmEventSetup.DoubleTauOvRm: kDoubleTauOvRm,
+    tmEventSetup.TripleTauOvRm: kTripleTauOvRm,
+    tmEventSetup.QuadTauOvRm: kQuadTauOvRm,
+    tmEventSetup.SingleJetOvRm: kSingleJetOvRm,
+    tmEventSetup.DoubleJetOvRm: kDoubleJetOvRm,
+    tmEventSetup.TripleJetOvRm: kTripleJetOvRm,
+    tmEventSetup.QuadJetOvRm: kQuadJetOvRm,
 }
 """Dictionary for condition type enumerations."""
 
@@ -256,6 +280,21 @@ CorrelationConditionOvRmTypes = [
     kCaloCaloCorrelationOvRm,
     kInvariantMassOvRm,
     kTransverseMassOvRm,
+]
+
+CaloConditionOvRmTypes = [
+    kSingleEgammaOvRm,
+    kDoubleEgammaOvRm,
+    kTripleEgammaOvRm,
+    kQuadEgammaOvRm,
+    kSingleTauOvRm,
+    kDoubleTauOvRm,
+    kTripleTauOvRm,
+    kQuadTauOvRm,
+    kSingleJetOvRm,
+    kDoubleJetOvRm,
+    kTripleJetOvRm,
+    kQuadJetOvRm,
 ]
 
 ObjectsOrder = [
@@ -417,6 +456,9 @@ class ConditionStub(object):
 
     def isCorrelationConditionOvRm(self):
         return self.type in CorrelationConditionOvRmTypes
+
+    def isCaloConditionOvRm(self):
+        return self.type in CaloConditionOvRmTypes
 
     def __repr__(self):
         return "{self.__class__.__name__}(name={self.name}, payload={self.payload})".format(**locals())
