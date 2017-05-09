@@ -647,6 +647,25 @@ class CaloConditionHelper(ConditionHelper):
     ReqObjects = 4
     """Number of required objects."""
 
+    def __init__(self, condition):
+        super(CaloConditionHelper, self).__init__(condition)
+        self.hasTwoBodyPtCut = vhdl_bool(False)
+        self.twoBodyPtThres = .0
+        self.update(condition)
+
+    def update(self, condition):
+        def lowerLimit(esCut):
+            """Returns rounded floating point for minimum."""
+            value = esCut.getMinimum().value
+            precision = esCut.getPrecision()
+            scale = 10.**precision
+            return math.floor(value * scale) / scale
+          
+        for esCut in condition.ptr.getCuts():
+            if esCut.getCutType() == tmEventSetup.TwoBodyPt:
+                self.hasTwoBodyPtCut = vhdl_bool(True)
+                self.twoBodyPtThres = lowerLimit(esCut)
+                
 class MuonConditionHelper(ConditionHelper):
     """Muon condition template helper class.
 
@@ -663,12 +682,24 @@ class MuonConditionHelper(ConditionHelper):
     def __init__(self, condition):
         super(MuonConditionHelper, self).__init__(condition)
         self.chargeCorrelation = 'ig'
+        self.hasTwoBodyPtCut = vhdl_bool(False)
+        self.twoBodyPtThres = .0
         self.update_cuts(condition)
 
     def update_cuts(self, condition):
+        def lowerLimit(esCut):
+            """Returns rounded floating point for minimum."""
+            value = esCut.getMinimum().value
+            precision = esCut.getPrecision()
+            scale = 10.**precision
+            return math.floor(value * scale) / scale
+          
         for esCut in condition.ptr.getCuts():
             if esCut.getCutType() == tmEventSetup.ChargeCorrelation:
                 self.chargeCorrelation = esCut.getData()
+            elif esCut.getCutType() == tmEventSetup.TwoBodyPt:
+                self.hasTwoBodyPtCut = vhdl_bool(True)
+                self.twoBodyPtThres = lowerLimit(esCut)
 
 class EsumsConditionHelper(ConditionHelper):
     """Esums condition template helper class."""
