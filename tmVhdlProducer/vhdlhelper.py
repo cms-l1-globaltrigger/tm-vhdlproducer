@@ -446,13 +446,23 @@ class ModuleHelper(VhdlHelper):
                 key = (a.type, b.type, a.bx, b.bx) # create custom hash
                 combinations[key] = (ObjectHelperStub(a), ObjectHelperStub(b))
             if isinstance(condition, CorrelationConditionOvRmHelper):
-                a, b, c = condition.objects
-                key = (a.type, b.type, a.bx, b.bx) # a-b combination
-                combinations[key] = (ObjectHelperStub(a), ObjectHelperStub(b))
-                key = (a.type, c.type, a.bx, c.bx) # a-c combination
-                combinations[key] = (ObjectHelperStub(a), ObjectHelperStub(c))
-                key = (b.type, c.type, b.bx, c.bx) # b-c combination
-                combinations[key] = (ObjectHelperStub(b), ObjectHelperStub(c))
+		if condition.nr_objects == 3:
+		    a, b, c = condition.objects
+		    key = (a.type, b.type, a.bx, b.bx) # a-b combination
+		    combinations[key] = (ObjectHelperStub(a), ObjectHelperStub(b))
+		    print "CorrelationConditionHelper key for 3:", key
+		    key = (a.type, c.type, a.bx, c.bx) # a-c combination
+		    combinations[key] = (ObjectHelperStub(a), ObjectHelperStub(c))
+		    print "CorrelationConditionHelper key for 3:", key
+		    key = (b.type, c.type, b.bx, c.bx) # b-c combination
+		    combinations[key] = (ObjectHelperStub(b), ObjectHelperStub(c))
+		    print "CorrelationConditionHelper key for 3:", key
+		else:
+		    a = condition.objects[0]
+		    b = condition.objects[1]
+		    key = (a.type, b.type, a.bx, b.bx)
+		    combinations[key] = (ObjectHelperStub(a), ObjectHelperStub(b))
+		    print "CorrelationConditionHelper key for 2:", key
             if isinstance(condition, CaloConditionOvRmHelper):
                 a = condition.objects[0]
                 b = condition.objects[condition.nr_objects-1]

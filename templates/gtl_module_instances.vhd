@@ -35,7 +35,7 @@
 {%- include  "subTemplates/correlation_conditions_mass_cuts.vhd.j2" %}
 -- Instantiations of conditions
 {%- for condition in module.caloConditions %}
-{%- include  "subTemplates/calo_condition_v5.vhd.j2" %}
+{%- include  "subTemplates/calo_condition_v4_v5.vhd.j2" %}
 {%- endfor %}
 
 {%- for condition in module.caloConditionsOvRm %}
@@ -43,7 +43,7 @@
 {%- endfor %}
 
 {%- for condition in module.muonConditions %}
-{%- include  "subTemplates/muon_condition_v5.vhd.j2" %}
+{%- include  "subTemplates/muon_condition_v4_v5.vhd.j2" %}
 {%- endfor %}
 
 {%- for condition in module.esumsConditions %}
@@ -55,7 +55,7 @@
 {%- endfor %}
 
 {%- for condition in module.caloCaloCorrOvRmConditions %}
-{%- include  "subTemplates/calo_2plus1_orm_condition.vhd.j2" %}
+{%- include  "subTemplates/calo_calo_correlation_orm_condition.vhd.j2" %}
 {%- endfor %}
 
 {%- for condition in module.caloMuonCorrConditions %}
