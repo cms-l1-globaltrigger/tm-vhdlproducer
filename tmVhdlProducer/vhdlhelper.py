@@ -464,7 +464,7 @@ class ModuleHelper(VhdlHelper):
     def correlationObjects(self):
         objects = {}
         for condition in self.conditions:
-            if isinstance(condition, CorrelationConditionHelper) or isinstance(condition, CorrelationConditionOvRmHelper):
+            if isinstance(condition, CorrelationConditionHelper) or isinstance(condition, CorrelationConditionOvRmHelper) or isinstance(condition, CaloConditionOvRmHelper):
                 for object in condition.objects:
                     key = (object.type, object.bx) # create custom hash
                     objects[key] = object
