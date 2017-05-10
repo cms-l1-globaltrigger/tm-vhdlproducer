@@ -919,6 +919,7 @@ class CaloConditionOvRmHelper(ConditionOvRmHelper):
         self.hasDetaOrmCut = vhdl_bool(False)
         self.hasDphiOrmCut = vhdl_bool(False)
         self.hasDrOrmCut = vhdl_bool(False)
+        self.hasTwoBodyPtCut = vhdl_bool(False)
         # Limits
         self.diffEtaOrmLowerLimit = .0
         self.diffEtaOrmUpperLimit = .0
@@ -926,6 +927,7 @@ class CaloConditionOvRmHelper(ConditionOvRmHelper):
         self.diffPhiOrmUpperLimit = .0
         self.deltaROrmLowerLimit = .0
         self.deltaROrmUpperLimit = .0
+        self.twoBodyPtThres = .0
         self.update(condition)
 
     @property
@@ -960,6 +962,9 @@ class CaloConditionOvRmHelper(ConditionOvRmHelper):
                 self.hasDrOrmCut = vhdl_bool(True)
                 self.deltaROrmLowerLimit = lowerLimit(esCut)
                 self.deltaROrmUpperLimit = upperLimit(esCut)
+            elif esCut.getCutType() == tmEventSetup.TwoBodyPt:
+                self.hasTwoBodyPtCut = vhdl_bool(True)
+                self.twoBodyPtThres = lowerLimit(esCut)
 
 # -----------------------------------------------------------------------------
 #  Object helpers
