@@ -55,7 +55,7 @@
 {%- endfor %}
 
 {%- for condition in module.caloCaloCorrOvRmConditions %}
-{%- include  "subTemplates/calo_calo_correlation_orm_condition.vhd.j2" %}
+{%- include  "subTemplates/calo_calo_calo_correlation_orm_condition.vhd.j2" %}
 {%- endfor %}
 
 {%- for condition in module.caloMuonCorrConditions %}
