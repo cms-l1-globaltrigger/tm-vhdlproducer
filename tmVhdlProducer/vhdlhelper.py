@@ -1020,9 +1020,8 @@ class ObjectHelper(VhdlHelper):
             if cut.getCutType() == tmEventSetup.Count:
                 self.count = cut.getMinimumIndex()
             if cut.getCutType() == tmEventSetup.Slice:
-                sliceData = cut.getData().split(",")
-                self.sliceLow  =  int(sliceData[0])
-                self.sliceHigh =  int(sliceData[-1])
+                self.sliceLow  =  int(cut.getMinimumValue())
+                self.sliceHigh =  int(cut.getMaximumValue())
         # setup eta windows
         if len(etaCuts) > 0:
             self.etaFullRange = vhdl_bool(False)
