@@ -421,8 +421,11 @@ class ConditionStub(object):
     def __init__(self, condition, payload):
         self.name = condition.getName()
         self.type = esConditionType[condition.getType()]
-        objects = [esObjectType[object.getType()] for object in condition.getObjects()]
-        self.objects = self.sortedObjects(objects)
+        self.objects = [esObjectType[object.getType()] for object in condition.getObjects()]
+        # Do not sort object by type for overlap removal conditions.
+        if not (self.type in CorrelationConditionOvRmTypes or
+                self.type in CaloConditionOvRmTypes):
+           self.objects = self.sortedObjects(self.objects)
         self.cuts = [esCutType[cut.getCutType()] for cut in condition.getCuts()]
         self.payload = Payload(payload.sliceLUTs, payload.processors)
         self.ptr = condition
