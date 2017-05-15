@@ -580,50 +580,10 @@ class ConditionHelper(VhdlHelper):
         """Update objects assigned to this condition."""
         esObjects = list(condition.ptr.getObjects())
         assert 0 < len(esObjects) <= self.ReqObjects, "condition object count missmatch"
-        esObjects.sort(key=lambda key: ObjectsOrder.index(key.getType()))
-        for i, esObject in enumerate(esObjects):
-            self.objects[i].update(esObject)
-
-    @property
-    def nr_objects(self):
-        """Returns number of valid objects."""
-        return len([object for object in self.objects if object.isValid])
-
-    def __len__(self):
-        """Returns count of objects assigned to this condition."""
-        return len(self.objects)
-
-    def __iter__(self):
-        """Iterate over objects."""
-        return iter([object for object in self.objects])
-
-class ConditionOvRmHelper(VhdlHelper):
-    """Generic condition template helper class.
-
-    Attributes:
-        name         condition name from event setup [str]
-        type         condition type name [str]
-        vhdl_signal  VHDL safe condition signal name [str]
-        objects      list of object template helpers contained by condition [list]
-        nr_objects   number of actually used objects [int]
-    """
-    ReqObjects = 1
-    """Number of required objects."""
-
-    def __init__(self, condition):
-        # Default attributes
-        self.name = condition.name
-        self.type = condition.type
-        self.vhdl_signal = vhdl_label(condition.name)
-        self.objects = [ObjectHelper() for _ in range(self.ReqObjects)]
-        self.update_objects(condition)
-
-    def update_objects(self, condition):
-        """Update objects assigned to this condition."""
-        esObjects = list(condition.ptr.getObjects())
-        assert 0 < len(esObjects) <= self.ReqObjects, "condition object count missmatch"
-## HB 2017-05-09: no sorting for OvRm conditions
-        #esObjects.sort(key=lambda key: ObjectsOrder.index(key.getType()))
+        # Do not sort objects by type for overlap removal conditions!
+        if not (condition.type in algodist.CorrelationConditionOvRmTypes or
+                condition.type in algodist.CaloConditionOvRmTypes):
+            esObjects.sort(key=lambda key: ObjectsOrder.index(key.getType()))
         for i, esObject in enumerate(esObjects):
             self.objects[i].update(esObject)
 
@@ -666,12 +626,12 @@ class CaloConditionHelper(ConditionHelper):
             precision = esCut.getPrecision()
             scale = 10.**precision
             return math.floor(value * scale) / scale
-          
+
         for esCut in condition.ptr.getCuts():
             if esCut.getCutType() == tmEventSetup.TwoBodyPt:
                 self.hasTwoBodyPtCut = vhdl_bool(True)
                 self.twoBodyPtThres = lowerLimit(esCut)
-                
+
 class MuonConditionHelper(ConditionHelper):
     """Muon condition template helper class.
 
@@ -699,7 +659,7 @@ class MuonConditionHelper(ConditionHelper):
             precision = esCut.getPrecision()
             scale = 10.**precision
             return math.floor(value * scale) / scale
-          
+
         for esCut in condition.ptr.getCuts():
             if esCut.getCutType() == tmEventSetup.ChargeCorrelation:
                 self.chargeCorrelation = esCut.getData()
@@ -773,7 +733,7 @@ class CorrelationConditionHelper(ConditionHelper):
             precision = esCut.getPrecision()
             scale = 10.**precision
             return math.ceil(value * scale) / scale
-          
+
         #hasTwoBodyPtCut = False
         for esCut in condition.ptr.getCuts():
             if esCut.getCutType() == tmEventSetup.DeltaEta:
@@ -791,7 +751,7 @@ class CorrelationConditionHelper(ConditionHelper):
             elif esCut.getCutType() == tmEventSetup.Mass:
                 self.hasMassCut = vhdl_bool(True)
                 self.massLowerLimit = lowerLimit(esCut)
-                self.massUpperLimit = upperLimit(esCut)            
+                self.massUpperLimit = upperLimit(esCut)
             elif esCut.getCutType() == tmEventSetup.TwoBodyPt:
                 self.hasTwoBodyPtCut = vhdl_bool(True)
                 self.twoBodyPtThres = lowerLimit(esCut)
@@ -806,8 +766,8 @@ class CorrelationConditionHelper(ConditionHelper):
 	  self.massType = 0
         elif condition.ptr.getType() == tmEventSetup.TransverseMass:
 	  self.massType = 1
-            
-class CorrelationConditionOvRmHelper(ConditionOvRmHelper):
+
+class CorrelationConditionOvRmHelper(ConditionHelper):
     """Correlation condition template helper class."""
     ReqObjects = 3
     """Number of required objects."""
@@ -862,7 +822,7 @@ class CorrelationConditionOvRmHelper(ConditionOvRmHelper):
             precision = esCut.getPrecision()
             scale = 10.**precision
             return math.ceil(value * scale) / scale
-          
+
         #hasTwoBodyPtCut = False
         for esCut in condition.ptr.getCuts():
             if esCut.getCutType() == tmEventSetup.DeltaEta:
@@ -880,7 +840,7 @@ class CorrelationConditionOvRmHelper(ConditionOvRmHelper):
             elif esCut.getCutType() == tmEventSetup.Mass:
                 self.hasMassCut = vhdl_bool(True)
                 self.massLowerLimit = lowerLimit(esCut)
-                self.massUpperLimit = upperLimit(esCut)            
+                self.massUpperLimit = upperLimit(esCut)
             elif esCut.getCutType() == tmEventSetup.TwoBodyPt:
                 self.hasTwoBodyPtCut = vhdl_bool(True)
                 self.twoBodyPtThres = lowerLimit(esCut)
@@ -907,8 +867,8 @@ class CorrelationConditionOvRmHelper(ConditionOvRmHelper):
 	  self.massType = 0
         elif condition.ptr.getType() == tmEventSetup.TransverseMassOvRm:
 	  self.massType = 1
-            
-class CaloConditionOvRmHelper(ConditionOvRmHelper):
+
+class CaloConditionOvRmHelper(ConditionHelper):
     """Correlation condition template helper class."""
     ReqObjects = 5
     """Number of required objects."""
@@ -948,7 +908,7 @@ class CaloConditionOvRmHelper(ConditionOvRmHelper):
             precision = esCut.getPrecision()
             scale = 10.**precision
             return math.ceil(value * scale) / scale
-          
+
         for esCut in condition.ptr.getCuts():
             if esCut.getCutType() == tmEventSetup.OvRmDeltaEta:
                 self.hasDetaOrmCut = vhdl_bool(True)
