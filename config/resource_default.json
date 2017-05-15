@@ -538,40 +538,40 @@
                 "sliceLUTs": 0.022
             },
             {
-                "type": "TransverseMassOvRm",
-                "objects": ["Egamma", "Egamma"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
+                "type": "CaloCaloCorrelationOvRm",
+                "objects": ["Jet", "Jet", "Egamma"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0005
             },
             {
-                "type": "TransverseMassOvRm",
-                "objects": ["Egamma", "Tau"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
+                "type": "CaloCaloCorrelationOvRm",
+                "objects": ["Jet", "Jet", "Tau"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0005
             },
             {
-                "type": "TransverseMassOvRm",
-                "objects": ["Egamma", "Jet"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
+                "type": "CaloCaloCorrelationOvRm",
+                "objects": ["Tau", "Tau", "Egamma"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0005
             },
             {
-                "type": "TransverseMassOvRm",
-                "objects": ["Jet", "Jet"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
+                "type": "CaloCaloCorrelationOvRm",
+                "objects": ["Tau", "Tau", "Jet"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0005
             },
             {
-                "type": "TransverseMassOvRm",
-                "objects": ["Jet", "Tau"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
+                "type": "CaloCaloCorrelationOvRm",
+                "objects": ["Egamma", "Egamma", "Jet"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0007
             },
             {
-                "type": "TransverseMassOvRm",
-                "objects": ["Tau", "Tau"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
+                "type": "CaloCaloCorrelationOvRm",
+                "objects": ["Egamma", "Egamma", "Tau"],
+                "processors": 0.0,
+                "sliceLUTs": 0.0007
             },
             {
                 "type": "SingleEgammaOvRm",
