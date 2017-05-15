@@ -748,30 +748,30 @@ def list_resources(tray):
         logging.info(section(name, instance))
 
 def list_algorithms(collection):
-    logging.info("|-------------------------------------------------------------------------|")
-    logging.info("|                                                                         |")
-    logging.info("| Algorithms sorted by payload (descending)                               |")
-    logging.info("|                                                                         |")
-    logging.info("|-------------------------------------------------------------------------|")
-    logging.info("|-------|-----------|--------|--------------------------------------------|")
-    logging.info("| Index | SliceLUTs | DSPs   | Name                                       |")
-    logging.info("|-------|-----------|--------|--------------------------------------------|")
+    logging.info("|-----------------------------------------------------------------------------|")
+    logging.info("|                                                                             |")
+    logging.info("| Algorithms sorted by payload (descending)                                   |")
+    logging.info("|                                                                             |")
+    logging.info("|-----------------------------------------------------------------------------|")
+    logging.info("|-------|-----------|--------|------------------------------------------------|")
+    logging.info("| Index | SliceLUTs | DSPs   | Name                                           |")
+    logging.info("|-------|-----------|--------|------------------------------------------------|")
     for algorithm in collection.algorithmStubs:
         sliceLUTs = algorithm.payload.sliceLUTs * 100.
         processors = algorithm.payload.processors * 100.
         name = short_name(algorithm.name, 42)
-        logging.info("| {algorithm.index:>5d} | {sliceLUTs:>8.2f}% | {processors:>5.2f}% | {name:<42} |".format(**locals()))
-    logging.info("|-------------------------------------------------------------------------|")
+        logging.info("| {algorithm.index:>5d} | {sliceLUTs:>8.2f}% | {processors:>5.2f}% | {name:<46} |".format(**locals()))
+    logging.info("|-----------------------------------------------------------------------------|")
 
 def list_conditions(collection):
-    logging.info("|-------------------------------------------------------------------------|")
-    logging.info("|                                                                         |")
-    logging.info("| Condition payloads by type                                              |")
-    logging.info("|                                                                         |")
-    logging.info("|-----------------------------||--------------------||--------------------|")
-    logging.info("| Condition                   || Item               || Sub total          |")
-    logging.info("| Type                | Count || SliceLUTs | DSPs   || SliceLUTs | DSPs   |")
-    logging.info("|---------------------|-------||-----------|--------||-----------|--------|")
+    logging.info("|-----------------------------------------------------------------------------|")
+    logging.info("|                                                                             |")
+    logging.info("| Condition payloads by type                                                  |")
+    logging.info("|                                                                             |")
+    logging.info("|---------------------------------||--------------------||--------------------|")
+    logging.info("| Condition                       || Item               || Sub total          |")
+    logging.info("| Type                    | Count || SliceLUTs | DSPs   || SliceLUTs | DSPs   |")
+    logging.info("|-------------------------|-------||-----------|--------||-----------|--------|")
     totals = Payload()
     total_count = 0
     for typename, conditions in collection.byConditionType().iteritems():
@@ -783,63 +783,63 @@ def list_conditions(collection):
         all_processors = processors * count
         totals += Payload(all_sliceLUTs, all_processors)
         typename = short_name(typename, 25)
-        line = "| {typename:<19} | {count:>5d} || {sliceLUTs:>8.2f}% | {processors:>5.2f}% || {all_sliceLUTs:>8.2f}% | {all_processors:>5.2f}% |".format(**locals())
+        line = "| {typename:<23} | {count:>5d} || {sliceLUTs:>8.2f}% | {processors:>5.2f}% || {all_sliceLUTs:>8.2f}% | {all_processors:>5.2f}% |".format(**locals())
         logging.info(line)
-    logging.info("|---------------------|-------||-----------|--------||-----------|--------|")
-    logging.info("| Total               | {total_count:>5d} ||         - |      - || {totals.sliceLUTs:>8.2f}% | {totals.processors:>5.2f}% |".format(**locals()))
-    logging.info("|---------------------|-------||-----------|--------||-----------|--------|")
+    logging.info("|-------------------------|-------||-----------|--------||-----------|--------|")
+    logging.info("| Total                   | {total_count:>5d} ||         - |      - || {totals.sliceLUTs:>8.2f}% | {totals.processors:>5.2f}% |".format(**locals()))
+    logging.info("|-------------------------|-------||-----------|--------||-----------|--------|")
 
 def list_distribution(collection):
     message = "Detailed distribition on {n} modules, shadow ratio: {r:.1f}".format(n=len(collection), r=collection.ratio)
-    logging.info("|-------------------------------------------------------------------------|")
-    logging.info("|                                                                         |")
-    logging.info("| {message:<71} |".format(**locals()))
-    logging.info("|                                                                         |")
-    logging.info("|------------|------------------------------------------------------------|")
-    logging.info("| Module     | Algorithm                                                  |")
-    logging.info("| ID | Index | Index | Name                                               |")
-    logging.info("|----|-------|-------|----------------------------------------------------|")
+    logging.info("|-----------------------------------------------------------------------------|")
+    logging.info("|                                                                             |")
+    logging.info("| {message:<75} |".format(**locals()))
+    logging.info("|                                                                             |")
+    logging.info("|------------|----------------------------------------------------------------|")
+    logging.info("| Module     | Algorithm                                                      |")
+    logging.info("| ID | Index | Index | Name                                                   |")
+    logging.info("|----|-------|-------|--------------------------------------------------------|")
     for module in collection:
         indices = sorted(str(algorithm.index) for algorithm in module)
         for algorithm in module:
             name = short_name(algorithm.name, 50)
             line = "| {algorithm.module_id:>2d} | {algorithm.module_index:>5d} " \
-                   "| {algorithm.index:>5d} | {name:<50} |".format(**locals())
+                   "| {algorithm.index:>5d} | {name:<54} |".format(**locals())
             logging.info(line)
-    logging.info("|----|-------|-------|----------------------------------------------------|")
-    logging.info("|-------------------------------------------------------------------------|")
-    logging.info("|                                                                         |")
-    logging.info("| Condition distribution, sorted by weight (descending)                   |")
-    logging.info("|                                                                         |")
-    logging.info("|-------------------------------------------------------------------------|")
-    logging.info("| Name                                             | Modules              |")
-    logging.info("|--------------------------------------------------|----------------------|")
+    logging.info("|----|-------|-------|--------------------------------------------------------|")
+    logging.info("|-----------------------------------------------------------------------------|")
+    logging.info("|                                                                             |")
+    logging.info("| Condition distribution, sorted by weight (descending)                       |")
+    logging.info("|                                                                             |")
+    logging.info("|-----------------------------------------------------------------------------|")
+    logging.info("| Name                                             | Modules                  |")
+    logging.info("|--------------------------------------------------|--------------------------|")
     conditions = sorted(collection.conditions, key=lambda condition: condition.payload, reverse=True)
     for condition in conditions:
         modules = []
         for module in collection:
             if condition in module.conditions:
                 modules.append(module.id)
-        logging.info("| {name:<48} | {modules:<20} |".format(name=condition.name, modules=','.join([str(module) for module in modules])))
-    logging.info("|--------------------------------------------------|----------------------|")
+        logging.info("| {name:<48} | {modules:<24} |".format(name=condition.name, modules=','.join([str(module) for module in modules])))
+    logging.info("|--------------------------------------------------|--------------------------|")
 
 def list_summary(collection):
     message = "Summary for distribution on {n} modules, shadow ratio: {r:.1f}".format(n=len(collection), r=collection.ratio)
-    logging.info("|-------------------------------------------------------------------------|")
-    logging.info("|                                                                         |")
-    logging.info("| {message:<71} |".format(**locals()))
-    logging.info("|                                                                         |")
-    logging.info("|-----------------|-------------------------------------------------------|")
-    logging.info("| Module          | Payload                                               |")
-    logging.info("| ID | Algorithms | SliceLUTs | DSPs                                      |")
-    logging.info("|----|------------|-----------|-------------------------------------------|")
+    logging.info("|-----------------------------------------------------------------------------|")
+    logging.info("|                                                                             |")
+    logging.info("| {message:<75} |".format(**locals()))
+    logging.info("|                                                                             |")
+    logging.info("|-----------------|-----------------------------------------------------------|")
+    logging.info("| Module          | Payload                                                   |")
+    logging.info("| ID | Algorithms | SliceLUTs | DSPs                                          |")
+    logging.info("|----|------------|-----------|-----------------------------------------------|")
     for module in collection:
         algorithms = len(module)
         sliceLUTs = module.payload.sliceLUTs * 100.
         processors = module.payload.processors * 100.
         logging.info("| {module.id:>2} | {algorithms:>10} | {sliceLUTs:>8.2f}% " \
-                     "| {processors:>5.2f}%                                    |".format(**locals()))
-    logging.info("|----|------------|-----------|-------------------------------------------|")
+                     "| {processors:>5.2f}%                                        |".format(**locals()))
+    logging.info("|----|------------|-----------|-----------------------------------------------|")
 
 def dump_distribution(collection, args):
     logging.info(":: writing menu distribution JSON dump: %s", args.o)
