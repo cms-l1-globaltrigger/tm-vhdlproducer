@@ -468,9 +468,23 @@ class ModuleHelper(VhdlHelper):
 
     @property
     def correlationObjects(self):
+        """Retruns list of objects used by correlation conditions or any
+        conditions using two body pt correlations.
+        """
+        def hasObjectCorrelation(condition):
+            """True if either two body pt cut or correlation condtion type."""
+            if condition.type in algodist.CorrelationConditionTypes:
+                return True
+            if condition.type in algodist.CorrelationConditionOvRmTypes:
+                return True
+            if condition.type in algodist.CaloConditionOvRmTypes:
+                return True
+            if hasattr(condition, 'hasTwoBodyPtCut'):
+                return bool(condition.hasTwoBodyPtCut)
+            return False
         objects = {}
         for condition in self.conditions:
-            if isinstance(condition, CorrelationConditionHelper) or isinstance(condition, CorrelationConditionOvRmHelper) or isinstance(condition, CaloConditionOvRmHelper):
+            if hasObjectCorrelation(condition):
                 for object in condition.objects:
                     key = (object.type, object.bx) # create custom hash
                     objects[key] = object
@@ -478,9 +492,10 @@ class ModuleHelper(VhdlHelper):
 
     @property
     def conversionObjects(self):
+        """Returns list of objects required for calo-muon and muon-esums correlations."""
         objects = {}
         for condition in self.conditions:
-            if condition.type in ('CaloMuonCorrelation', 'MuonEsumCorrelation'):
+            if condition.type in (algodist.kCaloMuonCorrelation, algodist.kMuonEsumCorrelation):
                 for object in condition.objects:
                     key = object.type # create custom hash
                     objects[key] = object
