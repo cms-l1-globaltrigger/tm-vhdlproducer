@@ -507,7 +507,8 @@ class ModuleHelper(VhdlHelper):
         for condition in self.conditions:
             if type(condition) in (MuonConditionHelper, CorrelationConditionHelper):
                 if len(condition) > 1:
-                    a, b = sorted(condition.objects[:2], key=lambda object: object.bx)
+                    a = condition.objects[0]
+                    b = condition.objects[1]
                     combinations.add((a.bx, b.bx))
         return list(combinations)
 
