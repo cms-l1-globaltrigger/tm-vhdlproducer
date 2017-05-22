@@ -1,7 +1,31 @@
 VHDL Producer
 =============
 
-## Basic usage
+## Dependecies
+
+CC7:
+
+    $ sudo yum install python python-jinja2
+
+Debian/Ubuntu:
+
+    $ sudo apt-get install python python-jinja2
+
+Required utm components are:
+
+ * tmEventSetup
+ * tmGrammar
+ * tmTable
+ * tmXsd
+ * tmUtil
+
+
+## Setup environment
+
+    $ source ../setup.sh
+
+
+## Synopsis
 
 Generate VHDL output from XML trigger menu.
 
@@ -38,9 +62,9 @@ the same condition instances will be placed on the same module. Preactical tests
 showed that this approach does not guarantee the most efficient distribution
 and should be used carefully (consider it as experimental). It is advised to
 start with a ratio of 0.0 and verify if higher ratios (up to 0.25) improve the
-chip resource usage. 
+chip resource usage.
 
-To try out different optimizations use the --dryrun flag to prevent writing 
+To try out different optimizations use the --dryrun flag to prevent writing
 output to the filesystem.
 
     $ tm-vhdlproducer L1Menu_sample.xml --modules 2 --ratio 0 --dryrun
