@@ -329,7 +329,7 @@ class InfoHelper(VhdlHelper):
         eventSetup = collection.eventSetup
         # Init attribiutes
         self.name = eventSetup.getName()
-        self.uuid_menu = eventSetup.menuUuid # HACK
+        self.uuid_menu = eventSetup.getMenuUuid()
         self.uuid_firmware = eventSetup.getFirmwareUuid()
         self.scale_set = eventSetup.getScaleSetName()
         self.version = VersionHelper(eventSetup.getVersion())

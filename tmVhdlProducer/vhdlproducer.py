@@ -23,7 +23,7 @@ import vhdlhelper
 import algodist
 
 from tmVhdlProducer import __version__
-__all__ = ['VhdlProducer', 'writeXmlMenu', 'getMenuUuid']
+__all__ = ['VhdlProducer', 'writeXmlMenu']
 
 # -----------------------------------------------------------------------------
 #  Jinja2 custom filters exposed to VHDL templates.
@@ -93,7 +93,7 @@ UsedTemplates = [
     #'ugt_constant_pkg.vhd',
     #'algo_mapping_rop.vhd',
     #'gtl_pkg.vhd',
-    'menu.json',
+    'menu.json', # obsolete?
 ]
 
 # -----------------------------------------------------------------------------
@@ -108,22 +108,6 @@ def mkdir_p(path):
     except OSError as exc: # Python >2.5
         if exc.errno == errno.EEXIST and os.path.isdir(path):
             pass # ignore existing dir...
-
-def loadMenu(filename):
-    """Load XML menu using tmTables."""
-    import tmTable
-    menu = tmTable.Menu()
-    scale = tmTable.Scale()
-    ext_signal = tmTable.ExtSignal()
-    message = tmTable.xml2menu(filename, menu, scale, ext_signal, False)
-    if message:
-        logging.error("{filename}: {message}".format(message))
-        raise RuntimeError(message)
-    return menu
-
-def getMenuUuid(filename):
-    menu = loadMenu(filename)
-    return menu.menu["uuid_menu"]
 
 def writeXmlMenu(filename, json_dir):
     """Updates a XML menu file based on inforamtion from a JSON file (used to apply
@@ -209,21 +193,23 @@ class VhdlProducer(object):
 
     def create_dirs(self, directory, n_modules):
         """Create directory tree for output."""
-        vhdlDir = os.path.join(directory, "vhdl")
         self.directoryDict = {
-            "top" : directory,
-            "vhdl" : vhdlDir,
+            "vhdl" : os.path.join(directory, "vhdl"),
             "testvectors" : os.path.join(directory, "testvectors"),
             "xml" : os.path.join(directory, "xml"),
+            "doc" : os.path.join(directory, "doc"),
         }
         for i in range(n_modules):
-            self.directoryDict["module_%s" % i] = os.path.join(vhdlDir, "module_%s/src/" % i)
+            self.directoryDict["module_{i}".format(i=i)] = os.path.join(self.directoryDict['vhdl'], "module_{i}/src/".format(i=i))
         if os.path.exists(self.directoryDict['vhdl']):
             logging.warning("diectory `%s' already exists. Will be replaced.", self.directoryDict['vhdl'])
             shutil.rmtree(self.directoryDict['vhdl'])
         if os.path.exists(self.directoryDict['xml']):
             logging.warning("directory `%s' already exists. Will be replaced.", self.directoryDict['xml'])
             shutil.rmtree(self.directoryDict['xml'])
+        if os.path.exists(self.directoryDict['doc']):
+            logging.warning("directory `%s' already exists. Will be replaced.", self.directoryDict['doc'])
+            shutil.rmtree(self.directoryDict['doc'])
 
         for directory in self.directoryDict:
             mkdir_p(self.directoryDict[directory])
@@ -247,8 +233,12 @@ class VhdlProducer(object):
                     writeJson = False
                     filename = os.path.join(self.directoryDict["xml"], template)
                 else:
-                    filename = os.path.join(self.directoryDict["module_%s" % (module.id)], "%s" % template )
-                params = {"menu": helper, 'module': module, }
+                    module_id = "module_{id}".format(id=module.id)
+                    filename = os.path.join(self.directoryDict[module_id], template)
+                params = {
+                    'menu': helper,
+                    'module': module,
+                }
                 content = self.engine.render(template, params)
                 with open(filename, 'a') as fp:
                     fp.write(content)

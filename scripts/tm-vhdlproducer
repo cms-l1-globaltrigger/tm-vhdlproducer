@@ -8,10 +8,11 @@
 #
 
 import tmEventSetup
-from tmVhdlProducer.vhdlproducer import VhdlProducer, writeXmlMenu, getMenuUuid
-from tmVhdlProducer import __version__
 
+from tmVhdlProducer.reporter import Reporter
+from tmVhdlProducer.vhdlproducer import VhdlProducer, writeXmlMenu
 from tmVhdlProducer.algodist import distribute
+from tmVhdlProducer import __version__
 
 import argparse
 import subprocess
@@ -25,7 +26,11 @@ LOGFILE = 'tm-vhdlproducer.log'
 MIN_MODULES = 1
 MAX_MODULES = 6
 
+SortingAsc = 'asc'
+SortingDesc = 'desc'
+
 DefaultRatio = 0.0
+DefaultSorting = SortingAsc
 DefaultOutputDir = os.getcwd()
 from tmVhdlProducer.algodist import DefaultConfigFile
 
@@ -88,17 +93,23 @@ def parse():
         type=ratio_t,
         help="algorithm shadow ratio (0.0 < ratio <= 1.0, default is {0})".format(DefaultRatio),
     )
+    parser.add_argument('--sorting',
+        metavar='asc|desc',
+        default=DefaultSorting,
+        choices=(SortingAsc, SortingDesc),
+        help="sort order for condition weights ({0} or {1}, default is {2})".format(SortingAsc, SortingDesc, DefaultSorting),
+    )
     parser.add_argument('--config',
         metavar='<file>',
         default=DefaultConfigFile,
         type=os.path.abspath,
-        help="JSON resource configuration file, default is {0}".format(DefaultConfigFile),
+        help="JSON resource configuration file (default is {0})".format(DefaultConfigFile),
     )
     parser.add_argument('--output',
         metavar='<dir>',
         default=DefaultOutputDir,
         type=os.path.abspath,
-        help="directory to write VHDL producer output, default is {0}".format(DefaultOutputDir),
+        help="directory to write VHDL producer output (default is {0})".format(DefaultOutputDir),
     )
     parser.add_argument('--dryrun',
         action='store_true',
@@ -125,19 +136,16 @@ def main():
     # Setup console logging
     logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
 
-    logging.info("running VHDL producer")
+    logging.info("running VHDL producer...")
 
     utm_root = os.environ.get("UTM_ROOT")
+    logging.info("UTM_ROOT: %s", utm_root)
     if not utm_root:
         logging.error("no `UTM_ROOT' environment variable defined")
         return EXIT_FAILURE
 
-    revision = getSvnRevision()
-    logging.info("svn revison r%s", revision)
-
+    logging.info("loading XML menu %s", args.menu)
     eventSetup = tmEventSetup.getTriggerMenu(args.menu)
-    eventSetup.menuUuid = getMenuUuid(args.menu) # HACK
-    eventSetup.svnRevision = revision # HACK
     output_dir = os.path.join(args.output, "{name}_m{modules}".format(name=eventSetup.getName(), modules=args.modules))
 
     # TODO: not convenient...
@@ -162,19 +170,41 @@ def main():
         handler.setLevel(logging.DEBUG)
         logging.getLogger().addHandler(handler)
 
-    # Distribute algorithms
-    collection = distribute(eventSetup, args.modules, args.config, args.ratio)
+    # Fetch SVN revision
+    revision = getSvnRevision()
+    eventSetup.svnRevision = revision # HACK
+    logging.info("svn revison r%s", revision)
+
+    # Distribute algorithms, set sort order (asc or desc)
+    reverse_sorting = (args.sorting == 'desc')
+    collection = distribute(eventSetup, args.modules, args.config, args.ratio, reverse_sorting)
 
     if args.dryrun:
         logging.info("skipped writing output (dryrun mode)")
     else:
         logging.info("writing VHDL modules...")
-        template_dir = os.path.join(utm_root, 'tmVhdlProducer', 'templates')
+        template_dir = os.path.join(utm_root, 'tmVhdlProducer', 'templates', 'vhdl')
         producer = VhdlProducer(template_dir, args.verbose)
         producer.write(collection, output_dir)
 
         logging.info("writing updated XML file %s", args.menu)
         writeXmlMenu(args.menu, os.path.join(output_dir, 'xml'))
+
+        # Write menu documentation.
+        logging.info("generating menu documentation...")
+        template_dir = os.path.join(utm_root, 'tmVhdlProducer', 'templates', 'doc')
+        reporter = Reporter(template_dir, eventSetup)
+        basename = eventSetup.getName()
+
+        # Generate HTML output
+        filename = os.path.join(output_dir, 'doc', '{basename}.html'.format(**locals()))
+        logging.info("writing HTML documentation %s", filename)
+        reporter.write_html(filename)
+
+        # Generate TWIKI output
+        filename = os.path.join(output_dir, 'doc', '{basename}.twiki'.format(**locals()))
+        logging.info("writing TWIKI page template %s", filename)
+        reporter.write_twiki(filename)
 
     logging.info("done.")
 

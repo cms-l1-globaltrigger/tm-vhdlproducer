@@ -166,6 +166,26 @@ esObjectType = {
 }
 """Dictionary for object type enumerations."""
 
+esObjectCollectionSizes = {
+    kEgamma: 12,
+    kJet: 12,
+    kTau: 12,
+    kMuon: 8,
+    kETT: 1,
+    kETTEM: 1,
+    kHTT: 1,
+    kTOWERCOUNT: 1,
+    kETM: 1,
+    kHTM: 1,
+    kETMHF: 1,
+    kMBT0HFM: 1,
+    kMBT0HFP: 1,
+    kMBT1HFM: 1,
+    kMBT1HFP: 1,
+    kEXT: 1,
+}
+"""Dictionary for object collection size (slices)."""
+
 esConditionType = {
     tmEventSetup.SingleMuon: kSingleMuon,
     tmEventSetup.DoubleMuon: kDoubleMuon,
@@ -322,6 +342,10 @@ ObjectsOrder = [
 # Functions
 #
 
+def filter_first(func, data):
+    """Returns first result for filter() or None if not match found."""
+    return (list(filter(func, data)) or [None])[0]
+
 def get_condition_names(algorithm):
     """Returns list of condition names of an algorithm (from RPN vector)."""
     return [label for label in algorithm.getRpnVector() if label not in Operators]
@@ -332,11 +356,20 @@ def short_name(name, length):
         return "{name}...".format(name=name[:length-3])
     return name[:length]
 
+def same_object_types(esObjects):
+    """Returns true if all objects are of same type."""
+    return len(set([esObject.getType() for esObject in esObjects])) == 1
+
+def same_object_bxs(esObjects):
+    """Returns true if all objects of condition are of same BX."""
+    return len(set([esObject.getBx() for esObject in esObjects])) == 1
+
 #
 # Classes
 #
 
 class ResourceOverflowError(RuntimeError):
+    """Custom exception class for reosurce overflow errors."""
     pass
 
 class Payload(object):
@@ -351,7 +384,9 @@ class Payload(object):
         self.processors = float(processors)
 
     def _astuple(self):
-        """Retrurns tuple of payload attributes ordered by significance (most significant last, least first)."""
+        """Retrurns tuple of payload attributes ordered by significance (most
+        significant last, least first).
+        """
         return self.sliceLUTs, self.processors
 
     def _asdict(self):
@@ -379,7 +414,7 @@ class ResourceTray(object):
     """Scale tray for calculating condition and algorithm payloads. It loads
     payload and threshold specifications from a JSON file.
 
-    >>> tray = Tray(es, 'algo_dist.json')
+    >>> tray = ResourceTray('algo_dist.json')
     >>> tray.measure(condition)
     """
     def __init__(self, filename):
@@ -398,22 +433,181 @@ class ResourceTray(object):
                 d[k] = self._object_hook(v)
         return namedtuple('resource', d.keys())(**d)
 
+    def map_instance(self, key):
+        """Returns mapped condition instance type for *key*.
+        >>> tray.map_instance("SingleTau")
+        'CaloCondition'
+        """
+        return self.resources.mapping.instances._asdict()[key]
+
+    def map_object(self, key):
+        """Returns mapped condition object type for *key*.
+        >>> tray.map_object("Egamma")
+        'calo'
+        """
+        return self.resources.mapping.objects._asdict()[key]
+
+    def map_objects(self, keys):
+        """Returns mapped condition object types for *keys*.
+        >>> tray.map_objects("Jet", "Tau")
+        ['calo', 'calo']
+        """
+        return [self.map_object(key) for key in keys]
+
+    def map_cut(self, key):
+        """Returns mapped condition cut type for *key*.
+        >>> tray.map_cut("ORMDETA")
+        'deta'
+        """
+        return self.resources.mapping.cuts._asdict()[key]
+
+    def floor(self):
+        """Returns minimum resource consumption payload.
+        >>> tray.floor()
+        Payload(sliceLUTs=30.00%, processors=0.00%)
+        """
+        floor = self.resources.floor
+        return Payload(sliceLUTs=floor.sliceLUTs, processors=floor.processors)
+
+    def ceiling(self):
+        """Returns maximum payload threshold for resource consumption.
+        >>> tray.ceiling()
+        Payload(sliceLUTs=90.00%, processors=100.00%)
+        """
+        ceiling = self.resources.ceiling
+        return Payload(sliceLUTs=ceiling.sliceLUTs, processors=ceiling.processors)
+
+    def find_instance(self, condition):
+        """Returns instance resource namedtuple for *key* or None if not found."""
+        assert isinstance(condition, ConditionStub)
+        instance_map = self.resources.mapping.instances._asdict()
+        def compare(instance):
+            return instance.type == self.map_instance(condition.type)
+        return filter_first(compare, self.resources.instances)
+
+    def slice_size(self, esObject):
+        """Returns number of objects used from collection."""
+        # Check for object slice cut
+        cut = filter_first(lambda item: item.getCutType() == tmEventSetup.Slice, esObject.getCuts())
+        if cut:
+            return int(cut.getMaximumValue() - cut.getMinimumValue()) + 1
+        # Else use default size
+        object_type = esObjectType[esObject.getType()]
+        return esObjectCollectionSizes[object_type]
+
+    def calc_factor(self, condition):
+        """Returns calculated multiplication factor for base resources."""
+        assert isinstance(condition, ConditionStub)
+        logging.debug("calc_factor:")
+        # condition type dependent factor calculation (see also config/README.md)
+        esObjects = condition.ptr.getObjects()
+        n_requirements = len(esObjects)
+        n_objects = self.slice_size(esObjects[0])
+        n_objects_ovrm = self.slice_size(esObjects[-1])
+        mapped_objects = self.map_objects(condition.objects)
+        same_object_types = len(set(mapped_objects)) == 1 # in terms of mapped object types!
+        same_object_bxs = len(set([esObject.getBxOffset() for esObject in esObjects])) == 1
+        # instance
+        instance = self.map_instance(condition.type)
+        # select
+        if instance in ('MuonCondition', 'CaloCondition', 'CaloConditionOvRm'):
+            return n_objects * n_requirements
+        elif instance == 'CorrelationCondition':
+            if same_object_types and same_object_bxs:
+                return n_objects * (n_objects - 1) * 0.5
+            else:
+                n_objects_1 = self.slice_size(esObjects[0])
+                n_objects_2 = self.slice_size(esObjects[1])
+                return n_objects_1 * n_objects_2
+        elif instance == 'CorrelationConditionOvRm':
+            if mapped_objects == ('calo', 'calo', 'calo'):
+                return n_objects * (n_objects - 1) * 0.5
+            elif mapped_objects == ('calo', 'calo'):
+                return n_objects * n_objects_ovrm
+            raise RuntimeError("missing mapped objects for ovrm corr")
+        return 1.
+
+    def calc_cut_factor(self, condition, cut_type):
+        """Returns calculated multiplication factor for cut resources."""
+        assert isinstance(condition, ConditionStub)
+        logging.debug("calc_cut_factor:")
+        # condition type dependent factor calculation (see also config/README.md)
+        esObjects = condition.ptr.getObjects()
+        n_requirements = len(esObjects)
+        n_objects = self.slice_size(esObjects[0])
+        n_objects_ovrm = self.slice_size(esObjects[-1])
+        mapped_objects = self.map_objects(condition.objects)
+        same_object_types = len(set(mapped_objects)) == 1 # in terms of mapped object types!
+        same_object_bxs = len(set([esObject.getBxOffset() for esObject in esObjects])) == 1
+        # instance
+        instance = self.map_instance(condition.type)
+        # select
+        if instance in ('MuonCondition', 'CaloCondition'):
+            if self.map_cut(cut_type) == 'tbpt':
+                return n_objects * (n_objects - 1) * 0.5
+        elif instance  == 'CaloConditionOvRm':
+            if self.map_cut(cut_type) == 'tbpt':
+                return n_objects * (n_objects - 1) * 0.5
+            elif cut_type in ('deta', 'dphi', 'dr'):
+                return n_objects * n_objects_ovrm
+        elif instance == 'CorrelationCondition':
+            if same_object_types and same_object_bxs:
+                return n_objects * (n_objects - 1) * 0.5
+            else:
+                n_objects_1 = self.slice_size(esObjects[0])
+                n_objects_2 = self.slice_size(esObjects[1])
+                return n_objects_1 * n_objects_2
+        elif instance == 'CorrelationConditionOvRm':
+            if mapped_objects == ('calo', 'calo', 'calo'):
+                return n_objects * (n_objects - 1) * 0.5
+            elif mapped_objects == ('calo', 'calo'):
+                return n_objects * n_objects_ovrm
+            raise RuntimeError("missing mapped objects for ovrm corr")
+        return 1.
+
     def measure(self, condition):
-        """Calculates the payload of a condition by its type and objects."""
+        """Calculates the payload of a condition by its type and objects.
+        Conditions can be of type `tmEventSetup.esCondition` or `ConditionStub`.
+        >>> tray.measure(condition)
+        Payload(sliceLUTs=0.42%, processors=0.00%)
+        """
         if isinstance(condition, tmEventSetup.esCondition):
             condition = ConditionStub(condition, Payload()) # cast to stub with empty payload
-        def compare(instance):
-            """Find resources of same type and objects. Used with filter function."""
-            if instance.type != condition.type: return False
-            if set(instance.objects) != set(condition.objects): return False
-            return True
-        result = filter(compare, self.resources.instances)
-        if not result:
+
+        # Pick resource instance
+        instance = self.find_instance(condition)
+        if not instance:
             message = "Missing configuration for condition of type '{0}' with " \
                       "objects {1} in file '{2}'.".format(condition.type, condition.objects, self.filename)
             raise RuntimeError(message)
-        instance = result[0]
-        payload = Payload(instance.sliceLUTs, instance.processors)
+
+        # Pick object configuration
+        mapped_objects = self.map_objects(condition.objects)
+        instance_objects = filter_first(lambda item: item.types == mapped_objects, instance.objects)
+        if not instance_objects:
+            message = "Missing configuration for condition of type '{0}' with " \
+                      "objects {1} in file '{2}'.".format(condition.type, condition.objects, self.filename)
+            raise RuntimeError(message)
+        # condition type dependent factor calculation (see also config/README.md)
+        factor = self.calc_factor(condition)
+        sliceLUTs = instance_objects.sliceLUTs * factor
+        processors = instance_objects.processors * factor
+        payload = Payload(sliceLUTs, processors)
+        logging.debug("object payload for condition %s: %s", condition.name, payload)
+        for key in condition.cuts:
+            try: # only for cuts listed in configuration... might be error prone
+                cut_type = self.map_cut(key)
+            except KeyError as e:
+                logging.warning("skipping cut %s", key)
+            else:
+                result = filter_first(lambda cut: cut.type == cut_type, instance_objects.cuts)
+                if result:
+                    factor = self.calc_cut_factor(condition, cut_type)
+                    sliceLUTs = result.sliceLUTs * factor
+                    processors = result.processors * factor
+                    cut_payload = Payload(sliceLUTs, processors)
+                    logging.debug(" --> adding payload for cut %s (%s): %s", key, cut_type, cut_payload)
+                    payload += cut_payload
         return payload
 
 class ConditionStub(object):
@@ -497,9 +691,8 @@ class ModuleStub(object):
         """Attribute *id* is the module index."""
         self.id = id
         self.algorithms = []
-        resources = tray.resources
-        self.floor = Payload(sliceLUTs=resources.floor.sliceLUTs, processors=resources.floor.processors)
-        self.ceiling = Payload(sliceLUTs=resources.ceiling.sliceLUTs, processors=resources.ceiling.processors)
+        self.floor = tray.floor()
+        self.ceiling = tray.ceiling()
 
     def __len__(self):
         """Returns count of algorithms assigned to this module."""
@@ -549,6 +742,7 @@ class ModuleCollection(object):
         self.tray = tray
         self.modules = []
         self.ratio = .0
+        self.reverse_sorting = False
         # Calculate condition stubs
         self.conditionStubs = {}
         for name, condition in es.getConditionMapPtr().iteritems():
@@ -559,7 +753,8 @@ class ModuleCollection(object):
         for name, algorithm in es.getAlgorithmMapPtr().iteritems():
             conditions = [self.conditionStubs[condition] for condition in get_condition_names(algorithm)]
             self.algorithmStubs.append(AlgorithmStub(algorithm, conditions))
-        self.algorithmStubs.sort(key = lambda algorithm: algorithm.payload, reverse=True)
+        # pre sort
+        self.algorithmStubs.sort(key = lambda algorithm: algorithm.payload, reverse=self.reverse_sorting)
 
     def __len__(self):
         """Returns count of modules assigned to this collection."""
@@ -597,10 +792,13 @@ class ModuleCollection(object):
         """Retruns unsorted list of all conditions."""
         return [condition for _, condition in self.conditionStubs.iteritems()]
 
-    def distribute(self, modules, ratio, regenerate=True):
+    def distribute(self, modules, ratio, reverse_sorting=False, regenerate=True):
         """Distribute algorithms to modules, applying shadow ratio.
         Regenerates firmware UUID.
         """
+        # sort algorithms
+        self.reverse_sorting = reverse_sorting
+        self.algorithmStubs.sort(key = lambda algorithm: algorithm.payload, reverse=self.reverse_sorting)
         if regenerate:
             self.eventSetup.setFirmwareUuid(str(uuid.uuid4())) # regenerate firmware UUID
         logging.info("starting algorithm distribution for %d algorithms on %d " \
@@ -647,7 +845,7 @@ class ModuleCollection(object):
                 name = algorithm['name']
                 module_id = algorithm['module_id']
                 module_index = algorithm['module_index']
-                algorithmStub = filter(lambda algorithmStub: algorithmStub.index == index and algorithmStub.name == name, self.algorithmStubs)[0]
+                algorithmStub = filter_first(lambda algorithmStub: algorithmStub.index == index and algorithmStub.name == name, self.algorithmStubs)
                 stack.pop(stack.index(algorithmStub))
                 # insert in correct order!
                 modules[module_id].append(algorithmStub)
@@ -677,16 +875,17 @@ class ModuleCollection(object):
         algorithms.sort(key=lambda algorithm: algorithm['index'])
         data = {
             'name': self.eventSetup.getName(),
-            'menu_uuid': self.eventSetup.menuUuid, # HACk
+            'menu_uuid': self.eventSetup.getMenuUuid(),
             'firmware_uuid': self.eventSetup.getFirmwareUuid(),
             'n_modules': len(self),
             'algorithms': algorithms,
         }
         json.dump(data, fp, indent=indent)
 
-    def getShadowed(self, stack, conditions, ratio, depth = 1):
+    def getShadowed(self, stack, conditions, ratio, depth=1):
         """Returns list of shadowed conditions from a stack of algorithms.
         Attribute *ratio* (0.0 < ratio <= 1.0) regulates the minimum amount of a shadowed algorithm.
+        Depth param is used for recursive call!
         """
         shadowed = []
         a = conditions
@@ -695,17 +894,17 @@ class ModuleCollection(object):
                 continue
             b = [condition.name for condition in algorithm.conditions]
             # is shadowed at all?
-            if (set(a) & set(b)):
-                left = len(set(a) & set(b))
-                right = len(set(a+b) - (set(a)&set(b)))
-                total = left + right
+            if (set(a) & set(b)): # abc & bcd -> bc
+                left = len(set(a) & set(b)) # number of identical conditions len(bc)
+                right = len(set(a + b) - (set(a) & set(b))) # number of other conditions len(ad)
+                total = left + right # total number of conditions
                 percent = total/100.
-                if not ratio <= (left/percent/100.):
-                    continue
-                logging.info("%s %s shadowed ratio %.1f %%", " +-" + "-" * depth, algorithm.name, (left/percent))
-                shadowed.append(algorithm)
-                shadowed += self.getShadowed(set(stack)-set(shadowed), list(set(a+b)), ratio, depth+1)# add recursive....
-                shadowed = list(set(shadowed))
+                if ratio <= (left/percent/100.):
+                    indent = " +-{0}".format("-" * depth)
+                    logging.info("%s %s shadowed ratio %.1f %%", indent, algorithm.name, (left/percent))
+                    shadowed.append(algorithm)
+                    shadowed += self.getShadowed(set(stack)-set(shadowed), list(set(a+b)), ratio, depth+1) # add recursive....
+                    shadowed = list(set(shadowed))
         return shadowed
 
     def __repr__(self):
@@ -727,7 +926,8 @@ def parse_args():
     parser.add_argument('filename', metavar='<file>', type=os.path.abspath, help="XML menu")
     parser.add_argument('--config', metavar='<file>', default=DefaultConfigFile, type=os.path.abspath, help="JSON resource configuration file, default {DefaultConfigFile}".format(**globals()))
     parser.add_argument('--modules', metavar='<n>', default=2, type=int, help="number of modules, default is 2")
-    parser.add_argument('--ratio', metavar='<f>', default=0.25, type=float, help="algorithm shadow ratio (0.0 < ratio <= 1.0, default 0.25)")
+    parser.add_argument('--ratio', metavar='<f>', default=0.0, type=float, help="algorithm shadow ratio (0.0 < ratio <= 1.0, default 0.0)")
+    parser.add_argument('--sorting', metavar='asc|desc', choices=('asc', 'desc'), default='asc', help="sort order for weighting (asc or desc, default asc)")
     parser.add_argument('-o', metavar='<file>', type=os.path.abspath, help="write calculated distribution to JSON file")
     parser.add_argument('--list', action='store_true', help="list resource scales and exit")
     return parser.parse_args()
@@ -737,15 +937,20 @@ def list_resources(tray):
     def section(name, instance):
         sliceLUTsPercent = instance.sliceLUTs * 100
         processorsPercent = instance.processors * 100
-        return "  * {name}: sliceLUTs={sliceLUTsPercent:.2f}%, processors={processorsPercent:.2f}%".format(**locals())
+        return " * {name}: sliceLUTs={sliceLUTsPercent:.2f}%, processors={processorsPercent:.2f}%".format(**locals())
     logging.info("thresholds:")
-    logging.info(section("floor", tray.resources.floor))
-    logging.info(section("ceiling", tray.resources.ceiling))
+    logging.info(section("floor", tray.floor()))
+    logging.info(section("ceiling", tray.ceiling()))
     logging.info("instances:")
     for instance in tray.resources.instances:
-        object_list = ', '.join(instance.objects)
-        name = "{instance.type}({object_list})".format(**locals())
-        logging.info(section(name, instance))
+        # TODO TODO TODO
+        for object_ in instance.objects:
+            object_list = ', '.join(object_.types)
+            name = "{instance.type}({object_list})".format(**locals())
+            logging.info(section(name, object_))
+            if hasattr(object_, 'cuts'):
+                for cut in object_.cuts:
+                    logging.info("  {0}: ".format(section(cut.type, cut)))
 
 def list_algorithms(collection):
     logging.info("|-----------------------------------------------------------------------------|")
@@ -809,12 +1014,15 @@ def list_distribution(collection):
     logging.info("|----|-------|-------|--------------------------------------------------------|")
     logging.info("|-----------------------------------------------------------------------------|")
     logging.info("|                                                                             |")
-    logging.info("| Condition distribution, sorted by weight (descending)                       |")
+    if collection.reverse_sorting:
+        logging.info("| Condition distribution, sorted by weight (descending)                       |")
+    else:
+        logging.info("| Condition distribution, sorted by weight (ascending)                        |")
     logging.info("|                                                                             |")
     logging.info("|-----------------------------------------------------------------------------|")
     logging.info("| Name                                             | Modules                  |")
     logging.info("|--------------------------------------------------|--------------------------|")
-    conditions = sorted(collection.conditions, key=lambda condition: condition.payload, reverse=True)
+    conditions = sorted(collection.conditions, key=lambda condition: condition.payload, reverse=collection.reverse_sorting)
     for condition in conditions:
         modules = []
         for module in collection:
@@ -829,24 +1037,25 @@ def list_summary(collection):
     logging.info("|                                                                             |")
     logging.info("| {message:<75} |".format(**locals()))
     logging.info("|                                                                             |")
-    logging.info("|-----------------|-----------------------------------------------------------|")
-    logging.info("| Module          | Payload                                                   |")
-    logging.info("| ID | Algorithms | SliceLUTs | DSPs                                          |")
-    logging.info("|----|------------|-----------|-----------------------------------------------|")
+    logging.info("|------------------------------|----------------------------------------------|")
+    logging.info("| Module                       | Payload                                      |")
+    logging.info("| ID | Algorithms | Conditions | SliceLUTs | DSPs   |                         |")
+    logging.info("|----|------------|------------|-----------|--------|-------------------------|")
     for module in collection:
         algorithms = len(module)
+        conditions = len(module.conditions)
         sliceLUTs = module.payload.sliceLUTs * 100.
         processors = module.payload.processors * 100.
-        logging.info("| {module.id:>2} | {algorithms:>10} | {sliceLUTs:>8.2f}% " \
-                     "| {processors:>5.2f}%                                        |".format(**locals()))
-    logging.info("|----|------------|-----------|-----------------------------------------------|")
+        logging.info("| {module.id:>2} | {algorithms:>10} | {conditions:>10} | " \
+                     "{sliceLUTs:>8.2f}% | {processors:>5.2f}% |                         |".format(**locals()))
+    logging.info("|----|------------|------------|-----------|--------|-------------------------|")
 
 def dump_distribution(collection, args):
     logging.info(":: writing menu distribution JSON dump: %s", args.o)
     with open(args.o, 'wb') as fp:
         collection.dump(fp)
 
-def distribute(eventSetup, modules, config, ratio):
+def distribute(eventSetup, modules, config, ratio, reverse_sorting):
     """Distribution wrapper function, provided for convenience."""
     logging.info("distributing menu...")
 
@@ -864,7 +1073,7 @@ def distribute(eventSetup, modules, config, ratio):
     list_conditions(collection)
 
     logging.info("distributing algorithms, shadow ratio: %s", ratio)
-    collection.distribute(modules, ratio)
+    collection.distribute(modules, ratio, reverse_sorting)
 
     # Diagnostic output
     list_distribution(collection)
@@ -882,7 +1091,6 @@ def main():
 
     logging.info("reading event setup from XML menu: %s", args.filename)
     es = tmEventSetup.getTriggerMenu(args.filename)
-    es.getMenuUuid = '' # HACK
 
     logging.info("loading resource information from JSON: %s", args.config)
     tray = ResourceTray(args.config)
@@ -901,7 +1109,9 @@ def main():
     list_conditions(collection)
 
     logging.info("distributing algorithms, shadow ratio: %s", args.ratio)
-    collection.distribute(args.modules, args.ratio)
+    # Set sort order (asc or desc)
+    reverse_sorting = (args.sorting == 'desc')
+    collection.distribute(args.modules, args.ratio, reverse_sorting)
 
     list_distribution(collection)
 

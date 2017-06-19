@@ -1,5 +1,87 @@
 {
     "resources": {
+        "mapping": {
+            "instances": {
+                "SingleMuon": "MuonCondition",
+                "DoubleMuon": "MuonCondition",
+                "TripleMuon": "MuonCondition",
+                "QuadMuon": "MuonCondition",
+                "SingleEgamma": "CaloCondition",
+                "DoubleEgamma": "CaloCondition",
+                "TripleEgamma": "CaloCondition",
+                "QuadEgamma": "CaloCondition",
+                "SingleJet": "CaloCondition",
+                "DoubleJet": "CaloCondition",
+                "TripleJet": "CaloCondition",
+                "QuadJet": "CaloCondition",
+                "SingleTau": "CaloCondition",
+                "DoubleTau": "CaloCondition",
+                "TripleTau": "CaloCondition",
+                "QuadTau": "CaloCondition",
+                "SingleEgammaOvRm": "CaloConditionOvRm",
+                "DoubleEgammaOvRm": "CaloConditionOvRm",
+                "TripleEgammaOvRm": "CaloConditionOvRm",
+                "QuadEgammaOvRm": "CaloConditionOvRm",
+                "SingleJetOvRm": "CaloConditionOvRm",
+                "DoubleJetOvRm": "CaloConditionOvRm",
+                "TripleJetOvRm": "CaloConditionOvRm",
+                "QuadJetOvRm": "CaloConditionOvRm",
+                "SingleTauOvRm": "CaloConditionOvRm",
+                "DoubleTauOvRm": "CaloConditionOvRm",
+                "TripleTauOvRm": "CaloConditionOvRm",
+                "QuadTauOvRm": "CaloConditionOvRm",
+                "CaloCaloCorrelation": "CorrelationCondition",
+                "CaloMuonCorrelation": "CorrelationCondition",
+                "CaloEsumCorrelation": "CorrelationCondition",
+                "MuonMuonCorrelation": "CorrelationCondition",
+                "MuonEsumCorrelation": "CorrelationCondition",
+                "TotalEt": "EsumsCondition",
+                "TotalHt": "EsumsCondition",
+                "MissingEt": "EsumsCondition",
+                "MissingHt": "EsumsCondition",
+                "MinBiasHFP0": "MinBiasCondition",
+                "MinBiasHFP1": "MinBiasCondition",
+                "MinBiasHFM0": "MinBiasCondition",
+                "MinBiasHFM1": "MinBiasCondition",
+                "TotalEtEM": "EsumsCondition",
+                "MissingEtHF": "EsumsCondition",
+                "TowerCount": "TowerCountCondition",
+                "Externals": "ExternalCondition",
+                "InvariantMass": "CorrelationCondition",
+                "TransverseMass": "CorrelationCondition",
+                "CaloCaloCorrelationOvRm": "CorrelationConditionOvRm",
+                "InvariantMassOvRm": "CorrelationConditionOvRm",
+                "TransverseMassOvRm": "CorrelationConditionOvRm"
+            },
+            "objects": {
+                "Egamma": "calo",
+                "Jet": "calo",
+                "Tau": "calo",
+                "Muon": "muon",
+                "HTT": "esum",
+                "ETT": "esum",
+                "ETTEM": "esum",
+                "ETM": "esum",
+                "ETMHF": "esum",
+                "HTM": "esum",
+                "MBT0HFP": "bias",
+                "MBT1HFP": "bias",
+                "MBT0HFM": "bias",
+                "MBT1HFM": "bias",
+                "TOWERCOUNT": "count",
+                "EXT": "ext"
+            },
+            "cuts": {
+                "DeltaEta": "deta",
+                "DeltaPhi": "dphi",
+                "DeltaR": "dr",
+                "OvRmDeltaEta": "deta",
+                "OvRmDeltaPhi": "dphi",
+                "OvRmDeltaR": "dr",
+                "TwoBodyPt": "tbpt",
+                "Mass": "mass"
+            }
+        },
         "floor": {
             "processors": 0.0,
             "sliceLUTs": 0.30
@@ -10,712 +92,420 @@
         },
         "instances": [
             {
-                "type": "SingleMuon",
-                "objects": ["Muon"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0004
-            },
-            {
-                "type": "DoubleMuon",
-                "objects": ["Muon", "Muon"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0005
-            },
-            {
-                "type": "TripleMuon",
-                "objects": ["Muon", "Muon", "Muon"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0006
-            },
-            {
-                "type": "QuadMuon",
-                "objects": ["Muon", "Muon", "Muon", "Muon"],
-                "processors": 0.0,
-                "sliceLUTs": 0.003
-            },
-            {
-                "type": "SingleEgamma",
-                "objects": ["Egamma"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0005
-            },
-            {
-                "type": "DoubleEgamma",
-                "objects": ["Egamma", "Egamma"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0007
-            },
-            {
-                "type": "TripleEgamma",
-                "objects": ["Egamma", "Egamma", "Egamma"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0009
-            },
-            {
-                "type": "QuadEgamma",
-                "objects": ["Egamma", "Egamma", "Egamma", "Egamma"],
-                "processors": 0.0,
-                "sliceLUTs": 0.035
-            },
-            {
-                "type": "SingleJet",
-                "objects": ["Jet"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0005
-            },
-            {
-                "type": "DoubleJet",
-                "objects": ["Jet", "Jet"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0007
-            },
-            {
-                "type": "TripleJet",
-                "objects": ["Jet", "Jet", "Jet"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0009
-            },
-            {
-                "type": "QuadJet",
-                "objects": ["Jet", "Jet", "Jet", "Jet"],
-                "processors": 0.0,
-                "sliceLUTs": 0.035
-            },
-            {
-                "type": "SingleTau",
-                "objects": ["Tau"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0005
-            },
-            {
-                "type": "DoubleTau",
-                "objects": ["Tau", "Tau"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0007
-            },
-            {
-                "type": "TripleTau",
-                "objects": ["Tau", "Tau", "Tau"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0009
-            },
-            {
-                "type": "QuadTau",
-                "objects": ["Tau", "Tau", "Tau", "Tau"],
-                "processors": 0.0,
-                "sliceLUTs": 0.035
-            },
-            {
-                "type": "TotalEt",
-                "objects": ["ETT"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0001
-            },
-            {
-                "type": "TotalEtEM",
-                "objects": ["ETTEM"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0001
-            },
-            {
-                "type": "TotalHt",
-                "objects": ["HTT"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0001
-            },
-            {
-                "type": "TowerCount",
-                "objects": ["TOWERCOUNT"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0001
-            },
-            {
-                "type": "MissingEt",
-                "objects": ["ETM"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0001
-            },
-            {
-                "type": "MissingEtHF",
-                "objects": ["ETMHF"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0001
-            },
-            {
-                "type": "MissingHt",
-                "objects": ["HTM"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0001
-            },
-            {
-                "type": "MinBiasHFM0",
-                "objects": ["MBT0HFM"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0001
-            },
-            {
-                "type": "MinBiasHFM1",
-                "objects": ["MBT1HFM"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0001
-            },
-            {
-                "type": "MinBiasHFP0",
-                "objects": ["MBT0HFP"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0001
-            },
-            {
-                "type": "MinBiasHFP1",
-                "objects": ["MBT1HFP"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0001
-            },
-            {
-                "type": "Externals",
-                "objects": ["EXT"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0
-            },
-            {
-                "type": "MuonMuonCorrelation",
-                "objects": ["Muon", "Muon"],
-                "processors": 0.0,
-                "sliceLUTs": 0.015
-            },
-            {
-                "type": "MuonEsumCorrelation",
-                "objects": ["Muon", "ETM"],
-                "processors": 0.0,
-                "sliceLUTs": 0.005
-            },
-            {
-                "type": "MuonEsumCorrelation",
-                "objects": ["Muon", "ETMHF"],
-                "processors": 0.0,
-                "sliceLUTs": 0.005
-            },
-            {
-                "type": "MuonEsumCorrelation",
-                "objects": ["Muon", "HTM"],
-                "processors": 0.0,
-                "sliceLUTs": 0.005
-            },
-            {
-                "type": "CaloMuonCorrelation",
-                "objects": ["Egamma", "Muon"],
-                "processors": 0.0,
-                "sliceLUTs": 0.025
-            },
-            {
-                "type": "CaloMuonCorrelation",
-                "objects": ["Jet", "Muon"],
-                "processors": 0.0,
-                "sliceLUTs": 0.025
-            },
-            {
-                "type": "CaloMuonCorrelation",
-                "objects": ["Tau", "Muon"],
-                "processors": 0.0,
-                "sliceLUTs": 0.025
-            },
-            {
-                "type": "CaloCaloCorrelation",
-                "objects": ["Egamma", "Egamma"],
-                "processors": 0.0,
-                "sliceLUTs": 0.025
-            },
-            {
-                "type": "CaloCaloCorrelation",
-                "objects": ["Egamma", "Tau"],
-                "processors": 0.0,
-                "sliceLUTs": 0.025
-            },
-            {
-                "type": "CaloCaloCorrelation",
-                "objects": ["Egamma", "Jet"],
-                "processors": 0.0,
-                "sliceLUTs": 0.025
-            },
-            {
-                "type": "CaloCaloCorrelation",
-                "objects": ["Jet", "Jet"],
-                "processors": 0.0,
-                "sliceLUTs": 0.025
-            },
-            {
-                "type": "CaloCaloCorrelation",
-                "objects": ["Jet", "Tau"],
-                "processors": 0.0,
-                "sliceLUTs": 0.025
-            },
-            {
-                "type": "CaloCaloCorrelation",
-                "objects": ["Tau", "Tau"],
-                "processors": 0.0,
-                "sliceLUTs": 0.025
-            },
-            {
-                "type": "CaloEsumCorrelation",
-                "objects": ["Egamma", "ETM"],
-                "processors": 0.0,
-                "sliceLUTs": 0.005
-            },
-            {
-                "type": "CaloEsumCorrelation",
-                "objects": ["Egamma", "ETMHF"],
-                "processors": 0.0,
-                "sliceLUTs": 0.005
-            },
-            {
-                "type": "CaloEsumCorrelation",
-                "objects": ["Tau", "ETM"],
-                "processors": 0.0,
-                "sliceLUTs": 0.005
-            },
-            {
-                "type": "CaloEsumCorrelation",
-                "objects": ["Tau", "ETMHF"],
-                "processors": 0.0,
-                "sliceLUTs": 0.005
-            },
-            {
-                "type": "CaloEsumCorrelation",
-                "objects": ["Jet", "ETM"],
-                "processors": 0.0,
-                "sliceLUTs": 0.005
-            },
-            {
-                "type": "CaloEsumCorrelation",
-                "objects": ["Jet", "ETMHF"],
-                "processors": 0.0,
-                "sliceLUTs": 0.005
-            },
-            {
-                "type": "CaloEsumCorrelation",
-                "objects": ["Egamma", "HTM"],
-                "processors": 0.0,
-                "sliceLUTs": 0.005
-            },
-            {
-                "type": "CaloEsumCorrelation",
-                "objects": ["Tau", "HTM"],
-                "processors": 0.0,
-                "sliceLUTs": 0.005
-            },
-            {
-                "type": "CaloEsumCorrelation",
-                "objects": ["Jet", "HTM"],
-                "processors": 0.0,
-                "sliceLUTs": 0.005
-            },
-            {
-                "type": "InvariantMass",
-                "objects": ["Muon", "Muon"],
-                "processors": 0.06,
-                "sliceLUTs": 0.05
-            },
-            {
-                "type": "InvariantMass",
-                "objects": ["Egamma", "Muon"],
-                "processors": 0.06,
-                "sliceLUTs": 0.06
-            },
-            {
-                "type": "InvariantMass",
-                "objects": ["Jet", "Muon"],
-                "processors": 0.06,
-                "sliceLUTs": 0.06
-            },
-            {
-                "type": "InvariantMass",
-                "objects": ["Tau", "Muon"],
-                "processors": 0.06,
-                "sliceLUTs": 0.06
-            },
-            {
-                "type": "InvariantMass",
-                "objects": ["Egamma", "Egamma"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "InvariantMass",
-                "objects": ["Egamma", "Tau"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "InvariantMass",
-                "objects": ["Egamma", "Jet"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "InvariantMass",
-                "objects": ["Jet", "Jet"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "InvariantMass",
-                "objects": ["Jet", "Tau"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "InvariantMass",
-                "objects": ["Tau", "Tau"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "TransverseMass",
-                "objects": ["Muon", "Muon"],
-                "processors": 0.06,
-                "sliceLUTs": 0.05
-            },
-            {
-                "type": "TransverseMass",
-                "objects": ["Egamma", "Muon"],
-                "processors": 0.06,
-                "sliceLUTs": 0.06
-            },
-            {
-                "type": "TransverseMass",
-                "objects": ["Jet", "Muon"],
-                "processors": 0.06,
-                "sliceLUTs": 0.06
-            },
-            {
-                "type": "TransverseMass",
-                "objects": ["Tau", "Muon"],
-                "processors": 0.06,
-                "sliceLUTs": 0.06
-            },
-            {
-                "type": "TransverseMass",
-                "objects": ["Egamma", "Egamma"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "TransverseMass",
-                "objects": ["Egamma", "Tau"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "TransverseMass",
-                "objects": ["Egamma", "Jet"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "TransverseMass",
-                "objects": ["Egamma", "ETM"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "TransverseMass",
-                "objects": ["Egamma", "ETMHF"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "TransverseMass",
-                "objects": ["Egamma", "HTM"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "TransverseMass",
-                "objects": ["Jet", "Jet"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "TransverseMass",
-                "objects": ["Jet", "ETM"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "TransverseMass",
-                "objects": ["Jet", "ETMHF"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "TransverseMass",
-                "objects": ["Jet", "HTM"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "TransverseMass",
-                "objects": ["Jet", "Tau"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "TransverseMass",
-                "objects": ["Tau", "Tau"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "TransverseMass",
-                "objects": ["Tau", "ETM"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "TransverseMass",
-                "objects": ["Tau", "ETMHF"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "TransverseMass",
-                "objects": ["Tau", "HTM"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "TransverseMass",
-                "objects": ["Muon", "ETM"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "TransverseMass",
-                "objects": ["Muon", "ETMHF"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "TransverseMass",
-                "objects": ["Muon", "HTM"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "InvariantMassOvRm",
-                "objects": ["Egamma", "Egamma"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "InvariantMassOvRm",
-                "objects": ["Egamma", "Tau"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "InvariantMassOvRm",
-                "objects": ["Egamma", "Jet"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "InvariantMassOvRm",
-                "objects": ["Jet", "Jet"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "InvariantMassOvRm",
-                "objects": ["Jet", "Tau"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "InvariantMassOvRm",
-                "objects": ["Tau", "Tau"],
-                "processors": 0.11,
-                "sliceLUTs": 0.022
-            },
-            {
-                "type": "CaloCaloCorrelationOvRm",
-                "objects": ["Jet", "Jet", "Egamma"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0005
-            },
-            {
-                "type": "CaloCaloCorrelationOvRm",
-                "objects": ["Jet", "Jet", "Tau"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0005
-            },
-            {
-                "type": "CaloCaloCorrelationOvRm",
-                "objects": ["Tau", "Tau", "Egamma"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0005
-            },
-            {
-                "type": "CaloCaloCorrelationOvRm",
-                "objects": ["Tau", "Tau", "Jet"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0005
-            },
-            {
-                "type": "CaloCaloCorrelationOvRm",
-                "objects": ["Egamma", "Egamma", "Jet"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0007
-            },
-            {
-                "type": "CaloCaloCorrelationOvRm",
-                "objects": ["Egamma", "Egamma", "Tau"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0007
-            },
-            {
-                "type": "SingleEgammaOvRm",
-                "objects": ["Egamma", "Jet"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0005
-            },
-            {
-                "type": "DoubleEgammaOvRm",
-                "objects": ["Egamma", "Egamma", "Jet"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0007
-            },
-            {
-                "type": "TripleEgammaOvRm",
-                "objects": ["Egamma", "Egamma", "Egamma", "Jet"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0009
-            },
-            {
-                "type": "QuadEgammaOvRm",
-                "objects": ["Egamma", "Egamma", "Egamma", "Egamma", "Jet"],
-                "processors": 0.0,
-                "sliceLUTs": 0.035
-            },
-            {
-                "type": "SingleEgammaOvRm",
-                "objects": ["Egamma", "Tau"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0005
-            },
-            {
-                "type": "DoubleEgammaOvRm",
-                "objects": ["Egamma", "Egamma", "Tau"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0007
-            },
-            {
-                "type": "TripleEgammaOvRm",
-                "objects": ["Egamma", "Egamma", "Egamma", "Tau"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0009
-            },
-            {
-                "type": "QuadEgammaOvRm",
-                "objects": ["Egamma", "Egamma", "Egamma", "Egamma", "Tau"],
-                "processors": 0.0,
-                "sliceLUTs": 0.035
-            },
-            {
-                "type": "SingleJetOvRm",
-                "objects": ["Jet", "Egamma"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0005
-            },
-            {
-                "type": "DoubleJetOvRm",
-                "objects": ["Jet", "Jet", "Egamma"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0007
-            },
-            {
-                "type": "TripleJetOvRm",
-                "objects": ["Jet", "Jet", "Jet", "Egamma"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0009
-            },
-            {
-                "type": "QuadJetOvRm",
-                "objects": ["Jet", "Jet", "Jet", "Jet", "Egamma"],
-                "processors": 0.0,
-                "sliceLUTs": 0.035
-            },
-            {
-                "type": "SingleJetOvRm",
-                "objects": ["Jet", "Tau"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0005
-            },
-            {
-                "type": "DoubleJetOvRm",
-                "objects": ["Jet", "Jet", "Tau"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0007
-            },
-            {
-                "type": "TripleJetOvRm",
-                "objects": ["Jet", "Jet", "Jet", "Tau"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0009
-            },
-            {
-                "type": "QuadJetOvRm",
-                "objects": ["Jet", "Jet", "Jet", "Jet", "Tau"],
-                "processors": 0.0,
-                "sliceLUTs": 0.035
-            },
-            {
-                "type": "SingleTauOvRm",
-                "objects": ["Tau", "Egamma"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0005
-            },
-            {
-                "type": "DoubleTauOvRm",
-                "objects": ["Tau", "Tau", "Egamma"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0007
-            },
-            {
-                "type": "TripleTauOvRm",
-                "objects": ["Tau", "Tau", "Tau", "Egamma"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0009
-            },
-            {
-                "type": "QuadTauOvRm",
-                "objects": ["Tau", "Tau", "Tau", "Tau", "Egamma"],
-                "processors": 0.0,
-                "sliceLUTs": 0.035
-            },
-            {
-                "type": "SingleTauOvRm",
-                "objects": ["Tau", "Jet"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0005
-            },
-            {
-                "type": "DoubleTauOvRm",
-                "objects": ["Tau", "Tau", "Jet"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0007
-            },
-            {
-                "type": "TripleTauOvRm",
-                "objects": ["Tau", "Tau", "Tau", "Jet"],
-                "processors": 0.0,
-                "sliceLUTs": 0.0009
-            },
-            {
-                "type": "QuadTauOvRm",
-                "objects": ["Tau", "Tau", "Tau", "Tau", "Jet"],
-                "processors": 0.0,
-                "sliceLUTs": 0.035
+                "type": "MuonCondition",
+                "objects": [
+                    {
+                        "types": ["muon"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.0001
+                    },
+                    {
+                        "types": ["muon", "muon"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.0001,
+                        "cuts": [
+                            {
+                                "type": "tbpt",
+                                "processors": 0.00334,
+                                "sliceLUTs": 0.0008
+                            }
+                        ]
+                    },
+                    {
+                        "types": ["muon", "muon", "muon"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.0001
+                    },
+                    {
+                        "types": ["muon", "muon", "muon", "muon"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.0001
+                    }
+                ]
+            },
+            {
+                "type": "CaloCondition",
+                "objects": [
+                    {
+                        "types": ["calo"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.00002
+                    },
+                    {
+                        "types": ["calo", "calo"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.00002,
+                        "cuts": [
+                            {
+                                "type": "tbpt",
+                                "processors": 0.00445,
+                                "sliceLUTs": 0.0005
+                            }
+                        ]
+                    },
+                    {
+                        "types": ["calo", "calo", "calo"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.00002
+                    },
+                    {
+                        "types": ["calo", "calo", "calo", "calo"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.0007
+                    }
+                ]
+            },
+            {
+                "type": "CaloConditionOvRm",
+                "objects": [
+                    {
+                        "types": ["calo", "calo"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.00002,
+                        "cuts": [
+                            {
+                                "type": "deta",
+                                "processors": 0.0,
+                                "sliceLUTs": 0.0
+                            },
+                            {
+                                "type": "dphi",
+                                "processors": 0.0,
+                                "sliceLUTs": 0.0
+                            },
+                            {
+                                "type": "dr",
+                                "processors": 0.00056,
+                                "sliceLUTs": 0.0
+                            }
+                        ]
+                    },
+                    {
+                        "types": ["calo", "calo", "calo"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.00002,
+                        "cuts": [
+                            {
+                                "type": "deta",
+                                "processors": 0.0,
+                                "sliceLUTs": 0.0
+                            },
+                            {
+                                "type": "dphi",
+                                "processors": 0.0,
+                                "sliceLUTs": 0.0
+                            },
+                            {
+                                "type": "dr",
+                                "processors": 0.00056,
+                                "sliceLUTs": 0.0
+                            },
+                            {
+                                "type": "tbpt",
+                                "processors": 0.00445,
+                                "sliceLUTs": 0.0005
+                            }
+                        ]
+                    },
+                    {
+                        "types": ["calo", "calo", "calo", "calo"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.00002,
+                        "cuts": [
+                            {
+                                "type": "deta",
+                                "processors": 0.0,
+                                "sliceLUTs": 0.0
+                            },
+                            {
+                                "type": "dphi",
+                                "processors": 0.0,
+                                "sliceLUTs": 0.0
+                            },
+                            {
+                                "type": "dr",
+                                "processors": 0.00056,
+                                "sliceLUTs": 0.0
+                            }
+                        ]
+                    },
+                    {
+                        "types": ["calo", "calo", "calo", "calo", "calo"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.0007,
+                        "cuts": [
+                            {
+                                "type": "deta",
+                                "processors": 0.0,
+                                "sliceLUTs": 0.0
+                            },
+                            {
+                                "type": "dphi",
+                                "processors": 0.0,
+                                "sliceLUTs": 0.0
+                            },
+                            {
+                                "type": "dr",
+                                "processors": 0.00056,
+                                "sliceLUTs": 0.0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "CorrelationCondition",
+                "objects": [
+                    {
+                        "types": ["calo", "calo"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.0003,
+                        "cuts": [
+                            {
+                                "type": "deta",
+                                "processors": 0.0,
+                                "sliceLUTs": 0.00002
+                            },
+                            {
+                                "type": "dphi",
+                                "processors": 0.0,
+                                "sliceLUTs": 0.0
+                            },
+                            {
+                                "type": "dr",
+                                "processors": 0.00056,
+                                "sliceLUTs": 0.00025
+                            },
+                            {
+                                "type": "tbpt",
+                                "processors": 0.00445,
+                                "sliceLUTs": 0.0002
+                            },
+                            {
+                                "type": "mass",
+                                "processors": 0.00083,
+                                "sliceLUTs": 0.00033
+                            }
+                        ]
+                    },
+                    {
+                        "types": ["calo", "muon"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.00047,
+                        "cuts": [
+                            {
+                                "type": "deta",
+                                "processors": 0.0,
+                                "sliceLUTs": 0.00005
+                            },
+                            {
+                                "type": "dphi",
+                                "processors": 0.0,
+                                "sliceLUTs": 0.0
+                            },
+                            {
+                                "type": "dr",
+                                "processors": 0.00056,
+                                "sliceLUTs": 0.00051
+                            },
+                            {
+                                "type": "tbpt",
+                                "processors": 0.00389,
+                                "sliceLUTs": 0.00003
+                            },
+                            {
+                                "type": "mass",
+                                "processors": 0.00139,
+                                "sliceLUTs": 0.00123
+                            }
+                        ]
+                    },
+                    {
+                        "types": ["calo", "esum"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.00023,
+                        "cuts": [
+                            {
+                                "type": "dphi",
+                                "processors": 0.0,
+                                "sliceLUTs": 0.0
+                            },
+                            {
+                                "type": "tbpt",
+                                "processors": 0.00407,
+                                "sliceLUTs": 0.00038
+                            },
+                            {
+                                "type": "mass",
+                                "processors": 0.00077,
+                                "sliceLUTs": 0.00009
+                            }
+                        ]
+                    },
+                    {
+                        "types": ["muon", "esum"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.0008,
+                        "cuts": [
+                            {
+                                "type": "dphi",
+                                "processors": 0.0,
+                                "sliceLUTs": 0.0
+                            },
+                            {
+                                "type": "tbpt",
+                                "processors": 0.00445,
+                                "sliceLUTs": 0.0002
+                            },
+                            {
+                                "type": "mass",
+                                "processors": 0.00139,
+                                "sliceLUTs": 0.0002
+                            }
+                        ]
+                    },
+                    {
+                        "types": ["muon", "muon"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.00045,
+                        "cuts": [
+                            {
+                                "type": "deta",
+                                "processors": 0.0,
+                                "sliceLUTs": 0.0
+                            },
+                            {
+                                "type": "dphi",
+                                "processors": 0.0,
+                                "sliceLUTs": 0.00005
+                            },
+                            {
+                                "type": "dr",
+                                "processors": 0.00056,
+                                "sliceLUTs": 0.00045
+                            },
+                            {
+                                "type": "tbpt",
+                                "processors": 0.00334,
+                                "sliceLUTs": 0.00035
+                            },
+                            {
+                                "type": "mass",
+                                "processors": 0.00083,
+                                "sliceLUTs": 0.00065
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "CorrelationConditionOvRm",
+                "objects": [
+                    {
+                        "types": ["calo", "calo"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.0003,
+                        "cuts": [
+                            {
+                                "type": "deta",
+                                "processors": 0.0,
+                                "sliceLUTs": 0.00002
+                            },
+                            {
+                                "type": "dphi",
+                                "processors": 0.0,
+                                "sliceLUTs": 0.0
+                            },
+                            {
+                                "type": "dr",
+                                "processors": 0.00056,
+                                "sliceLUTs": 0.00025
+                            },
+                            {
+                                "type": "tbpt",
+                                "processors": 0.00445,
+                                "sliceLUTs": 0.0002
+                            },
+                            {
+                                "type": "mass",
+                                "processors": 0.00083,
+                                "sliceLUTs": 0.00033
+                            }
+                        ]
+                    },
+                    {
+                        "types": ["calo", "calo", "calo"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.0003,
+                        "cuts": [
+                            {
+                                "type": "deta",
+                                "processors": 0.0,
+                                "sliceLUTs": 0.00002
+                            },
+                            {
+                                "type": "dphi",
+                                "processors": 0.0,
+                                "sliceLUTs": 0.0
+                            },
+                            {
+                                "type": "dr",
+                                "processors": 0.00056,
+                                "sliceLUTs": 0.00025
+                            },
+                            {
+                                "type": "tbpt",
+                                "processors": 0.00445,
+                                "sliceLUTs": 0.0002
+                            },
+                            {
+                                "type": "mass",
+                                "processors": 0.00083,
+                                "sliceLUTs": 0.00033
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "EsumsCondition",
+                "objects": [
+                    {
+                        "types": ["esum"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.00002
+                    }
+                ]
+            },
+            {
+                "type": "MinBiasCondition",
+                "objects": [
+                    {
+                        "types": ["bias"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.00001
+                    }
+                ]
+            },
+            {
+                "type": "ExternalCondition",
+                "objects": [
+                    {
+                        "types": ["ext"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.00001
+                    }
+                ]
+            },
+            {
+                "type": "TowerCountCondition",
+                "objects": [
+                    {
+                        "types": ["count"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.00001
+                    }
+                ]
             }
         ]
     }
