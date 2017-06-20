@@ -498,7 +498,6 @@ class ResourceTray(object):
     def calc_factor(self, condition):
         """Returns calculated multiplication factor for base resources."""
         assert isinstance(condition, ConditionStub)
-        logging.debug("calc_factor:")
         # condition type dependent factor calculation (see also config/README.md)
         esObjects = condition.ptr.getObjects()
         n_requirements = len(esObjects)
@@ -530,7 +529,6 @@ class ResourceTray(object):
     def calc_cut_factor(self, condition, cut_type):
         """Returns calculated multiplication factor for cut resources."""
         assert isinstance(condition, ConditionStub)
-        logging.debug("calc_cut_factor:")
         # condition type dependent factor calculation (see also config/README.md)
         esObjects = condition.ptr.getObjects()
         n_requirements = len(esObjects)
@@ -593,7 +591,6 @@ class ResourceTray(object):
         sliceLUTs = instance_objects.sliceLUTs * factor
         processors = instance_objects.processors * factor
         payload = Payload(sliceLUTs, processors)
-        logging.debug("object payload for condition %s: %s", condition.name, payload)
         for key in condition.cuts:
             try: # only for cuts listed in configuration... might be error prone
                 cut_type = self.map_cut(key)
@@ -606,7 +603,6 @@ class ResourceTray(object):
                     sliceLUTs = result.sliceLUTs * factor
                     processors = result.processors * factor
                     cut_payload = Payload(sliceLUTs, processors)
-                    logging.debug(" --> adding payload for cut %s (%s): %s", key, cut_type, cut_payload)
                     payload += cut_payload
         return payload
 
@@ -724,8 +720,11 @@ class ModuleStub(object):
 
     def append(self, algorithm):
         """Appends an algorithm, updates module id and index of assigned algorithm."""
-        if self.payload + algorithm.payload > self.ceiling:
-            raise ResourceOverflowError() # no more resources left, ceiling exceeded
+        payload = self.payload + algorithm.payload
+        if payload.sliceLUTs > self.ceiling.sliceLUTs:
+             raise ResourceOverflowError() # no more resources left, ceiling exceeded
+        if payload.processors > self.ceiling.processors:
+             raise ResourceOverflowError() # no more resources left, ceiling exceeded
         algorithm.module_id = self.id
         algorithm.module_index = len(self) # enumerate
         self.algorithms.append(algorithm)
@@ -1037,18 +1036,19 @@ def list_summary(collection):
     logging.info("|                                                                             |")
     logging.info("| {message:<75} |".format(**locals()))
     logging.info("|                                                                             |")
-    logging.info("|------------------------------|----------------------------------------------|")
-    logging.info("| Module                       | Payload                                      |")
-    logging.info("| ID | Algorithms | Conditions | SliceLUTs | DSPs   |                         |")
-    logging.info("|----|------------|------------|-----------|--------|-------------------------|")
+    logging.info("|-------------------------------------|---------------------------------------|")
+    logging.info("| Module                              | Payload                               |")
+    logging.info("| ID | Algorithms | Conditions | Rel. | SliceLUTs | DSPs    |                 |")
+    logging.info("|----|------------|------------|------|-----------|---------|-----------------|")
     for module in collection:
         algorithms = len(module)
         conditions = len(module.conditions)
+        proportion = float(conditions) / algorithms
         sliceLUTs = module.payload.sliceLUTs * 100.
         processors = module.payload.processors * 100.
-        logging.info("| {module.id:>2} | {algorithms:>10} | {conditions:>10} | " \
-                     "{sliceLUTs:>8.2f}% | {processors:>5.2f}% |                         |".format(**locals()))
-    logging.info("|----|------------|------------|-----------|--------|-------------------------|")
+        logging.info("| {module.id:>2} | {algorithms:>10} | {conditions:>10} | {proportion:>4.2f} | " \
+                     "{sliceLUTs:>8.2f}% | {processors:>6.2f}% |                 |".format(**locals()))
+    logging.info("|----|------------|------------|------|-----------|---------|-----------------|")
 
 def dump_distribution(collection, args):
     logging.info(":: writing menu distribution JSON dump: %s", args.o)
