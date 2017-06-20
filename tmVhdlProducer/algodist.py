@@ -595,7 +595,7 @@ class ResourceTray(object):
             try: # only for cuts listed in configuration... might be error prone
                 cut_type = self.map_cut(key)
             except KeyError as e:
-                logging.warning("skipping cut %s", key)
+                logging.warning("skipping cut '%s' (not defined in resource config)", key)
             else:
                 result = filter_first(lambda cut: cut.type == cut_type, instance_objects.cuts)
                 if result:
@@ -942,10 +942,9 @@ def list_resources(tray):
     logging.info(section("ceiling", tray.ceiling()))
     logging.info("instances:")
     for instance in tray.resources.instances:
-        # TODO TODO TODO
         for object_ in instance.objects:
             object_list = ', '.join(object_.types)
-            name = "{instance.type}({object_list})".format(**locals())
+            name = "{instance.type}[ {object_list} ]".format(**locals())
             logging.info(section(name, object_))
             if hasattr(object_, 'cuts'):
                 for cut in object_.cuts:
@@ -966,32 +965,6 @@ def list_algorithms(collection):
         name = short_name(algorithm.name, 42)
         logging.info("| {algorithm.index:>5d} | {sliceLUTs:>8.2f}% | {processors:>5.2f}% | {name:<46} |".format(**locals()))
     logging.info("|-----------------------------------------------------------------------------|")
-
-def list_conditions(collection):
-    logging.info("|-----------------------------------------------------------------------------|")
-    logging.info("|                                                                             |")
-    logging.info("| Condition payloads by type                                                  |")
-    logging.info("|                                                                             |")
-    logging.info("|---------------------------------||--------------------||--------------------|")
-    logging.info("| Condition                       || Item               || Sub total          |")
-    logging.info("| Type                    | Count || SliceLUTs | DSPs   || SliceLUTs | DSPs   |")
-    logging.info("|-------------------------|-------||-----------|--------||-----------|--------|")
-    totals = Payload()
-    total_count = 0
-    for typename, conditions in collection.byConditionType().iteritems():
-        count = len(conditions)
-        total_count += count
-        sliceLUTs = conditions[0].payload.sliceLUTs * 100.
-        processors = conditions[0].payload.processors * 100.
-        all_sliceLUTs = sliceLUTs * count
-        all_processors = processors * count
-        totals += Payload(all_sliceLUTs, all_processors)
-        typename = short_name(typename, 25)
-        line = "| {typename:<23} | {count:>5d} || {sliceLUTs:>8.2f}% | {processors:>5.2f}% || {all_sliceLUTs:>8.2f}% | {all_processors:>5.2f}% |".format(**locals())
-        logging.info(line)
-    logging.info("|-------------------------|-------||-----------|--------||-----------|--------|")
-    logging.info("| Total                   | {total_count:>5d} ||         - |      - || {totals.sliceLUTs:>8.2f}% | {totals.processors:>5.2f}% |".format(**locals()))
-    logging.info("|-------------------------|-------||-----------|--------||-----------|--------|")
 
 def list_distribution(collection):
     message = "Detailed distribition on {n} modules, shadow ratio: {r:.1f}".format(n=len(collection), r=collection.ratio)
@@ -1070,7 +1043,6 @@ def distribute(eventSetup, modules, config, ratio, reverse_sorting):
 
     # Diagnostic output
     list_algorithms(collection)
-    list_conditions(collection)
 
     logging.info("distributing algorithms, shadow ratio: %s", ratio)
     collection.distribute(modules, ratio, reverse_sorting)
@@ -1105,8 +1077,6 @@ def main():
     collection = ModuleCollection(es, tray)
 
     list_algorithms(collection)
-
-    list_conditions(collection)
 
     logging.info("distributing algorithms, shadow ratio: %s", args.ratio)
     # Set sort order (asc or desc)
