@@ -956,14 +956,15 @@ def list_algorithms(collection):
     logging.info("| Algorithms sorted by payload (descending)                                   |")
     logging.info("|                                                                             |")
     logging.info("|-----------------------------------------------------------------------------|")
-    logging.info("|-------|-----------|--------|------------------------------------------------|")
-    logging.info("| Index | SliceLUTs | DSPs   | Name                                           |")
-    logging.info("|-------|-----------|--------|------------------------------------------------|")
+    logging.info("|-------|-----------|---------|-----------------------------------------------|")
+    logging.info("| Index | SliceLUTs | DSPs    | Name                                          |")
+    logging.info("|-------|-----------|---------|-----------------------------------------------|")
     for algorithm in collection.algorithmStubs:
         sliceLUTs = algorithm.payload.sliceLUTs * 100.
         processors = algorithm.payload.processors * 100.
-        name = short_name(algorithm.name, 42)
-        logging.info("| {algorithm.index:>5d} | {sliceLUTs:>8.2f}% | {processors:>5.2f}% | {name:<46} |".format(**locals()))
+        name = short_name(algorithm.name, 41)
+        logging.info("| {algorithm.index:>5d} | {sliceLUTs:>8.3f}% | {processors:>6.3f}% | {name:<45} |".format(**locals()))
+    logging.info("|-------|-----------|---------|-----------------------------------------------|")
     logging.info("|-----------------------------------------------------------------------------|")
 
 def list_distribution(collection):
@@ -1059,7 +1060,8 @@ def distribute(eventSetup, modules, config, ratio, reverse_sorting):
 def main():
     args = parse_args()
 
-    logging.getLogger().setLevel(logging.INFO)
+    level = logging.DEBUG if args.verbose else logging.INFO
+    logging.getLogger().setLevel(level)
 
     logging.info("reading event setup from XML menu: %s", args.filename)
     es = tmEventSetup.getTriggerMenu(args.filename)
