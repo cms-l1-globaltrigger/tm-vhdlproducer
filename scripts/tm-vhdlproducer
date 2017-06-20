@@ -10,7 +10,7 @@
 import tmEventSetup
 
 from tmVhdlProducer.reporter import Reporter
-from tmVhdlProducer.vhdlproducer import VhdlProducer, writeXmlMenu
+from tmVhdlProducer.vhdlproducer import VhdlProducer
 from tmVhdlProducer.algodist import distribute
 from tmVhdlProducer import __version__
 
@@ -53,7 +53,7 @@ def ratio_t(value):
     raise ValueError(value)
 
 def getSvnRevision():
-    # TODO
+    """Returns local SVN revision number of set UTM_ROOT path."""
     rootdir = os.environ.get("UTM_ROOT")
     if not rootdir:
         raise RuntimeError("UTM_ROOT not set.")
@@ -85,7 +85,7 @@ def parse():
         metavar='<n>',
         required=True,
         type=modules_t,
-        help="number of modules ({0}-{1}, default is {0})".format(MIN_MODULES, MAX_MODULES),
+        help="number of modules ({0}-{1})".format(MIN_MODULES, MAX_MODULES),
     )
     parser.add_argument('--ratio',
         metavar='<f>',
@@ -134,7 +134,8 @@ def main():
     args = parse()
 
     # Setup console logging
-    logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG)
+    level = logging.DEBUG if args.verbose else logging.INFO
+    logging.basicConfig(format='%(levelname)s: %(message)s', level=level)
 
     logging.info("running VHDL producer...")
 
@@ -144,15 +145,15 @@ def main():
         logging.error("no `UTM_ROOT' environment variable defined")
         return EXIT_FAILURE
 
-    logging.info("loading XML menu %s", args.menu)
+    logging.info("loading XML menu: %s", args.menu)
     eventSetup = tmEventSetup.getTriggerMenu(args.menu)
     output_dir = os.path.join(args.output, "{name}_m{modules}".format(name=eventSetup.getName(), modules=args.modules))
 
-    # TODO: not convenient...
+    # Prevent overwirting source menu
     dest = os.path.realpath(os.path.join(output_dir, 'xml'))
     orig = os.path.dirname(os.path.realpath(args.menu))
     if dest == orig:
-        logging.error("%s is in %s directory which will be deleted during the process", args.menu, dest)
+        logging.error("%s is in %s directory which will be overwritten during the process", args.menu, dest)
         logging.error("     specified menu not in %s directory", dest)
         return EXIT_FAILURE
 
@@ -167,7 +168,7 @@ def main():
         # Forward logs to file
         handler = logging.FileHandler(os.path.join(output_dir, LOGFILE), mode='a')
         handler.setFormatter(logging.Formatter(fmt='%(asctime)s %(levelname)s : %(message)s', datefmt='%Y-%m-%d %H:%M:%S'))
-        handler.setLevel(logging.DEBUG)
+        handler.setLevel(level)
         logging.getLogger().addHandler(handler)
 
     # Fetch SVN revision
@@ -184,11 +185,10 @@ def main():
     else:
         logging.info("writing VHDL modules...")
         template_dir = os.path.join(utm_root, 'tmVhdlProducer', 'templates', 'vhdl')
-        producer = VhdlProducer(template_dir, args.verbose)
+        producer = VhdlProducer(template_dir)
         producer.write(collection, output_dir)
-
         logging.info("writing updated XML file %s", args.menu)
-        writeXmlMenu(args.menu, os.path.join(output_dir, 'xml'))
+        producer.writeXmlMenu(args.menu, os.path.join(output_dir, 'xml')) # TODO
 
         # Write menu documentation.
         logging.info("generating menu documentation...")
