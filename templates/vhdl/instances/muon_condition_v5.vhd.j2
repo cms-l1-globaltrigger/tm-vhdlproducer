@@ -28,10 +28,18 @@
   {%- endif %}
     )
     port map(lhc_clk, mu_bx_{{ bx }},
+  {%- if condition.nr_objects >= 2 and condition.hasTwoBodyPtCut == "true" %}
+	{{ condition.vhdl_signal }},
         ls_charcorr_double_bx_{{ bx }}_bx_{{ bx }}, os_charcorr_double_bx_{{ bx }}_bx_{{ bx }},
         ls_charcorr_triple_bx_{{ bx }}_bx_{{ bx }}, os_charcorr_triple_bx_{{ bx }}_bx_{{ bx }},
         ls_charcorr_quad_bx_{{ bx }}_bx_{{ bx }}, os_charcorr_quad_bx_{{ bx }}_bx_{{ bx }},
-  {%- if condition.hasTwoBodyPtCut == "true" %}
+        {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }});
+  {%- elif condition.nr_objects >= 2 and condition.hasTwoBodyPtCut == "false" %}
+	{{ condition.vhdl_signal }},
+        ls_charcorr_double_bx_{{ bx }}_bx_{{ bx }}, os_charcorr_double_bx_{{ bx }}_bx_{{ bx }},
+        ls_charcorr_triple_bx_{{ bx }}_bx_{{ bx }}, os_charcorr_triple_bx_{{ bx }}_bx_{{ bx }},
+        ls_charcorr_quad_bx_{{ bx }}_bx_{{ bx }}, os_charcorr_quad_bx_{{ bx }}_bx_{{ bx }});
+  {%- elif condition.nr_objects == 1 and condition.hasTwoBodyPtCut == "true" %}
 	{{ condition.vhdl_signal }},
         {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }});
   {%- else %}
