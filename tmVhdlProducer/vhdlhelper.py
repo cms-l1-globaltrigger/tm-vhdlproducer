@@ -22,9 +22,9 @@ Overview of class hierarchy:
         class MuonConditionHelper
         class ExternalConditionHelper
         class CorrelationConditionHelper
-	class CorrelationConditionOvRmHelper
-	class CaloConditionOvRmHelper
-	class ObjectHelper
+        class CorrelationConditionOvRmHelper
+        class CaloConditionOvRmHelper
+        class ObjectHelper
 
 """
 
@@ -446,19 +446,19 @@ class ModuleHelper(VhdlHelper):
                 key = (a.type, b.type, a.bx, b.bx) # create custom hash
                 combinations[key] = (ObjectHelperStub(a), ObjectHelperStub(b))
             if isinstance(condition, CorrelationConditionOvRmHelper):
-		if condition.nr_objects == 3:
-		    a, b, c = condition.objects
-		    key = (a.type, b.type, a.bx, b.bx) # a-b combination
-		    combinations[key] = (ObjectHelperStub(a), ObjectHelperStub(b))
-		    key = (a.type, c.type, a.bx, c.bx) # a-c combination
-		    combinations[key] = (ObjectHelperStub(a), ObjectHelperStub(c))
-		    key = (b.type, c.type, b.bx, c.bx) # b-c combination
-		    combinations[key] = (ObjectHelperStub(b), ObjectHelperStub(c))
-		else:
-		    a = condition.objects[0]
-		    b = condition.objects[1]
-		    key = (a.type, b.type, a.bx, b.bx)
-		    combinations[key] = (ObjectHelperStub(a), ObjectHelperStub(b))
+                if condition.nr_objects == 3:
+                    a, b, c = condition.objects
+                    key = (a.type, b.type, a.bx, b.bx) # a-b combination
+                    combinations[key] = (ObjectHelperStub(a), ObjectHelperStub(b))
+                    key = (a.type, c.type, a.bx, c.bx) # a-c combination
+                    combinations[key] = (ObjectHelperStub(a), ObjectHelperStub(c))
+                    key = (b.type, c.type, b.bx, c.bx) # b-c combination
+                    combinations[key] = (ObjectHelperStub(b), ObjectHelperStub(c))
+                else:
+                    a = condition.objects[0]
+                    b = condition.objects[1]
+                    key = (a.type, b.type, a.bx, b.bx)
+                    combinations[key] = (ObjectHelperStub(a), ObjectHelperStub(b))
             if isinstance(condition, CaloConditionOvRmHelper):
                 a = condition.objects[0]
                 b = condition.objects[condition.nr_objects-1]
@@ -779,9 +779,9 @@ class CorrelationConditionHelper(ConditionHelper):
         # 1 => transverse mass
 
         if condition.ptr.getType() == tmEventSetup.InvariantMass:
-	  self.massType = 0
+            self.massType = 0
         elif condition.ptr.getType() == tmEventSetup.TransverseMass:
-	  self.massType = 1
+            self.massType = 1
 
 class CorrelationConditionOvRmHelper(ConditionHelper):
     """Correlation condition template helper class."""
@@ -880,9 +880,9 @@ class CorrelationConditionOvRmHelper(ConditionHelper):
         # 1 => transverse mass
 
         if condition.ptr.getType() == tmEventSetup.InvariantMassOvRm:
-	  self.massType = 0
+            self.massType = 0
         elif condition.ptr.getType() == tmEventSetup.TransverseMassOvRm:
-	  self.massType = 1
+            self.massType = 1
 
 class CaloConditionOvRmHelper(ConditionHelper):
     """Correlation condition template helper class."""
