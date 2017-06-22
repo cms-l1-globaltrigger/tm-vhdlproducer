@@ -84,7 +84,7 @@
         },
         "floor": {
             "processors": 0.0,
-            "sliceLUTs": 0.30
+            "sliceLUTs": 0.25
         },
         "ceiling": {
             "processors": 1.0,
