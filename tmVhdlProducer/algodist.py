@@ -449,7 +449,7 @@ class ResourceTray(object):
 
     def map_objects(self, keys):
         """Returns mapped condition object types for *keys*.
-        >>> tray.map_objects("Jet", "Tau")
+        >>> tray.map_objects(["Jet", "Tau"])
         ['calo', 'calo']
         """
         return [self.map_object(key) for key in keys]
@@ -519,9 +519,9 @@ class ResourceTray(object):
                 n_objects_2 = self.slice_size(esObjects[1])
                 return n_objects_1 * n_objects_2
         elif instance == 'CorrelationConditionOvRm':
-            if mapped_objects == ('calo', 'calo', 'calo'):
+            if mapped_objects == ['calo', 'calo', 'calo']:
                 return n_objects * (n_objects - 1) * 0.5
-            elif mapped_objects == ('calo', 'calo'):
+            elif mapped_objects == ['calo', 'calo']:
                 return n_objects * n_objects_ovrm
             raise RuntimeError("missing mapped objects for ovrm corr")
         return 1.
@@ -556,9 +556,9 @@ class ResourceTray(object):
                 n_objects_2 = self.slice_size(esObjects[1])
                 return n_objects_1 * n_objects_2
         elif instance == 'CorrelationConditionOvRm':
-            if mapped_objects == ('calo', 'calo', 'calo'):
+            if mapped_objects == ['calo', 'calo', 'calo']:
                 return n_objects * (n_objects - 1) * 0.5
-            elif mapped_objects == ('calo', 'calo'):
+            elif mapped_objects == ['calo', 'calo']:
                 return n_objects * n_objects_ovrm
             raise RuntimeError("missing mapped objects for ovrm corr")
         return 1.
