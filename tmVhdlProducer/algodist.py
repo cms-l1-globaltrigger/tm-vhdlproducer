@@ -364,6 +364,19 @@ def same_object_bxs(esObjects):
     """Returns true if all objects of condition are of same BX."""
     return len(set([esObject.getBx() for esObject in esObjects])) == 1
 
+def slice_size(esObject):
+    """Returns size of object slice used from collection.
+    >>> slice_size(obj)
+    8
+    """
+    # Check for object slice cut
+    cut = filter_first(lambda item: item.getCutType() == tmEventSetup.Slice, esObject.getCuts())
+    if cut:
+        return int(cut.getMaximumValue() - cut.getMinimumValue()) + 1
+    # Else use default size
+    object_type = esObjectType[esObject.getType()]
+    return esObjectCollectionSizes[object_type]
+
 #
 # Classes
 #
@@ -485,26 +498,20 @@ class ResourceTray(object):
             return instance.type == self.map_instance(condition.type)
         return filter_first(compare, self.resources.instances)
 
-    def slice_size(self, esObject):
-        """Returns number of objects used from collection."""
-        # Check for object slice cut
-        cut = filter_first(lambda item: item.getCutType() == tmEventSetup.Slice, esObject.getCuts())
-        if cut:
-            return int(cut.getMaximumValue() - cut.getMinimumValue()) + 1
-        # Else use default size
-        object_type = esObjectType[esObject.getType()]
-        return esObjectCollectionSizes[object_type]
-
     def calc_factor(self, condition):
-        """Returns calculated multiplication factor for base resources."""
+        """Returns calculated multiplication factor for base resources.
+
+        >>> tray.calc_factor(condition)
+        1.234
+        """
         assert isinstance(condition, ConditionStub)
         # condition type dependent factor calculation (see also config/README.md)
         esObjects = condition.ptr.getObjects()
         n_requirements = len(esObjects)
-        n_objects = self.slice_size(esObjects[0])
-        n_objects_ovrm = self.slice_size(esObjects[-1])
+        n_objects = slice_size(esObjects[0])
+        n_objects_ovrm = slice_size(esObjects[-1])
         mapped_objects = self.map_objects(condition.objects)
-        same_object_types = len(set(mapped_objects)) == 1 # in terms of mapped object types!
+        same_object_types = len(set([esObject.getType() for esObject in esObjects])) == 1 # in terms of mapped object types!
         same_object_bxs = len(set([esObject.getBxOffset() for esObject in esObjects])) == 1
         # instance
         instance = self.map_instance(condition.type)
@@ -515,49 +522,58 @@ class ResourceTray(object):
             if same_object_types and same_object_bxs:
                 return n_objects * (n_objects - 1) * 0.5
             else:
-                n_objects_1 = self.slice_size(esObjects[0])
-                n_objects_2 = self.slice_size(esObjects[1])
+                n_objects_1 = slice_size(esObjects[0])
+                n_objects_2 = slice_size(esObjects[1])
                 return n_objects_1 * n_objects_2
         elif instance == 'CorrelationConditionOvRm':
             if mapped_objects == ['calo', 'calo', 'calo']:
                 return n_objects * (n_objects - 1) * 0.5
             elif mapped_objects == ['calo', 'calo']:
                 return n_objects * n_objects_ovrm
-            raise RuntimeError("missing mapped objects for ovrm corr")
+            raise RuntimeError("missing mapped objects for ovrm corr: {0}".format(mapped_objects))
         return 1.
 
-    def calc_cut_factor(self, condition, cut_type):
-        """Returns calculated multiplication factor for cut resources."""
+    def calc_cut_factor(self, condition, cut):
+        """Returns calculated multiplication factor for cut resources.
+        Argument *cut* must be an event setup cut name (not a mapped one).
+
+        >>> tray.calc_cut_factor(condition, "DeltaROvRm")
+        1.234
+        """
         assert isinstance(condition, ConditionStub)
         # condition type dependent factor calculation (see also config/README.md)
+        mapped_cut = self.map_cut(cut)
         esObjects = condition.ptr.getObjects()
         n_requirements = len(esObjects)
-        n_objects = self.slice_size(esObjects[0])
-        n_objects_ovrm = self.slice_size(esObjects[-1])
+        n_objects = slice_size(esObjects[0])
+        n_objects_ovrm = slice_size(esObjects[-1])
         mapped_objects = self.map_objects(condition.objects)
-        same_object_types = len(set(mapped_objects)) == 1 # in terms of mapped object types!
+        same_object_types = len(set([esObject.getType() for esObject in esObjects])) == 1 # in terms of mapped object types!
         same_object_bxs = len(set([esObject.getBxOffset() for esObject in esObjects])) == 1
         # instance
         instance = self.map_instance(condition.type)
         # select
         if instance in ('MuonCondition', 'CaloCondition'):
-            if self.map_cut(cut_type) == 'tbpt':
+            if mapped_cut == 'tbpt':
                 return n_objects * (n_objects - 1) * 0.5
         elif instance  == 'CaloConditionOvRm':
-            if self.map_cut(cut_type) == 'tbpt':
+            if mapped_cut == 'tbpt':
                 return n_objects * (n_objects - 1) * 0.5
-            elif cut_type in ('deta', 'dphi', 'dr'):
+            elif mapped_cut in ('deta', 'dphi', 'dr'):
                 return n_objects * n_objects_ovrm
         elif instance == 'CorrelationCondition':
             if same_object_types and same_object_bxs:
                 return n_objects * (n_objects - 1) * 0.5
             else:
-                n_objects_1 = self.slice_size(esObjects[0])
-                n_objects_2 = self.slice_size(esObjects[1])
+                n_objects_1 = slice_size(esObjects[0])
+                n_objects_2 = slice_size(esObjects[1])
                 return n_objects_1 * n_objects_2
         elif instance == 'CorrelationConditionOvRm':
             if mapped_objects == ['calo', 'calo', 'calo']:
-                return n_objects * (n_objects - 1) * 0.5
+                if cut in ('DeltaEtaOvRm', 'DeltaPhiOvRm', 'DeltaROvRm'):
+                    return n_objects * n_objects_ovrm
+                else:
+                    return n_objects * (n_objects - 1) * 0.5
             elif mapped_objects == ['calo', 'calo']:
                 return n_objects * n_objects_ovrm
             raise RuntimeError("missing mapped objects for ovrm corr")
@@ -591,15 +607,15 @@ class ResourceTray(object):
         sliceLUTs = instance_objects.sliceLUTs * factor
         processors = instance_objects.processors * factor
         payload = Payload(sliceLUTs, processors)
-        for key in condition.cuts:
+        for cut_name in condition.cuts:
             try: # only for cuts listed in configuration... might be error prone
-                cut_type = self.map_cut(key)
+                mapped_cut = self.map_cut(cut_name)
             except KeyError as e:
-                logging.warning("skipping cut '%s' (not defined in resource config)", key)
+                logging.warning("skipping cut '%s' (not defined in resource config)", cut_name)
             else:
-                result = filter_first(lambda cut: cut.type == cut_type, instance_objects.cuts)
+                result = filter_first(lambda cut: cut.type == mapped_cut, instance_objects.cuts)
                 if result:
-                    factor = self.calc_cut_factor(condition, cut_type)
+                    factor = self.calc_cut_factor(condition, cut_name)
                     sliceLUTs = result.sliceLUTs * factor
                     processors = result.processors * factor
                     cut_payload = Payload(sliceLUTs, processors)
