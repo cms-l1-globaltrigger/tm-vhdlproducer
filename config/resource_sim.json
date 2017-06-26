@@ -139,7 +139,7 @@
                         "cuts": [
                             {
                                 "type": "tbpt",
-                                "processors": 0.00611,
+                                "processors": 0.00333,
                                 "sliceLUTs": 0.0005
                             }
                         ]
@@ -203,7 +203,7 @@
                             },
                             {
                                 "type": "tbpt",
-                                "processors": 0.00611,
+                                "processors": 0.00333,
                                 "sliceLUTs": 0.0005
                             }
                         ]
@@ -275,11 +275,11 @@
                             {
                                 "type": "dr",
                                 "processors": 0.00056,
-                                "sliceLUTs": 0.00025
+                                "sliceLUTs": 0.00002
                             },
                             {
                                 "type": "tbpt",
-                                "processors": 0.00611,
+                                "processors": 0.00333,
                                 "sliceLUTs": 0.0002
                             },
                             {
@@ -420,11 +420,11 @@
                             {
                                 "type": "dr",
                                 "processors": 0.00056,
-                                "sliceLUTs": 0.00025
+                                "sliceLUTs": 0.00002
                             },
                             {
                                 "type": "tbpt",
-                                "processors": 0.00611,
+                                "processors": 0.00333,
                                 "sliceLUTs": 0.0002
                             },
                             {
@@ -452,11 +452,11 @@
                             {
                                 "type": "dr",
                                 "processors": 0.00056,
-                                "sliceLUTs": 0.00025
+                                "sliceLUTs": 0.00002
                             },
                             {
                                 "type": "tbpt",
-                                "processors": 0.00611,
+                                "processors": 0.00333,
                                 "sliceLUTs": 0.0002
                             },
                             {
