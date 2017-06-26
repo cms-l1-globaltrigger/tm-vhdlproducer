@@ -32,6 +32,9 @@ import logging
 import json, uuid
 import sys, os
 
+MinModules = 1
+MaxModules = 6
+
 ProjectDir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 """Projects root directory."""
 
@@ -342,6 +345,14 @@ ObjectsOrder = [
 # Functions
 #
 
+def constraint_t(value):
+    tokens = value.split(':')
+    try:
+        return tokens[0], parse_range(tokens[1])
+    except IndexError:
+        pass
+    raise ValueError(value)
+
 def filter_first(func, data):
     """Returns first result for filter() or None if not match found."""
     return (list(filter(func, data)) or [None])[0]
@@ -376,6 +387,30 @@ def slice_size(esObject):
     # Else use default size
     object_type = esObjectType[esObject.getType()]
     return esObjectCollectionSizes[object_type]
+
+def expand_range(expr):
+    """Parse and resolves numeric ranges.
+    >>> parse_range("3")
+    [3]
+    >>> parse_range("4-7")
+    [4, 5, 6, 7]
+    """
+    tokens = expr.split('-')
+    if len(tokens) == 2:
+        return [int(tokens[0]), int(tokens[1])]
+    if len(tokens) == 1:
+        return [int(tokens[0])]
+    raise ValueError("invalid range {expr}".format(**locals()))
+
+def parse_range(expr):
+    """Parse and resolves numeric ranges.
+    >>> parse_range("2,4-7,5,9")
+    [2, 4, 5, 6, 7, 9]
+    """
+    result = set()
+    for token in expr.split(','):
+        result.update(expand_range(token))
+    return list(result)
 
 #
 # Classes
@@ -758,6 +793,8 @@ class ModuleCollection(object):
         self.modules = []
         self.ratio = .0
         self.reverse_sorting = False
+        self.regenerate_uuid = True
+        self.constraints = {}
         # Calculate condition stubs
         self.conditionStubs = {}
         for name, condition in es.getConditionMapPtr().iteritems():
@@ -779,13 +816,24 @@ class ModuleCollection(object):
         """Iterate over modules."""
         return iter([module for module in self.modules])
 
+    def setConstraint(self, condition, modules):
+        """Set module constraint for condition type."""
+        # Force list for single numbers
+        modules = modules if isinstance(modules, (list, tuple)) else [modules]
+        assert condition in esConditionType.values(), "no such constraint condition type '{condition}'".format(**locals())
+        assert max(modules) < MaxModules, "exceeding constraint module range 'modules'".format(**locals())
+        self.constraints[condition] = modules
+
     def capableModules(self):
         """Return modules below payload ceiling."""
         return filter(lambda module: (module.payload) < module.ceiling, self.modules)
 
-    def lightestModule(self):
-        """Retruns module with the least payload."""
-        return sorted(self.modules, key = lambda module: module.payload)[0]
+    def lightestModule(self, constraints=None):
+        """Retruns module with the least payload. Assign constraints to limit modules."""
+        modules = self.modules
+        if constraints:
+            modules = [module for module in self.modules if module.id in constraints]
+        return sorted(modules, key = lambda module: module.payload)[0]
 
     @property
     def algorithms(self):
@@ -807,28 +855,44 @@ class ModuleCollection(object):
         """Retruns unsorted list of all conditions."""
         return [condition for _, condition in self.conditionStubs.iteritems()]
 
-    def distribute(self, modules, ratio, reverse_sorting=False, regenerate=True):
+    def distribute(self, modules):
         """Distribute algorithms to modules, applying shadow ratio.
-        Regenerates firmware UUID.
         """
         # sort algorithms
-        self.reverse_sorting = reverse_sorting
         self.algorithmStubs.sort(key = lambda algorithm: algorithm.payload, reverse=self.reverse_sorting)
-        if regenerate:
-            self.eventSetup.setFirmwareUuid(str(uuid.uuid4())) # regenerate firmware UUID
+        # regenerate firmware UUID
+        if self.regenerate_uuid:
+            self.eventSetup.setFirmwareUuid(str(uuid.uuid4()))
         logging.info("starting algorithm distribution for %d algorithms on %d " \
-                     "modules using shadow ratio of %.1f", len(self.algorithmStubs), modules, ratio)
+                     "modules using shadow ratio of %.1f", len(self.algorithmStubs), modules, self.ratio)
         self.modules = [ModuleStub(id, self.tray) for id in range(modules)]
-        self.ratio = ratio
         stack = list(self.algorithmStubs) # copy list
         try:
             while stack:
                 algorithm = stack.pop(0) # POP
                 module = self.lightestModule()
+                # ######## constraints ########
+                for condition in algorithm:
+                    if condition.type in self.constraints:
+                        module = self.lightestModule(self.constraints[condition.type])
+                        logging.info("applying condition constraint %s => module %s", condition.type, module.id)
+                # ######## /constraints ########
                 logging.info(" . adding %s (%d) to module %s", algorithm.name, algorithm.index, module.id)
                 module.append(algorithm)
                 condition_names = [condition.name for condition in algorithm.conditions]
-                for shadowed in self.getShadowed(stack, condition_names, ratio):
+                for shadowed in self.getShadowed(stack, condition_names, self.ratio):
+                    # ######## constraints ########
+                    has_constraint = False
+                    i = stack.index(shadowed)
+                    for condition in stack[i]:
+                        if condition.type in self.constraints:
+                            if module.id != self.constraints[condition.type]:
+                                logging.info("applying condition constraint, ignoring shadowed algorithm %s", stack[i].name)
+                                has_constraint = True
+                                break
+                    if has_constraint:
+                        continue
+                    # ######## /constraints ########
                     stack.pop(stack.index(shadowed)) # POP
                     logging.info(" ... adding shadowed %s %s to module %s", shadowed.name, shadowed.index, module.id)
                     module.append(shadowed)
@@ -943,8 +1007,10 @@ def parse_args():
     parser.add_argument('--modules', metavar='<n>', default=2, type=int, help="number of modules, default is 2")
     parser.add_argument('--ratio', metavar='<f>', default=0.0, type=float, help="algorithm shadow ratio (0.0 < ratio <= 1.0, default 0.0)")
     parser.add_argument('--sorting', metavar='asc|desc', choices=('asc', 'desc'), default='asc', help="sort order for weighting (asc or desc, default asc)")
+    parser.add_argument('--constraint', metavar='<condition:module>', type=constraint_t, action='append', help="limit condition type to a specific module")
     parser.add_argument('-o', metavar='<file>', type=os.path.abspath, help="write calculated distribution to JSON file")
     parser.add_argument('--list', action='store_true', help="list resource scales and exit")
+    parser.add_argument("--verbose", dest="verbose", action="store_true")
     return parser.parse_args()
 
 def list_resources(tray):
@@ -1045,9 +1111,11 @@ def dump_distribution(collection, args):
     with open(args.o, 'wb') as fp:
         collection.dump(fp)
 
-def distribute(eventSetup, modules, config, ratio, reverse_sorting):
+def distribute(eventSetup, modules, config, ratio, reverse_sorting, constraints=None):
     """Distribution wrapper function, provided for convenience."""
     logging.info("distributing menu...")
+
+    constraints = constraints or {}
 
     logging.info("loading resource information from JSON: %s", config)
     # Load resource file
@@ -1062,7 +1130,11 @@ def distribute(eventSetup, modules, config, ratio, reverse_sorting):
     list_algorithms(collection)
 
     logging.info("distributing algorithms, shadow ratio: %s", ratio)
-    collection.distribute(modules, ratio, reverse_sorting)
+    collection.ratio = ratio
+    collection.reverse_sorting = reverse_sorting
+    for k, v in constraints.iteritems():
+        collection.setConstraint(k, v)
+    collection.distribute(modules)
 
     # Diagnostic output
     list_distribution(collection)
@@ -1097,9 +1169,15 @@ def main():
     list_algorithms(collection)
 
     logging.info("distributing algorithms, shadow ratio: %s", args.ratio)
+    collection.ratio = args.ratio
     # Set sort order (asc or desc)
-    reverse_sorting = (args.sorting == 'desc')
-    collection.distribute(args.modules, args.ratio, reverse_sorting)
+    collection.reverse_sorting = (args.sorting == 'desc')
+    # Collect condition constraints
+    if args.constraint:
+        for k, v in args.constraint:
+            collection.setConstraint(k, v)
+    # Run distibution
+    collection.distribute(args.modules)
 
     list_distribution(collection)
 
