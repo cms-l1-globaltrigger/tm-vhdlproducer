@@ -109,18 +109,37 @@
                                 "type": "tbpt",
                                 "processors": 0.00334,
                                 "sliceLUTs": 0.0008
+                            },
+                            {
+                                "type": "chgcor",
+                                "processors": 0.0,
+                                "sliceLUTs": 0.0
                             }
                         ]
                     },
                     {
                         "types": ["muon", "muon", "muon"],
                         "processors": 0.0,
-                        "sliceLUTs": 0.0001
-                    },
+                        "sliceLUTs": 0.0001,
+                        "cuts": [
+                            {
+                                "type": "chgcor",
+                                "processors": 0.0,
+                                "sliceLUTs": 0.0
+                            }
+                        ]
+                     },
                     {
                         "types": ["muon", "muon", "muon", "muon"],
                         "processors": 0.0,
-                        "sliceLUTs": 0.0001
+                        "sliceLUTs": 0.0001,
+                        "cuts": [
+                            {
+                                "type": "chgcor",
+                                "processors": 0.0,
+                                "sliceLUTs": 0.0
+                            }
+                        ]
                     }
                 ]
             },
@@ -394,6 +413,11 @@
                                 "type": "mass",
                                 "processors": 0.00083,
                                 "sliceLUTs": 0.00065
+                            },
+                            {
+                                "type": "chgcor",
+                                "processors": 0.0,
+                                "sliceLUTs": 0.0
                             }
                         ]
                     }
