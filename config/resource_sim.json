@@ -139,7 +139,7 @@
                         "cuts": [
                             {
                                 "type": "tbpt",
-                                "processors": 0.00445,
+                                "processors": 0.00611,
                                 "sliceLUTs": 0.0005
                             }
                         ]
@@ -203,7 +203,7 @@
                             },
                             {
                                 "type": "tbpt",
-                                "processors": 0.00445,
+                                "processors": 0.00611,
                                 "sliceLUTs": 0.0005
                             }
                         ]
@@ -279,7 +279,7 @@
                             },
                             {
                                 "type": "tbpt",
-                                "processors": 0.00445,
+                                "processors": 0.00611,
                                 "sliceLUTs": 0.0002
                             },
                             {
@@ -355,7 +355,7 @@
                             },
                             {
                                 "type": "tbpt",
-                                "processors": 0.00445,
+                                "processors": 0.00611,
                                 "sliceLUTs": 0.0002
                             },
                             {
@@ -424,7 +424,7 @@
                             },
                             {
                                 "type": "tbpt",
-                                "processors": 0.00445,
+                                "processors": 0.00611,
                                 "sliceLUTs": 0.0002
                             },
                             {
@@ -456,7 +456,7 @@
                             },
                             {
                                 "type": "tbpt",
-                                "processors": 0.00445,
+                                "processors": 0.00611,
                                 "sliceLUTs": 0.0002
                             },
                             {
