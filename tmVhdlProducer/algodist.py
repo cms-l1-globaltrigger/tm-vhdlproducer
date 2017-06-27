@@ -142,9 +142,9 @@ esCutType = {
   tmEventSetup.TwoBodyPt: 'TwoBodyPt',
   tmEventSetup.Slice: 'Slice',
   tmEventSetup.ChargeCorrelation: 'ChargeCorrelation',
-  tmEventSetup.OvRmDeltaEta: 'DeltaEtaOvRm',
-  tmEventSetup.OvRmDeltaPhi: 'DeltaPhiOvRm',
-  tmEventSetup.OvRmDeltaR: 'DeltaROvRm',
+  tmEventSetup.OvRmDeltaEta: 'OvRmDeltaEta',
+  tmEventSetup.OvRmDeltaPhi: 'OvRmDeltaPhi',
+  tmEventSetup.OvRmDeltaR: 'OvRmDeltaR',
 }
 """Dictionary for cut type enumerations."""
 
@@ -639,6 +639,7 @@ class ResourceTray(object):
             raise RuntimeError(message)
         # condition type dependent factor calculation (see also config/README.md)
         factor = self.calc_factor(condition)
+        logging.debug("%s.calc_factor(<instance %s>) => %s", self.__class__.__name__, condition.name, factor)
         sliceLUTs = instance_objects.sliceLUTs * factor
         processors = instance_objects.processors * factor
         payload = Payload(sliceLUTs, processors)
@@ -651,10 +652,12 @@ class ResourceTray(object):
                 result = filter_first(lambda cut: cut.type == mapped_cut, instance_objects.cuts)
                 if result:
                     factor = self.calc_cut_factor(condition, cut_name)
+                    logging.debug("%s.calc_cut_factor(<instance %s>, '%s') => %s", self.__class__.__name__, condition.name, cut_name, factor)
                     sliceLUTs = result.sliceLUTs * factor
                     processors = result.processors * factor
                     cut_payload = Payload(sliceLUTs, processors)
                     payload += cut_payload
+        logging.debug("%s.measure(<instance %s>) => %s", self.__class__.__name__, condition.name, payload)
         return payload
 
 class ConditionStub(object):
@@ -875,7 +878,7 @@ class ModuleCollection(object):
                 for condition in algorithm:
                     if condition.type in self.constraints:
                         module = self.lightestModule(self.constraints[condition.type])
-                        logging.info("applying condition constraint %s => module %s", condition.type, module.id)
+                        logging.info("[*] applying condition constraint %s => module %s", condition.type, module.id)
                 # ######## /constraints ########
                 logging.info(" . adding %s (%d) to module %s", algorithm.name, algorithm.index, module.id)
                 module.append(algorithm)
@@ -887,7 +890,7 @@ class ModuleCollection(object):
                     for condition in stack[i]:
                         if condition.type in self.constraints:
                             if module.id != self.constraints[condition.type]:
-                                logging.info("applying condition constraint, ignoring shadowed algorithm %s", stack[i].name)
+                                logging.info("[*] applying condition constraint, ignoring shadowed algorithm %s", stack[i].name)
                                 has_constraint = True
                                 break
                     if has_constraint:
