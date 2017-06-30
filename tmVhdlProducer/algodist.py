@@ -120,6 +120,31 @@ kDoubleJetOvRm = 'DoubleJetOvRm'
 kTripleJetOvRm = 'TripleJetOvRm'
 kQuadJetOvRm = 'QuadJetOvRm'
 
+#
+# Keys for cut types
+#
+
+kThreshold = 'Threshold'
+kEta = 'Eta'
+kPhi = 'Phi'
+kCharge = 'Charge'
+kQuality = 'Quality'
+kIsolation = 'Isolation'
+kDeltaEta = 'DeltaEta'
+kDeltaPhi = 'DeltaPhi'
+kDeltaR = 'DeltaR'
+kMass = 'Mass'
+kTwoBodyPt = 'TwoBodyPt'
+kSlice = 'Slice'
+kChargeCorrelation = 'ChargeCorrelation'
+kOvRmDeltaEta = 'OvRmDeltaEta'
+kOvRmDeltaPhi = 'OvRmDeltaPhi'
+kOvRmDeltaR = 'OvRmDeltaR'
+
+#
+# Operators
+#
+
 Operators = (
     tmGrammar.AND,
     tmGrammar.OR,
@@ -128,23 +153,27 @@ Operators = (
 )
 """List of valid algorithm expression operators."""
 
+#
+# Dictionaries
+#
+
 esCutType = {
-  tmEventSetup.Threshold: 'Threshold',
-  tmEventSetup.Eta: 'Eta',
-  tmEventSetup.Phi: 'Phi',
-  tmEventSetup.Charge: 'Charge',
-  tmEventSetup.Quality: 'Quality',
-  tmEventSetup.Isolation: 'Isolation',
-  tmEventSetup.DeltaEta: 'DeltaEta',
-  tmEventSetup.DeltaPhi: 'DeltaPhi',
-  tmEventSetup.DeltaR: 'DeltaR',
-  tmEventSetup.Mass: 'Mass',
-  tmEventSetup.TwoBodyPt: 'TwoBodyPt',
-  tmEventSetup.Slice: 'Slice',
-  tmEventSetup.ChargeCorrelation: 'ChargeCorrelation',
-  tmEventSetup.OvRmDeltaEta: 'OvRmDeltaEta',
-  tmEventSetup.OvRmDeltaPhi: 'OvRmDeltaPhi',
-  tmEventSetup.OvRmDeltaR: 'OvRmDeltaR',
+  tmEventSetup.Threshold: kThreshold,
+  tmEventSetup.Eta: kEta,
+  tmEventSetup.Phi: kPhi,
+  tmEventSetup.Charge: kCharge,
+  tmEventSetup.Quality: kQuality,
+  tmEventSetup.Isolation: kIsolation,
+  tmEventSetup.DeltaEta: kDeltaEta,
+  tmEventSetup.DeltaPhi: kDeltaPhi,
+  tmEventSetup.DeltaR: kDeltaR,
+  tmEventSetup.Mass: kMass,
+  tmEventSetup.TwoBodyPt: kTwoBodyPt,
+  tmEventSetup.Slice: kSlice,
+  tmEventSetup.ChargeCorrelation: kChargeCorrelation,
+  tmEventSetup.OvRmDeltaEta: kOvRmDeltaEta,
+  tmEventSetup.OvRmDeltaPhi: kOvRmDeltaPhi,
+  tmEventSetup.OvRmDeltaR: kOvRmDeltaR,
 }
 """Dictionary for cut type enumerations."""
 
@@ -465,6 +494,14 @@ class ResourceTray(object):
     >>> tray = ResourceTray('algo_dist.json')
     >>> tray.measure(condition)
     """
+
+    # Instances used in resource configuration
+    kMuonCondition = 'MuonCondition'
+    kCaloCondition = 'CaloCondition'
+    kCaloConditionOvRm = 'CaloConditionOvRm'
+    kCorrelationCondition = 'CorrelationCondition'
+    kCorrelationConditionOvRm = 'CorrelationConditionOvRm'
+
     def __init__(self, filename):
         """Attribute *filename* is a filename of an JSON payload configuration file."""
         with open(filename, 'rb') as fp:
@@ -551,16 +588,16 @@ class ResourceTray(object):
         # instance
         instance = self.map_instance(condition.type)
         # select
-        if instance in ('MuonCondition', 'CaloCondition', 'CaloConditionOvRm'):
+        if instance in (self.kMuonCondition, self.kCaloCondition, self.kCaloConditionOvRm):
             return n_objects * n_requirements
-        elif instance == 'CorrelationCondition':
+        elif instance == self.kCorrelationCondition:
             if same_object_types and same_object_bxs:
                 return n_objects * (n_objects - 1) * 0.5
             else:
                 n_objects_1 = slice_size(esObjects[0])
                 n_objects_2 = slice_size(esObjects[1])
                 return n_objects_1 * n_objects_2
-        elif instance == 'CorrelationConditionOvRm':
+        elif instance == self.kCorrelationConditionOvRm:
             if mapped_objects == ['calo', 'calo', 'calo']:
                 return n_objects * (n_objects - 1) * 0.5
             elif mapped_objects == ['calo', 'calo']:
@@ -572,7 +609,7 @@ class ResourceTray(object):
         """Returns calculated multiplication factor for cut resources.
         Argument *cut* must be an event setup cut name (not a mapped one).
 
-        >>> tray.calc_cut_factor(condition, "DeltaROvRm")
+        >>> tray.calc_cut_factor(condition, "OvRmDeltaR")
         1.234
         """
         assert isinstance(condition, ConditionStub)
@@ -588,24 +625,24 @@ class ResourceTray(object):
         # instance
         instance = self.map_instance(condition.type)
         # select
-        if instance in ('MuonCondition', 'CaloCondition'):
+        if instance in (self.kMuonCondition, self.kCaloCondition):
             if mapped_cut == 'tbpt':
                 return n_objects * (n_objects - 1) * 0.5
-        elif instance  == 'CaloConditionOvRm':
+        elif instance  == self.kCaloConditionOvRm:
             if mapped_cut == 'tbpt':
                 return n_objects * (n_objects - 1) * 0.5
             elif mapped_cut in ('deta', 'dphi', 'dr'):
                 return n_objects * n_objects_ovrm
-        elif instance == 'CorrelationCondition':
+        elif instance == self.kCorrelationCondition:
             if same_object_types and same_object_bxs:
                 return n_objects * (n_objects - 1) * 0.5
             else:
                 n_objects_1 = slice_size(esObjects[0])
                 n_objects_2 = slice_size(esObjects[1])
                 return n_objects_1 * n_objects_2
-        elif instance == 'CorrelationConditionOvRm':
+        elif instance == self.kCorrelationConditionOvRm:
             if mapped_objects == ['calo', 'calo', 'calo']:
-                if cut in ('DeltaEtaOvRm', 'DeltaPhiOvRm', 'DeltaROvRm'):
+                if cut in (kOvRmDeltaEta, kOvRmDeltaPhi, kOvRmDeltaR):
                     return n_objects * n_objects_ovrm
                 else:
                     return n_objects * (n_objects - 1) * 0.5
