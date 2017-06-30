@@ -444,7 +444,7 @@
                             {
                                 "type": "dr",
                                 "processors": 0.00056,
-                                "sliceLUTs": 0.00002
+                                "sliceLUTs": 0.00025
                             },
                             {
                                 "type": "tbpt",
@@ -461,7 +461,7 @@
                     {
                         "types": ["calo", "calo", "calo"],
                         "processors": 0.0,
-                        "sliceLUTs": 0.0003,
+                        "sliceLUTs": 0.001,
                         "cuts": [
                             {
                                 "type": "deta",
@@ -476,7 +476,7 @@
                             {
                                 "type": "dr",
                                 "processors": 0.00056,
-                                "sliceLUTs": 0.00002
+                                "sliceLUTs": 0.00025
                             },
                             {
                                 "type": "tbpt",
