@@ -184,6 +184,7 @@ class VhdlProducer(object):
     def writeXmlMenu(self, filename, json_dir):
         """Updates a XML menu file based on inforamtion from a JSON file (used to apply
         a previously calculated algorithm distribution over multiple modules).
+        Returns path and filename of created XML menu.
         """
         # TODO
         # Load mapping from JSON
@@ -235,6 +236,8 @@ class VhdlProducer(object):
 
         logging.info("writing target XML menu file %s", target)
         tmTable.menu2xml(menu, scale, ext_signal, target)
+
+        return target
 
 
 # eof

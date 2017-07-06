@@ -212,7 +212,10 @@ def main():
         producer = VhdlProducer(template_dir)
         producer.write(collection, output_dir)
         logging.info("writing updated XML file %s", args.menu)
-        producer.writeXmlMenu(args.menu, os.path.join(output_dir, 'xml')) # TODO
+        filename = producer.writeXmlMenu(args.menu, os.path.join(output_dir, 'xml')) # TODO
+
+        # Load output XML
+        eventSetup = tmEventSetup.getTriggerMenu(filename)
 
         # Write menu documentation.
         logging.info("generating menu documentation...")
