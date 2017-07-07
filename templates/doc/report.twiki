@@ -29,9 +29,9 @@ A complete description of the algorithm and technical trigger implementation is 
 
 ---+++ L1 menu identification
 
-|L1 Trigger Menu Name: | !{{ menu.name }} |
-|L1 Trigger Menu UUID: | {{ menu.uuid_menu }} |
-|L1 Trigger Menu Firmware UUID: | {{ menu.uuid_firmware }}  |
+|Menu Name: | !{{ menu.name }} |
+|Menu UUID: | {{ menu.uuid_menu }} |
+|Firmware UUID: | {{ menu.uuid_firmware }}  |
 |Associated L1 scale DB key: | {{ menu.scale_set }} |
 
 
