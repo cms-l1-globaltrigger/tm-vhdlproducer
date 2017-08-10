@@ -158,22 +158,22 @@ Operators = (
 #
 
 esCutType = {
-  tmEventSetup.Threshold: kThreshold,
-  tmEventSetup.Eta: kEta,
-  tmEventSetup.Phi: kPhi,
-  tmEventSetup.Charge: kCharge,
-  tmEventSetup.Quality: kQuality,
-  tmEventSetup.Isolation: kIsolation,
-  tmEventSetup.DeltaEta: kDeltaEta,
-  tmEventSetup.DeltaPhi: kDeltaPhi,
-  tmEventSetup.DeltaR: kDeltaR,
-  tmEventSetup.Mass: kMass,
-  tmEventSetup.TwoBodyPt: kTwoBodyPt,
-  tmEventSetup.Slice: kSlice,
-  tmEventSetup.ChargeCorrelation: kChargeCorrelation,
-  tmEventSetup.OvRmDeltaEta: kOvRmDeltaEta,
-  tmEventSetup.OvRmDeltaPhi: kOvRmDeltaPhi,
-  tmEventSetup.OvRmDeltaR: kOvRmDeltaR,
+    tmEventSetup.Threshold: kThreshold,
+    tmEventSetup.Eta: kEta,
+    tmEventSetup.Phi: kPhi,
+    tmEventSetup.Charge: kCharge,
+    tmEventSetup.Quality: kQuality,
+    tmEventSetup.Isolation: kIsolation,
+    tmEventSetup.DeltaEta: kDeltaEta,
+    tmEventSetup.DeltaPhi: kDeltaPhi,
+    tmEventSetup.DeltaR: kDeltaR,
+    tmEventSetup.Mass: kMass,
+    tmEventSetup.TwoBodyPt: kTwoBodyPt,
+    tmEventSetup.Slice: kSlice,
+    tmEventSetup.ChargeCorrelation: kChargeCorrelation,
+    tmEventSetup.OvRmDeltaEta: kOvRmDeltaEta,
+    tmEventSetup.OvRmDeltaPhi: kOvRmDeltaPhi,
+    tmEventSetup.OvRmDeltaR: kOvRmDeltaR,
 }
 """Dictionary for cut type enumerations."""
 
@@ -348,6 +348,16 @@ CaloConditionOvRmTypes = [
     kTripleJetOvRm,
     kQuadJetOvRm,
 ]
+
+EsumsObjectTypes = [
+    kETT,
+    kETTEM,
+    kHTT,
+    kETM,
+    kHTM,
+    kETMHF,
+]
+"""List of energy sums object types."""
 
 ObjectsOrder = [
     kEgamma,

@@ -150,7 +150,6 @@ ComparisonOperator = {
 }
 """See utm/tmEventSetup/esTypes.hh"""
 
-
 # -----------------------------------------------------------------------------
 #  Filters
 # -----------------------------------------------------------------------------
@@ -483,22 +482,30 @@ class ModuleHelper(VhdlHelper):
                 return bool(condition.hasTwoBodyPtCut)
             return False
         objects = {}
-        for condition in self.conditions:
-            if hasObjectCorrelation(condition):
-                for object in condition.objects:
-                    key = (object.type, object.bx) # create custom hash
-                    objects[key] = object
+        for condition in filter(hasObjectCorrelation, self.conditions):
+            for object in condition.objects:
+                key = (object.type, object.bx) # create custom hash
+                objects[key] = object
         return objects.values()
 
     @property
     def conversionObjects(self):
         """Returns list of objects required for calo-muon and muon-esums correlations."""
-        objects = {}
-        for condition in self.conditions:
+        def isConversionCondition(condition):
+            """Returns True if condition type requires eta/phi conversion."""
             if condition.type in (algodist.kCaloMuonCorrelation, algodist.kMuonEsumCorrelation):
+                return True
+            # Calo/Muon-Esum combinations for transverse mass
+            if condition.type == algodist.kTransverseMass:
                 for object in condition.objects:
-                    key = object.type # create custom hash
-                    objects[key] = object
+                    if object.type in algodist.EsumsObjectTypes:
+                        return True
+            return False
+        objects = {}
+        for condition in filter(isConversionCondition, self.conditions):
+            for object in condition.objects:
+                key = object.type # create custom hash
+                objects[key] = object
         return objects.values()
 
     @property
