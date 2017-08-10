@@ -6,7 +6,7 @@
 {{ condition.vhdl_signal }}_i: entity work.calo_2plus1_orm_condition
     generic map(
         {{ condition.hasDetaOrmCut }}, {{ condition.hasDphiOrmCut }}, {{ condition.hasDrOrmCut }},
-        {{ condition.hasDetaCut }}, {{ condition.hasDphiCut }}, {{ condition.hasDrCut }}, {{ condition.hasMassCut }}, {{ condition.massType }}, {{ condition.hasTwoBodyPtCut }}, 
+        {{ condition.hasDetaCut }}, {{ condition.hasDphiCut }}, {{ condition.hasDrCut }}, {{ condition.hasMassCut }}, {{ condition.massType }}, {{ condition.hasTwoBodyPtCut }},
         {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o1.operator }}, {{ o1.type|upper }}_TYPE,
         (X"{{ o1.threshold|X04 }}", X"{{ o2.threshold|X04 }}", X"0000", X"0000"),
         ({{ o1.etaFullRange }}, {{ o2.etaFullRange }}, false, false),
@@ -28,17 +28,17 @@
         {{ o1.type|upper }}_{{ o3.type|upper }}_DETA_DPHI_PRECISION,
         {{ condition.diffEtaOrmUpperLimit }}, {{ condition.diffEtaOrmLowerLimit }},
         {{ condition.diffPhiOrmUpperLimit }}, {{ condition.diffPhiOrmLowerLimit }},
-        {{ condition.deltaROrmUpperLimit }}, {{ condition.deltaROrmLowerLimit }}, 
+        {{ condition.deltaROrmUpperLimit }}, {{ condition.deltaROrmLowerLimit }},
         DETA_DPHI_VECTOR_WIDTH_ALL, {{ o1.type|upper }}_{{ o1.type|upper }}_DETA_DPHI_PRECISION,
         {{ condition.diffEtaUpperLimit }}, {{ condition.diffEtaLowerLimit }},
         {{ condition.diffPhiUpperLimit }}, {{ condition.diffPhiLowerLimit }},
-        {{ condition.deltaRUpperLimit }}, {{ condition.deltaRLowerLimit }}, 
+        {{ condition.deltaRUpperLimit }}, {{ condition.deltaRLowerLimit }},
         {{ condition.massUpperLimit }}, {{ condition.massLowerLimit }},
         {{ o1.type|upper }}_{{ o1.type|upper }}_MASS_PRECISION, {{ o1.type|upper }}_PT_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o1.type|upper }}_COSH_COS_PRECISION, {{ o1.type|upper }}_{{ o1.type|upper }}_COSH_COS_VECTOR_WIDTH,
         {{ condition.twoBodyPtThres }}, CALO_SIN_COS_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o1.type|upper }}_PT_PRECISION, {{ o1.type|upper }}_{{ o1.type|upper }}_SIN_COS_PRECISION
     )
     port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o3.type|lower }}_bx_{{ o3.bx }},
-	diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_eta_vector, diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_phi_vector,
+        diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_eta_vector, diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_phi_vector,
         diff_{{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_eta_vector, diff_{{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_phi_vector,
         {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }},
         {{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_cosh_deta_vector,
@@ -50,7 +50,7 @@
 {{ condition.vhdl_signal }}_i: entity work.calo_1plus1_orm_condition
     generic map(
         {{ condition.hasDetaOrmCut }}, {{ condition.hasDphiOrmCut }}, {{ condition.hasDrOrmCut }},
-        {{ condition.hasDetaCut }}, {{ condition.hasDphiCut }}, {{ condition.hasDrCut }}, {{ condition.hasMassCut }}, {{ condition.massType }}, {{ condition.hasTwoBodyPtCut }}, 
+        {{ condition.hasDetaCut }}, {{ condition.hasDphiCut }}, {{ condition.hasDrCut }}, {{ condition.hasMassCut }}, {{ condition.massType }}, {{ condition.hasTwoBodyPtCut }},
         {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o1.operator }}, {{ o1.type|upper }}_TYPE,
         X"{{ o1.threshold|X04 }}",
         {{ o1.etaFullRange }}, X"{{ o1.etaW1UpperLimit|X04 }}", X"{{ o1.etaW1LowerLimit|X04 }}",
@@ -68,11 +68,11 @@
         {{ o1.type|upper }}_{{ o2.type|upper }}_DETA_DPHI_PRECISION,
         {{ condition.diffEtaOrmUpperLimit }}, {{ condition.diffEtaOrmLowerLimit }},
         {{ condition.diffPhiOrmUpperLimit }}, {{ condition.diffPhiOrmLowerLimit }},
-        {{ condition.deltaROrmUpperLimit }}, {{ condition.deltaROrmLowerLimit }}, 
+        {{ condition.deltaROrmUpperLimit }}, {{ condition.deltaROrmLowerLimit }},
         DETA_DPHI_VECTOR_WIDTH_ALL, {{ o1.type|upper }}_{{ o1.type|upper }}_DETA_DPHI_PRECISION,
         {{ condition.diffEtaUpperLimit }}, {{ condition.diffEtaLowerLimit }},
         {{ condition.diffPhiUpperLimit }}, {{ condition.diffPhiLowerLimit }},
-        {{ condition.deltaRUpperLimit }}, {{ condition.deltaRLowerLimit }}, 
+        {{ condition.deltaRUpperLimit }}, {{ condition.deltaRLowerLimit }},
         {{ condition.massUpperLimit }}, {{ condition.massLowerLimit }},
         {{ o1.type|upper }}_{{ o1.type|upper }}_MASS_PRECISION, {{ o1.type|upper }}_PT_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o1.type|upper }}_COSH_COS_PRECISION, {{ o1.type|upper }}_{{ o1.type|upper }}_COSH_COS_VECTOR_WIDTH,
         {{ condition.twoBodyPtThres }}, CALO_SIN_COS_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o1.type|upper }}_PT_PRECISION, {{ o1.type|upper }}_{{ o1.type|upper }}_SIN_COS_PRECISION
