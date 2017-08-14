@@ -495,12 +495,18 @@ class ModuleHelper(VhdlHelper):
             """Returns True if condition type requires eta/phi conversion."""
             if condition.type in (algodist.kCaloMuonCorrelation, algodist.kMuonEsumCorrelation):
                 return True
-            # Calo/Muon-Esum combinations for transverse mass
+            # Muon-Esum combinations for transverse mass
             if condition.type == algodist.kTransverseMass:
                 for object in condition.objects:
                     if object.type in algodist.EsumsObjectTypes:
                         return True
-            return False
+                return False
+            # Calo-Muon combinations for invariant mass
+            if condition.type == algodist.kInvariantMass:
+                object = condition.objects
+                if (object[0].type == 'EG' or 'TAU' or 'JET') and (object[1].type == 'MU'):
+                    return True
+                return False
         objects = {}
         for condition in filter(isConversionCondition, self.conditions):
             for object in condition.objects:
