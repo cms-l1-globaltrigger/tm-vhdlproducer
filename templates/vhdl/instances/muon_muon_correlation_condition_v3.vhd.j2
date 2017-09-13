@@ -27,7 +27,7 @@
         {{ o1.type|upper }}_PT_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_PRECISION, {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH,
         {{ condition.twoBodyPtThres }}, MUON_SIN_COS_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o2.type|upper }}_PT_PRECISION, {{ o1.type|upper }}_{{ o2.type|upper }}_SIN_COS_PRECISION
     )
-    port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o1.type|lower }}_bx_{{ o2.bx }},
+    port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o2.type|lower }}_bx_{{ o2.bx }},
         ls_charcorr_double_bx_{{ o1.bx }}_bx_{{ o2.bx }}, os_charcorr_double_bx_{{ o1.bx }}_bx_{{ o2.bx }},
         diff_{{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_eta_vector, diff_{{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_vector,
         {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, {{ o1.type|lower }}_pt_vector_bx_{{ o2.bx }},

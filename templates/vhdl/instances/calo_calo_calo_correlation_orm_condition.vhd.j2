@@ -32,7 +32,7 @@
         {{ o1.type|upper }}_{{ o1.type|upper }}_MASS_PRECISION, {{ o1.type|upper }}_PT_VECTOR_WIDTH, {{ o1.type|upper }}_PT_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o1.type|upper }}_COSH_COS_PRECISION, {{ o1.type|upper }}_{{ o1.type|upper }}_COSH_COS_VECTOR_WIDTH,
         {{ condition.twoBodyPtThres }}, CALO_SIN_COS_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o1.type|upper }}_PT_PRECISION, {{ o1.type|upper }}_{{ o1.type|upper }}_SIN_COS_PRECISION
     )
-    port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o3.type|lower }}_bx_{{ o3.bx }},
+    port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}({{ o1.sliceLow }} to {{ o1.sliceHigh }}), {{ o3.type|lower }}_bx_{{ o3.bx }}({{ o3.sliceLow }} to {{ o3.sliceHigh }}),
         diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_eta_vector, diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_phi_vector,
         diff_{{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_eta_vector, diff_{{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_phi_vector,
         {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }},
@@ -69,7 +69,7 @@
         {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_PRECISION, {{ o1.type|upper }}_PT_VECTOR_WIDTH, {{ o2.type|upper }}_PT_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_PRECISION, {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH,
         {{ condition.twoBodyPtThres }}, CALO_SIN_COS_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o2.type|upper }}_PT_PRECISION, {{ o1.type|upper }}_{{ o2.type|upper }}_SIN_COS_PRECISION
     )
-    port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o2.type|lower }}_bx_{{ o2.bx }},
+    port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}({{ o1.sliceLow }} to {{ o1.sliceHigh }}), {{ o2.type|lower }}_bx_{{ o2.bx }}({{ o2.sliceLow }} to {{ o2.sliceHigh }}),
         diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_eta_vector, diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_vector,
         diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_eta_vector, diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_vector,
         {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, {{ o2.type|lower }}_pt_vector_bx_{{ o2.bx }},

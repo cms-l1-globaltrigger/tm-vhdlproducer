@@ -4,8 +4,8 @@
   {%- set o3 = condition.objects[2] %}
   {%- set o4 = condition.objects[3] %}
   {%- set bx = o1.bx %}
-{{ condition.vhdl_signal }}_i: entity work.muon_conditions_v5
-    generic map({{ o1.sliceLow }}, {{ o1.sliceHigh }},
+{{ condition.vhdl_signal }}_i: entity work.muon_conditions_v6
+    generic map({{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o2.sliceLow }}, {{ o2.sliceHigh }}, {{ o3.sliceLow }}, {{ o3.sliceHigh }}, {{ o4.sliceLow }}, {{ o4.sliceHigh }},
         {{ condition.nr_objects }}, {{ o1.operator }},
         (X"{{ o1.threshold|X04 }}", X"{{ o2.threshold|X04 }}", X"{{ o3.threshold|X04 }}", X"{{ o4.threshold|X04 }}"),
         ({{ o1.etaFullRange }}, {{ o2.etaFullRange }}, {{ o3.etaFullRange }}, {{ o4.etaFullRange }}),
@@ -27,7 +27,7 @@
         false
   {%- endif %}
     )
-    port map(lhc_clk, mu_bx_{{ bx }}({{ o1.sliceLow }} to {{ o1.sliceHigh }}),
+    port map(lhc_clk, mu_bx_{{ bx }},
   {%- if condition.nr_objects >= 2 and condition.hasTwoBodyPtCut == "true" %}
         {{ condition.vhdl_signal }},
         ls_charcorr_double_bx_{{ bx }}_bx_{{ bx }}, os_charcorr_double_bx_{{ bx }}_bx_{{ bx }},

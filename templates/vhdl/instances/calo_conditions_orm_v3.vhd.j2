@@ -1,4 +1,4 @@
-{%- block instantiate_calo_conditions_orm %}
+{%- block instantiate_calo_conditions_orm_v3 %}
   {%- set o1 = condition.objects[0] %}
   {%- set o2 = condition.objects[1] %}
   {%- set o3 = condition.objects[2] %}
@@ -6,10 +6,10 @@
   {%- set o5 = condition.objects[4] %}
   {%- set nr_requirements = condition.nr_objects-1 %}
   {%- if o1.type == o2.type and o1.type == o3.type and o1.type == o4.type and o1.type != o5.type %}
-{{ condition.vhdl_signal }}_i: entity work.calo_conditions_orm
+{{ condition.vhdl_signal }}_i: entity work.calo_conditions_orm_v3_quad
     generic map(
         {{ condition.hasDetaOrmCut }}, {{ condition.hasDphiOrmCut }}, {{ condition.hasDrOrmCut }},
-        {{ o1.sliceLow }}, {{ o1.sliceHigh }},
+        {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o2.sliceLow }}, {{ o2.sliceHigh }}, {{ o3.sliceLow }}, {{ o3.sliceHigh }}, {{ o4.sliceLow }}, {{ o4.sliceHigh }},
         {{ nr_requirements }}, {{ o1.operator }}, {{ o1.type }}_TYPE,
         (X"{{ o1.threshold|X04 }}", X"{{ o2.threshold|X04 }}", X"{{ o3.threshold|X04 }}", X"{{ o4.threshold|X04 }}"),
         ({{ o1.etaFullRange }}, {{ o2.etaFullRange }}, {{ o3.etaFullRange }}, {{ o4.etaFullRange }}),
@@ -30,27 +30,16 @@
         X"{{ o5.isolationLUT|X01 }}",
         DETA_DPHI_VECTOR_WIDTH_ALL,
         {{ o1.type|upper }}_{{ o5.type|upper }}_DETA_DPHI_PRECISION,
-        {{ condition.diffEtaOrmUpperLimit }}, {{ condition.diffEtaOrmLowerLimit }}, {{ condition.diffPhiOrmUpperLimit }}, {{ condition.diffPhiOrmLowerLimit }}, {{ condition.deltaROrmUpperLimit }}, {{ condition.deltaROrmLowerLimit }},
-  {%- if condition.hasTwoBodyPtCut == "true" %}
-        true, {{ o1.type|upper }}_PT_VECTOR_WIDTH, {{ condition.twoBodyPtThres }},
-        CALO_SIN_COS_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o1.type|upper }}_PT_PRECISION, {{ o1.type|upper }}_{{ o1.type|upper }}_SIN_COS_PRECISION
-  {%- else %}
-        false
-  {%- endif %}
+        {{ condition.diffEtaOrmUpperLimit }}, {{ condition.diffEtaOrmLowerLimit }}, {{ condition.diffPhiOrmUpperLimit }}, {{ condition.diffPhiOrmLowerLimit }}, {{ condition.deltaROrmUpperLimit }}, {{ condition.deltaROrmLowerLimit }}
     )
-    port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}({{ o1.sliceLow }} to {{ o1.sliceHigh }}), {{ o5.type|lower }}_bx_{{ o5.bx }}({{ o5.sliceLow }} to {{ o5.sliceHigh }}),
+    port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o5.type|lower }}_bx_{{ o5.bx }}({{ o5.sliceLow }} to {{ o5.sliceHigh }}),
         diff_{{ o1.type|lower }}_{{ o5.type|lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_eta_vector, diff_{{ o1.type|lower }}_{{ o5.type|lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_phi_vector,
-  {%- if condition.hasTwoBodyPtCut == "true" %}
-        {{ condition.vhdl_signal }},
-        {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}({{ o1.sliceLow }} to {{ o1.sliceHigh }}), {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}({{ o1.sliceLow }} to {{ o1.sliceHigh }}), {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }}({{ o1.sliceLow }} to {{ o1.sliceHigh }}));
-  {%- else %}
         {{ condition.vhdl_signal }});
-  {%- endif %}
   {%- elif o1.type == o2.type and o1.type == o3.type and o1.type != o4.type %}
-{{ condition.vhdl_signal }}_i: entity work.calo_conditions_orm
+{{ condition.vhdl_signal }}_i: entity work.calo_conditions_orm_v3_triple
     generic map(
         {{ condition.hasDetaOrmCut }}, {{ condition.hasDphiOrmCut }}, {{ condition.hasDrOrmCut }},
-        {{ o1.sliceLow }}, {{ o1.sliceHigh }},
+        {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o2.sliceLow }}, {{ o2.sliceHigh }}, {{ o3.sliceLow }}, {{ o3.sliceHigh }},
         {{ nr_requirements }}, {{ o1.operator }}, {{ o1.type }}_TYPE,
         (X"{{ o1.threshold|X04 }}", X"{{ o2.threshold|X04 }}", X"{{ o3.threshold|X04 }}", X"0000"),
         ({{ o1.etaFullRange }}, {{ o2.etaFullRange }}, {{ o3.etaFullRange }}, false),
@@ -71,27 +60,16 @@
         X"{{ o4.isolationLUT|X01 }}",
         DETA_DPHI_VECTOR_WIDTH_ALL,
         {{ o1.type|upper }}_{{ o4.type|upper }}_DETA_DPHI_PRECISION,
-        {{ condition.diffEtaOrmUpperLimit }}, {{ condition.diffEtaOrmLowerLimit }}, {{ condition.diffPhiOrmUpperLimit }}, {{ condition.diffPhiOrmLowerLimit }}, {{ condition.deltaROrmUpperLimit }}, {{ condition.deltaROrmLowerLimit }},
-  {%- if condition.hasTwoBodyPtCut == "true" %}
-        true, {{ o1.type|upper }}_PT_VECTOR_WIDTH, {{ condition.twoBodyPtThres }},
-        CALO_SIN_COS_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o1.type|upper }}_PT_PRECISION, {{ o1.type|upper }}_{{ o1.type|upper }}_SIN_COS_PRECISION
-  {%- else %}
-        false
-  {%- endif %}
+        {{ condition.diffEtaOrmUpperLimit }}, {{ condition.diffEtaOrmLowerLimit }}, {{ condition.diffPhiOrmUpperLimit }}, {{ condition.diffPhiOrmLowerLimit }}, {{ condition.deltaROrmUpperLimit }}, {{ condition.deltaROrmLowerLimit }}
     )
-    port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}({{ o1.sliceLow }} to {{ o1.sliceHigh }}), {{ o4.type|lower }}_bx_{{ o4.bx }}({{ o4.sliceLow }} to {{ o4.sliceHigh }}),
+    port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o4.type|lower }}_bx_{{ o4.bx }}({{ o4.sliceLow }} to {{ o4.sliceHigh }}),
         diff_{{ o1.type|lower }}_{{ o4.type|lower }}_bx_{{ o1.bx }}_bx_{{ o4.bx }}_eta_vector, diff_{{ o1.type|lower }}_{{ o4.type|lower }}_bx_{{ o1.bx }}_bx_{{ o4.bx }}_phi_vector,
-  {%- if condition.hasTwoBodyPtCut == "true" %}
-        {{ condition.vhdl_signal }},
-        {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}({{ o1.sliceLow }} to {{ o1.sliceHigh }}), {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}({{ o1.sliceLow }} to {{ o1.sliceHigh }}), {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }}({{ o1.sliceLow }} to {{ o1.sliceHigh }}));
-  {%- else %}
         {{ condition.vhdl_signal }});
-  {%- endif %}
   {%- elif o1.type == o2.type and o1.type != o3.type %}
-{{ condition.vhdl_signal }}_i: entity work.calo_conditions_orm
+{{ condition.vhdl_signal }}_i: entity work.calo_conditions_orm_v3_single_double
     generic map(
         {{ condition.hasDetaOrmCut }}, {{ condition.hasDphiOrmCut }}, {{ condition.hasDrOrmCut }},
-        {{ o1.sliceLow }}, {{ o1.sliceHigh }},
+        {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o2.sliceLow }}, {{ o2.sliceHigh }},
         {{ nr_requirements }}, {{ o1.operator }}, {{ o1.type }}_TYPE,
         (X"{{ o1.threshold|X04 }}", X"{{ o2.threshold|X04 }}", X"0000", X"0000"),
         ({{ o1.etaFullRange }}, {{ o2.etaFullRange }}, false, false),
@@ -120,19 +98,19 @@
         false
   {%- endif %}
     )
-    port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}({{ o1.sliceLow }} to {{ o1.sliceHigh }}), {{ o3.type|lower }}_bx_{{ o3.bx }}({{ o3.sliceLow }} to {{ o3.sliceHigh }}),
+    port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o3.type|lower }}_bx_{{ o3.bx }}({{ o3.sliceLow }} to {{ o3.sliceHigh }}),
         diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_eta_vector, diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_phi_vector,
   {%- if condition.hasTwoBodyPtCut == "true" %}
         {{ condition.vhdl_signal }},
-        {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}({{ o1.sliceLow }} to {{ o1.sliceHigh }}), {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}({{ o1.sliceLow }} to {{ o1.sliceHigh }}), {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }}({{ o1.sliceLow }} to {{ o1.sliceHigh }}));
+        {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }});
   {%- else %}
         {{ condition.vhdl_signal }});
   {%- endif %}
   {%- elif o1.type != o2.type %}
-{{ condition.vhdl_signal }}_i: entity work.calo_conditions_orm
+{{ condition.vhdl_signal }}_i: entity work.calo_conditions_orm_v3_single_double
     generic map(
         {{ condition.hasDetaOrmCut }}, {{ condition.hasDphiOrmCut }}, {{ condition.hasDrOrmCut }},
-        {{ o1.sliceLow }}, {{ o1.sliceHigh }},
+        {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o2.sliceLow }}, {{ o2.sliceHigh }},
         {{ nr_requirements }}, {{ o1.operator }}, {{ o1.type }}_TYPE,
         (X"{{ o1.threshold|X04 }}", X"0000", X"0000", X"0000"),
         ({{ o1.etaFullRange }}, false, false, false),
@@ -161,14 +139,14 @@
         false
   {%- endif %}
     )
-    port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}({{ o1.sliceLow }} to {{ o1.sliceHigh }}), {{ o2.type|lower }}_bx_{{ o2.bx }}({{ o2.sliceLow }} to {{ o2.sliceHigh }}),
+    port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o2.type|lower }}_bx_{{ o2.bx }}({{ o2.sliceLow }} to {{ o2.sliceHigh }}),
         diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_eta_vector, diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_vector,
   {%- if condition.hasTwoBodyPtCut == "true" %}
         {{ condition.vhdl_signal }},
-        {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}({{ o1.sliceLow }} to {{ o1.sliceHigh }}), {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}({{ o1.sliceLow }} to {{ o1.sliceHigh }}), {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }}({{ o1.sliceLow }} to {{ o1.sliceHigh }}));
+        {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }});
   {%- else %}
         {{ condition.vhdl_signal }});
   {%- endif %}
     {%- endif %}
-{% endblock instantiate_calo_conditions_orm %}
+{% endblock instantiate_calo_conditions_orm_v3 %}
 {# eof #}
