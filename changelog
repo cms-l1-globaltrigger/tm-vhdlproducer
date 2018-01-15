@@ -4,13 +4,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.3.0] - 2017-10-23
+### Added
+- added handles module.
+- added cut and object template helper classes.
+### Changed
+- code refactoring.
+- renamed stubs to handles (algodist).
+- lookup dictionaries, replaced string type keys by enumerations.
+- updated/renamed templates (using new template helpers).
+- fixed VHDL templates for GTL version 1.5.0
+### Removed
+- obsolete templates.
+
 ## [2.2.1] - 2017-09-14
 ### Changed
- - fixed VHDL templates for GTL version 1.4.1
+- fixed VHDL templates for GTL version 1.4.1
 
 ## [2.2.0] - 2017-09-13
 ### Changed
- - updated VHDL templates for GTL version 1.4.0 
+- updated VHDL templates for GTL version 1.4.0
 
 ## [2.1.1] - 2017-07-06
 ### Changed

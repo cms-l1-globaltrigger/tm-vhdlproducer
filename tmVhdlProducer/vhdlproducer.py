@@ -72,6 +72,8 @@ def murmurhash(s, bits=32):
 # -----------------------------------------------------------------------------
 
 CustomFilters = {
+    'X16' : lambda x: "%016X" % int(float(x)),
+    'X08' : lambda x: "%08X" % int(float(x)),
     'X04' : lambda x: "%04X" % int(float(x)),
     'X01' : lambda x: "%01X" % int(float(x)),
     'alpha' : lambda s: ''.join(c for c in s if c.isalpha()),

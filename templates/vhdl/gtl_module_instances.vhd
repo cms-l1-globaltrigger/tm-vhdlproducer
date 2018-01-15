@@ -35,15 +35,15 @@
 {%- include  "instances/correlation_conditions_mass_cuts.vhd.j2" %}
 -- Instantiations of conditions
 {%- for condition in module.caloConditions %}
-{%- include  "instances/calo_condition_v6.vhd.j2" %}
+{%- include  "instances/calo_condition.vhd.j2" %}
 {%- endfor %}
 
 {%- for condition in module.caloConditionsOvRm %}
-{%- include  "instances/calo_conditions_orm_v3.vhd.j2" %}
+{%- include  "instances/calo_conditions_orm.vhd.j2" %}
 {%- endfor %}
 
 {%- for condition in module.muonConditions %}
-{%- include  "instances/muon_condition_v6.vhd.j2" %}
+{%- include  "instances/muon_condition.vhd.j2" %}
 {%- endfor %}
 
 {%- for condition in module.esumsConditions %}
@@ -51,27 +51,27 @@
 {%- endfor %}
 
 {%- for condition in module.caloCaloCorrConditions %}
-{%- include  "instances/calo_calo_correlation_condition_v3.vhd.j2" %}
+{%- include  "instances/calo_calo_correlation_condition.vhd.j2" %}
 {%- endfor %}
 
 {%- for condition in module.caloCaloCorrOvRmConditions %}
-{%- include  "instances/calo_calo_calo_correlation_orm_condition_v2.vhd.j2" %}
+{%- include  "instances/calo_calo_calo_correlation_orm_condition.vhd.j2" %}
 {%- endfor %}
 
 {%- for condition in module.caloMuonCorrConditions %}
-{%- include  "instances/calo_muon_correlation_condition_v2.vhd.j2" %}
+{%- include  "instances/calo_muon_correlation_condition.vhd.j2" %}
 {%- endfor %}
 
 {%- for condition in module.muonMuonCorrConditions %}
-{%- include  "instances/muon_muon_correlation_condition_v3.vhd.j2" %}
+{%- include  "instances/muon_muon_correlation_condition.vhd.j2" %}
 {%- endfor %}
 
 {%- for condition in module.caloEsumCorrConditions %}
-{%- include  "instances/calo_esums_correlation_condition_v2.vhd.j2" %}
+{%- include  "instances/calo_esums_correlation_condition.vhd.j2" %}
 {%- endfor %}
 
 {%- for condition in module.muonEsumCorrConditions %}
-{%- include  "instances/muon_esums_correlation_condition_v2.vhd.j2" %}
+{%- include  "instances/muon_esums_correlation_condition.vhd.j2" %}
 {%- endfor %}
 
 {%- for condition in module.minBiasConditions %}

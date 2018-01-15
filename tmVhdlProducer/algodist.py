@@ -1,4 +1,11 @@
 #!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+#
+# Repository path   : $HeadURL: $
+# Last committed    : $Revision: $
+# Last changed by   : $Author: $
+# Last changed date : $Date: $
+#
 
 """Smart distribution of algorithms on multiple modules.
 
@@ -24,7 +31,10 @@ Dump distribution to JSON file
 
 import tmEventSetup
 import tmGrammar
-import tmTable
+
+from tmVhdlProducer.handles import Payload
+from tmVhdlProducer.handles import ConditionHandle
+from tmVhdlProducer.handles import AlgorithmHandle
 
 from collections import namedtuple
 import argparse
@@ -43,6 +53,7 @@ DefaultConfigDir = os.path.join(ProjectDir, 'config')
 
 DefaultConfigFile = os.path.join(DefaultConfigDir, 'resource_default.json')
 """Default resource configuration file."""
+
 #
 # Keys for object types
 #
@@ -157,7 +168,7 @@ Operators = (
 # Dictionaries
 #
 
-esCutType = {
+CutTypeKey = {
     tmEventSetup.Threshold: kThreshold,
     tmEventSetup.Eta: kEta,
     tmEventSetup.Phi: kPhi,
@@ -177,7 +188,7 @@ esCutType = {
 }
 """Dictionary for cut type enumerations."""
 
-esObjectType = {
+ObjectTypeKey = {
     tmEventSetup.Muon: kMuon,
     tmEventSetup.Egamma: kEgamma,
     tmEventSetup.Tau: kTau,
@@ -198,27 +209,27 @@ esObjectType = {
 }
 """Dictionary for object type enumerations."""
 
-esObjectCollectionSizes = {
-    kEgamma: 12,
-    kJet: 12,
-    kTau: 12,
-    kMuon: 8,
-    kETT: 1,
-    kETTEM: 1,
-    kHTT: 1,
-    kTOWERCOUNT: 1,
-    kETM: 1,
-    kHTM: 1,
-    kETMHF: 1,
-    kMBT0HFM: 1,
-    kMBT0HFP: 1,
-    kMBT1HFM: 1,
-    kMBT1HFP: 1,
-    kEXT: 1,
+ObjectGrammarKey = {
+    tmEventSetup.Muon: tmGrammar.MU,
+    tmEventSetup.Egamma: tmGrammar.EG,
+    tmEventSetup.Tau: tmGrammar.TAU,
+    tmEventSetup.Jet: tmGrammar.JET,
+    tmEventSetup.ETT: tmGrammar.ETT,
+    tmEventSetup.ETTEM: tmGrammar.ETTEM,
+    tmEventSetup.HTT: tmGrammar.HTT,
+    tmEventSetup.ETM: tmGrammar.ETM,
+    tmEventSetup.ETMHF: tmGrammar.ETMHF,
+    tmEventSetup.HTM: tmGrammar.HTM,
+    tmEventSetup.EXT: tmGrammar.EXT,
+    tmEventSetup.MBT0HFP: tmGrammar.MBT0HFP,
+    tmEventSetup.MBT1HFP: tmGrammar.MBT1HFP,
+    tmEventSetup.MBT0HFM: tmGrammar.MBT0HFM,
+    tmEventSetup.MBT1HFM: tmGrammar.MBT1HFM,
+    tmEventSetup.TOWERCOUNT: tmGrammar.TOWERCOUNT,
 }
-"""Dictionary for object collection size (slices)."""
+"""Dictionary for object grammar type enumerations."""
 
-esConditionType = {
+ConditionTypeKey = {
     tmEventSetup.SingleMuon: kSingleMuon,
     tmEventSetup.DoubleMuon: kDoubleMuon,
     tmEventSetup.TripleMuon: kTripleMuon,
@@ -272,114 +283,6 @@ esConditionType = {
 }
 """Dictionary for condition type enumerations."""
 
-MuonConditionTypes = [
-    kSingleMuon,
-    kDoubleMuon,
-    kTripleMuon,
-    kQuadMuon,
-]
-
-CaloConditionTypes = [
-    kSingleEgamma,
-    kDoubleEgamma,
-    kTripleEgamma,
-    kQuadEgamma,
-    kSingleTau,
-    kDoubleTau,
-    kTripleTau,
-    kQuadTau,
-    kSingleJet,
-    kDoubleJet,
-    kTripleJet,
-    kQuadJet,
-]
-
-EsumsConditionTypes = [
-    kTotalEt,
-    kTotalEtEM,
-    kTotalHt,
-    kMissingEt,
-    kMissingHt,
-    kMissingEtHF,
-]
-
-ExternalConditionTypes = [
-    kExternals,
-]
-
-MinBiasConditionTypes = [
-    kMinBiasHFM0,
-    kMinBiasHFM1,
-    kMinBiasHFP0,
-    kMinBiasHFP1,
-]
-
-TowerCountConditionTypes = [
-    kTowerCount,
-]
-
-CorrelationConditionTypes = [
-    kMuonMuonCorrelation,
-    kMuonEsumCorrelation,
-    kCaloMuonCorrelation,
-    kCaloCaloCorrelation,
-    kCaloEsumCorrelation,
-    kInvariantMass,
-    kTransverseMass,
-]
-
-CorrelationConditionOvRmTypes = [
-    kCaloCaloCorrelationOvRm,
-    kInvariantMassOvRm,
-    kTransverseMassOvRm,
-]
-
-CaloConditionOvRmTypes = [
-    kSingleEgammaOvRm,
-    kDoubleEgammaOvRm,
-    kTripleEgammaOvRm,
-    kQuadEgammaOvRm,
-    kSingleTauOvRm,
-    kDoubleTauOvRm,
-    kTripleTauOvRm,
-    kQuadTauOvRm,
-    kSingleJetOvRm,
-    kDoubleJetOvRm,
-    kTripleJetOvRm,
-    kQuadJetOvRm,
-]
-
-EsumsObjectTypes = [
-    kETT,
-    kETTEM,
-    kHTT,
-    kETM,
-    kHTM,
-    kETMHF,
-]
-"""List of energy sums object types."""
-
-ObjectsOrder = [
-    kEgamma,
-    kJet,
-    kTau,
-    kMuon,
-    kETT,
-    kETTEM,
-    kHTT,
-    kTOWERCOUNT,
-    kETM,
-    kHTM,
-    kETMHF,
-    kMBT0HFM,
-    kMBT0HFP,
-    kMBT1HFM,
-    kMBT1HFP,
-    kEXT,
-    kPrecision,
-]
-"""Order of object types required by VHDL correlation conditions."""
-
 #
 # Functions
 #
@@ -405,27 +308,6 @@ def short_name(name, length):
     if len(name) > length:
         return "{name}...".format(name=name[:length-3])
     return name[:length]
-
-def same_object_types(esObjects):
-    """Returns true if all objects are of same type."""
-    return len(set([esObject.getType() for esObject in esObjects])) == 1
-
-def same_object_bxs(esObjects):
-    """Returns true if all objects of condition are of same BX."""
-    return len(set([esObject.getBx() for esObject in esObjects])) == 1
-
-def slice_size(esObject):
-    """Returns size of object slice used from collection.
-    >>> slice_size(obj)
-    8
-    """
-    # Check for object slice cut
-    cut = filter_first(lambda item: item.getCutType() == tmEventSetup.Slice, esObject.getCuts())
-    if cut:
-        return int(cut.getMaximumValue() - cut.getMinimumValue()) + 1
-    # Else use default size
-    object_type = esObjectType[esObject.getType()]
-    return esObjectCollectionSizes[object_type]
 
 def expand_range(expr):
     """Parse and resolves numeric ranges.
@@ -458,44 +340,6 @@ def parse_range(expr):
 class ResourceOverflowError(RuntimeError):
     """Custom exception class for reosurce overflow errors."""
     pass
-
-class Payload(object):
-    """Implements a generic payload represented by multiple attributes.
-
-    >>> payload = Payload(sliceLUTs, processors)
-    >>> payload < (payload + payload)
-    >>> payload.sliceLUTs, payload.processors
-    """
-    def __init__(self, sliceLUTs=0, processors=0):
-        self.sliceLUTs = float(sliceLUTs)
-        self.processors = float(processors)
-
-    def _astuple(self):
-        """Retrurns tuple of payload attributes ordered by significance (most
-        significant last, least first).
-        """
-        return self.sliceLUTs, self.processors
-
-    def _asdict(self):
-        return dict(sliceLUTs=self.sliceLUTs, processors=self.processors)
-
-    def __add__(self, payload):
-        """Multiplicate payloads."""
-        sliceLUTs = self.sliceLUTs + payload.sliceLUTs
-        processors = self.processors + payload.processors
-        return Payload(sliceLUTs, processors)
-
-    def __eq__(self, payload):
-        return self._astuple() == payload._astuple()
-
-    def __lt__(self, payload):
-        """Compare payloads by list of attributes ordered by significance."""
-        return self._astuple() < payload._astuple()
-
-    def __repr__(self):
-        sliceLUTsPercent = self.sliceLUTs * 100
-        processorsPercent = self.processors * 100
-        return "{self.__class__.__name__}(sliceLUTs={sliceLUTsPercent:.2f}%, DSPs={processorsPercent:.2f}%)".format(**locals())
 
 class ResourceTray(object):
     """Scale tray for calculating condition and algorithm payloads. It loads
@@ -574,10 +418,10 @@ class ResourceTray(object):
 
     def find_instance(self, condition):
         """Returns instance resource namedtuple for *key* or None if not found."""
-        assert isinstance(condition, ConditionStub)
+        assert isinstance(condition, ConditionHandle)
         instance_map = self.resources.mapping.instances._asdict()
         def compare(instance):
-            return instance.type == self.map_instance(condition.type)
+            return instance.type == self.map_instance(ConditionTypeKey[condition.type])
         return filter_first(compare, self.resources.instances)
 
     def calc_factor(self, condition):
@@ -586,26 +430,25 @@ class ResourceTray(object):
         >>> tray.calc_factor(condition)
         1.234
         """
-        assert isinstance(condition, ConditionStub)
+        assert isinstance(condition, ConditionHandle)
         # condition type dependent factor calculation (see also config/README.md)
-        esObjects = condition.ptr.getObjects()
-        n_requirements = len(esObjects)
-        n_objects = slice_size(esObjects[0])
-        n_objects_ovrm = slice_size(esObjects[-1])
-        mapped_objects = self.map_objects(condition.objects)
-        same_object_types = len(set([esObject.getType() for esObject in esObjects])) == 1 # in terms of mapped object types!
-        same_object_bxs = len(set([esObject.getBxOffset() for esObject in esObjects])) == 1
+        objects = condition.objects
+        n_requirements = len(objects)
+        n_objects = objects[0].slice_size
+        n_objects_ovrm = objects[-1].slice_size
+        object_keys = [ObjectTypeKey[object_.type] for object_ in condition.objects]
+        mapped_objects = self.map_objects(object_keys)
         # instance
-        instance = self.map_instance(condition.type)
+        instance = self.map_instance(ConditionTypeKey[condition.type])
         # select
         if instance in (self.kMuonCondition, self.kCaloCondition, self.kCaloConditionOvRm):
             return n_objects * n_requirements
         elif instance == self.kCorrelationCondition:
-            if same_object_types and same_object_bxs:
+            if condition.same_object_types and condition.same_object_bxs:
                 return n_objects * (n_objects - 1) * 0.5
             else:
-                n_objects_1 = slice_size(esObjects[0])
-                n_objects_2 = slice_size(esObjects[1])
+                n_objects_1 = objects[0].slice_size
+                n_objects_2 = objects[1].slice_size
                 return n_objects_1 * n_objects_2
         elif instance == self.kCorrelationConditionOvRm:
             if mapped_objects == ['calo', 'calo', 'calo']:
@@ -622,18 +465,18 @@ class ResourceTray(object):
         >>> tray.calc_cut_factor(condition, "OvRmDeltaR")
         1.234
         """
-        assert isinstance(condition, ConditionStub)
+        assert isinstance(condition, ConditionHandle)
+        assert isinstance(cut, str)
         # condition type dependent factor calculation (see also config/README.md)
         mapped_cut = self.map_cut(cut)
-        esObjects = condition.ptr.getObjects()
-        n_requirements = len(esObjects)
-        n_objects = slice_size(esObjects[0])
-        n_objects_ovrm = slice_size(esObjects[-1])
-        mapped_objects = self.map_objects(condition.objects)
-        same_object_types = len(set([esObject.getType() for esObject in esObjects])) == 1 # in terms of mapped object types!
-        same_object_bxs = len(set([esObject.getBxOffset() for esObject in esObjects])) == 1
+        objects = condition.objects
+        n_requirements = len(objects)
+        n_objects = objects[0].slice_size
+        n_objects_ovrm = objects[-1].slice_size
+        object_keys = [ObjectTypeKey[object_.type] for object_ in condition.objects]
+        mapped_objects = self.map_objects(object_keys)
         # instance
-        instance = self.map_instance(condition.type)
+        instance = self.map_instance(ConditionTypeKey[condition.type])
         # select
         if instance in (self.kMuonCondition, self.kCaloCondition):
             if mapped_cut == 'tbpt':
@@ -644,11 +487,11 @@ class ResourceTray(object):
             elif mapped_cut in ('deta', 'dphi', 'dr'):
                 return n_objects * n_objects_ovrm
         elif instance == self.kCorrelationCondition:
-            if same_object_types and same_object_bxs:
+            if condition.same_object_types and condition.same_object_bxs:
                 return n_objects * (n_objects - 1) * 0.5
             else:
-                n_objects_1 = slice_size(esObjects[0])
-                n_objects_2 = slice_size(esObjects[1])
+                n_objects_1 = objects[0].slice_size
+                n_objects_2 = objects[1].slice_size
                 return n_objects_1 * n_objects_2
         elif instance == self.kCorrelationConditionOvRm:
             if mapped_objects == ['calo', 'calo', 'calo']:
@@ -663,26 +506,30 @@ class ResourceTray(object):
 
     def measure(self, condition):
         """Calculates the payload of a condition by its type and objects.
-        Conditions can be of type `tmEventSetup.esCondition` or `ConditionStub`.
+        Conditions can be of type `tmEventSetup.esCondition` or `ConditionHandle`.
         >>> tray.measure(condition)
         Payload(sliceLUTs=0.42%, processors=0.00%)
         """
         if isinstance(condition, tmEventSetup.esCondition):
-            condition = ConditionStub(condition, Payload()) # cast to stub with empty payload
+            condition = ConditionHandle(condition, Payload()) # cast to handle with empty payload
 
         # Pick resource instance
         instance = self.find_instance(condition)
         if not instance:
+            condition_type = ConditionTypeKey[condition.type]
+            objects_types = [ObjectTypeKey[object_.type] for object_ in condition.objects]
             message = "Missing configuration for condition of type '{0}' with " \
-                      "objects {1} in file '{2}'.".format(condition.type, condition.objects, self.filename)
+                      "objects {1} in file '{2}'.".format(condition_type, objects_types, self.filename)
             raise RuntimeError(message)
 
         # Pick object configuration
-        mapped_objects = self.map_objects(condition.objects)
+        objects_types = [ObjectTypeKey[object_.type] for object_ in condition.objects]
+        mapped_objects = self.map_objects(objects_types)
         instance_objects = filter_first(lambda item: item.types == mapped_objects, instance.objects)
         if not instance_objects:
+            condition_type = ConditionTypeKey[condition.type]
             message = "Missing configuration for condition of type '{0}' with " \
-                      "objects {1} in file '{2}'.".format(condition.type, condition.objects, self.filename)
+                      "objects {1} in file '{2}'.".format(condition_type, objects_types, self.filename)
             raise RuntimeError(message)
         # condition type dependent factor calculation (see also config/README.md)
         factor = self.calc_factor(condition)
@@ -690,16 +537,17 @@ class ResourceTray(object):
         sliceLUTs = instance_objects.sliceLUTs * factor
         processors = instance_objects.processors * factor
         payload = Payload(sliceLUTs, processors)
-        for cut_name in condition.cuts:
+        for cut in condition.cuts:
+            name = CutTypeKey[cut.cut_type]
             try: # only for cuts listed in configuration... might be error prone
-                mapped_cut = self.map_cut(cut_name)
+                mapped_cut = self.map_cut(name)
             except KeyError as e:
-                logging.warning("skipping cut '%s' (not defined in resource config)", cut_name)
+                logging.warning("skipping cut '%s' (not defined in resource config)", name)
             else:
                 result = filter_first(lambda cut: cut.type == mapped_cut, instance_objects.cuts)
                 if result:
-                    factor = self.calc_cut_factor(condition, cut_name)
-                    logging.debug("%s.calc_cut_factor(<instance %s>, '%s') => %s", self.__class__.__name__, condition.name, cut_name, factor)
+                    factor = self.calc_cut_factor(condition, name)
+                    logging.debug("%s.calc_cut_factor(<instance %s>, '%s') => %s", self.__class__.__name__, condition.name, name, factor)
                     sliceLUTs = result.sliceLUTs * factor
                     processors = result.processors * factor
                     cut_payload = Payload(sliceLUTs, processors)
@@ -707,85 +555,11 @@ class ResourceTray(object):
         logging.debug("%s.measure(<instance %s>) => %s", self.__class__.__name__, condition.name, payload)
         return payload
 
-class ConditionStub(object):
-    """Represents an condition."""
-    def __init__(self, condition, payload):
-        self.name = condition.getName()
-        self.type = esConditionType[condition.getType()]
-        self.objects = [esObjectType[object.getType()] for object in condition.getObjects()]
-        # Do not sort object by type for overlap removal conditions.
-        if not (self.type in CorrelationConditionOvRmTypes or
-                self.type in CaloConditionOvRmTypes):
-           self.objects = self.sortedObjects(self.objects)
-        self.cuts = [esCutType[cut.getCutType()] for cut in condition.getCuts()]
-        self.payload = Payload(payload.sliceLUTs, payload.processors)
-        self.ptr = condition
-
-    def sortedObjects(self, objects):
-        """Returns list of condition objects sorted by VHDL notation (object order
-        required by correlation conditions).
-        """
-        return sorted(objects, key=lambda key: ObjectsOrder.index(key))
-
-    def isMuonCondition(self):
-        return self.type in MuonConditionTypes
-
-    def isCaloCondition(self):
-        return self.type in CaloConditionTypes
-
-    def isEsumsCondition(self):
-        return self.type in EsumsConditionTypes
-
-    def isExternalCondition(self):
-        return self.type in ExternalConditionTypes
-
-    def isMinBiasCondition(self):
-        return self.type in MinBiasConditionTypes
-
-    def isTowerCountCondition(self):
-        return self.type in TowerCountConditionTypes
-
-    def isCorrelationCondition(self):
-        return self.type in CorrelationConditionTypes
-
-    def isCorrelationConditionOvRm(self):
-        return self.type in CorrelationConditionOvRmTypes
-
-    def isCaloConditionOvRm(self):
-        return self.type in CaloConditionOvRmTypes
-
-    def __repr__(self):
-        return "{self.__class__.__name__}(name={self.name}, payload={self.payload})".format(**locals())
-
-class AlgorithmStub(object):
-    """Represents an algorithm."""
-    def __init__(self, algorithm, conditions):
-        self.module_id = None
-        self.module_index = None
-        self.index = algorithm.getIndex()
-        self.name = algorithm.getName()
-        self.conditions = conditions
-        self.expression = algorithm.getExpression()
-        self.expression_in_condition = algorithm.getExpressionInCondition()
-        self.payload = Payload()
-        for condition in conditions:
-            self.payload += condition.payload
-
-    def __len__(self):
-        """Returns count of conditions."""
-        return len(self.conditions)
-
-    def __iter__(self):
-        """Iterate over conditions."""
-        return iter([condition for condition in self.conditions])
-
-    def __repr__(self):
-        return "{self.__class__.__name__}(index={self.index}, name={self.name}, payload={self.payload})".format(**locals())
-
-class ModuleStub(object):
+class Module(object):
     """Represents a uGT module implementation holding a subset of algorithms."""
     def __init__(self, id, tray):
         """Attribute *id* is the module index."""
+        assert isinstance(tray, ResourceTray)
         self.id = id
         self.algorithms = []
         self.floor = tray.floor()
@@ -838,6 +612,8 @@ class ModuleCollection(object):
     """Collection of modules permitting various operations."""
     def __init__(self, es, tray):
         """Attribute *modules* represents the number of instantiated modules."""
+        assert isinstance(es, tmEventSetup.esTriggerMenu)
+        assert isinstance(tray, ResourceTray)
         self.eventSetup = es
         self.tray = tray
         self.modules = []
@@ -845,18 +621,44 @@ class ModuleCollection(object):
         self.reverse_sorting = False
         self.regenerate_uuid = True
         self.constraints = {}
-        # Calculate condition stubs
-        self.conditionStubs = {}
+        # Calculate condition handles
+        self.condition_handles = {}
         for name, condition in es.getConditionMapPtr().iteritems():
             payload = tray.measure(condition)
-            self.conditionStubs[name] = ConditionStub(condition, payload)
-        # Calculate algorithms stubs, sort them descending by payload
-        self.algorithmStubs = []
+            self.condition_handles[name] = ConditionHandle(condition, payload)
+        # Calculate algorithms handles, sort them descending by payload
+        self.algorithm_handles = []
         for name, algorithm in es.getAlgorithmMapPtr().iteritems():
-            conditions = [self.conditionStubs[condition] for condition in get_condition_names(algorithm)]
-            self.algorithmStubs.append(AlgorithmStub(algorithm, conditions))
+            conditions = [self.condition_handles[condition] for condition in get_condition_names(algorithm)]
+            self.algorithm_handles.append(AlgorithmHandle(algorithm, conditions))
         # pre sort
-        self.algorithmStubs.sort(key = lambda algorithm: algorithm.payload, reverse=self.reverse_sorting)
+        self.algorithm_handles.sort(key = lambda algorithm: algorithm.payload, reverse=self.reverse_sorting)
+        #
+        # HACK TODO batch updating condition cuts
+        # * assigning precision_pt
+        # * assigning precision_math
+        #
+        def precision_key(left, right, name):
+            """Returns precision key for scales map."""
+            left = ObjectGrammarKey[left.type]
+            right = ObjectGrammarKey[right.type]
+            return 'PRECISION-{}-{}-{}'.format(left, right, name)
+        scales = self.eventSetup.getScaleMapPtr()
+        for condition in self.condition_handles.values():
+            for cut in condition.cuts:
+                if cut.cut_type == tmEventSetup.TwoBodyPt:
+                    left = condition.objects[0]
+                    right = condition.objects[1]
+                    cut.precision_pt = 1 # for all
+                    cut.precision_math = scales[precision_key(left, right, 'TwoBodyPtMath')].getNbits()
+                elif cut.cut_type == tmEventSetup.Mass:
+                    left = condition.objects[0]
+                    right = condition.objects[1]
+                    cut.precision_pt = scales[precision_key(left, right, 'MassPt')].getNbits()
+                    cut.precision_math = scales[precision_key(left, right, 'Math')].getNbits()
+        #
+        # /END HACK
+        #
 
     def __len__(self):
         """Returns count of modules assigned to this collection."""
@@ -870,7 +672,7 @@ class ModuleCollection(object):
         """Set module constraint for condition type."""
         # Force list for single numbers
         modules = modules if isinstance(modules, (list, tuple)) else [modules]
-        assert condition in esConditionType.values(), "no such constraint condition type '{condition}'".format(**locals())
+        assert condition in ConditionTypeKey.values(), "no such constraint condition type '{condition}'".format(**locals())
         assert max(modules) < MaxModules, "exceeding constraint module range 'modules'".format(**locals())
         self.constraints[condition] = modules
 
@@ -888,7 +690,7 @@ class ModuleCollection(object):
     @property
     def algorithms(self):
         """Returns list of all algorithms."""
-        return [algorithm for algorithm in self.algorithmStubs]
+        return [algorithm for algorithm in self.algorithm_handles]
 
     def byConditionType(self):
         """Returns dictionary with lists of conditions grouped by their types."""
@@ -903,20 +705,20 @@ class ModuleCollection(object):
     @property
     def conditions(self):
         """Retruns unsorted list of all conditions."""
-        return [condition for _, condition in self.conditionStubs.iteritems()]
+        return [condition for _, condition in self.condition_handles.iteritems()]
 
     def distribute(self, modules):
         """Distribute algorithms to modules, applying shadow ratio.
         """
         # sort algorithms
-        self.algorithmStubs.sort(key = lambda algorithm: algorithm.payload, reverse=self.reverse_sorting)
+        self.algorithm_handles.sort(key = lambda algorithm: algorithm.payload, reverse=self.reverse_sorting)
         # regenerate firmware UUID
         if self.regenerate_uuid:
             self.eventSetup.setFirmwareUuid(str(uuid.uuid4()))
         logging.info("starting algorithm distribution for %d algorithms on %d " \
-                     "modules using shadow ratio of %.1f", len(self.algorithmStubs), modules, self.ratio)
-        self.modules = [ModuleStub(id, self.tray) for id in range(modules)]
-        stack = list(self.algorithmStubs) # copy list
+                     "modules using shadow ratio of %.1f", len(self.algorithm_handles), modules, self.ratio)
+        self.modules = [Module(id, self.tray) for id in range(modules)]
+        stack = list(self.algorithm_handles) # copy list
         try:
             while stack:
                 algorithm = stack.pop(0) # POP
@@ -966,18 +768,18 @@ class ModuleCollection(object):
     def load(self, fp):
         """Loads distribution from JSON."""
         data = json.load(fp)
-        modules = [ModuleStub(id, self.tray) for id in range(data['n_modules'])]
-        stack = list(self.algorithmStubs)
+        modules = [Module(id, self.tray) for id in range(data['n_modules'])]
+        stack = list(self.algorithm_handles)
         try:
             for algorithm in sorted(data['algorithms'], key=lambda a: a['module_index']):
                 index = algorithm['index']
                 name = algorithm['name']
                 module_id = algorithm['module_id']
                 module_index = algorithm['module_index']
-                algorithmStub = filter_first(lambda algorithmStub: algorithmStub.index == index and algorithmStub.name == name, self.algorithmStubs)
-                stack.pop(stack.index(algorithmStub))
+                algorithm_handle = filter_first(lambda handle: handle.index == index and handle.name == name, self.algorithm_handles)
+                stack.pop(stack.index(algorithm_handle))
                 # insert in correct order!
-                modules[module_id].append(algorithmStub)
+                modules[module_id].append(algorithm_handle)
         except ResourceOverflowError:
             logging.error("no resources left to implement menu")
             logging.error("there are %d unassigned algorithms left:", len(stack))
@@ -1091,7 +893,7 @@ def list_algorithms(collection):
     logging.info("|-------|-----------|---------|-----------------------------------------------|")
     logging.info("| Index | SliceLUTs | DSPs    | Name                                          |")
     logging.info("|-------|-----------|---------|-----------------------------------------------|")
-    for algorithm in collection.algorithmStubs:
+    for algorithm in collection.algorithm_handles:
         sliceLUTs = algorithm.payload.sliceLUTs * 100.
         processors = algorithm.payload.processors * 100.
         name = short_name(algorithm.name, 41)
