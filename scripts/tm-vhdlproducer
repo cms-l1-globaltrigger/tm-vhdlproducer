@@ -34,6 +34,8 @@ DefaultSorting = SortingAsc
 DefaultOutputDir = os.getcwd()
 from tmVhdlProducer.algodist import DefaultConfigFile
 
+FwDistMaxValue = 100
+
 ConstraintTypes = {
     'ext': kExternals,
 }
@@ -47,6 +49,13 @@ def modules_t(value):
     """Validate number of modules input."""
     value = int(value)
     if 1 <= value <= MaxModules:
+        return value
+    raise ValueError(value)
+
+def fwdist_t(value):
+    """Validate number of modules input."""
+    value = int(value)
+    if 1 <= value <= FwDistMaxValue:
         return value
     raise ValueError(value)
 
@@ -91,6 +100,12 @@ def parse():
         required=True,
         type=modules_t,
         help="number of modules ({0}-{1})".format(MinModules, MaxModules),
+    )
+    parser.add_argument('--fwdist',
+        metavar='<n>',
+        required=True,
+        type=fwdist_t,
+        help="firmware distribution value (starting with 1)",
     )
     parser.add_argument('--ratio',
         metavar='<f>',
@@ -158,7 +173,8 @@ def main():
 
     logging.info("loading XML menu: %s", args.menu)
     eventSetup = tmEventSetup.getTriggerMenu(args.menu)
-    output_dir = os.path.join(args.output, "{name}_m{modules}".format(name=eventSetup.getName(), modules=args.modules))
+    #output_dir = os.path.join(args.output, "{name}_m{modules}".format(name=eventSetup.getName(), modules=args.modules))
+    output_dir = os.path.join(args.output, "{name}-d{distr}".format(name=eventSetup.getName(), distr=args.fwdist))
 
     # Prevent overwirting source menu
     dest = os.path.realpath(os.path.join(output_dir, 'xml'))
@@ -212,8 +228,9 @@ def main():
         producer = VhdlProducer(template_dir)
         producer.write(collection, output_dir)
         logging.info("writing updated XML file %s", args.menu)
-        filename = producer.writeXmlMenu(args.menu, os.path.join(output_dir, 'xml')) # TODO
-
+        
+        filename = producer.writeXmlMenu(args.menu, os.path.join(output_dir, 'xml'), ("-d"+str(args.fwdist))) # TODO
+        
         # Load output XML
         eventSetup = tmEventSetup.getTriggerMenu(filename)
 
@@ -221,7 +238,7 @@ def main():
         logging.info("generating menu documentation...")
         template_dir = os.path.join(utm_root, 'tmVhdlProducer', 'templates', 'doc')
         reporter = Reporter(template_dir, eventSetup)
-        basename = eventSetup.getName()
+        basename = eventSetup.getName()+"-d"+str(args.fwdist)
 
         # Generate HTML output
         filename = os.path.join(output_dir, 'doc', '{basename}.html'.format(**locals()))

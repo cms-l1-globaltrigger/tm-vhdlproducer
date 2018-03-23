@@ -183,7 +183,7 @@ class VhdlProducer(object):
         with open(filename, 'w') as fp:
             fp.write(content)
 
-    def writeXmlMenu(self, filename, json_dir):
+    def writeXmlMenu(self, filename, json_dir, fwdist):
         """Updates a XML menu file based on inforamtion from a JSON file (used to apply
         a previously calculated algorithm distribution over multiple modules).
         Returns path and filename of created XML menu.
@@ -234,7 +234,7 @@ class VhdlProducer(object):
             algorithm["module_index"] = str(module_index)
             menu.algorithms[id_] = algorithm
 
-        target = os.path.join(json_dir, '{name}_m{n}.xml'.format(name=menu.menu['name'], n=menu.menu["n_modules"]))
+        target = os.path.join(json_dir, '{name}-d{n}.xml'.format(name=menu.menu['name'], n=fwdist))
 
         logging.info("writing target XML menu file %s", target)
         tmTable.menu2xml(menu, scale, ext_signal, target)
