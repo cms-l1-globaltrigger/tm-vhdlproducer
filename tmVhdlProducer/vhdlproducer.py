@@ -234,7 +234,7 @@ class VhdlProducer(object):
             algorithm["module_index"] = str(module_index)
             menu.algorithms[id_] = algorithm
 
-        target = os.path.join(json_dir, '{name}-d{n}.xml'.format(name=menu.menu['name'], n=fwdist))
+        target = os.path.join(json_dir, '{name}{n}.xml'.format(name=menu.menu['name'], n=fwdist))
 
         logging.info("writing target XML menu file %s", target)
         tmTable.menu2xml(menu, scale, ext_signal, target)
