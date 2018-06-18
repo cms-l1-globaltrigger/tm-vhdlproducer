@@ -9,7 +9,6 @@
 
 import tmEventSetup
 
-from tmVhdlProducer.reporter import Reporter
 from tmVhdlProducer.vhdlproducer import VhdlProducer
 from tmVhdlProducer.algodist import distribute, constraint_t
 from tmVhdlProducer.algodist import MinModules, MaxModules
@@ -18,6 +17,7 @@ from tmVhdlProducer import __version__
 
 import argparse
 import subprocess
+import glob
 import logging
 import sys, os
 import re
@@ -25,6 +25,7 @@ import re
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
 LOGFILE = 'tm-vhdlproducer.log'
+EXEC_REPORTER = 'tm-reporter'
 
 SortingAsc = 'asc'
 SortingDesc = 'desc'
@@ -169,6 +170,13 @@ def main():
         logging.error("no `UTM_ROOT' environment variable defined")
         return EXIT_FAILURE
 
+    if not args.dryrun:
+        try:
+            subprocess.call([EXEC_REPORTER, '--version'])
+        except Exception as e:
+            logging.error("Missing reporter executable '%s': %s", EXEC_REPORTER, format(e))
+            return EXIT_FAILURE
+
     logging.info("loading XML menu: %s", args.menu)
     eventSetup = tmEventSetup.getTriggerMenu(args.menu)
     #output_dir = os.path.join(args.output, "{name}_m{modules}".format(name=eventSetup.getName(), modules=args.modules))
@@ -221,6 +229,7 @@ def main():
     if args.dryrun:
         logging.info("skipped writing output (dryrun mode)")
     else:
+
         logging.info("writing VHDL modules...")
         template_dir = os.path.join(utm_root, 'tmVhdlProducer', 'templates', 'vhdl')
         producer = VhdlProducer(template_dir)
@@ -229,24 +238,21 @@ def main():
 
         filename = producer.writeXmlMenu(args.menu, os.path.join(output_dir, 'xml'), args.dist) # TODO
 
-        # Load output XML
-        eventSetup = tmEventSetup.getTriggerMenu(filename)
-
         # Write menu documentation.
         logging.info("generating menu documentation...")
-        template_dir = os.path.join(utm_root, 'tmVhdlProducer', 'templates', 'doc')
-        reporter = Reporter(template_dir, eventSetup)
-        basename = "{menu}-d{dist}".format(menu=eventSetup.getName(), dist=args.dist)
+        doc_dir = os.path.join(output_dir, 'doc')
 
-        # Generate HTML output
-        filename = os.path.join(output_dir, 'doc', '{basename}.html'.format(**locals()))
         logging.info("writing HTML documentation %s", filename)
-        reporter.write_html(filename)
+        subprocess.check_call([EXEC_REPORTER, '-m', 'html', '-o', doc_dir, filename])
 
-        # Generate TWIKI output
-        filename = os.path.join(output_dir, 'doc', '{basename}.twiki'.format(**locals()))
         logging.info("writing TWIKI page template %s", filename)
-        reporter.write_twiki(filename)
+        subprocess.check_call([EXEC_REPORTER, '-m', 'twiki', '-o', doc_dir, filename])
+
+        logging.info("patching filenames...")
+        for filename in glob.glob(os.path.join(doc_dir, '*')):
+            newname = re.sub(r'(.+)\.([a-z]+)$', r'\1-d{}.\2'.format(args.dist), filename)
+            logging.info("%s --> %s", filename, newname)
+            os.rename(filename, newname)
 
     logging.info("done.")
 

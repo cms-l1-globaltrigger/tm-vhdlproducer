@@ -1,40 +1,55 @@
 VHDL Producer
 =============
 
+## Dependencies
+
+ * utm >= 0.6.5 python bindings, [https://svnweb.cern.ch/trac/cactus/browser/trunk/cactusprojects/utm]()
+ * tm-reporter >= 2.5.0, [https://gitlab.cern.ch/cms-l1t-tools/tm-reporter]()
+
 
 ## Basic usage
 
 Generate VHDL output from XML trigger menu.
 
-    $ tm-vhdlproducer [--modules <n>] [--ratio <f>] [--sorting asc|desc]
-                      [--constraint <type:modules>] [--dryrun] <menu>
+    $ tm-vhdlproducer --modules <n> --dist <n> [--ratio <f>]
+                      [--sorting asc|desc] [--constraint <type:modules>]
+                      [--dryrun] <menu>
 
 
 ### Distribute to multiple modules
 
 Example for distributing on two modules:
 
-    $ tm-vhdlproducer L1Menu_sample.xml --modules 2
+    $ tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 1
 
-This will create a directory L1Menu_sample/ in the current directory.
+This will create a directory L1Menu_sample-d1/ in the current directory.
+
+
+### Specifying distribution number
+
+To specify the distribution number use the --dist flag. For example
+
+    $ tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 2
+
+will write the output to /tmp/L1Menu_sample-d2/.
 
 
 ### Specify sort order for algorithm distribution
 
 Example for reversing algorithm distribution descending order (default ascending):
 
-    $ tm-vhdlproducer L1Menu_sample.xml --modules 2 --sorting desc
+    $ tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 1 --sorting desc
 
 This will distribute algorithms from high to low payload weight.
 
 
-### Specifiying output location
+### Specifying output location
 
-To specifiy a different output location use the --outdir flag. For example
+To specify a different output location use the --outdir flag. For example
 
-    $ tm-vhdlproducer L1Menu_sample.xml --modules 2 --outdir /tmp
+    $ tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 1 --outdir /tmp
 
-will write the output to /tmp/L1Menu_sample/.
+will write the output to /tmp/L1Menu_sample-d1/.
 
 
 ## Optimizations
@@ -60,11 +75,11 @@ chip resource usage.
 To limit certain condition types to a subset of modules (or just a single
 module) use the --constraint argument. Limit a condition type to a single module
 
-    $ tm-vhdlproducer L1Menu_sample.xml --modules 2 --constraint ext:0  # limit external conditions to module 0
+    $ tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 1 --constraint ext:0  # limit external conditions to module 0
 
 or to a subset of modules
 
-    $ tm-vhdlproducer L1Menu_sample.xml --modules 2 --constraint ext:2,4-6  # limit external conditions to modules 2, 4, 5 and 6
+    $ tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 1 --constraint ext:2,4-6  # limit external conditions to modules 2, 4, 5 and 6
 
 
 ### Dryrun
@@ -72,15 +87,15 @@ or to a subset of modules
 To try out different optimizations use the --dryrun flag to prevent writing
 output to the filesystem.
 
-    $ tm-vhdlproducer L1Menu_sample.xml --modules 2 --ratio 0 --dryrun
+    $ tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 1 --ratio 0 --dryrun
 
 
 ## Generated output
 
-    L1Menu_sample/
+    L1Menu_sample-d1/
      +-- doc/
-     |    +-- L1Menu_sample.html
-     |    `-- L1Menu_sample.twiki
+     |    +-- L1Menu_sample-d1.html
+     |    `-- L1Menu_sample-d1.twiki
      +-- testvectors/
      +-- vhdl/
      |    +-- module_0/
@@ -88,7 +103,7 @@ output to the filesystem.
      |    |         `-- *.vhd
      |    `-- ...
      +-- xml/
-     |    `-- L1Menu_sample.xml
+     |    `-- L1Menu_sample-d1.xml
      `-- tm-vhdlproducer.log
 
 

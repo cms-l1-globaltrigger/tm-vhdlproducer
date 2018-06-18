@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.4.0] - 2018-04-24
+### Removed
+- removed tm-reporter (now a separate gitlab project)
+
 ## [2.3.0] - 2017-10-23
 ### Added
 - added handles module.
