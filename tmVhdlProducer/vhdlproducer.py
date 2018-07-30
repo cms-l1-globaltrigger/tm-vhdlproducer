@@ -79,6 +79,7 @@ CustomFilters = {
     'alpha' : lambda s: ''.join(c for c in s if c.isalpha()),
     'bx_offset': bx_encode,
     'sort_by_attribute': sort_by_attribute,
+    'hex': lambda d: format(int(d), 'x'), # plain hex format
     'hexstr': hexstr_filter,
     'hexuuid': uuid2hex_filter,
     'vhdl_bool': lambda b: ('false', 'true')[bool(b)],

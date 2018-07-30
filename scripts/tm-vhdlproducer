@@ -65,19 +65,14 @@ def ratio_t(value):
         return value
     raise ValueError(value)
 
-def getSvnRevision():
-    """Returns local SVN revision number of set UTM_ROOT path."""
+def getGitRevision():
+    """Returns git short revision (8 hex digits) of UTM_ROOT path."""
     rootdir = os.environ.get("UTM_ROOT")
     if not rootdir:
         raise RuntimeError("UTM_ROOT not set.")
-    process = subprocess.Popen(['svnversion', rootdir], stdout=subprocess.PIPE)
-    output = process.stdout.readlines()[0].strip()
-    # match on 12345:12444MS -> ('12444', 'MS')
-    result = re.match('(?:\w+\:)?(\d+)([A-Z]+)?', output)
-    if not result:
-        raise RuntimeError("utm directory is not an SVN directory")
-    revision, modified = result.groups()
-    return int(revision)
+    process = subprocess.Popen(['git', '-C', rootdir, 'rev-parse', '--short=8', 'HEAD'], stdout=subprocess.PIPE)
+    revision = process.stdout.readlines()[0].strip()
+    return int(revision, 16)
 
 # -----------------------------------------------------------------------------
 #  Command line parser
@@ -177,6 +172,8 @@ def main():
             logging.error("Missing reporter executable '%s': %s", EXEC_REPORTER, format(e))
             return EXIT_FAILURE
 
+    producer_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
     logging.info("loading XML menu: %s", args.menu)
     eventSetup = tmEventSetup.getTriggerMenu(args.menu)
     #output_dir = os.path.join(args.output, "{name}_m{modules}".format(name=eventSetup.getName(), modules=args.modules))
@@ -205,7 +202,7 @@ def main():
         logging.getLogger().addHandler(handler)
 
     # Fetch SVN revision
-    revision = getSvnRevision()
+    revision = getGitRevision()
     eventSetup.svnRevision = revision # HACK
     logging.info("svn revison r%s", revision)
 
@@ -231,7 +228,7 @@ def main():
     else:
 
         logging.info("writing VHDL modules...")
-        template_dir = os.path.join(utm_root, 'tmVhdlProducer', 'templates', 'vhdl')
+        template_dir = os.path.join(producer_root, 'templates', 'vhdl')
         producer = VhdlProducer(template_dir)
         producer.write(collection, output_dir)
         logging.info("writing updated XML file %s", args.menu)

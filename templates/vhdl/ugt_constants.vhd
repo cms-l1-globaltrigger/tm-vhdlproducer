@@ -40,10 +40,7 @@ constant L1TM_COMPILER_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(L1TM_COMPILER_MINOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(L1TM_COMPILER_REV_VERSION, 8));
 
--- HB 2016-01-14: proposed by TM, conv_std_logic_vector used, because to_unsigned does not accept neg. values
-constant SVN_REVISION_NUMBER : std_logic_vector(31 downto 0) := conv_std_logic_vector({{ menu.info.svn_revision|int }}, 32);
-
--- HB 2016-04-12: proposed by TM
+constant SVN_REVISION_NUMBER : std_logic_vector(31 downto 0) := conv_std_logic_vector({{ menu.info.svn_revision|int }}, 32); -- git rev {{ menu.info.svn_revision|hex }}
 constant L1TM_UID_HASH : std_logic_vector(31 downto 0) := conv_std_logic_vector({{ menu.info.name|mmhashn }}, 32);
 constant FW_UID_HASH : std_logic_vector(31 downto 0) := conv_std_logic_vector({{ menu.info.uuid_firmware|mmhashn }}, 32);
 
