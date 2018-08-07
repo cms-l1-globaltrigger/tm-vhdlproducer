@@ -82,6 +82,10 @@
 {%- include  "instances/towercount_condition.vhd.j2" %}
 {%- endfor %}
 
+{%- for condition in module.asymConditions %}
+{%- include  "instances/asym_condition.vhd.j2" %}
+{%- endfor %}
+
 -- Instantiations of algorithms
 {% for algorithm in module.algorithms|sort_by_attribute('index') %}
 -- {{ algorithm.index }} {{ algorithm.name }} : {{ algorithm.expression }}
