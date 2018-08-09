@@ -45,6 +45,18 @@
                 "MinBiasHFM1": "MinBiasCondition",
                 "TotalEtEM": "EsumsCondition",
                 "MissingEtHF": "EsumsCondition",
+                "AsymmetryEt": "EsumsCondition",
+                "AsymmetryHt": "EsumsCondition",
+                "AsymmetryEtHF": "EsumsCondition",
+                "AsymmetryHtHF": "EsumsCondition",
+                "Centrality0": "SignalCondition",
+                "Centrality1": "SignalCondition",
+                "Centrality2": "SignalCondition",
+                "Centrality3": "SignalCondition",
+                "Centrality4": "SignalCondition",
+                "Centrality5": "SignalCondition",
+                "Centrality6": "SignalCondition",
+                "Centrality7": "SignalCondition",
                 "TowerCount": "TowerCountCondition",
                 "Externals": "ExternalCondition",
                 "InvariantMass": "CorrelationCondition",
@@ -64,6 +76,18 @@
                 "ETM": "esum",
                 "ETMHF": "esum",
                 "HTM": "esum",
+                "ASYMET": "esum",
+                "ASYMHT": "esum",
+                "ASYMETHF": "esum",
+                "ASYMHTHF": "esum",
+                "CENT0": "signal",
+                "CENT1": "signal",
+                "CENT2": "signal",
+                "CENT3": "signal",
+                "CENT4": "signal",
+                "CENT5": "signal",
+                "CENT6": "signal",
+                "CENT7": "signal",
                 "MBT0HFP": "bias",
                 "MBT1HFP": "bias",
                 "MBT0HFM": "bias",
@@ -518,7 +542,7 @@
                     {
                         "types": ["ext"],
                         "processors": 0.0,
-                        "sliceLUTs": 0.00001
+                        "sliceLUTs": 0.00000
                     }
                 ]
             },
@@ -529,6 +553,16 @@
                         "types": ["count"],
                         "processors": 0.0,
                         "sliceLUTs": 0.00001
+                    }
+                ]
+            },
+            {
+                "type": "SignalCondition",
+                "objects": [
+                    {
+                        "types": ["signal"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.00000
                     }
                 ]
             }
