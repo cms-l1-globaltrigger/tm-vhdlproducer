@@ -1,7 +1,0 @@
-{%- block instantiate_asym_condition %}
-  {%- set o = condition.objects[0] %}
-{{ condition.vhdl_signal }}_i: entity work.asym_conditions
-    generic map({{ o.operator }}, {{ o.type|upper }}_TYPE, X"{{ o.count|X02 }}")
-    port map(lhc_clk, {{ o.type|lower }}_bx_{{ o.bx }}, {{ condition.vhdl_signal }});
-{% endblock instantiate_asym_condition %}
-{# eof #}
