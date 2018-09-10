@@ -20,7 +20,7 @@
 
 -- External condition assignment
 {%- for condition in module.externalConditions %}
-    {{ condition.vhdl_signal }} <= ext_cond_bx_{{ condition.objects[0].bx }}({{ condition.objects[0].externalChannelId }}); -- {{ condition.vhdl_signal }}
+{{ condition.vhdl_signal }} <= ext_cond_bx_{{ condition.objects[0].bx }}({{ condition.objects[0].externalChannelId }}); -- {{ condition.vhdl_signal }}
 {%- endfor %}
 -- Instantiations of muon charge correlations - only once for a certain Bx combination, if there is at least one DoubleMuon, TripleMuon, QuadMuon condition
 -- or muon-muon correlation condition.
@@ -37,51 +37,42 @@
 {%- for condition in module.caloConditions %}
 {%- include  "instances/calo_condition.vhd.j2" %}
 {%- endfor %}
-
 {%- for condition in module.caloConditionsOvRm %}
 {%- include  "instances/calo_conditions_orm.vhd.j2" %}
 {%- endfor %}
-
 {%- for condition in module.muonConditions %}
 {%- include  "instances/muon_condition.vhd.j2" %}
 {%- endfor %}
-
 {%- for condition in module.esumsConditions %}
 {%- include  "instances/esums_condition.vhd.j2" %}
 {%- endfor %}
-
 {%- for condition in module.caloCaloCorrConditions %}
 {%- include  "instances/calo_calo_correlation_condition.vhd.j2" %}
 {%- endfor %}
-
 {%- for condition in module.caloCaloCorrOvRmConditions %}
 {%- include  "instances/calo_calo_calo_correlation_orm_condition.vhd.j2" %}
 {%- endfor %}
-
 {%- for condition in module.caloMuonCorrConditions %}
 {%- include  "instances/calo_muon_correlation_condition.vhd.j2" %}
 {%- endfor %}
-
 {%- for condition in module.muonMuonCorrConditions %}
 {%- include  "instances/muon_muon_correlation_condition.vhd.j2" %}
 {%- endfor %}
-
 {%- for condition in module.caloEsumCorrConditions %}
 {%- include  "instances/calo_esums_correlation_condition.vhd.j2" %}
 {%- endfor %}
-
 {%- for condition in module.muonEsumCorrConditions %}
 {%- include  "instances/muon_esums_correlation_condition.vhd.j2" %}
 {%- endfor %}
-
 {%- for condition in module.minBiasConditions %}
 {%- include  "instances/min_bias_hf_condition.vhd.j2" %}
 {%- endfor %}
-
 {%- for condition in module.towerCountConditions %}
 {%- include  "instances/towercount_condition.vhd.j2" %}
 {%- endfor %}
-
+{%- for condition in module.signalConditions %}
+{%- include  "instances/signal_condition.vhd.j2" %}
+{%- endfor %}
 -- Instantiations of algorithms
 {% for algorithm in module.algorithms|sort_by_attribute('index') %}
 -- {{ algorithm.index }} {{ algorithm.name }} : {{ algorithm.expression }}

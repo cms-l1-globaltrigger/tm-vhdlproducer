@@ -69,6 +69,19 @@ kTOWERCOUNT = 'TOWERCOUNT'
 kETM = 'ETM'
 kHTM = 'HTM'
 kETMHF = 'ETMHF'
+#kHTMHF = 'HTMHF'
+kASYMET = 'ASYMET'
+kASYMHT = 'ASYMHT'
+kASYMETHF = 'ASYMETHF'
+kASYMHTHF = 'ASYMHTHF'
+kCENT0 = 'CENT0'
+kCENT1 = 'CENT1'
+kCENT2 = 'CENT2'
+kCENT3 = 'CENT3'
+kCENT4 = 'CENT4'
+kCENT5 = 'CENT5'
+kCENT6 = 'CENT6'
+kCENT7 = 'CENT7'
 kMBT0HFM = 'MBT0HFM'
 kMBT0HFP = 'MBT0HFP'
 kMBT1HFM = 'MBT1HFM'
@@ -103,6 +116,19 @@ kTowerCount = 'TowerCount'
 kMissingEt = 'MissingEt'
 kMissingHt = 'MissingHt'
 kMissingEtHF = 'MissingEtHF'
+#kMissingHtHF = 'MissingHtHF'
+kAsymmetryEt = 'AsymmetryEt'
+kAsymmetryHt = 'AsymmetryHt' 
+kAsymmetryEtHF = 'AsymmetryEtHF'
+kAsymmetryHtHF = 'AsymmetryHtHF'
+kCentrality0 = 'Centrality0'
+kCentrality1 = 'Centrality1'
+kCentrality2 = 'Centrality2'
+kCentrality3 = 'Centrality3'
+kCentrality4 = 'Centrality4'
+kCentrality5 = 'Centrality5'
+kCentrality6 = 'Centrality6'
+kCentrality7 = 'Centrality7'
 kMinBiasHFM0 = 'MinBiasHFM0'
 kMinBiasHFM1 = 'MinBiasHFM1'
 kMinBiasHFP0 = 'MinBiasHFP0'
@@ -200,6 +226,19 @@ ObjectTypeKey = {
     tmEventSetup.ETM: kETM,
     tmEventSetup.HTM: kHTM,
     tmEventSetup.ETMHF: kETMHF,
+#    tmEventSetup.HTMHF: kHTMHF,
+    tmEventSetup.ASYMET: kASYMET,
+    tmEventSetup.ASYMHT: kASYMHT,
+    tmEventSetup.ASYMETHF: kASYMETHF,
+    tmEventSetup.ASYMHTHF: kASYMHTHF,
+    tmEventSetup.CENT0: kCENT0,
+    tmEventSetup.CENT1: kCENT1,
+    tmEventSetup.CENT2: kCENT2,
+    tmEventSetup.CENT3: kCENT3,
+    tmEventSetup.CENT4: kCENT4,
+    tmEventSetup.CENT5: kCENT5,
+    tmEventSetup.CENT6: kCENT6,
+    tmEventSetup.CENT7: kCENT7,
     tmEventSetup.MBT0HFM: kMBT0HFM,
     tmEventSetup.MBT0HFP: kMBT0HFP,
     tmEventSetup.MBT1HFM: kMBT1HFM,
@@ -219,7 +258,20 @@ ObjectGrammarKey = {
     tmEventSetup.HTT: tmGrammar.HTT,
     tmEventSetup.ETM: tmGrammar.ETM,
     tmEventSetup.ETMHF: tmGrammar.ETMHF,
+#    tmEventSetup.HTMHF: tmGrammar.HTMHF,
     tmEventSetup.HTM: tmGrammar.HTM,
+    tmEventSetup.ASYMET: tmGrammar.ASYMET,
+    tmEventSetup.ASYMHT: tmGrammar.ASYMHT,
+    tmEventSetup.ASYMETHF: tmGrammar.ASYMETHF,
+    tmEventSetup.ASYMHTHF: tmGrammar.ASYMHTHF,
+    tmEventSetup.CENT0: tmGrammar.CENT0,
+    tmEventSetup.CENT1: tmGrammar.CENT1,
+    tmEventSetup.CENT2: tmGrammar.CENT2,
+    tmEventSetup.CENT3: tmGrammar.CENT3,
+    tmEventSetup.CENT4: tmGrammar.CENT4,
+    tmEventSetup.CENT5: tmGrammar.CENT5,
+    tmEventSetup.CENT6: tmGrammar.CENT6,
+    tmEventSetup.CENT7: tmGrammar.CENT7,
     tmEventSetup.EXT: tmGrammar.EXT,
     tmEventSetup.MBT0HFP: tmGrammar.MBT0HFP,
     tmEventSetup.MBT1HFP: tmGrammar.MBT1HFP,
@@ -253,6 +305,19 @@ ConditionTypeKey = {
     tmEventSetup.MissingEt: kMissingEt,
     tmEventSetup.MissingHt: kMissingHt,
     tmEventSetup.MissingEtHF: kMissingEtHF,
+#    tmEventSetup.MissingHtHF: kMissingHtHF,
+    tmEventSetup.AsymmetryEt: kAsymmetryEt,
+    tmEventSetup.AsymmetryHt: kAsymmetryHt,
+    tmEventSetup.AsymmetryEtHF: kAsymmetryEtHF,
+    tmEventSetup.AsymmetryHtHF: kAsymmetryHtHF,
+    tmEventSetup.Centrality0: kCentrality0,
+    tmEventSetup.Centrality1: kCentrality1,
+    tmEventSetup.Centrality2: kCentrality2,
+    tmEventSetup.Centrality3: kCentrality3,
+    tmEventSetup.Centrality4: kCentrality4,
+    tmEventSetup.Centrality5: kCentrality5,
+    tmEventSetup.Centrality6: kCentrality6,
+    tmEventSetup.Centrality7: kCentrality7,
     tmEventSetup.MinBiasHFM0: kMinBiasHFM0,
     tmEventSetup.MinBiasHFM1: kMinBiasHFM1,
     tmEventSetup.MinBiasHFP0: kMinBiasHFP0,

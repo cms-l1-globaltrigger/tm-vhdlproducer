@@ -36,6 +36,19 @@ ObjectCollectionSize = {
     tmEventSetup.ETM: 1,
     tmEventSetup.HTM: 1,
     tmEventSetup.ETMHF: 1,
+#    tmEventSetup.HTMHF: 1,
+    tmEventSetup.ASYMET: 1,
+    tmEventSetup.ASYMHT: 1,
+    tmEventSetup.ASYMETHF: 1,
+    tmEventSetup.ASYMHTHF: 1,
+    tmEventSetup.CENT0: 1,
+    tmEventSetup.CENT1: 1,
+    tmEventSetup.CENT2: 1,
+    tmEventSetup.CENT3: 1,
+    tmEventSetup.CENT4: 1,
+    tmEventSetup.CENT5: 1,
+    tmEventSetup.CENT6: 1,
+    tmEventSetup.CENT7: 1,
     tmEventSetup.MBT0HFM: 1,
     tmEventSetup.MBT0HFP: 1,
     tmEventSetup.MBT1HFM: 1,
@@ -73,6 +86,22 @@ EsumsConditionTypes = [
     tmEventSetup.MissingEt,
     tmEventSetup.MissingHt,
     tmEventSetup.MissingEtHF,
+#    tmEventSetup.MissingHtHF,
+    tmEventSetup.AsymmetryEt,
+    tmEventSetup.AsymmetryHt,
+    tmEventSetup.AsymmetryEtHF,
+    tmEventSetup.AsymmetryHtHF,
+]
+
+SignalConditionTypes = [
+    tmEventSetup.Centrality0,
+    tmEventSetup.Centrality1,
+    tmEventSetup.Centrality2,
+    tmEventSetup.Centrality3,
+    tmEventSetup.Centrality4,
+    tmEventSetup.Centrality5,
+    tmEventSetup.Centrality6,
+    tmEventSetup.Centrality7,
 ]
 
 ExternalConditionTypes = [
@@ -138,25 +167,57 @@ EsumsObjectTypes = [
     tmEventSetup.ETM,
     tmEventSetup.HTM,
     tmEventSetup.ETMHF,
+#    tmEventSetup.HTMHF,
+    tmEventSetup.ASYMET,
+    tmEventSetup.ASYMHT,
+    tmEventSetup.ASYMETHF,
+    tmEventSetup.ASYMHTHF,
 ]
 """List of energy sums object types."""
 
+SignalObjectTypes = [
+    tmEventSetup.CENT0,
+    tmEventSetup.CENT1,
+    tmEventSetup.CENT2,
+    tmEventSetup.CENT3,
+    tmEventSetup.CENT4,
+    tmEventSetup.CENT5,
+    tmEventSetup.CENT6,
+    tmEventSetup.CENT7,
+]
+"""List of signal object types."""
+
 ObjectsOrder = [
+# objects used in correlation conditions
     tmEventSetup.Egamma,
     tmEventSetup.Jet,
     tmEventSetup.Tau,
     tmEventSetup.Muon,
-    tmEventSetup.ETT,
-    tmEventSetup.ETTEM,
-    tmEventSetup.HTT,
-    tmEventSetup.TOWERCOUNT,
     tmEventSetup.ETM,
     tmEventSetup.HTM,
     tmEventSetup.ETMHF,
+#    tmEventSetup.HTMHF,
+# other objects
+    tmEventSetup.ETT,
+    tmEventSetup.ETTEM,
+    tmEventSetup.HTT,
+    tmEventSetup.ASYMET,
+    tmEventSetup.ASYMHT,
+    tmEventSetup.ASYMETHF,
+    tmEventSetup.ASYMHTHF,
+    tmEventSetup.CENT0,
+    tmEventSetup.CENT1,
+    tmEventSetup.CENT2,
+    tmEventSetup.CENT3,
+    tmEventSetup.CENT4,
+    tmEventSetup.CENT5,
+    tmEventSetup.CENT6,
+    tmEventSetup.CENT7,
     tmEventSetup.MBT0HFM,
     tmEventSetup.MBT0HFP,
     tmEventSetup.MBT1HFM,
     tmEventSetup.MBT1HFP,
+    tmEventSetup.TOWERCOUNT,
     tmEventSetup.EXT,
     tmEventSetup.Precision,
 ]
@@ -286,6 +347,9 @@ class ObjectHandle(Handle):
     def isEsumsObject(self):
         return self.type in EsumsObjectTypes
 
+    def isSignalObject(self):
+        return self.type in SignalObjectTypes
+
     def __repr__(self):
         return "{self.__class__.__name__}(name={self.name})".format(**locals())
 
@@ -332,6 +396,9 @@ class ConditionHandle(Handle):
 
     def isEsumsCondition(self):
         return self.type in EsumsConditionTypes
+
+    def isSignalCondition(self):
+        return self.type in SignalConditionTypes
 
     def isExternalCondition(self):
         return self.type in ExternalConditionTypes

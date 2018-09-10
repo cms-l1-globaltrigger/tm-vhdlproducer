@@ -84,7 +84,20 @@ ObjectTypes = {
     tmEventSetup.HTT: tmGrammar.HTT,
     tmEventSetup.ETM: tmGrammar.ETM,
     tmEventSetup.ETMHF: tmGrammar.ETMHF,
+#    tmEventSetup.HTMHF: tmGrammar.HTMHF,
     tmEventSetup.HTM: tmGrammar.HTM,
+    tmEventSetup.ASYMET: tmGrammar.ASYMET,
+    tmEventSetup.ASYMHT: tmGrammar.ASYMHT,
+    tmEventSetup.ASYMETHF: tmGrammar.ASYMETHF,
+    tmEventSetup.ASYMHTHF: tmGrammar.ASYMHTHF,
+    tmEventSetup.CENT0: tmGrammar.CENT0,
+    tmEventSetup.CENT1: tmGrammar.CENT1,
+    tmEventSetup.CENT2: tmGrammar.CENT2,
+    tmEventSetup.CENT3: tmGrammar.CENT3,
+    tmEventSetup.CENT4: tmGrammar.CENT4,
+    tmEventSetup.CENT5: tmGrammar.CENT5,
+    tmEventSetup.CENT6: tmGrammar.CENT6,
+    tmEventSetup.CENT7: tmGrammar.CENT7,
     tmEventSetup.EXT: tmGrammar.EXT,
     tmEventSetup.MBT0HFP: tmGrammar.MBT0HFP,
     tmEventSetup.MBT1HFP: tmGrammar.MBT1HFP,
@@ -104,7 +117,20 @@ ObjectCount = {
     tmEventSetup.HTT:        1,
     tmEventSetup.ETM:        1,
     tmEventSetup.ETMHF:      1,
+#    tmEventSetup.HTMHF:      1,
     tmEventSetup.HTM:        1,
+    tmEventSetup.ASYMET:     1,
+    tmEventSetup.ASYMHT:     1,
+    tmEventSetup.ASYMETHF:   1,
+    tmEventSetup.ASYMHTHF:   1,
+    tmEventSetup.CENT0:      1,
+    tmEventSetup.CENT1:      1,
+    tmEventSetup.CENT2:      1,
+    tmEventSetup.CENT3:      1,
+    tmEventSetup.CENT4:      1,
+    tmEventSetup.CENT5:      1,
+    tmEventSetup.CENT6:      1,
+    tmEventSetup.CENT7:      1,
     tmEventSetup.EXT:        1,
     tmEventSetup.MBT0HFP:    1,
     tmEventSetup.MBT1HFP:    1,
@@ -128,8 +154,21 @@ EsumsTypes = [
     tmGrammar.ETTEM,
     tmGrammar.ETM,
     tmGrammar.ETMHF,
+#    tmGrammar.HTMHF,
     tmGrammar.HTT,
     tmGrammar.HTM,
+    tmGrammar.ASYMET,
+    tmGrammar.ASYMHT,
+    tmGrammar.ASYMETHF,
+    tmGrammar.ASYMHTHF,
+    tmGrammar.CENT0,
+    tmGrammar.CENT1,
+    tmGrammar.CENT2,
+    tmGrammar.CENT3,
+    tmGrammar.CENT4,
+    tmGrammar.CENT5,
+    tmGrammar.CENT6,
+    tmGrammar.CENT7,
 ]
 
 TowerCountTypes = [
@@ -245,6 +284,8 @@ def conditionFactory(condition_handle):
         return MuonConditionHelper(condition_handle)
     elif condition_handle.isEsumsCondition():
         return EsumsConditionHelper(condition_handle)
+    elif condition_handle.isSignalCondition():
+        return SignalConditionHelper(condition_handle)
     elif condition_handle.isExternalCondition():
         return ExternalConditionHelper(condition_handle)
     elif condition_handle.isMinBiasCondition():
@@ -387,6 +428,10 @@ class ModuleHelper(VhdlHelper):
     @property
     def esumsConditions(self):
         return filter(lambda condition: condition.handle.isEsumsCondition(), self.conditions)
+
+    @property
+    def signalConditions(self):
+        return filter(lambda condition: condition.handle.isSignalCondition(), self.conditions)
 
     @property
     def externalConditions(self):
@@ -697,6 +742,11 @@ class EsumsConditionHelper(ConditionHelper):
     ReqObjects = 1
     """Number of required objects."""
 
+class SignalConditionHelper(ConditionHelper):
+    """Signal condition template helper class."""
+    ReqObjects = 1
+    """Number of required objects."""
+
 class ExternalConditionHelper(ConditionHelper):
     """External condition template helper class."""
     ReqObjects = 1
@@ -942,6 +992,7 @@ class ObjectHelper(VhdlHelper):
         self.qualityLUT = 0xffff
         self.charge = charge_encode('ign')
         self.count = 0
+        self.hasCount = False
         # spatial cuts
         self.etaFullRange = vhdl_bool(True)
         self.etaW1LowerLimit = 0
@@ -988,6 +1039,7 @@ class ObjectHelper(VhdlHelper):
                 self.charge = charge_encode(cut_handle.data)
             if cut_handle.cut_type == tmEventSetup.Count:
                 self.count = cut_handle.minimum.index
+                self.hasCount = True
             if cut_handle.cut_type == tmEventSetup.Slice:
                 self.sliceLow  =  int(cut_handle.minimum.value) # float to int
                 self.sliceHigh =  int(cut_handle.maximum.value)
@@ -1026,6 +1078,11 @@ class ObjectHelper(VhdlHelper):
     def is_esums_type(self):
         """Retruns True if object is of energy sums type."""
         return self.handle and self.handle.isEsumsObject()
+
+    @property
+    def is_signal_type(self):
+        """Retruns True if object is of energy sums type."""
+        return self.handle and self.handle.isSignalObject()
 
 # -----------------------------------------------------------------------------
 #  Cut helper

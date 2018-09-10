@@ -56,16 +56,9 @@ def sort_by_attribute(items, attribute, reverse=False):
     """
     return sorted(items, key=lambda item: getattr(item, attribute), reverse=reverse)
 
-def signed(value, bits=32):
-    """Returns signed integer with *bits* with."""
-    mask = (2 ** bits) - 1
-    if value & (1 << (bits - 1)):
-        return value | ~mask
-    return value & mask
-
-def murmurhash(s, bits=32):
+def murmurhash(s):
     """Returns Murmurhash signed integer."""
-    return signed(tmEventSetup.getMmHashN(str(s)), bits)
+    return tmEventSetup.getMmHashN(str(s))
 
 # -----------------------------------------------------------------------------
 #  Constants
