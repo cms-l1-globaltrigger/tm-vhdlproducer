@@ -13,13 +13,15 @@ setup(
     long_description=long_description,
     packages=["tmVhdlProducer"],
     scripts=["scripts/tm-vhdlproducer"],
-    package_data={'tmVhdlProducer': [
-        'config/*.json',
-        'templates/vhdl/*.vhd',
-        'templates/vhdl/menu.json',
-        'templates/vhdl/instances/*.j2',
-        'templates/vhdl/signals/*.j2',
-    ]},
+    package_data={
+        'tmVhdlProducer': [
+            'config/*.json',
+            'templates/vhdl/*.vhd',
+            'templates/vhdl/menu.json',
+            'templates/vhdl/instances/*.j2',
+            'templates/vhdl/signals/*.j2',
+        ]
+    },
     license="GPLv3",
     keywords="",
     platforms="any",

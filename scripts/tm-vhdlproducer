@@ -172,7 +172,7 @@ def main():
             logging.error("Missing reporter executable '%s': %s", EXEC_REPORTER, format(e))
             return EXIT_FAILURE
 
-    producer_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    producer_root = os.path.dirname(os.path.abspath(__file__))
 
     logging.info("loading XML menu: %s", args.menu)
     eventSetup = tmEventSetup.getTriggerMenu(args.menu)
