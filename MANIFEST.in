@@ -1,0 +1,3 @@
+include changelog
+include README.md
+include setup.sh

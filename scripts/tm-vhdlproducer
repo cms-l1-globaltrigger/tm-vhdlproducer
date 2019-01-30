@@ -10,6 +10,7 @@
 import tmEventSetup
 
 from tmVhdlProducer.vhdlproducer import VhdlProducer
+from tmVhdlProducer.algodist import ProjectDir
 from tmVhdlProducer.algodist import distribute, constraint_t
 from tmVhdlProducer.algodist import MinModules, MaxModules
 from tmVhdlProducer.algodist import kExternals
@@ -172,8 +173,6 @@ def main():
             logging.error("Missing reporter executable '%s': %s", EXEC_REPORTER, format(e))
             return EXIT_FAILURE
 
-    producer_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
     logging.info("loading XML menu: %s", args.menu)
     eventSetup = tmEventSetup.getTriggerMenu(args.menu)
     #output_dir = os.path.join(args.output, "{name}_m{modules}".format(name=eventSetup.getName(), modules=args.modules))
@@ -228,7 +227,7 @@ def main():
     else:
 
         logging.info("writing VHDL modules...")
-        template_dir = os.path.join(producer_root, 'templates', 'vhdl')
+        template_dir = os.path.join(ProjectDir, 'templates', 'vhdl')
         producer = VhdlProducer(template_dir)
         producer.write(collection, output_dir)
         logging.info("writing updated XML file %s", args.menu)

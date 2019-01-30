@@ -45,7 +45,7 @@ import sys, os
 MinModules = 1
 MaxModules = 6
 
-ProjectDir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+ProjectDir = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 """Projects root directory."""
 
 DefaultConfigDir = os.path.join(ProjectDir, 'config')
@@ -118,7 +118,7 @@ kMissingHt = 'MissingHt'
 kMissingEtHF = 'MissingEtHF'
 #kMissingHtHF = 'MissingHtHF'
 kAsymmetryEt = 'AsymmetryEt'
-kAsymmetryHt = 'AsymmetryHt' 
+kAsymmetryHt = 'AsymmetryHt'
 kAsymmetryEtHF = 'AsymmetryEtHF'
 kAsymmetryHtHF = 'AsymmetryHtHF'
 kCentrality0 = 'Centrality0'
