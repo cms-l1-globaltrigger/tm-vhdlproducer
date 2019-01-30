@@ -1,8 +1,3 @@
-include config/*.json
-include templates/vhdl/*.vhd
-include templates/vhdl/menu.json
-include templates/vhdl/instances/*.j2
-include templates/vhdl/signals/*.j2
 include changelog
 include README.md
 include setup.sh
