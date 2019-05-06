@@ -1,7 +1,7 @@
 {%- block instantiate_muon_muon_correlation_condition %}
   {%- set o1 = condition.objects[0] %}
   {%- set o2 = condition.objects[1] %}
-{{ condition.vhdl_signal }}_i: entity work.muon_muon_correlation_condition_v4
+{{ condition.vhdl_signal }}_i: entity work.muon_muon_correlation_condition
     generic map(
         {{ condition.objectsInSameBx }},
         {{ condition.deltaEta.enabled }}, {{ condition.deltaPhi.enabled }}, {{ condition.deltaR.enabled }}, {{ condition.mass.enabled }}, {{ condition.mass.type }}, {{ condition.twoBodyPt.enabled }},

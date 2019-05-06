@@ -3,7 +3,7 @@
   {%- set o2 = condition.objects[1] %}
   {%- if condition.nr_objects == 3 %}
   {%- set o3 = condition.objects[2] %}
-{{ condition.vhdl_signal }}_i: entity work.calo_calo_calo_correlation_orm_condition_v3
+{{ condition.vhdl_signal }}_i: entity work.calo_calo_calo_correlation_orm_condition
     generic map(
         true,
         {{ condition.deltaEtaOrm.enabled }}, {{ condition.deltaPhiOrm.enabled }}, {{ condition.deltaROrm.enabled }},
