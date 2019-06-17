@@ -4,25 +4,25 @@
     signal {{ o.type|lower }}_pt_vector_bx_{{ o.bx }}: diff_inputs_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => (others => '0'));
     signal {{ o.type|lower }}_eta_integer_bx_{{ o.bx }}: diff_integer_inputs_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
     signal {{ o.type|lower }}_phi_integer_bx_{{ o.bx }}: diff_integer_inputs_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
-    signal {{ o.type|lower }}_cos_phi_bx_{{ o.bx }}: calo_sin_cos_integer_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
-    signal {{ o.type|lower }}_sin_phi_bx_{{ o.bx }}: calo_sin_cos_integer_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
-    signal conv_{{ o.type|lower }}_cos_phi_bx_{{ o.bx }}: muon_sin_cos_integer_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
-    signal conv_{{ o.type|lower }}_sin_phi_bx_{{ o.bx }}: muon_sin_cos_integer_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
+    signal {{ o.type|lower }}_cos_phi_bx_{{ o.bx }}: sin_cos_integer_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
+    signal {{ o.type|lower }}_sin_phi_bx_{{ o.bx }}: sin_cos_integer_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
+    signal conv_{{ o.type|lower }}_cos_phi_bx_{{ o.bx }}: sin_cos_integer_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
+    signal conv_{{ o.type|lower }}_sin_phi_bx_{{ o.bx }}: sin_cos_integer_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
     signal {{ o.type|lower }}_eta_conv_2_muon_eta_integer_bx_{{ o.bx }}: diff_integer_inputs_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
     signal {{ o.type|lower }}_phi_conv_2_muon_phi_integer_bx_{{ o.bx }}: diff_integer_inputs_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
     {%- elif o.type == 'MU' %}
     signal {{ o.type|lower }}_pt_vector_bx_{{ o.bx }}: diff_inputs_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => (others => '0'));
     signal {{ o.type|lower }}_eta_integer_bx_{{ o.bx }}: diff_integer_inputs_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
     signal {{ o.type|lower }}_phi_integer_bx_{{ o.bx }}: diff_integer_inputs_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
-    signal {{ o.type|lower }}_cos_phi_bx_{{ o.bx }}: muon_sin_cos_integer_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
-    signal {{ o.type|lower }}_sin_phi_bx_{{ o.bx }}: muon_sin_cos_integer_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
+    signal {{ o.type|lower }}_cos_phi_bx_{{ o.bx }}: sin_cos_integer_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
+    signal {{ o.type|lower }}_sin_phi_bx_{{ o.bx }}: sin_cos_integer_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
     {%- elif o.type in ('ETM', 'HTM', 'ETMHF') %}
     signal {{ o.type|lower }}_pt_vector_bx_{{ o.bx }}: diff_inputs_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => (others => '0'));
     signal {{ o.type|lower }}_phi_integer_bx_{{ o.bx }}: diff_integer_inputs_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
-    signal {{ o.type|lower }}_cos_phi_bx_{{ o.bx }}: calo_sin_cos_integer_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
-    signal {{ o.type|lower }}_sin_phi_bx_{{ o.bx }}: calo_sin_cos_integer_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
-    signal conv_{{ o.type|lower }}_cos_phi_bx_{{ o.bx }}: muon_sin_cos_integer_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
-    signal conv_{{ o.type|lower }}_sin_phi_bx_{{ o.bx }}: muon_sin_cos_integer_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
+    signal {{ o.type|lower }}_cos_phi_bx_{{ o.bx }}: sin_cos_integer_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
+    signal {{ o.type|lower }}_sin_phi_bx_{{ o.bx }}: sin_cos_integer_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
+    signal conv_{{ o.type|lower }}_cos_phi_bx_{{ o.bx }}: sin_cos_integer_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
+    signal conv_{{ o.type|lower }}_sin_phi_bx_{{ o.bx }}: sin_cos_integer_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
     signal {{ o.type|lower }}_phi_conv_2_muon_phi_integer_bx_{{ o.bx }}: diff_integer_inputs_array(0 to NR_{{ o.type|upper }}_OBJECTS-1) := (others => 0);
     {%- endif %}
   {%- endfor %}
