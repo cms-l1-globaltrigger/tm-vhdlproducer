@@ -1208,7 +1208,7 @@ if __name__ == '__main__':
     print("menu.info.scale_set     :", menu.info.scale_set)
     print("menu.info.version       :", menu.info.version)
     print("menu.info.sw_version    :", menu.info.sw_version)
-    print("*" * 80
+    print("*" * 80)
     print("menu.algorithms|length  :", len(menu.algorithms))
     print("menu.conditions|length  :", len(menu.conditions))
     print("*" * 80)
@@ -1223,7 +1223,7 @@ if __name__ == '__main__':
             print("module.id                :", module.id)
             print("module.algorithms|length :", len(module.algorithms))
             print("module.conditions|length :", len(module.conditions))
-            print("-" * 80
+            print("-" * 80)
             print("module.correlationCombinations:")
             for a, b in module.correlationCombinations:
                 print(" ", a.type, a.bx, "<>", b.type, b.bx)
