@@ -1,11 +1,3 @@
-# -*- coding: utf-8 -*-
-#
-# Repository path   : $HeadURL: $
-# Last committed    : $Revision: $
-# Last changed by   : $Author: $
-# Last changed date : $Date: $
-#
-
 """Template helper classes.
 
 Overview of class hierarchy:
@@ -60,7 +52,7 @@ import tmGrammar  # import after tmEventSetup
 import algodist
 import handles
 
-from tmVhdlProducer import __version__
+from . import __version__
 
 # -----------------------------------------------------------------------------
 #  Precompiled regular expressions
@@ -361,7 +353,6 @@ class InfoHelper(VhdlHelper):
         scale_set  [str]
         version  [str]
         sw_version  [str]
-        svn_revision  [int]
     """
 
     def __init__(self, collection):
@@ -373,7 +364,6 @@ class InfoHelper(VhdlHelper):
         self.scale_set = eventSetup.getScaleSetName()
         self.version = VersionHelper(eventSetup.getVersion())
         self.sw_version = VersionHelper(__version__)
-        self.svn_revision = eventSetup.svnRevision # HACK
 
 class ModuleHelper(VhdlHelper):
     """Module template helper.
@@ -1202,7 +1192,6 @@ if __name__ == '__main__':
     tray = algodist.ResourceTray(resource)
     # Load event setup
     eventSetup = tmEventSetup.getTriggerMenu(args.filename)
-    eventSetup.svnRevision = 0
 
     # Distribute modules
     collection = algodist.ModuleCollection(eventSetup, tray)
@@ -1212,18 +1201,17 @@ if __name__ == '__main__':
     menu = MenuHelper(collection)
 
     # Info
-    print "*" * 80
-    print "menu.info.name          :", menu.info.name
-    print "menu.info.uuid_menu     :", menu.info.uuid_menu
-    print "menu.info.uuid_firmware :", menu.info.uuid_firmware
-    print "menu.info.scale_set     :", menu.info.scale_set
-    print "menu.info.version       :", menu.info.version
-    print "menu.info.sw_version    :", menu.info.sw_version
-    print "menu.info.svn_revision  :", menu.info.svn_revision
-    print "*" * 80
-    print "menu.algorithms|length  :", len(menu.algorithms)
-    print "menu.conditions|length  :", len(menu.conditions)
-    print "*" * 80
+    print("*" * 80)
+    print("menu.info.name          :", menu.info.name)
+    print("menu.info.uuid_menu     :", menu.info.uuid_menu)
+    print("menu.info.uuid_firmware :", menu.info.uuid_firmware)
+    print("menu.info.scale_set     :", menu.info.scale_set)
+    print("menu.info.version       :", menu.info.version)
+    print("menu.info.sw_version    :", menu.info.sw_version)
+    print("*" * 80
+    print("menu.algorithms|length  :", len(menu.algorithms))
+    print("menu.conditions|length  :", len(menu.conditions))
+    print("*" * 80)
 
     assert len(eventSetup.getAlgorithmMapPtr()) == len(menu.algorithms), "algorithm count missmatch"
     assert len(eventSetup.getConditionMapPtr()) == len(menu.conditions), "condition count missmatch"
@@ -1232,46 +1220,46 @@ if __name__ == '__main__':
     if args.m:
         # Modules
         for module in menu.modules:
-            print "module.id                :", module.id
-            print "module.algorithms|length :", len(module.algorithms)
-            print "module.conditions|length :", len(module.conditions)
-            print "-" * 80
-            print "module.correlationCombinations:"
+            print("module.id                :", module.id)
+            print("module.algorithms|length :", len(module.algorithms))
+            print("module.conditions|length :", len(module.conditions))
+            print("-" * 80
+            print("module.correlationCombinations:")
             for a, b in module.correlationCombinations:
-                print " ", a.type, a.bx, "<>", b.type, b.bx
-            print "-" * 80
-            print "module.muonBxCombinations:"
+                print(" ", a.type, a.bx, "<>", b.type, b.bx)
+            print("-" * 80)
+            print("module.muonBxCombinations:")
             for a, b in module.muonBxCombinations:
-                print "  {a} <> {b}".format(a=a, b=b)
-            print "-" * 80
-            print "module.conversionObjects:"
+                print("  {a} <> {b}".format(a=a, b=b))
+            print("-" * 80)
+            print("module.conversionObjects:")
             for o in module.conversionObjects:
-                print "  {o.name} (type:{o.type}, threshold:{o.threshold}, bx:{o.bx})".format(o=o)
-            print "-" * 80
-            print "module.correlationObjects:"
+                print("  {o.name} (type:{o.type}, threshold:{o.threshold}, bx:{o.bx})".format(o=o))
+            print("-" * 80)
+            print("module.correlationObjects:")
             for o in module.correlationObjects:
-                print "  {o.name} (type:{o.type}, threshold:{o.threshold}, bx:{o.bx})".format(o=o)
-            print "-" * 80
+                print("  {o.name} (type:{o.type}, threshold:{o.threshold}, bx:{o.bx})".format(o=o))
+            print("-" * 80)
 
             if args.c:
                 for condition in module.conditions:
-                    print "condition.name        :", condition.name
-                    print "condition.vhdl_signal :", condition.vhdl_signal
-                    print "condition.type :", condition.type
+                    print("condition.name        :", condition.name)
+                    print("condition.vhdl_signal :", condition.vhdl_signal)
+                    print("condition.type :", condition.type)
                     if condition.handle.type == tmEventSetup.InvariantMass:
-                        print "condition.mass.enabled :", condition.mass.enabled
-                        print "condition.mass.lower :", condition.mass.lower
-                        print "condition.mass.upper :", condition.mass.upper
+                        print("condition.mass.enabled :", condition.mass.enabled)
+                        print("condition.mass.lower :", condition.mass.lower)
+                        print("condition.mass.upper :", condition.mass.upper)
                     if condition.handle.type == tmEventSetup.TransverseMass:
-                        print "condition.mass.enabled :", condition.mass.enabled
-                        print "condition.mass.lower :", condition.mass.lower
-                        print "condition.mass.upper :", condition.mass.upper
+                        print("condition.mass.enabled :", condition.mass.enabled)
+                        print("condition.mass.lower :", condition.mass.lower)
+                        print("condition.mass.upper :", condition.mass.upper)
                     if args.o:
-                        print "condition.objects:"
+                        print("condition.objects:")
                         for obj in condition.objects:
-                            print "  name      :", obj.name
-                            print "  type      :", obj.type
-                            print "  threshold :", obj.threshold
-                            print "  bx        :", obj.bx
-                    print
-        print "*" * 80
+                            print("  name      :", obj.name)
+                            print("  type      :", obj.type)
+                            print("  threshold :", obj.threshold)
+                            print("  bx        :", obj.bx)
+                    print()
+        print("*" * 80)

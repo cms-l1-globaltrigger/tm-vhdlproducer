@@ -1,11 +1,3 @@
-# -*- coding: utf-8 -*-
-#
-# Repository path   : $HeadURL: $
-# Last committed    : $Revision: $
-# Last changed by   : $Author: $
-# Last changed date : $Date: $
-#
-
 from jinja2 import Environment, FileSystemLoader, filters, StrictUndefined
 from os.path import join, exists, basename
 from itertools import cycle

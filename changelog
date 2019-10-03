@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.7.0] - 2019-10-03
+### Added
+- depending on tmReporter package
+### Changed
+- migrated to Python3
+- removed obsolete SVN/git revision tagging
+- moved scripts to package modules
+- updated setup.py
+- renamed test to tests
+### Removed
+- scripts, setup.sh, copyright
+
 ## [2.6.1] - 2019-06-17
 ### Changed
 - merged parallel branches 2.5.1 and 2.6.0

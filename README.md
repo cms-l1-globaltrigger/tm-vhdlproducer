@@ -1,12 +1,6 @@
 VHDL Producer
 =============
 
-## Dependencies
-
- * utm >= 0.6.5 python bindings, [https://svnweb.cern.ch/trac/cactus/browser/trunk/cactusprojects/utm]()
- * tm-reporter >= 2.5.0, [https://gitlab.cern.ch/cms-l1t-tools/tm-reporter]()
-
-
 ## Basic usage
 
 Generate VHDL output from XML trigger menu.
@@ -24,7 +18,6 @@ Example for distributing on two modules:
 
 This will create a directory L1Menu_sample-d1/ in the current directory.
 
-
 ### Specifying distribution number
 
 To specify the distribution number use the --dist flag. For example
@@ -32,7 +25,6 @@ To specify the distribution number use the --dist flag. For example
     $ tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 2
 
 will write the output to /tmp/L1Menu_sample-d2/.
-
 
 ### Specify sort order for algorithm distribution
 
@@ -42,7 +34,6 @@ Example for reversing algorithm distribution descending order (default ascending
 
 This will distribute algorithms from high to low payload weight.
 
-
 ### Specifying output location
 
 To specify a different output location use the --outdir flag. For example
@@ -51,9 +42,7 @@ To specify a different output location use the --outdir flag. For example
 
 will write the output to /tmp/L1Menu_sample-d1/.
 
-
 ## Optimizations
-
 
 ### Shadow ratio
 
@@ -69,7 +58,6 @@ and should be used carefully (consider it as experimental). It is advised to
 start with a ratio of 0.0 and verify if higher ratios (up to 0.25) improve the
 chip resource usage.
 
-
 ### Condition constraints
 
 To limit certain condition types to a subset of modules (or just a single
@@ -81,14 +69,12 @@ or to a subset of modules
 
     $ tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 1 --constraint ext:2,4-6  # limit external conditions to modules 2, 4, 5 and 6
 
-
 ### Dryrun
 
 To try out different optimizations use the --dryrun flag to prevent writing
 output to the filesystem.
 
     $ tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 1 --ratio 0 --dryrun
-
 
 ## Generated output
 
@@ -106,12 +92,38 @@ output to the filesystem.
      |    `-- L1Menu_sample-d1.xml
      `-- tm-vhdlproducer.log
 
+## Dependencies
+
+Install following utm wheels or build utm python bindings.
+
+ * [`tm-eventsetup>=0.7.3`](https://github.com/cms-l1-globaltrigger/tm-eventsetup)
+ * [`tm-grammar>=0.7.3`](https://github.com/cms-l1-globaltrigger/tm-grammar)
+ * [`tm-table>=0.7.3`](https://github.com/cms-l1-globaltrigger/tm-table)
+
+Install following utm tools.
+
+ * [`tm-reporter>=2.7.0`](https://github.com/cms-l1-globaltrigger/tm-reporter)
+
+## Install
+
+Install using pip
+
+```bash
+pip install git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git@2.7.0
+```
+
+Install from local source
+
+```bash
+git clone https://gitlab.cern.ch/cms-l1-globaltrigger/tm-vhdlproducer.git
+cd tm-vhdlproducer
+python setup.py install
+```
 
 ## Documentation
 
 A TWiki page template and a HTML menu ducumentation is also written to the
 doc/ directory in the output location.
-
 
 ## Logging
 

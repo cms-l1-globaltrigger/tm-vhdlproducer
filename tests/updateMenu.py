@@ -31,10 +31,10 @@ ext_signal = tmTable.ExtSignal()
 
 msg = tmTable.xml2menu(results.menu_path, menu, scale, ext_signal, False)
 if msg:
-  print 'err> %s: %s' % (results.menu_path,  msg)
+  print('err> %s: %s' % (results.menu_path,  msg))
   sys.exit(1)
 
-print "inf> processing %s ... " % menu.menu["name"]
+print("inf> processing %s ... " % menu.menu["name"])
 
 menu.menu["uuid_menu"] = str(json_data["menu_uuid"])
 menu.menu["uuid_firmware"] = str(json_data["firmware_uuid"])

@@ -31,7 +31,7 @@ parser.add_argument("--menu", dest="menu", default=defaultMenu, type=str, action
 parser.add_argument("--nModules", dest="nModules", default=1, type=int, action="store", help="number of uGT modules")
 parser.add_argument("--manual_dist", dest="manual_dist", action="store_true", help="manual distribution of algorithms in uGT modules")
 parser.add_argument("--output", dest="outputDir", default=BASE_DIR+"/tmVhdlProducer/test/vhdltest/", type=str, action="store", help="directory for the VHDL producer output")
-parser.add_argument("--verbose", dest="verbose", action="store_true", help="prints teplate output")
+parser.add_argument("--verbose", dest="verbose", action="store_true", help="prints template output")
 
 options = parser.parse_args()
 

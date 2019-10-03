@@ -1,12 +1,3 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
-#
-# Repository path   : $HeadURL: $
-# Last committed    : $Revision: $
-# Last changed by   : $Author: $
-# Last changed date : $Date: $
-#
-
 """Smart distribution of algorithms on multiple modules.
 
 Perform a quick distribution using the convenient distribution function.
@@ -32,9 +23,9 @@ Dump distribution to JSON file
 import tmEventSetup
 import tmGrammar
 
-from tmVhdlProducer.handles import Payload
-from tmVhdlProducer.handles import ConditionHandle
-from tmVhdlProducer.handles import AlgorithmHandle
+from .handles import Payload
+from .handles import ConditionHandle
+from .handles import AlgorithmHandle
 
 from collections import namedtuple
 import argparse
