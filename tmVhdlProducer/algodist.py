@@ -729,7 +729,7 @@ class ModuleCollection(object):
         # Force list for single numbers
         modules = modules if isinstance(modules, (list, tuple)) else [modules]
         assert condition in ConditionTypeKey.values(), "no such constraint condition type '{condition}'".format(**locals())
-        assert max(modules) < MaxModules, "exceeding constraint module range 'modules'".format(**locals())
+        assert max(modules) <= MaxModules, "exceeding constraint module range 'modules'".format(**locals())
         self.constraints[condition] = modules
 
     def capableModules(self):
