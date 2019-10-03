@@ -5,24 +5,29 @@ VHDL Producer
 
 Generate VHDL output from XML trigger menu.
 
-    $ tm-vhdlproducer --modules <n> --dist <n> [--ratio <f>]
-                      [--sorting asc|desc] [--constraint <type:modules>]
-                      [--dryrun] <menu>
-
+```
+tm-vhdlproducer --modules <n> --dist <n> [--ratio <f>]
+                  [--sorting asc|desc] [--constraint <type:modules>]
+                  [--dryrun] <menu>
+```
 
 ### Distribute to multiple modules
 
 Example for distributing on two modules:
 
-    $ tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 1
+```bash
+tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 1
+```
 
-This will create a directory L1Menu_sample-d1/ in the current directory.
+This will create a directory `L1Menu_sample-d1/` in the current directory.
 
 ### Specifying distribution number
 
-To specify the distribution number use the --dist flag. For example
+To specify the distribution number use the `--dist` flag. For example
 
-    $ tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 2
+```bash
+tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 2  # set distribution number to 2
+```
 
 will write the output to /tmp/L1Menu_sample-d2/.
 
@@ -30,15 +35,19 @@ will write the output to /tmp/L1Menu_sample-d2/.
 
 Example for reversing algorithm distribution descending order (default ascending):
 
-    $ tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 1 --sorting desc
+```bash
+tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 1 --sorting desc
+```
 
 This will distribute algorithms from high to low payload weight.
 
 ### Specifying output location
 
-To specify a different output location use the --outdir flag. For example
+To specify a different output location use the `--output` flag. For example
 
-    $ tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 1 --outdir /tmp
+```bash
+tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 1 --output /tmp
+```
 
 will write the output to /tmp/L1Menu_sample-d1/.
 
@@ -58,39 +67,51 @@ and should be used carefully (consider it as experimental). It is advised to
 start with a ratio of 0.0 and verify if higher ratios (up to 0.25) improve the
 chip resource usage.
 
+```bash
+tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 1 --ratio .25  # set ratio to 0.25
+```
+
 ### Condition constraints
 
 To limit certain condition types to a subset of modules (or just a single
-module) use the --constraint argument. Limit a condition type to a single module
+module) use the `--constraint` argument. Limit a condition type to a single module
 
-    $ tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 1 --constraint ext:0  # limit external conditions to module 0
+```bash
+tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 1 --constraint ext:0  # limit external conditions to module 0
+```
 
 or to a subset of modules
 
-    $ tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 1 --constraint ext:2,4-6  # limit external conditions to modules 2, 4, 5 and 6
+```bash
+tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 1 --constraint ext:2,4-6  # limit external conditions to modules 2, 4, 5 and 6
+```
 
 ### Dryrun
 
-To try out different optimizations use the --dryrun flag to prevent writing
+To try out different optimizations use the `--dryrun` flag to prevent writing
 output to the filesystem.
 
-    $ tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 1 --ratio 0 --dryrun
+```bash
+tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 1 --dryrun
+```
 
 ## Generated output
 
-    L1Menu_sample-d1/
-     +-- doc/
-     |    +-- L1Menu_sample-d1.html
-     |    `-- L1Menu_sample-d1.twiki
-     +-- testvectors/
-     +-- vhdl/
-     |    +-- module_0/
-     |    |    `-- src/
-     |    |         `-- *.vhd
-     |    `-- ...
-     +-- xml/
-     |    `-- L1Menu_sample-d1.xml
-     `-- tm-vhdlproducer.log
+```
+L1Menu_sample-d1/
+ +-- doc/
+ |    +-- L1Menu_sample-d1.html
+ |    `-- L1Menu_sample-d1.twiki
+ +-- testvectors/
+ +-- vhdl/
+ |    +-- module_0/
+ |    |    `-- src/
+ |    |         `-- *.vhd
+ |    `-- ...
+ +-- xml/
+ |    `-- L1Menu_sample-d1.xml
+ `-- tm-vhdlproducer.log
+```
 
 ## Dependencies
 
@@ -100,7 +121,7 @@ Install following utm wheels or build utm python bindings.
  * [`tm-grammar>=0.7.3`](https://github.com/cms-l1-globaltrigger/tm-grammar)
  * [`tm-table>=0.7.3`](https://github.com/cms-l1-globaltrigger/tm-table)
 
-Install following utm tools.
+Install required utm tools.
 
  * [`tm-reporter>=2.7.0`](https://github.com/cms-l1-globaltrigger/tm-reporter)
 
@@ -123,9 +144,9 @@ python setup.py install
 ## Documentation
 
 A TWiki page template and a HTML menu ducumentation is also written to the
-doc/ directory in the output location.
+`doc/` directory in the output location.
 
 ## Logging
 
 All messages printed to the screen are written to a log file in the output
-location (e.g. L1Menu_sample/tm-vhdlproducer.log).
+location (e.g. `L1Menu_sample/tm-vhdlproducer.log`).
