@@ -49,9 +49,9 @@ import sys, os
 
 import tmEventSetup
 import tmGrammar  # import after tmEventSetup
-import algodist
-import handles
 
+from . import algodist
+from . import handles
 from . import __version__
 
 # -----------------------------------------------------------------------------

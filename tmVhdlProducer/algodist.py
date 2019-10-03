@@ -20,18 +20,18 @@ Dump distribution to JSON file
 
 """
 
+import argparse
+import logging
+import json, uuid
+import sys, os
+from collections import namedtuple
+
 import tmEventSetup
 import tmGrammar
 
 from .handles import Payload
 from .handles import ConditionHandle
 from .handles import AlgorithmHandle
-
-from collections import namedtuple
-import argparse
-import logging
-import json, uuid
-import sys, os
 
 MinModules = 1
 MaxModules = 6

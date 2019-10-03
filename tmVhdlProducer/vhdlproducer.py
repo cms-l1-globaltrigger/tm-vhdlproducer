@@ -1,18 +1,19 @@
+import json
+import shutil
+import logging
+import uuid
+import os, errno
+
 from jinja2 import Environment, FileSystemLoader, filters, StrictUndefined
 from os.path import join, exists, basename
 from itertools import cycle
 from binascii import hexlify
 
-import os, errno
-import json
-import shutil
-import logging
-import uuid
-
 import tmEventSetup
 import tmTable
-import vhdlhelper
-import algodist
+
+from . import vhdlhelper
+from . import algodist
 
 from tmVhdlProducer import __version__
 __all__ = ['VhdlProducer', 'writeXmlMenu']
