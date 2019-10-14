@@ -1,26 +1,19 @@
-# -*- coding: utf-8 -*-
-#
-# Repository path   : $HeadURL: $
-# Last committed    : $Revision: $
-# Last changed by   : $Author: $
-# Last changed date : $Date: $
-#
+import json
+import shutil
+import logging
+import uuid
+import os, errno
 
 from jinja2 import Environment, FileSystemLoader, filters, StrictUndefined
 from os.path import join, exists, basename
 from itertools import cycle
 from binascii import hexlify
 
-import os, errno
-import json
-import shutil
-import logging
-import uuid
-
 import tmEventSetup
 import tmTable
-import vhdlhelper
-import algodist
+
+from . import vhdlhelper
+from . import algodist
 
 from tmVhdlProducer import __version__
 __all__ = ['VhdlProducer', 'writeXmlMenu']
@@ -30,16 +23,34 @@ __all__ = ['VhdlProducer', 'writeXmlMenu']
 # -----------------------------------------------------------------------------
 
 def hexstr_filter(s, bytes):
+    """Converts a string into hex representation.
+
+    >>> hexstr_filter("Monty Python's Flying Circus", 32)
+    '0000000073756372694320676e69796c462073276e6f687479502079746e6f4d'
+    """
     chars = bytes * 2
-    return "{0:0>{1}}".format(hexlify(s[::-1]), chars)[-chars:]
+    return "{0:0>{1}}".format(hexlify(s[::-1].encode()).decode(), chars)[-chars:]
 
 def uuid2hex_filter(s):
+    """Converts a UUID into hex representation.
+
+    >>> uuid2hex_filter('1d69f777-ade0-4fb7-82f7-2b9afbba4078')
+    '1d69f777ade04fb782f72b9afbba4078'
+    """
     return uuid.UUID(s).hex.lower()
 
 def bx_encode(value):
     """Encode relative bunch crossings into VHDL notation.
+
     All positive values with the exception of zero are prefixed with m, all
     negative values are prefixed with p instead of the minus sign.
+
+    >>> bx_encode(0)
+    '0'
+    >>> bx_encode(-1)
+    'm1'
+    >>> bx_encode(2)
+    'p2'
     """
     # Prefix positive values greater then zero with p.
     if value > 0:
@@ -220,7 +231,7 @@ class VhdlProducer(object):
             algorithm = tmTable.Row()
             id_ = names.index(name)
             # Copy attributes
-            for k, v in menu.algorithms[id_].iteritems():
+            for k, v in menu.algorithms[id_].items():
                 algorithm[k] = v
             # Update attributes
             algorithm["index"] = str(index)

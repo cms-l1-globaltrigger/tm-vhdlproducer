@@ -32,15 +32,15 @@ constant L1TM_NAME : std_logic_vector(128*8-1 downto 0) := X"{{ menu.info.name|h
 constant L1TM_FW_UID : std_logic_vector(127 downto 0) := X"{{ menu.info.uuid_firmware|hexuuid }}";
 --
 -- -- Trigger Menu Editor software version - written by TME
-constant L1TM_COMPILER_MAJOR_VERSION      : integer range 0 to 255 := {{ menu.info.sw_version.major|int }};
-constant L1TM_COMPILER_MINOR_VERSION      : integer range 0 to 255 := {{ menu.info.sw_version.minor|int }};
-constant L1TM_COMPILER_REV_VERSION        : integer range 0 to 255 := {{ menu.info.sw_version.patch|int }};
+constant L1TM_COMPILER_MAJOR_VERSION : integer range 0 to 255 := {{ menu.info.sw_version.major|int }};
+constant L1TM_COMPILER_MINOR_VERSION : integer range 0 to 255 := {{ menu.info.sw_version.minor|int }};
+constant L1TM_COMPILER_REV_VERSION : integer range 0 to 255 := {{ menu.info.sw_version.patch|int }};
 constant L1TM_COMPILER_VERSION : std_logic_vector(31 downto 0) := X"00" &
            std_logic_vector(to_unsigned(L1TM_COMPILER_MAJOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(L1TM_COMPILER_MINOR_VERSION, 8)) &
            std_logic_vector(to_unsigned(L1TM_COMPILER_REV_VERSION, 8));
 
-constant SVN_REVISION_NUMBER : std_logic_vector(31 downto 0) := X"{{ menu.info.svn_revision|X08}}"; -- git rev {{ menu.info.svn_revision|hex }}
+constant SVN_REVISION_NUMBER : std_logic_vector(31 downto 0) := X"00000000"; -- not used anymore
 constant L1TM_UID_HASH : std_logic_vector(31 downto 0) := X"{{ menu.info.name|mmhashn|X08}}";
 constant FW_UID_HASH : std_logic_vector(31 downto 0) := X"{{ menu.info.uuid_firmware|mmhashn|X08}}";
 

@@ -1,27 +1,19 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
-#
-# Repository path   : $HeadURL: $
-# Last committed    : $Revision: $
-# Last changed by   : $Author: $
-# Last changed date : $Date: $
-#
-
-import tmEventSetup
-
-from tmVhdlProducer.vhdlproducer import VhdlProducer
-from tmVhdlProducer.algodist import ProjectDir
-from tmVhdlProducer.algodist import distribute, constraint_t
-from tmVhdlProducer.algodist import MinModules, MaxModules
-from tmVhdlProducer.algodist import kExternals
-from tmVhdlProducer import __version__
-
 import argparse
 import subprocess
 import glob
 import logging
-import sys, os
 import re
+import sys, os
+
+import tmEventSetup
+import tmReporter
+
+from .vhdlproducer import VhdlProducer
+from .algodist import ProjectDir
+from .algodist import distribute, constraint_t
+from .algodist import MinModules, MaxModules
+from .algodist import kExternals
+from . import __version__
 
 EXIT_SUCCESS = 0
 EXIT_FAILURE = 1
@@ -34,7 +26,7 @@ SortingDesc = 'desc'
 DefaultRatio = 0.0
 DefaultSorting = SortingAsc
 DefaultOutputDir = os.getcwd()
-from tmVhdlProducer.algodist import DefaultConfigFile
+from .algodist import DefaultConfigFile
 
 ConstraintTypes = {
     'ext': kExternals,
@@ -66,20 +58,11 @@ def ratio_t(value):
         return value
     raise ValueError(value)
 
-def getGitRevision():
-    """Returns git short revision (8 hex digits) of UTM_ROOT path."""
-    rootdir = os.environ.get("UTM_ROOT")
-    if not rootdir:
-        raise RuntimeError("UTM_ROOT not set.")
-    process = subprocess.Popen(['git', '-C', rootdir, 'rev-parse', '--short=8', 'HEAD'], stdout=subprocess.PIPE)
-    revision = process.stdout.readlines()[0].strip()
-    return int(revision, 16)
-
 # -----------------------------------------------------------------------------
 #  Command line parser
 # -----------------------------------------------------------------------------
 
-def parse():
+def parse_args():
     """Parse command line options."""
     parser = argparse.ArgumentParser(
         prog='tm-vhdlproducer',
@@ -152,7 +135,7 @@ def parse():
 
 def main():
     """Main routine."""
-    args = parse()
+    args = parse_args()
 
     # Setup console logging
     level = logging.DEBUG if args.verbose else logging.INFO
@@ -160,22 +143,8 @@ def main():
 
     logging.info("running VHDL producer...")
 
-    utm_root = os.environ.get("UTM_ROOT")
-    logging.info("UTM_ROOT: %s", utm_root)
-    if not utm_root:
-        logging.error("no `UTM_ROOT' environment variable defined")
-        return EXIT_FAILURE
-
-    if not args.dryrun:
-        try:
-            subprocess.call([EXEC_REPORTER, '--version'])
-        except Exception as e:
-            logging.error("Missing reporter executable '%s': %s", EXEC_REPORTER, format(e))
-            return EXIT_FAILURE
-
     logging.info("loading XML menu: %s", args.menu)
     eventSetup = tmEventSetup.getTriggerMenu(args.menu)
-    #output_dir = os.path.join(args.output, "{name}_m{modules}".format(name=eventSetup.getName(), modules=args.modules))
     output_dir = os.path.join(args.output, "{name}-d{dist}".format(name=eventSetup.getName(), dist=args.dist))
 
     # Prevent overwirting source menu
@@ -199,11 +168,6 @@ def main():
         handler.setFormatter(logging.Formatter(fmt='%(asctime)s %(levelname)s : %(message)s', datefmt='%Y-%m-%d %H:%M:%S'))
         handler.setLevel(level)
         logging.getLogger().addHandler(handler)
-
-    # Fetch SVN revision
-    revision = getGitRevision()
-    eventSetup.svnRevision = revision # HACK
-    logging.info("svn revison r%s", revision)
 
     # Distribute algorithms, set sort order (asc or desc)
     reverse_sorting = (args.sorting == 'desc')

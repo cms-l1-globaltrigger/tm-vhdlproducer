@@ -1,11 +1,3 @@
-# -*- coding: utf-8 -*-
-#
-# Repository path   : $HeadURL: $
-# Last committed    : $Revision: $
-# Last changed by   : $Author: $
-# Last changed date : $Date: $
-#
-
 """Handles to wrap and extend event setup container classes.
 
 Classes:

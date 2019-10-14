@@ -1,1 +1,5 @@
 Jinja2
+tm-table>=0.7.3
+tm-grammar>=0.7.3
+tm-eventsetup>=0.7.3
+tm-reporter>=2.7.0

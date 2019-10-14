@@ -1,12 +1,3 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
-#
-# Repository path   : $HeadURL: $
-# Last committed    : $Revision: $
-# Last changed by   : $Author: $
-# Last changed date : $Date: $
-#
-
 """Smart distribution of algorithms on multiple modules.
 
 Perform a quick distribution using the convenient distribution function.
@@ -29,18 +20,18 @@ Dump distribution to JSON file
 
 """
 
-import tmEventSetup
-import tmGrammar
-
-from tmVhdlProducer.handles import Payload
-from tmVhdlProducer.handles import ConditionHandle
-from tmVhdlProducer.handles import AlgorithmHandle
-
-from collections import namedtuple
 import argparse
 import logging
 import json, uuid
 import sys, os
+from collections import namedtuple
+
+import tmEventSetup
+import tmGrammar
+
+from .handles import Payload
+from .handles import ConditionHandle
+from .handles import AlgorithmHandle
 
 MinModules = 1
 MaxModules = 6
@@ -423,7 +414,7 @@ class ResourceTray(object):
 
     def __init__(self, filename):
         """Attribute *filename* is a filename of an JSON payload configuration file."""
-        with open(filename, 'rb') as fp:
+        with open(filename) as fp:
             resources = json.load(fp, object_hook=self._object_hook).resources
         self.resources = resources
         self.filename = filename
@@ -432,7 +423,7 @@ class ResourceTray(object):
         """Convert a dict into a namedtuple, used to convert JSON input.
         http://stackoverflow.com/questions/35898270/trying-to-make-a-dict-behave-like-a-clean-class-method-structure
         """
-        for k,v in d.iteritems():
+        for k, v in d.items():
             if isinstance(v, dict):
                 d[k] = self._object_hook(v)
         return namedtuple('resource', d.keys())(**d)
@@ -654,7 +645,7 @@ class Module(object):
         for algorithm in self.algorithms:
             for condition in algorithm.conditions:
                 payloadMap[condition.name] = condition.payload
-        for name, payload_ in payloadMap.iteritems():
+        for name, payload_ in payloadMap.items():
             payload += payload_
         return payload
 
@@ -688,12 +679,12 @@ class ModuleCollection(object):
         self.constraints = {}
         # Calculate condition handles
         self.condition_handles = {}
-        for name, condition in es.getConditionMapPtr().iteritems():
+        for name, condition in es.getConditionMapPtr().items():
             payload = tray.measure(condition)
             self.condition_handles[name] = ConditionHandle(condition, payload)
         # Calculate algorithms handles, sort them descending by payload
         self.algorithm_handles = []
-        for name, algorithm in es.getAlgorithmMapPtr().iteritems():
+        for name, algorithm in es.getAlgorithmMapPtr().items():
             conditions = [self.condition_handles[condition] for condition in get_condition_names(algorithm)]
             self.algorithm_handles.append(AlgorithmHandle(algorithm, conditions))
         # pre sort
@@ -738,7 +729,7 @@ class ModuleCollection(object):
         # Force list for single numbers
         modules = modules if isinstance(modules, (list, tuple)) else [modules]
         assert condition in ConditionTypeKey.values(), "no such constraint condition type '{condition}'".format(**locals())
-        assert max(modules) < MaxModules, "exceeding constraint module range 'modules'".format(**locals())
+        assert max(modules) <= MaxModules, "exceeding constraint module range 'modules'".format(**locals())
         self.constraints[condition] = modules
 
     def capableModules(self):
@@ -770,7 +761,7 @@ class ModuleCollection(object):
     @property
     def conditions(self):
         """Retruns unsorted list of all conditions."""
-        return [condition for _, condition in self.condition_handles.iteritems()]
+        return [condition for _, condition in self.condition_handles.items()]
 
     def distribute(self, modules):
         """Distribute algorithms to modules, applying shadow ratio.
@@ -1025,7 +1016,7 @@ def list_summary(collection):
 
 def dump_distribution(collection, args):
     logging.info(":: writing menu distribution JSON dump: %s", args.o)
-    with open(args.o, 'wb') as fp:
+    with open(args.o, 'w') as fp:
         collection.dump(fp)
 
 def distribute(eventSetup, modules, config, ratio, reverse_sorting, constraints=None):
@@ -1049,7 +1040,7 @@ def distribute(eventSetup, modules, config, ratio, reverse_sorting, constraints=
     logging.info("distributing algorithms, shadow ratio: %s", ratio)
     collection.ratio = ratio
     collection.reverse_sorting = reverse_sorting
-    for k, v in constraints.iteritems():
+    for k, v in constraints.items():
         collection.setConstraint(k, v)
     collection.distribute(modules)
 
