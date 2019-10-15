@@ -123,14 +123,14 @@ Install following utm wheels or build utm python bindings.
 
 Install required utm tools.
 
- * [`tm-reporter>=2.7.0`](https://github.com/cms-l1-globaltrigger/tm-reporter)
+ * [`tm-reporter>=2.7.1`](https://github.com/cms-l1-globaltrigger/tm-reporter)
 
 ## Install
 
 Install using pip
 
 ```bash
-pip install git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git@2.7.0
+pip install git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git@2.7.1
 ```
 
 Install from local source

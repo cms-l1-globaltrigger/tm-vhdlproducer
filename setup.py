@@ -4,7 +4,7 @@ long_description = open('README.md').read()
 
 setup(
     name="tm-vhdlproducer",
-    version='2.7.0',
+    version='2.7.1',
     url="https://github.com/cms-l1-globaltrigger/tm-vhdlproducer",
     author="Bernhard Arnold",
     author_email="bernhard.arnold@cern.ch",
@@ -25,7 +25,7 @@ setup(
         'tm-table>=0.7.3',
         'tm-grammar>=0.7.3',
         'tm-eventsetup>=0.7.3',
-        'tm-reporter>=2.7.0'
+        'tm-reporter>=2.7.1'
     ],
     entry_points={
         'console_scripts': [

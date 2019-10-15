@@ -52,7 +52,7 @@
   {%- else %}
         {{ condition.vhdl_signal }});
   {%- endif %}
-  {%- if o1.type != o2.type %}
+  {%- elif o1.type != o2.type %}
 {{ condition.vhdl_signal }}_i: entity work.calo_conditions_orm_v4_single_double
     generic map(
         {{ condition.deltaEtaOrm.enabled }}, {{ condition.deltaPhiOrm.enabled }}, {{ condition.deltaROrm.enabled }},
@@ -65,10 +65,6 @@
         (X"{{ o1.etaW3UpperLimit|X04 }}", X"0000", X"0000", X"0000"), (X"{{ o1.etaW3LowerLimit|X04 }}", X"0000", X"0000", X"0000"),
         (X"{{ o1.etaW4UpperLimit|X04 }}", X"0000", X"0000", X"0000"), (X"{{ o1.etaW4LowerLimit|X04 }}", X"0000", X"0000", X"0000"),
         (X"{{ o1.etaW5UpperLimit|X04 }}", X"0000", X"0000", X"0000"), (X"{{ o1.etaW5LowerLimit|X04 }}", X"0000", X"0000", X"0000"),
-        ({{ o1.etaFullRange }}, false, false, false),
-        (X"{{ o1.etaW1UpperLimit|X04 }}", X"0000", X"0000", X"0000"), (X"{{ o1.etaW1LowerLimit|X04 }}", X"0000", X"0000", X"0000"),
-        ({{ o1.etaW2Ignore }}, false, false, false),
-        (X"{{ o1.etaW2UpperLimit|X04 }}", X"0000", X"0000", X"0000"), (X"{{ o1.etaW2LowerLimit|X04 }}", X"0000", X"0000", X"0000"),
         ({{ o1.phiFullRange }}, false, false, false),
         (X"{{ o1.phiW1UpperLimit|X04 }}", X"0000", X"0000", X"0000"), (X"{{ o1.phiW1LowerLimit|X04 }}", X"0000", X"0000", X"0000"),
         ({{ o1.phiW2Ignore }}, false, false, false),
@@ -76,8 +72,12 @@
         (X"{{ o1.isolationLUT|X01 }}", X"F", X"F", X"F"),
         {{ o2.sliceLow }}, {{ o2.sliceHigh }}, {{ o2.operator }}, {{ o2.type|upper }}_TYPE,
         X"{{ o2.threshold|X04 }}",
-        {{ o2.etaFullRange }}, X"{{ o2.etaW1UpperLimit|X04 }}", X"{{ o2.etaW1LowerLimit|X04 }}",
-        {{ o2.etaW2Ignore }}, X"{{ o2.etaW2UpperLimit|X04 }}", X"{{ o2.etaW2LowerLimit|X04 }}",
+        ({{ o2.etaNrCuts }}, false, false, false),
+        (X"{{ o2.etaW1UpperLimit|X04 }}", X"0000", X"0000", X"0000"), (X"{{ o2.etaW1LowerLimit|X04 }}", X"0000", X"0000", X"0000"),
+        (X"{{ o2.etaW2UpperLimit|X04 }}", X"0000", X"0000", X"0000"), (X"{{ o2.etaW2LowerLimit|X04 }}", X"0000", X"0000", X"0000"),
+        (X"{{ o2.etaW3UpperLimit|X04 }}", X"0000", X"0000", X"0000"), (X"{{ o2.etaW3LowerLimit|X04 }}", X"0000", X"0000", X"0000"),
+        (X"{{ o2.etaW4UpperLimit|X04 }}", X"0000", X"0000", X"0000"), (X"{{ o2.etaW4LowerLimit|X04 }}", X"0000", X"0000", X"0000"),
+        (X"{{ o2.etaW5UpperLimit|X04 }}", X"0000", X"0000", X"0000"), (X"{{ o2.etaW5LowerLimit|X04 }}", X"0000", X"0000", X"0000"),
         {{ o2.phiFullRange }}, X"{{ o2.phiW1UpperLimit|X04 }}", X"{{ o2.phiW1LowerLimit|X04 }}",
         {{ o2.phiW2Ignore }}, X"{{ o2.phiW2UpperLimit|X04 }}", X"{{ o2.phiW2LowerLimit|X04 }}",
         X"{{ o2.isolationLUT|X01 }}",
