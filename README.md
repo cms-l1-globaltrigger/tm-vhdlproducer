@@ -1,6 +1,15 @@
 VHDL Producer
 =============
 
+## Install
+
+Install using pip (>= 19.0)
+
+```bash
+pip install --upgrade pip
+pip install git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git@2.7.2
+```
+
 ## Basic usage
 
 Generate VHDL output from XML trigger menu.
@@ -111,34 +120,6 @@ L1Menu_sample-d1/
  +-- xml/
  |    `-- L1Menu_sample-d1.xml
  `-- tm-vhdlproducer.log
-```
-
-## Dependencies
-
-Install following utm wheels or build utm python bindings.
-
- * [`tm-eventsetup>=0.7.3`](https://github.com/cms-l1-globaltrigger/tm-eventsetup)
- * [`tm-grammar>=0.7.3`](https://github.com/cms-l1-globaltrigger/tm-grammar)
- * [`tm-table>=0.7.3`](https://github.com/cms-l1-globaltrigger/tm-table)
-
-Install required utm tools.
-
- * [`tm-reporter>=2.7.1`](https://github.com/cms-l1-globaltrigger/tm-reporter)
-
-## Install
-
-Install using pip
-
-```bash
-pip install git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git@2.7.1
-```
-
-Install from local source
-
-```bash
-git clone https://gitlab.cern.ch/cms-l1-globaltrigger/tm-vhdlproducer.git
-cd tm-vhdlproducer
-python setup.py install
 ```
 
 ## Documentation
