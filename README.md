@@ -10,6 +10,27 @@ pip install --upgrade pip
 pip install git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git@2.7.2
 ```
 
+## Build from source
+
+Basic development instrcutions.
+
+```bash
+git clone https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git
+cd tm-vhdlproducer
+git checkout master
+```
+```bash
+python3 -m venv env
+. env/bin/activate
+```
+```bash
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+```bash
+python setup.py develop
+```
+
 ## Basic usage
 
 Generate VHDL output from XML trigger menu.
