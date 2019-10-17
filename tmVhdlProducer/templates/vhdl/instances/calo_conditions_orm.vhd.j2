@@ -5,35 +5,34 @@
   {%- set o4 = condition.objects[3] %}
   {%- set o5 = condition.objects[4] %}
   {%- set nr_requirements = condition.nr_objects-1 %}
-  {%- if o1.type == o2.type and o1.type != o3.type %}
 {{ condition.vhdl_signal }}_i: entity work.calo_conditions_orm
     generic map(
         {{ condition.deltaEtaOrm.enabled }}, {{ condition.deltaPhiOrm.enabled }}, {{ condition.deltaROrm.enabled }},
-        {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o2.sliceLow }}, {{ o2.sliceHigh }},
+        {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o2.sliceLow }}, {{ o2.sliceHigh }}, {{ o3.sliceLow }}, {{ o3.sliceHigh }}, {{ o4.sliceLow }}, {{ o4.sliceHigh }},
         {{ nr_requirements }}, {{ o1.operator }}, {{ o1.type }}_TYPE,
-        (X"{{ o1.threshold|X04 }}", X"{{ o2.threshold|X04 }}", X"0000", X"0000"),
-        ({{ o1.etaNrCuts }}, {{ o2.etaNrCuts }}, false, false),
-        (X"{{ o1.etaW1UpperLimit|X04 }}", X"{{ o2.etaW1UpperLimit|X04 }}", X"0000", X"0000"), (X"{{ o1.etaW1LowerLimit|X04 }}", X"{{ o2.etaW1LowerLimit|X04 }}", X"0000", X"0000"),
-        (X"{{ o1.etaW2UpperLimit|X04 }}", X"{{ o2.etaW2UpperLimit|X04 }}", X"0000", X"0000"), (X"{{ o1.etaW2LowerLimit|X04 }}", X"{{ o2.etaW2LowerLimit|X04 }}", X"0000", X"0000"),
-        (X"{{ o1.etaW3UpperLimit|X04 }}", X"{{ o2.etaW3UpperLimit|X04 }}", X"0000", X"0000"), (X"{{ o1.etaW3LowerLimit|X04 }}", X"{{ o2.etaW3LowerLimit|X04 }}", X"0000", X"0000"),
-        (X"{{ o1.etaW4UpperLimit|X04 }}", X"{{ o2.etaW4UpperLimit|X04 }}", X"0000", X"0000"), (X"{{ o1.etaW4LowerLimit|X04 }}", X"{{ o2.etaW4LowerLimit|X04 }}", X"0000", X"0000"),
-        (X"{{ o1.etaW5UpperLimit|X04 }}", X"{{ o2.etaW5UpperLimit|X04 }}", X"0000", X"0000"), (X"{{ o1.etaW5LowerLimit|X04 }}", X"{{ o2.etaW5LowerLimit|X04 }}", X"0000", X"0000"),
-        ({{ o1.phiFullRange }}, {{ o2.phiFullRange }}, false, false),
-        (X"{{ o1.phiW1UpperLimit|X04 }}", X"{{ o2.phiW1UpperLimit|X04 }}", X"0000", X"0000"), (X"{{ o1.phiW1LowerLimit|X04 }}", X"{{ o2.phiW1LowerLimit|X04 }}", X"0000", X"0000"),
-        ({{ o1.phiW2Ignore }}, {{ o2.phiW2Ignore }}, false, false),
-        (X"{{ o1.phiW2UpperLimit|X04 }}", X"{{ o2.phiW2UpperLimit|X04 }}", X"0000", X"0000"), (X"{{ o1.phiW2LowerLimit|X04 }}", X"{{ o2.phiW2LowerLimit|X04 }}", X"0000", X"0000"),
-        (X"{{ o1.isolationLUT|X01 }}", X"{{ o2.isolationLUT|X01 }}", X"F", X"F"),
-        {{ o3.sliceLow }}, {{ o3.sliceHigh }}, {{ o3.operator }}, {{ o3.type|upper }}_TYPE,
-        X"{{ o3.threshold|X04 }}",
-        {{ o3.etaNrCuts }}, 
-        X"{{ o3.etaW1UpperLimit|X04 }}", X"{{ o3.etaW1LowerLimit|X04 }}",
-        X"{{ o3.etaW2UpperLimit|X04 }}", X"{{ o3.etaW2LowerLimit|X04 }}",
-        X"{{ o3.etaW3UpperLimit|X04 }}", X"{{ o3.etaW3LowerLimit|X04 }}",
-        X"{{ o3.etaW4UpperLimit|X04 }}", X"{{ o3.etaW4LowerLimit|X04 }}",
-        X"{{ o3.etaW5UpperLimit|X04 }}", X"{{ o3.etaW5LowerLimit|X04 }}",
-        {{ o3.phiFullRange }}, X"{{ o3.phiW1UpperLimit|X04 }}", X"{{ o3.phiW1LowerLimit|X04 }}",
-        {{ o3.phiW2Ignore }}, X"{{ o3.phiW2UpperLimit|X04 }}", X"{{ o3.phiW2LowerLimit|X04 }}",
-        X"{{ o3.isolationLUT|X01 }}",
+        (X"{{ o1.threshold|X04 }}", X"{{ o2.threshold|X04 }}", X"{{ o3.threshold|X04 }}", X"{{ o4.threshold|X04 }}"),
+        ({{ o1.etaNrCuts }}, {{ o2.etaNrCuts }}, {{ o3.etaNrCuts }}, {{ o4.etaNrCuts }}),
+        (X"{{ o1.etaW1UpperLimit|X04 }}", X"{{ o2.etaW1UpperLimit|X04 }}", X"{{ o3.etaW1UpperLimit|X04 }}", X"{{ o4.etaW1UpperLimit|X04 }}"), (X"{{ o1.etaW1LowerLimit|X04 }}", X"{{ o2.etaW1LowerLimit|X04 }}", X"{{ o3.etaW1LowerLimit|X04 }}", X"{{ o4.etaW1LowerLimit|X04 }}"),
+        (X"{{ o1.etaW2UpperLimit|X04 }}", X"{{ o2.etaW2UpperLimit|X04 }}", X"{{ o3.etaW2UpperLimit|X04 }}", X"{{ o4.etaW2UpperLimit|X04 }}"), (X"{{ o1.etaW2LowerLimit|X04 }}", X"{{ o2.etaW2LowerLimit|X04 }}", X"{{ o3.etaW2LowerLimit|X04 }}", X"{{ o4.etaW2LowerLimit|X04 }}"),
+        (X"{{ o1.etaW3UpperLimit|X04 }}", X"{{ o2.etaW3UpperLimit|X04 }}", X"{{ o3.etaW3UpperLimit|X04 }}", X"{{ o4.etaW3UpperLimit|X04 }}"), (X"{{ o1.etaW3LowerLimit|X04 }}", X"{{ o2.etaW3LowerLimit|X04 }}", X"{{ o3.etaW3LowerLimit|X04 }}", X"{{ o4.etaW3LowerLimit|X04 }}"),
+        (X"{{ o1.etaW4UpperLimit|X04 }}", X"{{ o2.etaW4UpperLimit|X04 }}", X"{{ o3.etaW4UpperLimit|X04 }}", X"{{ o4.etaW4UpperLimit|X04 }}"), (X"{{ o1.etaW4LowerLimit|X04 }}", X"{{ o2.etaW4LowerLimit|X04 }}", X"{{ o3.etaW4LowerLimit|X04 }}", X"{{ o4.etaW4LowerLimit|X04 }}"),
+        (X"{{ o1.etaW5UpperLimit|X04 }}", X"{{ o2.etaW5UpperLimit|X04 }}", X"{{ o3.etaW5UpperLimit|X04 }}", X"{{ o4.etaW5UpperLimit|X04 }}"), (X"{{ o1.etaW5LowerLimit|X04 }}", X"{{ o2.etaW5LowerLimit|X04 }}", X"{{ o3.etaW5LowerLimit|X04 }}", X"{{ o4.etaW5LowerLimit|X04 }}"),
+        ({{ o1.phiFullRange }}, {{ o2.phiFullRange }}, {{ o3.phiFullRange }}, {{ o4.phiFullRange }}),
+        (X"{{ o1.phiW1UpperLimit|X04 }}", X"{{ o2.phiW1UpperLimit|X04 }}", X"{{ o3.phiW1UpperLimit|X04 }}", X"{{ o4.phiW1UpperLimit|X04 }}"), (X"{{ o1.phiW1LowerLimit|X04 }}", X"{{ o2.phiW1LowerLimit|X04 }}", X"{{ o3.phiW1LowerLimit|X04 }}", X"{{ o4.phiW1LowerLimit|X04 }}"),
+        ({{ o1.phiW2Ignore }}, {{ o2.phiW2Ignore }}, {{ o3.phiW2Ignore }}, {{ o4.phiW2Ignore }}),
+        (X"{{ o1.phiW2UpperLimit|X04 }}", X"{{ o2.phiW2UpperLimit|X04 }}", X"{{ o3.phiW2UpperLimit|X04 }}", X"{{ o4.phiW2UpperLimit|X04 }}"), (X"{{ o1.phiW2LowerLimit|X04 }}", X"{{ o2.phiW2LowerLimit|X04 }}", X"{{ o3.phiW2LowerLimit|X04 }}", X"{{ o4.phiW2LowerLimit|X04 }}"),
+        (X"{{ o1.isolationLUT|X01 }}", X"{{ o2.isolationLUT|X01 }}", X"{{ o3.isolationLUT|X01 }}", X"{{ o4.isolationLUT|X01 }}"),
+        {{ o5.sliceLow }}, {{ o5.sliceHigh }}, {{ o5.operator }}, {{ o5.type|upper }}_TYPE,
+        X"{{ o5.threshold|X04 }}",
+        {{ o5.etaNrCuts }}, 
+        X"{{ o5.etaW1UpperLimit|X04 }}", X"{{ o5.etaW1LowerLimit|X04 }}",
+        X"{{ o5.etaW2UpperLimit|X04 }}", X"{{ o5.etaW2LowerLimit|X04 }}",
+        X"{{ o5.etaW3UpperLimit|X04 }}", X"{{ o5.etaW3LowerLimit|X04 }}",
+        X"{{ o5.etaW4UpperLimit|X04 }}", X"{{ o5.etaW4LowerLimit|X04 }}",
+        X"{{ o5.etaW5UpperLimit|X04 }}", X"{{ o5.etaW5LowerLimit|X04 }}",
+        {{ o5.phiFullRange }}, X"{{ o5.phiW1UpperLimit|X04 }}", X"{{ o5.phiW1LowerLimit|X04 }}",
+        {{ o5.phiW2Ignore }}, X"{{ o5.phiW2UpperLimit|X04 }}", X"{{ o5.phiW2LowerLimit|X04 }}",
+        X"{{ o5.isolationLUT|X01 }}",
         X"{{ condition.deltaEtaOrm.upper|X08 }}", X"{{ condition.deltaEtaOrm.lower|X08 }}",
         X"{{ condition.deltaPhiOrm.upper|X08 }}", X"{{ condition.deltaPhiOrm.lower|X08 }}",
         X"{{ condition.deltaROrm.upper|X16 }}", X"{{ condition.deltaROrm.lower|X16 }}",
@@ -44,61 +43,13 @@
         false
   {%- endif %}
     )
-    port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o3.type|lower }}_bx_{{ o3.bx }}({{ o3.sliceLow }} to {{ o3.sliceHigh }}),
-        diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_eta_vector, diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_phi_vector,
+    port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o5.type|lower }}_bx_{{ o5.bx }}({{ o5.sliceLow }} to {{ o5.sliceHigh }}),
+        diff_{{ o1.type|lower }}_{{ o5.type|lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_eta_vector, diff_{{ o1.type|lower }}_{{ o5.type|lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_phi_vector,
   {%- if condition.twoBodyPt.enabled == "true" %}
         {{ condition.vhdl_signal }},
         {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }});
   {%- else %}
         {{ condition.vhdl_signal }});
   {%- endif %}
-  {%- elif o1.type != o2.type %}
-{{ condition.vhdl_signal }}_i: entity work.calo_conditions_orm_v4_single_double
-    generic map(
-        {{ condition.deltaEtaOrm.enabled }}, {{ condition.deltaPhiOrm.enabled }}, {{ condition.deltaROrm.enabled }},
-        {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o2.sliceLow }}, {{ o2.sliceHigh }},
-        {{ nr_requirements }}, {{ o1.operator }}, {{ o1.type }}_TYPE,
-        (X"{{ o1.threshold|X04 }}", X"0000", X"0000", X"0000"),
-        ({{ o1.etaNrCuts }}, false, false, false),
-        (X"{{ o1.etaW1UpperLimit|X04 }}", X"0000", X"0000", X"0000"), (X"{{ o1.etaW1LowerLimit|X04 }}", X"0000", X"0000", X"0000"),
-        (X"{{ o1.etaW2UpperLimit|X04 }}", X"0000", X"0000", X"0000"), (X"{{ o1.etaW2LowerLimit|X04 }}", X"0000", X"0000", X"0000"),
-        (X"{{ o1.etaW3UpperLimit|X04 }}", X"0000", X"0000", X"0000"), (X"{{ o1.etaW3LowerLimit|X04 }}", X"0000", X"0000", X"0000"),
-        (X"{{ o1.etaW4UpperLimit|X04 }}", X"0000", X"0000", X"0000"), (X"{{ o1.etaW4LowerLimit|X04 }}", X"0000", X"0000", X"0000"),
-        (X"{{ o1.etaW5UpperLimit|X04 }}", X"0000", X"0000", X"0000"), (X"{{ o1.etaW5LowerLimit|X04 }}", X"0000", X"0000", X"0000"),
-        ({{ o1.phiFullRange }}, false, false, false),
-        (X"{{ o1.phiW1UpperLimit|X04 }}", X"0000", X"0000", X"0000"), (X"{{ o1.phiW1LowerLimit|X04 }}", X"0000", X"0000", X"0000"),
-        ({{ o1.phiW2Ignore }}, false, false, false),
-        (X"{{ o1.phiW2UpperLimit|X04 }}", X"0000", X"0000", X"0000"), (X"{{ o1.phiW2LowerLimit|X04 }}", X"0000", X"0000", X"0000"),
-        (X"{{ o1.isolationLUT|X01 }}", X"F", X"F", X"F"),
-        {{ o2.sliceLow }}, {{ o2.sliceHigh }}, {{ o2.operator }}, {{ o2.type|upper }}_TYPE,
-        X"{{ o2.threshold|X04 }}",
-        ({{ o2.etaNrCuts }}, false, false, false),
-        (X"{{ o2.etaW1UpperLimit|X04 }}", X"0000", X"0000", X"0000"), (X"{{ o2.etaW1LowerLimit|X04 }}", X"0000", X"0000", X"0000"),
-        (X"{{ o2.etaW2UpperLimit|X04 }}", X"0000", X"0000", X"0000"), (X"{{ o2.etaW2LowerLimit|X04 }}", X"0000", X"0000", X"0000"),
-        (X"{{ o2.etaW3UpperLimit|X04 }}", X"0000", X"0000", X"0000"), (X"{{ o2.etaW3LowerLimit|X04 }}", X"0000", X"0000", X"0000"),
-        (X"{{ o2.etaW4UpperLimit|X04 }}", X"0000", X"0000", X"0000"), (X"{{ o2.etaW4LowerLimit|X04 }}", X"0000", X"0000", X"0000"),
-        (X"{{ o2.etaW5UpperLimit|X04 }}", X"0000", X"0000", X"0000"), (X"{{ o2.etaW5LowerLimit|X04 }}", X"0000", X"0000", X"0000"),
-        {{ o2.phiFullRange }}, X"{{ o2.phiW1UpperLimit|X04 }}", X"{{ o2.phiW1LowerLimit|X04 }}",
-        {{ o2.phiW2Ignore }}, X"{{ o2.phiW2UpperLimit|X04 }}", X"{{ o2.phiW2LowerLimit|X04 }}",
-        X"{{ o2.isolationLUT|X01 }}",
-        X"{{ condition.deltaEtaOrm.upper|X08 }}", X"{{ condition.deltaEtaOrm.lower|X08 }}",
-        X"{{ condition.deltaPhiOrm.upper|X08 }}", X"{{ condition.deltaPhiOrm.lower|X08 }}",
-        X"{{ condition.deltaROrm.upper|X16 }}", X"{{ condition.deltaROrm.lower|X16 }}",
-  {%- if condition.twoBodyPt.enabled == "true" %}
-        true, {{ o1.type|upper }}_PT_VECTOR_WIDTH, X"{{ condition.twoBodyPt.threshold|X16 }}",
-        CALO_SIN_COS_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o1.type|upper }}_SIN_COS_PRECISION
-  {%- else %}
-        false
-  {%- endif %}
-    )
-    port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o2.type|lower }}_bx_{{ o2.bx }}({{ o2.sliceLow }} to {{ o2.sliceHigh }}),
-        diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_eta_vector, diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_vector,
-  {%- if condition.twoBodyPt.enabled == "true" %}
-        {{ condition.vhdl_signal }},
-        {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }});
-  {%- else %}
-        {{ condition.vhdl_signal }});
-  {%- endif %}
-    {%- endif %}
 {% endblock instantiate_calo_conditions_orm %}
 {# eof #}
