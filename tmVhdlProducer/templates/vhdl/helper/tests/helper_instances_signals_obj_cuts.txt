@@ -1,0 +1,20 @@
+{%- block helper_instances_signals_obj_cuts %}
+{%- for i in comp_obj_cuts_list | unique %}
+  {%- set list_split = i.split('_') %}
+  {%- if list_split[0] == 'pt' %}
+    signal comp_{{ list_split[0] }}_{{ list_split[1]|lower }}_bx_{{ list_split[3] }}_{{ list_split[6] }} : {{ list_split[1]|lower }}_obj_t;
+  {%- elif list_split[0] == 'eta' %}
+    signal comp_{{ list_split[0] }}_{{ list_split[1]|lower }}_bx_{{ list_split[3] }}_{{ list_split[6] }}_{{ list_split[7] }} : {{ list_split[1]|lower }}_obj_t;
+  {%- elif list_split[0] == 'phi' %}
+    signal comp_{{ list_split[0] }}_{{ list_split[1]|lower }}_bx_{{ list_split[3] }}_{{ list_split[6] }}_{{ list_split[7] }} : {{ list_split[1]|lower }}_obj_t;
+  {%- elif list_split[0] == 'iso' %}
+    signal comp_{{ list_split[0] }}_{{ list_split[1]|lower }}_bx_{{ list_split[3] }}_{{ list_split[6] }} : {{ list_split[1]|lower }}_obj_t;
+  {%- elif list_split[0] == 'qual' %}
+    signal comp_{{ list_split[0] }}_{{ list_split[1]|lower }}_bx_{{ list_split[3] }}_{{ list_split[6] }} : {{ list_split[1]|lower }}_obj_t;
+  {%- elif list_split[0] == 'charge' %}
+    signal comp_{{ list_split[0] }}_{{ list_split[1]|lower }}_bx_{{ list_split[3] }}_{{ list_split[6] }} : {{ list_split[1]|lower }}_obj_t;
+  {%- elif list_split[0] == 'count' %}
+    signal comp_{{ list_split[0] }}_{{ list_split[1]|lower }}_bx_{{ list_split[3] }}_{{ list_split[6] }} : {{ list_split[1]|lower }}_obj_t;
+  {%- endif %}
+{%- endfor %}
+{%- endblock helper_instances_signals_obj_cuts %}

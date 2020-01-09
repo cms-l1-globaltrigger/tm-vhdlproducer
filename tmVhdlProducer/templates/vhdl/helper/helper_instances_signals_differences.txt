@@ -1,0 +1,38 @@
+{%- block helper_instances_signals_differences %}
+{%- for condition in module.caloCaloCorrConditions %}
+    {%- include "helper/helper_calc_deta_dphi_signals.txt" %}
+{%- endfor %}
+{%- for condition in module.caloEsumCorrConditions %}
+    {%- include "helper/helper_calc_deta_dphi_signals.txt" %}
+{%- endfor %}
+{%- for condition in module.caloCaloCorrOvRmConditions %}
+    {%- include "helper/helper_calc_deta_dphi_ovrm_signals.txt" %}
+{%- endfor %}
+{%- for condition in module.caloMuonCorrConditions %}
+    {%- include "helper/helper_calc_deta_dphi_signals.txt" %}
+{%- endfor %}
+{%- for condition in module.muonMuonCorrConditions %}
+    {%- include "helper/helper_calc_deta_dphi_signals.txt" %}
+{%- endfor %}
+{%- for condition in module.muonEsumCorrConditions %}
+    {%- include "helper/helper_calc_deta_dphi_signals.txt" %}
+{%- endfor %}
+{%- set sig_calc_deta_list_int = [] %}
+{%- for i in sig_calc_deta_list | unique %}
+    {%- set list_split = i.split('_') %}
+    {%- set sig_calc_deta_list_int2 = sig_calc_deta_list_int.append(list_split[0]|lower+'_'+list_split[1]|lower) %}
+{%- endfor %}
+{%- for i in sig_calc_deta_list_int | unique %}
+    {%- set list_split = i.split('_') %}
+    signal deta_calc_{{ list_split[0]|lower }}_{{ list_split[1]|lower }} : obj_bx_max_eta_range_array;
+{%- endfor %}
+{%- set sig_calc_dphi_list_int = [] %}
+{%- for i in sig_calc_dphi_list | unique %}
+    {%- set list_split = i.split('_') %}
+    {%- set sig_calc_dphi_list_int2 = sig_calc_dphi_list_int.append(list_split[0]|lower+'_'+list_split[1]|lower) %}
+{%- endfor %}
+{%- for i in sig_calc_dphi_list_int | unique %}
+    {%- set list_split = i.split('_') %}
+    signal dphi_calc_{{ list_split[0]|lower }}_{{ list_split[1]|lower }} : obj_bx_max_phi_range_array;
+{%- endfor %}
+{%- endblock helper_instances_signals_differences %}

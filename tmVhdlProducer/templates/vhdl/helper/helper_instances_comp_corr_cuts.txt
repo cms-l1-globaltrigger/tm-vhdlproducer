@@ -1,0 +1,42 @@
+{%- block helper_instances_comp_corr_cuts %}
+{%- for i in comp_corr_cuts_list | unique %}
+  {%- set list_split = i.split('_') %}    
+  {%- if list_split[0] == 'deta' %}
+    {%- with obj1 = list_split[1], obj2 = list_split[2], bx1 = list_split[4], bx2 = list_split[6], limit_l = list_split[7].split('x')[1], limit_u = list_split[8].split('x')[1] %}
+    {%- include "instances/comparator_deta_cut.vhd" %}
+    {%- endwith %}
+  {%- elif list_split[0] == 'dphi' %}
+    {%- with obj1 = list_split[1], obj2 = list_split[2], bx1 = list_split[4], bx2 = list_split[6], limit_l = list_split[7].split('x')[1], limit_u = list_split[8].split('x')[1] %}
+    {%- include "instances/comparator_dphi_cut.vhd" %}
+    {%- endwith %}
+  {%- elif list_split[0] == 'dr' %}
+    {%- with obj1 = list_split[1], obj2 = list_split[2], bx1 = list_split[4], bx2 = list_split[6], limit_l = list_split[7].split('x')[1], limit_u = list_split[8].split('x')[1] %}
+    {%- include "instances/comparator_dr_cut.vhd" %}
+    {%- endwith %}
+  {%- elif list_split[0] == 'invmass' %}
+    {%- with obj1 = list_split[1], obj2 = list_split[2], bx1 = list_split[4], bx2 = list_split[6], limit_l = list_split[7].split('x')[1], limit_u = list_split[8].split('x')[1] %}
+    {%- include "instances/comparator_inv_mass_cut.vhd" %}
+    {%- endwith %}
+  {%- elif list_split[0] == 'transmass' %}
+    {%- with obj1 = list_split[1], obj2 = list_split[2], bx1 = list_split[4], bx2 = list_split[6], limit_l = list_split[7].split('x')[1], limit_u = list_split[8].split('x')[1] %}
+    {%- include "instances/comparator_trans_mass_cut.vhd" %}
+    {%- endwith %}
+  {%- elif list_split[0] == 'tbpt' %}
+    {%- with obj1 = list_split[1], obj2 = list_split[2], bx1 = list_split[4], bx2 = list_split[6], limit_l = list_split[7].split('x')[1], limit_u = list_split[8].split('x')[1] %}
+    {%- include "instances/comparator_tbpt_cut.vhd" %}
+    {%- endwith %}
+  {%- elif list_split[0] == 'detaorm' %}
+    {%- with obj1 = list_split[1], obj2 = list_split[2], bx1 = list_split[4], bx2 = list_split[6], limit_l = list_split[7].split('x')[1] %}
+    {%- include "instances/comparator_deta_cut.vhd" %}
+    {%- endwith %}
+  {%- elif list_split[0] == 'dphiorm' %}
+    {%- with obj1 = list_split[1], obj2 = list_split[2], bx1 = list_split[4], bx2 = list_split[6], limit_l = list_split[7].split('x')[1], limit_u = list_split[8].split('x')[1] %}
+    {%- include "instances/comparator_dphi_cut.vhd" %}
+    {%- endwith %}
+  {%- elif list_split[0] == 'drorm' %}
+    {%- with obj1 = list_split[1], obj2 = list_split[2], bx1 = list_split[4], bx2 = list_split[6], limit_l = list_split[7].split('x')[1], limit_u = list_split[8].split('x')[1] %}
+    {%- include "instances/comparator_dr_cut.vhd" %}
+    {%- endwith %}
+  {%- endif %}
+{%- endfor %}
+{%- endblock helper_instances_comp_corr_cuts %}

@@ -1,0 +1,54 @@
+{%- block helper_eta_cuts %}
+    {%- set o1 = condition.objects[0] %}
+    {%- if condition.objects[0].etaNrCuts > 0 %}
+    comp_eta_{{ o1.type|lower }}_bx{{ o1.bx }}_0x{{ o1.etaW1LowerLimit|X04 }}_0x_{{ o1.etaW1UpperLimit|X04 }}_i: entity work.comparators_obj_cuts
+        generic map(
+            N_{{ o1.type|upper }}_OBJECTS, {{ o1.type|upper }}_ETA_WIDTH,
+            ETA, X"{{ o1.etaW1LowerLimit|X04 }}", X"{{ o1.etaW1UpperLimit|X04 }}", X"0000", "ign"
+        )
+        port map(
+            lhc_clk, data.{{ o1.type|lower }}(bx({{ o1.bx_raw }})).eta, comp_eta_{{ o1.type|lower }}_bx_{{ o1.bx }}_0x{{ o1.etaW1LowerLimit|X04 }}_0x{{ o1.etaW1UpperLimit|X04 }}
+        );
+    {%- endif %}
+    {%- if condition.objects[0].etaNrCuts > 1 %}
+    comp_eta_{{ o1.type|lower }}_bx{{ o1.bx }}_0x{{ o1.etaW2LowerLimit|X04 }}_0x_{{ o1.etaW2UpperLimit|X04 }}_i: entity work.comparators_obj_cuts
+        generic map(
+            N_{{ o1.type|upper }}_OBJECTS, {{ o1.type|upper }}_ETA_WIDTH,
+            ETA, X"{{ o1.etaW2LowerLimit|X04 }}", X"{{ o1.etaW2UpperLimit|X04 }}", X"0000", "ign"
+        )
+        port map(
+            lhc_clk, data.{{ o1.type|lower }}(bx({{ o1.bx_raw }})).eta, comp_eta_{{ o1.type|lower }}_bx_{{ o1.bx }}_0x{{ o1.etaW2LowerLimit|X04 }}_0x{{ o1.etaW2UpperLimit|X04 }}
+        );
+    {%- endif %}
+    {%- if condition.objects[0].etaNrCuts > 2 %}
+    comp_eta_{{ o1.type|lower }}_bx{{ o1.bx }}_0x{{ o1.etaW3LowerLimit|X04 }}_0x_{{ o1.etaW3UpperLimit|X04 }}_i: entity work.comparators_obj_cuts
+        generic map(
+            N_{{ o1.type|upper }}_OBJECTS, {{ o1.type|upper }}_ETA_WIDTH,
+            ETA, X"{{ o1.etaW3LowerLimit|X04 }}", X"{{ o1.etaW3UpperLimit|X04 }}", X"0000", "ign"
+        )
+        port map(
+            lhc_clk, data.{{ o1.type|lower }}(bx({{ o1.bx_raw }})).eta, comp_eta_{{ o1.type|lower }}_bx_{{ o1.bx }}_0x{{ o1.etaW3LowerLimit|X04 }}_0x{{ o1.etaW3UpperLimit|X04 }}
+        );
+    {%- endif %}
+    {%- if condition.objects[0].etaNrCuts > 3 %}
+    comp_eta_{{ o1.type|lower }}_bx{{ o1.bx }}_0x{{ o1.etaW4LowerLimit|X04 }}_0x_{{ o1.etaW4UpperLimit|X04 }}_i: entity work.comparators_obj_cuts
+        generic map(
+            N_{{ o1.type|upper }}_OBJECTS, {{ o1.type|upper }}_ETA_WIDTH,
+            ETA, X"{{ o1.etaW4LowerLimit|X04 }}", X"{{ o1.etaW4UpperLimit|X04 }}", X"0000", "ign"
+        )
+        port map(
+            lhc_clk, data.{{ o1.type|lower }}(bx({{ o1.bx_raw }})).eta, comp_eta_{{ o1.type|lower }}_bx_{{ o1.bx }}_0x{{ o1.etaW4LowerLimit|X04 }}_0x{{ o1.etaW4UpperLimit|X04 }}
+        );
+    {%- endif %}
+    {%- if condition.objects[0].etaNrCuts > 4 %}
+    comp_eta_{{ o1.type|lower }}_bx{{ o1.bx }}_0x{{ o1.etaW5LowerLimit|X04 }}_0x_{{ o1.etaW5UpperLimit|X04 }}_i: entity work.comparators_obj_cuts
+        generic map(
+            N_{{ o1.type|upper }}_OBJECTS, {{ o1.type|upper }}_ETA_WIDTH,
+            ETA, X"{{ o1.etaW5LowerLimit|X04 }}", X"{{ o1.etaW5UpperLimit|X04 }}", X"0000", "ign"
+        )
+        port map(
+            lhc_clk, data.{{ o1.type|lower }}(bx({{ o1.bx_raw }})).eta, comp_eta_{{ o1.type|lower }}_bx_{{ o1.bx }}_0x{{ o1.etaW5LowerLimit|X04 }}_0x{{ o1.etaW5UpperLimit|X04 }}
+        );
+    {%- endif %}
+{%- endblock helper_eta_cuts %}
+{# eof #}

@@ -1,0 +1,35 @@
+{%- block helper_instances_signals_corr_cuts %}
+{%- for i in comp_corr_cuts_list | unique %}
+  {%- set list_split = i.split('_') %}
+  {%- with cut = list_split[0], obj1 = list_split[1], obj2 = list_split[2], bx1 = list_split[4], bx2 = list_split[6], bx1_raw = list_split[9], bx2_raw = list_split[10] %}
+  {%- set corr_cuts_list2 = corr_cuts_list.append(cut+'_'+obj1+'_'+obj2) %}
+  {%- endwith %}
+{%- endfor %}
+{%- for i in sig_calc_deta_list | unique %}
+  {%- set list_split = i.split('_') %}
+  {%- with obj1 = list_split[0], obj2 = list_split[1] %}
+  {%- set corr_cuts_list2 = corr_cuts_list.append('deta_'+obj1+'_'+obj2) %}
+  {%- endwith %}
+{%- endfor %}
+{%- for i in sig_calc_dphi_list | unique %}
+  {%- set list_split = i.split('_') %}
+  {%- with obj1 = list_split[0], obj2 = list_split[1] %}
+  {%- set corr_cuts_list2 = corr_cuts_list.append('dphi_'+obj1+'_'+obj2) %}
+  {%- endwith %}
+{%- endfor %}
+{%- for i in sig_calc_dphi_list | unique %}
+  {%- set list_split = i.split('_') %}
+  {%- with obj1 = list_split[0], obj2 = list_split[1] %}
+  {%- set corr_cuts_list2 = corr_cuts_list.append('cosh_deta_'+obj1+'_'+obj2) %}
+  {%- endwith %}
+{%- endfor %}
+{%- for i in sig_calc_dphi_list | unique %}
+  {%- set list_split = i.split('_') %}
+  {%- with obj1 = list_split[0], obj2 = list_split[1] %}
+  {%- set corr_cuts_list2 = corr_cuts_list.append('cos_dphi_'+obj1+'_'+obj2) %}
+  {%- endwith %}
+{%- endfor %}
+{%- for i in corr_cuts_list | unique %}
+    signal {{ i|lower }} :  obj_bx_corr_cuts_std_logic_array;
+{%- endfor %}
+{%- endblock helper_instances_signals_corr_cuts %}

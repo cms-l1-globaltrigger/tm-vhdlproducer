@@ -1,0 +1,11 @@
+{%- block helper_comp_charge_corr_signals %}
+  {%- if condition.nr_objects == 2 and condition.chargeCorrelation != 'ig' %}
+    {%- set comp_charge_corr_list2 = comp_charge_corr_list.append('cc_double_bx_'+condition.objects[0].bx+'_bx_'+condition.objects[1].bx+'_cc_'+condition.chargeCorrelation|lower+'_'+condition.objects[0].bx_raw|string+'_'+condition.objects[1].bx_raw|string) %}
+  {%- endif %}
+  {%- if condition.nr_objects == 3 and condition.chargeCorrelation != 'ig' %}
+    {%- set comp_charge_corr_list2 = comp_charge_corr_list.append('cc_triple_bx_'+condition.objects[0].bx+'_bx_'+condition.objects[1].bx+'_cc_'+condition.chargeCorrelation|lower+'_'+condition.objects[0].bx_raw|string+'_'+condition.objects[1].bx_raw|string) %}
+  {%- endif %}
+  {%- if condition.nr_objects == 4 and condition.chargeCorrelation != 'ig' %}
+    {%- set comp_charge_corr_list2 = comp_charge_corr_list.append('cc_quad_bx_'+condition.objects[0].bx+'_bx_'+condition.objects[1].bx+'_cc_'+condition.chargeCorrelation|lower+'_'+condition.objects[0].bx_raw|string+'_'+condition.objects[1].bx_raw|string) %}
+  {%- endif %}
+{%- endblock helper_comp_charge_corr_signals %}

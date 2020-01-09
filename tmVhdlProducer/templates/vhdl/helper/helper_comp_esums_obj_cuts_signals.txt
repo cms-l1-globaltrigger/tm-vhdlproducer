@@ -1,0 +1,9 @@
+{%- block helper_comp_calos_obj_cuts_signals %}
+  {%- set comp_obj_cuts_list2 = comp_obj_cuts_list.append('pt_'+obj.type+'_bx_'+obj.bx+'_0x'+obj.threshold|X04|lower+'_'+obj.operator|lower) %}
+  {%- if obj.phiFullRange == false %}
+    {%- set comp_obj_cuts_list2 = comp_obj_cuts_list.append('phi_'+obj.type+'_bx_'+obj.bx+'_0x'+obj.phiW1LowerLimit|X04|lower+'_0x'+obj.phiW1UpperLimit|X04|lower) %}
+  {%- endif %}
+  {%- if obj.phiW2Ignore == false %}
+    {%- set comp_obj_cuts_list2 = comp_obj_cuts_list.append('phi_'+obj.type+'_bx_'+obj.bx+'_0x'+obj.phiW2LowerLimit|X04|lower+'_0x'+obj.phiW2UpperLimit|X04|lower) %}
+  {%- endif %}
+{%- endblock helper_comp_calos_obj_cuts_signals %}

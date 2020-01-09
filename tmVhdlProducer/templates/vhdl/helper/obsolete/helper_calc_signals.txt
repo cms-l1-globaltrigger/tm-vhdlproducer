@@ -1,0 +1,8 @@
+{%- block helper_calc_signals %}
+  {%- if condition.deltaEta.enabled == 'true' or condition.deltaR.enabled == 'true' or (condition.mass.enabled == 'true' and condition.mass.type == 0) %}
+    signal deta_calc_{{ condition.objects[0].type|lower }}_{{ condition.objects[1].type|lower }} : obj_bx_max_eta_range_array;
+  {%- endif %}
+  {%- if condition.deltaPhi.enabled == 'true' or condition.deltaR.enabled == 'true' or condition.mass.enabled == 'true' %}
+    signal dphi_calc_{{ condition.objects[0].type|lower }}_{{ condition.objects[1].type|lower }} : obj_bx_max_phi_range_array;
+  {%- endif %}
+{%- endblock helper_calc_signals %}

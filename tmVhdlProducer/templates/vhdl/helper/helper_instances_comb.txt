@@ -1,0 +1,16 @@
+{%- block helper_instances_comb %}
+{%- for i in comb_signals_list | unique %}
+  {%- set list_split = i.split('_') %}    
+  {%- with elem = i, elem_split = list_split %}
+    {%- if elem_split[3] == 'count' %}
+      {%- include "helper/helper_comb_and_count.txt" %}
+    {%- elif elem_split[0]|lower == 'mu' %}
+      {%- include "helper/helper_comb_and_muons.txt" %}
+    {%- elif elem_split[0]|lower == 'eg' or elem_split[0]|lower == 'jet' or elem_split[0]|lower == 'tau' %}
+      {%- include "helper/helper_comb_and_calos.txt" %}
+    {%- else %}
+      {%- include "helper/helper_comb_and_esums.txt" %}
+    {%- endif %} 
+  {%- endwith %}
+{%- endfor %}
+{%- endblock helper_instances_comb %}

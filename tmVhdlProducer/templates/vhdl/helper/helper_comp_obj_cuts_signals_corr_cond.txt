@@ -1,0 +1,8 @@
+{%- block helper_comp_obj_cuts_signals_corr_cond %}
+    {%- with obj = obj1 %}
+    {%- include  "helper/helper_comp_obj_cuts_signals.txt" %}
+    {%- endwith %}
+    {%- with obj = obj2 %}
+    {%- include  "helper/helper_comp_obj_cuts_signals.txt" %}
+    {%- endwith %}
+{%- endblock helper_comp_obj_cuts_signals_corr_cond %}

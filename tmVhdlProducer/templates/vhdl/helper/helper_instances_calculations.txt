@@ -1,0 +1,53 @@
+{%- block helper_instances_calculations %}
+{%- set charge_corr_bx_list = [] %}
+{%- for i in comp_charge_corr_list | unique %}
+  {%- set list_split = i.split('_') %}
+  {%- with bx1 = list_split[3], bx2 = list_split[5] %}
+  {%- set charge_corr_bx_list2 = charge_corr_bx_list.append(bx1+'_'+bx2) %}
+  {%- endwith %}
+{%- endfor %}
+{%- for i in charge_corr_bx_list | unique %}
+  {%- set list_split = i.split('_') %}
+  {%- with bx1 = list_split[0], bx2 = list_split[1] %}
+    {%- include "instances/muon_charge_correlations_calc.vhd" %}
+  {%- endwith %}
+{%- endfor %}
+{%- for i in sig_calc_deta_list | unique %}
+  {% set list_split = i.split('_') %}
+  {%- with obj1 = list_split[0], obj2 = list_split[1], bx1 = list_split[2], bx2 = list_split[3] %}
+    {%- include "instances/deta_calc.vhd" %}
+    {%- include "instances/deta_lut.vhd" %}
+  {%- endwith %}
+{%- endfor %}
+{%- for i in sig_calc_dphi_list | unique %}
+  {% set list_split = i.split('_') %}
+  {%- with obj1 = list_split[0], obj2 = list_split[1], bx1 = list_split[2], bx2 = list_split[3] %}
+    {%- include "instances/dphi_calc.vhd" %}
+    {%- include "instances/dphi_lut.vhd" %}
+  {%- endwith %}
+{%- endfor %}
+{%- set corr_cuts_bx_list = [] %}
+{%- for i in comp_corr_cuts_list | unique %}
+  {%- set list_split = i.split('_') %}
+  {%- with cut = list_split[0], obj1 = list_split[1], obj2 = list_split[2], bx1 = list_split[4], bx2 = list_split[6] %}
+  {%- set corr_cuts_bx_list2 = corr_cuts_bx_list.append(cut+'_'+obj1+'_'+obj2+'_'+bx1+'_'+bx2) %}
+  {%- endwith %}
+{%- endfor %}
+{%- for i in corr_cuts_bx_list | unique %}
+  {%- set list_split = i.split('_') %}    
+  {%- with obj1 = list_split[1], obj2 = list_split[2], bx1 = list_split[3], bx2 = list_split[4] %}
+    {%- if list_split[0] == 'dr' %}
+    {%- include "instances/delta_r.vhd" %}
+    {%- endif %}
+    {%- if list_split[0] == 'invmass' %}
+    {%- include "instances/cosh_deta_lut.vhd" %}
+    {%- include "instances/cos_dphi_lut.vhd" %}
+    {%- include "instances/invariant_mass.vhd" %}
+    {%- endif %}
+    {%- if list_split[0] == 'transmass' %}
+    {%- include "instances/cos_dphi_lut.vhd" %}
+    {%- include "instances/transverse_mass.vhd" %}
+    {%- endif %}
+  {%- endwith %}
+{%- endfor %}
+{%- endblock helper_instances_calculations %}

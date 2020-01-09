@@ -1,0 +1,13 @@
+{%- block helper_comp_obj_cuts_signals_corr_cond_ovrm %}
+  {%- with obj = obj1 %}
+      {%- include "helper/helper_comp_calos_obj_cuts_signals.txt" %}
+  {%- endwith %}
+  {%- with obj = obj2 %}
+      {%- include "helper/helper_comp_calos_obj_cuts_signals.txt" %}
+  {%- endwith %}
+  {%- if nr_obj > 2 %}
+    {%- with obj = obj3 %}
+      {%- include "helper/helper_comp_calos_obj_cuts_signals.txt" %}
+    {%- endwith %}
+  {%- endif %} 
+{%- endblock helper_comp_obj_cuts_signals_corr_cond_ovrm %}

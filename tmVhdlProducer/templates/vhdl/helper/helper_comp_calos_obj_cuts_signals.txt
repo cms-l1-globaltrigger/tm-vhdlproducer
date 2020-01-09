@@ -1,0 +1,27 @@
+{%- block helper_comp_calos_obj_cuts_signals %}
+  {%- set comp_obj_cuts_list2 = comp_obj_cuts_list.append('pt_'+obj.type+'_bx_'+obj.bx+'_0x'+obj.threshold|X04|lower+'_'+obj.operator|lower) %}
+  {%- if obj.etaNrCuts > 0 %}
+    {%- set comp_obj_cuts_list2 = comp_obj_cuts_list.append('eta_'+obj.type+'_bx_'+obj.bx+'_0x'+obj.etaW1LowerLimit|X04|lower+'_0x'+obj.etaW1UpperLimit|X04|lower) %}
+  {%- endif %}
+  {%- if obj.etaNrCuts > 1 %}
+    {%- set comp_obj_cuts_list2 = comp_obj_cuts_list.append('eta_'+obj.type+'_bx_'+obj.bx+'_0x'+obj.etaW2LowerLimit|X04|lower+'_0x'+obj.etaW2UpperLimit|X04|lower) %}
+  {%- endif %}
+  {%- if obj.etaNrCuts > 2 %}
+    {%- set comp_obj_cuts_list2 = comp_obj_cuts_list.append('eta_'+obj.type+'_bx_'+obj.bx+'_0x'+obj.etaW3LowerLimit|X04|lower+'_0x'+obj.etaW3UpperLimit|X04|lower) %}
+  {%- endif %}
+  {%- if obj.etaNrCuts > 3 %}
+    {%- set comp_obj_cuts_list2 = comp_obj_cuts_list.append('eta_'+obj.type+'_bx_'+obj.bx+'_0x'+obj.etaW4LowerLimit|X04|lower+'_0x'+obj.etaW4UpperLimit|X04|lower) %}
+  {%- endif %}
+  {%- if obj.etaNrCuts > 4 %}
+    {%- set comp_obj_cuts_list2 = comp_obj_cuts_list.append('eta_'+obj.type+'_bx_'+obj.bx+'_0x'+obj.etaW5LowerLimit|X04|lower+'_0x'+obj.etaW5UpperLimit|X04|lower) %}
+  {%- endif %}
+  {%- if obj.phiFullRange == false %}
+    {%- set comp_obj_cuts_list2 = comp_obj_cuts_list.append('phi_'+obj.type+'_bx_'+obj.bx+'_0x'+obj.phiW1LowerLimit|X04|lower+'_0x'+obj.phiW1UpperLimit|X04|lower) %}
+  {%- endif %}
+  {%- if obj.phiW2Ignore == false %}
+    {%- set comp_obj_cuts_list2 = comp_obj_cuts_list.append('phi_'+obj.type+'_bx_'+obj.bx+'_0x'+obj.phiW2LowerLimit|X04|lower+'_0x'+obj.phiW2UpperLimit|X04|lower) %}
+  {%- endif %}
+  {%- if obj.isolationLUT != 15 %}
+    {%- set comp_obj_cuts_list2 = comp_obj_cuts_list.append('iso_'+obj.type+'_bx_'+obj.bx+'_0x'+obj.isolationLUT|X04|lower) %}
+  {%- endif %}
+{%- endblock helper_comp_calos_obj_cuts_signals %}

@@ -1,0 +1,38 @@
+{%- block helper_comp_corr_ovrm_cuts_signals %}
+  {%- if condition.deltaEta.enabled == 'true' %}
+    {%- set comp_corr_cuts_list2 = comp_corr_cuts_list.append('deta_'+condition.objects[0].type+'_'+condition.objects[1].type+'_bx_'+condition.objects[0].bx+'_bx_'+condition.objects[1].bx+'_0x'+condition.deltaEta.lower|X14+'_0x'+condition.deltaEta.upper|X14) %}
+  {%- endif %}
+  {%- if condition.deltaPhi.enabled == 'true' %}
+    {%- set comp_corr_cuts_list2 = comp_corr_cuts_list.append('dphi_'+condition.objects[0].type+'_'+condition.objects[1].type+'_bx_'+condition.objects[0].bx+'_bx_'+condition.objects[1].bx+'_0x'+condition.deltaPhi.lower|X14+'_0x'+condition.deltaPhi.upper|X14) %}
+  {%- endif %}
+  {%- if condition.deltaR.enabled == 'true' %}
+    {%- set comp_corr_cuts_list2 = comp_corr_cuts_list.append('dr_'+condition.objects[0].type+'_'+condition.objects[1].type+'_bx_'+condition.objects[0].bx+'_bx_'+condition.objects[1].bx+'_0x'+condition.deltaR.lower|X14+'_0x'+condition.deltaR.upper|X14) %}
+  {%- endif %}
+  {%- if condition.mass.enabled == 'true' and condition.mass.type == 0 %}
+    {%- set comp_corr_cuts_list2 = comp_corr_cuts_list.append('invmass_'+condition.objects[0].type+'_'+condition.objects[1].type+'_bx_'+condition.objects[0].bx+'_bx_'+condition.objects[1].bx+'_0x'+condition.mass.lower|X14+'_0x'+condition.mass.upper|X14) %}
+  {%- endif %}
+  {%- if condition.mass.enabled == 'true' and condition.mass.type == 1 %}
+    {%- set comp_corr_cuts_list2 = comp_corr_cuts_list.append('transmass_'+condition.objects[0].type+'_'+condition.objects[1].type+'_bx_'+condition.objects[0].bx+'_bx_'+condition.objects[1].bx+'_0x'+condition.mass.lower|X14+'_0x'+condition.mass.upper|X14) %}
+  {%- endif %}
+  {%- if condition.nr_objects == 2 %}
+    {%- if condition.deltaEtaOrm.enabled == 'true' %}
+    {%- set comp_corr_cuts_list2 = comp_corr_cuts_list.append('deta_'+condition.objects[0].type+'_'+condition.objects[1].type+'_bx_'+condition.objects[0].bx+'_bx_'+condition.objects[1].bx+'_0x'+condition.deltaEtaOrm.lower|X14+'_0x'+condition.deltaEtaOrm.upper|X14) %}
+    {%- endif %}
+    {%- if condition.deltaPhiOrm.enabled == 'true' %}
+    {%- set comp_corr_cuts_list2 = comp_corr_cuts_list.append('dphi_'+condition.objects[0].type+'_'+condition.objects[1].type+'_bx_'+condition.objects[0].bx+'_bx_'+condition.objects[1].bx+'_0x'+condition.deltaPhiOrm.lower|X14+'_0x'+condition.deltaPhiOrm.upper|X14) %}
+    {%- endif %}
+    {%- if condition.deltaROrm.enabled == 'true' %}
+    {%- set comp_corr_cuts_list2 = comp_corr_cuts_list.append('dr_'+condition.objects[0].type+'_'+condition.objects[1].type+'_bx_'+condition.objects[0].bx+'_bx_'+condition.objects[1].bx+'_0x'+condition.deltaROrm.lower|X14+'_0x'+condition.deltaROrm.upper|X14) %}
+    {%- endif %}
+  {%- elif condition.nr_objects == 3 %}
+    {%- if condition.deltaEtaOrm.enabled == 'true' %}
+    {%- set comp_corr_cuts_list2 = comp_corr_cuts_list.append('deta_'+condition.objects[0].type+'_'+condition.objects[2].type+'_bx_'+condition.objects[0].bx+'_bx_'+condition.objects[2].bx+'_0x'+condition.deltaEtaOrm.lower|X14+'_0x'+condition.deltaEtaOrm.upper|X14) %}
+    {%- endif %}
+    {%- if condition.deltaPhiOrm.enabled == 'true' %}
+    {%- set comp_corr_cuts_list2 = comp_corr_cuts_list.append('dphi_'+condition.objects[0].type+'_'+condition.objects[2].type+'_bx_'+condition.objects[0].bx+'_bx_'+condition.objects[2].bx+'_0x'+condition.deltaPhiOrm.lower|X14+'_0x'+condition.deltaPhiOrm.upper|X14) %}
+    {%- endif %}
+    {%- if condition.deltaROrm.enabled == 'true' %}
+    {%- set comp_corr_cuts_list2 = comp_corr_cuts_list.append('dr_'+condition.objects[0].type+'_'+condition.objects[2].type+'_bx_'+condition.objects[0].bx+'_bx_'+condition.objects[2].bx+'_0x'+condition.deltaROrm.lower|X14+'_0x'+condition.deltaROrm.upper|X14) %}
+    {%- endif %}
+  {%- endif %}
+{%- endblock helper_comp_corr_ovrm_cuts_signals %}

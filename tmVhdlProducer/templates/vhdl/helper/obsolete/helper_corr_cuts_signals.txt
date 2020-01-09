@@ -1,0 +1,20 @@
+{%- block helper_corr_cuts_signals %}
+  {%- if condition.deltaEta.enabled == 'true' %}
+    {%- set corr_cuts_list2 = corr_cuts_list.append('deta_'+condition.objects[0].type+'_'+condition.objects[1].type) %}
+  {%- endif %}
+  {%- if condition.deltaPhi.enabled == 'true' %}
+    {%- set corr_cuts_list2 = corr_cuts_list.append('dphi_'+condition.objects[0].type+'_'+condition.objects[1].type) %}
+  {%- endif %}
+  {%- if condition.deltaR.enabled == 'true' %}
+    {%- set corr_cuts_list2 = corr_cuts_list.append('dr_'+condition.objects[0].type+'_'+condition.objects[1].type) %}
+  {%- endif %}
+  {%- if condition.mass.enabled == 'true' and condition.mass.type == 0 %}
+    {%- set corr_cuts_list2 = corr_cuts_list.append('invmass_'+condition.objects[0].type+'_'+condition.objects[1].type) %}
+  {%- endif %}
+  {%- if condition.mass.enabled == 'true' and condition.mass.type == 1 %}
+    {%- set corr_cuts_list2 = corr_cuts_list.append('transmass_'+condition.objects[0].type+'_'+condition.objects[1].type) %}
+  {%- endif %}
+  {%- if condition.twoBodyPt.enabled == 'true' %}
+    {%- set corr_cuts_list2 = corr_cuts_list.append('tbpt_'+condition.objects[0].type+'_'+condition.objects[1].type) %}
+  {%- endif %}
+{%- endblock helper_corr_cuts_signals %}

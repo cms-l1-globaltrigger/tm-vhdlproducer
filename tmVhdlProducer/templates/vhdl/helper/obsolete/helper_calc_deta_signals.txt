@@ -1,0 +1,11 @@
+{%- block helper_calc_deta_signals %}
+  {%- for content in sig_calc_deta %}
+    {%- if content == condition.objects[0].type+":"+condition.objects[1].type %}
+      sig_exists = true
+    {%- endif -%}    
+  {%- endfor %}
+  {%- if sig_exists != 'true' %}
+    signal deta_calc_{{ condition.objects[0].type|lower }}_{{ condition.objects[1].type|lower }} : obj_bx_max_eta_range_array;
+  {%- endif -%}    
+    signal deta_calc_{{ condition.objects[0].type|lower }}_{{ condition.objects[1].type|lower }} : obj_bx_max_eta_range_array;
+{%- endblock helper_calc_deta_signals %}

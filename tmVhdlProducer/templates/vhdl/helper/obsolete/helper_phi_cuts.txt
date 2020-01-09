@@ -1,0 +1,23 @@
+{%- block helper_phi_cuts %}
+    {%- set o1 = condition.objects[0] %}
+    {%- if condition.objects[0].phiFullRange == false %}
+    comp_phi_{{ o1.type|lower }}_bx{{ o1.bx }}_0x{{ o1.phiW1LowerLimit|X04 }}_0x_{{ o1.phiW1UpperLimit|X04 }}_i: entity work.comparators_obj_cuts
+        generic map(
+            N_{{ o1.type|upper }}_OBJECTS, {{ o1.type|upper }}_PHI_WIDTH,
+            PHI, X"{{ o1.phiW1LowerLimit|X04 }}", X"{{ o1.phiW1UpperLimit|X04 }}", X"0000", "ign"
+        )
+        port map(
+            lhc_clk, data.{{ o1.type|lower }}(bx({{ o1.bx_raw }})).phi, comp_phi_{{ o1.type|lower }}_bx_{{ o1.bx }}_0x{{ o1.phiW1LowerLimit|X04 }}_0x{{ o1.phiW1UpperLimit|X04 }}
+        );
+    {%- endif %}
+    {%- if condition.objects[0].phiW2Ignore == false %}
+    comp_phi_{{ o1.type|lower }}_bx{{ o1.bx }}_0x{{ o1.phiW2LowerLimit|X04 }}_0x_{{ o1.phiW2UpperLimit|X04 }}_i: entity work.comparators_obj_cuts
+        generic map(
+            N_{{ o1.type|upper }}_OBJECTS, {{ o1.type|upper }}_PHI_WIDTH,
+            PHI, X"{{ o1.phiW2LowerLimit|X04 }}", X"{{ o1.phiW2UpperLimit|X04 }}", X"0000", "ign"
+        )
+        port map(
+            lhc_clk, data.{{ o1.type|lower }}(bx({{ o1.bx_raw }})).phi, comp_phi_{{ o1.type|lower }}_bx_{{ o1.bx }}_0x{{ o1.phiW2LowerLimit|X04 }}_0x{{ o1.phiW2UpperLimit|X04 }}
+        );
+    {%- endif %}
+{%- endblock helper_phi_cuts %}

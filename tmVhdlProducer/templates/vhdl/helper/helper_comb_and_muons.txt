@@ -1,0 +1,54 @@
+{%- block helper_comb_and_muons %}
+    comb_{{elem|lower}} <= 
+    comp_{{elem_split[3]}}_{{elem_split[0]|lower}}_bx_{{elem_split[2]}}_0x{{elem_split[4]|lower}}
+  {%- if elem_split[6] != '0000' %}
+    and 
+    (
+    comp_{{elem_split[5]}}_{{elem_split[0]|lower}}_bx_{{elem_split[2]}}_0x{{elem_split[6]|lower}}_0x{{elem_split[7]|lower}}
+  {%- endif %}
+  {%- if elem_split[8] != '0000' %}
+    or 
+    comp_{{elem_split[5]}}_{{elem_split[0]|lower}}_bx_{{elem_split[2]}}_0x{{elem_split[8]|lower}}_0x{{elem_split[9]|lower}}
+  {%- endif %}
+  {%- if elem_split[10] != '0000' %}
+    or 
+    comp_{{elem_split[5]}}_{{elem_split[0]|lower}}_bx_{{elem_split[2]}}_0x{{elem_split[10]|lower}}_0x{{elem_split[11]|lower}}
+  {%- endif %}
+  {%- if elem_split[12] != '0000' %}
+    or 
+    comp_{{elem_split[5]}}_{{elem_split[0]|lower}}_bx_{{elem_split[2]}}_0x{{elem_split[12]|lower}}_0x{{elem_split[13]|lower}}
+  {%- endif %}
+  {%- if elem_split[14] != '0000' %}
+    or 
+    comp_{{elem_split[5]}}_{{elem_split[0]|lower}}_bx_{{elem_split[2]}}_0x{{elem_split[14]|lower}}_0x{{elem_split[15]|lower}}
+  {%- endif %}
+  {%- if elem_split[6] != '0000' %}
+    )
+  {%- endif %}
+  {%- if elem_split[17] != '0000' %}
+    and 
+    (
+    comp_{{elem_split[16]}}_{{elem_split[0]|lower}}_bx_{{elem_split[2]}}_0x{{elem_split[17]|lower}}_0x{{elem_split[18]|lower}}
+  {%- endif %}
+  {%- if elem_split[19] != '0000' %}
+    or 
+    comp_{{elem_split[16]}}_{{elem_split[0]|lower}}_bx_{{elem_split[2]}}_0x{{elem_split[19]|lower}}_0x{{elem_split[20]|lower}}
+  {%- endif %}
+  {%- if elem_split[17] != '0000' %}
+    )
+  {%- endif %}
+  {%- if elem_split[22]|lower != '000f' %}
+    and 
+    comp_{{elem_split[21]}}_{{elem_split[0]|lower}}_bx_{{elem_split[2]}}_0x{{elem_split[22]|lower}}
+  {%- endif %}
+  {%- if elem_split[24]|lower != 'ffff' %}
+    and 
+    comp_{{elem_split[23]}}_{{elem_split[0]|lower}}_bx_{{elem_split[2]}}_0x{{elem_split[24]|lower}}
+  {%- endif %}
+  {%- if elem_split[26]|lower != 'ign' %}
+    and 
+    comp_{{elem_split[25]}}_{{elem_split[0]|lower}}_bx_{{elem_split[2]}}_0x{{elem_split[26]|lower}}
+  {%- endif %}
+    ;
+{%- endblock helper_comb_and_muons %}
+

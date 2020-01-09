@@ -77,6 +77,7 @@ def murmurhash(s):
 
 CustomFilters = {
     'X16' : lambda x: "%016X" % int(float(x)),
+    'X14' : lambda x: "%014X" % int(float(x)),
     'X08' : lambda x: "%08X" % int(float(x)),
     'X04' : lambda x: "%04X" % int(float(x)),
     'X01' : lambda x: "%01X" % int(float(x)),
@@ -91,10 +92,12 @@ CustomFilters = {
 }
 
 ModuleTemplates = [
-    'algo_index.vhd',
-    'gtl_module_signals.vhd',
-    'gtl_module_instances.vhd',
-    'ugt_constants.vhd',
+    'l1menu.vhd',
+    'l1menu_pkg.vhd',
+    #'algo_index.vhd',
+    #'gtl_module_signals.vhd',
+    #'gtl_module_instances.vhd',
+    #'ugt_constants.vhd',
 ]
 
 # -----------------------------------------------------------------------------

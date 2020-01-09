@@ -1,0 +1,4 @@
+{%- block helper_comb_and_calos_signals_definition %}
+    signal comb_{{ obj.type|lower }}_bx_{{ obj.bx }}_pt_{{ obj.threshold|X04 }}_eta_{{ obj.etaW1LowerLimit|X04 }}_{{ obj.etaW1UpperLimit|X04 }}_{{ obj.etaW2LowerLimit|X04 }}_{{ obj.etaW2UpperLimit|X04 }}_{{ obj.etaW3LowerLimit|X04 }}_{{ obj.etaW3UpperLimit|X04 }}_{{ obj.etaW4LowerLimit|X04 }}_{{ obj.etaW4UpperLimit|X04 }}_{{ obj.etaW5LowerLimit|X04 }}_{{ obj.etaW5UpperLimit|X04 }}_phi_{{ obj.phiW1LowerLimit|X04 }}_{{ obj.phiW1UpperLimit|X04 }}_{{ obj.phiW2LowerLimit|X04 }}_{{ obj.phiW2UpperLimit|X04 }}_iso_{{ obj.isolationLUT|X04 }} : std_logic;
+{%- endblock helper_comb_and_calos_signals_definition %}
+

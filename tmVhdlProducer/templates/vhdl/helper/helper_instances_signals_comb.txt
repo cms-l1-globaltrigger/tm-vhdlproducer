@@ -1,0 +1,6 @@
+{%- block helper_instances_signals_comb %}
+{%- for i in comb_signals_list | unique %}
+   {%- set list_split = i.split('_') %}
+   signal comb_{{ i | lower }} : {{ list_split[0]|lower }}_obj_t;
+{%- endfor %}
+{%- endblock helper_instances_signals_comb %}

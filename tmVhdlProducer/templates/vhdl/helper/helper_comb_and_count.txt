@@ -1,0 +1,5 @@
+{%- block helper_comb_and_count %}
+    comb_{{elem|lower}} <= 
+    comp_{{elem_split[3]}}_{{elem_split[0]|lower}}_bx_{{elem_split[2]}}_0x{{elem_split[4]|lower}};
+{%- endblock helper_comb_and_count %}
+

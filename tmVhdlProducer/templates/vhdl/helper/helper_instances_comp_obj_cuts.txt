@@ -1,0 +1,34 @@
+{%- block helper_instances_comp_obj_cuts %}
+{%- for i in comp_obj_cuts_list | unique %}
+  {%- set list_split = i.split('_') %}    
+  {%- if list_split[0] == 'pt' %}
+    {%- with obj = list_split[1], bx = list_split[3], thr = list_split[4].split('x')[1], ge = list_split[5] %}
+    {%- include "instances/comparator_pt_cut.vhd" %}
+    {%- endwith %}
+  {%- elif list_split[0] == 'eta' %}
+    {%- with obj = list_split[1], bx = list_split[3], limit_l = list_split[4].split('x')[1], limit_u = list_split[5].split('x')[1] %}
+    {%- include "instances/comparator_eta_cut.vhd" %}
+    {%- endwith %}
+  {%- elif list_split[0] == 'phi' %}
+    {%- with obj = list_split[1], bx = list_split[3], limit_l = list_split[4].split('x')[1], limit_u = list_split[5].split('x')[1] %}
+    {%- include "instances/comparator_phi_cut.vhd" %}
+    {%- endwith %}
+  {%- elif list_split[0] == 'iso' %}
+    {%- with obj = list_split[1], bx = list_split[3], iso_lut = list_split[4].split('x')[1] %}
+    {%- include "instances/comparator_iso_cut.vhd" %}
+    {%- endwith %}
+  {%- elif list_split[0] == 'qual' %}
+    {%- with obj = list_split[1], bx = list_split[3], qual_lut = list_split[4].split('x')[1] %}
+    {%- include "instances/comparator_qual_cut.vhd" %}
+    {%- endwith %}
+  {%- elif list_split[0] == 'charge' %}
+    {%- with obj = list_split[1], bx = list_split[3], charge_str = list_split[4] %}
+    {%- include "instances/comparator_charge_cut.vhd" %}
+    {%- endwith %}
+  {%- elif list_split[0] == 'count' %}
+      {%- with obj = list_split[1], bx = list_split[3], count = list_split[4].split('x')[1] %}
+    {%- include "instances/comparator_count.vhd" %}
+      {%- endwith %}
+  {%- endif %}
+{%- endfor %}
+{%- endblock helper_instances_comp_obj_cuts %}

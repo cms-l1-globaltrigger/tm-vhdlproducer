@@ -1,0 +1,18 @@
+{%- block helper_eta_signals %}
+    {%- set o1 = condition.objects[0] %}
+    {%- if condition.objects[0].etaNrCuts > 0 %}
+    signal comp_eta_{{ o1.type|lower }}_bx_{{ o1.bx }}_0x{{ o1.etaW1LowerLimit|X04 }}_0x{{ o1.etaW1UpperLimit|X04 }} : std_logic;
+    {%- endif %}
+    {%- if condition.objects[0].etaNrCuts > 1 %}
+    signal comp_eta_{{ o1.type|lower }}_bx_{{ o1.bx }}_0x{{ o1.etaW2LowerLimit|X04 }}_0x{{ o1.etaW2UpperLimit|X04 }} : std_logic;
+    {%- endif %}
+    {%- if condition.objects[0].etaNrCuts > 2 %}
+    signal comp_eta_{{ o1.type|lower }}_bx_{{ o1.bx }}_0x{{ o1.etaW3LowerLimit|X04 }}_0x{{ o1.etaW3UpperLimit|X04 }} : std_logic;
+    {%- endif %}
+    {%- if condition.objects[0].etaNrCuts > 3 %}
+    signal comp_eta_{{ o1.type|lower }}_bx_{{ o1.bx }}_0x{{ o1.etaW4LowerLimit|X04 }}_0x{{ o1.etaW4UpperLimit|X04 }} : std_logic;
+    {%- endif %}
+    {%- if condition.objects[0].etaNrCuts > 4 %}
+    signal comp_eta_{{ o1.type|lower }}_bx_{{ o1.bx }}_0x{{ o1.etaW5LowerLimit|X04 }}_0x{{ o1.etaW5UpperLimit|X04 }} : std_logic;
+    {%- endif %}
+{%- endblock helper_eta_signals %}

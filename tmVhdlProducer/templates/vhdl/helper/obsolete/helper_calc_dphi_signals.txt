@@ -1,0 +1,5 @@
+{%- block helper_calc_dphi_signals %}
+  {%- if condition.deltaPhi.enabled == 'true' or condition.deltaR.enabled == 'true' or condition.mass.enabled == 'true' %}
+    signal dphi_calc_{{ condition.objects[0].type|lower }}_{{ condition.objects[1].type|lower }} : obj_bx_max_phi_range_array;
+  {%- endif %}
+{%- endblock helper_calc_dphi_signals %}

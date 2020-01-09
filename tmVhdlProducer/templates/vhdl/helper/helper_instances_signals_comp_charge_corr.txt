@@ -1,0 +1,12 @@
+{%- block helper_instances_signals_comp_charge_corr %}
+{%- for i in comp_charge_corr_list | unique %}
+  {%- set list_split = i.split('_') %}
+  {%- if list_split[1] == 'double' %}
+    signal comp_{{ list_split[0] }}_{{ list_split[1]|lower }}_{{ list_split[2]|lower }}_{{ list_split[3]|lower }}_{{ list_split[4] }}_{{ list_split[5] }}_{{ list_split[6] }}_{{ list_split[7] }} : mu_cc_double_t;
+  {%- elif list_split[1] == 'triple' %}
+    signal comp_{{ list_split[0] }}_{{ list_split[1]|lower }}_{{ list_split[2]|lower }}_{{ list_split[3]|lower }}_{{ list_split[4] }}_{{ list_split[5] }}_{{ list_split[6] }}_{{ list_split[7] }} : mu_cc_triple_t;
+  {%- elif list_split[1] == 'quad' %}
+    signal comp_{{ list_split[0] }}_{{ list_split[1]|lower }}_{{ list_split[2]|lower }}_{{ list_split[3]|lower }}_{{ list_split[4] }}_{{ list_split[5] }}_{{ list_split[6] }}_{{ list_split[7] }} : mu_cc_quad_t;
+  {%- endif %}
+{%- endfor %}
+{%- endblock helper_instances_signals_comp_charge_corr %}

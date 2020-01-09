@@ -1,0 +1,90 @@
+{%- block helper_instances_signals_comparators %}
+    -- Object cuts
+{%- set comp_obj_cuts_list = [] %}
+{%- for condition in module.caloConditions %}
+  {%- for i in range(0,condition.nr_objects) %}
+    {%- with obj = condition.objects[i] %}
+    {%- include "helper/helper_comp_obj_cuts_signals.txt" %}
+    {%- endwith %}
+  {%- endfor %}    
+{%- endfor %}    
+{%- for condition in module.esumsConditions %}
+    {%- with obj = condition.objects[0] %}
+    {%- include "helper/helper_comp_obj_cuts_signals.txt" %}
+    {%- endwith %}
+{%- endfor %}    
+{%- for condition in module.minBiasConditions %}
+    {%- with obj = condition.objects[0] %}
+    {%- include "helper/helper_comp_obj_cuts_signals.txt" %}
+    {%- endwith %}
+{%- endfor %}    
+{%- for condition in module.muonConditions %}
+  {%- for i in range(0,condition.nr_objects) %}
+    {%- with obj = condition.objects[i] %}
+    {%- include "helper/helper_comp_obj_cuts_signals.txt" %}
+    {%- endwith %}
+  {%- endfor %}    
+{%- endfor %}    
+{%- for condition in module.caloCaloCorrConditions %}
+   {%- with obj1 = condition.objects[0], obj2 = condition.objects[1] %}
+    {%- include "helper/helper_comp_obj_cuts_signals_corr_cond.txt" %}
+    {%- endwith %}
+{%- endfor %}    
+{%- for condition in module.caloCaloCorrOvRmConditions %}
+  {%- if condition.nr_objects > 2 %}
+    {%- with obj1 = condition.objects[0], obj2 = condition.objects[1], obj3 = condition.objects[2], nr_obj = condition.nr_objects %}
+    {%- include "helper/helper_comp_obj_cuts_signals_corr_cond_ovrm.txt" %}
+    {%- endwith %}
+  {%- else %}
+    {%- with obj1 = condition.objects[0], obj2 = condition.objects[1], nr_obj = condition.nr_objects %}
+    {%- include "helper/helper_comp_obj_cuts_signals_corr_cond_ovrm.txt" %}
+    {%- endwith %}
+  {%- endif %}
+{%- endfor %}    
+{%- for condition in module.caloMuonCorrConditions %}
+    {%- with obj1 = condition.objects[0], obj2 = condition.objects[1] %}
+    {%- include "helper/helper_comp_obj_cuts_signals_corr_cond.txt" %}
+    {%- endwith %}
+{%- endfor %}    
+{%- for i in comp_obj_cuts_list | unique %}
+  {%- set list_split = i.split('_') %}
+  {%- if list_split[0] == 'pt' %}
+    signal comp_{{ list_split[0] }}_{{ list_split[1]|lower }}_bx_{{ list_split[3] }}_{{ list_split[6] }} : {{ list_split[1]|lower }}_obj_t;
+  {%- elif list_split[0] == 'eta' %}
+    signal comp_{{ list_split[0] }}_{{ list_split[1]|lower }}_bx_{{ list_split[3] }}_{{ list_split[6] }}_{{ list_split[7] }} : {{ list_split[1]|lower }}_obj_t;
+  {%- elif list_split[0] == 'phi' %}
+    signal comp_{{ list_split[0] }}_{{ list_split[1]|lower }}_bx_{{ list_split[3] }}_{{ list_split[6] }}_{{ list_split[7] }} : {{ list_split[1]|lower }}_obj_t;
+  {%- elif list_split[0] == 'iso' %}
+    signal comp_{{ list_split[0] }}_{{ list_split[1]|lower }}_bx_{{ list_split[3] }}_{{ list_split[6] }} : {{ list_split[1]|lower }}_obj_t;
+  {%- elif list_split[0] == 'qual' %}
+    signal comp_{{ list_split[0] }}_{{ list_split[1]|lower }}_bx_{{ list_split[3] }}_{{ list_split[6] }} : {{ list_split[1]|lower }}_obj_t;
+  {%- elif list_split[0] == 'charge' %}
+    signal comp_{{ list_split[0] }}_{{ list_split[1]|lower }}_bx_{{ list_split[3] }}_{{ list_split[6] }} : {{ list_split[1]|lower }}_obj_t;
+  {%- elif list_split[0] == 'count' %}
+    signal comp_{{ list_split[0] }}_{{ list_split[1]|lower }}_bx_{{ list_split[3] }}_{{ list_split[6] }} : {{ list_split[1]|lower }}_obj_t;
+  {%- endif %}
+{%- endfor %}
+    -- Correlation cuts 
+{%- for i in comp_corr_cuts_list | unique %}
+  {%- set list_split = i.split('_') %}
+    signal comp_{{ list_split[0]|lower }}_{{ list_split[1]|lower }}_{{ list_split[2]|lower }}_bx_{{ list_split[4]|lower }}_bx_{{ list_split[6]|lower }}_{{ list_split[7]|lower }}_{{ list_split[8]|lower }} : {{ list_split[1]|lower }}_{{ list_split[2]|lower }}_t;
+{%- endfor %}
+    -- Muon charge correlation 
+{%- set comp_charge_corr_list = [] %}
+{%- for condition in module.muonConditions %}
+    {%- include "helper/helper_comp_charge_corr_signals.txt" %}
+{%- endfor %}
+{%- for condition in module.muonMuonCorrConditions %}
+    {%- include "helper/helper_comp_charge_corr_signals.txt" %}
+{%- endfor %}
+{%- for i in comp_charge_corr_list | unique %}
+  {%- set list_split = i.split('_') %}
+  {%- if list_split[1] == 'double' %}
+    signal comp_{{ list_split[0] }}_{{ list_split[1]|lower }}_{{ list_split[2]|lower }}_{{ list_split[3]|lower }}_{{ list_split[4] }}_{{ list_split[5] }}_{{ list_split[6] }}_{{ list_split[7] }} : mu_cc_double_t;
+  {%- elif list_split[1] == 'triple' %}
+    signal comp_{{ list_split[0] }}_{{ list_split[1]|lower }}_{{ list_split[2]|lower }}_{{ list_split[3]|lower }}_{{ list_split[4] }}_{{ list_split[5] }}_{{ list_split[6] }}_{{ list_split[7] }} : mu_cc_triple_t;
+  {%- elif list_split[1] == 'quad' %}
+    signal comp_{{ list_split[0] }}_{{ list_split[1]|lower }}_{{ list_split[2]|lower }}_{{ list_split[3]|lower }}_{{ list_split[4] }}_{{ list_split[5] }}_{{ list_split[6] }}_{{ list_split[7] }} : mu_cc_quad_t;
+  {%- endif %}
+{%- endfor %}
+{%- endblock helper_instances_signals_comparators %}

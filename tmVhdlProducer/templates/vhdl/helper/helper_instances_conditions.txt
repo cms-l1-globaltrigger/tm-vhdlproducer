@@ -1,0 +1,45 @@
+{%- block helper_instances_conditions %}
+{%- for condition in module.caloConditions %}
+    {%- include "instances/combinatorial_conditions_calos.vhd" %}
+{%- endfor %}    
+{%- for condition in module.esumsConditions %}
+  {%- set o1 = condition.objects[0] %}
+  {%- if o1.type|lower == 'asymet' or o1.type|lower== 'asymht' or o1.type|lower == 'asymethf' or o1.type|lower == 'asymhthf' %}
+    {%- include "instances/combinatorial_conditions_count_obj.vhd" %}
+  {%- else %}
+     {%- include "instances/combinatorial_conditions_esums.vhd" %}
+  {%- endif %} 
+{%- endfor %}    
+{%- for condition in module.minBiasConditions %}
+    {%- include "instances/combinatorial_conditions_count_obj.vhd" %}
+{%- endfor %}    
+{%- for condition in module.muonConditions %}
+    {%- include "instances/combinatorial_conditions_muons.vhd" %}
+{%- endfor %}    
+{%- for condition in module.caloCaloCorrConditions %}
+    {%- include "instances/correlation_conditions.vhd" %}
+{%- endfor %}    
+{%- for condition in module.caloEsumCorrConditions %}
+    {%- include "instances/correlation_conditions.vhd" %}
+{%- endfor %}    
+{%- for condition in module.caloMuonCorrConditions %}
+    {%- include "instances/correlation_conditions.vhd" %}
+{%- endfor %}    
+{%- for condition in module.muonMuonCorrConditions %}
+    {%- include "instances/correlation_conditions.vhd" %}
+{%- endfor %}    
+{%- for condition in module.muonEsumCorrConditions %}
+    {%- include "instances/correlation_conditions.vhd" %}
+{%- endfor %}    
+{%- for condition in module.caloCaloCorrOvRmConditions %}
+    {%- include "instances/correlation_conditions_ovrm.vhd" %}
+{%- endfor %}    
+    -- Centrality assignment
+{%- for condition in module.signalConditions %}
+    {%- include "instances/signal_condition.vhd" %}
+{%- endfor %}
+    -- External condition assignment
+{%- for condition in module.externalConditions %}
+    {{ condition.vhdl_signal }} <= data.ext_cond(bx({{ condition.objects[0].bx_raw }}))({{ condition.objects[0].externalChannelId }});
+{%- endfor %}
+{%- endblock helper_instances_conditions %}

@@ -1,0 +1,14 @@
+{%- block helper_instances_comp_charge_corr %}
+{%- for i in comp_charge_corr_list | unique %}
+  {%- set list_split = i.split('_') %}    
+  {%- with bx1 = list_split[3], bx2 = list_split[5], cc_val = list_split[7], bx1_raw = list_split[8], bx2_raw = list_split[9] %}
+    {%- if list_split[1] == 'double' %}
+    {%- include "instances/comparator_muon_charge_corr_double.vhd" %}
+    {%- elif list_split[1] == 'triple' %}
+    {%- include "instances/comparator_muon_charge_corr_triple.vhd" %}
+    {%- elif list_split[1] == 'quad' %}
+    {%- include "instances/comparator_muon_charge_corr_quad.vhd" %}
+    {%- endif %}
+  {%- endwith %}
+{%- endfor %}
+{%- endblock helper_instances_comp_charge_corr %}
