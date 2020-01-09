@@ -40,6 +40,17 @@
 {%- endfor %}
     -- External condition assignment
 {%- for condition in module.externalConditions %}
-    {{ condition.vhdl_signal }} <= data.ext_cond(bx({{ condition.objects[0].bx_raw }}))({{ condition.objects[0].externalChannelId }});
+  {%- if condition.objects[0].bx == 'm2' %}
+    {%- set bx_raw = -2 %} 
+  {%- elif condition.objects[0].bx == 'm1' %}
+    {%- set bx_raw = -1 %} 
+  {%- elif condition.objects[0].bx == 'p1' %}
+    {%- set bx_raw = 1 %} 
+  {%- elif condition.objects[0].bx == 'p2' %}
+    {%- set bx_raw = 2 %} 
+  {%- else %}
+    {%- set bx_raw = 0 %} 
+  {%- endif %}  
+    {{ condition.vhdl_signal }} <= data.ext_cond(bx({{ bx_raw }}))({{ condition.objects[0].externalChannelId }});
 {%- endfor %}
 {%- endblock helper_instances_conditions %}
