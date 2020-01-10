@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.0] - 2020-01-10
+Version for new structure of GTL
+### Added
+- template directory "helper"
+- templates for new structure of GTL
+### Deleted
+- obsolete templates
+
 ## [2.7.1] - 2019-10-15
 ### Changed
 - bug fix in VHDL templates:
