@@ -61,6 +61,20 @@ def bx_encode(value):
     # Zero value is not prefixed according to VHDL documentation.
     return '0'
 
+def enc_bx_decode(s):
+    """Decode encoded relative bunch crossings.
+
+    """
+    if s == 'p2':
+        return '2'
+    if s == 'p1':
+        return '1'
+    if s == 'm1':
+        return '-1'
+    if s == 'm2':
+        return '-2'
+    return '0'
+
 def sort_by_attribute(items, attribute, reverse=False):
     """Returns list of items sorted by attribute. Provided to overcome lack of
     sort filter in older Jinja2 versions.
@@ -83,6 +97,7 @@ CustomFilters = {
     'X01' : lambda x: "%01X" % int(float(x)),
     'alpha' : lambda s: ''.join(c for c in s if c.isalpha()),
     'bx_offset': bx_encode,
+    'bx_dec': enc_bx_decode,
     'sort_by_attribute': sort_by_attribute,
     'hex': lambda d: format(int(d), 'x'), # plain hex format
     'hexstr': hexstr_filter,
