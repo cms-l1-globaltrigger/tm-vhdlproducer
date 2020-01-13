@@ -1,50 +1,23 @@
 {%- block helper_calc_deta_dphi_ovrm_signals %}
-  {%- if condition.objects[0].bx == 'm2' %}
-    {%- set bx1_raw = -2 %} 
-  {%- elif condition.objects[0].bx == 'm1' %}
-    {%- set bx1_raw = -1 %} 
-  {%- elif condition.objects[0].bx == 'p1' %}
-    {%- set bx1_raw = 1 %} 
-  {%- elif condition.objects[0].bx == 'p2' %}
-    {%- set bx1_raw = 2 %} 
-  {%- else %}
-    {%- set bx1_raw = 0 %} 
-  {%- endif %}  
-  {%- if condition.objects[1].bx == 'm2' %}
-    {%- set bx2_raw = -2 %} 
-  {%- elif condition.objects[1].bx == 'm1' %}
-    {%- set bx2_raw = -1 %} 
-  {%- elif condition.objects[1].bx == 'p1' %}
-    {%- set bx2_raw = 1 %} 
-  {%- elif condition.objects[1].bx == 'p2' %}
-    {%- set bx2_raw = 2 %} 
-  {%- else %}
-    {%- set bx2_raw = 0 %} 
-  {%- endif %}  
-  {%- if condition.objects[2].bx == 'm2' %}
-    {%- set bx3_raw = -2 %} 
-  {%- elif condition.objects[2].bx == 'm1' %}
-    {%- set bx3_raw = -1 %} 
-  {%- elif condition.objects[2].bx == 'p1' %}
-    {%- set bx3_raw = 1 %} 
-  {%- elif condition.objects[2].bx == 'p2' %}
-    {%- set bx3_raw = 2 %} 
-  {%- else %}
-    {%- set bx3_raw = 0 %} 
-  {%- endif %}  
+  {%- if condition.deltaEta.enabled == 'true' or condition.deltaR.enabled == 'true' or (condition.mass.enabled == 'true' and condition.mass.type == 0) %}    
+      {%- set sig_calc_deta_list2 = sig_calc_deta_list.append(condition.objects[0].type+'_'+condition.objects[1].type+'_'+condition.objects[0].bx+'_'+condition.objects[1].bx) %}
+  {%- endif %}    
+  {%- if condition.deltaPhi.enabled == 'true' or condition.deltaR.enabled == 'true' or condition.mass.enabled == 'true' %}    
+      {%- set sig_calc_dphi_list2 = sig_calc_dphi_list.append(condition.objects[0].type+'_'+condition.objects[1].type+'_'+condition.objects[0].bx+'_'+condition.objects[1].bx) %}
+  {%- endif %}    
   {%- if condition.nr_objects == 2 %}    
     {%- if condition.deltaEtaOrm.enabled == 'true' or condition.deltaROrm.enabled == 'true' %}    
-      {%- set sig_calc_deta_list2 = sig_calc_deta_list.append(condition.objects[0].type+'_'+condition.objects[1].type+'_'+condition.objects[0].bx+'_'+condition.objects[1].bx+'_'+bx1_raw|string+'_'+bx2_raw|string) %}
+      {%- set sig_calc_deta_list2 = sig_calc_deta_list.append(condition.objects[0].type+'_'+condition.objects[1].type+'_'+condition.objects[0].bx+'_'+condition.objects[1].bx) %}
     {%- endif %}    
     {%- if condition.deltaPhiOrm.enabled == 'true' or condition.deltaROrm.enabled == 'true' %}    
-      {%- set sig_calc_dphi_list2 = sig_calc_dphi_list.append(condition.objects[0].type+'_'+condition.objects[1].type+'_'+condition.objects[0].bx+'_'+condition.objects[1].bx+'_'+bx1_raw|string+'_'+bx2_raw|string) %}
+      {%- set sig_calc_dphi_list2 = sig_calc_dphi_list.append(condition.objects[0].type+'_'+condition.objects[1].type+'_'+condition.objects[0].bx+'_'+condition.objects[1].bx) %}
     {%- endif %}    
   {%- elif condition.nr_objects == 3 %}    
     {%- if condition.deltaEtaOrm.enabled == 'true' or condition.deltaROrm.enabled == 'true' %}    
-      {%- set sig_calc_deta_list2 = sig_calc_deta_list.append(condition.objects[0].type+'_'+condition.objects[2].type+'_'+condition.objects[0].bx+'_'+condition.objects[2].bx+'_'+bx1_raw|string+'_'+bx3_raw|string) %}
+      {%- set sig_calc_deta_list2 = sig_calc_deta_list.append(condition.objects[0].type+'_'+condition.objects[2].type+'_'+condition.objects[0].bx+'_'+condition.objects[2].bx) %}
     {%- endif %}    
     {%- if condition.deltaPhiOrm.enabled == 'true' or condition.deltaROrm.enabled == 'true' %}    
-      {%- set sig_calc_dphi_list2 = sig_calc_dphi_list.append(condition.objects[0].type+'_'+condition.objects[2].type+'_'+condition.objects[0].bx+'_'+condition.objects[2].bx+'_'+bx1_raw|string+'_'+bx3_raw|string) %}
+      {%- set sig_calc_dphi_list2 = sig_calc_dphi_list.append(condition.objects[0].type+'_'+condition.objects[2].type+'_'+condition.objects[0].bx+'_'+condition.objects[2].bx) %}
     {%- endif %}    
   {%- endif %}    
 {%- endblock helper_calc_deta_dphi_ovrm_signals %}
