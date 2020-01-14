@@ -26,7 +26,7 @@
     {%- include "instances/comparator_tbpt_cut.vhd" %}
     {%- endwith %}
   {%- elif list_split[0] == 'detaorm' %}
-    {%- with obj1 = list_split[1], obj2 = list_split[2], bx1 = list_split[4], bx2 = list_split[6], limit_l = list_split[7].split('x')[1] %}
+    {%- with obj1 = list_split[1], obj2 = list_split[2], bx1 = list_split[4], bx2 = list_split[6], limit_l = list_split[7].split('x')[1], limit_u = list_split[8].split('x')[1] %}
     {%- include "instances/comparator_deta_cut.vhd" %}
     {%- endwith %}
   {%- elif list_split[0] == 'dphiorm' %}
