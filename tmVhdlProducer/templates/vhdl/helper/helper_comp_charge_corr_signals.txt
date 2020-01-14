@@ -1,33 +1,11 @@
 {%- block helper_comp_charge_corr_signals %}
-  {%- if condition.objects[0].bx == 'm2' %}
-    {%- set bx1_raw = -2 %} 
-  {%- elif condition.objects[0].bx == 'm1' %}
-    {%- set bx1_raw = -1 %} 
-  {%- elif condition.objects[0].bx == 'p1' %}
-    {%- set bx1_raw = 1 %} 
-  {%- elif condition.objects[0].bx == 'p2' %}
-    {%- set bx1_raw = 2 %} 
-  {%- else %}
-    {%- set bx1_raw = 0 %} 
-  {%- endif %}  
-  {%- if condition.objects[1].bx == 'm2' %}
-    {%- set bx2_raw = -2 %} 
-  {%- elif condition.objects[1].bx == 'm1' %}
-    {%- set bx2_raw = -1 %} 
-  {%- elif condition.objects[1].bx == 'p1' %}
-    {%- set bx2_raw = 1 %} 
-  {%- elif condition.objects[1].bx == 'p2' %}
-    {%- set bx2_raw = 2 %} 
-  {%- else %}
-    {%- set bx2_raw = 0 %} 
-  {%- endif %}  
   {%- if condition.nr_objects == 2 and condition.chargeCorrelation != 'ig' %}
-    {%- set comp_charge_corr_list2 = comp_charge_corr_list.append('cc_double_bx_'+condition.objects[0].bx+'_bx_'+condition.objects[1].bx+'_cc_'+condition.chargeCorrelation|lower+'_'+bx1_raw|string+'_'+bx2_raw|string) %}
+    {%- set comp_charge_corr_list2 = comp_charge_corr_list.append('cc_double_bx_'+condition.objects[0].bx+'_bx_'+condition.objects[1].bx+'_cc_'+condition.chargeCorrelation|lower) %}
   {%- endif %}
   {%- if condition.nr_objects == 3 and condition.chargeCorrelation != 'ig' %}
-    {%- set comp_charge_corr_list2 = comp_charge_corr_list.append('cc_triple_bx_'+condition.objects[0].bx+'_bx_'+condition.objects[1].bx+'_cc_'+condition.chargeCorrelation|lower+'_'+bx1_raw|string+'_'+bx2_raw|string) %}
+    {%- set comp_charge_corr_list2 = comp_charge_corr_list.append('cc_triple_bx_'+condition.objects[0].bx+'_bx_'+condition.objects[1].bx+'_cc_'+condition.chargeCorrelation|lower) %}
   {%- endif %}
   {%- if condition.nr_objects == 4 and condition.chargeCorrelation != 'ig' %}
-    {%- set comp_charge_corr_list2 = comp_charge_corr_list.append('cc_quad_bx_'+condition.objects[0].bx+'_bx_'+condition.objects[1].bx+'_cc_'+condition.chargeCorrelation|lower+'_'+bx1_raw|string+'_'+bx2_raw|string) %}
+    {%- set comp_charge_corr_list2 = comp_charge_corr_list.append('cc_quad_bx_'+condition.objects[0].bx+'_bx_'+condition.objects[1].bx+'_cc_'+condition.chargeCorrelation|lower) %}
   {%- endif %}
 {%- endblock helper_comp_charge_corr_signals %}

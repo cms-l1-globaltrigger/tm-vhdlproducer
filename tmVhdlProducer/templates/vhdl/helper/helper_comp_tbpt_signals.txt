@@ -1,0 +1,5 @@
+{%- block helper_comp_tbpt_signals %}
+  {%- if condition.twoBodyPt.enabled == 'true' %}
+    {%- set comp_corr_cuts_list2 = comp_corr_cuts_list.append('tbpt_'+condition.objects[0].type+'_'+condition.objects[1].type+'_bx_'+condition.objects[0].bx+'_bx_'+condition.objects[1].bx+'_0x'+condition.twoBodyPt.threshold|X14+'_0x'+condition.twoBodyPt.threshold|X14) %}
+  {%- endif %}
+{%- endblock helper_comp_tbpt_signals %}

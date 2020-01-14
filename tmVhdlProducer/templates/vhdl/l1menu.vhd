@@ -79,6 +79,7 @@ architecture rtl of l1menu is
     {%- include "helper/helper_comp_obj_cuts_signals.txt" %}
     {%- endwith %}
   {%- endfor %}    
+  {%- include "helper/helper_comp_tbpt_signals.txt" %}
 {%- endfor %}    
 {%- for condition in module.esumsConditions %}
     {%- with obj = condition.objects[0] %}
@@ -96,6 +97,7 @@ architecture rtl of l1menu is
     {%- include "helper/helper_comp_obj_cuts_signals.txt" %}
     {%- endwith %}
   {%- endfor %}    
+  {%- include "helper/helper_comp_tbpt_signals.txt" %}
 {%- endfor %}    
 {%- for condition in module.caloCaloCorrConditions %}
    {%- with obj1 = condition.objects[0], obj2 = condition.objects[1] %}

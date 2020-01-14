@@ -14,6 +14,9 @@
   {%- if condition.mass.enabled == 'true' and condition.mass.type == 1 %}
     {%- set comp_corr_cuts_list2 = comp_corr_cuts_list.append('transmass_'+condition.objects[0].type+'_'+condition.objects[1].type+'_bx_'+condition.objects[0].bx+'_bx_'+condition.objects[1].bx+'_0x'+condition.mass.lower|X14+'_0x'+condition.mass.upper|X14) %}
   {%- endif %}
+  {%- if condition.twoBodyPt.enabled == 'true' %}
+    {%- set comp_corr_cuts_list2 = comp_corr_cuts_list.append('tbpt_'+condition.objects[0].type+'_'+condition.objects[1].type+'_bx_'+condition.objects[0].bx+'_bx_'+condition.objects[1].bx+'_0x'+condition.twoBodyPt.threshold|X14+'_0x'+condition.twoBodyPt.threshold|X14) %}
+  {%- endif %}
   {%- if condition.nr_objects == 2 %}
     {%- if condition.deltaEtaOrm.enabled == 'true' %}
     {%- set comp_corr_cuts_list2 = comp_corr_cuts_list.append('deta_'+condition.objects[0].type+'_'+condition.objects[1].type+'_bx_'+condition.objects[0].bx+'_bx_'+condition.objects[1].bx+'_0x'+condition.deltaEtaOrm.lower|X14+'_0x'+condition.deltaEtaOrm.upper|X14) %}
