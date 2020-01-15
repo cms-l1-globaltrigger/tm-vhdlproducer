@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.7.4] - 2020-01-15
+### Changed
+- bug fix in VHDL templates:
+  - calo_calo_calo_correlation_orm_condition.vhd.j2
+
+## [2.7.3] - 2020-01-08
+- using utm 0.7.4 patch
+
+## [2.7.2] - 2019-10-16
+- depends on meta package tm-python
+
 ## [2.7.1] - 2019-10-15
 ### Changed
 - bug fix in VHDL templates:
