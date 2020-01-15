@@ -57,7 +57,7 @@
     {%- endwith %}
   {%- endif %}
   {%- if condition.twoBodyPt.enabled == "true" %}
-            tbpt => comp_tbpt_{{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_0x{{ condition.twoBodyPt.threshold|X14|lower }}_0x{{ condition.twoBodyPt.threshold|X14|lower }},        
+            tbpt => comp_tbpt_{{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_0x{{ condition.twoBodyPt.threshold|X14|lower }},        
   {%- endif %}
   {%- if condition.chargeCorrelation in ('os', 'ls') %}
    {%- if condition.nr_objects  == 2 %}

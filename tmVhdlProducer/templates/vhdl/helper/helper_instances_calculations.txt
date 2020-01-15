@@ -48,6 +48,9 @@
     {%- include "instances/cos_dphi_lut.vhd" %}
     {%- include "instances/transverse_mass.vhd" %}
     {%- endif %}
+    {%- if list_split[0] == 'tbpt' %}
+    {%- include "instances/twobody_pt.vhd" %}
+    {%- endif %}
   {%- endwith %}
 {%- endfor %}
 {%- endblock helper_instances_calculations %}

@@ -1,7 +1,7 @@
 {%- block instantiate_twobody_pt %}
     calc_twobody_pt_{{ obj1|lower }}_{{ obj2|lower }}_bx_{{ bx1 }}_bx_{{ bx2 }}_i: entity work.twobody_pt
         generic map(
-            N_{{ obj1|upper }}_OBJECTS, N_{{ obj2|upper }}_OBJECTS
+            N_{{ obj1|upper }}_OBJECTS, N_{{ obj2|upper }}_OBJECTS,
             {{ obj1|upper }}_PT_VECTOR_WIDTH, {{ obj2|upper }}_PT_VECTOR_WIDTH
         )
         port map(
