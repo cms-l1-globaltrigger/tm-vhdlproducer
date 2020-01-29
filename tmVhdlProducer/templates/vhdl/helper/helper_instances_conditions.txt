@@ -16,6 +16,9 @@
 {%- for condition in module.muonConditions %}
     {%- include "instances/combinatorial_conditions_muons.vhd" %}
 {%- endfor %}    
+{%- for condition in module.caloConditionsOvRm %}
+    {%- include "instances/combinatorial_conditions_ovrm.vhd" %}
+{%- endfor %}    
 {%- for condition in module.caloCaloCorrConditions %}
     {%- include "instances/correlation_conditions.vhd" %}
 {%- endfor %}    

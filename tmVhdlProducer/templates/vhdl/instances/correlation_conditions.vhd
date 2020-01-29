@@ -15,24 +15,24 @@
             lhc_clk,           
   {%- if o1.type == 'EG' or o1.type == 'JET' or o1.type == 'TAU' %}
     {%- with obj = o1 %}
-            in_1 => {% include "helper/helper_comb_and_calos_signals_names.txt" %}
+            in_1 => {% include "helper/helper_comb_and_calos_signals_names.txt" %},
     {%- endwith %}
   {%- elif o1.type == 'MU' %}
     {%- with obj = o1 %}
-            in_1 => {% include "helper/helper_comb_and_muons_signals_names.txt" %}
+            in_1 => {% include "helper/helper_comb_and_muons_signals_names.txt" %},
     {%- endwith %}
   {%- endif %}
   {%- if o2.type == 'EG' or o2.type == 'JET' or o2.type == 'TAU' %}
     {%- with obj = o2 %}
-            in_2 => {% include "helper/helper_comb_and_calos_signals_names.txt" %}
+            in_2 => {% include "helper/helper_comb_and_calos_signals_names.txt" %},
     {%- endwith %}
   {%- elif o2.type == 'MU' %}
     {%- with obj = o2 %}
-            in_2 => {% include "helper/helper_comb_and_muons_signals_names.txt" %}
+            in_2 => {% include "helper/helper_comb_and_muons_signals_names.txt" %},
     {%- endwith %}
   {%- elif o2.type == 'ETM' or o2.type == 'HTM' or o2.type == 'ETMHF' or o2.type == 'HTMHF' %}
     {%- with obj = o2 %}
-            in_2 => {% include "helper/helper_comb_and_esums_signals_names.txt" %}
+            in_2 => {% include "helper/helper_comb_and_esums_signals_names.txt" %},
     {%- endwith %}
   {%- endif %}
   {%- if condition.deltaEta.enabled == "true" %} 

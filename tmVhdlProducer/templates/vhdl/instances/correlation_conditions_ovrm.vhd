@@ -26,20 +26,20 @@
             lhc_clk, 
   {%- if o1.type == o2.type %}  
     {%- with obj = o1 %}
-            in_1 => {% include "helper/helper_comb_and_calos_signals_names.txt" %}
+            in_1 => {% include "helper/helper_comb_and_calos_signals_names.txt" %},
     {%- endwith %}
     {%- with obj = o2 %}
-            in_2 => {% include "helper/helper_comb_and_calos_signals_names.txt" %}
+            in_2 => {% include "helper/helper_comb_and_calos_signals_names.txt" %},
     {%- endwith %}
     {%- with obj = o3 %}
-            in_3 => {% include "helper/helper_comb_and_calos_signals_names.txt" %}
+            in_3 => {% include "helper/helper_comb_and_calos_signals_names.txt" %},
     {%- endwith %}
   {%- else %}  
     {%- with obj = o1 %}
-            in_1 => {% include "helper/helper_comb_and_calos_signals_names.txt" %}
+            in_1 => {% include "helper/helper_comb_and_calos_signals_names.txt" %},
     {%- endwith %}
     {%- with obj = o2 %}
-            in_2 => {% include "helper/helper_comb_and_calos_signals_names.txt" %}
+            in_2 => {% include "helper/helper_comb_and_calos_signals_names.txt" %},
     {%- endwith %}
   {%- endif %}
   {%- if condition.deltaEta.enabled == "true" %} 
