@@ -1,3 +1,3 @@
 {%- block helper_comb_and_count_signals_names %}
-        comb_{{ obj.type|lower }}_bx_{{ obj.bx }}_count_{{ obj.count|X04|lower }}
+            comb_{{ obj.type|lower }}_bx_{{ obj.bx }}_count_{{ obj.count|X04|lower }}
 {%- endblock helper_comb_and_count_signals_names %}
