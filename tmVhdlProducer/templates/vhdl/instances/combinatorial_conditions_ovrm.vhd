@@ -9,19 +9,19 @@
   {%- if condition.nr_objects == 2 %}  
             N_{{ o1.type|upper }}_OBJECTS, N_{{ o2.type|upper }}_OBJECTS, 1,
             (({{ o1.sliceLow }},{{ o1.sliceHigh }}), (0,0), (0,0), (0,0)),
-            (({{ o2.sliceLow }},{{ o2.sliceHigh }}), (0,0), (0,0), (0,0)),
+            (({{ o2.sliceLow }},{{ o2.sliceHigh }}), (0,0), (0,0), (0,0))
   {%- elif condition.nr_objects == 3 %}  
             N_{{ o1.type|upper }}_OBJECTS, N_{{ o3.type|upper }}_OBJECTS, 2,
             (({{ o1.sliceLow }},{{ o1.sliceHigh }}), ({{ o2.sliceLow }},{{ o2.sliceHigh }}), (0,0), (0,0)),
-            (({{ o3.sliceLow }},{{ o3.sliceHigh }}), (0,0), (0,0), (0,0)),
+            (({{ o3.sliceLow }},{{ o3.sliceHigh }}), (0,0), (0,0), (0,0))
   {%- elif condition.nr_objects == 4 %}
             N_{{ o1.type|upper }}_OBJECTS, N_{{ o4.type|upper }}_OBJECTS, 3,
             (({{ o1.sliceLow }},{{ o1.sliceHigh }}), ({{ o2.sliceLow }},{{ o2.sliceHigh }}), ({{ o3.sliceLow }},{{ o3.sliceHigh }}), (0,0)),
-            (({{ o4.sliceLow}},{{ o4.sliceHigh }}), (0,0), (0,0), (0,0)),
+            (({{ o4.sliceLow}},{{ o4.sliceHigh }}), (0,0), (0,0), (0,0))
   {%- elif condition.nr_objects == 5 %}
             N_{{ o1.type|upper }}_OBJECTS, N_{{ o5.type|upper }}_OBJECTS, 4,
             (({{ o1.sliceLow }},{{ o1.sliceHigh }}), ({{ o2.sliceLow }},{{ o2.sliceHigh }}), ({{ o3.sliceLow }},{{ o3.sliceHigh }}), ({{ o4.sliceLow }},{{ o4.sliceHigh }})),
-            (({{ o5.sliceLow }},{{ o5.sliceHigh }}), (0,0), (0,0), (0,0)),
+            (({{ o5.sliceLow }},{{ o5.sliceHigh }}), (0,0), (0,0), (0,0))
   {%- endif %}
         )
         port map(
