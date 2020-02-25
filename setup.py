@@ -22,7 +22,7 @@ setup(
     },
     install_requires=[
         'Jinja2',
-        'tm-python @ git+https://github.com/cms-l1-globaltrigger/tm-python@0.7.4',
+        'tm-python @ git+https://github.com/cms-l1-globaltrigger/tm-python@0.7.3',
         'tm-reporter @ git+https://github.com/cms-l1-globaltrigger/tm-reporter@2.7.3'
     ],
     entry_points={

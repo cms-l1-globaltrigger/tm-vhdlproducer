@@ -63,7 +63,9 @@
                 "TransverseMass": "CorrelationCondition",
                 "CaloCaloCorrelationOvRm": "CorrelationConditionOvRm",
                 "InvariantMassOvRm": "CorrelationConditionOvRm",
-                "TransverseMassOvRm": "CorrelationConditionOvRm"
+                "TransverseMassOvRm": "CorrelationConditionOvRm",
+                "CaloMassThreeObj": "MassThreeObjCondition",
+                "MuonMassThreeObj": "MassThreeObjCondition"
             },
             "objects": {
                 "Egamma": "calo",
@@ -442,6 +444,35 @@
                                 "type": "chgcor",
                                 "processors": 0.0,
                                 "sliceLUTs": 0.0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "MassThreeObjCondition",
+                "objects": [
+                    {
+                        "types": ["calo", "calo", "calo"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.001,
+                        "cuts": [
+                            {
+                                "type": "mass",
+                                "processors": 0.00083,
+                                "sliceLUTs": 0.00033
+                            }
+                        ]
+                    }
+                    {
+                        "types": ["muon", "muon", "muon"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.001,
+                        "cuts": [
+                            {
+                                "type": "mass",
+                                "processors": 0.00083,
+                                "sliceLUTs": 0.00033
                             }
                         ]
                     }

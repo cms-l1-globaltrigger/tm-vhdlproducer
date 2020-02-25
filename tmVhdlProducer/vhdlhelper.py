@@ -523,6 +523,8 @@ class ModuleHelper(VhdlHelper):
                 return True
             if condition.handle.isCaloConditionOvRm():
                 return True
+            if condition.handle.isMassThreeObjCondition():
+                return True
             if hasattr(condition, 'hasTwoBodyPtCut'):
                 return bool(condition.hasTwoBodyPtCut)
             return False
@@ -942,10 +944,6 @@ class CaloConditionOvRmHelper(ConditionHelper):
             elif cut_handle.cut_type == tmEventSetup.TwoBodyPt:
                 self.twoBodyPt.update(cut_handle)
 
-# -----------------------------------------------------------------------------
-#  Object helpers
-# -----------------------------------------------------------------------------
-
 class MassThreeObjConditionHelper(ConditionHelper):
     """Mass 3 objects condition template helper class.
 
@@ -964,7 +962,7 @@ class MassThreeObjConditionHelper(ConditionHelper):
     """Number of required objects."""
 
     def __init__(self, condition_handle):
-        super(CorrelationConditionHelper, self).__init__(condition_handle)
+        super(MassThreeObjConditionHelper, self).__init__(condition_handle)
         # Default attributes
         self.mass3obj = MassCutHelper(0, 0, type=0)
         self.chargeCorrelation = charge_correlation_encode('ig')
@@ -981,6 +979,10 @@ class MassThreeObjConditionHelper(ConditionHelper):
                 self.mass3obj.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.ChargeCorrelation:
                 self.chargeCorrelation = charge_correlation_encode(cut_handle.data)
+
+# -----------------------------------------------------------------------------
+#  Object helpers
+# -----------------------------------------------------------------------------
 
 class ObjectHelper(VhdlHelper):
     """Generic object helper.
