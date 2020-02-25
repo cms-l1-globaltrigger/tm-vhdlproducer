@@ -6,7 +6,6 @@
             X"{{ limit_l|upper }}", X"{{ limit_u|upper }}"        
         )
         port map(
-            lhc_clk, 
-            invmass_{{ obj1|lower }}_{{ obj2|lower }}(bx({{ bx1|bx_dec }}),bx({{ bx2|bx_dec }})), comp_invmass_{{ obj1|lower }}_{{ obj2|lower }}_bx_{{ bx1 }}_bx_{{ bx2 }}_0x{{ limit_l|lower }}_0x{{ limit_u|upper }}
+            lhc_clk, invmass_{{ obj1|lower }}_{{ obj2|lower }}(bx({{ bx1|bx_dec }}),bx({{ bx2|bx_dec }})), comp_invmass_{{ obj1|lower }}_{{ obj2|lower }}_bx_{{ bx1 }}_bx_{{ bx2 }}_0x{{ limit_l|lower }}_0x{{ limit_u|upper }}
         );
 {%- endblock instantiate_comparator_inv_mass_cut %}
