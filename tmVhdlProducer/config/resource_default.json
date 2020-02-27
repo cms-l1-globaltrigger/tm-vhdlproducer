@@ -64,8 +64,7 @@
                 "CaloCaloCorrelationOvRm": "CorrelationConditionOvRm",
                 "InvariantMassOvRm": "CorrelationConditionOvRm",
                 "TransverseMassOvRm": "CorrelationConditionOvRm",
-                "CaloMassThreeObj": "MassThreeObjCondition",
-                "MuonMassThreeObj": "MassThreeObjCondition"
+                "InvariantMassThreeObj": "InvariantMassThreeObjCondition"
             },
             "objects": {
                 "Egamma": "calo",
@@ -450,7 +449,7 @@
                 ]
             },
             {
-                "type": "MassThreeObjCondition",
+                "type": "InvariantMassThreeObjCondition",
                 "objects": [
                     {
                         "types": ["calo", "calo", "calo"],
@@ -463,7 +462,7 @@
                                 "sliceLUTs": 0.00033
                             }
                         ]
-                    }
+                    },
                     {
                         "types": ["muon", "muon", "muon"],
                         "processors": 0.0,

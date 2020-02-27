@@ -1,0 +1,11 @@
+{%- block helper_comp_obj_cuts_signals_mass_3_obj %}
+    {%- with obj = obj1 %}
+    {%- include  "helper/helper_comp_obj_cuts_signals.txt" %}
+    {%- endwith %}
+    {%- with obj = obj2 %}
+    {%- include  "helper/helper_comp_obj_cuts_signals.txt" %}
+    {%- endwith %}
+    {%- with obj = obj3 %}
+    {%- include  "helper/helper_comp_obj_cuts_signals.txt" %}
+    {%- endwith %}
+{%- endblock helper_comp_obj_cuts_signals_mass_3_obj %}

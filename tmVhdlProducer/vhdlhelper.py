@@ -290,7 +290,7 @@ def conditionFactory(condition_handle):
         return CorrelationConditionOvRmHelper(condition_handle)
     elif condition_handle.isCaloConditionOvRm():
         return CaloConditionOvRmHelper(condition_handle)
-    elif condition_handle.isMassThreeObjCondition():
+    elif condition_handle.isInvariantMassThreeObjCondition():
         return MassThreeObjConditionHelper(condition_handle)
     else:
         raise RuntimeError("unknown condition type")
@@ -460,13 +460,13 @@ class ModuleHelper(VhdlHelper):
              (condition.objects[0].is_muon_type and condition.objects[1].is_esums_type), self.conditions)
 
     @property
-    def caloMassThreeObjConditions(self):
-        return filter(lambda condition: condition.handle.isMassThreeObjCondition() and \
+    def caloInvariantMassThreeObjConditions(self):
+        return filter(lambda condition: condition.handle.isInvariantMassThreeObjCondition() and \
              (condition.objects[0].is_calo_type), self.conditions)
 
     @property
-    def muonMassThreeObjConditions(self):
-        return filter(lambda condition: condition.handle.isMassThreeObjCondition() and \
+    def muonInvariantMassThreeObjConditions(self):
+        return filter(lambda condition: condition.handle.isInvariantMassThreeObjCondition() and \
              (condition.objects[0].is_muon_type), self.conditions)
 
     @property
@@ -523,7 +523,7 @@ class ModuleHelper(VhdlHelper):
                 return True
             if condition.handle.isCaloConditionOvRm():
                 return True
-            if condition.handle.isMassThreeObjCondition():
+            if condition.handle.isInvariantMassThreeObjCondition():
                 return True
             if hasattr(condition, 'hasTwoBodyPtCut'):
                 return bool(condition.hasTwoBodyPtCut)
@@ -964,7 +964,7 @@ class MassThreeObjConditionHelper(ConditionHelper):
     def __init__(self, condition_handle):
         super(MassThreeObjConditionHelper, self).__init__(condition_handle)
         # Default attributes
-        self.mass3obj = MassCutHelper(0, 0, type=0)
+        self.mass = MassCutHelper(0, 0, type=0)
         self.chargeCorrelation = charge_correlation_encode('ig')
         self.update(condition_handle)
 
@@ -976,9 +976,16 @@ class MassThreeObjConditionHelper(ConditionHelper):
     def update(self, condition_handle):
         for cut_handle in condition_handle.cuts:
             if cut_handle.cut_type == tmEventSetup.Mass:
-                self.mass3obj.update(cut_handle)
+                self.mass.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.ChargeCorrelation:
                 self.chargeCorrelation = charge_correlation_encode(cut_handle.data)
+
+        # Definition of mass_type:
+        # 0 => invariant mass
+        # 1 => transverse mass
+        # 2 => invariant mass with 3 objects
+
+        self.mass.type = 2
 
 # -----------------------------------------------------------------------------
 #  Object helpers

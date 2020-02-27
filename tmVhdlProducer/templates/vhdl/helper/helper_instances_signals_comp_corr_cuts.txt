@@ -3,6 +3,8 @@
   {%- set list_split = i.split('_') %}
   {%- if list_split[0]|lower == 'tbpt' %}
     signal comp_{{ list_split[0]|lower }}_{{ list_split[1]|lower }}_{{ list_split[2]|lower }}_bx_{{ list_split[4]|lower }}_{{ list_split[5]|lower }}_{{ list_split[6]|lower }}_{{ list_split[7]|lower }} : {{ list_split[1]|lower }}_{{ list_split[2]|lower }}_t;
+  {%- elif list_split[0]|lower == 'invmass3obj' %}
+    signal comp_{{ list_split[0]|lower }}_{{ list_split[1]|lower }}_bx_{{ list_split[3]|lower }}_{{ list_split[4]|lower }}_{{ list_split[5]|lower }} : mass_3_obj_{{ list_split[1]|lower }}_t;
   {%- else %}
     signal comp_{{ list_split[0]|lower }}_{{ list_split[1]|lower }}_{{ list_split[2]|lower }}_bx_{{ list_split[4]|lower }}_{{ list_split[5]|lower }}_{{ list_split[6]|lower }}_{{ list_split[7]|lower }}_{{ list_split[8]|lower }} : {{ list_split[1]|lower }}_{{ list_split[2]|lower }}_t;
   {%- endif %}

@@ -17,6 +17,10 @@
     {%- with obj1 = list_split[1], obj2 = list_split[2], bx1 = list_split[4], bx2 = list_split[6], limit_l = list_split[7].split('x')[1], limit_u = list_split[8].split('x')[1] %}
     {%- include "instances/comparator_inv_mass_cut.vhd" %}
     {%- endwith %}
+  {%- elif list_split[0] == 'invmass3obj' %}
+    {%- with obj1 = list_split[1], bx1 = list_split[3], limit_l = list_split[4].split('x')[1], limit_u = list_split[5].split('x')[1] %}
+    {%- include "instances/comparator_inv_mass_3_obj_cut.vhd" %}
+    {%- endwith %}
   {%- elif list_split[0] == 'transmass' %}
     {%- with obj1 = list_split[1], obj2 = list_split[2], bx1 = list_split[4], bx2 = list_split[6], limit_l = list_split[7].split('x')[1], limit_u = list_split[8].split('x')[1] %}
     {%- include "instances/comparator_trans_mass_cut.vhd" %}

@@ -37,6 +37,12 @@
 {%- for condition in module.caloCaloCorrOvRmConditions %}
     {%- include "instances/correlation_conditions_ovrm.vhd" %}
 {%- endfor %}    
+{%- for condition in module.caloInvariantMassThreeObjConditions %}
+    {%- include "instances/mass_3_obj_conditions.vhd" %}
+{%- endfor %}    
+{%- for condition in module.muonInvariantMassThreeObjConditions %}
+    {%- include "instances/mass_3_obj_conditions.vhd" %}
+{%- endfor %}    
     -- Centrality assignment
 {%- for condition in module.signalConditions %}
     {%- include "instances/signal_condition.vhd" %}
