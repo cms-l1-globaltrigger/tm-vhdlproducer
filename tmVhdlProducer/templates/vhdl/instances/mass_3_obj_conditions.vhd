@@ -43,7 +43,7 @@
   {%- endif %}
             inv_mass => comp_invmass3obj_{{ o1.type|lower }}_bx_{{ o1.bx }}_0x{{ condition.mass.lower|X14|lower }}_0x{{ condition.mass.upper|X14|lower }},
   {%- if condition.chargeCorrelation in ('os', 'ls') %}
-            charge_corr_triple => comp_cc_triple_bx_{{ o1.bx }}_bx_{{ o2.bx }}_bx_{{ o3.bx }}_cc_{{ condition.chargeCorrelation }},
+            charge_corr_triple => comp_cc_triple_bx_{{ o1.bx }}_bx_{{ o1.bx }}_cc_{{ condition.chargeCorrelation }},
   {%- endif %}
             cond_o => {{ condition.vhdl_signal }}
         );

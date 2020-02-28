@@ -162,6 +162,9 @@ architecture rtl of l1menu is
 {%- for condition in module.muonMuonCorrConditions %}
     {%- include "helper/helper_comp_charge_corr_signals.txt" %}
 {%- endfor %}
+{%- for condition in module.muonInvariantMassThreeObjConditions %}
+    {%- include "helper/helper_comp_charge_corr_signals.txt" %}
+{%- endfor %}
     {%- include "helper/helper_instances_signals_comp_charge_corr.txt" %}
 -- Conditions inputs
     -- Object cuts "and"
