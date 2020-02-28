@@ -64,6 +64,12 @@
 {%- for condition in module.muonEsumCorrConditions %}
 {%- include  "instances/muon_esums_correlation_condition.vhd.j2" %}
 {%- endfor %}
+{%- for condition in module.caloInvariantMassThreeObjConditions %}
+{%- include  "instances/calo_mass_3_obj_condition.vhd.j2" %}
+{%- endfor %}
+{%- for condition in module.muonInvariantMassThreeObjConditions %}
+{%- include  "instances/muon_mass_3_obj_condition.vhd.j2" %}
+{%- endfor %}
 {%- for condition in module.minBiasConditions %}
 {%- include  "instances/min_bias_hf_condition.vhd.j2" %}
 {%- endfor %}

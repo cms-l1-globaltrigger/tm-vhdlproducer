@@ -147,6 +147,7 @@ kSingleJetOvRm = 'SingleJetOvRm'
 kDoubleJetOvRm = 'DoubleJetOvRm'
 kTripleJetOvRm = 'TripleJetOvRm'
 kQuadJetOvRm = 'QuadJetOvRm'
+kInvariantMassThreeObj = 'InvariantMassThreeObj'
 
 #
 # Keys for cut types
@@ -336,6 +337,7 @@ ConditionTypeKey = {
     tmEventSetup.DoubleJetOvRm: kDoubleJetOvRm,
     tmEventSetup.TripleJetOvRm: kTripleJetOvRm,
     tmEventSetup.QuadJetOvRm: kQuadJetOvRm,
+    tmEventSetup.InvariantMassThreeObj: kInvariantMassThreeObj,
 }
 """Dictionary for condition type enumerations."""
 
@@ -411,6 +413,8 @@ class ResourceTray(object):
     kCaloConditionOvRm = 'CaloConditionOvRm'
     kCorrelationCondition = 'CorrelationCondition'
     kCorrelationConditionOvRm = 'CorrelationConditionOvRm'
+    kCorrelationConditionOvRm = 'CorrelationConditionOvRm'
+    kInvariantMassThreeObj = 'InvariantMassThreeObj'
 
     def __init__(self, filename):
         """Attribute *filename* is a filename of an JSON payload configuration file."""
@@ -506,6 +510,11 @@ class ResourceTray(object):
                 n_objects_1 = objects[0].slice_size
                 n_objects_2 = objects[1].slice_size
                 return n_objects_1 * n_objects_2
+        elif instance == self.kInvariantMassThreeObj:
+            if mapped_objects == ['calo', 'calo', 'calo']:
+                return n_objects * (n_objects - 1) * 0.5
+            elif mapped_objects == ['muon', 'muon', 'muon']:
+                return n_objects * (n_objects - 1) * 0.5
         elif instance == self.kCorrelationConditionOvRm:
             if mapped_objects == ['calo', 'calo', 'calo']:
                 return n_objects * (n_objects - 1) * 0.5
@@ -549,6 +558,11 @@ class ResourceTray(object):
                 n_objects_1 = objects[0].slice_size
                 n_objects_2 = objects[1].slice_size
                 return n_objects_1 * n_objects_2
+        elif instance == self.kInvariantMassThreeObj:
+            if mapped_objects == ['calo', 'calo', 'calo']:
+                return n_objects * (n_objects - 1) * 0.5
+            elif mapped_objects == ['muon', 'muon', 'muon']:
+                return n_objects * (n_objects - 1) * 0.5
         elif instance == self.kCorrelationConditionOvRm:
             if mapped_objects == ['calo', 'calo', 'calo']:
                 if cut in (kOvRmDeltaEta, kOvRmDeltaPhi, kOvRmDeltaR):
