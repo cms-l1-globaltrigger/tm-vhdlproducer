@@ -414,7 +414,7 @@ class ResourceTray(object):
     kCorrelationCondition = 'CorrelationCondition'
     kCorrelationConditionOvRm = 'CorrelationConditionOvRm'
     kCorrelationConditionOvRm = 'CorrelationConditionOvRm'
-    kInvariantMassThreeObj = 'InvariantMassThreeObj'
+    kInvariantMassThreeObjCondition = 'InvariantMassThreeObjCondition'
 
     def __init__(self, filename):
         """Attribute *filename* is a filename of an JSON payload configuration file."""
@@ -500,17 +500,26 @@ class ResourceTray(object):
         mapped_objects = self.map_objects(object_keys)
         # instance
         instance = self.map_instance(ConditionTypeKey[condition.type])
+        print ("******************************")
+        print ("instance: ", instance)
+        print ("******************************")
         # select
         if instance in (self.kMuonCondition, self.kCaloCondition, self.kCaloConditionOvRm):
             return n_objects * n_requirements
         elif instance == self.kCorrelationCondition:
+            print ("******************************")
+            print ("instance kCorrelationCondition: ", instance)
+            print ("******************************")
             if condition.same_object_types and condition.same_object_bxs:
                 return n_objects * (n_objects - 1) * 0.5
             else:
                 n_objects_1 = objects[0].slice_size
                 n_objects_2 = objects[1].slice_size
                 return n_objects_1 * n_objects_2
-        elif instance == self.kInvariantMassThreeObj:
+        elif instance == self.kInvariantMassThreeObjCondition:
+            print ("******************************")
+            print ("instance in InvariantMassThreeObjCondition: ", instance)
+            print ("******************************")
             if mapped_objects == ['calo', 'calo', 'calo']:
                 return n_objects * (n_objects - 1) * (n_objects - 2) / 6
             elif mapped_objects == ['muon', 'muon', 'muon']:
@@ -558,7 +567,7 @@ class ResourceTray(object):
                 n_objects_1 = objects[0].slice_size
                 n_objects_2 = objects[1].slice_size
                 return n_objects_1 * n_objects_2
-        elif instance == self.kInvariantMassThreeObj:
+        elif instance == self.kInvariantMassThreeObjCondition:
             if mapped_objects == ['calo', 'calo', 'calo']:
                 return n_objects * (n_objects - 1) * 0.5
             elif mapped_objects == ['muon', 'muon', 'muon']:
