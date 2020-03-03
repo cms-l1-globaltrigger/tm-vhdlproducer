@@ -454,24 +454,24 @@
                     {
                         "types": ["calo", "calo", "calo"],
                         "processors": 0.0,
-                        "sliceLUTs": 0.001,
+                        "sliceLUTs": 0.00025,
                         "cuts": [
                             {
                                 "type": "mass",
                                 "processors": 0.00083,
-                                "sliceLUTs": 0.00033
+                                "sliceLUTs": 0.000055
                             }
                         ]
                     },
                     {
                         "types": ["muon", "muon", "muon"],
                         "processors": 0.0,
-                        "sliceLUTs": 0.001,
+                        "sliceLUTs": 0.00022,
                         "cuts": [
                             {
                                 "type": "mass",
                                 "processors": 0.00083,
-                                "sliceLUTs": 0.00033
+                                "sliceLUTs": 0.00005
                             }
                         ]
                     }
