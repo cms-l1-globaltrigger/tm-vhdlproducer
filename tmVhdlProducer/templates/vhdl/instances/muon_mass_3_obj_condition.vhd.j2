@@ -4,9 +4,7 @@
   {%- set o3 = condition.objects[2] %}
 {{ condition.vhdl_signal }}_i: entity work.muon_mass_3_obj_condition
     generic map(
-        {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o1.operator }},
-        X"{{ o1.threshold|X04 }}",
-        {{ o1.etaNrCuts }}, 
+        {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o1.operator }}, X"{{ o1.threshold|X04 }}", {{ o1.etaNrCuts }}, 
         X"{{ o1.etaW1UpperLimit|X04 }}", X"{{ o1.etaW1LowerLimit|X04 }}",
         X"{{ o1.etaW2UpperLimit|X04 }}", X"{{ o1.etaW2LowerLimit|X04 }}",
         X"{{ o1.etaW3UpperLimit|X04 }}", X"{{ o1.etaW3LowerLimit|X04 }}",
@@ -15,9 +13,7 @@
         {{ o1.phiFullRange }}, X"{{ o1.phiW1UpperLimit|X04 }}", X"{{ o1.phiW1LowerLimit|X04 }}",
         {{ o1.phiW2Ignore }}, X"{{ o1.phiW2UpperLimit|X04 }}", X"{{ o1.phiW2LowerLimit|X04 }}",
         "{{ o1.charge }}", X"{{ o1.qualityLUT|X04 }}", X"{{ o1.isolationLUT|X01 }}",
-        {{ o2.sliceLow }}, {{ o2.sliceHigh }}, {{ o2.operator }},
-        X"{{ o2.threshold|X04 }}",
-        {{ o2.etaNrCuts }}, 
+        {{ o2.sliceLow }}, {{ o2.sliceHigh }}, {{ o2.operator }}, X"{{ o2.threshold|X04 }}", {{ o2.etaNrCuts }}, 
         X"{{ o2.etaW1UpperLimit|X04 }}", X"{{ o2.etaW1LowerLimit|X04 }}",
         X"{{ o2.etaW2UpperLimit|X04 }}", X"{{ o2.etaW2LowerLimit|X04 }}",
         X"{{ o2.etaW3UpperLimit|X04 }}", X"{{ o2.etaW3LowerLimit|X04 }}",
@@ -26,9 +22,7 @@
         {{ o2.phiFullRange }}, X"{{ o2.phiW1UpperLimit|X04 }}", X"{{ o2.phiW1LowerLimit|X04 }}",
         {{ o2.phiW2Ignore }}, X"{{ o2.phiW2UpperLimit|X04 }}", X"{{ o2.phiW2LowerLimit|X04 }}",
         "{{ o2.charge }}", X"{{ o2.qualityLUT|X04 }}", X"{{ o2.isolationLUT|X01 }}",
-        {{ o3.sliceLow }}, {{ o3.sliceHigh }}, {{ o3.operator }},
-        X"{{ o3.threshold|X04 }}",
-        {{ o3.etaNrCuts }}, 
+        {{ o3.sliceLow }}, {{ o3.sliceHigh }}, {{ o3.operator }}, X"{{ o3.threshold|X04 }}", {{ o3.etaNrCuts }}, 
         X"{{ o3.etaW1UpperLimit|X04 }}", X"{{ o3.etaW1LowerLimit|X04 }}",
         X"{{ o3.etaW2UpperLimit|X04 }}", X"{{ o3.etaW2LowerLimit|X04 }}",
         X"{{ o3.etaW3UpperLimit|X04 }}", X"{{ o3.etaW3LowerLimit|X04 }}",

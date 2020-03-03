@@ -4,6 +4,7 @@
   {%- set o3 = condition.objects[2] %}
 {{ condition.vhdl_signal }}_i: entity work.calo_mass_3_obj_condition
     generic map(
+        NR_{{ o1.type|upper }}_OBJECTS, {{ o1.type|upper }}_TYPE,
         {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o1.operator }}, X"{{ o1.threshold|X04 }}", {{ o1.etaNrCuts }}, 
         X"{{ o1.etaW1UpperLimit|X04 }}", X"{{ o1.etaW1LowerLimit|X04 }}",
         X"{{ o1.etaW2UpperLimit|X04 }}", X"{{ o1.etaW2LowerLimit|X04 }}",
@@ -32,8 +33,7 @@
         {{ o3.phiW2Ignore }}, X"{{ o3.phiW2UpperLimit|X04 }}", X"{{ o3.phiW2LowerLimit|X04 }}",
         X"{{ o3.isolationLUT|X01 }}",
         X"{{ condition.mass.upper|X16 }}", X"{{ condition.mass.lower|X16 }}",
-        {{ o1.type|upper }}_PT_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o1.type|upper }}_COSH_COS_PRECISION, {{ o1.type|upper }}_{{ o1.type|upper }}_COSH_COS_VECTOR_WIDTH,
-        NR_{{ o1.type|upper }}_OBJECTS, {{ o1.type|upper }}_TYPE
+        {{ o1.type|upper }}_PT_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o1.type|upper }}_COSH_COS_PRECISION, {{ o1.type|upper }}_{{ o1.type|upper }}_COSH_COS_VECTOR_WIDTH
     )
     port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }},
         {{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_cosh_deta_vector, {{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_cos_dphi_vector,
