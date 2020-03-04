@@ -201,6 +201,11 @@ architecture rtl of l1menu is
   {%- endfor %}    
 {%- endfor %}    
 {%- for condition in module.caloCaloCorrConditions %}
+  {%- for i in range(condition.nr_objects) %}
+    {%- with obj = condition.objects[i] %}
+    {%- include "helper/helper_comb_and_calos_signals.txt" %}
+    {%- endwith %}
+  {%- endfor %}    
   {%- with obj = condition.objects[0] %}
     {%- include "helper/helper_comb_and_calos_signals.txt" %}
   {%- endwith %}
@@ -209,17 +214,11 @@ architecture rtl of l1menu is
   {%- endwith %}
 {%- endfor %}    
 {%- for condition in module.caloCaloCorrOvRmConditions %}
-  {%- with obj = condition.objects[0] %}
+  {%- for i in range(condition.nr_objects) %}
+    {%- with obj = condition.objects[i] %}
     {%- include "helper/helper_comb_and_calos_signals.txt" %}
-  {%- endwith %}
-  {%- with obj = condition.objects[1] %}
-    {%- include "helper/helper_comb_and_calos_signals.txt" %}
-  {%- endwith %}
-  {%- if condition.nr_objects > 2 %}
-    {%- with obj = condition.objects[2] %}
-     {%- include "helper/helper_comb_and_calos_signals.txt" %}
     {%- endwith %}
-  {%- endif %} 
+  {%- endfor %}    
 {%- endfor %}    
 {%- for condition in module.caloEsumCorrConditions %}
   {%- with obj = condition.objects[0] %}
@@ -238,34 +237,25 @@ architecture rtl of l1menu is
   {%- endwith %}
 {%- endfor %}    
 {%- for condition in module.muonMuonCorrConditions %}
-  {%- with obj = condition.objects[0] %}
+  {%- for i in range(condition.nr_objects) %}
+    {%- with obj = condition.objects[i] %}
     {%- include "helper/helper_comb_and_muons_signals.txt" %}
-  {%- endwith %}
-  {%- with obj = condition.objects[1] %}
-    {%- include "helper/helper_comb_and_muons_signals.txt" %}
-  {%- endwith %}
+    {%- endwith %}
+  {%- endfor %}    
 {%- endfor %}    
 {%- for condition in module.caloInvariantMassThreeObjConditions %}
-  {%- with obj = condition.objects[0] %}
+  {%- for i in range(condition.nr_objects) %}
+    {%- with obj = condition.objects[i] %}
     {%- include "helper/helper_comb_and_calos_signals.txt" %}
-  {%- endwith %}
-  {%- with obj = condition.objects[1] %}
-    {%- include "helper/helper_comb_and_calos_signals.txt" %}
-  {%- endwith %}
-  {%- with obj = condition.objects[2] %}
-    {%- include "helper/helper_comb_and_calos_signals.txt" %}
-  {%- endwith %}
+    {%- endwith %}
+  {%- endfor %}    
 {%- endfor %}    
 {%- for condition in module.muonInvariantMassThreeObjConditions %}
-  {%- with obj = condition.objects[0] %}
+  {%- for i in range(condition.nr_objects) %}
+    {%- with obj = condition.objects[i] %}
     {%- include "helper/helper_comb_and_muons_signals.txt" %}
-  {%- endwith %}
-  {%- with obj = condition.objects[1] %}
-    {%- include "helper/helper_comb_and_muons_signals.txt" %}
-  {%- endwith %}
-  {%- with obj = condition.objects[2] %}
-    {%- include "helper/helper_comb_and_muons_signals.txt" %}
-  {%- endwith %}
+    {%- endwith %}
+  {%- endfor %}    
 {%- endfor %}    
 {%- for condition in module.muonEsumCorrConditions %}
   {%- with obj = condition.objects[0] %}

@@ -4,13 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.2.0] - 2020-03-04
+### Changed
+- template instances and helper files (simplify structure) 
+
 ## [3.1.0] - 2020-03-04
 ### Added
 - files for invariant mass with 3 objects 
 
 ## [3.0.0] - 2020-01-31
 ### Changed
-- changed templates for new structure of VHDL code of GTL
+- templates for new structure of VHDL code of GTL
 
 ## [2.7.4] - 2020-01-15
 ### Changed
