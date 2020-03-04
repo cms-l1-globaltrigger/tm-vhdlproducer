@@ -290,6 +290,8 @@ def conditionFactory(condition_handle):
         return CorrelationConditionOvRmHelper(condition_handle)
     elif condition_handle.isCaloConditionOvRm():
         return CaloConditionOvRmHelper(condition_handle)
+    elif condition_handle.isInvariantMassThreeObjCondition():
+        return MassThreeObjConditionHelper(condition_handle)
     else:
         raise RuntimeError("unknown condition type")
 
@@ -458,6 +460,16 @@ class ModuleHelper(VhdlHelper):
              (condition.objects[0].is_muon_type and condition.objects[1].is_esums_type), self.conditions)
 
     @property
+    def caloInvariantMassThreeObjConditions(self):
+        return filter(lambda condition: condition.handle.isInvariantMassThreeObjCondition() and \
+             (condition.objects[0].is_calo_type), self.conditions)
+
+    @property
+    def muonInvariantMassThreeObjConditions(self):
+        return filter(lambda condition: condition.handle.isInvariantMassThreeObjCondition() and \
+             (condition.objects[0].is_muon_type), self.conditions)
+
+    @property
     def minBiasConditions(self):
         return filter(lambda condition: condition.handle.isMinBiasCondition(), self.conditions)
 
@@ -510,6 +522,8 @@ class ModuleHelper(VhdlHelper):
             if condition.handle.isCorrelationConditionOvRm():
                 return True
             if condition.handle.isCaloConditionOvRm():
+                return True
+            if condition.handle.isInvariantMassThreeObjCondition():
                 return True
             if hasattr(condition, 'hasTwoBodyPtCut'):
                 return bool(condition.hasTwoBodyPtCut)
@@ -929,6 +943,49 @@ class CaloConditionOvRmHelper(ConditionHelper):
                 self.deltaROrm.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.TwoBodyPt:
                 self.twoBodyPt.update(cut_handle)
+
+class MassThreeObjConditionHelper(ConditionHelper):
+    """Mass 3 objects condition template helper class.
+
+    Attributes:
+        name         condition name from event setup [str]
+        type         condition type name [str]
+        vhdl_signal  VHDL safe condition signal name [str]
+        objects      list of object template helpers contained by condition
+        nr_objects   number of actually used objects [int]
+        handle       reference to underlying condition handle [ConditionHandle]
+        mass         [MassCutHelper]
+        chargeCorrelation [str]
+    """
+
+    ReqObjects = 3
+    """Number of required objects."""
+
+    def __init__(self, condition_handle):
+        super(MassThreeObjConditionHelper, self).__init__(condition_handle)
+        # Default attributes
+        self.mass = MassCutHelper(0, 0, type=0)
+        self.chargeCorrelation = charge_correlation_encode('ig')
+        self.update(condition_handle)
+
+    @property
+    def objectsInSameBx(self):
+        """Returns 'true' if all objects of same BX offset else returns 'false'."""
+        return vhdl_bool(len(set([obj.bx for obj in self.objects])) == 1)
+
+    def update(self, condition_handle):
+        for cut_handle in condition_handle.cuts:
+            if cut_handle.cut_type == tmEventSetup.Mass:
+                self.mass.update(cut_handle)
+            elif cut_handle.cut_type == tmEventSetup.ChargeCorrelation:
+                self.chargeCorrelation = charge_correlation_encode(cut_handle.data)
+
+        # Definition of mass_type:
+        # 0 => invariant mass
+        # 1 => transverse mass
+        # 2 => invariant mass with 3 objects
+
+        self.mass.type = 2
 
 # -----------------------------------------------------------------------------
 #  Object helpers

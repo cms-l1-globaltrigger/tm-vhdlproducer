@@ -29,9 +29,15 @@
 {%- set corr_cuts_bx_list = [] %}
 {%- for i in comp_corr_cuts_list | unique %}
   {%- set list_split = i.split('_') %}
-  {%- with cut = list_split[0], obj1 = list_split[1], obj2 = list_split[2], bx1 = list_split[4], bx2 = list_split[6] %}
-  {%- set corr_cuts_bx_list2 = corr_cuts_bx_list.append(cut+'_'+obj1+'_'+obj2+'_'+bx1+'_'+bx2) %}
-  {%- endwith %}
+  {%- if list_split[0] == 'invmass3obj' %}  
+    {%- with cut = list_split[0], obj1 = list_split[1], obj2 = list_split[1], bx1 = list_split[3], bx2 = list_split[3] %}
+    {%- set corr_cuts_bx_list2 = corr_cuts_bx_list.append('invmass'+'_'+obj1+'_'+obj2+'_'+bx1+'_'+bx2) %}
+    {%- endwith %}
+  {%- else %}  
+    {%- with cut = list_split[0], obj1 = list_split[1], obj2 = list_split[2], bx1 = list_split[4], bx2 = list_split[6] %}
+    {%- set corr_cuts_bx_list2 = corr_cuts_bx_list.append(cut+'_'+obj1+'_'+obj2+'_'+bx1+'_'+bx2) %}
+    {%- endwith %}
+  {%- endif %}
 {%- endfor %}
 {%- for i in corr_cuts_bx_list | unique %}
   {%- set list_split = i.split('_') %}    

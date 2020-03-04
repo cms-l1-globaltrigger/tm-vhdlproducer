@@ -64,6 +64,12 @@ architecture rtl of l1menu is
 {%- for condition in module.caloCaloCorrOvRmConditions %}
     {%- include "helper/helper_comp_corr_ovrm_cuts_signals.txt" %}
 {%- endfor %}   
+{%- for condition in module.caloInvariantMassThreeObjConditions %}
+    {%- include "helper/helper_comp_mass_3_obj_cuts_signals.txt" %}
+{%- endfor %}   
+{%- for condition in module.muonInvariantMassThreeObjConditions %}
+    {%- include "helper/helper_comp_mass_3_obj_cuts_signals.txt" %}
+{%- endfor %}   
 {%- set corr_cuts_list = [] %}
     {%- include "helper/helper_instances_signals_corr_cuts.txt" %}
     -- Muon charge correlation    
@@ -135,6 +141,16 @@ architecture rtl of l1menu is
     {%- include "helper/helper_comp_obj_cuts_signals_corr_cond.txt" %}
     {%- endwith %}
 {%- endfor %}    
+{%- for condition in module.caloInvariantMassThreeObjConditions %}
+    {%- with obj1 = condition.objects[0], obj2 = condition.objects[1], obj3 = condition.objects[2] %}
+    {%- include "helper/helper_comp_obj_cuts_signals_mass_3_obj.txt" %}
+    {%- endwith %}
+{%- endfor %}    
+{%- for condition in module.muonInvariantMassThreeObjConditions %}
+    {%- with obj1 = condition.objects[0], obj2 = condition.objects[1], obj3 = condition.objects[2] %}
+    {%- include "helper/helper_comp_obj_cuts_signals_mass_3_obj.txt" %}
+    {%- endwith %}
+{%- endfor %}    
     {%- include "helper/helper_instances_signals_comp_obj_cuts.txt" %}
 -- Correlation cuts 
     {%- include "helper/helper_instances_signals_comp_corr_cuts.txt" %}
@@ -144,6 +160,9 @@ architecture rtl of l1menu is
     {%- include "helper/helper_comp_charge_corr_signals.txt" %}
 {%- endfor %}
 {%- for condition in module.muonMuonCorrConditions %}
+    {%- include "helper/helper_comp_charge_corr_signals.txt" %}
+{%- endfor %}
+{%- for condition in module.muonInvariantMassThreeObjConditions %}
     {%- include "helper/helper_comp_charge_corr_signals.txt" %}
 {%- endfor %}
     {%- include "helper/helper_instances_signals_comp_charge_corr.txt" %}
@@ -223,6 +242,28 @@ architecture rtl of l1menu is
     {%- include "helper/helper_comb_and_muons_signals.txt" %}
   {%- endwith %}
   {%- with obj = condition.objects[1] %}
+    {%- include "helper/helper_comb_and_muons_signals.txt" %}
+  {%- endwith %}
+{%- endfor %}    
+{%- for condition in module.caloInvariantMassThreeObjConditions %}
+  {%- with obj = condition.objects[0] %}
+    {%- include "helper/helper_comb_and_calos_signals.txt" %}
+  {%- endwith %}
+  {%- with obj = condition.objects[1] %}
+    {%- include "helper/helper_comb_and_calos_signals.txt" %}
+  {%- endwith %}
+  {%- with obj = condition.objects[2] %}
+    {%- include "helper/helper_comb_and_calos_signals.txt" %}
+  {%- endwith %}
+{%- endfor %}    
+{%- for condition in module.muonInvariantMassThreeObjConditions %}
+  {%- with obj = condition.objects[0] %}
+    {%- include "helper/helper_comb_and_muons_signals.txt" %}
+  {%- endwith %}
+  {%- with obj = condition.objects[1] %}
+    {%- include "helper/helper_comb_and_muons_signals.txt" %}
+  {%- endwith %}
+  {%- with obj = condition.objects[2] %}
     {%- include "helper/helper_comb_and_muons_signals.txt" %}
   {%- endwith %}
 {%- endfor %}    
