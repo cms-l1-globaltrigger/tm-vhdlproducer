@@ -21,6 +21,9 @@
         ("{{ o1.charge }}", "{{ o2.charge }}", "{{ o3.charge }}", "{{ o4.charge }}"),
         (X"{{ o1.qualityLUT|X04 }}", X"{{ o2.qualityLUT|X04 }}", X"{{ o3.qualityLUT|X04 }}", X"{{ o4.qualityLUT|X04 }}"),
         (X"{{ o1.isolationLUT|X01 }}", X"{{ o2.isolationLUT|X01 }}", X"{{ o3.isolationLUT|X01 }}", X"{{ o4.isolationLUT|X01 }}"),
+        false, false, false, false,
+        X"0000", X"0000", "0000", X"0000",
+        X"0000", X"0000", "0000", X"0000",
         "{{ condition.chargeCorrelation }}",
   {%- if condition.twoBodyPt.enabled == "true" %}
         true, {{ o1.type|upper }}_PT_VECTOR_WIDTH, X"{{ condition.twoBodyPt.threshold|X16 }}",
