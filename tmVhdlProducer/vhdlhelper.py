@@ -1054,16 +1054,16 @@ class ObjectHelper(VhdlHelper):
             self.etaW2UpperLimit = etaCuts[1][1]
         if len(etaCuts) > 2:
             self.etaNrCuts = 3
-            self.etaW2LowerLimit = etaCuts[2][0]
-            self.etaW2UpperLimit = etaCuts[2][1]
+            self.etaW3LowerLimit = etaCuts[2][0]
+            self.etaW3UpperLimit = etaCuts[2][1]
         if len(etaCuts) > 3:
             self.etaNrCuts = 4
-            self.etaW2LowerLimit = etaCuts[3][0]
-            self.etaW2UpperLimit = etaCuts[3][1]
+            self.etaW4LowerLimit = etaCuts[3][0]
+            self.etaW4UpperLimit = etaCuts[3][1]
         if len(etaCuts) > 4:
             self.etaNrCuts = 5
-            self.etaW2LowerLimit = etaCuts[4][0]
-            self.etaW2UpperLimit = etaCuts[4][1]
+            self.etaW5LowerLimit = etaCuts[4][0]
+            self.etaW5UpperLimit = etaCuts[4][1]
         # setup phi windows
         if len(phiCuts) > 0:
             self.phiFullRange = vhdl_bool(False)
