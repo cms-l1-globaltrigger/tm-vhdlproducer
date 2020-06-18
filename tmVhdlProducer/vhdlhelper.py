@@ -966,6 +966,9 @@ class ObjectHelper(VhdlHelper):
         phiW2Ignore         [str]
         phiW2LowerLimit     [int]
         phiW2UpperLimit     [int]
+        uptCut              [str]
+        uptLowerLimit       [int]
+        uptUpperLimit       [int]
         isValid             is False if object is not initialized [bool]
         is_muon_type        [bool]
         is_calo_type        [bool]
@@ -1006,6 +1009,10 @@ class ObjectHelper(VhdlHelper):
         self.phiW2Ignore = vhdl_bool(True)
         self.phiW2LowerLimit = 0
         self.phiW2UpperLimit = 0
+        self.uptCutSel = vhdl_bool(False) # unconstraint pt cut (muon)
+        self.uptLowerLimit = 0 # unconstraint pt cut (muon)
+        self.uptUpperLimit = 0 # unconstraint pt cut (muon)
+        self.impactParameterLUT = 0xf # impact parameter (muon)
         self.sliceLow = 0
         self.sliceHigh = 0
         # State of object
@@ -1033,10 +1040,15 @@ class ObjectHelper(VhdlHelper):
                 etaCuts.append((cut_handle.minimum.index, cut_handle.maximum.index))
             elif cut_handle.cut_type == tmEventSetup.Phi:
                 phiCuts.append((cut_handle.minimum.index, cut_handle.maximum.index))
+            elif cut_handle.cut_type == tmEventSetup.UnconstraintPt:
+                self.uptLowerLimit = int(cut_handle.minimum.value)
+                self.uptUpperLimit = int(cut_handle.maximum.value)
             elif cut_handle.cut_type == tmEventSetup.Quality:
                 self.qualityLUT = int(cut_handle.data)
             elif cut_handle.cut_type == tmEventSetup.Charge:
                 self.charge = charge_encode(cut_handle.data)
+            elif cut_handle.cut_type == tmEventSetup.ImpactParameter:
+                self.impactParameterLUT = int(cut_handle.data)
             if cut_handle.cut_type == tmEventSetup.Count:
                 self.count = cut_handle.minimum.index
                 self.hasCount = True
@@ -1054,16 +1066,16 @@ class ObjectHelper(VhdlHelper):
             self.etaW2UpperLimit = etaCuts[1][1]
         if len(etaCuts) > 2:
             self.etaNrCuts = 3
-            self.etaW2LowerLimit = etaCuts[2][0]
-            self.etaW2UpperLimit = etaCuts[2][1]
+            self.etaW3LowerLimit = etaCuts[2][0]
+            self.etaW3UpperLimit = etaCuts[2][1]
         if len(etaCuts) > 3:
             self.etaNrCuts = 4
-            self.etaW2LowerLimit = etaCuts[3][0]
-            self.etaW2UpperLimit = etaCuts[3][1]
+            self.etaW4LowerLimit = etaCuts[3][0]
+            self.etaW4UpperLimit = etaCuts[3][1]
         if len(etaCuts) > 4:
             self.etaNrCuts = 5
-            self.etaW2LowerLimit = etaCuts[4][0]
-            self.etaW2UpperLimit = etaCuts[4][1]
+            self.etaW5LowerLimit = etaCuts[4][0]
+            self.etaW5UpperLimit = etaCuts[4][1]
         # setup phi windows
         if len(phiCuts) > 0:
             self.phiFullRange = vhdl_bool(False)
@@ -1073,6 +1085,9 @@ class ObjectHelper(VhdlHelper):
             self.phiW2Ignore = vhdl_bool(False)
             self.phiW2LowerLimit = phiCuts[1][0]
             self.phiW2UpperLimit = phiCuts[1][1]
+        # setup upt selection
+        if (self.uptUpperLimit != 0) or (self.uptLowerLimit != 0):
+            self.uptCutSel = vhdl_bool(True)
         self.isValid = True
         self.handle = object_handle
 

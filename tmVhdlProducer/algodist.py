@@ -155,6 +155,8 @@ kQuadJetOvRm = 'QuadJetOvRm'
 kThreshold = 'Threshold'
 kEta = 'Eta'
 kPhi = 'Phi'
+kUnconstraintPt = 'UnconstraintPt'
+kImpactParameter = 'ImpactParameter'
 kCharge = 'Charge'
 kQuality = 'Quality'
 kIsolation = 'Isolation'
@@ -189,6 +191,8 @@ CutTypeKey = {
     tmEventSetup.Threshold: kThreshold,
     tmEventSetup.Eta: kEta,
     tmEventSetup.Phi: kPhi,
+    tmEventSetup.UnconstraintPt: kUnconstraintPt,
+    tmEventSetup.ImpactParameter: kImpactParameter,
     tmEventSetup.Charge: kCharge,
     tmEventSetup.Quality: kQuality,
     tmEventSetup.Isolation: kIsolation,
