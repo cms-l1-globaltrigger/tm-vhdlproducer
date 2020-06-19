@@ -118,6 +118,7 @@ CorrelationConditionTypes = [
     tmEventSetup.CaloCaloCorrelation,
     tmEventSetup.CaloEsumCorrelation,
     tmEventSetup.InvariantMass,
+    tmEventSetup.InvariantMassUpt,
     tmEventSetup.TransverseMass,
 ]
 

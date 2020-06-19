@@ -60,6 +60,7 @@
                 "TowerCount": "TowerCountCondition",
                 "Externals": "ExternalCondition",
                 "InvariantMass": "CorrelationCondition",
+                "InvariantMassUpt": "CorrelationCondition",
                 "TransverseMass": "CorrelationCondition",
                 "CaloCaloCorrelationOvRm": "CorrelationConditionOvRm",
                 "InvariantMassOvRm": "CorrelationConditionOvRm",
