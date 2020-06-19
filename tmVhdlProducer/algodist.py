@@ -131,6 +131,7 @@ kCaloMuonCorrelation = 'CaloMuonCorrelation'
 kCaloCaloCorrelation = 'CaloCaloCorrelation'
 kCaloEsumCorrelation = 'CaloEsumCorrelation'
 kInvariantMass = 'InvariantMass'
+kInvariantMassUpt = 'InvariantMassUpt'
 kTransverseMass = 'TransverseMass'
 kCaloCaloCorrelationOvRm = 'CaloCaloCorrelationOvRm'
 kInvariantMassOvRm = 'InvariantMassOvRm'
@@ -325,6 +326,7 @@ ConditionTypeKey = {
     tmEventSetup.CaloCaloCorrelation: kCaloCaloCorrelation,
     tmEventSetup.CaloEsumCorrelation: kCaloEsumCorrelation,
     tmEventSetup.InvariantMass: kInvariantMass,
+    tmEventSetup.InvariantMassUpt: kInvariantMassUpt,
     tmEventSetup.TransverseMass: kTransverseMass,
     tmEventSetup.CaloCaloCorrelationOvRm: kCaloCaloCorrelationOvRm,
     tmEventSetup.InvariantMassOvRm: kInvariantMassOvRm,
