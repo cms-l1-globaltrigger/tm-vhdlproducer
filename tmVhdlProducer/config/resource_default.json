@@ -62,6 +62,7 @@
                 "InvariantMass": "CorrelationCondition",
                 "InvariantMassUpt": "CorrelationCondition",
                 "TransverseMass": "CorrelationCondition",
+                "InvariantMassDivDeltaR": "CorrelationCondition",
                 "CaloCaloCorrelationOvRm": "CorrelationConditionOvRm",
                 "InvariantMassOvRm": "CorrelationConditionOvRm",
                 "TransverseMassOvRm": "CorrelationConditionOvRm",
