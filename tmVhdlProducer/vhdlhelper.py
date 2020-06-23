@@ -831,6 +831,7 @@ class CorrelationConditionHelper(ConditionHelper):
         # 0 => invariant mass
         # 1 => transverse mass
         # 2 => invariant mass with unconstraint pt
+        # 3 => invariant mass divided by deltaR
 
         if condition_handle.type == tmEventSetup.InvariantMass:
             self.mass.type = 0
@@ -838,6 +839,8 @@ class CorrelationConditionHelper(ConditionHelper):
             self.mass.type = 1
         elif condition_handle.type == tmEventSetup.InvariantMassUpt:
             self.mass.type = 2
+        elif condition_handle.type == tmEventSetup.InvariantMassDivDeltaR:
+            self.mass.type = 3
 
 class CorrelationConditionOvRmHelper(ConditionHelper):
     """Correlation condition template helper class.
