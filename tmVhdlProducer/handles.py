@@ -120,6 +120,7 @@ CorrelationConditionTypes = [
     tmEventSetup.InvariantMass,
     tmEventSetup.InvariantMassUpt,
     tmEventSetup.TransverseMass,
+    tmEventSetup.InvariantMassDivDeltaR,
 ]
 
 InvariantMassThreeObjConditionTypes = [

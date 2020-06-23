@@ -149,6 +149,7 @@ kDoubleJetOvRm = 'DoubleJetOvRm'
 kTripleJetOvRm = 'TripleJetOvRm'
 kQuadJetOvRm = 'QuadJetOvRm'
 kInvariantMassThreeObj = 'InvariantMassThreeObj'
+kInvariantMassDivDeltaR = 'InvariantMassDivDeltaR'
 
 #
 # Keys for cut types
@@ -344,6 +345,7 @@ ConditionTypeKey = {
     tmEventSetup.TripleJetOvRm: kTripleJetOvRm,
     tmEventSetup.QuadJetOvRm: kQuadJetOvRm,
     tmEventSetup.InvariantMassThreeObj: kInvariantMassThreeObj,
+    tmEventSetup.InvariantMassDivDeltaR: kInvariantMassDivDeltaR,
 }
 """Dictionary for condition type enumerations."""
 
