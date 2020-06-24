@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.10.0] - 2020-06-24
+### Changed
+- updated for invariant mass divided by deltaR (2 objects)
+
 ## [2.9.0] - 2020-06-24
 ### Changed
 - updated for invariant mass with 3 objects
