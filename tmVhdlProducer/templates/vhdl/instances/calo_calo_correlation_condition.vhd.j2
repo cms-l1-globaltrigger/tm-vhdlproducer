@@ -8,7 +8,11 @@
     {%- endif %}
     generic map(
         {{ condition.objectsInSameBx }},
+    {%- if condition.mass.type == 3 %}
+        {{ o1.type|upper }}_{{ o2.type|upper }}_INV_DR_SQ_VECTOR_WIDTH, NR_{{ o1.type|upper }}_OBJECTS,        
+    {%- else %}
         {{ condition.deltaEta.enabled }}, {{ condition.deltaPhi.enabled }}, {{ condition.deltaR.enabled }}, {{ condition.mass.enabled }}, {{ condition.mass.type }}, {{ condition.twoBodyPt.enabled }},
+    {%- endif %}
         {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o1.operator }}, {{ o1.type|upper }}_TYPE,
         X"{{ o1.threshold|X04 }}",
         {{ o1.etaNrCuts }}, 
@@ -20,6 +24,9 @@
         {{ o1.phiFullRange }}, X"{{ o1.phiW1UpperLimit|X04 }}", X"{{ o1.phiW1LowerLimit|X04 }}",
         {{ o1.phiW2Ignore }}, X"{{ o1.phiW2UpperLimit|X04 }}", X"{{ o1.phiW2LowerLimit|X04 }}",
         X"{{ o1.isolationLUT|X01 }}",
+    {%- if condition.mass.type == 3 %}
+        NR_{{ o2.type|upper }}_OBJECTS,        
+    {%- endif %}
         {{ o2.sliceLow }}, {{ o2.sliceHigh }}, {{ o2.operator }}, {{ o2.type|upper }}_TYPE,
         X"{{ o2.threshold|X04 }}",
         {{ o2.etaNrCuts }}, 
@@ -31,12 +38,16 @@
         {{ o2.phiFullRange }}, X"{{ o2.phiW1UpperLimit|X04 }}", X"{{ o2.phiW1LowerLimit|X04 }}",
         {{ o2.phiW2Ignore }}, X"{{ o2.phiW2UpperLimit|X04 }}", X"{{ o2.phiW2LowerLimit|X04 }}",
         X"{{ o2.isolationLUT|X01 }}",
+    {%- if condition.mass.type == 3 %}
+        X"{{ condition.mass.upper|X21 }}", X"{{ condition.mass.lower|X21 }}"
+    {%- else %}
         X"{{ condition.deltaEta.upper|X08 }}", X"{{ condition.deltaEta.lower|X08 }}",
         X"{{ condition.deltaPhi.upper|X08 }}", X"{{ condition.deltaPhi.lower|X08 }}",
         X"{{ condition.deltaR.upper|X16 }}", X"{{ condition.deltaR.lower|X16 }}",
         X"{{ condition.mass.upper|X16 }}", X"{{ condition.mass.lower|X16 }}",
         {{ o1.type|upper }}_PT_VECTOR_WIDTH, {{ o2.type|upper }}_PT_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_PRECISION, {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH,
         X"{{ condition.twoBodyPt.threshold|X16 }}", CALO_SIN_COS_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o2.type|upper }}_SIN_COS_PRECISION
+    {%- endif %}
     )
     port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o2.type|lower }}_bx_{{ o2.bx }},
     {%- if condition.mass.type == 3 %}

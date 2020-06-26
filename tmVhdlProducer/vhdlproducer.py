@@ -76,6 +76,7 @@ def murmurhash(s):
 # -----------------------------------------------------------------------------
 
 CustomFilters = {
+    'X21' : lambda x: "%021X" % int(float(x)),
     'X16' : lambda x: "%016X" % int(float(x)),
     'X08' : lambda x: "%08X" % int(float(x)),
     'X04' : lambda x: "%04X" % int(float(x)),
