@@ -19,7 +19,7 @@
     end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_cos_l1;
 
     {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_calc_l1: for i in 0 to NR_{{ o1.type|upper }}_OBJECTS-1 generate
-        {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_calc_l2: for j in 0 to NR_{{ o2.type|upper }}-1 generate
+        {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_calc_l2: for j in 0 to NR_{{ o2.type|upper }}_OBJECTS-1 generate
             calculator_i: entity work.mass_div_dr_calculator
                 generic map(
                     {{ o1.type|upper }}_{{ o2.type|upper }}_ROM, {{ o1.type|upper }}_{{ o2.type|upper }}_DETA_BINS_WIDTH_ROM, {{ o1.type|upper }}_{{ o2.type|upper }}_DPHI_BINS_WIDTH_ROM,
