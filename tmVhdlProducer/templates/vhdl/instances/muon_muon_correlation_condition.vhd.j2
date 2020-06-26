@@ -1,7 +1,11 @@
 {%- block instantiate_muon_muon_correlation_condition %}
   {%- set o1 = condition.objects[0] %}
   {%- set o2 = condition.objects[1] %}
+    {%- if condition.mass.type == 3 %}
+{{ condition.vhdl_signal }}_i: entity work.muon_muon_mass_div_dr_condition
+    {%- else %}
 {{ condition.vhdl_signal }}_i: entity work.muon_muon_correlation_condition
+    {%- endif %}
     generic map(
         {{ condition.objectsInSameBx }},
         {{ condition.deltaEta.enabled }}, {{ condition.deltaPhi.enabled }}, {{ condition.deltaR.enabled }}, {{ condition.mass.enabled }}, {{ condition.mass.type }}, {{ condition.twoBodyPt.enabled }},
@@ -39,11 +43,15 @@
     )
     port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o2.type|lower }}_bx_{{ o2.bx }},
         ls_charcorr_double_bx_{{ o1.bx }}_bx_{{ o2.bx }}, os_charcorr_double_bx_{{ o1.bx }}_bx_{{ o2.bx }},
-        diff_{{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_eta_vector, diff_{{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_vector,
-        {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, {{ o1.type|lower }}_pt_vector_bx_{{ o2.bx }},
-        {{ o1.type|lower }}_upt_vector_bx_{{ o1.bx }}, {{ o1.type|lower }}_upt_vector_bx_{{ o2.bx }},
-        {{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector, {{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
-        {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, {{ o1.type|lower }}_cos_phi_bx_{{ o2.bx }}, {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }}, {{ o1.type|lower }}_sin_phi_bx_{{ o2.bx }},
+    {%- if condition.mass.type == 3 %}
+        {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr,
+    {%- else %}
+        diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_eta_vector, diff_{{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_vector,
+        {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, {{ o2.type|lower }}_pt_vector_bx_{{ o2.bx }},
+        {{ o1.type|lower }}_upt_vector_bx_{{ o1.bx }}, {{ o2.type|lower }}_upt_vector_bx_{{ o2.bx }},
+        {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector, {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
+        {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, {{ o2.type|lower }}_cos_phi_bx_{{ o2.bx }}, {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }}, {{ o2.type|lower }}_sin_phi_bx_{{ o2.bx }},
+    {%- endif %}
         {{ condition.vhdl_signal }});
 {%- endblock instantiate_muon_muon_correlation_condition %}
 {# eof #}

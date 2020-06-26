@@ -32,6 +32,7 @@
 -- Instantiations of differences for correlation conditions (used for DETA, DPHI, DR, mass and b_tagging) - once for correlation conditions with two ObjectTypes in certain Bxs
 {%- include  "instances/correlation_conditions_differences.vhd.j2" %}
 -- Instantiations of cosh-deta and cos-dphi LUTs for correlation conditions (used for mass and overlap_remover) - once for correlation conditions with two ObjectTypes in certain Bxs
+-- Instantiations of invariant mass divided by deltaR for all conditions
 {%- include  "instances/correlation_conditions_mass_cuts.vhd.j2" %}
 -- Instantiations of conditions
 {%- for condition in module.caloConditions %}
