@@ -31,8 +31,7 @@
 {%- include  "instances/correlation_conditions_pt_eta_phi_cos_sin_phi.vhd.j2" %}
 -- Instantiations of differences for correlation conditions (used for DETA, DPHI, DR, mass and b_tagging) - once for correlation conditions with two ObjectTypes in certain Bxs
 {%- include  "instances/correlation_conditions_differences.vhd.j2" %}
--- Instantiations of cosh-deta and cos-dphi LUTs for correlation conditions (used for mass and overlap_remover) - once for correlation conditions with two ObjectTypes in certain Bxs
--- Instantiations of invariant mass divided by deltaR for all conditions
+-- Instantiations for mass cuts calculations
 {%- include  "instances/correlation_conditions_mass_cuts.vhd.j2" %}
 -- Instantiations of conditions
 {%- for condition in module.caloConditions %}
@@ -48,7 +47,7 @@
 {%- include  "instances/esums_condition.vhd.j2" %}
 {%- endfor %}
 {%- for condition in module.caloCaloCorrConditions %}
-{%- include  "instances/calo_calo_correlation_condition.vhd.j2" %}
+{%- include  "instances/calo_calo_corr_cond.vhd.j2" %}
 {%- endfor %}
 {%- for condition in module.caloCaloCorrOvRmConditions %}
 {%- include  "instances/calo_calo_calo_correlation_orm_condition.vhd.j2" %}
