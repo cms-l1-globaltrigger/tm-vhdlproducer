@@ -118,7 +118,13 @@ CorrelationConditionTypes = [
     tmEventSetup.CaloCaloCorrelation,
     tmEventSetup.CaloEsumCorrelation,
     tmEventSetup.InvariantMass,
+    tmEventSetup.InvariantMassUpt,
     tmEventSetup.TransverseMass,
+    tmEventSetup.InvariantMassDivDeltaR,
+]
+
+InvariantMassThreeObjConditionTypes = [
+    tmEventSetup.InvariantMassThreeObj,
 ]
 
 CorrelationConditionOvRmTypes = [
@@ -409,6 +415,9 @@ class ConditionHandle(Handle):
 
     def isCaloConditionOvRm(self):
         return self.type in CaloConditionOvRmTypes
+
+    def isInvariantMassThreeObjCondition(self):
+        return self.type in InvariantMassThreeObjConditionTypes
 
     def __repr__(self):
         return "{self.__class__.__name__}(name={self.name}, payload={self.payload})".format(**locals())

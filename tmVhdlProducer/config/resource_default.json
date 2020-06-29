@@ -60,10 +60,13 @@
                 "TowerCount": "TowerCountCondition",
                 "Externals": "ExternalCondition",
                 "InvariantMass": "CorrelationCondition",
+                "InvariantMassUpt": "CorrelationCondition",
                 "TransverseMass": "CorrelationCondition",
+                "InvariantMassDivDeltaR": "CorrelationCondition",
                 "CaloCaloCorrelationOvRm": "CorrelationConditionOvRm",
                 "InvariantMassOvRm": "CorrelationConditionOvRm",
-                "TransverseMassOvRm": "CorrelationConditionOvRm"
+                "TransverseMassOvRm": "CorrelationConditionOvRm",
+                "InvariantMassThreeObj": "InvariantMassThreeObjCondition"
             },
             "objects": {
                 "Egamma": "calo",
@@ -442,6 +445,35 @@
                                 "type": "chgcor",
                                 "processors": 0.0,
                                 "sliceLUTs": 0.0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "InvariantMassThreeObjCondition",
+                "objects": [
+                    {
+                        "types": ["calo", "calo", "calo"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.00025,
+                        "cuts": [
+                            {
+                                "type": "mass",
+                                "processors": 0.00083,
+                                "sliceLUTs": 0.000055
+                            }
+                        ]
+                    },
+                    {
+                        "types": ["muon", "muon", "muon"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.00022,
+                        "cuts": [
+                            {
+                                "type": "mass",
+                                "processors": 0.00083,
+                                "sliceLUTs": 0.00005
                             }
                         ]
                     }

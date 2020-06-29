@@ -3,7 +3,7 @@
   {%- set o2 = condition.objects[1] %}
 {{ condition.vhdl_signal }}_i: entity work.muon_esums_correlation_condition
     generic map(
-        {{ condition.deltaPhi.enabled }}, {{ condition.mass.enabled }}, TRANSVERSE_MASS_TYPE, {{ condition.twoBodyPt.enabled }},
+        {{ condition.deltaPhi.enabled }}, {{ condition.mass.enabled }}, {{ condition.mass.type }}, {{ condition.twoBodyPt.enabled }},
         {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o1.operator }},
         X"{{ o1.threshold|X04 }}",
         {{ o1.etaNrCuts }}, 
@@ -15,6 +15,7 @@
         {{ o1.phiFullRange }}, X"{{ o1.phiW1UpperLimit|X04 }}", X"{{ o1.phiW1LowerLimit|X04 }}",
         {{ o1.phiW2Ignore }}, X"{{ o1.phiW2UpperLimit|X04 }}", X"{{ o1.phiW2LowerLimit|X04 }}",
         "{{ o1.charge }}", X"{{ o1.qualityLUT|X04 }}", X"{{ o1.isolationLUT|X01 }}",
+        {{ o1.uptCutSel }}, X"{{ o1.uptUpperLimit|X04 }}", X"{{ o1.uptLowerLimit|X04 }}", X"{{ o1.impactParameterLUT|X01 }}",
         {{ o2.operator }}, {{ o2.type|upper }}_TYPE,
         X"{{ o2.threshold|X04 }}",
         {{ o2.phiFullRange }}, X"{{ o2.phiW1UpperLimit|X04 }}", X"{{ o2.phiW1LowerLimit|X04 }}",

@@ -131,6 +131,7 @@ kCaloMuonCorrelation = 'CaloMuonCorrelation'
 kCaloCaloCorrelation = 'CaloCaloCorrelation'
 kCaloEsumCorrelation = 'CaloEsumCorrelation'
 kInvariantMass = 'InvariantMass'
+kInvariantMassUpt = 'InvariantMassUpt'
 kTransverseMass = 'TransverseMass'
 kCaloCaloCorrelationOvRm = 'CaloCaloCorrelationOvRm'
 kInvariantMassOvRm = 'InvariantMassOvRm'
@@ -147,6 +148,8 @@ kSingleJetOvRm = 'SingleJetOvRm'
 kDoubleJetOvRm = 'DoubleJetOvRm'
 kTripleJetOvRm = 'TripleJetOvRm'
 kQuadJetOvRm = 'QuadJetOvRm'
+kInvariantMassThreeObj = 'InvariantMassThreeObj'
+kInvariantMassDivDeltaR = 'InvariantMassDivDeltaR'
 
 #
 # Keys for cut types
@@ -155,6 +158,8 @@ kQuadJetOvRm = 'QuadJetOvRm'
 kThreshold = 'Threshold'
 kEta = 'Eta'
 kPhi = 'Phi'
+kUnconstraintPt = 'UnconstraintPt'
+kImpactParameter = 'ImpactParameter'
 kCharge = 'Charge'
 kQuality = 'Quality'
 kIsolation = 'Isolation'
@@ -189,6 +194,8 @@ CutTypeKey = {
     tmEventSetup.Threshold: kThreshold,
     tmEventSetup.Eta: kEta,
     tmEventSetup.Phi: kPhi,
+    tmEventSetup.UnconstraintPt: kUnconstraintPt,
+    tmEventSetup.ImpactParameter: kImpactParameter,
     tmEventSetup.Charge: kCharge,
     tmEventSetup.Quality: kQuality,
     tmEventSetup.Isolation: kIsolation,
@@ -320,6 +327,7 @@ ConditionTypeKey = {
     tmEventSetup.CaloCaloCorrelation: kCaloCaloCorrelation,
     tmEventSetup.CaloEsumCorrelation: kCaloEsumCorrelation,
     tmEventSetup.InvariantMass: kInvariantMass,
+    tmEventSetup.InvariantMassUpt: kInvariantMassUpt,
     tmEventSetup.TransverseMass: kTransverseMass,
     tmEventSetup.CaloCaloCorrelationOvRm: kCaloCaloCorrelationOvRm,
     tmEventSetup.InvariantMassOvRm: kInvariantMassOvRm,
@@ -336,6 +344,8 @@ ConditionTypeKey = {
     tmEventSetup.DoubleJetOvRm: kDoubleJetOvRm,
     tmEventSetup.TripleJetOvRm: kTripleJetOvRm,
     tmEventSetup.QuadJetOvRm: kQuadJetOvRm,
+    tmEventSetup.InvariantMassThreeObj: kInvariantMassThreeObj,
+    tmEventSetup.InvariantMassDivDeltaR: kInvariantMassDivDeltaR,
 }
 """Dictionary for condition type enumerations."""
 
@@ -411,6 +421,8 @@ class ResourceTray(object):
     kCaloConditionOvRm = 'CaloConditionOvRm'
     kCorrelationCondition = 'CorrelationCondition'
     kCorrelationConditionOvRm = 'CorrelationConditionOvRm'
+    kCorrelationConditionOvRm = 'CorrelationConditionOvRm'
+    kInvariantMassThreeObjCondition = 'InvariantMassThreeObjCondition'
 
     def __init__(self, filename):
         """Attribute *filename* is a filename of an JSON payload configuration file."""
@@ -496,16 +508,30 @@ class ResourceTray(object):
         mapped_objects = self.map_objects(object_keys)
         # instance
         instance = self.map_instance(ConditionTypeKey[condition.type])
+        print ("******************************")
+        print ("instance: ", instance)
+        print ("******************************")
         # select
         if instance in (self.kMuonCondition, self.kCaloCondition, self.kCaloConditionOvRm):
             return n_objects * n_requirements
         elif instance == self.kCorrelationCondition:
+            print ("******************************")
+            print ("instance kCorrelationCondition: ", instance)
+            print ("******************************")
             if condition.same_object_types and condition.same_object_bxs:
                 return n_objects * (n_objects - 1) * 0.5
             else:
                 n_objects_1 = objects[0].slice_size
                 n_objects_2 = objects[1].slice_size
                 return n_objects_1 * n_objects_2
+        elif instance == self.kInvariantMassThreeObjCondition:
+            print ("******************************")
+            print ("instance in InvariantMassThreeObjCondition: ", instance)
+            print ("******************************")
+            if mapped_objects == ['calo', 'calo', 'calo']:
+                return n_objects * (n_objects - 1) * (n_objects - 2) / 6
+            elif mapped_objects == ['muon', 'muon', 'muon']:
+                return n_objects * (n_objects - 1) * (n_objects - 2) / 6
         elif instance == self.kCorrelationConditionOvRm:
             if mapped_objects == ['calo', 'calo', 'calo']:
                 return n_objects * (n_objects - 1) * 0.5
@@ -549,6 +575,11 @@ class ResourceTray(object):
                 n_objects_1 = objects[0].slice_size
                 n_objects_2 = objects[1].slice_size
                 return n_objects_1 * n_objects_2
+        elif instance == self.kInvariantMassThreeObjCondition:
+            if mapped_objects == ['calo', 'calo', 'calo']:
+                return n_objects * (n_objects - 1) * 0.5
+            elif mapped_objects == ['muon', 'muon', 'muon']:
+                return n_objects * (n_objects - 1) * 0.5
         elif instance == self.kCorrelationConditionOvRm:
             if mapped_objects == ['calo', 'calo', 'calo']:
                 if cut in (kOvRmDeltaEta, kOvRmDeltaPhi, kOvRmDeltaR):
