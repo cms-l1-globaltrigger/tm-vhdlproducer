@@ -56,7 +56,7 @@
 {%- include  "instances/calo_muon_correlation_condition.vhd.j2" %}
 {%- endfor %}
 {%- for condition in module.muonMuonCorrConditions %}
-{%- include  "instances/muon_muon_correlation_condition.vhd.j2" %}
+{%- include  "instances/muon_muon_corr_cond.vhd.j2" %}
 {%- endfor %}
 {%- for condition in module.caloEsumCorrConditions %}
 {%- include  "instances/calo_esums_correlation_condition.vhd.j2" %}
