@@ -5,7 +5,7 @@
     generic map(
         {{ condition.objectsInSameBx }},
         {{ condition.deltaEta.enabled }}, {{ condition.deltaPhi.enabled }}, {{ condition.deltaR.enabled }}, {{ condition.mass.enabled }}, {{ condition.mass.type }}, {{ condition.twoBodyPt.enabled }},
-        {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o1.operator }}, {{ o1.type|upper }}_TYPE,
+        {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o1.operator }},
         X"{{ o1.threshold|X04 }}",
         {{ o1.etaNrCuts }}, 
         X"{{ o1.etaW1UpperLimit|X04 }}", X"{{ o1.etaW1LowerLimit|X04 }}",
@@ -17,7 +17,7 @@
         {{ o1.phiW2Ignore }}, X"{{ o1.phiW2UpperLimit|X04 }}", X"{{ o1.phiW2LowerLimit|X04 }}",
         "{{ o1.charge }}", X"{{ o1.qualityLUT|X04 }}", X"{{ o1.isolationLUT|X01 }}",
         {{ o1.uptCutSel }}, X"{{ o1.uptUpperLimit|X04 }}", X"{{ o1.uptLowerLimit|X04 }}", X"{{ o1.impactParameterLUT|X01 }}",
-        {{ o2.sliceLow }}, {{ o2.sliceHigh }}, {{ o2.operator }}, {{ o2.type|upper }}_TYPE,
+        {{ o2.sliceLow }}, {{ o2.sliceHigh }}, {{ o2.operator }},
         X"{{ o2.threshold|X04 }}",
         {{ o2.etaNrCuts }}, 
         X"{{ o2.etaW1UpperLimit|X04 }}", X"{{ o2.etaW1LowerLimit|X04 }}",
@@ -40,21 +40,18 @@
         X"{{ condition.mass.upper|X16 }}", X"{{ condition.mass.lower|X16 }}",
         X"000000000000000000000", X"000000000000000000000",
     {%- endif %}
-        X"{{ condition.twoBodyPt.threshold|X16 }}", 
-        {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_VECTOR_WIDTH,
-        {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_DIV_DR_VECTOR_WIDTH, 
-        {{ o1.type|upper }}_{{ o2.type|upper }}_TBPT_VECTOR_WIDTH
+        X"{{ condition.twoBodyPt.threshold|X16 }}" 
     )
     port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o2.type|lower }}_bx_{{ o2.bx }},
         ls_charcorr_double_bx_{{ o1.bx }}_bx_{{ o2.bx }}, os_charcorr_double_bx_{{ o1.bx }}_bx_{{ o2.bx }},
     {%- if condition.deltaEta.enabled == 'true' %}
-        deta => diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_eta_vector,
+        deta => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector,
     {%- endif %}
     {%- if condition.deltaPhi.enabled == 'true' %}    
-        dphi => diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_vector,
+        dphi => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
     {%- endif %}
     {%- if condition.deltaR.enabled == 'true' %}    
-        dr => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dr_vector,
+        dr => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_delta_r_vector,
     {%- endif %}
     {%- if condition.mass.enabled == 'true' and (condition.mass.type == 0 or condition.mass.type == 2) %}    
         mass_inv => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_vector,
@@ -68,6 +65,6 @@
     {%- if condition.twoBodyPt.enabled == 'true' %}    
         tbpt => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt_vector,
     {%- endif %}
-        {{ condition.vhdl_signal }});
+        condition_o => {{ condition.vhdl_signal }});
 {%- endblock instantiate_calo_calo_corr_cond %}
 {# eof #}

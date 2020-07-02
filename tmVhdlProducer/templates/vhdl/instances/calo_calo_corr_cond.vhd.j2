@@ -46,13 +46,13 @@
     )
     port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o2.type|lower }}_bx_{{ o2.bx }},
     {%- if condition.deltaEta.enabled == 'true' %}
-        deta => diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_eta_vector,
+        deta => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector,
     {%- endif %}
     {%- if condition.deltaPhi.enabled == 'true' %}    
-        dphi => diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_vector,
+        dphi => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
     {%- endif %}
     {%- if condition.deltaR.enabled == 'true' %}    
-        dr => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dr_vector,
+        dr => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_delta_r_vector,
     {%- endif %}
     {%- if condition.mass.enabled == 'true' and (condition.mass.type == 0 or condition.mass.type == 2) %}    
         mass_inv => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_vector,
@@ -66,6 +66,6 @@
     {%- if condition.twoBodyPt.enabled == 'true' %}    
         tbpt => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt_vector,
     {%- endif %}
-        {{ condition.vhdl_signal }});
+        condition_o => {{ condition.vhdl_signal }});
 {%- endblock instantiate_calo_calo_corr_cond %}
 {# eof #}

@@ -26,7 +26,7 @@
         X"{{ condition.twoBodyPt.threshold|X16 }}", MUON_SIN_COS_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o2.type|upper }}_SIN_COS_PRECISION
     )
     port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx|lower }}({{ o1.sliceLow }} to {{ o1.sliceHigh }}), {{ o2.type|lower }}_bx_{{ o2.bx|lower }},
-        diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx|lower }}_bx_{{ o2.bx|lower }}_phi_vector,
+        {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx|lower }}_bx_{{ o2.bx|lower }}_dphi_vector,
         {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, {{ o2.type|lower }}_pt_vector_bx_{{ o2.bx }},
         {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
         {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, conv_{{ o2.type|lower }}_cos_phi_bx_{{ o2.bx }}, {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }}, conv_{{ o2.type|lower }}_sin_phi_bx_{{ o2.bx }},

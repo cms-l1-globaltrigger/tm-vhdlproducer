@@ -47,7 +47,7 @@
 {%- include  "instances/esums_condition.vhd.j2" %}
 {%- endfor %}
 {%- for condition in module.caloCaloCorrConditions %}
-{%- include  "instances/calo_calo_corr_cond.vhd.j2" %}
+{%- include  "instances/calo_calo_correlation_condition.vhd.j2" %}
 {%- endfor %}
 {%- for condition in module.caloCaloCorrOvRmConditions %}
 {%- include  "instances/calo_calo_calo_correlation_orm_condition.vhd.j2" %}
@@ -56,7 +56,7 @@
 {%- include  "instances/calo_muon_correlation_condition.vhd.j2" %}
 {%- endfor %}
 {%- for condition in module.muonMuonCorrConditions %}
-{%- include  "instances/muon_muon_corr_cond.vhd.j2" %}
+{%- include  "instances/muon_muon_correlation_condition.vhd.j2" %}
 {%- endfor %}
 {%- for condition in module.caloEsumCorrConditions %}
 {%- include  "instances/calo_esums_correlation_condition.vhd.j2" %}
