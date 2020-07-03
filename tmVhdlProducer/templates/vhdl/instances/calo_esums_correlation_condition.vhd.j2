@@ -3,7 +3,8 @@
   {%- set o2 = condition.objects[1] %}
 {{ condition.vhdl_signal }}_i: entity work.calo_esums_correlation_condition
     generic map(
-        {{ condition.deltaPhi.enabled }}, {{ condition.mass.enabled }}, TRANSVERSE_MASS_TYPE, {{ condition.twoBodyPt.enabled }},
+        {{ condition.deltaPhi.enabled }}, {{ condition.mass.enabled }}, {{ condition.twoBodyPt.enabled }},
+        NR_{{ o1.type|upper }}_OBJECTS,
         {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o1.operator }}, {{ o1.type|upper }}_TYPE,
         X"{{ o1.threshold|X04 }}",
         {{ o1.etaNrCuts }}, 
@@ -21,14 +22,20 @@
         {{ o2.phiW2Ignore }}, X"{{ o2.phiW2UpperLimit|X04 }}", X"{{ o2.phiW2LowerLimit|X04 }}",
         X"{{ condition.deltaPhi.upper|X08 }}", X"{{ condition.deltaPhi.lower|X08 }}",
         X"{{ condition.mass.upper|X16 }}", X"{{ condition.mass.lower|X16 }}",
-        {{ o1.type|upper }}_PT_VECTOR_WIDTH, {{ o2.type|upper }}_PT_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_PRECISION, {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH,
-        X"{{ condition.twoBodyPt.threshold|X16 }}", CALO_SIN_COS_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o2.type|upper }}_SIN_COS_PRECISION
+        X"{{ condition.twoBodyPt.threshold|X16 }}",
+        {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_VECTOR_WIDTH,
+        {{ o1.type|upper }}_{{ o2.type|upper }}_TBPT_VECTOR_WIDTH
    )
     port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}({{ o1.sliceLow }} to {{ o1.sliceHigh }}), {{ o2.type|lower }}_bx_{{ o2.bx }},
-        {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
-        {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, {{ o2.type|lower }}_pt_vector_bx_{{ o2.bx }},
-        {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
-        {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, {{ o2.type|lower }}_cos_phi_bx_{{ o2.bx }}, {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }}, {{ o2.type|lower }}_sin_phi_bx_{{ o2.bx }},
-        {{ condition.vhdl_signal }});
+    {%- if condition.deltaPhi.enabled == 'true' %}    
+        dphi => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
+    {%- endif %}
+    {%- if condition.mass.enabled == 'true' %}    
+        mass_trv => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_trv_vector,
+    {%- endif %}
+    {%- if condition.twoBodyPt.enabled == 'true' %}    
+        tbpt => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt_vector,
+    {%- endif %}
+        condition_o => {{ condition.vhdl_signal }});
 {%- endblock instantiate_calo_esums_correlation_condition %}
 {# eof #}
