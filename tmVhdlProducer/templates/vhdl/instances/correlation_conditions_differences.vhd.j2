@@ -21,7 +21,7 @@
         {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l2: for j in 0 to NR_{{ o2.type|upper }}_OBJECTS-1 generate
             {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type|upper }}_{{ o2.type|upper }}_DIFF_ETA_LUT({{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
             {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type|upper }}_{{ o2.type|upper }}_DIFF_PHI_LUT({{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
-    {%- if cuts[0] == 'true' %}
+    {%- if cuts[0] == 'true' or cuts[4] == 'true' %}
             delta_r_calc_i: entity work.delta_r_calc
                 port map(
                     {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector(i,j),
@@ -43,7 +43,7 @@
         {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l2: for j in 0 to NR_{{ o2.type|upper }}_OBJECTS-1 generate
             {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type|upper }}_{{ o2.type|upper }}_DIFF_ETA_LUT({{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
             {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type|upper }}_{{ o2.type|upper }}_DIFF_PHI_LUT({{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
-    {%- if cuts[0] == 'true' %}
+    {%- if cuts[0] == 'true' or cuts[4] == 'true' %}
             delta_r_calc_i: entity work.delta_r_calc
                 port map(
                     {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector(i,j),
@@ -75,7 +75,7 @@
         {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l2: for j in 0 to NR_{{ o2.type|upper }}_OBJECTS-1 generate
             {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type|upper }}_{{ o2.type|upper }}_DIFF_ETA_LUT({{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
             {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type|upper }}_{{ o2.type|upper }}_DIFF_PHI_LUT({{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
-    {%- if cuts[0] == 'true' %}
+    {%- if cuts[0] == 'true' or cuts[4] == 'true' %}
             delta_r_calc_i: entity work.delta_r_calc
                 port map(
                     {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector(i,j),
