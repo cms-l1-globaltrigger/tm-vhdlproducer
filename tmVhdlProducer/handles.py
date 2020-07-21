@@ -121,6 +121,10 @@ CorrelationConditionTypes = [
     tmEventSetup.TransverseMass,
 ]
 
+InvariantMass3ConditionTypes = [
+    tmEventSetup.InvariantMass3,
+]
+
 CorrelationConditionOvRmTypes = [
     tmEventSetup.CaloCaloCorrelationOvRm,
     tmEventSetup.InvariantMassOvRm,
@@ -403,6 +407,9 @@ class ConditionHandle(Handle):
 
     def isCorrelationCondition(self):
         return self.type in CorrelationConditionTypes
+
+    def isInvariantMass3Condition(self):
+        return self.type in InvariantMass3ConditionTypes
 
     def isCorrelationConditionOvRm(self):
         return self.type in CorrelationConditionOvRmTypes

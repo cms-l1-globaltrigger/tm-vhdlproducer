@@ -60,6 +60,7 @@
                 "TowerCount": "TowerCountCondition",
                 "Externals": "ExternalCondition",
                 "InvariantMass": "CorrelationCondition",
+                "InvariantMass3": "InvariantMass3Condition",
                 "TransverseMass": "CorrelationCondition",
                 "CaloCaloCorrelationOvRm": "CorrelationConditionOvRm",
                 "InvariantMassOvRm": "CorrelationConditionOvRm",
@@ -442,6 +443,35 @@
                                 "type": "chgcor",
                                 "processors": 0.0,
                                 "sliceLUTs": 0.0
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "InvariantMass3Condition",
+                "objects": [
+                    {
+                        "types": ["calo", "calo", "calo"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.00025,
+                        "cuts": [
+                            {
+                                "type": "mass",
+                                "processors": 0.00083,
+                                "sliceLUTs": 0.000055
+                            }
+                        ]
+                    },
+                    {
+                        "types": ["muon", "muon", "muon"],
+                        "processors": 0.0,
+                        "sliceLUTs": 0.00022,
+                        "cuts": [
+                            {
+                                "type": "mass",
+                                "processors": 0.00083,
+                                "sliceLUTs": 0.00005
                             }
                         ]
                     }

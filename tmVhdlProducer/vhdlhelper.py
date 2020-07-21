@@ -21,6 +21,7 @@ Condition template helpers for needs of different condition types.
     * CorrelationConditionHelper
     * CorrelationConditionOvRmHelper
     * CaloConditionOvRmHelper
+    * InvariantMass3ConditionHelper
 
 Unified object template helper (proably better to create dedicated for every
 object type).
@@ -290,6 +291,8 @@ def conditionFactory(condition_handle):
         return CorrelationConditionOvRmHelper(condition_handle)
     elif condition_handle.isCaloConditionOvRm():
         return CaloConditionOvRmHelper(condition_handle)
+    elif condition_handle.isInvariantMass3Condition():
+        return InvariantMass3ConditionHelper(condition_handle)
     else:
         raise RuntimeError("unknown condition type")
 
@@ -458,6 +461,16 @@ class ModuleHelper(VhdlHelper):
              (condition.objects[0].is_muon_type and condition.objects[1].is_esums_type), self.conditions)
 
     @property
+    def caloInvariantMass3Conditions(self):
+        return filter(lambda condition: condition.handle.isInvariantMass3Condition() and \
+             (condition.objects[0].is_calo_type), self.conditions)
+
+    @property
+    def muonInvariantMass3Conditions(self):
+        return filter(lambda condition: condition.handle.isInvariantMass3Condition() and \
+             (condition.objects[0].is_muon_type), self.conditions)
+
+    @property
     def minBiasConditions(self):
         return filter(lambda condition: condition.handle.isMinBiasCondition(), self.conditions)
 
@@ -496,6 +509,14 @@ class ModuleHelper(VhdlHelper):
                 b = condition.objects[condition.nr_objects-1]
                 key = (a.type, b.type, a.bx, b.bx)
                 combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+            if isinstance(condition, InvariantMass3ConditionHelper):
+                a, b, c = condition.objects
+                key = (a.type, b.type, a.bx, b.bx) # a-b combination
+                combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+                key = (a.type, c.type, a.bx, c.bx) # a-c combination
+                combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(c))
+                key = (b.type, c.type, b.bx, c.bx) # b-c combination
+                combinations[key] = (CorrelationObjectHelper(b), CorrelationObjectHelper(c))
         return combinations.values()
 
     @property
@@ -510,6 +531,8 @@ class ModuleHelper(VhdlHelper):
             if condition.handle.isCorrelationConditionOvRm():
                 return True
             if condition.handle.isCaloConditionOvRm():
+                return True
+            if condition.handle.isInvariantMass3Condition():
                 return True
             if hasattr(condition, 'hasTwoBodyPtCut'):
                 return bool(condition.hasTwoBodyPtCut)
@@ -552,7 +575,7 @@ class ModuleHelper(VhdlHelper):
     def muonBxCombinations(self):
         combinations = set()
         for condition in self.conditions:
-            if type(condition) in (MuonConditionHelper, CorrelationConditionHelper):
+            if type(condition) in (MuonConditionHelper, CorrelationConditionHelper, InvariantMass3ConditionHelper):
                 if condition.nr_objects == 2:
                     a = condition.objects[0]
                     b = condition.objects[1]
@@ -687,7 +710,7 @@ class CaloConditionHelper(ConditionHelper):
     """Number of required objects."""
 
     def __init__(self, condition_handle):
-        super(CaloConditionHelper, self).__init__(condition_handle)
+        super().__init__(condition_handle)
         # Default attributes
         self.twoBodyPt = TwoBodyPtCutHelper(0)
         self.update(condition_handle)
@@ -714,7 +737,7 @@ class MuonConditionHelper(ConditionHelper):
     """Number of required objects."""
 
     def __init__(self, condition_handle):
-        super(MuonConditionHelper, self).__init__(condition_handle)
+        super().__init__(condition_handle)
         # Default attributes
         self.chargeCorrelation = charge_correlation_encode('ig')
         self.twoBodyPt = TwoBodyPtCutHelper(0)
@@ -773,8 +796,12 @@ class CorrelationConditionHelper(ConditionHelper):
     ReqObjects = 2
     """Number of required objects."""
 
+    InvariantMassType = 0
+    TransverseMassType = 1
+    InvariantMass3Type = 2
+
     def __init__(self, condition_handle):
-        super(CorrelationConditionHelper, self).__init__(condition_handle)
+        super().__init__(condition_handle)
         # Default attributes
         self.deltaEta = DeltaEtaCutHelper(0, 0)
         self.deltaPhi = DeltaPhiCutHelper(0, 0)
@@ -804,14 +831,13 @@ class CorrelationConditionHelper(ConditionHelper):
             elif cut_handle.cut_type == tmEventSetup.ChargeCorrelation:
                 self.chargeCorrelation = charge_correlation_encode(cut_handle.data)
 
-        # Definition of mass_type:
-        # 0 => invariant mass
-        # 1 => transverse mass
-
+        # Update mass cut type
         if condition_handle.type == tmEventSetup.InvariantMass:
-            self.mass.type = 0
+            self.mass.type = self.InvariantMassType
         elif condition_handle.type == tmEventSetup.TransverseMass:
-            self.mass.type = 1
+            self.mass.type = self.TransverseMassType
+        elif condition_handle.type == tmEventSetup.InvariantMass3:
+            self.mass.type = self.InvariantMass3Type
 
 class CorrelationConditionOvRmHelper(ConditionHelper):
     """Correlation condition template helper class.
@@ -837,8 +863,11 @@ class CorrelationConditionOvRmHelper(ConditionHelper):
     ReqObjects = 3
     """Number of required objects."""
 
+    InvariantMassOvRmType = 0
+    TransverseMassOvRmType = 1
+
     def __init__(self, condition_handle):
-        super(CorrelationConditionOvRmHelper, self).__init__(condition_handle)
+        super().__init__(condition_handle)
         # Default attributes
         self.deltaEtaOrm = DeltaEtaCutHelper(0, 0)
         self.deltaPhiOrm = DeltaPhiCutHelper(0, 0)
@@ -877,14 +906,51 @@ class CorrelationConditionOvRmHelper(ConditionHelper):
             elif cut_handle.cut_type == tmEventSetup.OvRmDeltaR:
                 self.deltaROrm.update(cut_handle)
 
-        # Definition of mass_type:
-        # 0 => invariant mass
-        # 1 => transverse mass
-
+        # Update mass cut type
         if condition_handle.type == tmEventSetup.InvariantMassOvRm:
-            self.mass.type = 0
+            self.mass.type = self.InvariantMassOvRmType
         elif condition_handle.type == tmEventSetup.TransverseMassOvRm:
-            self.mass.type = 1
+            self.mass.type = self.TransverseMassOvRmType
+
+class InvariantMass3ConditionHelper(ConditionHelper):
+    """Invariant mass for three objects condition template helper class.
+    Attributes:
+        name         condition name from event setup [str]
+        type         condition type name [str]
+        vhdl_signal  VHDL safe condition signal name [str]
+        objects      list of object template helpers contained by condition
+        nr_objects   number of actually used objects [int]
+        handle       reference to underlying condition handle [ConditionHandle]
+        mass         [MassCutHelper]
+        chargeCorrelation [str]
+    """
+
+    ReqObjects = 3
+    """Number of required objects."""
+
+    InvariantMass3Type = 2
+
+    def __init__(self, condition_handle):
+        super().__init__(condition_handle)
+        # Default attributes
+        self.mass = MassCutHelper(0, 0, type=0)
+        self.chargeCorrelation = charge_correlation_encode('ig')
+        self.update(condition_handle)
+
+    @property
+    def objectsInSameBx(self):
+        """Returns 'true' if all objects of same BX offset else returns 'false'."""
+        return vhdl_bool(len(set([obj.bx for obj in self.objects])) == 1)
+
+    def update(self, condition_handle):
+        for cut_handle in condition_handle.cuts:
+            if cut_handle.cut_type == tmEventSetup.Mass:
+                self.mass.update(cut_handle)
+            elif cut_handle.cut_type == tmEventSetup.ChargeCorrelation:
+                self.chargeCorrelation = charge_correlation_encode(cut_handle.data)
+
+        if condition_handle.type == tmEventSetup.InvariantMass3:
+            self.mass.type = self.InvariantMass3Type
 
 class CaloConditionOvRmHelper(ConditionHelper):
     """Correlation condition template helper class.
@@ -906,7 +972,7 @@ class CaloConditionOvRmHelper(ConditionHelper):
     """Number of required objects."""
 
     def __init__(self, condition_handle):
-        super(CaloConditionOvRmHelper, self).__init__(condition_handle)
+        super().__init__(condition_handle)
         # Defaults
         self.deltaEtaOrm = DeltaEtaCutHelper(0, 0)
         self.deltaPhiOrm = DeltaPhiCutHelper(0, 0)
@@ -945,8 +1011,12 @@ class ObjectHelper(VhdlHelper):
         externalSignalName  [str]
         externalChannelId   [int]
         threshold           [int]
+        hasUpt              [str]
+        uptLowerLimit       [int]
+        uptUpperLimit       [int]
         isolationLUT        [int]
         qualityLUT          [int]
+        impactParameterLUT  [int]
         charge              [str]
         count               [int]
         etaNrCuts           [int]
@@ -983,8 +1053,12 @@ class ObjectHelper(VhdlHelper):
         self.externalChannelId = 0
         # common cuts
         self.threshold = 0
+        self.hasUpt = vhdl_bool(False)
+        self.uptLowerLimit = 0
+        self.uptUpperLimit = 0
         self.isolationLUT = 0xf
         self.qualityLUT = 0xffff
+        self.impactParameterLUT = 0xf
         self.charge = charge_encode('ign')
         self.count = 0
         self.hasCount = False
@@ -1027,6 +1101,10 @@ class ObjectHelper(VhdlHelper):
         for cut_handle in object_handle.cuts:
             if cut_handle.cut_type == tmEventSetup.Threshold:
                 self.threshold = cut_handle.minimum.index
+            elif cut_handle.cut_type == tmEventSetup.UnconstrainedPt:
+                self.hasUpt = vhdl_bool(True)
+                self.uptLowerLimit = cut_handle.minimum.index
+                self.uptUpperLimit = cut_handle.maximum.index
             elif cut_handle.cut_type == tmEventSetup.Isolation:
                 self.isolationLUT = int(cut_handle.data)
             elif cut_handle.cut_type == tmEventSetup.Eta:
@@ -1035,6 +1113,8 @@ class ObjectHelper(VhdlHelper):
                 phiCuts.append((cut_handle.minimum.index, cut_handle.maximum.index))
             elif cut_handle.cut_type == tmEventSetup.Quality:
                 self.qualityLUT = int(cut_handle.data)
+            elif cut_handle.cut_type == tmEventSetup.ImpactParameter:
+                self.impactParameterLUT = int(cut_handle.data)
             elif cut_handle.cut_type == tmEventSetup.Charge:
                 self.charge = charge_encode(cut_handle.data)
             if cut_handle.cut_type == tmEventSetup.Count:
@@ -1160,7 +1240,7 @@ class DeltaRCutHelper(RangeCutHelper):
 class MassCutHelper(RangeCutHelper):
 
     def __init__(self, lower=0, upper=0, type=0):
-        super(MassCutHelper, self).__init__(lower, upper)
+        super().__init__(lower, upper)
         self.type = type
 
     def update(self, cut_handle):
