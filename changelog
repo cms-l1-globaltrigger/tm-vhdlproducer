@@ -5,26 +5,25 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.7.5] - 2020-06-18
-### Changed
-- bug fix in vhdlhelper.py:
-  - corrected wrong names of eta windows 3 to 5
+### Fixed
+- using 5 eta windows
 
 ## [2.7.4] - 2020-01-15
-### Changed
-- bug fix in VHDL templates:
-  - calo_calo_calo_correlation_orm_condition.vhd.j2
+### Fixed
+- calo_calo_calo_correlation_orm_condition.vhd.j2
 
 ## [2.7.3] - 2020-01-08
+### Changed
 - using utm 0.7.4 patch
 
 ## [2.7.2] - 2019-10-16
+### Changed
 - depends on meta package tm-python
 
 ## [2.7.1] - 2019-10-15
-### Changed
-- bug fix in VHDL templates:
-  - calo_calo_calo_correlation_orm_condition.vhd.j2
-  - calo_conditions_orm.vhd.j2 
+### Fixed
+- calo_calo_calo_correlation_orm_condition.vhd.j2
+- calo_conditions_orm.vhd.j2
 
 ## [2.7.0] - 2019-10-03
 ### Added
