@@ -1,0 +1,109 @@
+{%- block instantiate_correlation_correlation_cuts %}
+  {%- for o1, o2 in module.correlationCombinationsCosDphi %}
+    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosdphi_l1: for i in 0 to NR_{{ o1.type|upper }}_OBJECTS-1 generate
+        {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosdphi_l2: for j in 0 to NR_{{ o2.type|upper }}_OBJECTS-1 generate
+            {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type|upper }}_{{ o2.type|upper }}_COS_DPHI_LUT({{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer(i,j)), {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH);
+        end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosdphi_l2;
+    end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosdphi_l1;
+  {%- endfor %}
+
+  {%- for o1, o2 in module.correlationCombinationsCoshDeta %}
+    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_coshdeta_l1: for i in 0 to NR_{{ o1.type|upper }}_OBJECTS-1 generate
+        {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_coshdeta_l2: for j in 0 to NR_{{ o2.type|upper }}_OBJECTS-1 generate
+            {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type|upper }}_{{ o2.type|upper }}_COSH_DETA_LUT({{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer(i,j)), {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH);
+        end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_coshdeta_l2;
+    end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_coshdeta_l1;
+  {%- endfor %}
+  
+  {%- for o1, o2 in module.correlationCombinationsDeltaR %}
+    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dr_l1: for i in 0 to NR_{{ o1.type|upper }}_OBJECTS-1 generate
+        {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dr_l2: for j in 0 to NR_{{ o2.type|upper }}_OBJECTS-1 generate
+            delta_r_calc_i: entity work.delta_r_calc
+                port map(
+                    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector(i,j),
+                    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector(i,j),
+                    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_delta_r_vector(i,j)
+                );
+        end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dr_l2;
+    end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dr_l1;
+  {%- endfor %}
+  
+  {%- for o1, o2 in module.correlationCombinationsTrvMass %}
+    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_trvmass_l1: for i in 0 to NR_{{ o1.type|upper }}_OBJECTS-1 generate
+        {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_trvmass_l2: for j in 0 to NR_{{ o2.type|upper }}_OBJECTS-1 generate
+            mass_inv_i: entity work.mass_transverse_calc
+                generic map(
+                    {{ o1.type|upper }}_PT_VECTOR_WIDTH, {{ o2.type|upper }}_PT_VECTOR_WIDTH, 
+                    {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH
+                )
+                port map(
+                    {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}(i)({{ o1.type|upper }}_PT_VECTOR_WIDTH-1 downto 0), 
+                    {{ o2.type|lower }}_pt_vector_bx_{{ o2.bx }}(j)({{ o2.type|upper }}_PT_VECTOR_WIDTH-1 downto 0),
+                    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector(i,j),
+                    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_trv_vector(i,j)
+                );
+        end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_trvmass_l2;
+    end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_trvmass_l1;
+  {%- endfor %}
+  
+  {%- for o1, o2 in module.correlationCombinationsInvMass %}
+    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_invmass_l1: for i in 0 to NR_{{ o1.type|upper }}_OBJECTS-1 generate
+        {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_invmass_l2: for j in 0 to NR_{{ o2.type|upper }}_OBJECTS-1 generate
+            mass_inv_i: entity work.mass_invariant_calc
+                generic map(
+                    {{ o1.type|upper }}_PT_VECTOR_WIDTH, {{ o2.type|upper }}_PT_VECTOR_WIDTH, 
+                    {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH
+                )
+                port map(
+                    {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}(i)({{ o1.type|upper }}_PT_VECTOR_WIDTH-1 downto 0), 
+                    {{ o2.type|lower }}_pt_vector_bx_{{ o2.bx }}(j)({{ o2.type|upper }}_PT_VECTOR_WIDTH-1 downto 0),
+                    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector(i,j), 
+                    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector(i,j),
+                    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_vector(i,j)
+                );
+        end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_invmass_l2;
+    end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_invmass_l1;
+  {%- endfor %}
+    
+  {%- for o1, o2 in module.correlationCombinationsInvMassDivDr %}
+    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_invmassdivdr_l1: for i in 0 to NR_{{ o1.type|upper }}_OBJECTS-1 generate
+        {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_invmassdivdr_l2: for j in 0 to NR_{{ o2.type|upper }}_OBJECTS-1 generate
+            mass_div_dr_i: entity work.mass_invariant_div_dr_calc
+                generic map(
+                    {{ o1.type|upper }}_{{ o2.type|upper }}_ROM, {{ o1.type|upper }}_{{ o2.type|upper }}_DETA_BINS_WIDTH_ROM, {{ o1.type|upper }}_{{ o2.type|upper }}_DPHI_BINS_WIDTH_ROM,
+                    {{ o1.type|upper }}_PT_VECTOR_WIDTH, {{ o2.type|upper }}_PT_VECTOR_WIDTH, 
+                    {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o2.type|upper }}_INV_DR_SQ_VECTOR_WIDTH 
+                )
+                port map(
+                    lhc_clk,
+                    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_bin_vector(i,j)({{ o1.type|upper }}_{{ o2.type|upper }}_DETA_BINS_WIDTH-1 downto {{ o1.type|upper }}_{{ o2.type|upper }}_DETA_BINS_WIDTH-{{ o1.type|upper }}_{{ o2.type|upper }}_DETA_BINS_WIDTH_ROM), 
+                    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_bin_vector(i,j)({{ o1.type|upper }}_{{ o2.type|upper }}_DPHI_BINS_WIDTH-1 downto {{ o1.type|upper }}_{{ o2.type|upper }}_DPHI_BINS_WIDTH-{{ o1.type|upper }}_{{ o2.type|upper }}_DPHI_BINS_WIDTH_ROM),
+                    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_vector(i,j),
+                    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr_vector(i,j)
+                );
+        end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_invmassdivdr_l2;
+    end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_invmassdivdr_l1;
+  {%- endfor %}
+    
+  {%- for o1, o2 in module.correlationCombinationsTbpt %}
+    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt_l1: for i in 0 to NR_{{ o1.type|upper }}_OBJECTS-1 generate
+        {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt_l2: for j in 0 to NR_{{ o2.type|upper }}_OBJECTS-1 generate
+    tbpt_i: entity work.tbpt_calc
+                generic map(
+                    {{ o1.type|upper }}_PT_VECTOR_WIDTH, {{ o2.type|upper }}_PT_VECTOR_WIDTH, 
+                    {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH
+                )
+                port map(
+                    {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}(i), 
+                    {{ o2.type|lower }}_pt_vector_bx_{{ o2.bx }}(j),
+                    {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}(i),                    
+                    {{ o2.type|lower }}_cos_phi_bx_{{ o1.bx }}(j),                    
+                    {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }}(i),                    
+                    {{ o2.type|lower }}_sin_phi_bx_{{ o1.bx }}(j),                    
+                    {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt_vector(i,j)
+                );
+        end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt_l2;
+    end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt_l1;
+  {%- endfor %}
+    
+{%- endblock instantiate_correlation_correlation_cuts %}
