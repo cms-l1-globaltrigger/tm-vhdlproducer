@@ -527,7 +527,7 @@ class ModuleHelper(VhdlHelper):
                 self.bx = helper.bx
         combinations = {}
         for condition in self.conditions:
-            if condition.mass.enabled == vhdl_bool(True): 
+            if hasattr(condition, 'mass') and condition.mass.enabled == vhdl_bool(True): 
                 if isinstance(condition, CorrelationConditionHelper):
                     a, b = condition.objects
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
@@ -570,7 +570,7 @@ class ModuleHelper(VhdlHelper):
                 self.bx = helper.bx
         combinations = {}
         for condition in self.conditions:
-            if condition.mass.enabled == vhdl_bool(True) and condition.mass.type != 1: 
+            if hasattr(condition, 'mass') and condition.mass.enabled == vhdl_bool(True) and condition.mass.type != 1: 
                 if isinstance(condition, CorrelationConditionHelper):
                     a, b = condition.objects
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
@@ -613,39 +613,39 @@ class ModuleHelper(VhdlHelper):
                 self.bx = helper.bx
         combinations = {}
         for condition in self.conditions:
-            if condition.deltaR.enabled == vhdl_bool(True) or condition.deltaROrm.enabled == vhdl_bool(True): 
-                if isinstance(condition, CorrelationConditionHelper):
-                    a, b = condition.objects
-                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
-                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, CorrelationConditionOvRmHelper):
-                    if condition.nr_objects == 3:
-                        a, b, c = condition.objects
-                        key = (a.type, b.type, a.bx, b.bx) # a-b combination
+            if (hasattr(condition, 'deltaR') and condition.deltaR.enabled == vhdl_bool(True)) or (hasattr(condition, 'deltaROrm') and condition.deltaROrm.enabled == vhdl_bool(True)):
+                    if isinstance(condition, CorrelationConditionHelper):
+                        a, b = condition.objects
+                        key = (a.type, b.type, a.bx, b.bx) # create custom hash
                         combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                        key = (a.type, c.type, a.bx, c.bx) # a-c combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(c))
-                        key = (b.type, c.type, b.bx, c.bx) # b-c combination
-                        combinations[key] = (CorrelationObjectHelper(b), CorrelationObjectHelper(c))
-                    else:
+                    if isinstance(condition, CorrelationConditionOvRmHelper):
+                        if condition.nr_objects == 3:
+                            a, b, c = condition.objects
+                            key = (a.type, b.type, a.bx, b.bx) # a-b combination
+                            combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+                            key = (a.type, c.type, a.bx, c.bx) # a-c combination
+                            combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(c))
+                            key = (b.type, c.type, b.bx, c.bx) # b-c combination
+                            combinations[key] = (CorrelationObjectHelper(b), CorrelationObjectHelper(c))
+                        else:
+                            a = condition.objects[0]
+                            b = condition.objects[1]
+                            key = (a.type, b.type, a.bx, b.bx)
+                            combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+                    if isinstance(condition, CaloConditionOvRmHelper):
                         a = condition.objects[0]
-                        b = condition.objects[1]
+                        b = condition.objects[condition.nr_objects-1]
                         key = (a.type, b.type, a.bx, b.bx)
                         combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, CaloConditionOvRmHelper):
-                    a = condition.objects[0]
-                    b = condition.objects[condition.nr_objects-1]
-                    key = (a.type, b.type, a.bx, b.bx)
-                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, MassThreeObjConditionHelper):
-                    if condition.nr_objects == 3:
-                        a, b, c = condition.objects
-                        key = (a.type, b.type, a.bx, b.bx) # a-b combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                        key = (a.type, c.type, a.bx, c.bx) # a-c combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(c))
-                        key = (b.type, c.type, b.bx, c.bx) # b-c combination
-                        combinations[key] = (CorrelationObjectHelper(b), CorrelationObjectHelper(c))
+                    if isinstance(condition, MassThreeObjConditionHelper):
+                        if condition.nr_objects == 3:
+                            a, b, c = condition.objects
+                            key = (a.type, b.type, a.bx, b.bx) # a-b combination
+                            combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+                            key = (a.type, c.type, a.bx, c.bx) # a-c combination
+                            combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(c))
+                            key = (b.type, c.type, b.bx, c.bx) # b-c combination
+                            combinations[key] = (CorrelationObjectHelper(b), CorrelationObjectHelper(c))
         return combinations.values()
 
     @property
@@ -656,7 +656,7 @@ class ModuleHelper(VhdlHelper):
                 self.bx = helper.bx
         combinations = {}
         for condition in self.conditions:
-            if condition.mass.enabled == vhdl_bool(True) and condition.mass.type != 1: 
+            if hasattr(condition, 'mass') and condition.mass.enabled == vhdl_bool(True) and condition.mass.type != 1: 
                 if isinstance(condition, CorrelationConditionHelper):
                     a, b = condition.objects
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
@@ -699,7 +699,7 @@ class ModuleHelper(VhdlHelper):
                 self.bx = helper.bx
         combinations = {}
         for condition in self.conditions:
-            if condition.mass.enabled == vhdl_bool(True) and condition.mass.type == 3: 
+            if hasattr(condition, 'mass') and condition.mass.enabled == vhdl_bool(True) and condition.mass.type == 3: 
                 if isinstance(condition, CorrelationConditionHelper):
                     a, b = condition.objects
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
@@ -742,7 +742,7 @@ class ModuleHelper(VhdlHelper):
                 self.bx = helper.bx
         combinations = {}
         for condition in self.conditions:
-            if condition.mass.enabled == vhdl_bool(True) and condition.mass.type == 1: 
+            if hasattr(condition, 'mass') and condition.mass.enabled == vhdl_bool(True) and condition.mass.type == 1: 
                 if isinstance(condition, CorrelationConditionHelper):
                     a, b = condition.objects
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
@@ -785,7 +785,7 @@ class ModuleHelper(VhdlHelper):
                 self.bx = helper.bx
         combinations = {}
         for condition in self.conditions:
-            if condition.twoBodyPt.enabled == vhdl_bool(True): 
+            if hasattr(condition, 'twoBodyPt') and condition.twoBodyPt.enabled == vhdl_bool(True): 
                 if isinstance(condition, CorrelationConditionHelper):
                     a, b = condition.objects
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
@@ -1576,7 +1576,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # Create tray
-    resource = os.path.join(os.path.dirname(__file__), '..', 'config', 'resource_default.json')
+    resource = os.path.join(os.path.dirname(__file__), 'config', 'resource_default.json')
     tray = algodist.ResourceTray(resource)
     # Load event setup
     eventSetup = tmEventSetup.getTriggerMenu(args.filename)
@@ -1616,6 +1616,42 @@ if __name__ == '__main__':
             for a, b in module.correlationCombinations:
                 print(" ", a.type, a.bx, "<>", b.type, b.bx)
             print("-" * 80)
+
+            print("module.correlationCombinationsCosDphi:")
+            for a, b in module.correlationCombinationsCosDphi:
+                print(" ", a.type, a.bx, "<>", b.type, b.bx)
+            print("-" * 80)
+            
+            print("module.correlationCombinationsCoshDeta:")
+            for a, b in module.correlationCombinationsCoshDeta:
+                print(" ", a.type, a.bx, "<>", b.type, b.bx)
+            print("-" * 80)
+            
+            print("module.correlationCombinationsDeltaR:")
+            for a, b in module.correlationCombinationsDeltaR:
+                print(" ", a.type, a.bx, "<>", b.type, b.bx)
+            print("-" * 80)
+            
+            print("module.correlationCombinationsInvMass:")
+            for a, b in module.correlationCombinationsInvMass:
+                print(" ", a.type, a.bx, "<>", b.type, b.bx)
+            print("-" * 80)
+            
+            print("module.correlationCombinationsInvMassDivDr:")
+            for a, b in module.correlationCombinationsInvMassDivDr:
+                print(" ", a.type, a.bx, "<>", b.type, b.bx)
+            print("-" * 80)
+            
+            print("module.correlationCombinationsTrvMass:")
+            for a, b in module.correlationCombinationsTrvMass:
+                print(" ", a.type, a.bx, "<>", b.type, b.bx)
+            print("-" * 80)
+            
+            print("module.correlationCombinationsTbpt:")
+            for a, b in module.correlationCombinationsTrvMass:
+                print(" ", a.type, a.bx, "<>", b.type, b.bx)
+            print("-" * 80)
+            
             print("module.muonBxCombinations:")
             for a, b in module.muonBxCombinations:
                 print("  {a} <> {b}".format(a=a, b=b))

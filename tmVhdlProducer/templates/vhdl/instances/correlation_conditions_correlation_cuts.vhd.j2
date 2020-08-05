@@ -27,7 +27,7 @@
         end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dr_l2;
     end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dr_l1;
   {%- endfor %}
-  
+
   {%- for o1, o2 in module.correlationCombinationsTrvMass %}
     {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_trvmass_l1: for i in 0 to NR_{{ o1.type|upper }}_OBJECTS-1 generate
         {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_trvmass_l2: for j in 0 to NR_{{ o2.type|upper }}_OBJECTS-1 generate
@@ -88,7 +88,7 @@
   {%- for o1, o2 in module.correlationCombinationsTbpt %}
     {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt_l1: for i in 0 to NR_{{ o1.type|upper }}_OBJECTS-1 generate
         {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt_l2: for j in 0 to NR_{{ o2.type|upper }}_OBJECTS-1 generate
-    tbpt_i: entity work.tbpt_calc
+            tbpt_i: entity work.tbpt_calc
                 generic map(
                     {{ o1.type|upper }}_PT_VECTOR_WIDTH, {{ o2.type|upper }}_PT_VECTOR_WIDTH, 
                     {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH

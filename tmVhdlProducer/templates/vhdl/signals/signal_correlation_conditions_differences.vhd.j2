@@ -1,5 +1,5 @@
 {%- block signal_correlation_conditions_differences %}
-  {%- for o1, o2, cuts in module.correlationCombinations %}
+  {%- for o1, o2 in module.correlationCombinations %}
 
     {%- if o2.type in ('ETM', 'HTM', 'ETMHF')  %}
     signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer: dim2_max_phi_range_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => 0));
