@@ -4,45 +4,68 @@
     {%- if o2.type in ('ETM', 'HTM', 'ETMHF')  %}
     signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer: dim2_max_phi_range_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => 0));
     signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector: deta_dphi_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
-    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt_vector: tbpt_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
     {%- else %}
     signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer: dim2_max_eta_range_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => 0));
     signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector: deta_dphi_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
     signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer: dim2_max_phi_range_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => 0));
     signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector: deta_dphi_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
-    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_delta_r_vector: delta_r_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
-    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt_vector: tbpt_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
     {%- endif %}
 
     {%- if ('EG' in o1.type or 'JET' in o1.type or 'TAU' in o1.type) and ('EG' in o2.type or 'JET' in o2.type or 'TAU' in o2.type) %}
-    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector : calo_cosh_cos_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
-    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector : calo_cosh_cos_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
-    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_vector : mass_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));    
     signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_bin_vector : calo_deta_bin_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
     signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_bin_vector : calo_dphi_bin_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));    
-    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr_vector : mass_div_dr_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
-    {%- elif ('EG' in o1.type or 'JET' in o1.type or 'TAU' in o1.type or 'MU' in o1.type) and ('ETM' in o2.type or 'HTM' in o2.type or 'ETMHF' in o2.type) %}
-    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector : calo_cosh_cos_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
-    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_trv_vector : mass_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));    
     {%- elif ('EG' in o1.type or 'JET' in o1.type or 'TAU' in o1.type) and 'MU' in o2.type %}
-    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector : calo_muon_cosh_cos_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
-    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector : calo_muon_cosh_cos_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
-    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_vector : mass_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));    
     signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_bin_vector : calo_deta_bin_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
     signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_bin_vector : calo_dphi_bin_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));    
-    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr_vector : mass_div_dr_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
     {%- elif 'MU' in o1.type and 'MU' in o2.type %}
-    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector : muon_cosh_cos_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
-    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector : muon_cosh_cos_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
-    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_vector : mass_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));    
     signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_bin_vector : muon_deta_bin_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
     signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_bin_vector : muon_dphi_bin_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));    
-    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr_vector : mass_div_dr_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
-    {%- elif 'MU' in o1.type and ('ETM' in o2.type or 'HTM' in o2.type or 'ETMHF' in o2.type) %}
-    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector : calo_muon_cosh_cos_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
-    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_trv_vector : mass_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));    
     {%- endif %}
     
+  {%- endfor %}
+  
+  {%- for o1, o2 in module.correlationCombinationsCoshDeta %}
+    {%- if ('EG' in o1.type or 'JET' in o1.type or 'TAU' in o1.type) and ('EG' in o2.type or 'JET' in o2.type or 'TAU' in o2.type) %}
+    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector : calo_cosh_cos_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
+    {%- elif ('EG' in o1.type or 'JET' in o1.type or 'TAU' in o1.type) and 'MU' in o2.type %}
+    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector : calo_muon_cosh_cos_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
+    {%- elif 'MU' in o1.type and 'MU' in o2.type %}
+    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector : muon_cosh_cos_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
+    {%- endif %}
+  {%- endfor %}
+
+  {%- for o1, o2 in module.correlationCombinationsCosDphi %}
+    {%- if ('EG' in o1.type or 'JET' in o1.type or 'TAU' in o1.type) and ('EG' in o2.type or 'JET' in o2.type or 'TAU' in o2.type) %}
+    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector : calo_cosh_cos_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
+    {%- elif ('EG' in o1.type or 'JET' in o1.type or 'TAU' in o1.type or 'MU' in o1.type) and ('ETM' in o2.type or 'HTM' in o2.type or 'ETMHF' in o2.type) %}
+    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector : calo_cosh_cos_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
+    {%- elif ('EG' in o1.type or 'JET' in o1.type or 'TAU' in o1.type) and 'MU' in o2.type %}
+    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector : calo_muon_cosh_cos_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
+    {%- elif 'MU' in o1.type and 'MU' in o2.type %}
+    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector : muon_cosh_cos_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
+    {%- elif 'MU' in o1.type and ('ETM' in o2.type or 'HTM' in o2.type or 'ETMHF' in o2.type) %}
+    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector : calo_muon_cosh_cos_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
+    {%- endif %}
+  {%- endfor %}
+
+  {%- for o1, o2 in module.correlationCombinationsDeltaR %}
+    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_delta_r_vector: delta_r_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
+  {%- endfor %}
+
+  {%- for o1, o2 in module.correlationCombinationsTrvMass %}
+    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_trv_vector : mass_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));    
+  {%- endfor %}
+  
+  {%- for o1, o2 in module.correlationCombinationsInvMass %}
+    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_vector : mass_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));    
+  {%- endfor %}
+    
+  {%- for o1, o2 in module.correlationCombinationsInvMassDivDr %}
+    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr_vector : mass_div_dr_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
+  {%- endfor %}
+    
+  {%- for o1, o2 in module.correlationCombinationsTbpt %}
+    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt_vector: tbpt_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
   {%- endfor %}
 {%- endblock signal_correlation_conditions_differences %}
 {# eof #}
