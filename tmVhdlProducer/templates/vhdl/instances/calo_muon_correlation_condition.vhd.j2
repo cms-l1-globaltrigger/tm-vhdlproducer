@@ -7,7 +7,7 @@
         NR_{{ o1.type|upper }}_OBJECTS,
         {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o1.operator }}, {{ o1.type|upper }}_TYPE,
         X"{{ o1.threshold|X04 }}",
-        {{ o1.etaNrCuts }}, 
+        {{ o1.etaNrCuts }},
         X"{{ o1.etaW1UpperLimit|X04 }}", X"{{ o1.etaW1LowerLimit|X04 }}",
         X"{{ o1.etaW2UpperLimit|X04 }}", X"{{ o1.etaW2LowerLimit|X04 }}",
         X"{{ o1.etaW3UpperLimit|X04 }}", X"{{ o1.etaW3LowerLimit|X04 }}",
@@ -18,7 +18,7 @@
         X"{{ o1.isolationLUT|X01 }}",
         {{ o2.sliceLow }}, {{ o2.sliceHigh }}, {{ o2.operator }},
         X"{{ o2.threshold|X04 }}",
-        {{ o2.etaNrCuts }}, 
+        {{ o2.etaNrCuts }},
         X"{{ o2.etaW1UpperLimit|X04 }}", X"{{ o2.etaW1LowerLimit|X04 }}",
         X"{{ o2.etaW2UpperLimit|X04 }}", X"{{ o2.etaW2LowerLimit|X04 }}",
         X"{{ o2.etaW3UpperLimit|X04 }}", X"{{ o2.etaW3LowerLimit|X04 }}",
@@ -31,38 +31,38 @@
         X"{{ condition.deltaEta.upper|X08 }}", X"{{ condition.deltaEta.lower|X08 }}",
         X"{{ condition.deltaPhi.upper|X08 }}", X"{{ condition.deltaPhi.lower|X08 }}",
         X"{{ condition.deltaR.upper|X16 }}", X"{{ condition.deltaR.lower|X16 }}",
-    {%- if condition.mass.type == 3 %}
+    {%- if condition.mass.type == condition.mass.InvMassDivDeltaR %}
         X"0000000000000000", X"0000000000000000",
         X"{{ condition.mass.upper|X21 }}", X"{{ condition.mass.lower|X21 }}",
     {%- else %}
         X"{{ condition.mass.upper|X16 }}", X"{{ condition.mass.lower|X16 }}",
         X"000000000000000000000", X"000000000000000000000",
     {%- endif %}
-        X"{{ condition.twoBodyPt.threshold|X16 }}", 
+        X"{{ condition.twoBodyPt.threshold|X16 }}",
         {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_VECTOR_WIDTH,
-        {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_DIV_DR_VECTOR_WIDTH, 
+        {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_DIV_DR_VECTOR_WIDTH,
         {{ o1.type|upper }}_{{ o2.type|upper }}_TBPT_VECTOR_WIDTH
     )
     port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o2.type|lower }}_bx_{{ o2.bx }},
     {%- if condition.deltaEta.enabled == 'true' %}
         deta => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector,
     {%- endif %}
-    {%- if condition.deltaPhi.enabled == 'true' %}    
+    {%- if condition.deltaPhi.enabled == 'true' %}
         dphi => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
     {%- endif %}
-    {%- if condition.deltaR.enabled == 'true' %}    
+    {%- if condition.deltaR.enabled == 'true' %}
         dr => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_delta_r_vector,
     {%- endif %}
-    {%- if condition.mass.enabled == 'true' and (condition.mass.type == 0 or condition.mass.type == 2) %}    
+    {%- if condition.mass.enabled == 'true' and (condition.mass.type == condition.mass.InvMass or condition.mass.type == condition.mass.InvMassUpt) %}
         mass_inv => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_vector,
     {%- endif %}
-    {%- if condition.mass.enabled == 'true' and condition.mass.type == 1 %}    
+    {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.TrvMass %}
         mass_trv => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_trv_vector,
     {%- endif %}
-    {%- if condition.mass.enabled == 'true' and condition.mass.type == 3 %}    
+    {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.InvMassDivDeltaR %}
         mass_div_dr => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr_vector,
     {%- endif %}
-    {%- if condition.twoBodyPt.enabled == 'true' %}    
+    {%- if condition.twoBodyPt.enabled == 'true' %}
         tbpt => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt_vector,
     {%- endif %}
         condition_o => {{ condition.vhdl_signal }});
