@@ -774,7 +774,7 @@ class CaloConditionHelper(ConditionHelper):
     def __init__(self, condition_handle):
         super().__init__(condition_handle)
         # Default attributes
-        self.twoBodyPt = TwoBodyPtCutHelper(0)
+        self.twoBodyPt = TwoBodyPtCutHelper()
         self.update(condition_handle)
 
     def update(self, condition_handle):
@@ -802,7 +802,7 @@ class MuonConditionHelper(ConditionHelper):
         super().__init__(condition_handle)
         # Default attributes
         self.chargeCorrelation = charge_correlation_encode('ig')
-        self.twoBodyPt = TwoBodyPtCutHelper(0)
+        self.twoBodyPt = TwoBodyPtCutHelper()
         self.update_cuts(condition_handle)
 
     def update_cuts(self, condition_handle):
@@ -861,11 +861,11 @@ class CorrelationConditionHelper(ConditionHelper):
     def __init__(self, condition_handle):
         super().__init__(condition_handle)
         # Default attributes
-        self.deltaEta = DeltaEtaCutHelper(0, 0)
-        self.deltaPhi = DeltaPhiCutHelper(0, 0)
-        self.deltaR = DeltaRCutHelper(0, 0)
-        self.mass = MassCutHelper(0, 0)
-        self.twoBodyPt = TwoBodyPtCutHelper(0)
+        self.deltaEta = DeltaEtaCutHelper()
+        self.deltaPhi = DeltaPhiCutHelper()
+        self.deltaR = DeltaRCutHelper()
+        self.mass = MassCutHelper()
+        self.twoBodyPt = TwoBodyPtCutHelper()
         self.chargeCorrelation = charge_correlation_encode('ig')
         self.update(condition_handle)
 
@@ -926,14 +926,14 @@ class CorrelationConditionOvRmHelper(ConditionHelper):
     def __init__(self, condition_handle):
         super().__init__(condition_handle)
         # Default attributes
-        self.deltaEtaOrm = DeltaEtaCutHelper(0, 0)
-        self.deltaPhiOrm = DeltaPhiCutHelper(0, 0)
-        self.deltaROrm = DeltaRCutHelper(0, 0)
-        self.deltaEta = DeltaEtaCutHelper(0, 0)
-        self.deltaPhi = DeltaPhiCutHelper(0, 0)
-        self.deltaR = DeltaRCutHelper(0, 0)
-        self.mass = MassCutHelper(0, 0)
-        self.twoBodyPt = TwoBodyPtCutHelper(0)
+        self.deltaEtaOrm = DeltaEtaCutHelper()
+        self.deltaPhiOrm = DeltaPhiCutHelper()
+        self.deltaROrm = DeltaRCutHelper()
+        self.deltaEta = DeltaEtaCutHelper()
+        self.deltaPhi = DeltaPhiCutHelper()
+        self.deltaR = DeltaRCutHelper()
+        self.mass = MassCutHelper()
+        self.twoBodyPt = TwoBodyPtCutHelper()
         self.chargeCorrelation = charge_correlation_encode('ig')
         self.update(condition_handle)
 
@@ -991,10 +991,10 @@ class CaloConditionOvRmHelper(ConditionHelper):
     def __init__(self, condition_handle):
         super().__init__(condition_handle)
         # Defaults
-        self.deltaEtaOrm = DeltaEtaCutHelper(0, 0)
-        self.deltaPhiOrm = DeltaPhiCutHelper(0, 0)
-        self.deltaROrm = DeltaRCutHelper(0, 0)
-        self.twoBodyPt = TwoBodyPtCutHelper(0)
+        self.deltaEtaOrm = DeltaEtaCutHelper()
+        self.deltaPhiOrm = DeltaPhiCutHelper()
+        self.deltaROrm = DeltaRCutHelper()
+        self.twoBodyPt = TwoBodyPtCutHelper()
         self.update(condition_handle)
 
     @property
