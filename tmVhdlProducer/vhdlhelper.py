@@ -478,42 +478,51 @@ class ModuleHelper(VhdlHelper):
     def towerCountConditions(self):
         return filter(lambda condition: condition.handle.isTowerCountCondition(), self.conditions)
 
+    def conditionCorrelationCombinations(self, condition):
+        """Return dictionary of correlation combination for condition. If
+        condition does not provide any correlations an empty dictionary is
+        returned.
+        """
+        combinations = {}
+        if isinstance(condition, CorrelationConditionHelper):
+            a, b = condition.objects
+            key = (a.type, b.type, a.bx, b.bx) # create custom hash
+            combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+        if isinstance(condition, CorrelationConditionOvRmHelper):
+            if condition.nr_objects == 3:
+                a, b, c = condition.objects
+                key = (a.type, b.type, a.bx, b.bx) # a-b combination
+                combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+                key = (a.type, c.type, a.bx, c.bx) # a-c combination
+                combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(c))
+                key = (b.type, c.type, b.bx, c.bx) # b-c combination
+                combinations[key] = (CorrelationObjectHelper(b), CorrelationObjectHelper(c))
+            else:
+                a = condition.objects[0]
+                b = condition.objects[1]
+                key = (a.type, b.type, a.bx, b.bx)
+                combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+        if isinstance(condition, CaloConditionOvRmHelper):
+            a = condition.objects[0]
+            b = condition.objects[condition.nr_objects-1]
+            key = (a.type, b.type, a.bx, b.bx)
+            combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+        if isinstance(condition, MassThreeObjConditionHelper):
+            if condition.nr_objects == 3:
+                a, b, c = condition.objects
+                key = (a.type, b.type, a.bx, b.bx) # a-b combination
+                combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+                key = (a.type, c.type, a.bx, c.bx) # a-c combination
+                combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(c))
+                key = (b.type, c.type, b.bx, c.bx) # b-c combination
+                combinations[key] = (CorrelationObjectHelper(b), CorrelationObjectHelper(c))
+        return combinations
+
     @property
     def correlationCombinations(self):
         combinations = {}
         for condition in self.conditions:
-            if isinstance(condition, CorrelationConditionHelper):
-                a, b = condition.objects
-                key = (a.type, b.type, a.bx, b.bx) # create custom hash
-                combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-            if isinstance(condition, CorrelationConditionOvRmHelper):
-                if condition.nr_objects == 3:
-                    a, b, c = condition.objects
-                    key = (a.type, b.type, a.bx, b.bx) # a-b combination
-                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                    key = (a.type, c.type, a.bx, c.bx) # a-c combination
-                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(c))
-                    key = (b.type, c.type, b.bx, c.bx) # b-c combination
-                    combinations[key] = (CorrelationObjectHelper(b), CorrelationObjectHelper(c))
-                else:
-                    a = condition.objects[0]
-                    b = condition.objects[1]
-                    key = (a.type, b.type, a.bx, b.bx)
-                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-            if isinstance(condition, CaloConditionOvRmHelper):
-                a = condition.objects[0]
-                b = condition.objects[condition.nr_objects-1]
-                key = (a.type, b.type, a.bx, b.bx)
-                combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-            if isinstance(condition, MassThreeObjConditionHelper):
-                if condition.nr_objects == 3:
-                    a, b, c = condition.objects
-                    key = (a.type, b.type, a.bx, b.bx) # a-b combination
-                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                    key = (a.type, c.type, a.bx, c.bx) # a-c combination
-                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(c))
-                    key = (b.type, c.type, b.bx, c.bx) # b-c combination
-                    combinations[key] = (CorrelationObjectHelper(b), CorrelationObjectHelper(c))
+            combinations.update(self.conditionCorrelationCombinations(condition))
         return combinations.values()
 
     @property
@@ -521,38 +530,7 @@ class ModuleHelper(VhdlHelper):
         combinations = {}
         for condition in self.conditions:
             if hasattr(condition, 'mass') and condition.mass.enabled == vhdl_bool(True):
-                if isinstance(condition, CorrelationConditionHelper):
-                    a, b = condition.objects
-                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
-                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, CorrelationConditionOvRmHelper):
-                    if condition.nr_objects == 3:
-                        a, b, c = condition.objects
-                        key = (a.type, b.type, a.bx, b.bx) # a-b combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                        key = (a.type, c.type, a.bx, c.bx) # a-c combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(c))
-                        key = (b.type, c.type, b.bx, c.bx) # b-c combination
-                        combinations[key] = (CorrelationObjectHelper(b), CorrelationObjectHelper(c))
-                    else:
-                        a = condition.objects[0]
-                        b = condition.objects[1]
-                        key = (a.type, b.type, a.bx, b.bx)
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, CaloConditionOvRmHelper):
-                    a = condition.objects[0]
-                    b = condition.objects[condition.nr_objects-1]
-                    key = (a.type, b.type, a.bx, b.bx)
-                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, MassThreeObjConditionHelper):
-                    if condition.nr_objects == 3:
-                        a, b, c = condition.objects
-                        key = (a.type, b.type, a.bx, b.bx) # a-b combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                        key = (a.type, c.type, a.bx, c.bx) # a-c combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(c))
-                        key = (b.type, c.type, b.bx, c.bx) # b-c combination
-                        combinations[key] = (CorrelationObjectHelper(b), CorrelationObjectHelper(c))
+                combinations.update(self.conditionCorrelationCombinations(condition))
         return combinations.values()
 
     @property
@@ -560,38 +538,7 @@ class ModuleHelper(VhdlHelper):
         combinations = {}
         for condition in self.conditions:
             if hasattr(condition, 'mass') and condition.mass.enabled == vhdl_bool(True) and condition.mass.type != 1:
-                if isinstance(condition, CorrelationConditionHelper):
-                    a, b = condition.objects
-                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
-                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, CorrelationConditionOvRmHelper):
-                    if condition.nr_objects == 3:
-                        a, b, c = condition.objects
-                        key = (a.type, b.type, a.bx, b.bx) # a-b combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                        key = (a.type, c.type, a.bx, c.bx) # a-c combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(c))
-                        key = (b.type, c.type, b.bx, c.bx) # b-c combination
-                        combinations[key] = (CorrelationObjectHelper(b), CorrelationObjectHelper(c))
-                    else:
-                        a = condition.objects[0]
-                        b = condition.objects[1]
-                        key = (a.type, b.type, a.bx, b.bx)
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, CaloConditionOvRmHelper):
-                    a = condition.objects[0]
-                    b = condition.objects[condition.nr_objects-1]
-                    key = (a.type, b.type, a.bx, b.bx)
-                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, MassThreeObjConditionHelper):
-                    if condition.nr_objects == 3:
-                        a, b, c = condition.objects
-                        key = (a.type, b.type, a.bx, b.bx) # a-b combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                        key = (a.type, c.type, a.bx, c.bx) # a-c combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(c))
-                        key = (b.type, c.type, b.bx, c.bx) # b-c combination
-                        combinations[key] = (CorrelationObjectHelper(b), CorrelationObjectHelper(c))
+                combinations.update(self.conditionCorrelationCombinations(condition))
         return combinations.values()
 
     @property
@@ -599,38 +546,7 @@ class ModuleHelper(VhdlHelper):
         combinations = {}
         for condition in self.conditions:
             if (hasattr(condition, 'deltaR') and condition.deltaR.enabled == vhdl_bool(True)) or (hasattr(condition, 'deltaROrm') and condition.deltaROrm.enabled == vhdl_bool(True)):
-                    if isinstance(condition, CorrelationConditionHelper):
-                        a, b = condition.objects
-                        key = (a.type, b.type, a.bx, b.bx) # create custom hash
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                    if isinstance(condition, CorrelationConditionOvRmHelper):
-                        if condition.nr_objects == 3:
-                            a, b, c = condition.objects
-                            key = (a.type, b.type, a.bx, b.bx) # a-b combination
-                            combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                            key = (a.type, c.type, a.bx, c.bx) # a-c combination
-                            combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(c))
-                            key = (b.type, c.type, b.bx, c.bx) # b-c combination
-                            combinations[key] = (CorrelationObjectHelper(b), CorrelationObjectHelper(c))
-                        else:
-                            a = condition.objects[0]
-                            b = condition.objects[1]
-                            key = (a.type, b.type, a.bx, b.bx)
-                            combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                    if isinstance(condition, CaloConditionOvRmHelper):
-                        a = condition.objects[0]
-                        b = condition.objects[condition.nr_objects-1]
-                        key = (a.type, b.type, a.bx, b.bx)
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                    if isinstance(condition, MassThreeObjConditionHelper):
-                        if condition.nr_objects == 3:
-                            a, b, c = condition.objects
-                            key = (a.type, b.type, a.bx, b.bx) # a-b combination
-                            combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                            key = (a.type, c.type, a.bx, c.bx) # a-c combination
-                            combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(c))
-                            key = (b.type, c.type, b.bx, c.bx) # b-c combination
-                            combinations[key] = (CorrelationObjectHelper(b), CorrelationObjectHelper(c))
+                combinations.update(self.conditionCorrelationCombinations(condition))
         return combinations.values()
 
     @property
@@ -638,38 +554,7 @@ class ModuleHelper(VhdlHelper):
         combinations = {}
         for condition in self.conditions:
             if hasattr(condition, 'mass') and condition.mass.enabled == vhdl_bool(True) and condition.mass.type != 1:
-                if isinstance(condition, CorrelationConditionHelper):
-                    a, b = condition.objects
-                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
-                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, CorrelationConditionOvRmHelper):
-                    if condition.nr_objects == 3:
-                        a, b, c = condition.objects
-                        key = (a.type, b.type, a.bx, b.bx) # a-b combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                        key = (a.type, c.type, a.bx, c.bx) # a-c combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(c))
-                        key = (b.type, c.type, b.bx, c.bx) # b-c combination
-                        combinations[key] = (CorrelationObjectHelper(b), CorrelationObjectHelper(c))
-                    else:
-                        a = condition.objects[0]
-                        b = condition.objects[1]
-                        key = (a.type, b.type, a.bx, b.bx)
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, CaloConditionOvRmHelper):
-                    a = condition.objects[0]
-                    b = condition.objects[condition.nr_objects-1]
-                    key = (a.type, b.type, a.bx, b.bx)
-                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, MassThreeObjConditionHelper):
-                    if condition.nr_objects == 3:
-                        a, b, c = condition.objects
-                        key = (a.type, b.type, a.bx, b.bx) # a-b combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                        key = (a.type, c.type, a.bx, c.bx) # a-c combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(c))
-                        key = (b.type, c.type, b.bx, c.bx) # b-c combination
-                        combinations[key] = (CorrelationObjectHelper(b), CorrelationObjectHelper(c))
+                combinations.update(self.conditionCorrelationCombinations(condition))
         return combinations.values()
 
     @property
@@ -677,38 +562,7 @@ class ModuleHelper(VhdlHelper):
         combinations = {}
         for condition in self.conditions:
             if hasattr(condition, 'mass') and condition.mass.enabled == vhdl_bool(True) and condition.mass.type == 3:
-                if isinstance(condition, CorrelationConditionHelper):
-                    a, b = condition.objects
-                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
-                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, CorrelationConditionOvRmHelper):
-                    if condition.nr_objects == 3:
-                        a, b, c = condition.objects
-                        key = (a.type, b.type, a.bx, b.bx) # a-b combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                        key = (a.type, c.type, a.bx, c.bx) # a-c combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(c))
-                        key = (b.type, c.type, b.bx, c.bx) # b-c combination
-                        combinations[key] = (CorrelationObjectHelper(b), CorrelationObjectHelper(c))
-                    else:
-                        a = condition.objects[0]
-                        b = condition.objects[1]
-                        key = (a.type, b.type, a.bx, b.bx)
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, CaloConditionOvRmHelper):
-                    a = condition.objects[0]
-                    b = condition.objects[condition.nr_objects-1]
-                    key = (a.type, b.type, a.bx, b.bx)
-                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, MassThreeObjConditionHelper):
-                    if condition.nr_objects == 3:
-                        a, b, c = condition.objects
-                        key = (a.type, b.type, a.bx, b.bx) # a-b combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                        key = (a.type, c.type, a.bx, c.bx) # a-c combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(c))
-                        key = (b.type, c.type, b.bx, c.bx) # b-c combination
-                        combinations[key] = (CorrelationObjectHelper(b), CorrelationObjectHelper(c))
+                combinations.update(self.conditionCorrelationCombinations(condition))
         return combinations.values()
 
     @property
@@ -716,38 +570,7 @@ class ModuleHelper(VhdlHelper):
         combinations = {}
         for condition in self.conditions:
             if hasattr(condition, 'mass') and condition.mass.enabled == vhdl_bool(True) and condition.mass.type == 1:
-                if isinstance(condition, CorrelationConditionHelper):
-                    a, b = condition.objects
-                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
-                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, CorrelationConditionOvRmHelper):
-                    if condition.nr_objects == 3:
-                        a, b, c = condition.objects
-                        key = (a.type, b.type, a.bx, b.bx) # a-b combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                        key = (a.type, c.type, a.bx, c.bx) # a-c combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(c))
-                        key = (b.type, c.type, b.bx, c.bx) # b-c combination
-                        combinations[key] = (CorrelationObjectHelper(b), CorrelationObjectHelper(c))
-                    else:
-                        a = condition.objects[0]
-                        b = condition.objects[1]
-                        key = (a.type, b.type, a.bx, b.bx)
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, CaloConditionOvRmHelper):
-                    a = condition.objects[0]
-                    b = condition.objects[condition.nr_objects-1]
-                    key = (a.type, b.type, a.bx, b.bx)
-                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, MassThreeObjConditionHelper):
-                    if condition.nr_objects == 3:
-                        a, b, c = condition.objects
-                        key = (a.type, b.type, a.bx, b.bx) # a-b combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                        key = (a.type, c.type, a.bx, c.bx) # a-c combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(c))
-                        key = (b.type, c.type, b.bx, c.bx) # b-c combination
-                        combinations[key] = (CorrelationObjectHelper(b), CorrelationObjectHelper(c))
+                combinations.update(self.conditionCorrelationCombinations(condition))
         return combinations.values()
 
     @property
@@ -755,38 +578,7 @@ class ModuleHelper(VhdlHelper):
         combinations = {}
         for condition in self.conditions:
             if hasattr(condition, 'twoBodyPt') and condition.twoBodyPt.enabled == vhdl_bool(True):
-                if isinstance(condition, CorrelationConditionHelper):
-                    a, b = condition.objects
-                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
-                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, CorrelationConditionOvRmHelper):
-                    if condition.nr_objects == 3:
-                        a, b, c = condition.objects
-                        key = (a.type, b.type, a.bx, b.bx) # a-b combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                        key = (a.type, c.type, a.bx, c.bx) # a-c combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(c))
-                        key = (b.type, c.type, b.bx, c.bx) # b-c combination
-                        combinations[key] = (CorrelationObjectHelper(b), CorrelationObjectHelper(c))
-                    else:
-                        a = condition.objects[0]
-                        b = condition.objects[1]
-                        key = (a.type, b.type, a.bx, b.bx)
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, CaloConditionOvRmHelper):
-                    a = condition.objects[0]
-                    b = condition.objects[condition.nr_objects-1]
-                    key = (a.type, b.type, a.bx, b.bx)
-                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, MassThreeObjConditionHelper):
-                    if condition.nr_objects == 3:
-                        a, b, c = condition.objects
-                        key = (a.type, b.type, a.bx, b.bx) # a-b combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                        key = (a.type, c.type, a.bx, c.bx) # a-c combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(c))
-                        key = (b.type, c.type, b.bx, c.bx) # b-c combination
-                        combinations[key] = (CorrelationObjectHelper(b), CorrelationObjectHelper(c))
+                combinations.update(self.conditionCorrelationCombinations(condition))
         return combinations.values()
 
     @property
@@ -1625,7 +1417,7 @@ if __name__ == '__main__':
             print("-" * 80)
 
             print("module.correlationCombinationsTbpt:")
-            for a, b in module.correlationCombinationsTrvMass:
+            for a, b in module.correlationCombinationsTbpt:
                 print(" ", a.type, a.bx, "<>", b.type, b.bx)
             print("-" * 80)
 
