@@ -526,11 +526,68 @@ class ModuleHelper(VhdlHelper):
         return combinations.values()
 
     @property
+    def correlationCombinationsDeltaR(self):
+        combinations = {}
+        for condition in self.conditions:
+            if (hasattr(condition, 'deltaR') and condition.deltaR.enabled == vhdl_bool(True)) or (hasattr(condition, 'deltaROrm') and condition.deltaROrm.enabled == vhdl_bool(True)):
+                    if isinstance(condition, CorrelationConditionHelper):
+                        a, b = condition.objects
+                        key = (a.type, b.type, a.bx, b.bx) # create custom hash
+                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+                    if isinstance(condition, CorrelationConditionOvRmHelper):
+                        if condition.nr_objects == 3:
+                            a, b, c = condition.objects
+                            if condition.deltaR.enabled == vhdl_bool(True):
+                                key = (a.type, b.type, a.bx, b.bx) # a-b combination
+                                combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+                            if condition.deltaROrm.enabled == vhdl_bool(True):
+                                key = (a.type, c.type, a.bx, c.bx) # a-c combination
+                                combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(c))
+                        else:
+                            a = condition.objects[0]
+                            b = condition.objects[1]
+                            key = (a.type, b.type, a.bx, b.bx)
+                            combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+        return combinations.values()
+
+    def conditionCorrelationCombinationsMass(self, condition):
+        """Return dictionary of correlation combination for condition with mass cuts. If
+        condition does not provide any correlations an empty dictionary is
+        returned.
+        """
+        combinations = {}
+        if isinstance(condition, CorrelationConditionHelper):
+            a, b = condition.objects
+            key = (a.type, b.type, a.bx, b.bx) # create custom hash
+            combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+        if isinstance(condition, CorrelationConditionOvRmHelper):
+            if condition.nr_objects == 3:
+                a, b, c = condition.objects
+                key = (a.type, b.type, a.bx, b.bx) # a-b combination
+                combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+            else:
+                a = condition.objects[0]
+                b = condition.objects[1]
+                key = (a.type, b.type, a.bx, b.bx)
+                combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+        if isinstance(condition, CaloConditionOvRmHelper):
+            a = condition.objects[0]
+            b = condition.objects[condition.nr_objects-1]
+            key = (a.type, b.type, a.bx, b.bx)
+            combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+        if isinstance(condition, MassThreeObjConditionHelper):
+            if condition.nr_objects == 3:
+                a, b, c = condition.objects
+                key = (a.type, b.type, a.bx, b.bx) # a-b combination
+                combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+        return combinations
+
+    @property
     def correlationCombinationsCosDphi(self):
         combinations = {}
         for condition in self.conditions:
             if hasattr(condition, 'mass') and condition.mass.enabled == vhdl_bool(True):
-                combinations.update(self.conditionCorrelationCombinations(condition))
+                combinations.update(self.conditionCorrelationCombinationsMass(condition))
         return combinations.values()
 
     @property
@@ -538,15 +595,7 @@ class ModuleHelper(VhdlHelper):
         combinations = {}
         for condition in self.conditions:
             if hasattr(condition, 'mass') and condition.mass.enabled == vhdl_bool(True) and condition.mass.type != condition.mass.TrvMass:
-                combinations.update(self.conditionCorrelationCombinations(condition))
-        return combinations.values()
-
-    @property
-    def correlationCombinationsDeltaR(self):
-        combinations = {}
-        for condition in self.conditions:
-            if (hasattr(condition, 'deltaR') and condition.deltaR.enabled == vhdl_bool(True)) or (hasattr(condition, 'deltaROrm') and condition.deltaROrm.enabled == vhdl_bool(True)):
-                combinations.update(self.conditionCorrelationCombinations(condition))
+                combinations.update(self.conditionCorrelationCombinationsMass(condition))
         return combinations.values()
 
     @property
@@ -554,7 +603,7 @@ class ModuleHelper(VhdlHelper):
         combinations = {}
         for condition in self.conditions:
             if hasattr(condition, 'mass') and condition.mass.enabled == vhdl_bool(True) and condition.mass.type != condition.mass.TrvMass:
-                combinations.update(self.conditionCorrelationCombinations(condition))
+                combinations.update(self.conditionCorrelationCombinationsMass(condition))
         return combinations.values()
 
     @property
@@ -562,7 +611,7 @@ class ModuleHelper(VhdlHelper):
         combinations = {}
         for condition in self.conditions:
             if hasattr(condition, 'mass') and condition.mass.enabled == vhdl_bool(True) and condition.mass.type == condition.mass.InvMassDivDeltaR:
-                combinations.update(self.conditionCorrelationCombinations(condition))
+                combinations.update(self.conditionCorrelationCombinationsMass(condition))
         return combinations.values()
 
     @property
@@ -570,15 +619,52 @@ class ModuleHelper(VhdlHelper):
         combinations = {}
         for condition in self.conditions:
             if hasattr(condition, 'mass') and condition.mass.enabled == vhdl_bool(True) and condition.mass.type == condition.mass.TrvMass:
-                combinations.update(self.conditionCorrelationCombinations(condition))
+                combinations.update(self.conditionCorrelationCombinationsMass(condition))
         return combinations.values()
 
     @property
     def correlationCombinationsTbpt(self):
+        class CorrelationObjectHelper(VhdlHelper):
+            def __init__(self, helper):
+                self.type = helper.type
+                self.bx = helper.bx
         combinations = {}
         for condition in self.conditions:
-            if hasattr(condition, 'twoBodyPt') and condition.twoBodyPt.enabled == vhdl_bool(True):
-                combinations.update(self.conditionCorrelationCombinations(condition))
+            if hasattr(condition, 'twoBodyPt') and condition.twoBodyPt.enabled == vhdl_bool(True): 
+                if isinstance(condition, CaloConditionHelper):
+                    a = condition.objects[0]
+                    b = condition.objects[1]
+                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
+                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+                if isinstance(condition, MuonConditionHelper):
+                    a = condition.objects[0]
+                    b = condition.objects[1]
+                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
+                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+                if isinstance(condition, CorrelationConditionHelper):
+                    a, b = condition.objects
+                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
+                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+                if isinstance(condition, CorrelationConditionOvRmHelper):
+                    if condition.nr_objects == 3:
+                        a, b, c = condition.objects
+                        key = (a.type, b.type, a.bx, b.bx) # a-b combination
+                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+                    else:
+                        a = condition.objects[0]
+                        b = condition.objects[1]
+                        key = (a.type, b.type, a.bx, b.bx)
+                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+                if isinstance(condition, CaloConditionOvRmHelper):
+                    a = condition.objects[0]
+                    b = condition.objects[condition.nr_objects-1]
+                    key = (a.type, b.type, a.bx, b.bx)
+                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+                if isinstance(condition, MassThreeObjConditionHelper):
+                    if condition.nr_objects == 3:
+                        a, b, c = condition.objects
+                        key = (a.type, b.type, a.bx, b.bx) # a-b combination
+                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
         return combinations.values()
 
     @property
@@ -1310,7 +1396,7 @@ class MassCutHelper(RangeCutHelper):
     InvMassUpt = 2
     InvMassDivDeltaR = 3
 
-    def __init__(self, lower=0, upper=0, type=None):
+    def __init__(self, lower=0, upper=0, type=InvMass):
         super().__init__(lower, upper)
         self.type = type
 
