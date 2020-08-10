@@ -54,7 +54,7 @@
     {%- if condition.deltaR.enabled == 'true' %}
         dr => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_delta_r_vector,
     {%- endif %}
-    {%- if condition.mass.enabled == 'true' and (condition.mass.type == condition.mass.InvMass or condition.mass.type == InvariantMassUpt) %}
+    {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.InvMass %}
         mass_inv => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_vector,
     {%- endif %}
     {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.TrvMass %}
