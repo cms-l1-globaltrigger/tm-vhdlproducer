@@ -26,7 +26,7 @@
         (X"{{ o1.impactParameterLUT|X01 }}", X"{{ o2.impactParameterLUT|X01 }}", X"{{ o3.impactParameterLUT|X01 }}", X"{{ o4.impactParameterLUT|X01 }}"),
   {%- if condition.twoBodyPt.enabled == "true" %}
         "{{ condition.chargeCorrelation }}",
-        twobody_pt_cut => true        
+        twobody_pt_cut => true,        
         tbpt_threshold => X"{{ condition.twoBodyPt.threshold|X16 }}"
   {%- else %}
         "{{ condition.chargeCorrelation }}"
