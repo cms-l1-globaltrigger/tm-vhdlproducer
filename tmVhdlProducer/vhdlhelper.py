@@ -622,51 +622,65 @@ class ModuleHelper(VhdlHelper):
                 combinations.update(self.conditionCorrelationCombinationsMass(condition))
         return combinations.values()
 
+    def conditioncorrelationCombinationsTbpt(self, condition):
+        """Return dictionary of correlation combination for condition with twobody pt cuts. If
+        condition does not provide any correlations an empty dictionary is
+        returned.
+        """
+        combinations = {}
+        if isinstance(condition, CaloConditionHelper):
+            a = condition.objects[0]
+            b = condition.objects[1]
+            key = (a.type, b.type, a.bx, b.bx) # create custom hash
+            combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+        if isinstance(condition, MuonConditionHelper):
+            a = condition.objects[0]
+            b = condition.objects[1]
+            key = (a.type, b.type, a.bx, b.bx) # create custom hash
+            combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+        if isinstance(condition, CorrelationConditionHelper):
+            a, b = condition.objects
+            key = (a.type, b.type, a.bx, b.bx) # create custom hash
+            combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+        if isinstance(condition, CorrelationConditionOvRmHelper):
+            if condition.nr_objects == 3:
+                a, b, c = condition.objects
+                key = (a.type, b.type, a.bx, b.bx) # a-b combination
+                combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+            else:
+                a = condition.objects[0]
+                b = condition.objects[1]
+                key = (a.type, b.type, a.bx, b.bx)
+                combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+        if isinstance(condition, CaloConditionOvRmHelper):
+            a = condition.objects[0]
+            b = condition.objects[condition.nr_objects-1]
+            key = (a.type, b.type, a.bx, b.bx)
+            combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+        if isinstance(condition, MassThreeObjConditionHelper):
+            if condition.nr_objects == 3:
+                a, b, c = condition.objects
+                key = (a.type, b.type, a.bx, b.bx) # a-b combination
+                combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+        return combinations.values()
+
     @property
     def correlationCombinationsTbpt(self):
-        class CorrelationObjectHelper(VhdlHelper):
-            def __init__(self, helper):
-                self.type = helper.type
-                self.bx = helper.bx
         combinations = {}
         for condition in self.conditions:
             if hasattr(condition, 'twoBodyPt') and condition.twoBodyPt.enabled == vhdl_bool(True): 
-                if isinstance(condition, CaloConditionHelper):
-                    a = condition.objects[0]
-                    b = condition.objects[1]
-                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
-                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, MuonConditionHelper):
-                    a = condition.objects[0]
-                    b = condition.objects[1]
-                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
-                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, CorrelationConditionHelper):
-                    a, b = condition.objects
-                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
-                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, CorrelationConditionOvRmHelper):
-                    if condition.nr_objects == 3:
-                        a, b, c = condition.objects
-                        key = (a.type, b.type, a.bx, b.bx) # a-b combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                    else:
-                        a = condition.objects[0]
-                        b = condition.objects[1]
-                        key = (a.type, b.type, a.bx, b.bx)
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, CaloConditionOvRmHelper):
-                    a = condition.objects[0]
-                    b = condition.objects[condition.nr_objects-1]
-                    key = (a.type, b.type, a.bx, b.bx)
-                    combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-                if isinstance(condition, MassThreeObjConditionHelper):
-                    if condition.nr_objects == 3:
-                        a, b, c = condition.objects
-                        key = (a.type, b.type, a.bx, b.bx) # a-b combination
-                        combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
+                combinations.update(self.conditioncorrelationCombinationsTbpt(condition))
         return combinations.values()
 
+## TO DO: insert code for twobody unconstraint pt !!!!
+    #@property
+    #def correlationCombinationsTbupt(self):
+        #combinations = {}
+        #for condition in self.conditions:
+            #if hasattr(condition, 'twoBodyUPt') and condition.twoBodyUPt.enabled == vhdl_bool(True): 
+                #combinations.update(self.conditioncorrelationCombinationsTbpt(condition))
+        #return combinations.values()
+    
     @property
     def correlationObjects(self):
         """Retruns list of objects used by correlation conditions or any

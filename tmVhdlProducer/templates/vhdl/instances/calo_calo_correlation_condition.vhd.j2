@@ -4,7 +4,6 @@
 {{ condition.vhdl_signal }}_i: entity work.calo_calo_correlation_condition
     generic map(
         {{ condition.objectsInSameBx }},
-        {{ condition.deltaEta.enabled }}, {{ condition.deltaPhi.enabled }}, {{ condition.deltaR.enabled }}, {{ condition.mass.enabled }}, {{ condition.mass.type }}, {{ condition.twoBodyPt.enabled }},
         NR_{{ o1.type|upper }}_OBJECTS,
         {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o1.operator }}, {{ o1.type|upper }}_TYPE,
         X"{{ o1.threshold|X04 }}",
@@ -29,20 +28,40 @@
         {{ o2.phiFullRange }}, X"{{ o2.phiW1UpperLimit|X04 }}", X"{{ o2.phiW1LowerLimit|X04 }}",
         {{ o2.phiW2Ignore }}, X"{{ o2.phiW2UpperLimit|X04 }}", X"{{ o2.phiW2LowerLimit|X04 }}",
         X"{{ o2.isolationLUT|X01 }}",
-        X"{{ condition.deltaEta.upper|X08 }}", X"{{ condition.deltaEta.lower|X08 }}",
-        X"{{ condition.deltaPhi.upper|X08 }}", X"{{ condition.deltaPhi.lower|X08 }}",
-        X"{{ condition.deltaR.upper|X16 }}", X"{{ condition.deltaR.lower|X16 }}",
-    {%- if condition.mass.type == condition.mass.InvMassDivDeltaR %}
-        X"0000000000000000", X"0000000000000000",
-        X"{{ condition.mass.upper|X21 }}", X"{{ condition.mass.lower|X21 }}",
-    {%- else %}
-        X"{{ condition.mass.upper|X16 }}", X"{{ condition.mass.lower|X16 }}",
-        X"000000000000000000000", X"000000000000000000000",
+    {%- if condition.deltaEta.enabled == 'true'  %}
+        deta_cut => {{ condition.deltaEta.enabled }},
+        deta_upper_limit => X"{{ condition.deltaEta.upper|X08 }}", 
+        deta_lower_limit => X"{{ condition.deltaEta.lower|X08 }}",
     {%- endif %}
-        X"{{ condition.twoBodyPt.threshold|X16 }}",
-        {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_VECTOR_WIDTH,
-        {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_DIV_DR_VECTOR_WIDTH,
-        {{ o1.type|upper }}_{{ o2.type|upper }}_TBPT_VECTOR_WIDTH
+    {%- if condition.deltaPhi.enabled == 'true'  %}
+        dphi_cut => {{ condition.deltaPhi.enabled }},
+        dphi_upper_limit => X"{{ condition.deltaPhi.upper|X08 }}", 
+        dphi_lower_limit => X"{{ condition.deltaPhi.lower|X08 }}",
+    {%- endif %}
+    {%- if condition.deltaR.enabled == 'true'  %}
+        dr_cut => {{ condition.deltaR.enabled }},
+        dr_upper_limit => X"{{ condition.deltaR.upper|X16 }}", 
+        dr_lower_limit => X"{{ condition.deltaR.lower|X16 }}",
+    {%- endif %}
+    {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.InvMassDivDeltaR %}
+        mass_cut => {{ condition.mass.enabled }}, mass_type => INVARIANT_MASS_DIV_DR_TYPE,       
+        mass_div_dr_width => {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_DIV_DR_VECTOR_WIDTH,
+        mass_div_dr_upper_limit => X"{{ condition.mass.upper|X21 }}", 
+        mass_div_dr_lower_limit => X"{{ condition.mass.lower|X21 }}",
+    {%- elif condition.mass.enabled == 'true' and condition.mass.type == condition.mass.InvMass %}
+        mass_cut => {{ condition.mass.enabled }}, mass_type => INVARIANT_MASS_TYPE,       
+        mass_width => {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_VECTOR_WIDTH,
+        mass_upper_limit => X"{{ condition.mass.upper|X16 }}",
+        mass_lower_limit => X"{{ condition.mass.lower|X16 }}",
+    {%- else %}
+    {%- endif %}
+    {%- if condition.twoBodyPt.enabled == 'true'  %}
+        twobody_pt_cut => {{ condition.twoBodyPt.enabled }},
+        tbpt_width => {{ o1.type|upper }}_{{ o2.type|upper }}_TBPT_VECTOR_WIDTH,
+        tbpt_threshold => X"{{ condition.twoBodyPt.threshold|X16 }}"
+    {%- else %}
+        twobody_pt_cut => {{ condition.twoBodyPt.enabled }}
+    {%- endif %}    
     )
     port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o2.type|lower }}_bx_{{ o2.bx }},
     {%- if condition.deltaEta.enabled == 'true' %}

@@ -24,29 +24,32 @@
         ({{ o1.uptCutSel }}, {{ o2.uptCutSel }}, {{ o3.uptCutSel }}, {{ o4.uptCutSel }}),
         (X"{{ o1.uptUpperLimit|X04 }}", X"{{ o2.uptUpperLimit|X04 }}", X"{{ o3.uptUpperLimit|X04 }}", X"{{ o4.uptUpperLimit|X04 }}"), (X"{{ o1.uptLowerLimit|X04 }}", X"{{ o2.uptLowerLimit|X04 }}", X"{{ o3.uptLowerLimit|X04 }}", X"{{ o4.uptLowerLimit|X04 }}"),
         (X"{{ o1.impactParameterLUT|X01 }}", X"{{ o2.impactParameterLUT|X01 }}", X"{{ o3.impactParameterLUT|X01 }}", X"{{ o4.impactParameterLUT|X01 }}"),
-        "{{ condition.chargeCorrelation }}",
   {%- if condition.twoBodyPt.enabled == "true" %}
-        true, {{ o1.type|upper }}_PT_VECTOR_WIDTH, X"{{ condition.twoBodyPt.threshold|X16 }}",
-        MUON_SIN_COS_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o1.type|upper }}_SIN_COS_PRECISION
+        "{{ condition.chargeCorrelation }}",
+        twobody_pt_cut => true        
+        tbpt_threshold => X"{{ condition.twoBodyPt.threshold|X16 }}"
   {%- else %}
-        false
+        "{{ condition.chargeCorrelation }}"
   {%- endif %}
     )
     port map(lhc_clk, mu_bx_{{ bx }},
-  {%- if condition.nr_objects >= 2 and condition.twoBodyPt.enabled == "true" %}
+  {%- if condition.nr_objects == 2 and condition.twoBodyPt.enabled == "true" %}
         {{ condition.vhdl_signal }},
-        ls_charcorr_double_bx_{{ bx }}_bx_{{ bx }}, os_charcorr_double_bx_{{ bx }}_bx_{{ bx }},
-        ls_charcorr_triple_bx_{{ bx }}_bx_{{ bx }}, os_charcorr_triple_bx_{{ bx }}_bx_{{ bx }},
-        ls_charcorr_quad_bx_{{ bx }}_bx_{{ bx }}, os_charcorr_quad_bx_{{ bx }}_bx_{{ bx }},
-        {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }});
-  {%- elif condition.nr_objects >= 2 and condition.twoBodyPt.enabled == "false" %}
+        ls_charcorr_double => ls_charcorr_double_bx_{{ bx }}_bx_{{ bx }}, 
+        os_charcorr_double => os_charcorr_double_bx_{{ bx }}_bx_{{ bx }},
+        tbpt => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt_vector);
+  {%- elif condition.nr_objects == 2 and condition.twoBodyPt.enabled == "false" %}
         {{ condition.vhdl_signal }},
-        ls_charcorr_double_bx_{{ bx }}_bx_{{ bx }}, os_charcorr_double_bx_{{ bx }}_bx_{{ bx }},
-        ls_charcorr_triple_bx_{{ bx }}_bx_{{ bx }}, os_charcorr_triple_bx_{{ bx }}_bx_{{ bx }},
-        ls_charcorr_quad_bx_{{ bx }}_bx_{{ bx }}, os_charcorr_quad_bx_{{ bx }}_bx_{{ bx }});
-  {%- elif condition.nr_objects == 1 and condition.twoBodyPt.enabled == "true" %}
+        ls_charcorr_double => ls_charcorr_double_bx_{{ bx }}_bx_{{ bx }}, 
+        os_charcorr_double => os_charcorr_double_bx_{{ bx }}_bx_{{ bx }});
+  {%- elif condition.nr_objects == 3 %}
         {{ condition.vhdl_signal }},
-        {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }});
+        ls_charcorr_triple => ls_charcorr_triple_bx_{{ bx }}_bx_{{ bx }}, 
+        os_charcorr_triple => os_charcorr_triple_bx_{{ bx }}_bx_{{ bx }});
+  {%- elif condition.nr_objects == 4 %}
+        {{ condition.vhdl_signal }},
+        ls_charcorr_quad => ls_charcorr_quad_bx_{{ bx }}_bx_{{ bx }}, 
+        os_charcorr_quad => os_charcorr_quad_bx_{{ bx }}_bx_{{ bx }});
   {%- else %}
         {{ condition.vhdl_signal }});
   {%- endif %}
