@@ -3,29 +3,83 @@
   {%- set o2 = condition.objects[1] %}
 {{ condition.vhdl_signal }}_i: entity work.calo_esums_correlation_condition
     generic map(
-        {{ condition.deltaPhi.enabled }}, {{ condition.mass.enabled }}, {{ condition.twoBodyPt.enabled }},
-        NR_{{ o1.type|upper }}_OBJECTS,
-        {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o1.operator }}, {{ o1.type|upper }}_TYPE,
-        X"{{ o1.threshold|X04 }}",
-        {{ o1.etaNrCuts }}, 
-        X"{{ o1.etaW1UpperLimit|X04 }}", X"{{ o1.etaW1LowerLimit|X04 }}",
-        X"{{ o1.etaW2UpperLimit|X04 }}", X"{{ o1.etaW2LowerLimit|X04 }}",
-        X"{{ o1.etaW3UpperLimit|X04 }}", X"{{ o1.etaW3LowerLimit|X04 }}",
-        X"{{ o1.etaW4UpperLimit|X04 }}", X"{{ o1.etaW4LowerLimit|X04 }}",
-        X"{{ o1.etaW5UpperLimit|X04 }}", X"{{ o1.etaW5LowerLimit|X04 }}",
-        {{ o1.phiFullRange }}, X"{{ o1.phiW1UpperLimit|X04 }}", X"{{o1.phiW1LowerLimit|X04 }}",
-        {{ o1.phiW2Ignore }}, X"{{ o1.phiW2UpperLimit|X04 }}", X"{{o1.phiW2LowerLimit|X04 }}",
-        X"{{ o1.isolationLUT|X01 }}",
-        {{ o2.operator }}, {{ o2.type|upper }}_TYPE,
+        nr_obj_calo => NR_{{ o1.type|upper }}_OBJECTS,
+        obj_type_calo => {{ o1.type|upper }}_TYPE,
+        calo_object_low => {{ o1.sliceLow }}, calo_object_high => {{ o1.sliceHigh }}, 
+    {%- if o1.operator == 'false'  %}
+        et_ge_mode_calo => {{ o1.operator }}, 
+    {%- endif %}
+        et_threshold_calo => X"{{ o1.threshold|X04 }}",
+    {%- if o1.etaNrCuts == 0  %}
+        -- no eta cuts for calo object
+    {%- endif %}
+    {%- if o1.etaNrCuts >= 1  %}
+        nr_eta_windows_calo => {{ o1.etaNrCuts }},
+        eta_w1_upper_limit_calo => X"{{ o1.etaW1UpperLimit|X04 }}", eta_w1_lower_limit_calo => X"{{ o1.etaW1LowerLimit|X04 }}",
+    {%- endif %}
+    {%- if o1.etaNrCuts >= 2  %}
+        eta_w2_upper_limit_calo => X"{{ o1.etaW2UpperLimit|X04 }}", eta_w2_lower_limit_calo => X"{{ o1.etaW2LowerLimit|X04 }}",
+    {%- endif %}
+    {%- if o1.etaNrCuts >= 3  %}
+        eta_w3_upper_limit_calo => X"{{ o1.etaW3UpperLimit|X04 }}", eta_w3_lower_limit_calo => X"{{ o1.etaW3LowerLimit|X04 }}",
+    {%- endif %}
+    {%- if o1.etaNrCuts >= 4  %}
+        eta_w4_upper_limit_calo => X"{{ o1.etaW4UpperLimit|X04 }}", eta_w4_lower_limit_calo => X"{{ o1.etaW4LowerLimit|X04 }}",
+    {%- endif %}
+    {%- if o1.etaNrCuts >= 5  %}
+        eta_w5_upper_limit_calo => X"{{ o1.etaW5UpperLimit|X04 }}", eta_w5_lower_limit_calo => X"{{ o1.etaW5LowerLimit|X04 }}",
+    {%- endif %}
+    {%- if o1.phiFullRange == 'true'  %}
+        -- no phi cuts for calo object        
+    {%- else %}
+        phi_full_range_calo => {{ o1.phiFullRange }}, 
+        phi_w1_upper_limit_calo => X"{{ o1.phiW1UpperLimit|X04 }}", phi_w1_lower_limit_calo => X"{{ o1.phiW1LowerLimit|X04 }}",
+    {%- endif %}
+    {%- if o1.phiW2Ignore == 'false'  %}
+        phi_w2_ignore_calo => {{ o1.phi_w2_ignore_calo }}, 
+        phi_w2_upper_limit_calo => X"{{ o1.phiW2UpperLimit|X04 }}", phi_w2_lower_limit_calo => X"{{ o1.phiW2LowerLimit|X04 }}",
+    {%- endif %}    
+    {%- if o1.isolationLUT != 15  %}
+        iso_lut_calo => X"{{ o1.isolationLUT|X01 }}",
+    {%- else %}
+        -- no isolation cut for calo object
+    {%- endif %}    
+         obj_type_esums => {{ o2.type|upper }}_TYPE,
+    {%- if o2.operator == 'false'  %}
+        et_ge_mode_esums => {{ o2.operator }}, 
+    {%- endif %}
         X"{{ o2.threshold|X04 }}",
-        {{ o2.phiFullRange }}, X"{{ o2.phiW1UpperLimit|X04 }}", X"{{ o2.phiW1LowerLimit|X04 }}",
-        {{ o2.phiW2Ignore }}, X"{{ o2.phiW2UpperLimit|X04 }}", X"{{ o2.phiW2LowerLimit|X04 }}",
-        X"{{ condition.deltaPhi.upper|X08 }}", X"{{ condition.deltaPhi.lower|X08 }}",
-        X"{{ condition.mass.upper|X16 }}", X"{{ condition.mass.lower|X16 }}",
-        X"{{ condition.twoBodyPt.threshold|X16 }}",
-        {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_VECTOR_WIDTH,
-        {{ o1.type|upper }}_{{ o2.type|upper }}_TBPT_VECTOR_WIDTH
-   )
+    {%- if o2.phiFullRange == 'true'  %}
+        -- no phi cuts for esums object       
+    {%- else %}
+        phi_full_range_esums => {{ o2.phiFullRange }}, 
+        phi_w1_upper_limit_esums => X"{{ o2.phiW1UpperLimit|X04 }}", 
+        phi_w1_lower_limit_esums => X"{{ o2.phiW1LowerLimit|X04 }}",
+    {%- endif %}
+    {%- if o2.phiW2Ignore == 'false'  %}
+        phi_w2_ignore_esums => {{ o2.phi_w2_ignore_calo }}, 
+        phi_w2_upper_limit_esums => X"{{ o2.phiW2UpperLimit|X04 }}", 
+        phi_w2_lower_limit_esums => X"{{ o2.phiW2LowerLimit|X04 }}",
+    {%- endif %}    
+    {%- if condition.deltaPhi.enabled == 'true'  %}
+        dphi_cut => {{ condition.deltaPhi.enabled }},
+        dphi_upper_limit => X"{{ condition.deltaPhi.upper|X08 }}", 
+        dphi_lower_limit => X"{{ condition.deltaPhi.lower|X08 }}",
+    {%- endif %}
+    {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.TrvMass %}
+        mass_cut => {{ condition.mass.enabled }},       
+        mass_width => {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_VECTOR_WIDTH,
+        mass_upper_limit => X"{{ condition.mass.upper|X21 }}", 
+        mass_lower_limit => X"{{ condition.mass.lower|X21 }}",
+    {%- endif %}
+    {%- if condition.twoBodyPt.enabled == 'true'  %}
+        twobody_pt_cut => {{ condition.twoBodyPt.enabled }},
+        tbpt_width => {{ o1.type|upper }}_{{ o2.type|upper }}_TBPT_VECTOR_WIDTH,
+        tbpt_threshold => X"{{ condition.twoBodyPt.threshold|X16 }}"
+    {%- else %}
+        twobody_pt_cut => {{ condition.twoBodyPt.enabled }}
+    {%- endif %}    
+    )
     port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}({{ o1.sliceLow }} to {{ o1.sliceHigh }}), {{ o2.type|lower }}_bx_{{ o2.bx }},
     {%- if condition.deltaPhi.enabled == 'true' %}    
         dphi => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,

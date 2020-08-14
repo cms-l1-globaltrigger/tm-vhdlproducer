@@ -8,8 +8,11 @@
         obj_2plus1 => true,
 -- parameter for object 1
         nr_obj_calo1 => NR_{{ o1.type|upper }}_OBJECTS,
+        obj_type_calo1 => {{ o1.type|upper }}_TYPE,
         calo1_object_low => {{ o1.sliceLow }}, calo1_object_high => {{ o1.sliceHigh }}, 
-        et_ge_mode_calo1 => {{ o1.operator }}, obj_type_calo1 => {{ o1.type|upper }}_TYPE,
+    {%- if o1.operator == 'false'  %}
+        et_ge_mode_calo1 => {{ o1.operator }}, 
+    {%- endif %}
         et_threshold_calo1 => X"{{ o1.threshold|X04 }}",
     {%- if o1.etaNrCuts == 0  %}
         -- no eta cuts for object 1
@@ -47,8 +50,11 @@
     {%- endif %}    
 -- parameter for object 2
         nr_obj_calo2 => NR_{{ o2.type|upper }}_OBJECTS,
+        obj_type_calo2 => {{ o2.type|upper }}_TYPE,
         calo2_object_low => {{ o2.sliceLow }}, calo2_object_high => {{ o2.sliceHigh }}, 
-        et_ge_mode_calo2 => {{ o2.operator }}, obj_type_calo2 => {{ o2.type|upper }}_TYPE,
+    {%- if o2.operator == 'false'  %}
+        et_ge_mode_calo2 => {{ o2.operator }}, 
+    {%- endif %}
         et_threshold_calo2 => X"{{ o2.threshold|X04 }}",
     {%- if o2.etaNrCuts == 0  %}
         -- no eta cuts for object 2
@@ -83,12 +89,14 @@
         iso_lut_calo2 => X"{{ o2.isolationLUT|X01 }}",       
     {%- else %}
         -- no isolation cut for object 2
-        X"F"
     {%- endif %}    
 -- parameter for object 3
         nr_obj_calo3 => NR_{{ o3.type|upper }}_OBJECTS,
+        obj_type_calo3 => {{ o3.type|upper }}_TYPE,
         calo3_object_low => {{ o3.sliceLow }}, calo3_object_high => {{ o3.sliceHigh }}, 
-        et_ge_mode_calo3 => {{ o3.operator }}, obj_type_calo3 => {{ o3.type|upper }}_TYPE,
+    {%- if o3.operator == 'false'  %}
+        et_ge_mode_calo3 => {{ o3.operator }}, 
+    {%- endif %}
         et_threshold_calo3 => X"{{ o3.threshold|X04 }}",
     {%- if o3.etaNrCuts == 0  %}
         -- no eta cuts for object 3
@@ -203,8 +211,11 @@
         obj_2plus1 => false,
 -- parameter for object 1
         nr_obj_calo1 => NR_{{ o1.type|upper }}_OBJECTS,
+        obj_type_calo1 => {{ o1.type|upper }}_TYPE,
         calo1_object_low => {{ o1.sliceLow }}, calo1_object_high => {{ o1.sliceHigh }}, 
-        et_ge_mode_calo1 => {{ o1.operator }}, obj_type_calo1 => {{ o1.type|upper }}_TYPE,
+    {%- if o1.operator == 'false'  %}
+        et_ge_mode_calo1 => {{ o1.operator }}, 
+    {%- endif %}
         et_threshold_calo1 => X"{{ o1.threshold|X04 }}",
     {%- if o1.etaNrCuts == 0  %}
         -- no eta cuts for object 1
@@ -242,9 +253,12 @@
     {%- endif %}    
 -- parameter for object 2
         nr_obj_calo2 => NR_{{ o2.type|upper }}_OBJECTS,
-        calo2_object_low => {{ o2.sliceLow }}, calo2_object_high => {{ o2.sliceHigh }}, 
-        et_ge_mode_calo2 => {{ o2.operator }}, obj_type_calo2 => {{ o2.type|upper }}_TYPE,
         et_threshold_calo2 => X"{{ o2.threshold|X04 }}",
+        calo2_object_low => {{ o2.sliceLow }}, calo2_object_high => {{ o2.sliceHigh }}, 
+    {%- if o2.operator == 'false'  %}
+        et_ge_mode_calo2 => {{ o2.operator }}, 
+    {%- endif %}
+        obj_type_calo2 => {{ o2.type|upper }}_TYPE,
     {%- if o2.etaNrCuts == 0  %}
         -- no eta cuts for object 2
     {%- endif %}
@@ -321,9 +335,9 @@
     {%- if condition.twoBodyPt.enabled == 'true'  %}
         twobody_pt_cut => {{ condition.twoBodyPt.enabled }},
         tbpt_width => {{ o1.type|upper }}_{{ o2.type|upper }}_TBPT_VECTOR_WIDTH,
-        tbpt_threshold => X"{{ condition.twoBodyPt.threshold|X16 }}",
+        tbpt_threshold => X"{{ condition.twoBodyPt.threshold|X16 }}"
     {%- else %}
-        twobody_pt_cut => {{ condition.twoBodyPt.enabled }},
+        twobody_pt_cut => {{ condition.twoBodyPt.enabled }}
     {%- endif %}    
     )
     port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, calo3 => {{ o2.type|lower }}_bx_{{ o2.bx }},
