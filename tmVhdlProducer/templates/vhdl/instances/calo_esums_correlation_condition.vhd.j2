@@ -44,11 +44,11 @@
     {%- else %}
         -- no isolation cut for calo object
     {%- endif %}    
-         obj_type_esums => {{ o2.type|upper }}_TYPE,
+        obj_type_esums => {{ o2.type|upper }}_TYPE,
     {%- if o2.operator == 'false'  %}
         et_ge_mode_esums => {{ o2.operator }}, 
     {%- endif %}
-        X"{{ o2.threshold|X04 }}",
+        et_threshold_esums => X"{{ o2.threshold|X04 }}",
     {%- if o2.phiFullRange == 'true'  %}
         -- no phi cuts for esums object       
     {%- else %}
