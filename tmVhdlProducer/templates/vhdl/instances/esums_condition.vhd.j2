@@ -4,12 +4,32 @@
 {{ condition.vhdl_signal }}_i: entity work.esums_conditions
     generic map({{ o.operator }}, {{ o.type|upper }}_TYPE,
     {%- if o.hasCount  %}
+        {%- if o.phiFullRange == 'true' %}
+        X"{{ o.count|X04 }}"
+        {%- else %}
         X"{{ o.count|X04 }}",
+        {%- endif %}
     {%- else %}
+        {%- if o.phiFullRange == 'true' %}
+        X"{{ o.threshold|X04 }}"
+        {%- else %}
         X"{{ o.threshold|X04 }}",
+        {%- endif %}
     {%- endif %}
-        {{ o.phiFullRange }}, X"{{ o.phiW1UpperLimit|X04 }}", X"{{ o.phiW1LowerLimit|X04 }}",
-        {{ o.phiW2Ignore }}, X"{{ o.phiW2UpperLimit|X04 }}", X"{{ o.phiW2LowerLimit|X04 }}"
+    {%- if o.phiFullRange == 'true' and o.phiW2Ignore == 'true' %}
+        -- no phi cuts        
+    {%- elif o.phiFullRange == 'false' and o.phiW2Ignore == 'true' %}
+        phi_full_range => {{ o.phiFullRange }}, 
+        phi_w1_upper_limit => X"{{ o.phiW1UpperLimit|X04 }}", 
+        phi_w1_lower_limit => X"{{ o.phiW1LowerLimit|X04 }}"
+    {%- elif o.phiFullRange == 'false' and o.phiW2Ignore == 'false' %}
+        phi_full_range => {{ o.phiFullRange }}, 
+        phi_w1_upper_limit => X"{{ o.phiW1UpperLimit|X04 }}", 
+        phi_w1_lower_limit => X"{{ o.phiW1LowerLimit|X04 }}"
+        phi_w2_ignore => {{ o.phiW2Ignore }}, 
+        phi_w2_upper_limit => X"{{ o.phiW2UpperLimit|X04 }}", 
+        phi_w2_lower_limit => X"{{ o.phiW2LowerLimit|X04 }}",
+    {%- endif %}
         )
     port map(lhc_clk, {{ o.type|lower }}_bx_{{ o.bx }}, {{ condition.vhdl_signal }});
     {%- endif %}

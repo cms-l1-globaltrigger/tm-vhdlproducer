@@ -21,29 +21,36 @@
     {%- endif %}
     {%- if o1.etaNrCuts >= 1  %}
         nr_eta_windows_calo1 => {{ o1.etaNrCuts }},
-        eta_w1_upper_limit_calo1 => X"{{ o1.etaW1UpperLimit|X04 }}", eta_w1_lower_limit_calo1 => X"{{ o1.etaW1LowerLimit|X04 }}",
+        eta_w1_upper_limit_calo1 => X"{{ o1.etaW1UpperLimit|X04 }}", 
+        eta_w1_lower_limit_calo1 => X"{{ o1.etaW1LowerLimit|X04 }}",
     {%- endif %}
     {%- if o1.etaNrCuts >= 2  %}
-        eta_w2_upper_limit_calo1 => X"{{ o1.etaW2UpperLimit|X04 }}", eta_w2_lower_limit_calo1 => X"{{ o1.etaW2LowerLimit|X04 }}",
+        eta_w2_upper_limit_calo1 => X"{{ o1.etaW2UpperLimit|X04 }}", 
+        eta_w2_lower_limit_calo1 => X"{{ o1.etaW2LowerLimit|X04 }}",
     {%- endif %}
     {%- if o1.etaNrCuts >= 3  %}
-        eta_w3_upper_limit_calo1 => X"{{ o1.etaW3UpperLimit|X04 }}", eta_w3_lower_limit_calo1 => X"{{ o1.etaW3LowerLimit|X04 }}",
+        eta_w3_upper_limit_calo1 => X"{{ o1.etaW3UpperLimit|X04 }}", 
+        eta_w3_lower_limit_calo1 => X"{{ o1.etaW3LowerLimit|X04 }}",
     {%- endif %}
     {%- if o1.etaNrCuts >= 4  %}
-        eta_w4_upper_limit_calo1 => X"{{ o1.etaW4UpperLimit|X04 }}", eta_w4_lower_limit_calo1 => X"{{ o1.etaW4LowerLimit|X04 }}",
+        eta_w4_upper_limit_calo1 => X"{{ o1.etaW4UpperLimit|X04 }}", 
+        eta_w4_lower_limit_calo1 => X"{{ o1.etaW4LowerLimit|X04 }}",
     {%- endif %}
     {%- if o1.etaNrCuts >= 5  %}
-        eta_w5_upper_limit_calo1 => X"{{ o1.etaW5UpperLimit|X04 }}", eta_w5_lower_limit_calo1 => X"{{ o1.etaW5LowerLimit|X04 }}",
+        eta_w5_upper_limit_calo1 => X"{{ o1.etaW5UpperLimit|X04 }}", 
+        eta_w5_lower_limit_calo1 => X"{{ o1.etaW5LowerLimit|X04 }}",
     {%- endif %}
     {%- if o1.phiFullRange == 'true'  %}
         -- no phi cuts for object 1        
     {%- else %}
         phi_full_range_calo1 => {{ o1.phiFullRange }}, 
-        phi_w1_upper_limit_calo1 => X"{{ o1.phiW1UpperLimit|X04 }}", phi_w1_lower_limit_calo1 => X"{{ o1.phiW1LowerLimit|X04 }}",
+        phi_w1_upper_limit_calo1 => X"{{ o1.phiW1UpperLimit|X04 }}", 
+        phi_w1_lower_limit_calo1 => X"{{ o1.phiW1LowerLimit|X04 }}",
     {%- endif %}
     {%- if o1.phiW2Ignore == 'false'  %}
-        phi_w2_ignore_calo1 => {{ o1.phi_w2_ignore_calo1 }}, 
-        phi_w2_upper_limit_calo1 => X"{{ o1.phiW2UpperLimit|X04 }}", phi_w2_lower_limit_calo1 => X"{{ o1.phiW2LowerLimit|X04 }}",
+        phi_w2_ignore_calo1 => {{ o1.phiW2Ignore }}, 
+        phi_w2_upper_limit_calo1 => X"{{ o1.phiW2UpperLimit|X04 }}", 
+        phi_w2_lower_limit_calo1 => X"{{ o1.phiW2LowerLimit|X04 }}",
     {%- endif %}    
     {%- if o1.isolationLUT != 15  %}
         iso_lut_calo1 => X"{{ o1.isolationLUT|X01 }}",
@@ -63,29 +70,36 @@
     {%- endif %}
     {%- if o2.etaNrCuts >= 1  %}
         nr_eta_windows_calo2 => {{ o2.etaNrCuts }},
-        eta_w1_upper_limit_calo2 => X"{{ o2.etaW1UpperLimit|X04 }}", eta_w1_lower_limit_calo2 => X"{{ o2.etaW1LowerLimit|X04 }}",
+        eta_w1_upper_limit_calo2 => X"{{ o2.etaW1UpperLimit|X04 }}", 
+        eta_w1_lower_limit_calo2 => X"{{ o2.etaW1LowerLimit|X04 }}",
     {%- endif %}
     {%- if o2.etaNrCuts >= 2  %}
-        eta_w2_upper_limit_calo2 => X"{{ o2.etaW2UpperLimit|X04 }}", eta_w2_lower_limit_calo2 => X"{{ o2.etaW2LowerLimit|X04 }}",
+        eta_w2_upper_limit_calo2 => X"{{ o2.etaW2UpperLimit|X04 }}", 
+        eta_w2_lower_limit_calo2 => X"{{ o2.etaW2LowerLimit|X04 }}",
     {%- endif %}
     {%- if o2.etaNrCuts >= 3  %}
-        eta_w3_upper_limit_calo2 => X"{{ o2.etaW3UpperLimit|X04 }}", eta_w3_lower_limit_calo2 => X"{{ o2.etaW3LowerLimit|X04 }}",
+        eta_w3_upper_limit_calo2 => X"{{ o2.etaW3UpperLimit|X04 }}", 
+        eta_w3_lower_limit_calo2 => X"{{ o2.etaW3LowerLimit|X04 }}",
     {%- endif %}
     {%- if o2.etaNrCuts >= 4  %}
-        eta_w4_upper_limit_calo2 => X"{{ o2.etaW4UpperLimit|X04 }}", eta_w4_lower_limit_calo2 => X"{{ o2.etaW4LowerLimit|X04 }}",
+        eta_w4_upper_limit_calo2 => X"{{ o2.etaW4UpperLimit|X04 }}", 
+        eta_w4_lower_limit_calo2 => X"{{ o2.etaW4LowerLimit|X04 }}",
     {%- endif %}
     {%- if o2.etaNrCuts >= 5  %}
-        eta_w5_upper_limit_calo2 => X"{{ o2.etaW5UpperLimit|X04 }}", eta_w5_lower_limit_calo2 => X"{{ o2.etaW5LowerLimit|X04 }}",
+        eta_w5_upper_limit_calo2 => X"{{ o2.etaW5UpperLimit|X04 }}", 
+        eta_w5_lower_limit_calo2 => X"{{ o2.etaW5LowerLimit|X04 }}",
     {%- endif %}
     {%- if o2.phiFullRange == 'true'  %}
         -- no phi cuts for object 2      
     {%- else %}
         phi_full_range_calo2 => {{ o2.phiFullRange }}, 
-        phi_w1_upper_limit_calo2 => X"{{ o2.phiW1UpperLimit|X04 }}", phi_w1_lower_limit_calo2 => X"{{ o2.phiW1LowerLimit|X04 }}",
+        phi_w1_upper_limit_calo2 => X"{{ o2.phiW1UpperLimit|X04 }}", 
+        phi_w1_lower_limit_calo2 => X"{{ o2.phiW1LowerLimit|X04 }}",
     {%- endif %}
     {%- if o2.phiW2Ignore == 'false'  %}
-        phi_w2_ignore_calo2 => {{ o2.phi_w2_ignore_calo2 }}, 
-        phi_w2_upper_limit_calo2 => X"{{ o2.phiW2UpperLimit|X04 }}", phi_w2_lower_limit_calo2 => X"{{ o2.phiW2LowerLimit|X04 }}",
+        phi_w2_ignore_calo2 => {{ o2.phiW2Ignore }}, 
+        phi_w2_upper_limit_calo2 => X"{{ o2.phiW2UpperLimit|X04 }}", 
+        phi_w2_lower_limit_calo2 => X"{{ o2.phiW2LowerLimit|X04 }}",
     {%- endif %}    
     {%- if o2.isolationLUT != 15  %}
         iso_lut_calo2 => X"{{ o2.isolationLUT|X01 }}",        
@@ -109,7 +123,6 @@
         dr_lower_limit => X"{{ condition.deltaR.lower|X16 }}",
     {%- endif %}
     {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.InvMassDivDeltaR %}
-        mass_cut => {{ condition.mass.enabled }}, mass_type => INVARIANT_MASS_DIV_DR_TYPE,       
         mass_div_dr_width => {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_DIV_DR_VECTOR_WIDTH,
         mass_div_dr_upper_limit => X"{{ condition.mass.upper|X21 }}", 
         mass_div_dr_lower_limit => X"{{ condition.mass.lower|X21 }}",

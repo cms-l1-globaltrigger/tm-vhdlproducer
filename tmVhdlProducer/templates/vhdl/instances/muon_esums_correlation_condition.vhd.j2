@@ -3,33 +3,110 @@
   {%- set o2 = condition.objects[1] %}
 {{ condition.vhdl_signal }}_i: entity work.muon_esums_correlation_condition
     generic map(
-        {{ condition.deltaPhi.enabled }}, {{ condition.mass.enabled }}, {{ condition.mass.type }}, {{ condition.twoBodyPt.enabled }},
-        {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o1.operator }},
-        X"{{ o1.threshold|X04 }}",
-        {{ o1.etaNrCuts }}, 
-        X"{{ o1.etaW1UpperLimit|X04 }}", X"{{ o1.etaW1LowerLimit|X04 }}",
-        X"{{ o1.etaW2UpperLimit|X04 }}", X"{{ o1.etaW2LowerLimit|X04 }}",
-        X"{{ o1.etaW3UpperLimit|X04 }}", X"{{ o1.etaW3LowerLimit|X04 }}",
-        X"{{ o1.etaW4UpperLimit|X04 }}", X"{{ o1.etaW4LowerLimit|X04 }}",
-        X"{{ o1.etaW5UpperLimit|X04 }}", X"{{ o1.etaW5LowerLimit|X04 }}",
-        {{ o1.phiFullRange }}, X"{{ o1.phiW1UpperLimit|X04 }}", X"{{ o1.phiW1LowerLimit|X04 }}",
-        {{ o1.phiW2Ignore }}, X"{{ o1.phiW2UpperLimit|X04 }}", X"{{ o1.phiW2LowerLimit|X04 }}",
-        "{{ o1.charge }}", X"{{ o1.qualityLUT|X04 }}", X"{{ o1.isolationLUT|X01 }}",
-        {{ o1.uptCutSel }}, X"{{ o1.uptUpperLimit|X04 }}", X"{{ o1.uptLowerLimit|X04 }}", X"{{ o1.impactParameterLUT|X01 }}",
-        {{ o2.operator }}, {{ o2.type|upper }}_TYPE,
-        X"{{ o2.threshold|X04 }}",
-        {{ o2.phiFullRange }}, X"{{ o2.phiW1UpperLimit|X04 }}", X"{{ o2.phiW1LowerLimit|X04 }}",
-        {{ o2.phiW2Ignore }}, X"{{ o2.phiW2UpperLimit|X04 }}", X"{{ o2.phiW2LowerLimit|X04 }}",
-        X"{{ condition.deltaPhi.upper|X08 }}", X"{{ condition.deltaPhi.lower|X08 }}",
-        X"{{ condition.mass.upper|X16 }}", X"{{ condition.mass.lower|X16 }}",
-        {{ o1.type|upper }}_PT_VECTOR_WIDTH, {{ o2.type|upper }}_PT_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_PRECISION, {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH,
-        X"{{ condition.twoBodyPt.threshold|X16 }}", MUON_SIN_COS_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o2.type|upper }}_SIN_COS_PRECISION
+-- parameter for muons
+        muon_object_low => {{ o1.sliceLow }}, muon_object_high => {{ o1.sliceHigh }}, 
+    {%- if o1.operator == 'false'  %}
+        pt_ge_mode_muon => {{ o1.operator }},
+    {%- endif %}
+        pt_threshold_muon => X"{{ o1.threshold|X04 }}",
+    {%- if o1.etaNrCuts == 0  %}
+        -- no eta cuts for object 1
+    {%- endif %}
+    {%- if o1.etaNrCuts >= 1  %}
+        nr_eta_windows_muon => {{ o1.etaNrCuts }},
+        eta_w1_upper_limit_muon => X"{{ o1.etaW1UpperLimit|X04 }}", eta_w1_lower_limit_muon => X"{{ o1.etaW1LowerLimit|X04 }}",
+    {%- endif %}
+    {%- if o1.etaNrCuts >= 2  %}
+        eta_w2_upper_limit_muon => X"{{ o1.etaW2UpperLimit|X04 }}", eta_w2_lower_limit_muon => X"{{ o1.etaW2LowerLimit|X04 }}",
+    {%- endif %}
+    {%- if o1.etaNrCuts >= 3  %}
+        eta_w3_upper_limit_muon => X"{{ o1.etaW3UpperLimit|X04 }}", eta_w3_lower_limit_muon => X"{{ o1.etaW3LowerLimit|X04 }}",
+    {%- endif %}
+    {%- if o1.etaNrCuts >= 4  %}
+        eta_w4_upper_limit_muon => X"{{ o1.etaW4UpperLimit|X04 }}", eta_w4_lower_limit_muon => X"{{ o1.etaW4LowerLimit|X04 }}",
+    {%- endif %}
+    {%- if o1.etaNrCuts >= 5  %}
+        eta_w5_upper_limit_muon => X"{{ o1.etaW5UpperLimit|X04 }}", eta_w5_lower_limit_muon => X"{{ o1.etaW5LowerLimit|X04 }}",
+    {%- endif %}
+    {%- if o1.phiFullRange == 'true'  %}
+        -- no phi cuts for object 1        
+    {%- else %}
+        phi_full_range_muon => {{ o1.phiFullRange }}, 
+        phi_w1_upper_limit_muon => X"{{ o1.phiW1UpperLimit|X04 }}", phi_w1_lower_limit_muon => X"{{ o1.phiW1LowerLimit|X04 }}",
+    {%- endif %}
+    {%- if o1.phiW2Ignore == 'false'  %}
+        phi_w2_ignore_muon => {{ o1.phi_w2_ignore_muon }}, 
+        phi_w2_upper_limit_muon => X"{{ o1.phiW2UpperLimit|X04 }}", phi_w2_lower_limit_muon => X"{{ o1.phiW2LowerLimit|X04 }}",
+    {%- endif %}    
+    {%- if o1.charge != "ign"  %}
+        requested_charge_muon => {{ o1.charge }},
+    {%- else %}
+        -- no charge cut for object 1
+    {%- endif %}    
+    {%- if  o1.qualityLUT != 65535 %}
+        qual_lut_muon => X"{{ o1.qualityLUT|X04 }}",
+    {%- else %}
+        -- no quality cut for object 1
+    {%- endif %}    
+    {%- if o1.isolationLUT != 15  %}
+        iso_lut_muon => X"{{ o1.isolationLUT|X01 }}",
+    {%- else %}
+        -- no isolation cut for object 1
+    {%- endif %}    
+    {%- if o1.uptCutSel == 'true' %}
+        iso_lut_muon => o1.uptCutSel,
+        upt_upper_limit_muon => X"{{ o1.uptUpperLimit|X04 }}", 
+        upt_lower_limit_muon => X"{{ o1.uptLowerLimit|X04 }}", 
+        ip_lut_muon => X"{{ o1.impactParameterLUT|X01 }}",
+    {%- else %}
+        -- no unconstraint pt cut for object 1
+    {%- endif %}    
+-- parameter for esums
+    {%- if o2.operator == 'false'  %}
+        et_ge_mode_esums => {{ o2.operator }},
+    {%- endif %}
+        obj_type_esums => {{ o2.type|upper }}_TYPE
+        et_threshold_esums => X"{{ o2.threshold|X04 }}",
+    {%- if o2.phiFullRange == 'true'  %}
+        -- no phi cuts for object 1        
+    {%- else %}
+        phi_full_range_esums => {{ o2.phiFullRange }}, 
+        phi_w1_upper_limit_esums => X"{{ o2.phiW1UpperLimit|X04 }}", phi_w1_lower_limit_esums => X"{{ o2.phiW1LowerLimit|X04 }}",
+    {%- endif %}
+    {%- if o2.phiW2Ignore == 'false'  %}
+        phi_w2_ignore_esums => {{ o2.phi_w2_ignore_esums }}, 
+        phi_w2_upper_limit_esums => X"{{ o2.phiW2UpperLimit|X04 }}", phi_w2_lower_limit_esums => X"{{ o2.phiW2LowerLimit|X04 }}",
+    {%- endif %}    
+-- correlation cuts
+    {%- if condition.deltaPhi.enabled == 'true'  %}
+        dphi_cut => {{ condition.deltaPhi.enabled }},
+        dphi_upper_limit => X"{{ condition.deltaPhi.upper|X08 }}", 
+        dphi_lower_limit => X"{{ condition.deltaPhi.lower|X08 }}",
+    {%- endif %}
+    {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.InvMassDivDeltaR %}
+        mass_cut => {{ condition.mass.enabled }},      
+        mass_width => {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_VECTOR_WIDTH,
+        mass_upper_limit => X"{{ condition.mass.upper|X16 }}",
+        mass_lower_limit => X"{{ condition.mass.lower|X16 }}",
+    {%- endif %}
+    {%- if condition.twoBodyPt.enabled == 'true'  %}
+        twobody_pt_cut => {{ condition.twoBodyPt.enabled }},
+        tbpt_width => {{ o1.type|upper }}_{{ o2.type|upper }}_TBPT_VECTOR_WIDTH,
+        tbpt_threshold => X"{{ condition.twoBodyPt.threshold|X16 }}"
+    {%- else %}
+        twobody_pt_cut => {{ condition.twoBodyPt.enabled }}
+    {%- endif %}    
     )
-    port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx|lower }}({{ o1.sliceLow }} to {{ o1.sliceHigh }}), {{ o2.type|lower }}_bx_{{ o2.bx|lower }},
-        {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx|lower }}_bx_{{ o2.bx|lower }}_dphi_vector,
-        {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, {{ o2.type|lower }}_pt_vector_bx_{{ o2.bx }},
-        {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
-        {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, conv_{{ o2.type|lower }}_cos_phi_bx_{{ o2.bx }}, {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }}, conv_{{ o2.type|lower }}_sin_phi_bx_{{ o2.bx }},
+    port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx|lower }}, {{ o2.type|lower }}_bx_{{ o2.bx|lower }},
+    {%- if condition.deltaPhi.enabled == 'true' %}
+        dphi => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
+    {%- endif %}
+    {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.TrvMass %}
+        mass_trv => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_trv_vector,
+    {%- endif %}
+    {%- if condition.twoBodyPt.enabled == 'true' %}
+        tbpt => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt_vector,
+    {%- endif %}
         {{ condition.vhdl_signal }});
 {%- endblock instantiate_muon_esums_correlation_condition %}
 {# eof #}
