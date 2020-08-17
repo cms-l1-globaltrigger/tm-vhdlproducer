@@ -1,11 +1,7 @@
 {%- block instantiate_calo_calo_correlation_condition %}
   {%- set o1 = condition.objects[0] %}
   {%- set o2 = condition.objects[1] %}
-    {%- if condition.mass.type == condition.mass.InvMassDivDeltaR %}
-{{ condition.vhdl_signal }}_i: entity work.calo_calo_mass_div_dr_condition
-    {%- else %}
 {{ condition.vhdl_signal }}_i: entity work.calo_calo_correlation_condition
-    {%- endif %}
     generic map(
         same_bx => {{ condition.objectsInSameBx }},        
 -- parameter for object 1
@@ -123,6 +119,7 @@
         dr_lower_limit => X"{{ condition.deltaR.lower|X16 }}",
     {%- endif %}
     {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.InvMassDivDeltaR %}
+        mass_cut => {{ condition.mass.enabled }}, mass_type => INVARIANT_MASS_DIV_DR_TYPE,       
         mass_div_dr_width => {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_DIV_DR_VECTOR_WIDTH,
         mass_div_dr_upper_limit => X"{{ condition.mass.upper|X21 }}", 
         mass_div_dr_lower_limit => X"{{ condition.mass.lower|X21 }}",

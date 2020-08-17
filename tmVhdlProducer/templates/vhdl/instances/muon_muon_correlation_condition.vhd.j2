@@ -1,11 +1,7 @@
 {%- block instantiate_muon_muon_correlation_condition %}
   {%- set o1 = condition.objects[0] %}
   {%- set o2 = condition.objects[1] %}
-    {%- if condition.mass.type == condition.mass.InvMassDivDeltaR %}
-{{ condition.vhdl_signal }}_i: entity work.muon_muon_mass_div_dr_condition
-    {%- else %}
 {{ condition.vhdl_signal }}_i: entity work.muon_muon_correlation_condition
-    {%- endif %}
 -- parameter for object 1
         muon1_object_low => {{ o1.sliceLow }}, muon1_object_high => {{ o1.sliceHigh }}, 
     {%- if o1.operator == 'false'  %}

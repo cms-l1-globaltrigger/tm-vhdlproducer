@@ -31,7 +31,7 @@
 {%- include  "instances/correlation_conditions_pt_eta_phi_cos_sin_phi.vhd.j2" %}
 -- Instantiations of differences for correlation conditions (used for DETA, DPHI, DR, mass and b_tagging) - once for correlation conditions with two ObjectTypes in certain Bxs
 {%- include  "instances/correlation_conditions_differences.vhd.j2" %}
--- Instantiations for mass cuts calculations
+-- Instantiations for correlation cuts calculations
 {%- include  "instances/correlation_conditions_correlation_cuts.vhd.j2" %}
 -- Instantiations of conditions
 {%- for condition in module.caloConditions %}

@@ -630,13 +630,11 @@ class ModuleHelper(VhdlHelper):
         combinations = {}
         if isinstance(condition, CaloConditionHelper):
             a = condition.objects[0]
-            b = condition.objects[1]
-            key = (a.type, b.type, a.bx, b.bx) # create custom hash
+            key = (a.type, a.type, a.bx, a.bx) # create custom hash
             combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
         if isinstance(condition, MuonConditionHelper):
             a = condition.objects[0]
-            b = condition.objects[1]
-            key = (a.type, b.type, a.bx, b.bx) # create custom hash
+            key = (a.type, a.type, a.bx, a.bx) # create custom hash
             combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
         if isinstance(condition, CorrelationConditionHelper):
             a, b = condition.objects
@@ -662,7 +660,7 @@ class ModuleHelper(VhdlHelper):
                 a, b, c = condition.objects
                 key = (a.type, b.type, a.bx, b.bx) # a-b combination
                 combinations[key] = (CorrelationObjectHelper(a), CorrelationObjectHelper(b))
-        return combinations.values()
+        return combinations
 
     @property
     def correlationCombinationsTbpt(self):

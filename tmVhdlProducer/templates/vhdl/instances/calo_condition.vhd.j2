@@ -8,15 +8,15 @@
     generic map(
         obj_type => {{ o1.type|upper }}_TYPE,
         nr_obj => NR_{{ o1.type|upper }}_OBJECTS,
-        muon_object_slice_1_low => {{ o1.sliceLow }}, muon_object_slice_1_high => {{ o1.sliceHigh }}, 
+        calo_object_slice_1_low => {{ o1.sliceLow }}, calo_object_slice_1_high => {{ o1.sliceHigh }}, 
     {%- if condition.nr_objects >= 2 %}
-        muon_object_slice_2_low => {{ o2.sliceLow }}, muon_object_slice_2_high => {{ o2.sliceHigh }}, 
+        calo_object_slice_2_low => {{ o2.sliceLow }}, calo_object_slice_2_high => {{ o2.sliceHigh }}, 
     {%- endif %}    
     {%- if condition.nr_objects >= 3 %}
-        muon_object_slice_3_low => {{ o3.sliceLow }}, muon_object_slice_3_high => {{ o3.sliceHigh }}, 
+        calo_object_slice_3_low => {{ o3.sliceLow }}, calo_object_slice_3_high => {{ o3.sliceHigh }}, 
     {%- endif %}    
     {%- if condition.nr_objects >= 4 %}
-        muon_object_slice_4_low => {{ o4.sliceLow }}, muon_object_slice_4_high => {{ o4.sliceHigh }}, 
+        calo_object_slice_4_low => {{ o4.sliceLow }}, calo_object_slice_4_high => {{ o4.sliceHigh }}, 
     {%- endif %}    
         nr_templates => {{ condition.nr_objects }},
     {%- if o1.operator == 'false'  %}
@@ -78,3 +78,4 @@
     {%- endif %}
         condition_o => {{ condition.vhdl_signal }});
 {%- endblock instantiate_calo_condition %}
+{# eof #}
