@@ -2,6 +2,8 @@
   {%- set o1 = condition.objects[0] %}
   {%- set o2 = condition.objects[1] %}
 {{ condition.vhdl_signal }}_i: entity work.muon_muon_correlation_condition
+    generic map(
+        same_bx => {{ condition.objectsInSameBx }},        
 -- parameter for object 1
         muon1_object_low => {{ o1.sliceLow }}, muon1_object_high => {{ o1.sliceHigh }}, 
     {%- if o1.operator == 'false'  %}

@@ -6,6 +6,7 @@
   {%- set bx = o1.bx %}
 {{ condition.vhdl_signal }}_i: entity work.muon_conditions
     generic map(
+-- parameter for objects
         muon_object_slice_1_low => {{ o1.sliceLow }}, muon_object_slice_1_high => {{ o1.sliceHigh }}, 
     {%- if condition.nr_objects >= 2 %}
         muon_object_slice_2_low => {{ o2.sliceLow }}, muon_object_slice_2_high => {{ o2.sliceHigh }}, 
@@ -17,15 +18,15 @@
         muon_object_slice_4_low => {{ o4.sliceLow }}, muon_object_slice_4_high => {{ o4.sliceHigh }}, 
     {%- endif %}    
         nr_templates => {{ condition.nr_objects }},
-    {%- if o1.operator == 'false'  %}
-        pt_ge_mode => {{ o1.operator }},
+    {%- if o1.operator == 'false' and o2.operator == 'false' and o3.operator == 'false' and o4.operator == 'false' %}
+        pt_ge_mode => ({{ o1.operator }}, {{ o2.operator }}, {{ o3.operator }}, {{ o4.operator }}),
     {%- endif %}
         pt_thresholds => (X"{{ o1.threshold|X04 }}", X"{{ o2.threshold|X04 }}", X"{{ o3.threshold|X04 }}", X"{{ o4.threshold|X04 }}"),
-    {%- if o1.etaNrCuts == 0  %}
+    {%- if o1.etaNrCuts == 0 and o2.etaNrCuts == 0 and o3.etaNrCuts == 0 and o4.etaNrCuts == 0 %}
         -- no eta cuts
     {%- endif %}
     {%- if o1.etaNrCuts >= 1 or o2.etaNrCuts >= 1 or o3.etaNrCuts >= 1 or o4.etaNrCuts >= 1 %}
-        nr_eta_windows => {{ o1.etaNrCuts }},
+        nr_eta_windows => ({{ o1.etaNrCuts }}, {{ o2.etaNrCuts }}, {{ o3.etaNrCuts }}, {{ o4.etaNrCuts }}),
         eta_w1_upper_limits => (X"{{ o1.etaW1UpperLimit|X04 }}", X"{{ o2.etaW1UpperLimit|X04 }}", X"{{ o3.etaW1UpperLimit|X04 }}", X"{{ o4.etaW1UpperLimit|X04 }}"), 
         eta_w1_lower_limits => (X"{{ o1.etaW1LowerLimit|X04 }}", X"{{ o2.etaW1LowerLimit|X04 }}", X"{{ o3.etaW1LowerLimit|X04 }}", X"{{ o4.etaW1LowerLimit|X04 }}"),
     {%- endif %}

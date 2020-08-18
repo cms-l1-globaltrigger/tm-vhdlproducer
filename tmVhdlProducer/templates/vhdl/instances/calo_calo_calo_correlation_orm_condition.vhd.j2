@@ -145,8 +145,8 @@
     {%- endif %}
     {%- if condition.deltaROrm.enabled == 'true'  %}
         dr_orm_cut => {{ condition.deltaROrm.enabled }},
-        dr_orm_upper_limit => X"{{ condition.deltaROrm.upper|X08 }}", 
-        dr_orm_lower_limit => X"{{ condition.deltaROrm.lower|X08 }}",
+        dr_orm_upper_limit => X"{{ condition.deltaROrm.upper|X16 }}", 
+        dr_orm_lower_limit => X"{{ condition.deltaROrm.lower|X16 }}",
     {%- endif %}
 -- correlation cuts
     {%- if condition.deltaEta.enabled == 'true'  %}
@@ -306,8 +306,8 @@
     {%- endif %}
     {%- if condition.deltaROrm.enabled == 'true'  %}
         dr_orm_cut => {{ condition.deltaROrm.enabled }},
-        dr_orm_upper_limit => X"{{ condition.deltaROrm.upper|X08 }}", 
-        dr_orm_lower_limit => X"{{ condition.deltaROrm.lower|X08 }}",
+        dr_orm_upper_limit => X"{{ condition.deltaROrm.upper|X16 }}", 
+        dr_orm_lower_limit => X"{{ condition.deltaROrm.lower|X16 }}",
     {%- endif %}
 -- correlation cuts
     {%- if condition.deltaEta.enabled == 'true'  %}

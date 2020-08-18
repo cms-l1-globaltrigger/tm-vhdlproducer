@@ -30,14 +30,14 @@
     {%- endif %}    
         nr_templates => {{ nr_requirements }},
     {%- if o1.operator == 'false'  %}
-        pt_ge_mode_calo1 => {{ o1.operator }},
+        pt_ge_mode_calo1 => ({{ o1.operator }}, {{ o2.operator }}, {{ o3.operator }}, {{ o4.operator }}),
     {%- endif %}
         pt_thresholds_calo1 => (X"{{ o1.threshold|X04 }}", X"{{ o2.threshold|X04 }}", X"{{ o3.threshold|X04 }}", X"{{ o4.threshold|X04 }}"),
-    {%- if o1.etaNrCuts == 0  %}
+    {%- if o1.etaNrCuts == 0 and o2.etaNrCuts == 0 and o3.etaNrCuts == 0 and o4.etaNrCuts == 0 %}
         -- no eta cuts
     {%- endif %}
     {%- if o1.etaNrCuts >= 1 or o2.etaNrCuts >= 1 or o3.etaNrCuts >= 1 or o4.etaNrCuts >= 1 %}
-        nr_eta_windows_calo1 => {{ o1.etaNrCuts }},
+        nr_eta_windows => ({{ o1.etaNrCuts }}, {{ o2.etaNrCuts }}, {{ o3.etaNrCuts }}, {{ o4.etaNrCuts }}),
         eta_w1_upper_limits_calo1 => (X"{{ o1.etaW1UpperLimit|X04 }}", X"{{ o2.etaW1UpperLimit|X04 }}", X"{{ o3.etaW1UpperLimit|X04 }}", X"{{ o4.etaW1UpperLimit|X04 }}"), 
         eta_w1_lower_limits_calo1 => (X"{{ o1.etaW1LowerLimit|X04 }}", X"{{ o2.etaW1LowerLimit|X04 }}", X"{{ o3.etaW1LowerLimit|X04 }}", X"{{ o4.etaW1LowerLimit|X04 }}"),
     {%- endif %}
@@ -74,7 +74,7 @@
     {%- else %}
         -- no isolation cuts
     {%- endif %}    
--- parameter for object 1
+-- parameter for overlap removel object
         obj_type_calo2 => {{ orm_o.type|upper }}_TYPE,
         nr_obj_calo2 => NR_{{ orm_o.type|upper }}_OBJECTS,
         calo2_object_slice_1_low => {{ orm_o.sliceLow }},
@@ -137,8 +137,8 @@
     {%- endif %}
     {%- if condition.deltaROrm.enabled == 'true'  %}
         dr_orm_cut => {{ condition.deltaROrm.enabled }},
-        dr_orm_upper_limit => X"{{ condition.deltaROrm.upper|X08 }}", 
-        dr_orm_lower_limit => X"{{ condition.deltaROrm.lower|X08 }}",
+        dr_orm_upper_limit => X"{{ condition.deltaROrm.upper|X16 }}", 
+        dr_orm_lower_limit => X"{{ condition.deltaROrm.lower|X16 }}",
     {%- endif %}
     {%- if condition.twoBodyPt.enabled == "true" %}
         twobody_pt_cut => true,        

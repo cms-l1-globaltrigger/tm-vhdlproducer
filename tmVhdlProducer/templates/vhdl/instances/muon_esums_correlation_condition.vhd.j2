@@ -83,7 +83,7 @@
         dphi_upper_limit => X"{{ condition.deltaPhi.upper|X08 }}", 
         dphi_lower_limit => X"{{ condition.deltaPhi.lower|X08 }}",
     {%- endif %}
-    {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.InvMassDivDeltaR %}
+    {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.TrvMass %}
         mass_cut => {{ condition.mass.enabled }},      
         mass_width => {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_VECTOR_WIDTH,
         mass_upper_limit => X"{{ condition.mass.upper|X16 }}",
