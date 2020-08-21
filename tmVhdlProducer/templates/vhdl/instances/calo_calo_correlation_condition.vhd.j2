@@ -1,13 +1,17 @@
 {%- block instantiate_calo_calo_correlation_condition %}
   {%- set o1 = condition.objects[0] %}
   {%- set o2 = condition.objects[1] %}
+  {%- if condition.mass.type == condition.mass.InvariantMassDeltaRType %}
+{{ condition.vhdl_signal }}_i: entity work.calo_calo_mass_div_dr_condition
+  {%- else %}
 {{ condition.vhdl_signal }}_i: entity work.calo_calo_correlation_condition
+  {%- endif %}
     generic map(
         {{ condition.objectsInSameBx }},
         {{ condition.deltaEta.enabled }}, {{ condition.deltaPhi.enabled }}, {{ condition.deltaR.enabled }}, {{ condition.mass.enabled }}, {{ condition.mass.type }}, {{ condition.twoBodyPt.enabled }},
         {{ o1.sliceLow }}, {{ o1.sliceHigh }}, {{ o1.operator }}, {{ o1.type|upper }}_TYPE,
         X"{{ o1.threshold|X04 }}",
-        {{ o1.etaNrCuts }}, 
+        {{ o1.etaNrCuts }},
         X"{{ o1.etaW1UpperLimit|X04 }}", X"{{ o1.etaW1LowerLimit|X04 }}",
         X"{{ o1.etaW2UpperLimit|X04 }}", X"{{ o1.etaW2LowerLimit|X04 }}",
         X"{{ o1.etaW3UpperLimit|X04 }}", X"{{ o1.etaW3LowerLimit|X04 }}",
@@ -18,7 +22,7 @@
         X"{{ o1.isolationLUT|X01 }}",
         {{ o2.sliceLow }}, {{ o2.sliceHigh }}, {{ o2.operator }}, {{ o2.type|upper }}_TYPE,
         X"{{ o2.threshold|X04 }}",
-        {{ o2.etaNrCuts }}, 
+        {{ o2.etaNrCuts }},
         X"{{ o2.etaW1UpperLimit|X04 }}", X"{{ o2.etaW1LowerLimit|X04 }}",
         X"{{ o2.etaW2UpperLimit|X04 }}", X"{{ o2.etaW2LowerLimit|X04 }}",
         X"{{ o2.etaW3UpperLimit|X04 }}", X"{{ o2.etaW3LowerLimit|X04 }}",
@@ -35,10 +39,14 @@
         X"{{ condition.twoBodyPt.threshold|X16 }}", CALO_SIN_COS_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o2.type|upper }}_SIN_COS_PRECISION
     )
     port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o2.type|lower }}_bx_{{ o2.bx }},
+    {%- if condition.mass.type == condition.mass.InvariantMassDeltaRType %}
+        {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr,
+    {%- else %}
         diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_eta_vector, diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_vector,
         {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, {{ o2.type|lower }}_pt_vector_bx_{{ o2.bx }},
         {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector, {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
         {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, {{ o2.type|lower }}_cos_phi_bx_{{ o2.bx }}, {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }}, {{ o2.type|lower }}_sin_phi_bx_{{ o2.bx }},
+    {%- endif %}
         {{ condition.vhdl_signal }});
 {%- endblock instantiate_calo_calo_correlation_condition %}
 {# eof #}

@@ -95,7 +95,6 @@ made to get the resources for a certain condition.
 
     "cuts OvRm": factor = number_of_objects * number_of_objects_ovrm
 
-
 ### "CorrelationCondition"
 
   a) same object type, same bx:
@@ -117,9 +116,3 @@ made to get the resources for a certain condition.
   b) `["calo", "calo"]`:
 
     "objects", "cuts" and "cuts OvRm": factor = number_of_objects * number_of_objects_ovrm
-
-### "InvariantMass3Condition"
-
-  a) `["calo", "calo", "calo"]`:
-
-  b) `["calo", "calo"]`:

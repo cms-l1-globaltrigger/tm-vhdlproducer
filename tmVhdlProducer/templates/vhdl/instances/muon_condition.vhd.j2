@@ -26,8 +26,9 @@
         (X"{{ o1.impactParameterLUT|X01 }}", X"{{ o2.impactParameterLUT|X01 }}", X"{{ o3.impactParameterLUT|X01 }}", X"{{ o4.impactParameterLUT|X01 }}"),
         "{{ condition.chargeCorrelation }}",
   {%- if condition.twoBodyPt.enabled == "true" %}
-        true, {{ o1.type|upper }}_PT_VECTOR_WIDTH, X"{{ condition.twoBodyPt.threshold|X16 }}",
-        MUON_SIN_COS_VECTOR_WIDTH, {{ o1.type|upper }}_{{ o1.type|upper }}_SIN_COS_PRECISION
+        twobody_pt_cut => true, pt_width => {{ o1.type|upper }}_PT_VECTOR_WIDTH,
+        pt_sq_threshold_vector => X"{{ condition.twoBodyPt.threshold|X16 }}",
+        sin_cos_width => MUON_SIN_COS_VECTOR_WIDTH, pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o1.type|upper }}_SIN_COS_PRECISION
   {%- else %}
         false
   {%- endif %}

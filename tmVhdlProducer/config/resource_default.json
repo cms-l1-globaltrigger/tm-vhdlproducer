@@ -60,7 +60,9 @@
                 "TowerCount": "TowerCountCondition",
                 "Externals": "ExternalCondition",
                 "InvariantMass": "CorrelationCondition",
-                "InvariantMass3": "InvariantMass3Condition",
+                "InvariantMass3": "Correlation3Condition",
+                "InvariantMassUpt": "CorrelationCondition",
+                "InvariantMassDeltaR": "CorrelationCondition",
                 "TransverseMass": "CorrelationCondition",
                 "CaloCaloCorrelationOvRm": "CorrelationConditionOvRm",
                 "InvariantMassOvRm": "CorrelationConditionOvRm",
@@ -105,6 +107,8 @@
                 "OvRmDeltaR": "dr",
                 "TwoBodyPt": "tbpt",
                 "Mass": "mass",
+                "MassUpt": "massupt",
+                "MassDeltaR": "massdr",
                 "ChargeCorrelation": "chgcor"
             }
         },
@@ -330,6 +334,11 @@
                                 "type": "mass",
                                 "processors": 0.00083,
                                 "sliceLUTs": 0.00033
+                            },
+                            {
+                                "type": "massdr",
+                                "processors": 0.00083,
+                                "sliceLUTs": 0.00033
                             }
                         ]
                     },
@@ -362,6 +371,11 @@
                                 "type": "mass",
                                 "processors": 0.00139,
                                 "sliceLUTs": 0.00123
+                            },
+                            {
+                                "type": "massdr",
+                                "processors": 0.00083,
+                                "sliceLUTs": 0.00033
                             }
                         ]
                     },
@@ -440,6 +454,16 @@
                                 "sliceLUTs": 0.00065
                             },
                             {
+                                "type": "massupt",
+                                "processors": 0.00083,
+                                "sliceLUTs": 0.00033
+                            },
+                            {
+                                "type": "massdr",
+                                "processors": 0.00083,
+                                "sliceLUTs": 0.00033
+                            },
+                            {
                                 "type": "chgcor",
                                 "processors": 0.0,
                                 "sliceLUTs": 0.0
@@ -449,29 +473,29 @@
                 ]
             },
             {
-                "type": "InvariantMass3Condition",
+                "type": "Correlation3Condition",
                 "objects": [
                     {
                         "types": ["calo", "calo", "calo"],
                         "processors": 0.0,
-                        "sliceLUTs": 0.00025,
+                        "sliceLUTs": 0.0003,
                         "cuts": [
                             {
                                 "type": "mass",
                                 "processors": 0.00083,
-                                "sliceLUTs": 0.000055
+                                "sliceLUTs": 0.00033
                             }
                         ]
                     },
                     {
                         "types": ["muon", "muon", "muon"],
                         "processors": 0.0,
-                        "sliceLUTs": 0.00022,
+                        "sliceLUTs": 0.0003,
                         "cuts": [
                             {
                                 "type": "mass",
                                 "processors": 0.00083,
-                                "sliceLUTs": 0.00005
+                                "sliceLUTs": 0.00033
                             }
                         ]
                     }
