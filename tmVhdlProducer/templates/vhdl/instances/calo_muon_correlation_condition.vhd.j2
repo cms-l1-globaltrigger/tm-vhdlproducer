@@ -136,8 +136,7 @@
     {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.InvMassDivDeltaR %}
         mass_cut => {{ condition.mass.enabled }}, mass_type => INVARIANT_MASS_DIV_DR_TYPE,       
         mass_div_dr_width => {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_DIV_DR_VECTOR_WIDTH,
-        mass_div_dr_upper_limit => X"{{ condition.mass.upper|X21 }}", 
-        mass_div_dr_lower_limit => X"{{ condition.mass.lower|X21 }}",
+        mass_div_dr_threshold => X"{{ condition.mass.lower|X21 }}",
     {%- elif condition.mass.enabled == 'true' and condition.mass.type == condition.mass.InvMass %}
         mass_cut => {{ condition.mass.enabled }}, mass_type => INVARIANT_MASS_TYPE,       
         mass_width => {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_VECTOR_WIDTH,
