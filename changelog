@@ -4,9 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.8.0] - 2020-07-20
+### Changed
+- depending on tm-python 0.8.0
+- depending on tm-reporter 2.8.0
+### Added
+- unconstrained pt for muons
+- impact parameter for muons
+- invariant mass for three particles
+
 ## [2.7.5] - 2020-06-18
 ### Fixed
-- using 5 eta windows
+- supporting up to 5 eta windows
 
 ## [2.7.4] - 2020-01-15
 ### Fixed
@@ -14,7 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.7.3] - 2020-01-08
 ### Changed
-- using utm 0.7.4 patch
+- depending on tm-python 0.7.4
 
 ## [2.7.2] - 2019-10-16
 ### Changed
@@ -27,7 +36,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.7.0] - 2019-10-03
 ### Added
-- depending on tmReporter package
+- depending on tm-reporter
 ### Changed
 - migrated to Python3
 - removed obsolete SVN/git revision tagging

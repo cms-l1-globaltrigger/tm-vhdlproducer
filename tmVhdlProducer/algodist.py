@@ -131,6 +131,9 @@ kCaloMuonCorrelation = 'CaloMuonCorrelation'
 kCaloCaloCorrelation = 'CaloCaloCorrelation'
 kCaloEsumCorrelation = 'CaloEsumCorrelation'
 kInvariantMass = 'InvariantMass'
+kInvariantMass3 = 'InvariantMass3'
+kInvariantMassUpt = 'InvariantMassUpt'
+kInvariantMassDeltaR = 'InvariantMassDeltaR'
 kTransverseMass = 'TransverseMass'
 kCaloCaloCorrelationOvRm = 'CaloCaloCorrelationOvRm'
 kInvariantMassOvRm = 'InvariantMassOvRm'
@@ -155,6 +158,8 @@ kQuadJetOvRm = 'QuadJetOvRm'
 kThreshold = 'Threshold'
 kEta = 'Eta'
 kPhi = 'Phi'
+kUnconstrainedPt = 'UnconstrainedPt'
+kImpactParameter = 'ImpactParameter'
 kCharge = 'Charge'
 kQuality = 'Quality'
 kIsolation = 'Isolation'
@@ -162,6 +167,8 @@ kDeltaEta = 'DeltaEta'
 kDeltaPhi = 'DeltaPhi'
 kDeltaR = 'DeltaR'
 kMass = 'Mass'
+kMassUpt = 'MassUpt'
+kMassDeltaR = 'MassDeltaR'
 kTwoBodyPt = 'TwoBodyPt'
 kSlice = 'Slice'
 kChargeCorrelation = 'ChargeCorrelation'
@@ -189,6 +196,8 @@ CutTypeKey = {
     tmEventSetup.Threshold: kThreshold,
     tmEventSetup.Eta: kEta,
     tmEventSetup.Phi: kPhi,
+    tmEventSetup.UnconstrainedPt: kUnconstrainedPt,
+    tmEventSetup.ImpactParameter: kImpactParameter,
     tmEventSetup.Charge: kCharge,
     tmEventSetup.Quality: kQuality,
     tmEventSetup.Isolation: kIsolation,
@@ -196,6 +205,8 @@ CutTypeKey = {
     tmEventSetup.DeltaPhi: kDeltaPhi,
     tmEventSetup.DeltaR: kDeltaR,
     tmEventSetup.Mass: kMass,
+    tmEventSetup.MassUpt: kMassUpt,
+    tmEventSetup.MassDeltaR: kMassDeltaR,
     tmEventSetup.TwoBodyPt: kTwoBodyPt,
     tmEventSetup.Slice: kSlice,
     tmEventSetup.ChargeCorrelation: kChargeCorrelation,
@@ -320,6 +331,9 @@ ConditionTypeKey = {
     tmEventSetup.CaloCaloCorrelation: kCaloCaloCorrelation,
     tmEventSetup.CaloEsumCorrelation: kCaloEsumCorrelation,
     tmEventSetup.InvariantMass: kInvariantMass,
+    tmEventSetup.InvariantMass3: kInvariantMass3,
+    tmEventSetup.InvariantMassUpt: kInvariantMassUpt,
+    tmEventSetup.InvariantMassDeltaR: kInvariantMassDeltaR,
     tmEventSetup.TransverseMass: kTransverseMass,
     tmEventSetup.CaloCaloCorrelationOvRm: kCaloCaloCorrelationOvRm,
     tmEventSetup.InvariantMassOvRm: kInvariantMassOvRm,
@@ -410,6 +424,7 @@ class ResourceTray(object):
     kCaloCondition = 'CaloCondition'
     kCaloConditionOvRm = 'CaloConditionOvRm'
     kCorrelationCondition = 'CorrelationCondition'
+    kCorrelation3Condition = 'Correlation3Condition'
     kCorrelationConditionOvRm = 'CorrelationConditionOvRm'
 
     def __init__(self, filename):
@@ -506,12 +521,18 @@ class ResourceTray(object):
                 n_objects_1 = objects[0].slice_size
                 n_objects_2 = objects[1].slice_size
                 return n_objects_1 * n_objects_2
+        elif instance == self.kCorrelation3Condition:
+            if mapped_objects == ['calo', 'calo', 'calo']:
+                return n_objects * (n_objects - 1) * (n_objects - 2) / 6
+            elif mapped_objects == ['muon', 'muon', 'muon']:
+                return n_objects * (n_objects - 1) * (n_objects - 2) / 6
+            raise RuntimeError("missing mapped objects for '{}': {}".format(instance, mapped_objects))
         elif instance == self.kCorrelationConditionOvRm:
             if mapped_objects == ['calo', 'calo', 'calo']:
                 return n_objects * (n_objects - 1) * 0.5
             elif mapped_objects == ['calo', 'calo']:
                 return n_objects * n_objects_ovrm
-            raise RuntimeError("missing mapped objects for ovrm corr: {0}".format(mapped_objects))
+            raise RuntimeError("missing mapped objects for '{}': {}".format(instance, mapped_objects))
         return 1.
 
     def calc_cut_factor(self, condition, cut):
@@ -549,6 +570,12 @@ class ResourceTray(object):
                 n_objects_1 = objects[0].slice_size
                 n_objects_2 = objects[1].slice_size
                 return n_objects_1 * n_objects_2
+        elif instance == self.kCorrelation3Condition:
+            if mapped_objects == ['calo', 'calo', 'calo']:
+                return n_objects * (n_objects - 1) * 0.5
+            elif mapped_objects == ['muon', 'muon', 'muon']:
+                return n_objects * (n_objects - 1) * 0.5
+            raise RuntimeError("missing mapped objects for '{}': {}".format(instance, mapped_objects))
         elif instance == self.kCorrelationConditionOvRm:
             if mapped_objects == ['calo', 'calo', 'calo']:
                 if cut in (kOvRmDeltaEta, kOvRmDeltaPhi, kOvRmDeltaR):
@@ -557,7 +584,7 @@ class ResourceTray(object):
                     return n_objects * (n_objects - 1) * 0.5
             elif mapped_objects == ['calo', 'calo']:
                 return n_objects * n_objects_ovrm
-            raise RuntimeError("missing mapped objects for ovrm corr")
+            raise RuntimeError("missing mapped objects for '{}': {}".format(instance, mapped_objects))
         return 1.
 
     def measure(self, condition):
@@ -707,7 +734,7 @@ class ModuleCollection(object):
                     right = condition.objects[1]
                     cut.precision_pt = 1 # for all
                     cut.precision_math = scales[precision_key(left, right, 'TwoBodyPtMath')].getNbits()
-                elif cut.cut_type == tmEventSetup.Mass:
+                elif cut.cut_type in (tmEventSetup.Mass, tmEventSetup.MassUpt, tmEventSetup.MassDeltaR):
                     left = condition.objects[0]
                     right = condition.objects[1]
                     cut.precision_pt = scales[precision_key(left, right, 'MassPt')].getNbits()
@@ -1007,7 +1034,7 @@ def list_summary(collection):
     for module in collection:
         algorithms = len(module)
         conditions = len(module.conditions)
-        proportion = float(conditions) / algorithms
+        proportion = float(conditions) / algorithms if algorithms else 1.0
         sliceLUTs = module.payload.sliceLUTs * 100.
         processors = module.payload.processors * 100.
         logging.info("| {module.id:>2} | {algorithms:>10} | {conditions:>10} | {proportion:>4.2f} | " \
