@@ -28,7 +28,7 @@
                     {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_bin_vector(i,j)({{ o1.type|upper }}_{{ o2.type|upper }}_DETA_BINS_WIDTH-1 downto {{ o1.type|upper }}_{{ o2.type|upper }}_DETA_BINS_WIDTH-{{ o1.type|upper }}_{{ o2.type|upper }}_DETA_BINS_WIDTH_ROM),
                     {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_bin_vector(i,j)({{ o1.type|upper }}_{{ o2.type|upper }}_DPHI_BINS_WIDTH-1 downto {{ o1.type|upper }}_{{ o2.type|upper }}_DPHI_BINS_WIDTH-{{ o1.type|upper }}_{{ o2.type|upper }}_DPHI_BINS_WIDTH_ROM),
                     {{ o1.type|lower }}_pt_vector_bx_0(i)({{ o1.type|upper }}_PT_VECTOR_WIDTH-1 downto 0),
-                    {{ o2.type|lower }}_pt_vector_bx_0(i)({{ o2.type|upper }}_PT_VECTOR_WIDTH-1 downto 0),
+                    {{ o2.type|lower }}_pt_vector_bx_0(j)({{ o2.type|upper }}_PT_VECTOR_WIDTH-1 downto 0),
                     {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector(i,j),
                     {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector(i,j),
                     {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr(i,j)
