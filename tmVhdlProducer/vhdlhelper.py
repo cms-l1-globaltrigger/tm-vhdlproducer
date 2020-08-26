@@ -464,6 +464,17 @@ class ModuleHelper(VhdlHelper):
         return combinations.values()
 
     @property
+    def correlationCombinationsInvMassDivDr(self):
+        combinations = {}
+        for condition in self.conditions:
+            if hasattr(condition, 'mass') and condition.mass.enabled == vhdl_bool(True) and condition.mass.type == condition.mass.InvariantMassDeltaRType:
+                if isinstance(condition, CorrelationConditionHelper):
+                    a, b = condition.objects
+                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
+                    combinations[key] = (a, b)
+        return combinations.values()
+
+    @property
     def correlationObjects(self):
         """Retruns list of objects used by correlation conditions or any
         conditions using two body pt correlations.
@@ -1266,6 +1277,11 @@ if __name__ == '__main__':
             for a, b in module.correlationCombinations:
                 print(" ", a.type, a.bx, "<>", b.type, b.bx)
             print("-" * 80)
+            print("module.correlationCombinationsInvMassDivDr:")
+            for a, b in module.correlationCombinationsInvMassDivDr:
+                print(" ", a.type, a.bx, "<>", b.type, b.bx)
+            print("-" * 80)
+
             print("module.muonBxCombinations:")
             for a, b in module.muonBxCombinations:
                 print("  {a} <> {b}".format(a=a, b=b))

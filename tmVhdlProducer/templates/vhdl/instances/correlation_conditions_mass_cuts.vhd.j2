@@ -18,6 +18,10 @@
         end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_cos_l2;
     end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_cos_l1;
 
+    {%- endif %}
+  {%- endfor %}
+
+  {%- for o1, o2 in module.correlationCombinationsInvMassDivDr %}
     {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_calc_l1: for i in 0 to NR_{{ o1.type|upper }}_OBJECTS-1 generate
         {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_calc_l2: for j in 0 to NR_{{ o2.type|upper }}_OBJECTS-1 generate
             calculator_i: entity work.mass_div_dr_calculator
@@ -37,8 +41,7 @@
                 );
         end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_calc_l2;
     end generate {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_calc_l1;
-
-    {%- endif %}
   {%- endfor %}
+
 {%- endblock instantiate_correlation_conditions_differences %}
 {# eof #}
