@@ -133,11 +133,11 @@
         dr_upper_limit => X"{{ condition.deltaR.upper|X16 }}", 
         dr_lower_limit => X"{{ condition.deltaR.lower|X16 }}",
     {%- endif %}
-    {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.InvMassDivDeltaR %}
+    {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.InvariantMassDeltaRType %}
         mass_cut => {{ condition.mass.enabled }}, mass_type => INVARIANT_MASS_DIV_DR_TYPE,       
         mass_div_dr_width => {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_DIV_DR_VECTOR_WIDTH,
         mass_div_dr_threshold => X"{{ condition.mass.lower|X21 }}",
-    {%- elif condition.mass.enabled == 'true' and condition.mass.type == condition.mass.InvMass %}
+    {%- elif condition.mass.enabled == 'true' and condition.mass.type == condition.mass.InvariantMassType %}
         mass_cut => {{ condition.mass.enabled }}, mass_type => INVARIANT_MASS_TYPE,       
         mass_width => {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_VECTOR_WIDTH,
         mass_upper_limit => X"{{ condition.mass.upper|X16 }}",
@@ -162,13 +162,10 @@
     {%- if condition.deltaR.enabled == 'true' %}
         dr => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_delta_r_vector,
     {%- endif %}
-    {%- if condition.mass.enabled == 'true' and (condition.mass.type == condition.mass.InvMass or condition.mass.type == condition.mass.InvMassUpt) %}
+    {%- if condition.mass.enabled == 'true' and (condition.mass.type == condition.mass.InvariantMassType) %}
         mass_inv => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_vector,
     {%- endif %}
-    {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.TrvMass %}
-        mass_trv => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_trv_vector,
-    {%- endif %}
-    {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.InvMassDivDeltaR %}
+    {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.InvariantMassDeltaRType %}
         mass_div_dr => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr_vector,
     {%- endif %}
     {%- if condition.twoBodyPt.enabled == 'true' %}

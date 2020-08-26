@@ -66,7 +66,7 @@
         dphi_upper_limit => X"{{ condition.deltaPhi.upper|X08 }}", 
         dphi_lower_limit => X"{{ condition.deltaPhi.lower|X08 }}",
     {%- endif %}
-    {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.TrvMass %}
+    {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.TransverseMassType %}
         mass_cut => {{ condition.mass.enabled }},       
         mass_width => {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_VECTOR_WIDTH,
         mass_upper_limit => X"{{ condition.mass.upper|X16 }}", 
@@ -84,7 +84,7 @@
     {%- if condition.deltaPhi.enabled == 'true' %}    
         dphi => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
     {%- endif %}
-    {%- if condition.mass.enabled == 'true' %}    
+    {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.TransverseMassType %}    
         mass_trv => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_trv_vector,
     {%- endif %}
     {%- if condition.twoBodyPt.enabled == 'true' %}    
