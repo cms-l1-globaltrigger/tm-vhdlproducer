@@ -38,23 +38,29 @@
         X"{{ condition.deltaEta.upper|X08 }}", X"{{ condition.deltaEta.lower|X08 }}",
         X"{{ condition.deltaPhi.upper|X08 }}", X"{{ condition.deltaPhi.lower|X08 }}",
         X"{{ condition.deltaR.upper|X16 }}", X"{{ condition.deltaR.lower|X16 }}",
-        X"{{ condition.mass.upper|X16 }}", X"{{ condition.mass.lower|X16 }}",
-        pt_width => {{ o1.type|upper }}_PT_VECTOR_WIDTH, mass_cosh_cos_precision => {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_PRECISION,
-        cosh_cos_width => {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH,
-        pt_sq_threshold_vector => X"{{ condition.twoBodyPt.threshold|X16 }}", sin_cos_width => MUON_SIN_COS_VECTOR_WIDTH,
-        pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o2.type|upper }}_SIN_COS_PRECISION
+    {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.InvariantMassDeltaRType %}
+        mass_div_dr_threshold => X"{{ condition.mass.lower|X21 }}",
+    {%- else %}
+        mass_upper_limit => X"{{ condition.mass.upper|X16 }}",
+        mass_lower_limit => X"{{ condition.mass.lower|X16 }}",
+    {%- endif %}        
+        pt_width => {{ o1.type|upper }}_PT_VECTOR_WIDTH, 
+        mass_cosh_cos_precision => {{ o1.type|upper }}_{{ o1.type|upper }}_COSH_COS_PRECISION, 
+        cosh_cos_width => {{ o1.type|upper }}_{{ o1.type|upper }}_COSH_COS_VECTOR_WIDTH,
+        pt_sq_threshold_vector => X"{{ condition.twoBodyPt.threshold|X16 }}", 
+        sin_cos_width => CALO_SIN_COS_VECTOR_WIDTH, 
+        pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o1.type|upper }}_SIN_COS_PRECISION
     )
     port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o2.type|lower }}_bx_{{ o2.bx }},
         ls_charcorr_double_bx_{{ o1.bx }}_bx_{{ o2.bx }}, os_charcorr_double_bx_{{ o1.bx }}_bx_{{ o2.bx }},
-    {%- if condition.mass.type == condition.mass.InvariantMassDeltaRType %}
-        {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr,
-    {%- else %}
         diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_eta_vector, diff_{{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_vector,
         {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, {{ o2.type|lower }}_pt_vector_bx_{{ o2.bx }},
         {{ o1.type|lower }}_upt_vector_bx_{{ o1.bx }}, {{ o2.type|lower }}_upt_vector_bx_{{ o2.bx }},
         {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector, {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
         {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, {{ o2.type|lower }}_cos_phi_bx_{{ o2.bx }}, {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }}, {{ o2.type|lower }}_sin_phi_bx_{{ o2.bx }},
+    {%- if condition.mass.type == condition.mass.InvariantMassDeltaRType %}
+        mass_div_dr => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr,
     {%- endif %}
-        {{ condition.vhdl_signal }});
+        condition_o => {{ condition.vhdl_signal }});
 {%- endblock instantiate_muon_muon_correlation_condition %}
 {# eof #}
