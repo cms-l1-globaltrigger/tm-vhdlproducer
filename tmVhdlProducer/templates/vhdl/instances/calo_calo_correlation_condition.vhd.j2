@@ -31,6 +31,9 @@
         X"{{ condition.deltaPhi.upper|X08 }}", X"{{ condition.deltaPhi.lower|X08 }}",
         X"{{ condition.deltaR.upper|X16 }}", X"{{ condition.deltaR.lower|X16 }}",
     {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.InvariantMassDeltaRType %}
+        nr_calo1_objects => NR_{{ o1.type|upper }}_OBJECTS;
+        nr_calo2_objects => NR_{{ o2.type|upper }}_OBJECTS;
+        mass_div_dr_vector_width => {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_DIV_DR_VECTOR_WIDTH;
         mass_div_dr_threshold => X"{{ condition.mass.lower|X21 }}",
     {%- else %}
         mass_upper_limit => X"{{ condition.mass.upper|X16 }}",
