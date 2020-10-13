@@ -9,6 +9,7 @@
     {%- else %}
         deta_cut => {{ condition.deltaEta.enabled }}, dphi_cut => {{ condition.deltaPhi.enabled }}, dr_cut => {{ condition.deltaR.enabled }}, mass_cut => {{ condition.mass.enabled }}, mass_type => {{ condition.mass.type }}, twobody_pt_cut => {{ condition.twoBodyPt.enabled }},
     {%- endif %}        
+        nr_calo1_objects => NR_{{ o1.type|upper }}_OBJECTS;
         calo1_object_low => {{ o1.sliceLow }}, calo1_object_high => {{ o1.sliceHigh }}, et_ge_mode_calo1 => {{ o1.operator }}, obj_type_calo1 => {{ o1.type|upper }}_TYPE,
         et_threshold_calo1 => X"{{ o1.threshold|X04 }}",
         nr_eta_windows_calo1 => {{ o1.etaNrCuts }},
@@ -20,6 +21,7 @@
         phi_full_range_calo1 => {{ o1.phiFullRange }}, phi_w1_upper_limit_calo1 => X"{{ o1.phiW1UpperLimit|X04 }}", phi_w1_lower_limit_calo1 => X"{{ o1.phiW1LowerLimit|X04 }}",
         phi_w2_ignore_calo1 => {{ o1.phiW2Ignore }}, phi_w2_upper_limit_calo1 => X"{{ o1.phiW2UpperLimit|X04 }}", phi_w2_lower_limit_calo1 => X"{{ o1.phiW2LowerLimit|X04 }}",
         iso_lut_calo1 => X"{{ o1.isolationLUT|X01 }}",
+        nr_calo2_objects => NR_{{ o2.type|upper }}_OBJECTS;
         calo2_object_low => {{ o1.sliceLow }}, calo2_object_high => {{ o1.sliceHigh }}, et_ge_mode_calo2 => {{ o1.operator }}, obj_type_calo2 => {{ o1.type|upper }}_TYPE,
         et_threshold_calo2 => X"{{ o1.threshold|X04 }}",
         nr_eta_windows_calo2 => {{ o1.etaNrCuts }},
@@ -32,8 +34,6 @@
         phi_w2_ignore_calo2 => {{ o1.phiW2Ignore }}, phi_w2_upper_limit_calo2 => X"{{ o1.phiW2UpperLimit|X04 }}", phi_w2_lower_limit_calo2 => X"{{ o1.phiW2LowerLimit|X04 }}",
         iso_lut_calo2 => X"{{ o1.isolationLUT|X01 }}",
     {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.InvariantMassDeltaRType %}
-        nr_calo1_objects => NR_{{ o1.type|upper }}_OBJECTS;
-        nr_calo2_objects => NR_{{ o2.type|upper }}_OBJECTS;
         mass_div_dr_vector_width => {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_DIV_DR_VECTOR_WIDTH;
         mass_div_dr_threshold => X"{{ condition.mass.lower|X21 }}"
     {%- else %}
