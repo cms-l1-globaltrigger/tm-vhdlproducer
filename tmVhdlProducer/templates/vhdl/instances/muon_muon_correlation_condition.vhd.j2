@@ -114,41 +114,36 @@
         twobody_pt_cut => {{ condition.twoBodyPt.enabled }}, 
         {%- endif %}        
     {%- endif %}        
-    {%- if condition.mass.enabled == 'true' or condition.twoBodyPt.enabled == 'true'  %}
-        pt_width => {{ o1.type|upper }}_PT_VECTOR_WIDTH, 
-        upt_width => {{ o1.type|upper }}_UPT_VECTOR_WIDTH, 
-    {%- endif %}        
     {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.InvariantMassDeltaRType %}
-        mass_cosh_cos_precision => {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_PRECISION, 
-        cosh_cos_width => {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH,
-        mass_div_dr_vector_width => {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_DIV_DR_VECTOR_WIDTH,
         mass_div_dr_threshold => X"{{ condition.mass.lower|X21 }}",
     {%- else %}
         {%- if condition.deltaEta.enabled == 'true' %}
-        diff_eta_upper_limit_vector => X"{{ condition.deltaEta.upper|X08 }}", diff_eta_lower_limit_vector => X"{{ condition.deltaEta.lower|X08 }}",
+        diff_eta_upper_limit_vector => X"{{ condition.deltaEta.upper|X08 }}", 
+        diff_eta_lower_limit_vector => X"{{ condition.deltaEta.lower|X08 }}",
         {%- endif %}        
         {%- if condition.deltaPhi.enabled == 'true' %}
-        diff_phi_upper_limit_vector => X"{{ condition.deltaPhi.upper|X08 }}", diff_phi_lower_limit_vector => X"{{ condition.deltaPhi.lower|X08 }}",
+        diff_phi_upper_limit_vector => X"{{ condition.deltaPhi.upper|X08 }}", 
+        diff_phi_lower_limit_vector => X"{{ condition.deltaPhi.lower|X08 }}",
         {%- endif %}        
         {%- if condition.deltaR.enabled == 'true' %}
-        dr_upper_limit_vector => X"{{ condition.deltaR.upper|X16 }}", dr_lower_limit_vector => X"{{ condition.deltaR.lower|X16 }}",
+        dr_upper_limit_vector => X"{{ condition.deltaR.upper|X16 }}", 
+        dr_lower_limit_vector => X"{{ condition.deltaR.lower|X16 }}",
         {%- endif %}        
         {%- if condition.mass.enabled == 'true' %}
-        mass_cosh_cos_precision => {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_PRECISION, 
-        cosh_cos_width => {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH,
         mass_upper_limit => X"{{ condition.mass.upper|X16 }}",
         mass_lower_limit => X"{{ condition.mass.lower|X16 }}",
         {%- endif %}        
         {%- if condition.twoBodyPt.enabled == 'true' %}
         pt_sq_threshold_vector => X"{{ condition.twoBodyPt.threshold|X16 }}", 
-        sin_cos_width => CALO_SIN_COS_VECTOR_WIDTH, 
-        pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o2.type|upper }}_SIN_COS_PRECISION,
         {%- endif %}        
     {%- endif %}        
         same_bx => {{ condition.objectsInSameBx }}
     )
     port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o2.type|lower }}_bx_{{ o2.bx }},
-        ls_charcorr_double_bx_{{ o1.bx }}_bx_{{ o2.bx }}, os_charcorr_double_bx_{{ o1.bx }}_bx_{{ o2.bx }},
+    {%- if condition.chargeCorrelation != "ig" %}
+        ls_charcorr_double_bx_{{ o1.bx }}_bx_{{ o2.bx }}, 
+        os_charcorr_double_bx_{{ o1.bx }}_bx_{{ o2.bx }},
+    {%- endif %}        
     {%- if condition.mass.type == condition.mass.InvariantMassDeltaRType %}
         mass_div_dr => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr,
     {%- else %}
