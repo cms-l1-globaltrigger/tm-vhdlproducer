@@ -4,7 +4,10 @@
 {{ condition.vhdl_signal }}_i: entity work.calo_calo_correlation_condition
     generic map(
         nr_calo1_objects => NR_{{ o1.type|upper }}_OBJECTS,
-        calo1_object_low => {{ o1.sliceLow }}, calo1_object_high => {{ o1.sliceHigh }}, 
+    {%- if o1.sliceLow != 0 or o1.sliceHigh != 11 %}
+        calo1_object_low => {{ o1.sliceLow }}, 
+        calo1_object_high => {{ o1.sliceHigh }}, 
+    {%- endif %}        
     {%- if o1.operator == 'false' %}
         pt_ge_mode_calo1 => {{ o1.operator }}, 
     {%- endif %}        
@@ -12,31 +15,43 @@
         pt_threshold_calo1 => X"{{ o1.threshold|X04 }}",
     {%- if o1.etaNrCuts > 0 %}
         nr_eta_windows_calo1 => {{ o1.etaNrCuts }},
-        eta_w1_upper_limit_calo1 => X"{{ o1.etaW1UpperLimit|X04 }}", eta_w1_lower_limit_calo1 => X"{{ o1.etaW1LowerLimit|X04 }}",
+        eta_w1_upper_limit_calo1 => X"{{ o1.etaW1UpperLimit|X04 }}", 
+        eta_w1_lower_limit_calo1 => X"{{ o1.etaW1LowerLimit|X04 }}",
     {%- endif %}        
     {%- if o1.etaNrCuts > 1 %}
-        eta_w2_upper_limit_calo1 => X"{{ o1.etaW2UpperLimit|X04 }}", eta_w2_lower_limit_calo1 => X"{{ o1.etaW2LowerLimit|X04 }}",
+        eta_w2_upper_limit_calo1 => X"{{ o1.etaW2UpperLimit|X04 }}", 
+        eta_w2_lower_limit_calo1 => X"{{ o1.etaW2LowerLimit|X04 }}",
     {%- endif %}        
     {%- if o1.etaNrCuts > 2 %}
-        eta_w3_upper_limit_calo1 => X"{{ o1.etaW3UpperLimit|X04 }}", eta_w3_lower_limit_calo1 => X"{{ o1.etaW3LowerLimit|X04 }}",
+        eta_w3_upper_limit_calo1 => X"{{ o1.etaW3UpperLimit|X04 }}", 
+        eta_w3_lower_limit_calo1 => X"{{ o1.etaW3LowerLimit|X04 }}",
     {%- endif %}        
     {%- if o1.etaNrCuts > 3 %}
-        eta_w4_upper_limit_calo1 => X"{{ o1.etaW4UpperLimit|X04 }}", eta_w4_lower_limit_calo1 => X"{{ o1.etaW4LowerLimit|X04 }}",
+        eta_w4_upper_limit_calo1 => X"{{ o1.etaW4UpperLimit|X04 }}", 
+        eta_w4_lower_limit_calo1 => X"{{ o1.etaW4LowerLimit|X04 }}",
     {%- endif %}        
     {%- if o1.etaNrCuts > 4 %}
-        eta_w5_upper_limit_calo1 => X"{{ o1.etaW5UpperLimit|X04 }}", eta_w5_lower_limit_calo1 => X"{{ o1.etaW5LowerLimit|X04 }}",
+        eta_w5_upper_limit_calo1 => X"{{ o1.etaW5UpperLimit|X04 }}", 
+        eta_w5_lower_limit_calo1 => X"{{ o1.etaW5LowerLimit|X04 }}",
     {%- endif %}        
     {%- if o1.phiFullRange  == 'false' %}
-        phi_full_range_calo1 => {{ o1.phiFullRange }}, phi_w1_upper_limit_calo1 => X"{{ o1.phiW1UpperLimit|X04 }}", phi_w1_lower_limit_calo1 => X"{{ o1.phiW1LowerLimit|X04 }}",
+        phi_full_range_calo1 => {{ o1.phiFullRange }}, 
+        phi_w1_upper_limit_calo1 => X"{{ o1.phiW1UpperLimit|X04 }}", 
+        phi_w1_lower_limit_calo1 => X"{{ o1.phiW1LowerLimit|X04 }}",
     {%- endif %}        
     {%- if o1.phiW2Ignore  == 'false' and o1.phiFullRange  == 'false' %}
-        phi_w2_ignore_calo1 => {{ o1.phiW2Ignore }}, phi_w2_upper_limit_calo1 => X"{{ o1.phiW2UpperLimit|X04 }}", phi_w2_lower_limit_calo1 => X"{{ o1.phiW2LowerLimit|X04 }}",
+        phi_w2_ignore_calo1 => {{ o1.phiW2Ignore }}, 
+        phi_w2_upper_limit_calo1 => X"{{ o1.phiW2UpperLimit|X04 }}", 
+        phi_w2_lower_limit_calo1 => X"{{ o1.phiW2LowerLimit|X04 }}",
     {%- endif %}        
     {%- if o1.isolationLUT|X01 != "F" %}
         iso_lut_calo1 => X"{{ o1.isolationLUT|X01 }}",
     {%- endif %}        
         nr_calo2_objects => NR_{{ o2.type|upper }}_OBJECTS,
-        calo2_object_low => {{ o2.sliceLow }}, calo2_object_high => {{ o2.sliceHigh }},
+    {%- if o2.sliceLow != 0 or o2.sliceHigh != 11 %}
+        calo2_object_low => {{ o2.sliceLow }}, 
+        calo2_object_high => {{ o2.sliceHigh }}, 
+    {%- endif %}        
     {%- if o2.operator == 'false' %}
         pt_ge_mode_calo2 => {{ o2.operator }}, 
     {%- endif %}        
@@ -44,31 +59,41 @@
         pt_threshold_calo2 => X"{{ o2.threshold|X04 }}",
     {%- if o2.etaNrCuts > 0 %}
         nr_eta_windows_calo2 => {{ o2.etaNrCuts }},
-        eta_w1_upper_limit_calo2 => X"{{ o2.etaW1UpperLimit|X04 }}", eta_w1_lower_limit_calo2 => X"{{ o2.etaW1LowerLimit|X04 }}",
+        eta_w1_upper_limit_calo2 => X"{{ o2.etaW1UpperLimit|X04 }}", 
+        eta_w1_lower_limit_calo2 => X"{{ o2.etaW1LowerLimit|X04 }}",
     {%- endif %}        
     {%- if o2.etaNrCuts > 1 %}
-        eta_w2_upper_limit_calo2 => X"{{ o2.etaW2UpperLimit|X04 }}", eta_w2_lower_limit_calo2 => X"{{ o2.etaW2LowerLimit|X04 }}",
+        eta_w2_upper_limit_calo2 => X"{{ o2.etaW2UpperLimit|X04 }}", 
+        eta_w2_lower_limit_calo2 => X"{{ o2.etaW2LowerLimit|X04 }}",
     {%- endif %}        
     {%- if o2.etaNrCuts > 2 %}
-        eta_w3_upper_limit_calo2 => X"{{ o2.etaW3UpperLimit|X04 }}", eta_w3_lower_limit_calo2 => X"{{ o2.etaW3LowerLimit|X04 }}",
+        eta_w3_upper_limit_calo2 => X"{{ o2.etaW3UpperLimit|X04 }}", 
+        eta_w3_lower_limit_calo2 => X"{{ o2.etaW3LowerLimit|X04 }}",
     {%- endif %}        
     {%- if o2.etaNrCuts > 3 %}
-        eta_w4_upper_limit_calo2 => X"{{ o2.etaW4UpperLimit|X04 }}", eta_w4_lower_limit_calo2 => X"{{ o2.etaW4LowerLimit|X04 }}",
+        eta_w4_upper_limit_calo2 => X"{{ o2.etaW4UpperLimit|X04 }}", 
+        eta_w4_lower_limit_calo2 => X"{{ o2.etaW4LowerLimit|X04 }}",
     {%- endif %}        
     {%- if o2.etaNrCuts > 4 %}
-        eta_w5_upper_limit_calo2 => X"{{ o2.etaW5UpperLimit|X04 }}", eta_w5_lower_limit_calo2 => X"{{ o2.etaW5LowerLimit|X04 }}",
+        eta_w5_upper_limit_calo2 => X"{{ o2.etaW5UpperLimit|X04 }}", 
+        eta_w5_lower_limit_calo2 => X"{{ o2.etaW5LowerLimit|X04 }}",
     {%- endif %}        
     {%- if o2.phiFullRange  == 'false' %}
-        phi_full_range_calo2 => {{ o2.phiFullRange }}, phi_w1_upper_limit_calo2 => X"{{ o2.phiW1UpperLimit|X04 }}", phi_w1_lower_limit_calo2 => X"{{ o2.phiW1LowerLimit|X04 }}",
+        phi_full_range_calo2 => {{ o2.phiFullRange }}, 
+        phi_w1_upper_limit_calo2 => X"{{ o2.phiW1UpperLimit|X04 }}", 
+        phi_w1_lower_limit_calo2 => X"{{ o2.phiW1LowerLimit|X04 }}",
     {%- endif %}        
     {%- if o2.phiW2Ignore  == 'false' and o2.phiFullRange  == 'false' %}
-        phi_w2_ignore_calo2 => {{ o2.phiW2Ignore }}, phi_w2_upper_limit_calo2 => X"{{ o2.phiW2UpperLimit|X04 }}", phi_w2_lower_limit_calo2 => X"{{ o2.phiW2LowerLimit|X04 }}",
+        phi_w2_ignore_calo2 => {{ o2.phiW2Ignore }}, 
+        phi_w2_upper_limit_calo2 => X"{{ o2.phiW2UpperLimit|X04 }}", 
+        phi_w2_lower_limit_calo2 => X"{{ o2.phiW2LowerLimit|X04 }}",
     {%- endif %}        
     {%- if o2.isolationLUT|X01 != "F" %}
         iso_lut_calo2 => X"{{ o2.isolationLUT|X01 }}",
     {%- endif %}        
     {%- if condition.mass.enabled == 'true' and condition.mass.type == condition.mass.InvariantMassDeltaRType %}
-        mass_cut => {{ condition.mass.enabled }}, mass_type => INVARIANT_MASS_DIV_DR_TYPE,
+        mass_cut => {{ condition.mass.enabled }}, 
+        mass_type => INVARIANT_MASS_DIV_DR_TYPE,
     {%- else %}
         {%- if condition.deltaEta.enabled == 'true' %}
         deta_cut => {{ condition.deltaEta.enabled }}, 
@@ -102,13 +127,16 @@
         mass_div_dr_threshold => X"{{ condition.mass.lower|X21 }}",
     {%- else %}
         {%- if condition.deltaEta.enabled == 'true' %}
-        diff_eta_upper_limit_vector => X"{{ condition.deltaEta.upper|X08 }}", diff_eta_lower_limit_vector => X"{{ condition.deltaEta.lower|X08 }}",
+        diff_eta_upper_limit_vector => X"{{ condition.deltaEta.upper|X08 }}", 
+        diff_eta_lower_limit_vector => X"{{ condition.deltaEta.lower|X08 }}",
         {%- endif %}        
         {%- if condition.deltaPhi.enabled == 'true' %}
-        diff_phi_upper_limit_vector => X"{{ condition.deltaPhi.upper|X08 }}", diff_phi_lower_limit_vector => X"{{ condition.deltaPhi.lower|X08 }}",
+        diff_phi_upper_limit_vector => X"{{ condition.deltaPhi.upper|X08 }}", 
+        diff_phi_lower_limit_vector => X"{{ condition.deltaPhi.lower|X08 }}",
         {%- endif %}        
         {%- if condition.deltaR.enabled == 'true' %}
-        dr_upper_limit_vector => X"{{ condition.deltaR.upper|X16 }}", dr_lower_limit_vector => X"{{ condition.deltaR.lower|X16 }}",
+        dr_upper_limit_vector => X"{{ condition.deltaR.upper|X16 }}", 
+        dr_lower_limit_vector => X"{{ condition.deltaR.lower|X16 }}",
         {%- endif %}        
         {%- if condition.mass.enabled == 'true' %}
         mass_cosh_cos_precision => {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_PRECISION, 
@@ -135,13 +163,18 @@
         diff_phi => diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_vector,
         {%- endif %}        
         {%- if condition.mass.enabled == 'true' or condition.twoBodyPt.enabled == 'true' %}
-        pt1 => {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, pt2 => {{ o2.type|lower }}_pt_vector_bx_{{ o2.bx }},
+        pt1 => {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, 
+        pt2 => {{ o2.type|lower }}_pt_vector_bx_{{ o2.bx }},
         {%- endif %}        
         {%- if condition.mass.enabled == 'true' %}
-        cosh_deta => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector, cos_dphi => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
+        cosh_deta => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector, 
+        cos_dphi => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
         {%- endif %}        
         {%- if condition.twoBodyPt.enabled == 'true' %}
-        cos_phi_1_integer => {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, cos_phi_2_integer => {{ o2.type|lower }}_cos_phi_bx_{{ o2.bx }}, sin_phi_1_integer => {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }}, sin_phi_2_integer => {{ o2.type|lower }}_sin_phi_bx_{{ o2.bx }},
+        cos_phi_1_integer => {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, 
+        cos_phi_2_integer => {{ o2.type|lower }}_cos_phi_bx_{{ o2.bx }}, 
+        sin_phi_1_integer => {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }}, 
+        sin_phi_2_integer => {{ o2.type|lower }}_sin_phi_bx_{{ o2.bx }},
         {%- endif %}        
     {%- endif %}
         condition_o => {{ condition.vhdl_signal }});
