@@ -131,11 +131,7 @@
         {%- endif %}        
         {%- if condition.mass.enabled == 'true' %}
         mass_cut => {{ condition.mass.enabled }}, 
-            {%- if condition.mass.type == 0 %}
         mass_type => INVARIANT_MASS_TYPE, 
-            {%- elif condition.mass.type == 1 %}
-        mass_type => TRANSVERSE_MASS_TYPE, 
-            {%- endif %}        
         {%- endif %}        
         {%- if condition.twoBodyPt.enabled == 'true' %}
         twobody_pt_cut => {{ condition.twoBodyPt.enabled }}, 
@@ -195,6 +191,7 @@
         sin_phi_2_integer => {{ o2.type|lower }}_sin_phi_bx_{{ o2.bx }},
         {%- endif %}        
     {%- endif %}
-        condition_o => {{ condition.vhdl_signal }});
+        condition_o => {{ condition.vhdl_signal }}
+    );
 {%- endblock instantiate_muon_muon_correlation_condition %}
 {# eof #}

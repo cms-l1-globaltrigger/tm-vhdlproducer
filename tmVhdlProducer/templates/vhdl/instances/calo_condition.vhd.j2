@@ -3,24 +3,23 @@
   {%- set o2 = condition.objects[1] %}
   {%- set o3 = condition.objects[2] %}
   {%- set o4 = condition.objects[3] %}
-  
 {{ condition.vhdl_signal }}_i: entity work.calo_conditions
     generic map(
     {%- if condition.nr_objects > 0 %}
-        calo_object_slice_1_low => {{ o1.sliceLow }}, 
-        calo_object_slice_1_high => {{ o1.sliceHigh }}, 
+        object_slice_1_low => {{ o1.sliceLow }}, 
+        object_slice_1_high => {{ o1.sliceHigh }}, 
     {%- endif %}        
     {%- if condition.nr_objects > 1 %}
-        calo_object_slice_2_low => {{ o2.sliceLow }}, 
-        calo_object_slice_2_high => {{ o2.sliceHigh }}, 
+        object_slice_2_low => {{ o2.sliceLow }}, 
+        object_slice_2_high => {{ o2.sliceHigh }}, 
     {%- endif %}        
     {%- if condition.nr_objects > 2 %}
-        calo_object_slice_3_low => {{ o3.sliceLow }}, 
-        calo_object_slice_3_high => {{ o3.sliceHigh }}, 
+        object_slice_3_low => {{ o3.sliceLow }}, 
+        object_slice_3_high => {{ o3.sliceHigh }}, 
     {%- endif %}        
     {%- if condition.nr_objects > 3 %}
-        calo_object_slice_4_low => {{ o4.sliceLow }}, 
-        calo_object_slice_4_high => {{ o4.sliceHigh }},
+        object_slice_4_low => {{ o4.sliceLow }}, 
+        object_slice_4_high => {{ o4.sliceHigh }},
     {%- endif %}        
         nr_templates => {{ condition.nr_objects }}, 
         pt_ge_mode => {{ o1.operator }}, 
@@ -69,14 +68,14 @@
     {%- else %}
         twobody_pt_cut => false
     {%- endif %}
-    
     )
     port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }},
     {%- if condition.twoBodyPt.enabled == "true" %}
-        {{ condition.vhdl_signal }},
-        {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }});
-    {%- else %}
-        {{ condition.vhdl_signal }});
+         pt => {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, 
+         cos_phi_integer => {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, 
+         sin_phi_integer => {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }});
     {%- endif %}
-
+        condition_o => {{ condition.vhdl_signal }}
+    );
 {% endblock instantiate_calo_condition %}
+{# eof #}

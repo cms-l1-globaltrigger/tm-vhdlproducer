@@ -7,20 +7,20 @@
 {{ condition.vhdl_signal }}_i: entity work.muon_conditions
     generic map(    
     {%- if condition.nr_objects > 0 %}
-        muon_object_slice_1_low => {{ o1.sliceLow }}, 
-        muon_object_slice_1_high => {{ o1.sliceHigh }}, 
+        object_slice_1_low => {{ o1.sliceLow }}, 
+        object_slice_1_high => {{ o1.sliceHigh }}, 
     {%- endif %}        
     {%- if condition.nr_objects > 1 %}
-        muon_object_slice_2_low => {{ o2.sliceLow }}, 
-        muon_object_slice_2_high => {{ o2.sliceHigh }}, 
+        object_slice_2_low => {{ o2.sliceLow }}, 
+        object_slice_2_high => {{ o2.sliceHigh }}, 
     {%- endif %}        
     {%- if condition.nr_objects > 2 %}
-        muon_object_slice_3_low => {{ o3.sliceLow }}, 
-        muon_object_slice_3_high => {{ o3.sliceHigh }}, 
+        object_slice_3_low => {{ o3.sliceLow }}, 
+        object_slice_3_high => {{ o3.sliceHigh }}, 
     {%- endif %}        
     {%- if condition.nr_objects > 3 %}
-        muon_object_slice_4_low => {{ o4.sliceLow }}, 
-        muon_object_slice_4_high => {{ o4.sliceHigh }},
+        object_slice_4_low => {{ o4.sliceLow }}, 
+        object_slice_4_high => {{ o4.sliceHigh }},
     {%- endif %}        
         nr_templates => {{ condition.nr_objects }}, 
         pt_ge_mode => {{ o1.operator }}, 
@@ -85,26 +85,29 @@
     {%- else %}
         twobody_pt_cut => false
     {%- endif %}
-
     )
     port map(lhc_clk, mu_bx_{{ bx }},
     {%- if condition.nr_objects == 2 and condition.twoBodyPt.enabled == "true" and condition.chargeCorrelation != "ig" %}
-        {{ condition.vhdl_signal }},
-        ls_charcorr_double_bx_{{ bx }}_bx_{{ bx }}, os_charcorr_double_bx_{{ bx }}_bx_{{ bx }},
-        {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }});
+        ls_charcorr_double => ls_charcorr_double_bx_{{ bx }}_bx_{{ bx }}, 
+        os_charcorr_double => os_charcorr_double_bx_{{ bx }}_bx_{{ bx }},
+        pt => {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, 
+        cos_phi_integer => {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, 
+        sin_phi_integer => {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }}),
     {%- elif condition.nr_objects == 2 and condition.twoBodyPt.enabled == "true" and condition.chargeCorrelation == "ig" %}
-        {{ condition.vhdl_signal }},
-        {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }});
+        pt => {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, 
+        cos_phi_integer => {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, 
+        sin_phi_integer => {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }}),
     {%- elif condition.nr_objects == 2 and condition.twoBodyPt.enabled == "false" and condition.chargeCorrelation != "ig" %}
-        {{ condition.vhdl_signal }},
-        ls_charcorr_double_bx_{{ bx }}_bx_{{ bx }}, os_charcorr_double_bx_{{ bx }}_bx_{{ bx }},
+        ls_charcorr_double => ls_charcorr_double_bx_{{ bx }}_bx_{{ bx }}, 
+        os_charcorr_double => os_charcorr_double_bx_{{ bx }}_bx_{{ bx }},
     {%- elif condition.nr_objects == 3 and condition.chargeCorrelation != "ig" %}
-        {{ condition.vhdl_signal }},
-        ls_charcorr_triple_bx_{{ bx }}_bx_{{ bx }}, os_charcorr_triple_bx_{{ bx }}_bx_{{ bx }},
+        ls_charcorr_triple => ls_charcorr_triple_bx_{{ bx }}_bx_{{ bx }}, 
+        os_charcorr_triple => os_charcorr_triple_bx_{{ bx }}_bx_{{ bx }},
     {%- elif condition.nr_objects == 4 and condition.chargeCorrelation != "ig" %}
-        {{ condition.vhdl_signal }},
-        ls_charcorr_quad_bx_{{ bx }}_bx_{{ bx }}, os_charcorr_quad_bx_{{ bx }}_bx_{{ bx }});
-    {%- else %}
-        {{ condition.vhdl_signal }});
+        ls_charcorr_quad => ls_charcorr_quad_bx_{{ bx }}_bx_{{ bx }}, 
+        os_charcorr_quad => os_charcorr_quad_bx_{{ bx }}_bx_{{ bx }}),
     {%- endif %}
+        condition_o => {{ condition.vhdl_signal }}
+    );
 {% endblock instantiate_muon_condition %}
+{# eof #}

@@ -185,6 +185,7 @@
         sin_phi_2_integer => {{ o2.type|lower }}_sin_phi_bx_{{ o2.bx }},
         {%- endif %}        
     {%- endif %}
-        condition_o => {{ condition.vhdl_signal }});
+        condition_o => {{ condition.vhdl_signal }}
+    );
 {%- endblock instantiate_calo_muon_correlation_condition %}
 {# eof #}
