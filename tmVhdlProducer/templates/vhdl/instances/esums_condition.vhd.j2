@@ -8,10 +8,20 @@
     {%- else %}
         X"{{ o.threshold|X04 }}",
     {%- endif %}
-        {{ o.phiFullRange }}, X"{{ o.phiW1UpperLimit|X04 }}", X"{{ o.phiW1LowerLimit|X04 }}",
-        {{ o.phiW2Ignore }}, X"{{ o.phiW2UpperLimit|X04 }}", X"{{ o.phiW2LowerLimit|X04 }}"
+    {%- if o1.phiFullRange  == 'false' %}
+        phi_full_range => {{ o1.phiFullRange }}, 
+        phi_w1_upper_limit => X"{{ o1.phiW1UpperLimit|X04 }}", 
+        {%- if o1.phiW2Ignore  == 'true' %}
+        phi_w1_lower_limit => X"{{ o1.phiW1LowerLimit|X04 }}"
+        {%- else %}
+        phi_w2_ignore => {{ o1.phiW2Ignore }},
+        phi_w2_upper_limit => X"{{ o1.phiW2UpperLimit|X04 }}",
+        phi_w2_lower_limit => X"{{ o1.phiW2LowerLimit|X04 }}"
+        {%- endif %}
+    {%- else %}
+        phi_full_range => {{ o1.phiFullRange }}
+    {%- endif %}        
         )
     port map(lhc_clk, {{ o.type|lower }}_bx_{{ o.bx }}, {{ condition.vhdl_signal }});
     {%- endif %}
 {% endblock instantiate_esums_condition %}
-{# eof #}

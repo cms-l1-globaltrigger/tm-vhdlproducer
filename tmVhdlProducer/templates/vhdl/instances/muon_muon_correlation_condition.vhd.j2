@@ -109,7 +109,9 @@
         upt_cut_muon2 => {{ o2.hasUpt }}, 
         upt_upper_limit_muon2 => X"{{ o2.uptUpperLimit|X04 }}", 
         upt_lower_limit_muon2 => X"{{ o2.uptLowerLimit|X04 }}", 
-        ip_lut_muon2 => X"{{ o2.impactParameterLUT|X01 }}",
+    {%- endif %}        
+    {%- if o1.impactParameterLUT|X01 != "F" %}
+        ip_lut_muon => X"{{ o1.impactParameterLUT|X01 }}",
     {%- endif %}        
     {%- if condition.chargeCorrelation != "ig" %}
         requested_charge_correlation => "{{ condition.chargeCorrelation }}",

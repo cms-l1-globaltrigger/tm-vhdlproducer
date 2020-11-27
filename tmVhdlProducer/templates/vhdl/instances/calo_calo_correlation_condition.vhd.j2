@@ -95,26 +95,26 @@
         mass_cut => {{ condition.mass.enabled }}, 
         mass_type => INVARIANT_MASS_DIV_DR_TYPE,
     {%- else %}
-        {%- if condition.deltaEta.enabled == 'true' %}
+    {%- if condition.deltaEta.enabled == 'true' %}
         deta_cut => {{ condition.deltaEta.enabled }}, 
-        {%- endif %}        
-        {%- if condition.deltaPhi.enabled == 'true' %}
+    {%- endif %}        
+    {%- if condition.deltaPhi.enabled == 'true' %}
         dphi_cut => {{ condition.deltaPhi.enabled }}, 
-        {%- endif %}        
-        {%- if condition.deltaR.enabled == 'true' %}
+    {%- endif %}        
+    {%- if condition.deltaR.enabled == 'true' %}
         dr_cut => {{ condition.deltaR.enabled }}, 
-        {%- endif %}        
-        {%- if condition.mass.enabled == 'true' %}
+    {%- endif %}        
+    {%- if condition.mass.enabled == 'true' %}
         mass_cut => {{ condition.mass.enabled }}, 
-            {%- if condition.mass.type == 0 %}
+        {%- if condition.mass.type == 0 %}
         mass_type => INVARIANT_MASS_TYPE, 
-            {%- elif condition.mass.type == 1 %}
+        {%- elif condition.mass.type == 1 %}
         mass_type => TRANSVERSE_MASS_TYPE, 
-            {%- endif %}        
         {%- endif %}        
-        {%- if condition.twoBodyPt.enabled == 'true' %}
+    {%- endif %}        
+    {%- if condition.twoBodyPt.enabled == 'true' %}
         twobody_pt_cut => {{ condition.twoBodyPt.enabled }}, 
-        {%- endif %}        
+    {%- endif %}        
     {%- endif %}        
     {%- if condition.mass.enabled == 'true' or condition.twoBodyPt.enabled == 'true'  %}
         pt1_width => {{ o1.type|upper }}_PT_VECTOR_WIDTH, 
@@ -179,4 +179,3 @@
     {%- endif %}
         condition_o => {{ condition.vhdl_signal }});
 {%- endblock instantiate_calo_calo_correlation_condition %}
-
