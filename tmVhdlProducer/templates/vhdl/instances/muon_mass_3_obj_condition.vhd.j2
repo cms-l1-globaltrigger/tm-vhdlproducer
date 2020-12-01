@@ -182,13 +182,13 @@
     port map(
         lhc_clk, 
         {{ o1.type|lower }}_bx_{{ o1.bx }},
+        {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }},
+        {{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_cosh_deta_vector, 
+        {{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_cos_dphi_vector,
     {%- if condition.chargeCorrelation != "ig" %}
         ls_charcorr_triple => ls_charcorr_triple_bx_{{ o1.bx }}_bx_{{ o1.bx }}, 
         os_charcorr_triple => os_charcorr_triple_bx_{{ o1.bx }}_bx_{{ o1.bx }},
     {%- endif %}        
-        pt => {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }},
-        cosh_deta => {{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_cosh_deta_vector, 
-        cos_dphi => {{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_cos_dphi_vector,
         condition_o => {{ condition.vhdl_signal }}
     );
 {%- endblock instantiate_muon_mass_3_obj_condition %}

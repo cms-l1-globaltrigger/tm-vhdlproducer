@@ -68,8 +68,9 @@
     {%- endif %}        
     {%- if o1.hasUpt == 'true' or o2.hasUpt == 'true' or o3.hasUpt == 'true' or o4.hasUpt == 'true' %}
         upt_cuts => ({{ o1.hasUpt }}, {{ o2.hasUpt }}, {{ o3.hasUpt }}, {{ o4.hasUpt }}), 
-        upt_upper_limits => X"{{ o1.uptUpperLimit|X04 }}",
-        upt_lower_limits => X"{{ o1.uptLowerLimit|X04 }}", 
+-- o1.uptUpperLimit = {{ o1.uptUpperLimit }}
+        upt_upper_limits => (X"{{ o1.uptUpperLimit|X04 }}", X"{{ o2.uptUpperLimit|X04 }}", X"{{ o3.uptUpperLimit|X04 }}", X"{{ o4.uptUpperLimit|X04 }}"),
+        upt_lower_limits => (X"{{ o1.uptLowerLimit|X04 }}", X"{{ o2.uptLowerLimit|X04 }}", X"{{ o3.uptLowerLimit|X04 }}", X"{{ o4.uptLowerLimit|X04 }}"), 
     {%- endif %}        
     {%- if o1.impactParameterLUT|X01 != "F" or o2.impactParameterLUT|X01 != "F" or o3.impactParameterLUT|X01 != "F" or o4.impactParameterLUT|X01 != "F" %}
         ip_luts => (X"{{ o1.impactParameterLUT|X01 }}", X"{{ o2.impactParameterLUT|X01 }}", X"{{ o3.impactParameterLUT|X01 }}", X"{{ o4.impactParameterLUT|X01 }}"), 

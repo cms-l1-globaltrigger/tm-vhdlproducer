@@ -5,7 +5,7 @@
     {%- if o.operator == 'false' %}
         et_ge_mode => {{ o.operator }}, 
     {%- endif %}        
-        X"{{ o.count|X04 }}"
+        count_threshold => X"{{ o.count|X04 }}"
     )
     port map(
         lhc_clk, 

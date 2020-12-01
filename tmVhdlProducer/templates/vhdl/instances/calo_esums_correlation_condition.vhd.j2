@@ -95,8 +95,9 @@
     {%- if condition.twoBodyPt.enabled == 'true' %}
         pt_sq_threshold_vector => X"{{ condition.twoBodyPt.threshold|X16 }}", 
         sin_cos_width => CALO_SIN_COS_VECTOR_WIDTH, 
-        pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o2.type|upper }}_SIN_COS_PRECISION
-    {%- endif %}            
+        pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o2.type|upper }}_SIN_COS_PRECISION,
+    {%- endif %}
+        nr_calo_objects => NR_{{ o1.type|upper }}_OBJECTS
     )
     port map(
         lhc_clk, 

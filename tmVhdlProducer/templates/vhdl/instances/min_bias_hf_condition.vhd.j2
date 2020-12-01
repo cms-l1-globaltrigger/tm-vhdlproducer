@@ -5,8 +5,8 @@
     {%- if o.operator == 'false' %}
         et_ge_mode => {{ o.operator }}, 
     {%- endif %}        
-        {{ o.type|upper }}_TYPE, 
-        X"{{ o.count|X01 }}"
+        obj_type => {{ o.type|upper }}_TYPE, 
+        count_threshold => X"{{ o.count|X01 }}"
     )
     port map(
         lhc_clk, 

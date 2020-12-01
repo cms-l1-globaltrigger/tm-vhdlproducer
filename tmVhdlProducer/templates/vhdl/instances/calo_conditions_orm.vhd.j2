@@ -356,6 +356,8 @@
         sin_cos_width => CALO_SIN_COS_VECTOR_WIDTH, 
         pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o1.type|upper }}_SIN_COS_PRECISION,
     {%- endif %}
+        nr_calo1_objects => NR_{{ o1.type|upper }}_OBJECTS,
+        nr_calo2_objects => NR_{{ o2.type|upper }}_OBJECTS,
         nr_templates => {{ nr_requirements }}
     )
     port map(

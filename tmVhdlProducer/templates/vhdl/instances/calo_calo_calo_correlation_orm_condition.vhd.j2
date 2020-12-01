@@ -30,6 +30,7 @@
     {%- if condition.twoBodyPt.enabled == 'true' %}
         twobody_pt_cut => {{ condition.twoBodyPt.enabled }}, 
     {%- endif %}        
+        nr_calo1_objects => NR_{{ o1.type|upper }}_OBJECTS,
     {%- if o1.sliceLow != 0 or o1.sliceHigh != 11 %}
         calo1_object_low => {{ o1.sliceLow }}, 
         calo1_object_high => {{ o1.sliceHigh }}, 
@@ -73,6 +74,7 @@
     {%- if o1.isolationLUT|X01 != "F" %}
         iso_lut_calo1 => X"{{ o1.isolationLUT|X01 }}",
     {%- endif %}        
+        nr_calo2_objects => NR_{{ o2.type|upper }}_OBJECTS,
     {%- if o2.sliceLow != 0 or o2.sliceHigh != 11 %}
         calo2_object_low => {{ o2.sliceLow }}, 
         calo2_object_high => {{ o2.sliceHigh }}, 

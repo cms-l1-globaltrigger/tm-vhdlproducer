@@ -7,9 +7,9 @@
         et_ge_mode => {{ o.operator }}, 
     {%- endif %}        
     {%- if o.hasCount  %}
-        X"{{ o.count|X04 }}",
+        count_threshold => X"{{ o.count|X04 }}",
     {%- else %}
-        X"{{ o.threshold|X04 }}",
+        et_threshold => X"{{ o.threshold|X04 }}",
     {%- endif %}
     {%- if o.phiFullRange  == 'false' %}
         phi_full_range => {{ o.phiFullRange }}, 
@@ -22,7 +22,7 @@
         phi_w2_lower_limit => X"{{ o.phiW2LowerLimit|X04 }}",
         {%- endif %}
     {%- endif %}        
-        {{ o.type|upper }}_TYPE
+        obj_type => {{ o.type|upper }}_TYPE
     )
     port map(
         lhc_clk, 
