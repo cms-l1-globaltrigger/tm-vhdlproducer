@@ -5,24 +5,25 @@
   {%- set o4 = condition.objects[3] %}
 {{ condition.vhdl_signal }}_i: entity work.calo_conditions
     generic map(
-    {%- if condition.nr_objects > 0 %}
+    {%- if condition.nr_objects > 0 and (o1.sliceLow != 0 or o1.sliceHigh != 11) %}
         object_slice_1_low => {{ o1.sliceLow }}, 
         object_slice_1_high => {{ o1.sliceHigh }}, 
     {%- endif %}        
-    {%- if condition.nr_objects > 1 %}
+    {%- if condition.nr_objects > 1 and (o2.sliceLow != 0 or o2.sliceHigh != 11) %}
         object_slice_2_low => {{ o2.sliceLow }}, 
         object_slice_2_high => {{ o2.sliceHigh }}, 
     {%- endif %}        
-    {%- if condition.nr_objects > 2 %}
+    {%- if condition.nr_objects > 2 and (o3.sliceLow != 0 or o3.sliceHigh != 11) %}
         object_slice_3_low => {{ o3.sliceLow }}, 
         object_slice_3_high => {{ o3.sliceHigh }}, 
     {%- endif %}        
-    {%- if condition.nr_objects > 3 %}
+    {%- if condition.nr_objects > 3 and (o4.sliceLow != 0 or o4.sliceHigh != 11) %}
         object_slice_4_low => {{ o4.sliceLow }}, 
         object_slice_4_high => {{ o4.sliceHigh }},
     {%- endif %}        
-        nr_templates => {{ condition.nr_objects }}, 
+    {%- if o1.operator == 'false' %}
         pt_ge_mode => {{ o1.operator }}, 
+    {%- endif %}        
         obj_type => {{ o1.type }}_TYPE,
         pt_thresholds => (X"{{ o1.threshold|X04 }}", X"{{ o2.threshold|X04 }}", X"{{ o3.threshold|X04 }}", X"{{ o4.threshold|X04 }}"),
     {%- if o1.etaNrCuts > 0 or o2.etaNrCuts > 0 or o3.etaNrCuts > 0 or o4.etaNrCuts > 0 %}
@@ -64,12 +65,13 @@
         pt_width => {{ o1.type|upper }}_PT_VECTOR_WIDTH, 
         pt_sq_threshold_vector => X"{{ condition.twoBodyPt.threshold|X16 }}",
         sin_cos_width => CALO_SIN_COS_VECTOR_WIDTH, 
-        pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o1.type|upper }}_SIN_COS_PRECISION
-    {%- else %}
-        twobody_pt_cut => false
+        pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o1.type|upper }}_SIN_COS_PRECISION,
     {%- endif %}
+        nr_templates => {{ condition.nr_objects }}
     )
-    port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }},
+    port map(
+        lhc_clk, 
+        {{ o1.type|lower }}_bx_{{ o1.bx }},
     {%- if condition.twoBodyPt.enabled == "true" %}
          pt => {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, 
          cos_phi_integer => {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, 
@@ -77,5 +79,5 @@
     {%- endif %}
         condition_o => {{ condition.vhdl_signal }}
     );
-{% endblock instantiate_calo_condition %}
+{%- endblock instantiate_calo_condition %}
 {# eof #}

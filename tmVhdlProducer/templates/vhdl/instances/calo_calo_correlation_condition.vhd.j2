@@ -146,7 +146,10 @@
     {%- endif %}        
         same_bx => {{ condition.objectsInSameBx }}
     )
-    port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o2.type|lower }}_bx_{{ o2.bx }},
+    port map(
+        lhc_clk, 
+        {{ o1.type|lower }}_bx_{{ o1.bx }}, 
+        {{ o2.type|lower }}_bx_{{ o2.bx }},
     {%- if condition.mass.type == condition.mass.InvariantMassDeltaRType %}
         mass_div_dr => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr,
     {%- else %}

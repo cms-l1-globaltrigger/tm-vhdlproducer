@@ -97,8 +97,11 @@
         sin_cos_width => CALO_SIN_COS_VECTOR_WIDTH, 
         pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o2.type|upper }}_SIN_COS_PRECISION
     {%- endif %}            
-   )
-    port map(lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}({{ o1.sliceLow }} to {{ o1.sliceHigh }}), {{ o2.type|lower }}_bx_{{ o2.bx }},
+    )
+    port map(
+        lhc_clk, 
+        {{ o1.type|lower }}_bx_{{ o1.bx }}, 
+        {{ o2.type|lower }}_bx_{{ o2.bx }},
     {%- if condition.deltaPhi.enabled == 'true' or condition.deltaR.enabled == 'true' %}
         diff_phi => diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_vector,
     {%- endif %}        
@@ -116,7 +119,7 @@
         sin_phi_1_integer => {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }}, 
         sin_phi_2_integer => {{ o2.type|lower }}_sin_phi_bx_{{ o2.bx }},
     {%- endif %}        
-        {{ condition.vhdl_signal }}
+        condition_o => {{ condition.vhdl_signal }}
     );
 {%- endblock instantiate_calo_esums_correlation_condition %}
 {# eof #}
