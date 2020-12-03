@@ -17,7 +17,7 @@
         calo_object_low => {{ o1.sliceLow }}, 
         calo_object_high => {{ o1.sliceHigh }}, 
     {%- endif %}        
-    {%- if o1.operator == 'false' %}
+    {%- if o1.operator == False %}
         pt_ge_mode_calo => {{ o1.operator }}, 
     {%- endif %}        
         obj_type_calo => {{ o1.type|upper }}_TYPE,
@@ -56,7 +56,7 @@
     {%- if o1.isolationLUT|X01 != "F" %}
         iso_lut_calo => X"{{ o1.isolationLUT|X01 }}",
     {%- endif %}            
-    {%- if o2.operator == 'false' %}
+    {%- if o2.operator == False %}
         et_ge_mode_esums => {{ o2.operator }}, 
     {%- endif %}        
         obj_type_esums => {{ o2.type|upper }}_TYPE,
@@ -79,17 +79,14 @@
         diff_phi_upper_limit_vector => X"{{ condition.deltaPhi.upper|X08 }}", 
         diff_phi_lower_limit_vector => X"{{ condition.deltaPhi.lower|X08 }}",
     {%- endif %}        
+    {%- if condition.mass.enabled == 'true' or condition.twoBodyPt.enabled == 'true' %}
+        pt1_width => {{ o1.type|upper }}_PT_VECTOR_WIDTH, 
+        pt2_width => {{ o2.type|upper }}_PT_VECTOR_WIDTH, 
+    {%- endif %}        
     {%- if condition.mass.enabled == 'true' %}
-        pt1_width => {{ o1.type|upper }}_PT_VECTOR_WIDTH,
-        pt2_width => {{ o2.type|upper }}_PT_VECTOR_WIDTH,
-        mass_upper_limit => X"{{ condition.mass.upper|X16 }}",
-        mass_lower_limit => X"{{ condition.mass.lower|X16 }}",
+        mass_upper_limit_vector => X"{{ condition.mass.upper|X16 }}",
+        mass_lower_limit_vector => X"{{ condition.mass.lower|X16 }}",
         mass_cosh_cos_precision => {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_PRECISION, 
-    {%- endif %}        
-    {%- if condition.mass.enabled == 'true' and  condition.twoBodyPt.enabled == 'false' %}
-        cosh_cos_width => {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH
-    {%- endif %}        
-    {%- if condition.mass.enabled == 'true' and  condition.twoBodyPt.enabled == 'true' %}
         cosh_cos_width => {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH,
     {%- endif %}        
     {%- if condition.twoBodyPt.enabled == 'true' %}
@@ -111,7 +108,6 @@
         pt2 => {{ o2.type|lower }}_pt_vector_bx_{{ o2.bx }},
     {%- endif %}        
     {%- if condition.mass.enabled == 'true' %}
-        cosh_deta => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector, 
         cos_dphi => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
     {%- endif %}        
     {%- if condition.twoBodyPt.enabled == 'true' %}

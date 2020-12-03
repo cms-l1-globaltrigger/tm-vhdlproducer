@@ -17,10 +17,9 @@
         muon_object_low => {{ o1.sliceLow }}, 
         muon_object_high => {{ o1.sliceHigh }}, 
     {%- endif %}        
-    {%- if o1.operator == 'false' %}
+    {%- if o1.operator == False %}
         pt_ge_mode_muon => {{ o1.operator }}, 
     {%- endif %}        
-        obj_type_muon => {{ o1.type|upper }}_TYPE,
         pt_threshold_muon => X"{{ o1.threshold|X04 }}",
     {%- if o1.etaNrCuts > 0 %}
         nr_eta_windows_muon => {{ o1.etaNrCuts }},
@@ -53,7 +52,7 @@
         phi_w2_upper_limit_muon => X"{{ o1.phiW2UpperLimit|X04 }}", 
         phi_w2_lower_limit_muon => X"{{ o1.phiW2LowerLimit|X04 }}",
     {%- endif %}        
-    {%- if o1.charge != "ign" %}
+    {%- if o1.charge != None %}
         requested_charge_muon => X"{{ o1.charge }}",
     {%- endif %}        
     {%- if o1.qualityLUT|X04 != "FFFF" %}
@@ -62,18 +61,17 @@
     {%- if o1.isolationLUT|X01 != "F" %}
         iso_lut_muon => X"{{ o1.isolationLUT|X01 }}",
     {%- endif %}        
-    {%- if o1.hasUpt == 'true' %}
-        upt_cut_muon => {{ o1.hasUpt }},
+    {%- if o1.hasUpt != None %}
+        upt_cut_muon => {{ o1.hasUpt|vhdl_bool }},
         upt_upper_limit_muon => X"{{ o1.uptUpperLimit|X04 }}",
         upt_lower_limit_muon => X"{{ o1.uptLowerLimit|X04 }}", 
     {%- endif %}        
-    {%- if o1.impactParameterLUT|X01 != "F" %}
+    {%- if o1.impactParameterLUT != None %}
         ip_lut_muon => X"{{ o1.impactParameterLUT|X01 }}",
     {%- endif %}        
-    {%- if o2.operator == 'false' %}
+    {%- if o2.operator == False %}
         et_ge_mode_esums => {{ o2.operator }}, 
     {%- endif %}        
-        obj_type_esums => {{ o2.type|upper }}_TYPE,
         et_threshold_esums => X"{{ o2.threshold|X04 }}",
     {%- if o2.phiFullRange  == 'false' %}
         phi_full_range_esums => {{ o2.phiFullRange }}, 
@@ -93,24 +91,22 @@
         diff_phi_upper_limit_vector => X"{{ condition.deltaPhi.upper|X08 }}", 
         diff_phi_lower_limit_vector => X"{{ condition.deltaPhi.lower|X08 }}",
     {%- endif %}        
+    {%- if condition.mass.enabled == 'true' or condition.twoBodyPt.enabled == 'true'  %}
+        pt1_width => {{ o1.type|upper }}_PT_VECTOR_WIDTH, 
+        pt2_width => {{ o2.type|upper }}_PT_VECTOR_WIDTH, 
+    {%- endif %}        
     {%- if condition.mass.enabled == 'true' %}
-        pt1_width => {{ o1.type|upper }}_PT_VECTOR_WIDTH,
-        pt2_width => {{ o2.type|upper }}_PT_VECTOR_WIDTH,
         mass_upper_limit => X"{{ condition.mass.upper|X16 }}",
         mass_lower_limit => X"{{ condition.mass.lower|X16 }}",
         mass_cosh_cos_precision => {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_PRECISION, 
-    {%- endif %}        
-    {%- if condition.mass.enabled == 'true' and  condition.twoBodyPt.enabled == 'false' %}
-        cosh_cos_width => {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH
-    {%- endif %}        
-    {%- if condition.mass.enabled == 'true' and  condition.twoBodyPt.enabled == 'true' %}
         cosh_cos_width => {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH,
     {%- endif %}        
     {%- if condition.twoBodyPt.enabled == 'true' %}
         pt_sq_threshold_vector => X"{{ condition.twoBodyPt.threshold|X16 }}", 
         sin_cos_width => CALO_SIN_COS_VECTOR_WIDTH, 
-        pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o2.type|upper }}_SIN_COS_PRECISION
+        pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o2.type|upper }}_SIN_COS_PRECISION,
     {%- endif %}        
+        obj_type_esums => {{ o2.type|upper }}_TYPE
     )
     port map(
         lhc_clk, 

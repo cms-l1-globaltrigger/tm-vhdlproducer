@@ -21,7 +21,7 @@
         object_slice_4_low => {{ o4.sliceLow }}, 
         object_slice_4_high => {{ o4.sliceHigh }},
     {%- endif %}        
-    {%- if o1.operator == 'false' %}
+    {%- if o1.operator == False %}
         pt_ge_mode => {{ o1.operator }}, 
     {%- endif %}        
         obj_type => {{ o1.type }}_TYPE,

@@ -32,7 +32,7 @@
         calo1_object_slice_4_low => {{ o4.sliceLow }}, 
         calo1_object_slice_4_high => {{ o4.sliceHigh }},
     {%- endif %}        
-    {%- if o1.operator == 'false' %}
+    {%- if o1.operator == False %}
         pt_ge_mode_calo1 => {{ o1.operator }}, 
     {%- endif %}        
         obj_type_calo1 => {{ o1.type }}_TYPE,
@@ -72,7 +72,7 @@
     {%- if o1.isolationLUT|X01 != "F" or o2.isolationLUT|X01 != "F" or o3.isolationLUT|X01 != "F" or o4.isolationLUT|X01 != "F" %}
         iso_luts_calo1 => (X"{{ o1.isolationLUT|X01 }}", X"{{ o2.isolationLUT|X01 }}", X"{{ o3.isolationLUT|X01 }}", X"{{ o4.isolationLUT|X01 }}"),
     {%- endif %}        
-    {%- if o5.operator == 'false' %}
+    {%- if o5.operator == False %}
         pt_ge_mode_calo2 => {{ o5.operator }}, 
     {%- endif %}        
         obj_type_calo2 => {{ o5.type|upper }}_TYPE,
@@ -147,7 +147,7 @@
     {%- if o1.isolationLUT|X01 != "F" or o2.isolationLUT|X01 != "F" or o3.isolationLUT|X01 != "F" %}
         iso_luts_calo1 => (X"{{ o1.isolationLUT|X01 }}", X"{{ o2.isolationLUT|X01 }}", X"{{ o3.isolationLUT|X01 }}", X"F"),
     {%- endif %}        
-    {%- if o4.operator == 'false' %}
+    {%- if o4.operator == False %}
         pt_ge_mode_calo2 => {{ o4.operator }}, 
     {%- endif %}        
         obj_type_calo2 => {{ o4.type|upper }}_TYPE,
@@ -222,7 +222,7 @@
     {%- if o1.isolationLUT|X01 != "F" or o2.isolationLUT|X01 != "F" %}
         iso_luts_calo1 => (X"{{ o1.isolationLUT|X01 }}", X"{{ o2.isolationLUT|X01 }}", X"F", X"F"),
     {%- endif %}        
-    {%- if o3.operator == 'false' %}
+    {%- if o3.operator == False %}
         pt_ge_mode_calo2 => {{ o3.operator }}, 
     {%- endif %}        
         obj_type_calo2 => {{ o3.type|upper }}_TYPE,
@@ -297,7 +297,7 @@
     {%- if o1.isolationLUT|X01 != "F" %}
         iso_luts_calo1 => (X"{{ o1.isolationLUT|X01 }}", X"F", X"F", X"F"),
     {%- endif %}        
-    {%- if o2.operator == 'false' %}
+    {%- if o2.operator == False %}
         pt_ge_mode_calo2 => {{ o2.operator }}, 
     {%- endif %}        
         obj_type_calo2 => {{ o2.type|upper }}_TYPE,

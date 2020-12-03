@@ -702,7 +702,8 @@ class MuonConditionHelper(ConditionHelper):
     def __init__(self, condition_handle):
         super().__init__(condition_handle)
         # Default attributes
-        self.chargeCorrelation = charge_correlation_encode('ig')
+        #self.chargeCorrelation = charge_correlation_encode('ig')
+        self.chargeCorrelation = None
         self.twoBodyPt = TwoBodyPtCutHelper(0)
         self.update_cuts(condition_handle)
 
@@ -767,7 +768,8 @@ class CorrelationConditionHelper(ConditionHelper):
         self.deltaR = DeltaRCutHelper()
         self.mass = MassCutHelper()
         self.twoBodyPt = TwoBodyPtCutHelper()
-        self.chargeCorrelation = charge_correlation_encode('ig')
+        #self.chargeCorrelation = charge_correlation_encode('ig')
+        self.chargeCorrelation = None
         self.update(condition_handle)
 
     @property
@@ -818,7 +820,8 @@ class Correlation3ConditionHelper(ConditionHelper):
         super().__init__(condition_handle)
         # Default attributes
         self.mass = MassCutHelper()
-        self.chargeCorrelation = charge_correlation_encode('ig')
+        #self.chargeCorrelation = charge_correlation_encode('ig')
+        self.chargeCorrelation = None
         self.update(condition_handle)
 
     @property
@@ -871,7 +874,8 @@ class CorrelationConditionOvRmHelper(ConditionHelper):
         self.deltaR = DeltaRCutHelper()
         self.mass = MassCutHelper()
         self.twoBodyPt = TwoBodyPtCutHelper()
-        self.chargeCorrelation = charge_correlation_encode('ig')
+        #self.chargeCorrelation = charge_correlation_encode('ig')
+        self.chargeCorrelation = None
         self.update(condition_handle)
 
     @property
@@ -999,7 +1003,7 @@ class ObjectHelper(VhdlHelper):
         # common attributes
         self.name = 'UNDEFINED'
         self.type = 'UNDEFINED'
-        self.operator = vhdl_bool(True)
+        self.operator = False
         self.bx = bx_encode(0)
         self.externalSignalName = 'UNDEFINED'
         self.externalChannelId = 0
@@ -1007,13 +1011,13 @@ class ObjectHelper(VhdlHelper):
         self.threshold = 0
         self.isolationLUT = 0xf
         self.qualityLUT = 0xffff
-        self.charge = charge_encode('ign')
+        self.charge = None
         self.hasCount = False
         self.count = 0
-        self.hasUpt = vhdl_bool(False)
+        self.hasUpt = None
         self.uptLowerLimit = 0
         self.uptUpperLimit = 0
-        self.impactParameterLUT = 0xf
+        self.impactParameterLUT = None
         # spatial cuts
         self.etaNrCuts = 0
         self.etaW1LowerLimit = 0

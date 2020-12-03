@@ -8,7 +8,7 @@
         calo1_object_low => {{ o1.sliceLow }}, 
         calo1_object_high => {{ o1.sliceHigh }}, 
     {%- endif %}        
-    {%- if o1.operator == 'false' %}
+    {%- if o1.operator == False %}
         pt_ge_mode_calo1 => {{ o1.operator }}, 
     {%- endif %}        
         obj_type_calo1 => {{ o1.type|upper }}_TYPE,
@@ -52,7 +52,7 @@
         calo2_object_low => {{ o2.sliceLow }}, 
         calo2_object_high => {{ o2.sliceHigh }}, 
     {%- endif %}        
-    {%- if o2.operator == 'false' %}
+    {%- if o2.operator == False %}
         pt_ge_mode_calo2 => {{ o2.operator }}, 
     {%- endif %}        
         obj_type_calo2 => {{ o2.type|upper }}_TYPE,
