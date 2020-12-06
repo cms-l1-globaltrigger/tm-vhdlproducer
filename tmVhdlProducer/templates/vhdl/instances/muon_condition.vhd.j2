@@ -5,20 +5,19 @@
   {%- set o4 = condition.objects[3] %}
   {%- set bx = o1.bx %}
 {{ condition.vhdl_signal }}_i: entity work.muon_conditions
-    generic map(    
-    {%- if condition.nr_objects > 0 and (o1.sliceLow != 0 or o1.sliceHigh != 7) %}
+    {%- if condition.nr_objects > 0 and o1.hasSlice is not none %}
         object_slice_1_low => {{ o1.sliceLow }}, 
         object_slice_1_high => {{ o1.sliceHigh }}, 
     {%- endif %}        
-    {%- if condition.nr_objects > 1 and (o2.sliceLow != 0 or o2.sliceHigh != 7) %}
+    {%- if condition.nr_objects > 1 and o2.hasSlice is not none %}
         object_slice_2_low => {{ o2.sliceLow }}, 
         object_slice_2_high => {{ o2.sliceHigh }}, 
     {%- endif %}        
-    {%- if condition.nr_objects > 2 and (o3.sliceLow != 0 or o3.sliceHigh != 7) %}
+    {%- if condition.nr_objects > 2 and o3.hasSlice is not none %}
         object_slice_3_low => {{ o3.sliceLow }}, 
         object_slice_3_high => {{ o3.sliceHigh }}, 
     {%- endif %}        
-    {%- if condition.nr_objects > 3 and (o4.sliceLow != 0 or o4.sliceHigh != 7) %}
+    {%- if condition.nr_objects > 3 and o4.hasSlice is not none %}
         object_slice_4_low => {{ o4.sliceLow }}, 
         object_slice_4_high => {{ o4.sliceHigh }},
     {%- endif %}        
@@ -56,28 +55,28 @@
         phi_w2_upper_limits => (X"{{ o1.phiW2UpperLimit|X04 }}", X"{{ o2.phiW2UpperLimit|X04 }}", X"{{ o3.phiW2UpperLimit|X04 }}", X"{{ o4.phiW2UpperLimit|X04 }}"), 
         phi_w2_lower_limits => (X"{{ o1.phiW2LowerLimit|X04 }}", X"{{ o2.phiW2LowerLimit|X04 }}", X"{{ o3.phiW2LowerLimit|X04 }}", X"{{ o4.phiW2LowerLimit|X04 }}"),
         {%- endif %}        
+    {%- endif %} 
+    {%- if (o1.hasCharge is not none) or (o2.hasCharge is not none) or (o3.hasCharge is not none) or (o4.hasCharge is not none) %}
+        requested_charges => ("{{ o1.charge }}", "{{ o2.charge }}", "{{ o3.charge }}", "{{ o4.charge }}"), 
     {%- endif %}        
-    {%- if o1.charge != None or o2.charge != None or o3.charge != None or o4.charge != None %}
-        requested_charges => (X"{{ o1.charge }}", X"{{ o2.charge }}", X"{{ o3.charge }}", X"{{ o4.charge }}"), 
-    {%- endif %}        
-    {%- if o1.qualityLUT|X04 != "FFFF" or o2.qualityLUT|X04 != "FFFF" or o3.qualityLUT|X04 != "FFFF" or o4.qualityLUT|X04 != "FFFF" %}
+    {%- if (o1.hasQuality is not none) or (o2.hasQuality is not none) or (o3.hasQuality is not none) or (o4.hasQuality is not none) %}
         qual_luts => (X"{{ o1.qualityLUT|X04 }}", X"{{ o2.qualityLUT|X04 }}", X"{{ o3.qualityLUT|X04 }}", X"{{ o4.qualityLUT|X04 }}"), 
     {%- endif %}        
-    {%- if o1.isolationLUT|X01 != "F" or o2.isolationLUT|X01 != "F" or o3.isolationLUT|X01 != "F" or o4.isolationLUT|X01 != "F"%}
-        iso_luts => (X"{{ o1.isolationLUT|X01 }}", X"{{ o2.isolationLUT|X01 }}", X"{{ o3.isolationLUT|X01 }}", X"{{ o4.isolationLUT|X01 }}"), 
-    {%- endif %} 
-    {%- if (o1.hasUpt != None) or (o2.hasUpt != None) or (o3.hasUpt != None) or (o4.hasUpt != None) %}
+    {%- if (o1.hasIsolation is not none) or (o2.hasIsolation is not none) or (o3.hasIsolation is not none) or (o4.hasIsolation is not none) %}
+        iso_luts => (X"{{ o1.isolationLUT|X01 }}", X"{{ o2.isolationLUT|X01 }}", X"{{ o3.isolationLUT|X01 }}", X"{{ o4.isolationLUT|X01 }}"),
+    {%- endif %}        
+    {%- if (o1.hasUpt is not none) or (o2.hasUpt is not none) or (o3.hasUpt is not none) or (o4.hasUpt is not none) %}
         upt_cuts => ({{ o1.hasUpt|vhdl_bool }}, {{ o2.hasUpt|vhdl_bool }}, {{ o3.hasUpt|vhdl_bool }}, {{ o4.hasUpt|vhdl_bool }}), 
         upt_upper_limits => (X"{{ o1.uptUpperLimit|X04 }}", X"{{ o2.uptUpperLimit|X04 }}", X"{{ o3.uptUpperLimit|X04 }}", X"{{ o4.uptUpperLimit|X04 }}"),
         upt_lower_limits => (X"{{ o1.uptLowerLimit|X04 }}", X"{{ o2.uptLowerLimit|X04 }}", X"{{ o3.uptLowerLimit|X04 }}", X"{{ o4.uptLowerLimit|X04 }}"), 
     {%- endif %}        
-    {%- if (o1.impactParameterLUT != None) or (o2.impactParameterLUT != None) or (o3.impactParameterLUT != None) or (o4.impactParameterLUT != None) %}
+    {%- if (o1.hasImpactParameter is not none) or (o2.hasImpactParameter is not none) or (o3.hasImpactParameter is not none) or (o4.hasImpactParameter is not none) %}
         ip_luts => (X"{{ o1.impactParameterLUT|X01 }}", X"{{ o2.impactParameterLUT|X01 }}", X"{{ o3.impactParameterLUT|X01 }}", X"{{ o4.impactParameterLUT|X01 }}"), 
     {%- endif %}        
-    {%- if condition.chargeCorrelation != None %}
+    {%- if condition.chargeCorrelation is not none %}
         requested_charge_correlation => "{{ condition.chargeCorrelation }}",
     {%- endif %}        
-    {%- if condition.twoBodyPt.enabled == "true" %}
+    {%- if condition.hasTwoBodyPt is not none %}
         twobody_pt_cut => true, 
         pt_width => {{ o1.type|upper }}_PT_VECTOR_WIDTH, 
         pt_sq_threshold_vector => X"{{ condition.twoBodyPt.threshold|X16 }}",
@@ -89,23 +88,23 @@
     port map(
         lhc_clk, 
         mu_bx_{{ bx }},
-    {%- if condition.nr_objects == 2 and condition.twoBodyPt.enabled == "true" and condition.chargeCorrelation != None %}
+    {%- if (condition.nr_objects == 2) and (condition.hasTwoBodyPt is not none) and (condition.chargeCorrelation is not none) %}
         ls_charcorr_double => ls_charcorr_double_bx_{{ bx }}_bx_{{ bx }}, 
         os_charcorr_double => os_charcorr_double_bx_{{ bx }}_bx_{{ bx }},
         pt => {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, 
         cos_phi_integer => {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, 
         sin_phi_integer => {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }}),
-    {%- elif condition.nr_objects == 2 and condition.twoBodyPt.enabled == "true" and condition.chargeCorrelation == None %}
+    {%- elif (condition.nr_objects == 2) and (condition.hasTwoBodyPt is not none) and (condition.chargeCorrelation is none) %}
         pt => {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, 
         cos_phi_integer => {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, 
         sin_phi_integer => {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }}),
-    {%- elif condition.nr_objects == 2 and condition.twoBodyPt.enabled == "false" and condition.chargeCorrelation != None %}
+    {%- elif (condition.nr_objects == 2) and (condition.hasTwoBodyPt is none) and (condition.chargeCorrelation is not none) %}
         ls_charcorr_double => ls_charcorr_double_bx_{{ bx }}_bx_{{ bx }}, 
         os_charcorr_double => os_charcorr_double_bx_{{ bx }}_bx_{{ bx }},
-    {%- elif condition.nr_objects == 3 and condition.chargeCorrelation != None %}
+    {%- elif (condition.nr_objects == 3) and (condition.chargeCorrelation is not none) %}
         ls_charcorr_triple => ls_charcorr_triple_bx_{{ bx }}_bx_{{ bx }}, 
         os_charcorr_triple => os_charcorr_triple_bx_{{ bx }}_bx_{{ bx }},
-    {%- elif condition.nr_objects == 4 and condition.chargeCorrelation != None %}
+    {%- elif (condition.nr_objects == 4) and (condition.chargeCorrelation is not none) %}
         ls_charcorr_quad => ls_charcorr_quad_bx_{{ bx }}_bx_{{ bx }}, 
         os_charcorr_quad => os_charcorr_quad_bx_{{ bx }}_bx_{{ bx }}),
     {%- endif %}

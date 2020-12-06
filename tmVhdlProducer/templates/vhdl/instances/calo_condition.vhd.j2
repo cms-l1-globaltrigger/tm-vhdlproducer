@@ -5,19 +5,19 @@
   {%- set o4 = condition.objects[3] %}
 {{ condition.vhdl_signal }}_i: entity work.calo_conditions
     generic map(
-    {%- if condition.nr_objects > 0 and (o1.sliceLow != 0 or o1.sliceHigh != 11) %}
+    {%- if condition.nr_objects > 0 and o1.hasSlice is not none %}
         object_slice_1_low => {{ o1.sliceLow }}, 
         object_slice_1_high => {{ o1.sliceHigh }}, 
     {%- endif %}        
-    {%- if condition.nr_objects > 1 and (o2.sliceLow != 0 or o2.sliceHigh != 11) %}
+    {%- if condition.nr_objects > 1 and o2.hasSlice is not none %}
         object_slice_2_low => {{ o2.sliceLow }}, 
         object_slice_2_high => {{ o2.sliceHigh }}, 
     {%- endif %}        
-    {%- if condition.nr_objects > 2 and (o3.sliceLow != 0 or o3.sliceHigh != 11) %}
+    {%- if condition.nr_objects > 2 and o3.hasSlice is not none %}
         object_slice_3_low => {{ o3.sliceLow }}, 
         object_slice_3_high => {{ o3.sliceHigh }}, 
     {%- endif %}        
-    {%- if condition.nr_objects > 3 and (o4.sliceLow != 0 or o4.sliceHigh != 11) %}
+    {%- if condition.nr_objects > 3 and o4.hasSlice is not none %}
         object_slice_4_low => {{ o4.sliceLow }}, 
         object_slice_4_high => {{ o4.sliceHigh }},
     {%- endif %}        
@@ -57,10 +57,10 @@
         phi_w2_lower_limits => (X"{{ o1.phiW2LowerLimit|X04 }}", X"{{ o2.phiW2LowerLimit|X04 }}", X"{{ o3.phiW2LowerLimit|X04 }}", X"{{ o4.phiW2LowerLimit|X04 }}"),
         {%- endif %}        
     {%- endif %}        
-    {%- if o1.isolationLUT|X01 != "F" or o2.isolationLUT|X01 != "F" or o3.isolationLUT|X01 != "F" or o4.isolationLUT|X01 != "F" %}
+    {%- if (o1.hasIsolation is not none) or (o2.hasIsolation is not none) or (o3.hasIsolation is not none) or (o4.hasIsolation is not none) %}
         iso_luts => (X"{{ o1.isolationLUT|X01 }}", X"{{ o2.isolationLUT|X01 }}", X"{{ o3.isolationLUT|X01 }}", X"{{ o4.isolationLUT|X01 }}"),
     {%- endif %}        
-    {%- if condition.twoBodyPt.enabled == "true" %}
+    {%- if condition.hasTwoBodyPt is not none %}
         twobody_pt_cut => true, 
         pt_width => {{ o1.type|upper }}_PT_VECTOR_WIDTH, 
         pt_sq_threshold_vector => X"{{ condition.twoBodyPt.threshold|X16 }}",
@@ -72,7 +72,7 @@
     port map(
         lhc_clk, 
         {{ o1.type|lower }}_bx_{{ o1.bx }},
-    {%- if condition.twoBodyPt.enabled == "true" %}
+    {%- if condition.hasTwoBodyPt is not none %}
          pt => {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, 
          cos_phi_integer => {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, 
          sin_phi_integer => {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }});

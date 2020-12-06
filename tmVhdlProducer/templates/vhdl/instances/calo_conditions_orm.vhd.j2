@@ -7,30 +7,42 @@
   {%- set nr_requirements = condition.nr_objects-1 %}
 {{ condition.vhdl_signal }}_i: entity work.calo_conditions_orm
     generic map(
-    {%- if condition.deltaEtaOrm.enabled == 'true' %}
+    {%- if condition.hasDeltaEtaOrm is not none %}
+        diff_eta_orm_upper_limit_vector => X"{{ condition.deltaEtaOrm.upper|X08 }}", 
+        diff_eta_orm_lower_limit_vector => X"{{ condition.deltaEtaOrm.lower|X08 }}",
+    {%- endif %}        
+    {%- if condition.hasDeltaPhiOrm is not none %}
+        diff_phi_orm_upper_limit_vector => X"{{ condition.deltaPhiOrm.upper|X08 }}", 
+        diff_phi_orm_lower_limit_vector => X"{{ condition.deltaPhiOrm.lower|X08 }}",
+    {%- endif %}        
+    {%- if condition.hasDeltaROrm is not none %}
+        dr_orm_upper_limit_vector => X"{{ condition.deltaROrm.upper|X16 }}", 
+        dr_orm_lower_limit_vector => X"{{ condition.deltaROrm.lower|X16 }}",
+    {%- endif %}        
+    {%- if condition.deltaEtaOrm is not none %}
         deta_orm_cut => {{ condition.deltaEtaOrm.enabled }}, 
     {%- endif %}        
-    {%- if condition.deltaPhiOrm.enabled == 'true' %}
+    {%- if condition.deltaPhiOrm is not none %}
         dphi_orm_cut => {{ condition.deltaPhiOrm.enabled }}, 
     {%- endif %}        
-    {%- if condition.deltaROrm.enabled == 'true' %}
+    {%- if condition.deltaROrm is not none %}
         dr_orm_cut => {{ condition.deltaROrm.enabled }}, 
     {%- endif %}        
-    {%- if nr_requirements > 0 and (o1.sliceLow != 0 or o1.sliceHigh != 11) %}
-        calo1_object_slice_1_low => {{ o1.sliceLow }}, 
-        calo1_object_slice_1_high => {{ o1.sliceHigh }}, 
+    {%- if nr_requirements > 0 and o1.hasSlice is not none %}
+        object_slice_1_low => {{ o1.sliceLow }}, 
+        object_slice_1_high => {{ o1.sliceHigh }}, 
     {%- endif %}        
-    {%- if nr_requirements > 1 and (o2.sliceLow != 0 or o2.sliceHigh != 11) %}
-        calo1_object_slice_2_low => {{ o2.sliceLow }}, 
-        calo1_object_slice_2_high => {{ o2.sliceHigh }}, 
+    {%- if nr_requirements > 1 and o2.hasSlice is not none %}
+        object_slice_2_low => {{ o2.sliceLow }}, 
+        object_slice_2_high => {{ o2.sliceHigh }}, 
     {%- endif %}        
-    {%- if nr_requirements > 2 and (o3.sliceLow != 0 or o3.sliceHigh != 11) %}
-        calo1_object_slice_3_low => {{ o3.sliceLow }}, 
-        calo1_object_slice_3_high => {{ o3.sliceHigh }}, 
+    {%- if nr_requirements > 2 and o3.hasSlice is not none %}
+        object_slice_3_low => {{ o3.sliceLow }}, 
+        object_slice_3_high => {{ o3.sliceHigh }}, 
     {%- endif %}        
-    {%- if nr_requirements > 3 and (o4.sliceLow != 0 or o4.sliceHigh != 11) %}
-        calo1_object_slice_4_low => {{ o4.sliceLow }}, 
-        calo1_object_slice_4_high => {{ o4.sliceHigh }},
+    {%- if nr_requirements > 3 and o4.hasSlice is not none %}
+        object_slice_4_low => {{ o4.sliceLow }}, 
+        object_slice_4_high => {{ o4.sliceHigh }},
     {%- endif %}        
     {%- if o1.operator == False %}
         pt_ge_mode_calo1 => {{ o1.operator }}, 
@@ -69,8 +81,8 @@
         phi_w2_lower_limits_calo1 => (X"{{ o1.phiW2LowerLimit|X04 }}", X"{{ o2.phiW2LowerLimit|X04 }}", X"{{ o3.phiW2LowerLimit|X04 }}", X"{{ o4.phiW2LowerLimit|X04 }}"),
         {%- endif %}        
     {%- endif %}        
-    {%- if o1.isolationLUT|X01 != "F" or o2.isolationLUT|X01 != "F" or o3.isolationLUT|X01 != "F" or o4.isolationLUT|X01 != "F" %}
-        iso_luts_calo1 => (X"{{ o1.isolationLUT|X01 }}", X"{{ o2.isolationLUT|X01 }}", X"{{ o3.isolationLUT|X01 }}", X"{{ o4.isolationLUT|X01 }}"),
+    {%- if (o1.hasIsolation is not none) or (o2.hasIsolation is not none) or (o3.hasIsolation is not none) or (o4.hasIsolation is not none) %}
+        iso_luts => (X"{{ o1.isolationLUT|X01 }}", X"{{ o2.isolationLUT|X01 }}", X"{{ o3.isolationLUT|X01 }}", X"{{ o4.isolationLUT|X01 }}"),
     {%- endif %}        
     {%- if o5.operator == False %}
         pt_ge_mode_calo2 => {{ o5.operator }}, 
@@ -108,7 +120,7 @@
         phi_w2_upper_limit_calo2 => X"{{ o5.phiW2UpperLimit|X04 }}", 
         phi_w2_lower_limit_calo2 => X"{{ o5.phiW2LowerLimit|X04 }}",
     {%- endif %}        
-    {%- if o5.isolationLUT|X01 != "F" %}
+    {%- if o5.hasIsolation is not none %}
         iso_lut_calo2 => X"{{ o5.isolationLUT|X01 }}",
     {%- endif %}        
   {%- elif nr_requirements == 3 %}
@@ -144,8 +156,8 @@
         phi_w2_lower_limits_calo1 => (X"{{ o1.phiW2LowerLimit|X04 }}", X"{{ o2.phiW2LowerLimit|X04 }}", X"{{ o3.phiW2LowerLimit|X04 }}", X"0000"),
         {%- endif %}        
     {%- endif %}        
-    {%- if o1.isolationLUT|X01 != "F" or o2.isolationLUT|X01 != "F" or o3.isolationLUT|X01 != "F" %}
-        iso_luts_calo1 => (X"{{ o1.isolationLUT|X01 }}", X"{{ o2.isolationLUT|X01 }}", X"{{ o3.isolationLUT|X01 }}", X"F"),
+    {%- if (o1.hasIsolation is not none) or (o2.hasIsolation is not none) or (o3.hasIsolation is not none) %}
+        iso_luts => (X"{{ o1.isolationLUT|X01 }}", X"{{ o2.isolationLUT|X01 }}", X"{{ o3.isolationLUT|X01 }}", X"F"),
     {%- endif %}        
     {%- if o4.operator == False %}
         pt_ge_mode_calo2 => {{ o4.operator }}, 
@@ -183,7 +195,7 @@
         phi_w2_upper_limit_calo2 => X"{{ o4.phiW2UpperLimit|X04 }}", 
         phi_w2_lower_limit_calo2 => X"{{ o4.phiW2LowerLimit|X04 }}",
     {%- endif %}        
-    {%- if o4.isolationLUT|X01 != "F" %}
+    {%- if o4.hasIsolation is not none %}
         iso_lut_calo2 => X"{{ o4.isolationLUT|X01 }}",
     {%- endif %}        
   {%- elif nr_requirements == 2 %}
@@ -219,8 +231,8 @@
         phi_w2_lower_limits_calo1 => (X"{{ o1.phiW2LowerLimit|X04 }}", X"{{ o2.phiW2LowerLimit|X04 }}", X"0000", X"0000"),
         {%- endif %}        
     {%- endif %}        
-    {%- if o1.isolationLUT|X01 != "F" or o2.isolationLUT|X01 != "F" %}
-        iso_luts_calo1 => (X"{{ o1.isolationLUT|X01 }}", X"{{ o2.isolationLUT|X01 }}", X"F", X"F"),
+    {%- if (o1.hasIsolation is not none) or (o2.hasIsolation is not none) %}
+        iso_luts => (X"{{ o1.isolationLUT|X01 }}", X"{{ o2.isolationLUT|X01 }}", X"F", X"F"),
     {%- endif %}        
     {%- if o3.operator == False %}
         pt_ge_mode_calo2 => {{ o3.operator }}, 
@@ -258,7 +270,7 @@
         phi_w2_upper_limit_calo2 => X"{{ o3.phiW2UpperLimit|X04 }}", 
         phi_w2_lower_limit_calo2 => X"{{ o3.phiW2LowerLimit|X04 }}",
     {%- endif %}        
-    {%- if o3.isolationLUT|X01 != "F" %}
+    {%- if o3.hasIsolation is not none %}
         iso_lut_calo2 => X"{{ o3.isolationLUT|X01 }}",
     {%- endif %}        
   {%- elif nr_requirements == 1 %}
@@ -294,8 +306,8 @@
         phi_w2_lower_limits_calo1 => (X"{{ o1.phiW2LowerLimit|X04 }}", X"0000", X"0000", X"0000"),
         {%- endif %}        
     {%- endif %}        
-    {%- if o1.isolationLUT|X01 != "F" %}
-        iso_luts_calo1 => (X"{{ o1.isolationLUT|X01 }}", X"F", X"F", X"F"),
+    {%- if (o1.hasIsolation is not none) %}
+        iso_luts => (X"{{ o1.isolationLUT|X01 }}", X"F", X"F", X"F"),
     {%- endif %}        
     {%- if o2.operator == False %}
         pt_ge_mode_calo2 => {{ o2.operator }}, 
@@ -333,23 +345,23 @@
         phi_w2_upper_limit_calo2 => X"{{ o2.phiW2UpperLimit|X04 }}", 
         phi_w2_lower_limit_calo2 => X"{{ o2.phiW2LowerLimit|X04 }}",
     {%- endif %}        
-    {%- if o2.isolationLUT|X01 != "F" %}
+    {%- if o2.hasIsolation is not none %}
         iso_lut_calo2 => X"{{ o2.isolationLUT|X01 }}",
     {%- endif %}        
   {%- endif %}        
-    {%- if condition.deltaEtaOrm.enabled == 'true' %}
+    {%- if condition.hasDeltaEtaOrm is not none %}
         diff_eta_orm_upper_limit_vector => X"{{ condition.deltaEtaOrm.upper|X08 }}", 
-        diff_eta_orm_lower_limit_vector => X"{{ condition.deltaEtaOrm.lower|X08 }}", 
+        diff_eta_orm_lower_limit_vector => X"{{ condition.deltaEtaOrm.lower|X08 }}",
     {%- endif %}        
-    {%- if condition.deltaPhiOrm.enabled == 'true' %}
+    {%- if condition.hasDeltaPhiOrm is not none %}
         diff_phi_orm_upper_limit_vector => X"{{ condition.deltaPhiOrm.upper|X08 }}", 
-        diff_phi_orm_lower_limit_vector => X"{{ condition.deltaPhiOrm.lower|X08 }}", 
+        diff_phi_orm_lower_limit_vector => X"{{ condition.deltaPhiOrm.lower|X08 }}",
     {%- endif %}        
-    {%- if condition.deltaROrm.enabled == 'true' %}
+    {%- if condition.hasDeltaROrm is not none %}
         dr_orm_upper_limit_vector => X"{{ condition.deltaROrm.upper|X16 }}", 
-        dr_orm_lower_limit_vector => X"{{ condition.deltaROrm.lower|X16 }}", 
+        dr_orm_lower_limit_vector => X"{{ condition.deltaROrm.lower|X16 }}",
     {%- endif %}        
-    {%- if condition.twoBodyPt.enabled == "true" %}
+    {%- if condition.hasTwoBodyPt is not none %}
         twobody_pt_cut => true, 
         pt_width => {{ o1.type|upper }}_PT_VECTOR_WIDTH, 
         pt_sq_threshold_vector => X"{{ condition.twoBodyPt.threshold|X16 }}",
@@ -380,7 +392,7 @@
         diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_eta_vector, 
         diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_vector,
   {%- endif %}    
-    {%- if condition.twoBodyPt.enabled == "true" %}
+    {%- if condition.hasTwoBodyPt is not none %}
         pt => {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, 
         cos_phi_integer => {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, 
         sin_phi_integer => {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }});
