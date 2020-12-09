@@ -1,0 +1,92 @@
+{%- block condition_base %}
+  {%- set o1 = condition.objects[0] %}
+  {%- set o2 = condition.objects[1] %}
+  {%- set o3 = condition.objects[2] %}
+  {%- set o4 = condition.objects[3] %}
+  {%- block entity %}
+  {%- endblock entity %}
+    generic map(
+  {%- block generic_beg %}
+  {%- endblock generic_beg %}
+  {%- for i in range(0,condition.nr_objects) %}
+    {%- if condition.nr_objects > i and condition.objects[i].hasSlice is not none %}
+        object_slice_{{i+1}}_low => {{ condition.objects[i].sliceLow }}, 
+        object_slice_{{i+1}}_high => {{ condition.objects[i].sliceHigh }}, 
+    {%- endif %}        
+  {%- endfor %}
+  {%- if condition.objects[0].operator == False %}
+        pt_ge_mode => {{ condition.objects[0].operator }}, 
+  {%- endif %}        
+  {%- if condition.objects[0].is_calo_type %}        
+        obj_type => {{ condition.objects[0].type }}_TYPE,
+  {%- endif %}        
+        pt_thresholds => (X"{{ condition.objects[0].threshold|X04 }}", X"{{ condition.objects[1].threshold|X04 }}", X"{{ condition.objects[2].threshold|X04 }}", X"{{ condition.objects[3].threshold|X04 }}"),
+  {%- set max_eta_cuts = [condition.objects[0].etaNrCuts, condition.objects[1].etaNrCuts, condition.objects[2].etaNrCuts, condition.objects[3].etaNrCuts]|max %}  
+  {%- if o1.etaNrCuts > 0 or o2.etaNrCuts > 0 or o3.etaNrCuts > 0 or o4.etaNrCuts > 0 %}
+        nr_eta_windows => ({{ o1.etaNrCuts }}, {{ o2.etaNrCuts }}, {{ o3.etaNrCuts }}, {{ o4.etaNrCuts }}),
+  {%- endif %}        
+  {%- for i in range(0,max_eta_cuts) %}
+    {%- if o1.etaNrCuts > i or o2.etaNrCuts > i or o3.etaNrCuts > i or o4.etaNrCuts > i %}
+        eta_w{{i+1}}_upper_limits => (X"{{ o1.etaUpperLimit[i]|X04 }}", X"{{ o2.etaUpperLimit[i]|X04 }}", X"{{ o3.etaUpperLimit[i]|X04}}", X"{{ o4.etaUpperLimit[i]|X04 }}"), 
+        eta_w{{i+1}}_lower_limits => (X"{{ o1.etaLowerLimit[i]|X04 }}", X"{{ o2.etaLowerLimit[i]|X04 }}", X"{{ o3.etaLowerLimit[i]|X04 }}", X"{{ o4.etaLowerLimit[i]|X04 }}"),
+    {%- endif %}        
+  {%- endfor %}
+  {%- if o1.phiNrCuts > 0 or o2.phiNrCuts > 0 or o3.phiNrCuts > 0 or o4.phiNrCuts > 0 %}
+        phi_full_range => ({{ o1.phiFullRange }}, {{ o2.phiFullRange }}, {{ o3.phiFullRange }}, {{ o4.phiFullRange }}), 
+        phi_w1_upper_limits => (X"{{ o1.phiW1UpperLimit|X04 }}", X"{{ o2.phiW1UpperLimit|X04 }}", X"{{ o3.phiW1UpperLimit|X04 }}", X"{{ o4.phiW1UpperLimit|X04 }}"), 
+        phi_w1_lower_limits => (X"{{ o1.phiW1LowerLimit|X04 }}", X"{{ o2.phiW1LowerLimit|X04 }}", X"{{ o3.phiW1LowerLimit|X04 }}", X"{{ o4.phiW1LowerLimit|X04 }}"),
+  {%- endif %}        
+  {%- if o1.phiNrCuts > 1 or o2.phiNrCuts > 1 or o3.phiNrCuts > 1 or o4.phiNrCuts > 1 %}
+        phi_w2_ignore => ({{ o1.phiW2Ignore }}, {{ o2.phiW2Ignore }}, {{ o3.phiW2Ignore }}, {{ o4.phiW2Ignore }}),
+        phi_w2_upper_limits => (X"{{ o1.phiW2UpperLimit|X04 }}", X"{{ o2.phiW2UpperLimit|X04 }}", X"{{ o3.phiW2UpperLimit|X04 }}", X"{{ o4.phiW2UpperLimit|X04 }}"), 
+        phi_w2_lower_limits => (X"{{ o1.phiW2LowerLimit|X04 }}", X"{{ o2.phiW2LowerLimit|X04 }}", X"{{ o3.phiW2LowerLimit|X04 }}", X"{{ o4.phiW2LowerLimit|X04 }}"),
+  {%- endif %}     
+  {%- if o1.is_muon_type %}
+    {%- if (o1.hasCharge is not none) or (o2.hasCharge is not none) or (o3.hasCharge is not none) or (o4.hasCharge is not none) %}
+        requested_charges => ("{{ o1.charge }}", "{{ o2.charge }}", "{{ o3.charge }}", "{{ o4.charge }}"), 
+    {%- endif %}        
+    {%- if (o1.hasQuality is not none) or (o2.hasQuality is not none) or (o3.hasQuality is not none) or (o4.hasQuality is not none) %}
+        qual_luts => (X"{{ o1.qualityLUT|X04 }}", X"{{ o2.qualityLUT|X04 }}", X"{{ o3.qualityLUT|X04 }}", X"{{ o4.qualityLUT|X04 }}"), 
+    {%- endif %}        
+    {%- if (o1.hasIsolation is not none) or (o2.hasIsolation is not none) or (o3.hasIsolation is not none) or (o4.hasIsolation is not none) %}
+        iso_luts => (X"{{ o1.isolationLUT|X01 }}", X"{{ o2.isolationLUT|X01 }}", X"{{ o3.isolationLUT|X01 }}", X"{{ o4.isolationLUT|X01 }}"),
+    {%- endif %}        
+    {%- if (o1.hasUpt is not none) or (o2.hasUpt is not none) or (o3.hasUpt is not none) or (o4.hasUpt is not none) %}
+        upt_cuts => ({{ o1.hasUpt|vhdl_bool }}, {{ o2.hasUpt|vhdl_bool }}, {{ o3.hasUpt|vhdl_bool }}, {{ o4.hasUpt|vhdl_bool }}), 
+        upt_upper_limits => (X"{{ o1.uptUpperLimit|X04 }}", X"{{ o2.uptUpperLimit|X04 }}", X"{{ o3.uptUpperLimit|X04 }}", X"{{ o4.uptUpperLimit|X04 }}"),
+        upt_lower_limits => (X"{{ o1.uptLowerLimit|X04 }}", X"{{ o2.uptLowerLimit|X04 }}", X"{{ o3.uptLowerLimit|X04 }}", X"{{ o4.uptLowerLimit|X04 }}"), 
+    {%- endif %}        
+    {%- if (o1.hasImpactParameter is not none) or (o2.hasImpactParameter is not none) or (o3.hasImpactParameter is not none) or (o4.hasImpactParameter is not none) %}
+        ip_luts => (X"{{ o1.impactParameterLUT|X01 }}", X"{{ o2.impactParameterLUT|X01 }}", X"{{ o3.impactParameterLUT|X01 }}", X"{{ o4.impactParameterLUT|X01 }}"), 
+    {%- endif %}        
+    {%- if condition.chargeCorrelation is not none %}
+        requested_charge_correlation => "{{ condition.chargeCorrelation }}",
+    {%- endif %}        
+  {%- elif o1.is_calo_type %}        
+    {%- if (o1.hasIsolation is not none) or (o2.hasIsolation is not none) or (o3.hasIsolation is not none) or (o4.hasIsolation is not none) %}
+        iso_luts => (X"{{ o1.isolationLUT|X01 }}", X"{{ o2.isolationLUT|X01 }}", X"{{ o3.isolationLUT|X01 }}", X"{{ o4.isolationLUT|X01 }}"),
+    {%- endif %}        
+  {%- endif %} 
+  {%- block correlation_cuts %}
+    {%- if condition.hasTwoBodyPt is not none %}
+        twobody_pt_cut => true, 
+        pt_width => {{ o1.type|upper }}_PT_VECTOR_WIDTH, 
+        pt_sq_threshold_vector => X"{{ condition.twoBodyPt.threshold|X16 }}",
+      {%- if o1.is_muon_type %}
+        sin_cos_width => MUON_SIN_COS_VECTOR_WIDTH, 
+      {%- elif o1.is_calo_type %}        
+        sin_cos_width => CALO_SIN_COS_VECTOR_WIDTH, 
+      {%- endif %} 
+        pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o1.type|upper }}_SIN_COS_PRECISION,
+    {%- endif %}
+  {%- endblock correlation_cuts %}
+  {%- block generic_end %}
+        nr_templates => {{ condition.nr_objects }}
+  {%- endblock generic_end %}
+    )
+    port map(
+  {%- block port %}
+  {%- endblock port %}
+    );
+{%- endblock condition_base %}
+{# eof #}

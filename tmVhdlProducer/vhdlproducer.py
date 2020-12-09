@@ -135,7 +135,7 @@ class VhdlProducer(object):
     def __init__(self, searchpath):
         self.VHDLProducerVersion = __all__[0]+__version__
         self.engine = TemplateEngine(searchpath)
-
+        
     def create_dirs(self, directory, n_modules):
         """Create directory tree for output."""
         directories = {
@@ -188,7 +188,7 @@ class VhdlProducer(object):
         makedirs(os.path.dirname(filename)) # Create path if required
         with open(filename, 'w') as fp:
             fp.write(content)
-
+            
     def writeXmlMenu(self, filename, json_dir, dist=1):
         """Updates a XML menu file based on inforamtion from a JSON file (used to apply
         a previously calculated algorithm distribution over multiple modules).

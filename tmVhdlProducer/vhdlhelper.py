@@ -1064,16 +1064,9 @@ class ObjectHelper(VhdlHelper):
         self.impactParameterLUT = 0xf
         # spatial cuts
         self.etaNrCuts = 0
-        self.etaW1LowerLimit = 0
-        self.etaW1UpperLimit = 0
-        self.etaW2LowerLimit = 0
-        self.etaW2UpperLimit = 0
-        self.etaW3LowerLimit = 0
-        self.etaW3UpperLimit = 0
-        self.etaW4LowerLimit = 0
-        self.etaW4UpperLimit = 0
-        self.etaW5LowerLimit = 0
-        self.etaW5UpperLimit = 0
+        self.etaLowerLimit = [0, 0, 0, 0, 0]
+        self.etaUpperLimit = [0, 0, 0, 0, 0]
+        self.phiNrCuts = 0
         self.phiFullRange = vhdl_bool(True)
         self.phiW1LowerLimit = 0
         self.phiW1UpperLimit = 0
@@ -1134,30 +1127,32 @@ class ObjectHelper(VhdlHelper):
         # setup eta windows
         if len(etaCuts) > 0:
             self.etaNrCuts = 1
-            self.etaW1LowerLimit = etaCuts[0][0]
-            self.etaW1UpperLimit = etaCuts[0][1]
+            self.etaLowerLimit[0] = etaCuts[0][0]
+            self.etaUpperLimit[0] = etaCuts[0][1]
         if len(etaCuts) > 1:
             self.etaNrCuts = 2
-            self.etaW2LowerLimit = etaCuts[1][0]
-            self.etaW2UpperLimit = etaCuts[1][1]
+            self.etaLowerLimit[1] = etaCuts[1][0]
+            self.etaUpperLimit[1] = etaCuts[1][1]
         if len(etaCuts) > 2:
             self.etaNrCuts = 3
-            self.etaW3LowerLimit = etaCuts[2][0]
-            self.etaW3UpperLimit = etaCuts[2][1]
+            self.etaLowerLimit[2] = etaCuts[2][0]
+            self.etaUpperLimit[2] = etaCuts[2][1]
         if len(etaCuts) > 3:
             self.etaNrCuts = 4
-            self.etaW4LowerLimit = etaCuts[3][0]
-            self.etaW4UpperLimit = etaCuts[3][1]
+            self.etaLowerLimit[3] = etaCuts[3][0]
+            self.etaUpperLimit[3] = etaCuts[3][1]
         if len(etaCuts) > 4:
             self.etaNrCuts = 5
-            self.etaW5LowerLimit = etaCuts[4][0]
-            self.etaW5UpperLimit = etaCuts[4][1]
+            self.etaLowerLimit[4] = etaCuts[4][0]
+            self.etaUpperLimit[4] = etaCuts[4][1]
         # setup phi windows
         if len(phiCuts) > 0:
+            self.phiNrCuts = 1
             self.phiFullRange = vhdl_bool(False)
             self.phiW1LowerLimit = phiCuts[0][0]
             self.phiW1UpperLimit = phiCuts[0][1]
         if len(phiCuts) > 1:
+            self.phiNrCuts = 2
             self.phiW2Ignore = vhdl_bool(False)
             self.phiW2LowerLimit = phiCuts[1][0]
             self.phiW2UpperLimit = phiCuts[1][1]

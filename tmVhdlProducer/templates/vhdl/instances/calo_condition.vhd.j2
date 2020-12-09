@@ -1,83 +1,17 @@
+{%- extends "instances/condition_base.tmpl" %}
 {%- block instantiate_calo_condition %}
-  {%- set o1 = condition.objects[0] %}
-  {%- set o2 = condition.objects[1] %}
-  {%- set o3 = condition.objects[2] %}
-  {%- set o4 = condition.objects[3] %}
+  {%- block entity %}
 {{ condition.vhdl_signal }}_i: entity work.calo_conditions
-    generic map(
-    {%- if condition.nr_objects > 0 and o1.hasSlice is not none %}
-        object_slice_1_low => {{ o1.sliceLow }}, 
-        object_slice_1_high => {{ o1.sliceHigh }}, 
-    {%- endif %}        
-    {%- if condition.nr_objects > 1 and o2.hasSlice is not none %}
-        object_slice_2_low => {{ o2.sliceLow }}, 
-        object_slice_2_high => {{ o2.sliceHigh }}, 
-    {%- endif %}        
-    {%- if condition.nr_objects > 2 and o3.hasSlice is not none %}
-        object_slice_3_low => {{ o3.sliceLow }}, 
-        object_slice_3_high => {{ o3.sliceHigh }}, 
-    {%- endif %}        
-    {%- if condition.nr_objects > 3 and o4.hasSlice is not none %}
-        object_slice_4_low => {{ o4.sliceLow }}, 
-        object_slice_4_high => {{ o4.sliceHigh }},
-    {%- endif %}        
-    {%- if o1.operator == False %}
-        pt_ge_mode => {{ o1.operator }}, 
-    {%- endif %}        
-        obj_type => {{ o1.type }}_TYPE,
-        pt_thresholds => (X"{{ o1.threshold|X04 }}", X"{{ o2.threshold|X04 }}", X"{{ o3.threshold|X04 }}", X"{{ o4.threshold|X04 }}"),
-    {%- if o1.etaNrCuts > 0 or o2.etaNrCuts > 0 or o3.etaNrCuts > 0 or o4.etaNrCuts > 0 %}
-        nr_eta_windows => ({{ o1.etaNrCuts }}, {{ o2.etaNrCuts }}, {{ o3.etaNrCuts }}, {{ o4.etaNrCuts }}),
-        eta_w1_upper_limits => (X"{{ o1.etaW1UpperLimit|X04 }}", X"{{ o2.etaW1UpperLimit|X04 }}", X"{{ o3.etaW1UpperLimit|X04 }}", X"{{ o4.etaW1UpperLimit|X04 }}"), 
-        eta_w1_lower_limits => (X"{{ o1.etaW1LowerLimit|X04 }}", X"{{ o2.etaW1LowerLimit|X04 }}", X"{{ o3.etaW1LowerLimit|X04 }}", X"{{ o4.etaW1LowerLimit|X04 }}"),
-    {%- endif %}        
-    {%- if o1.etaNrCuts > 1 or o2.etaNrCuts > 1 or o3.etaNrCuts > 1 or o4.etaNrCuts > 1 %}
-        eta_w2_upper_limits => (X"{{ o1.etaW2UpperLimit|X04 }}", X"{{ o2.etaW2UpperLimit|X04 }}", X"{{ o3.etaW2UpperLimit|X04 }}", X"{{ o4.etaW2UpperLimit|X04 }}"), 
-        eta_w2_lower_limits => (X"{{ o1.etaW2LowerLimit|X04 }}", X"{{ o2.etaW2LowerLimit|X04 }}", X"{{ o3.etaW2LowerLimit|X04 }}", X"{{ o4.etaW2LowerLimit|X04 }}"),
-    {%- endif %}        
-    {%- if o1.etaNrCuts > 2 or o2.etaNrCuts > 2 or o3.etaNrCuts > 2 or o4.etaNrCuts > 2 %}
-        eta_w3_upper_limits => (X"{{ o1.etaW3UpperLimit|X04 }}", X"{{ o2.etaW3UpperLimit|X04 }}", X"{{ o3.etaW3UpperLimit|X04 }}", X"{{ o4.etaW3UpperLimit|X04 }}"), 
-        eta_w3_lower_limits => (X"{{ o1.etaW3LowerLimit|X04 }}", X"{{ o2.etaW3LowerLimit|X04 }}", X"{{ o3.etaW3LowerLimit|X04 }}", X"{{ o4.etaW3LowerLimit|X04 }}"),
-    {%- endif %}        
-    {%- if o1.etaNrCuts > 3 or o2.etaNrCuts > 3 or o3.etaNrCuts > 3 or o4.etaNrCuts > 3 %}
-        eta_w4_upper_limits => (X"{{ o1.etaW4UpperLimit|X04 }}", X"{{ o2.etaW4UpperLimit|X04 }}", X"{{ o3.etaW4UpperLimit|X04 }}", X"{{ o4.etaW4UpperLimit|X04 }}"), 
-        eta_w4_lower_limits => (X"{{ o1.etaW4LowerLimit|X04 }}", X"{{ o2.etaW4LowerLimit|X04 }}", X"{{ o3.etaW4LowerLimit|X04 }}", X"{{ o4.etaW4LowerLimit|X04 }}"),
-    {%- endif %}        
-    {%- if o1.etaNrCuts > 4 or o2.etaNrCuts > 4 or o3.etaNrCuts > 4 or o4.etaNrCuts > 4 %}
-        eta_w5_upper_limits => (X"{{ o1.etaW5UpperLimit|X04 }}", X"{{ o2.etaW5UpperLimit|X04 }}", X"{{ o3.etaW5UpperLimit|X04 }}", X"{{ o4.etaW5UpperLimit|X04 }}"), 
-        eta_w5_lower_limits => (X"{{ o1.etaW5LowerLimit|X04 }}", X"{{ o2.etaW5LowerLimit|X04 }}", X"{{ o3.etaW5LowerLimit|X04 }}", X"{{ o4.etaW5LowerLimit|X04 }}"),
-    {%- endif %}        
-    {%- if o1.phiFullRange  == 'false' or o2.phiFullRange  == 'false' or o3.phiFullRange  == 'false' or o4.phiFullRange  == 'false' %}
-        phi_full_range => ({{ o1.phiFullRange }}, {{ o2.phiFullRange }}, {{ o3.phiFullRange }}, {{ o4.phiFullRange }}), 
-        phi_w1_upper_limits => (X"{{ o1.phiW1UpperLimit|X04 }}", X"{{ o2.phiW1UpperLimit|X04 }}", X"{{ o3.phiW1UpperLimit|X04 }}", X"{{ o4.phiW1UpperLimit|X04 }}"), 
-        phi_w1_lower_limits => (X"{{ o1.phiW1LowerLimit|X04 }}", X"{{ o2.phiW1LowerLimit|X04 }}", X"{{ o3.phiW1LowerLimit|X04 }}", X"{{ o4.phiW1LowerLimit|X04 }}"),
-        {%- if o1.phiW2Ignore  == 'false' or o2.phiW2Ignore  == 'false' or o3.phiW2Ignore  == 'false' or o4.phiW2Ignore  == 'false' %}
-        phi_w2_ignore => ({{ o1.phiW2Ignore }}, {{ o2.phiW2Ignore }}, {{ o3.phiW2Ignore }}, {{ o4.phiW2Ignore }}),
-        phi_w2_upper_limits => (X"{{ o1.phiW2UpperLimit|X04 }}", X"{{ o2.phiW2UpperLimit|X04 }}", X"{{ o3.phiW2UpperLimit|X04 }}", X"{{ o4.phiW2UpperLimit|X04 }}"), 
-        phi_w2_lower_limits => (X"{{ o1.phiW2LowerLimit|X04 }}", X"{{ o2.phiW2LowerLimit|X04 }}", X"{{ o3.phiW2LowerLimit|X04 }}", X"{{ o4.phiW2LowerLimit|X04 }}"),
-        {%- endif %}        
-    {%- endif %}        
-    {%- if (o1.hasIsolation is not none) or (o2.hasIsolation is not none) or (o3.hasIsolation is not none) or (o4.hasIsolation is not none) %}
-        iso_luts => (X"{{ o1.isolationLUT|X01 }}", X"{{ o2.isolationLUT|X01 }}", X"{{ o3.isolationLUT|X01 }}", X"{{ o4.isolationLUT|X01 }}"),
-    {%- endif %}        
-    {%- if condition.hasTwoBodyPt is not none %}
-        twobody_pt_cut => true, 
-        pt_width => {{ o1.type|upper }}_PT_VECTOR_WIDTH, 
-        pt_sq_threshold_vector => X"{{ condition.twoBodyPt.threshold|X16 }}",
-        sin_cos_width => CALO_SIN_COS_VECTOR_WIDTH, 
-        pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o1.type|upper }}_SIN_COS_PRECISION,
-    {%- endif %}
-        nr_templates => {{ condition.nr_objects }}
-    )
-    port map(
+  {%- endblock entity %}
+  {%- block port %}
         lhc_clk, 
-        {{ o1.type|lower }}_bx_{{ o1.bx }},
+        {{ condition.objects[0].type|lower }}_bx_{{ condition.objects[0].bx }},
     {%- if condition.hasTwoBodyPt is not none %}
-         pt => {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, 
-         cos_phi_integer => {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, 
-         sin_phi_integer => {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }});
+         pt => {{ condition.objects[0].type|lower }}_pt_vector_bx_{{ condition.objects[0].bx }}, 
+         cos_phi_integer => {{ condition.objects[0].type|lower }}_cos_phi_bx_{{ condition.objects[0].bx }}, 
+         sin_phi_integer => {{ condition.objects[0].type|lower }}_sin_phi_bx_{{ condition.objects[0].bx }});
     {%- endif %}
         condition_o => {{ condition.vhdl_signal }}
-    );
+  {%- endblock port %}
 {%- endblock instantiate_calo_condition %}
 {# eof #}

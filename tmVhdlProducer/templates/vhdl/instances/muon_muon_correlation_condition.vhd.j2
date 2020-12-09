@@ -12,7 +12,7 @@
 {%- endblock generic_end %}
 {%- block port %}
         lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o2.type|lower }}_bx_{{ o2.bx }},
-    {%- if condition.chargeCorrelation != None %}
+    {%- if condition.chargeCorrelation is not none %}
         ls_charcorr_double_bx_{{ o1.bx }}_bx_{{ o2.bx }}, 
         os_charcorr_double_bx_{{ o1.bx }}_bx_{{ o2.bx }},
     {%- endif %}        

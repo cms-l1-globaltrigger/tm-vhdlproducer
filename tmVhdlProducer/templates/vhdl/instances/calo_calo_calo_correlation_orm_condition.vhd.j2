@@ -1,14 +1,14 @@
 {%- extends "instances/calo_correlation_conditions_base.tmpl" %}
-{%- set o1 = condition.objects[0] %}
-{%- set o2 = condition.objects[1] %}
-{%- if condition.nr_objects == 3 %}
-  {%- set o3 = condition.objects[2] %}
-{%- endif %}        
-{%- set nr_calo_obj = condition.nr_objects %}
-{%- block entity %}
+{%- block instantiate_calo_calo_calo_correlation_orm_condition %}
+  {%- set o1 = condition.objects[0] %}
+  {%- set o2 = condition.objects[1] %}
+  {%- if condition.nr_objects == 3 %}
+    {%- set o3 = condition.objects[2] %}
+  {%- endif %}        
+  {%- block entity %}
 {{ condition.vhdl_signal }}_i: entity work.calo_calo_calo_correlation_orm_condition
-{%- endblock entity %}
-{%- block generic_beg %}
+  {%- endblock entity %}
+  {%- block generic_beg %}
 -- correlations setting
     {%- if condition.deltaEtaOrm.enabled == 'true' %}
         deta_orm_cut => {{ condition.deltaEtaOrm.enabled }}, 
@@ -35,9 +35,10 @@
     {%- if condition.twoBodyPt.enabled == 'true' %}
         twobody_pt_cut => {{ condition.twoBodyPt.enabled }}, 
     {%- endif %}        
-        nr_calo1_objects => NR_{{ o1.type|upper }}_OBJECTS,
-{%- endblock generic_beg %}
-{%- block correlation_cuts %}
+  {%- endblock generic_beg %}
+  {%- block correlation_cuts %}
+    {%- set o1 = condition.objects[0] %}
+    {%- set o2 = condition.objects[1] %}
 -- correlation cuts
     {%- if condition.hasDeltaEtaOrm is not none %}
         diff_eta_orm_upper_limit_vector => X"{{ condition.deltaEtaOrm.upper|X08 }}", 
@@ -78,16 +79,21 @@
         sin_cos_width => CALO_SIN_COS_VECTOR_WIDTH, 
         pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o2.type|upper }}_SIN_COS_PRECISION,
     {%- endif %}        
-{%- endblock correlation_cuts %}
-{%- block generic_end %}
+  {%- endblock correlation_cuts %}
+  {%- block generic_end %}
 --
-{%- if condition.nr_objects == 3 %}
+    {%- if condition.nr_objects == 3 %}
         obj_2plus1 => true
-{%- else %}        
+    {%- else %}        
         obj_2plus1 => false
-{%- endif %}        
-{%- endblock generic_end %}
-{%- block port %}
+    {%- endif %}        
+  {%- endblock generic_end %}
+  {%- block port %}
+    {%- set o1 = condition.objects[0] %}
+    {%- set o2 = condition.objects[1] %}
+    {%- if condition.nr_objects == 3 %}
+      {%- set o3 = condition.objects[2] %}
+    {%- endif %}        
         lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o2.type|lower }}_bx_{{ o2.bx }}, {{ o3.type|lower }}_bx_{{ o3.bx }},
     {%- if condition.nr_objects == 3 %}
         diff_eta_orm => diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_eta_vector,        
@@ -113,5 +119,6 @@
         sin_phi_2_integer => {{ o2.type|lower }}_sin_phi_bx_{{ o2.bx }},
     {%- endif %}        
         condition_o => {{ condition.vhdl_signal }}
-{%- endblock port %}
+  {%- endblock port %}
+{%- endblock instantiate_calo_calo_calo_correlation_orm_condition %}
 {# eof #}

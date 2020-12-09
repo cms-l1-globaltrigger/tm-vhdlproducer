@@ -127,6 +127,11 @@ def parse_args():
         action='version',
         version="L1 Trigger Menu VHDL producer version {0}".format(__version__),
     )
+# Argument '--tme' used in output file '../versions/versions.txt' (for information in ugt firmware). 
+    parser.add_argument('--tme',
+        required=True,
+        help="TME version (for information in ugt firmware)[required]",
+    )
     return parser.parse_args()
 
 # -----------------------------------------------------------------------------
@@ -213,6 +218,15 @@ def main():
             newname = re.sub(r'(.+)\.([a-z]+)$', r'\1-d{}.\2'.format(args.dist), filename)
             logging.info("%s --> %s", filename, newname)
             os.rename(filename, newname)
+
+        # Write VHDL Producer and TME version to file '../versions/versions.txt'
+        logging.info("writing versions.txt")
+        filename = os.path.join(output_dir, 'versions', 'versions.txt')
+        print("versions path:", filename)
+        content = "tm-editor {0}\n%(prog)s {1}".format(args.tme,__version__)
+        os.makedirs(os.path.dirname(filename))
+        with open(filename, 'w') as fp:
+            fp.write(content)
 
     logging.info("done.")
 
