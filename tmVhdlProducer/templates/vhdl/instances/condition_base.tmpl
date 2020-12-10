@@ -9,17 +9,18 @@
   {%- block generic_beg %}
   {%- endblock generic_beg %}
   {%- for i in range(0,condition.nr_objects) %}
-    {%- if condition.nr_objects > i and condition.objects[i].hasSlice is not none %}
+    {%- if condition.nr_objects > i and condition.objects[i].hasSlice  %}
         object_slice_{{i+1}}_low => {{ condition.objects[i].sliceLow }}, 
         object_slice_{{i+1}}_high => {{ condition.objects[i].sliceHigh }}, 
     {%- endif %}        
   {%- endfor %}
-  {%- if condition.objects[0].operator == False %}
-        pt_ge_mode => {{ condition.objects[0].operator }}, 
+-- object cuts
+  {%- if not condition.objects[0].operator %}
+        pt_ge_mode => {{ condition.objects[0].operator|vhdl_bool }}, 
   {%- endif %}        
   {%- if condition.objects[0].is_calo_type %}        
         obj_type => {{ condition.objects[0].type }}_TYPE,
-  {%- endif %}        
+  {%- endif %}
         pt_thresholds => (X"{{ condition.objects[0].threshold|X04 }}", X"{{ condition.objects[1].threshold|X04 }}", X"{{ condition.objects[2].threshold|X04 }}", X"{{ condition.objects[3].threshold|X04 }}"),
   {%- set max_eta_cuts = [condition.objects[0].etaNrCuts, condition.objects[1].etaNrCuts, condition.objects[2].etaNrCuts, condition.objects[3].etaNrCuts]|max %}  
   {%- if o1.etaNrCuts > 0 or o2.etaNrCuts > 0 or o3.etaNrCuts > 0 or o4.etaNrCuts > 0 %}
@@ -42,33 +43,34 @@
         phi_w2_lower_limits => (X"{{ o1.phiW2LowerLimit|X04 }}", X"{{ o2.phiW2LowerLimit|X04 }}", X"{{ o3.phiW2LowerLimit|X04 }}", X"{{ o4.phiW2LowerLimit|X04 }}"),
   {%- endif %}     
   {%- if o1.is_muon_type %}
-    {%- if (o1.hasCharge is not none) or (o2.hasCharge is not none) or (o3.hasCharge is not none) or (o4.hasCharge is not none) %}
+    {%- if (o1.hasCharge) or (o2.hasCharge) or (o3.hasCharge) or (o4.hasCharge) %}
         requested_charges => ("{{ o1.charge }}", "{{ o2.charge }}", "{{ o3.charge }}", "{{ o4.charge }}"), 
     {%- endif %}        
-    {%- if (o1.hasQuality is not none) or (o2.hasQuality is not none) or (o3.hasQuality is not none) or (o4.hasQuality is not none) %}
+    {%- if (o1.hasQuality) or (o2.hasQuality) or (o3.hasQuality) or (o4.hasQuality) %}
         qual_luts => (X"{{ o1.qualityLUT|X04 }}", X"{{ o2.qualityLUT|X04 }}", X"{{ o3.qualityLUT|X04 }}", X"{{ o4.qualityLUT|X04 }}"), 
     {%- endif %}        
-    {%- if (o1.hasIsolation is not none) or (o2.hasIsolation is not none) or (o3.hasIsolation is not none) or (o4.hasIsolation is not none) %}
+    {%- if (o1.hasIsolation) or (o2.hasIsolation) or (o3.hasIsolation) or (o4.hasIsolation) %}
         iso_luts => (X"{{ o1.isolationLUT|X01 }}", X"{{ o2.isolationLUT|X01 }}", X"{{ o3.isolationLUT|X01 }}", X"{{ o4.isolationLUT|X01 }}"),
     {%- endif %}        
-    {%- if (o1.hasUpt is not none) or (o2.hasUpt is not none) or (o3.hasUpt is not none) or (o4.hasUpt is not none) %}
+    {%- if (o1.hasUpt) or (o2.hasUpt) or (o3.hasUpt) or (o4.hasUpt) %}
         upt_cuts => ({{ o1.hasUpt|vhdl_bool }}, {{ o2.hasUpt|vhdl_bool }}, {{ o3.hasUpt|vhdl_bool }}, {{ o4.hasUpt|vhdl_bool }}), 
         upt_upper_limits => (X"{{ o1.uptUpperLimit|X04 }}", X"{{ o2.uptUpperLimit|X04 }}", X"{{ o3.uptUpperLimit|X04 }}", X"{{ o4.uptUpperLimit|X04 }}"),
         upt_lower_limits => (X"{{ o1.uptLowerLimit|X04 }}", X"{{ o2.uptLowerLimit|X04 }}", X"{{ o3.uptLowerLimit|X04 }}", X"{{ o4.uptLowerLimit|X04 }}"), 
     {%- endif %}        
-    {%- if (o1.hasImpactParameter is not none) or (o2.hasImpactParameter is not none) or (o3.hasImpactParameter is not none) or (o4.hasImpactParameter is not none) %}
+    {%- if (o1.hasImpactParameter) or (o2.hasImpactParameter) or (o3.hasImpactParameter) or (o4.hasImpactParameter) %}
         ip_luts => (X"{{ o1.impactParameterLUT|X01 }}", X"{{ o2.impactParameterLUT|X01 }}", X"{{ o3.impactParameterLUT|X01 }}", X"{{ o4.impactParameterLUT|X01 }}"), 
     {%- endif %}        
-    {%- if condition.chargeCorrelation is not none %}
+    {%- if condition.chargeCorrelation  %}
         requested_charge_correlation => "{{ condition.chargeCorrelation }}",
     {%- endif %}        
   {%- elif o1.is_calo_type %}        
-    {%- if (o1.hasIsolation is not none) or (o2.hasIsolation is not none) or (o3.hasIsolation is not none) or (o4.hasIsolation is not none) %}
+    {%- if (o1.hasIsolation) or (o2.hasIsolation) or (o3.hasIsolation) or (o4.hasIsolation) %}
         iso_luts => (X"{{ o1.isolationLUT|X01 }}", X"{{ o2.isolationLUT|X01 }}", X"{{ o3.isolationLUT|X01 }}", X"{{ o4.isolationLUT|X01 }}"),
     {%- endif %}        
   {%- endif %} 
   {%- block correlation_cuts %}
-    {%- if condition.hasTwoBodyPt is not none %}
+    {%- if condition.hasTwoBodyPt %}
+-- correlation cuts
         twobody_pt_cut => true, 
         pt_width => {{ o1.type|upper }}_PT_VECTOR_WIDTH, 
         pt_sq_threshold_vector => X"{{ condition.twoBodyPt.threshold|X16 }}",
@@ -81,6 +83,7 @@
     {%- endif %}
   {%- endblock correlation_cuts %}
   {%- block generic_end %}
+--
         nr_templates => {{ condition.nr_objects }}
   {%- endblock generic_end %}
     )

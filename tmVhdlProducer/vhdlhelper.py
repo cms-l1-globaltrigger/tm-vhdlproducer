@@ -675,7 +675,7 @@ class CaloConditionHelper(ConditionHelper):
     def __init__(self, condition_handle):
         super().__init__(condition_handle)
         # Default attributes
-        self.hasTwoBodyPt = None
+        self.hasTwoBodyPt = False
         self.twoBodyPt = TwoBodyPtCutHelper(0)
         self.update(condition_handle)
 
@@ -683,7 +683,7 @@ class CaloConditionHelper(ConditionHelper):
         for cut_handle in condition_handle.cuts:
             if cut_handle.cut_type == tmEventSetup.TwoBodyPt:
                 self.twoBodyPt.update(cut_handle)
-                self.hasTwoBodyPt = vhdl_bool(True)
+                self.hasTwoBodyPt = True
 
 class MuonConditionHelper(ConditionHelper):
     """Muon condition template helper class.
@@ -706,7 +706,7 @@ class MuonConditionHelper(ConditionHelper):
         # Default attributes
         #self.chargeCorrelation = charge_correlation_encode('ig')
         self.chargeCorrelation = None
-        self.hasTwoBodyPt = None
+        self.hasTwoBodyPt = False
         self.twoBodyPt = TwoBodyPtCutHelper(0)
         self.update_cuts(condition_handle)
 
@@ -716,7 +716,7 @@ class MuonConditionHelper(ConditionHelper):
                 self.chargeCorrelation = charge_correlation_encode(cut_handle.data)
             elif cut_handle.cut_type == tmEventSetup.TwoBodyPt:
                 self.twoBodyPt.update(cut_handle)
-                self.hasTwoBodyPt = vhdl_bool(True)
+                self.hasTwoBodyPt = True
 
 class EsumsConditionHelper(ConditionHelper):
     """Esums condition template helper class."""
@@ -767,15 +767,15 @@ class CorrelationConditionHelper(ConditionHelper):
     def __init__(self, condition_handle):
         super().__init__(condition_handle)
         # Default attributes
-        self.hasDeltaEta = None
+        self.hasDeltaEta = False
         self.deltaEta = DeltaEtaCutHelper()
-        self.hasDeltaPhi = None
+        self.hasDeltaPhi = False
         self.deltaPhi = DeltaPhiCutHelper()
-        self.hasDeltaR = None
+        self.hasDeltaR = False
         self.deltaR = DeltaRCutHelper()
-        self.hasMass = None
+        self.hasMass = False
         self.mass = MassCutHelper()
-        self.hasTwoBodyPt = None
+        self.hasTwoBodyPt = False
         self.twoBodyPt = TwoBodyPtCutHelper()
         #self.chargeCorrelation = charge_correlation_encode('ig')
         self.chargeCorrelation = None
@@ -790,25 +790,25 @@ class CorrelationConditionHelper(ConditionHelper):
         for cut_handle in condition_handle.cuts:
             if cut_handle.cut_type == tmEventSetup.DeltaEta:
                 self.deltaEta.update(cut_handle)
-                self.hasDeltaEta = vhdl_bool(True)
+                self.hasDeltaEta = True
             elif cut_handle.cut_type == tmEventSetup.DeltaPhi:
                 self.deltaPhi.update(cut_handle)
-                self.hasDeltaPhi = vhdl_bool(True)
+                self.hasDeltaPhi = True
             elif cut_handle.cut_type == tmEventSetup.DeltaR:
                 self.deltaR.update(cut_handle)
-                self.hasDeltaR = vhdl_bool(True)
+                self.hasDeltaR = True
             elif cut_handle.cut_type == tmEventSetup.Mass:
                 self.mass.update(cut_handle)
-                self.hasMass = vhdl_bool(True)
+                self.hasMass = True
             elif cut_handle.cut_type == tmEventSetup.MassUpt:
                 self.mass.update(cut_handle)
-                self.hasMass = vhdl_bool(True)
+                self.hasMass = True
             elif cut_handle.cut_type == tmEventSetup.MassDeltaR:
                 self.mass.update(cut_handle)
-                self.hasMass = vhdl_bool(True)
+                self.hasMass = True
             elif cut_handle.cut_type == tmEventSetup.TwoBodyPt:
                 self.twoBodyPt.update(cut_handle)
-                self.hasTwoBodyPt = vhdl_bool(True)
+                self.hasTwoBodyPt = True
             elif cut_handle.cut_type == tmEventSetup.ChargeCorrelation:
                 self.chargeCorrelation = charge_correlation_encode(cut_handle.data)
 
@@ -882,21 +882,21 @@ class CorrelationConditionOvRmHelper(ConditionHelper):
     def __init__(self, condition_handle):
         super().__init__(condition_handle)
         # Default attributes
-        self.hasDeltaEtaOrm = None
+        self.hasDeltaEtaOrm = False
         self.deltaEtaOrm = DeltaEtaCutHelper()
-        self.hasDeltaPhiOrm = None
+        self.hasDeltaPhiOrm = False
         self.deltaPhiOrm = DeltaPhiCutHelper()
-        self.hasDeltaROrm = None
+        self.hasDeltaROrm = False
         self.deltaROrm = DeltaRCutHelper()
-        self.hasDeltaEta = None
+        self.hasDeltaEta = False
         self.deltaEta = DeltaEtaCutHelper()
-        self.hasDeltaPhi = None
+        self.hasDeltaPhi = False
         self.deltaPhi = DeltaPhiCutHelper()
-        self.hasDeltaR = None
+        self.hasDeltaR = False
         self.deltaR = DeltaRCutHelper()
-        self.hasMass = None
+        self.hasMass = False
         self.mass = MassCutHelper()
-        self.hasTwoBodyPt = None
+        self.hasTwoBodyPt = False
         self.twoBodyPt = TwoBodyPtCutHelper()
         #self.chargeCorrelation = charge_correlation_encode('ig')
         self.chargeCorrelation = None
@@ -911,30 +911,30 @@ class CorrelationConditionOvRmHelper(ConditionHelper):
         for cut_handle in condition_handle.cuts:
             if cut_handle.cut_type == tmEventSetup.DeltaEta:
                 self.deltaEta.update(cut_handle)
-                self.hasDeltaEta = vhdl_bool(True)
+                self.hasDeltaEta = True
             elif cut_handle.cut_type == tmEventSetup.DeltaPhi:
                 self.deltaPhi.update(cut_handle)
-                self.hasDeltaPhi = vhdl_bool(True)
+                self.hasDeltaPhi = True
             elif cut_handle.cut_type == tmEventSetup.DeltaR:
                 self.deltaR.update(cut_handle)
-                self.hasDeltaR = vhdl_bool(True)
+                self.hasDeltaR = True
             elif cut_handle.cut_type == tmEventSetup.Mass:
                 self.mass.update(cut_handle)
-                self.hasMass = vhdl_bool(True)
+                self.hasMass = True
             elif cut_handle.cut_type == tmEventSetup.TwoBodyPt:
                 self.twoBodyPt.update(cut_handle)
-                self.hasTwoBodyPt = vhdl_bool(True)
+                self.hasTwoBodyPt = True
             elif cut_handle.cut_type == tmEventSetup.ChargeCorrelation:
                 self.chargeCorrelation = charge_correlation_encode(cut_handle.data)
             elif cut_handle.cut_type == tmEventSetup.OvRmDeltaEta:
                 self.deltaEtaOrm.update(cut_handle)
-                self.hasDeltaEtaOrm = vhdl_bool(True)
+                self.hasDeltaEtaOrm = True
             elif cut_handle.cut_type == tmEventSetup.OvRmDeltaPhi:
                 self.deltaPhiOrm.update(cut_handle)
-                self.hasDeltaPhiOrm = vhdl_bool(True)
+                self.hasDeltaPhiOrm = True
             elif cut_handle.cut_type == tmEventSetup.OvRmDeltaR:
                 self.deltaROrm.update(cut_handle)
-                self.hasDeltaROrm = vhdl_bool(True)
+                self.hasDeltaROrm = True
 
         # Set mass cut type
         self.mass.deduceType(condition_handle)
@@ -961,13 +961,13 @@ class CaloConditionOvRmHelper(ConditionHelper):
     def __init__(self, condition_handle):
         super().__init__(condition_handle)
         # Defaults
-        self.hasDeltaEtaOrm = None
+        self.hasDeltaEtaOrm = False
         self.deltaEtaOrm = DeltaEtaCutHelper(0, 0)
-        self.hasDeltaPhiOrm = None
+        self.hasDeltaPhiOrm = False
         self.deltaPhiOrm = DeltaPhiCutHelper(0, 0)
-        self.hasDeltaROrm = None
+        self.hasDeltaROrm = False
         self.deltaROrm = DeltaRCutHelper(0, 0)
-        self.hasTwoBodyPt = None
+        self.hasTwoBodyPt = False
         self.twoBodyPt = TwoBodyPtCutHelper(0)
         self.update(condition_handle)
 
@@ -980,16 +980,16 @@ class CaloConditionOvRmHelper(ConditionHelper):
         for cut_handle in condition_handle.cuts:
             if cut_handle.cut_type == tmEventSetup.OvRmDeltaEta:
                 self.deltaEtaOrm.update(cut_handle)
-                self.hasDeltaEtaOrm = vhdl_bool(True)
+                self.hasDeltaEtaOrm = True
             elif cut_handle.cut_type == tmEventSetup.OvRmDeltaPhi:
                 self.deltaPhiOrm.update(cut_handle)
-                self.hasDeltaPhiOrm = vhdl_bool(True)
+                self.hasDeltaPhiOrm = True
             elif cut_handle.cut_type == tmEventSetup.OvRmDeltaR:
                 self.deltaROrm.update(cut_handle)
-                self.hasDeltaROrm = vhdl_bool(True)
+                self.hasDeltaROrm = True
             elif cut_handle.cut_type == tmEventSetup.TwoBodyPt:
                 self.twoBodyPt.update(cut_handle)
-                self.hasTwoBodyPt = vhdl_bool(True)
+                self.hasTwoBodyPt = True
 
 # -----------------------------------------------------------------------------
 #  Object helpers
@@ -1043,24 +1043,24 @@ class ObjectHelper(VhdlHelper):
         # common attributes
         self.name = 'UNDEFINED'
         self.type = 'UNDEFINED'
-        self.operator = False
+        self.operator = True
         self.bx = bx_encode(0)
         self.externalSignalName = 'UNDEFINED'
         self.externalChannelId = 0
         # common cuts
         self.threshold = 0
-        self.hasIsolation = None
+        self.hasIsolation = False
         self.isolationLUT = 0xf
-        self.hasQuality = None
+        self.hasQuality = False
         self.qualityLUT = 0xffff
-        self.hasCharge = None
+        self.hasCharge = False
         self.charge = charge_encode('ign')
         self.hasCount = False
         self.count = 0
-        self.hasUpt = None
+        self.hasUpt = False
         self.uptLowerLimit = 0
         self.uptUpperLimit = 0
-        self.hasImpactParameter = None
+        self.hasImpactParameter = False
         self.impactParameterLUT = 0xf
         # spatial cuts
         self.etaNrCuts = 0
@@ -1075,7 +1075,7 @@ class ObjectHelper(VhdlHelper):
         self.phiW2UpperLimit = 0
         #self.sliceLow = 0
         #self.sliceHigh = 0
-        self.hasSlice = None
+        self.hasSlice = False
         self.sliceLow = 0
         self.sliceHigh = 0
         # State of object
@@ -1085,7 +1085,7 @@ class ObjectHelper(VhdlHelper):
     def update(self, object_handle):
         self.name = object_handle.name
         self.type = ObjectTypes[object_handle.type]
-        self.operator = vhdl_bool(ComparisonOperator[object_handle.comparison_operator])
+        self.operator = ComparisonOperator[object_handle.comparison_operator]
         self.bx = bx_encode(object_handle.bx_offset)
         self.externalSignalName = object_handle.external_signal_name
         self.externalChannelId = object_handle.external_channel_id
@@ -1099,31 +1099,31 @@ class ObjectHelper(VhdlHelper):
                 self.threshold = cut_handle.minimum.index
             elif cut_handle.cut_type == tmEventSetup.Isolation:
                 self.isolationLUT = int(cut_handle.data)
-                self.hasIsolation = vhdl_bool(True)
+                self.hasIsolation = True
             elif cut_handle.cut_type == tmEventSetup.Eta:
                 etaCuts.append((cut_handle.minimum.index, cut_handle.maximum.index))
             elif cut_handle.cut_type == tmEventSetup.Phi:
                 phiCuts.append((cut_handle.minimum.index, cut_handle.maximum.index))
             elif cut_handle.cut_type == tmEventSetup.Quality:
                 self.qualityLUT = int(cut_handle.data)
-                self.hasQuality = vhdl_bool(True)
+                self.hasQuality = True
             elif cut_handle.cut_type == tmEventSetup.Charge:
                 self.charge = charge_encode(cut_handle.data)
-                self.hasCharge = vhdl_bool(True)
+                self.hasCharge = True
             if cut_handle.cut_type == tmEventSetup.Count:
                 self.count = cut_handle.minimum.index
                 self.hasCount = True
             elif cut_handle.cut_type == tmEventSetup.UnconstrainedPt:
                 self.uptLowerLimit = cut_handle.minimum.index
                 self.uptUpperLimit = cut_handle.maximum.index
-                self.hasUpt = vhdl_bool(True)
+                self.hasUpt = True
             elif cut_handle.cut_type == tmEventSetup.ImpactParameter:
                 self.impactParameterLUT = int(cut_handle.data)
-                self.hasImpactParameter = vhdl_bool(True)
+                self.hasImpactParameter = True
             if cut_handle.cut_type == tmEventSetup.Slice:
                 self.sliceLow  =  int(cut_handle.minimum.value) # float to int
                 self.sliceHigh =  int(cut_handle.maximum.value)
-                self.hasSlice = vhdl_bool(True)
+                self.hasSlice = True
         # setup eta windows
         if len(etaCuts) > 0:
             self.etaNrCuts = 1

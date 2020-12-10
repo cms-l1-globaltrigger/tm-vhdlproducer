@@ -18,6 +18,9 @@
 -- VHDL producer version
 -- v{{ menu.info.sw_version }}
 
+-- eventSetup version
+-- v{{ menu.info.version }}
+
 -- HB 2016-09-16: constants for algo_mapping_rop.
 type global_index_array is array (0 to NR_ALGOS-1) of integer;
 constant global_index: global_index_array := (

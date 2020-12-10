@@ -40,41 +40,41 @@
     {%- set o1 = condition.objects[0] %}
     {%- set o2 = condition.objects[1] %}
 -- correlation cuts
-    {%- if condition.hasDeltaEtaOrm is not none %}
+    {%- if condition.hasDeltaEtaOrm %}
         diff_eta_orm_upper_limit_vector => X"{{ condition.deltaEtaOrm.upper|X08 }}", 
         diff_eta_orm_lower_limit_vector => X"{{ condition.deltaEtaOrm.lower|X08 }}",
     {%- endif %}        
-    {%- if condition.hasDeltaPhiOrm is not none %}
+    {%- if condition.hasDeltaPhiOrm %}
         diff_phi_orm_upper_limit_vector => X"{{ condition.deltaPhiOrm.upper|X08 }}", 
         diff_phi_orm_lower_limit_vector => X"{{ condition.deltaPhiOrm.lower|X08 }}",
     {%- endif %}        
-    {%- if condition.hasDeltaROrm is not none %}
+    {%- if condition.hasDeltaROrm %}
         dr_orm_upper_limit_vector => X"{{ condition.deltaROrm.upper|X16 }}", 
         dr_orm_lower_limit_vector => X"{{ condition.deltaROrm.lower|X16 }}",
     {%- endif %}        
-    {%- if condition.hasDeltaEta is not none %}
+    {%- if condition.hasDeltaEta %}
         diff_eta_upper_limit_vector => X"{{ condition.deltaEta.upper|X08 }}", 
         diff_eta_lower_limit_vector => X"{{ condition.deltaEta.lower|X08 }}",
     {%- endif %}        
-    {%- if condition.hasDeltaPhi is not none %}
+    {%- if condition.hasDeltaPhi %}
         diff_phi_upper_limit_vector => X"{{ condition.deltaPhi.upper|X08 }}", 
         diff_phi_lower_limit_vector => X"{{ condition.deltaPhi.lower|X08 }}",
     {%- endif %}        
-    {%- if condition.hasDeltaR is not none %}
+    {%- if condition.hasDeltaR %}
         dr_upper_limit_vector => X"{{ condition.deltaR.upper|X16 }}", 
         dr_lower_limit_vector => X"{{ condition.deltaR.lower|X16 }}",
     {%- endif %}        
-    {%- if (condition.hasMass is not none) or (condition.hasTwoBodyPt is not none)  %}
+    {%- if (condition.hasMass) or (condition.hasTwoBodyPt)  %}
         pt1_width => {{ o1.type|upper }}_PT_VECTOR_WIDTH, 
         pt2_width => {{ o2.type|upper }}_PT_VECTOR_WIDTH, 
     {%- endif %}        
-    {%- if condition.hasMass is not none %}
+    {%- if condition.hasMass %}
         mass_upper_limit_vector => X"{{ condition.mass.upper|X16 }}",
         mass_lower_limit_vector => X"{{ condition.mass.lower|X16 }}",
         mass_cosh_cos_precision => {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_PRECISION, 
         cosh_cos_width => {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH,
     {%- endif %}        
-    {%- if condition.hasTwoBodyPt is not none %}
+    {%- if condition.hasTwoBodyPt %}
         pt_sq_threshold_vector => X"{{ condition.twoBodyPt.threshold|X16 }}", 
         sin_cos_width => CALO_SIN_COS_VECTOR_WIDTH, 
         pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o2.type|upper }}_SIN_COS_PRECISION,
@@ -104,15 +104,15 @@
     {%- endif %}        
         diff_eta => diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_eta_vector,        
         diff_phi => diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_vector,
-    {%- if (condition.hasMass is not none) or (condition.hasTwoBodyPt is not none) %}
+    {%- if (condition.hasMass) or (condition.hasTwoBodyPt) %}
         pt1 => {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, 
         pt2 => {{ o2.type|lower }}_pt_vector_bx_{{ o2.bx }},
     {%- endif %}        
-    {%- if condition.hasMass is not none %}
+    {%- if condition.hasMass %}
         cosh_deta => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector, 
         cos_dphi => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
     {%- endif %}        
-    {%- if condition.hasTwoBodyPt is not none %}
+    {%- if condition.hasTwoBodyPt %}
         cos_phi_1_integer => {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, 
         cos_phi_2_integer => {{ o2.type|lower }}_cos_phi_bx_{{ o2.bx }}, 
         sin_phi_1_integer => {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }}, 

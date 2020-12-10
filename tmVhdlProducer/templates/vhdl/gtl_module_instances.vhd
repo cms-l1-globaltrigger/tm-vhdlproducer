@@ -18,6 +18,9 @@
 -- VHDL producer version
 -- v{{ menu.info.sw_version }}
 
+-- eventSetup version
+-- v{{ menu.info.version }}
+
 -- External condition assignment
 {%- for condition in module.externalConditions %}
 {{ condition.vhdl_signal }} <= ext_cond_bx_{{ condition.objects[0].bx }}({{ condition.objects[0].externalChannelId }}); -- {{ condition.vhdl_signal }}

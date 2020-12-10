@@ -1,0 +1,62 @@
+
+        pt_thresholds_calo1 => (X"{{ thr1|X04 }}", X"{{ thr2|X04 }}", X"{{ thr3|X04 }}", X"{{ thr4|X04 }}"),
+  {%- set max_eta_cuts = [condition.objects[0].etaNrCuts, condition.objects[1].etaNrCuts, condition.objects[2].etaNrCuts, condition.objects[3].etaNrCuts]|max %}  
+  {%- if etaNrCuts1 > 0 or etaNrCuts2 > 0 or etaNrCuts3 > 0 or etaNrCuts4 > 0 %}
+        nr_eta_windows => ({{ etaNrCuts1 }}, {{ etaNrCuts2 }}, {{ etaNrCuts3}}, {{ etaNrCuts4 }}),
+  {%- endif %}        
+  {%- for i in range(0,max_eta_cuts) %}
+  {%- if etaNrCuts1 > i or etaNrCuts2 > i or etaNrCuts3 > i or etaNrCuts4 > i %}
+        eta_w{{i+1}}_upper_limits => (X"{{ etaUpperLimit1[i]|X04 }}", X"{{ etaUpperLimit2[i]|X04 }}", X"{{ etaUpperLimit3[i]|X04}}", X"{{ etaUpperLimit4[i]|X04 }}"), 
+        eta_w{{i+1}}_lower_limits => (X"{{ etaLowerLimit1[i]|X04 }}", X"{{ etaLowerLimit2[i]|X04 }}", X"{{ etaLowerLimit3[i]|X04 }}", X"{{ etaLowerLimit4[i]|X04 }}"),
+    {%- endif %}        
+  {%- endfor %}
+  {%- if phiNrCuts1 > 0 or phiNrCuts2 > 0 or phiNrCuts3 > 0 or phiNrCuts4 > 0 %}
+        phi_full_range_calo1 => ({{ phiFullRange1 }}, {{ phiFullRange2 }}, {{ phiFullRange3 }}, {{ phiFullRange4 }}), 
+        phi_w1_upper_limits_calo1 => (X"{{ phiW1UpperLimit1|X04 }}", X"{{ phiW1UpperLimit2|X04 }}", X"{{ phiW1UpperLimit3|X04 }}", X"{{ phiW1UpperLimit4|X04 }}"), 
+        phi_w1_lower_limits_calo1 => (X"{{ phiW1LowerLimit1|X04 }}", X"{{ phiW1LowerLimit2|X04 }}", X"{{ phiW1LowerLimit3|X04 }}", X"{{ phiW1LowerLimit4|X04 }}"),
+  {%- endif %}        
+  {%- if phiNrCuts1 > 1 or phiNrCuts2 > 1 or phiNrCuts3 > 1 or phiNrCuts4 > 1 %}
+        phi_w2_ignore_calo1 => ({{ phiW2Ignore1 }}, {{ phiW2Ignore2 }}, {{ phiW2Ignore3 }}, {{ phiW2Ignore4 }}), 
+        phi_w2_upper_limits_calo1 => (X"{{ phiW2UpperLimit1|X04 }}", X"{{ phiW2UpperLimit2|X04 }}", X"{{ phiW2UpperLimit3|X04 }}", X"{{ phiW2UpperLimit4|X04 }}"), 
+        phi_w2_lower_limits_calo1 => (X"{{ phiW2LowerLimit1|X04 }}", X"{{ phiW2LowerLimit2|X04 }}", X"{{ phiW2LowerLimit3|X04 }}", X"{{ phiW2LowerLimit4|X04 }}"),
+  {%- endif %}        
+  {%- if (o1.hasIsolation) or (o2.hasIsolation) or (o3.hasIsolation) or (o4.hasIsolation) %}
+        iso_luts => (X"{{ isolationLUT1|X01 }}", X"{{ isolationLUT2|X01 }}", X"{{ isolationLUT3|X01 }}", X"{{ isolationLUT4|X01 }}"),
+  {%- endif %} 
+  {%- if nr_requirements == 1 %}
+    {%- set orm_obj = condition.objects[1] %}
+  {%- elif nr_requirements == 2 %}
+    {%- set orm_obj = condition.objects[2] %}
+  {%- elif nr_requirements == 3 %}
+    {%- set orm_obj = condition.objects[3] %}
+  {%- elif nr_requirements == 4 %}
+    {%- set orm_obj = condition.objects[4] %}
+  {%- endif %}        
+-- orm object cuts
+  {%- if not orm_obj.operator %}
+        pt_ge_mode_calo2 => false, 
+  {%- endif %}        
+        obj_type_calo2 => {{ orm_obj.type|upper }}_TYPE,
+        pt_threshold_calo2 => X"{{ orm_obj.threshold|X04 }}",
+  {%- if orm_obj.etaNrCuts > 0 %}
+        nr_eta_windows_calo2 => {{ orm_obj.etaNrCuts }},
+  {%- endif %}        
+  {%- for j in range(0,(orm_obj.etaNrCuts)) %}
+    {%- if orm_obj.etaNrCuts > j %}
+        eta_w{{j+1}}_upper_limit_calo => X"{{ orm_obj.etaUpperLimit[j]|X04 }}", 
+        eta_w{{j+1}}_lower_limit_calo => X"{{ orm_obj.etaLowerLimit[j]|X04 }}",
+    {%- endif %}        
+  {%- endfor %}
+  {%- if orm_obj.phiFullRange  == 'false' %}
+        phi_full_range_calo2 => {{ orm_obj.phiFullRange }}, 
+        phi_w1_upper_limit_calo2 => X"{{ orm_obj.phiW1UpperLimit|X04 }}", 
+        phi_w1_lower_limit_calo2 => X"{{ orm_obj.phiW1LowerLimit|X04 }}",
+  {%- endif %}        
+  {%- if orm_obj.phiW2Ignore  == 'false' and orm_obj.phiFullRange  == 'false' %}
+        phi_w2_ignore_calo2 => {{ orm_obj.phiW2Ignore }}, 
+        phi_w2_upper_limit_calo2 => X"{{ orm_obj.phiW2UpperLimit|X04 }}", 
+        phi_w2_lower_limit_calo2 => X"{{ orm_obj.phiW2LowerLimit|X04 }}",
+  {%- endif %}        
+  {%- if orm_obj.hasIsolation %}
+        iso_lut_calo2 => X"{{ orm_obj.isolationLUT|X01 }}",
+  {%- endif %}        
