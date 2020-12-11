@@ -1,4 +1,4 @@
-{%- block correlation_cuts %}
+{%- block calo_correlation_cuts %}
 -- correlation cuts
       {%- set o1 = condition.objects[0] %}
       {%- set o2 = condition.objects[1] %}
@@ -28,8 +28,6 @@
         pt2_width => {{ o2.type|upper }}_PT_VECTOR_WIDTH, 
     {%- endif %}        
     {%- if (condition.hasMass) and (condition.mass.type == condition.mass.InvariantMassDeltaRType) %}
-        mass_cosh_cos_precision => {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_PRECISION, 
-        cosh_cos_width => {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH,
         mass_div_dr_vector_width => {{ o1.type|upper }}_{{ o2.type|upper }}_MASS_DIV_DR_VECTOR_WIDTH,
         mass_div_dr_threshold => X"{{ condition.mass.lower|X21 }}",
     {%- else %}
@@ -61,5 +59,5 @@
         pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o2.type|upper }}_SIN_COS_PRECISION,
         {%- endif %}        
     {%- endif %}        
-{%- endblock correlation_cuts %}
+{%- endblock calo_correlation_cuts %}
 

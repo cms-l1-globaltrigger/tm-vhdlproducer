@@ -30,7 +30,7 @@
     {%- include "instances/object_cuts_muon_single.vhd" %}
   {%- endif %}
   {%- block correlation_cuts %}
-    {%- include "instances/correlation_cuts.vhd" %}
+    {%- include "instances/calo_correlation_cuts.vhd" %}
   {%- endblock correlation_cuts %}
   {%- block generic_end %}
   {%- endblock generic_end %}

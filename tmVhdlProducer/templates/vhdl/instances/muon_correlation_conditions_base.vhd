@@ -23,7 +23,7 @@
 -- charge correlation cuts
         requested_charge_correlation => "{{ condition.chargeCorrelation }}",     
     {%- endif %}        
-    {%- include "instances/correlation_cuts.vhd" %}
+    {%- include "instances/muon_correlation_cuts.vhd" %}
   {%- endblock correlation_cuts %}
   {%- block generic_end %}
   {%- endblock generic_end %}
