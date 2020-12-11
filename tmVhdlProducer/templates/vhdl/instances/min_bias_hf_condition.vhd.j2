@@ -2,8 +2,8 @@
   {%- set o = condition.objects[0] %}
 {{ condition.vhdl_signal }}_i: entity work.min_bias_hf_conditions
     generic map(
-    {%- if o.operator == 'false' %}
-        et_ge_mode => {{ o.operator }}, 
+    {%- if not o.operator %}
+        et_ge_mode => {{ o.operator|vhdl_bool }}, 
     {%- endif %}        
         obj_type => {{ o.type|upper }}_TYPE, 
         count_threshold => X"{{ o.count|X01 }}"

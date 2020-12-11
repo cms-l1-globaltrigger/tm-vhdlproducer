@@ -9,21 +9,21 @@
     {%- set o = condition.objects[i] %}
     {%- if nr_muon_obj > 1 %}
 -- object {{i+1}} cuts
-      {%- include  "instances/object_cuts_muons.tmpl" %}
+      {%- include  "instances/object_cuts_muons.vhd" %}
     {%- else %}        
-      {%- include  "instances/object_cuts_muon_singel.tmpl" %}
+      {%- include  "instances/object_cuts_muon_singel.vhd" %}
     {%- endif %}        
   {%- endfor %}
   {%- if condition.objects[1].is_esums_type %}
     {%- set o2 = condition.objects[1] %}
-    {%- include  "instances/object_cuts_esums.tmpl" %}
+    {%- include  "instances/object_cuts_esums.vhd" %}
   {%- endif %}        
   {%- block correlation_cuts %}
     {%- if condition.chargeCorrelation is not none %}
 -- charge correlation cuts
         requested_charge_correlation => "{{ condition.chargeCorrelation }}",     
     {%- endif %}        
-    {%- include "instances/correlation_cuts.tmpl" %}
+    {%- include "instances/correlation_cuts.vhd" %}
   {%- endblock correlation_cuts %}
   {%- block generic_end %}
   {%- endblock generic_end %}

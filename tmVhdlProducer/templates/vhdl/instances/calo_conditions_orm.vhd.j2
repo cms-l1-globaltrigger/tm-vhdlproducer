@@ -5,150 +5,77 @@
   {%- set o4 = condition.objects[3] %}
   {%- set o5 = condition.objects[4] %}
   {%- set nr_requirements = condition.nr_objects-1 %}
-  {%- set thr1 = o1.threshold %}
-  {%- set etaNrCuts1 = o1.etaNrCuts %}
-  {%- set phiNrCuts1 = o1.phiNrCuts %}
-  {%- set etaUpperLimit1 = o1.etaUpperLimit %}
-  {%- set etaLowerLimit1 = o1.etaULowerLimit %}
-  {%- set phiFullRange1 = o1.phiFullRange %}
-  {%- set phiW2Ignore1 = o1.phiW2Ignore %}
-  {%- set phiUpperLimit1 = o1.phiUpperLimit %}
-  {%- set phiLowerLimit1 = o1.phiULowerLimit %}
-  {%- set isolationLUT1 = o1.isolationLUT %}
-  {%- set thr2 = o2.threshold %}
-  {%- set etaNrCuts2 = o2.etaNrCuts %}
-  {%- set phiNrCuts2 = o2.phiNrCuts %}
-  {%- set etaUpperLimit2 = o2.etaUpperLimit %}
-  {%- set etaLowerLimit2 = o2.etaULowerLimit %}
-  {%- set phiFullRange2 = o2.phiFullRange %}
-  {%- set phiW2Ignore2 = o2.phiW2Ignore %}
-  {%- set phiUpperLimit2 = o2.phiUpperLimit %}
-  {%- set phiLowerLimit2 = o2.phiULowerLimit %}
-  {%- set isolationLUT2 = o2.isolationLUT %}
-  {%- set thr3 = o3.threshold %}
-  {%- set etaNrCuts3 = o3.etaNrCuts %}
-  {%- set phiNrCuts3 = o3.phiNrCuts %}
-  {%- set etaUpperLimit3 = o3.etaUpperLimit %}
-  {%- set etaLowerLimit3 = o3.etaULowerLimit %}
-  {%- set phiFullRange3 = o3.phiFullRange %}
-  {%- set phiW2Ignore3 = o3.phiW2Ignore %}
-  {%- set phiUpperLimit3 = o3.phiUpperLimit %}
-  {%- set phiLowerLimit3 = o3.phiULowerLimit %}
-  {%- set isolationLUT3 = o3.isolationLUT %}
-  {%- set thr4 = o4.threshold %}
-  {%- set etaNrCuts4 = o4.etaNrCuts %}
-  {%- set phiNrCuts4 = o4.phiNrCuts %}
-  {%- set etaUpperLimit4 = o4.etaUpperLimit %}
-  {%- set etaLowerLimit4 = o4.etaULowerLimit %}
-  {%- set phiFullRange4 = o4.phiFullRange %}
-  {%- set phiW2Ignore4 = o4.phiW2Ignore %}
-  {%- set phiUpperLimit4 = o4.phiUpperLimit %}
-  {%- set phiLowerLimit4 = o4.phiULowerLimit %}
-  {%- set isolationLUT4 = o4.isolationLUT %}
+  {%- set thresholdList = [o1.threshold, o2.threshold, o3.threshold, o4.threshold] %}
+  {%- set etaNrCutsList = [o1.etaNrCuts, o2.etaNrCuts, o3.etaNrCuts, o4.etaNrCuts] %}
+  {%- set phiNrCutsList = [o1.phiNrCuts, o2.phiNrCuts, o3.phiNrCuts, o4.phiNrCuts] %}
+  {%- set etaUpperLimitList = [o1.etaUpperLimit, o2.etaUpperLimit, o3.etaUpperLimits, o4.etaUpperLimit] %}
+  {%- set etaLowerLimitList = [o1.etaLowerLimit, o2.etaLowerLimit, o3.etaLowerLimit, o4.etaLowerLimit] %}
+  {%- set phiFullRangeList = [o1.phiFullRange, o2.phiFullRange, o3.phiFullRange, o4.phiFullRange] %}
+  {%- set phiW2IgnoreList = [o1.phiW2Ignore, o2.phiW2Ignore, o3.phiW2Ignore, o4.phiW2Ignore] %}
+  {%- set phiUpperLimitList = [o1.phiUpperLimit, o2.phiUpperLimit, o3.phiUpperLimits, o4.phiUpperLimit] %}
+  {%- set phiLowerLimitList = [o1.phiLowerLimit, o2.phiLowerLimit, o3.phiLowerLimit, o4.phiLowerLimit] %}
+  {%- set hasIsolationList = [o1.hasIsolation, o2.hasIsolation, o3.hasIsolation, o4.hasIsolation] %}
+  {%- set isolationLUTList = [o1.isolationLUT, o2.isolationLUT, o3.isolationLUT, o4.isolationLUT] %}
 {{ condition.vhdl_signal }}_i: entity work.calo_conditions_orm
     generic map(
-    {%- if condition.hasDeltaEtaOrm %}
+  {%- if condition.hasDeltaEtaOrm %}
         diff_eta_orm_upper_limit_vector => X"{{ condition.deltaEtaOrm.upper|X08 }}", 
         diff_eta_orm_lower_limit_vector => X"{{ condition.deltaEtaOrm.lower|X08 }}",
-    {%- endif %}        
-    {%- if condition.hasDeltaPhiOrm %}
+  {%- endif %}        
+  {%- if condition.hasDeltaPhiOrm %}
         diff_phi_orm_upper_limit_vector => X"{{ condition.deltaPhiOrm.upper|X08 }}", 
         diff_phi_orm_lower_limit_vector => X"{{ condition.deltaPhiOrm.lower|X08 }}",
-    {%- endif %}        
-    {%- if condition.hasDeltaROrm %}
+  {%- endif %}        
+  {%- if condition.hasDeltaROrm %}
         dr_orm_upper_limit_vector => X"{{ condition.deltaROrm.upper|X16 }}", 
         dr_orm_lower_limit_vector => X"{{ condition.deltaROrm.lower|X16 }}",
-    {%- endif %}        
-    {%- if condition.hasDeltaEtaOrm %}
+  {%- endif %}        
+  {%- if condition.hasDeltaEtaOrm %}
         deta_orm_cut => {{ condition.deltaEtaOrm.enabled }}, 
-    {%- endif %}        
-    {%- if condition.hasDeltaPhiOrm %}
+  {%- endif %}        
+  {%- if condition.hasDeltaPhiOrm %}
         dphi_orm_cut => {{ condition.deltaPhiOrm.enabled }}, 
-    {%- endif %}        
-    {%- if condition.hasDeltaROrm %}
+  {%- endif %}        
+  {%- if condition.hasDeltaROrm %}
         dr_orm_cut => {{ condition.deltaROrm.enabled }}, 
-    {%- endif %}        
-  {%- for i in range(0,nr_requirements) %}
-    {%- set o = condition.objects[i+1] %}
+  {%- endif %}        
+  {%- for i in range(1,nr_requirements) %}
+    {%- set o = condition.objects[i] %}
     {%- if nr_requirements > i and o.hasSlice %}
-        object_slice_{{i+1}}_low => {{ o.sliceLow }}, 
-        object_slice_{{i+1}}_high => {{ o.sliceHigh }}, 
+        object_slice_{{i}}_low => {{ o.sliceLow }}, 
+        object_slice_{{i}}_high => {{ o.sliceHigh }}, 
     {%- endif %}        
   {%- endfor %}        
 -- object cuts
-    {%- if not o1.operator %}
+  {%- if not o1.operator %}
         pt_ge_mode_calo1 => {{ o1.operator|vhdl_bool }}, 
-    {%- endif %}        
-        obj_type_calo1 => {{ o1.type }}_TYPE,
-  {%- if nr_requirements == 4 %}
-    {% include "instances/object_cuts_calo_orm.tmpl" %}
-  {%- elif nr_requirements == 3 %}
-    {%- set thr4 = 0 %}
-    {%- set etaNrCuts4 = 0 %}
-    {%- set phiNrCuts4 = 0 %}
-    {%- set etaUpperLimit4 = 0 %}
-    {%- set etaLowerLimit4 = 0 %}
-    {%- set phiFullRange4 = true %}
-    {%- set phiW2Ignore4 = true %}
-    {%- set phiUpperLimit4 = 0 %}
-    {%- set phiLowerLimit4 = 0 %}
-    {%- set isolationLUT4 = 15 %}
-    {%- include "instances/object_cuts_calo_orm.tmpl" %}
-  {%- elif nr_requirements == 2 %}
-    {%- set thr3 = 0 %}
-    {%- set etaNrCuts3 = 0 %}
-    {%- set phiNrCuts3 = 0 %}
-    {%- set etaUpperLimit3 = 0 %}
-    {%- set etaLowerLimit3 = 0 %}
-    {%- set phiFullRange3 = true %}
-    {%- set phiW2Ignore3 = true %}
-    {%- set phiUpperLimit3 = 0 %}
-    {%- set phiLowerLimit3 = 0 %}
-    {%- set isolationLUT3 = 15 %}
-    {%- set thr4 = 0 %}
-    {%- set etaNrCuts4 = 0 %}
-    {%- set phiNrCuts4 = 0 %}
-    {%- set etaUpperLimit4 = 0 %}
-    {%- set etaLowerLimit4 = 0 %}
-    {%- set phiFullRange4 = true %}
-    {%- set phiW2Ignore4 = true %}
-    {%- set phiUpperLimit4 = 0 %}
-    {%- set phiLowerLimit4 = 0 %}
-    {%- set isolationLUT4 = 15 %}
-    {%- include "instances/object_cuts_calo_orm.tmpl" %}
-  {%- elif nr_requirements == 1 %}
-    {%- set thr2 = 0 %}
-    {%- set etaNrCuts2 = 0 %}
-    {%- set phiNrCuts2 = 0 %}
-    {%- set etaUpperLimit2 = 0 %}
-    {%- set etaLowerLimit2 = 0 %}
-    {%- set phiFullRange2 = true %}
-    {%- set phiW2Ignore2 = true %}
-    {%- set phiUpperLimit2 = 0 %}
-    {%- set phiLowerLimit2 = 0 %}
-    {%- set isolationLUT2 = 15 %}
-    {%- set thr3 = 0 %}
-    {%- set etaNrCuts3 = 0 %}
-    {%- set phiNrCuts3 = 0 %}
-    {%- set etaUpperLimit3 = 0 %}
-    {%- set etaLowerLimit3 = 0 %}
-    {%- set phiFullRange3 = true %}
-    {%- set phiW2Ignore3 = true %}
-    {%- set phiUpperLimit3 = 0 %}
-    {%- set phiLowerLimit3 = 0 %}
-    {%- set isolationLUT3 = 15 %}
-    {%- set thr4 = 0 %}
-    {%- set etaNrCuts4 = 0 %}
-    {%- set phiNrCuts4 = 0 %}
-    {%- set etaUpperLimit4 = 0 %}
-    {%- set etaLowerLimit4 = 0 %}
-    {%- set phiFullRange4 = true %}
-    {%- set phiW2Ignore4 = true %}
-    {%- set phiUpperLimit4 = 0 %}
-    {%- set phiLowerLimit4 = 0 %}
-    {%- set isolationLUT4 = 15 %}
-    {%- include "instances/object_cuts_calo_orm.tmpl" %}
   {%- endif %}        
+        obj_type_calo1 => {{ o1.type }}_TYPE,
+  {%- for i in range(nr_requirements,condition.ReqObjects-1)|reverse %}
+    {%- set temp = thresholdList.append(0) %}
+    {%- set temp = thresholdList.pop(i) %}
+    {%- set temp = etaNrCutsList.append(0) %}
+    {%- set temp = etaNrCutsList.pop(i) %}
+    {%- set temp = phiNrCutsList.append(0) %}
+    {%- set temp = phiNrCutsList.pop(i) %}
+    {%- set temp = etaUpperLimitList.append(0) %}
+    {%- set temp = etaUpperLimitList.pop(i) %}
+    {%- set temp = etaLowerLimitList.append(0) %}
+    {%- set temp = etaLowerLimitList.pop(i) %}
+    {%- set temp = phiFullRangeList.append(0) %}
+    {%- set temp = phiFullRangeList.pop(i) %}
+    {%- set temp = phiW2IgnoreList.append(0) %}
+    {%- set temp = phiW2IgnoreList.pop(i) %}
+    {%- set temp = phiUpperLimitList.append(0) %}
+    {%- set temp = phiUpperLimitList.pop(i) %}
+    {%- set temp = phiLowerLimitList.append(0) %}
+    {%- set temp = phiLowerLimitList.pop(i) %}
+    {%- set temp = hasIsolationList.append(0) %}
+    {%- set temp = hasIsolationList.pop(i) %}
+    {%- set temp = isolationLUTList.append(0) %}
+    {%- set temp = isolationLUTList.pop(i) %}
+  {%- endfor %}        
+  {%- include "instances/object_cuts_calo_orm.vhd" %}
 -- correlation cuts
   {%- if condition.hasDeltaEtaOrm %}
         diff_eta_orm_upper_limit_vector => X"{{ condition.deltaEtaOrm.upper|X08 }}", 
@@ -169,6 +96,7 @@
         sin_cos_width => CALO_SIN_COS_VECTOR_WIDTH, 
         pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o1.type|upper }}_SIN_COS_PRECISION,
   {%- endif %}
+--
         nr_calo1_objects => NR_{{ o1.type|upper }}_OBJECTS,
   {%- if nr_requirements == 1 %}
         nr_calo2_objects => NR_{{ o2.type|upper }}_OBJECTS,

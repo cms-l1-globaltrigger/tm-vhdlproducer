@@ -2,8 +2,8 @@
   {%- set o = condition.objects[0] %}
 {{ condition.vhdl_signal }}_i: entity work.towercount_condition
     generic map(
-    {%- if o.operator == 'false' %}
-        et_ge_mode => {{ o.operator }}, 
+    {%- if not o.operator %}
+        et_ge_mode => {{ o.operator|vhdl_bool }}, 
     {%- endif %}        
         count_threshold => X"{{ o.count|X04 }}"
     )

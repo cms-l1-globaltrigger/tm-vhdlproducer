@@ -1,3 +1,4 @@
+{%- block correlation_cuts %}
 -- correlation cuts
       {%- set o1 = condition.objects[0] %}
       {%- set o2 = condition.objects[1] %}
@@ -60,4 +61,5 @@
         pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o2.type|upper }}_SIN_COS_PRECISION,
         {%- endif %}        
     {%- endif %}        
+{%- endblock correlation_cuts %}
 

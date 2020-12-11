@@ -1,4 +1,4 @@
-{%- extends "instances/calo_correlation_conditions_base.tmpl" %}
+{%- extends "instances/calo_correlation_conditions_base.vhd" %}
 {%- block instantiate_calo_calo_calo_correlation_orm_condition %}
   {%- set o1 = condition.objects[0] %}
   {%- set o2 = condition.objects[1] %}
@@ -9,7 +9,7 @@
 {{ condition.vhdl_signal }}_i: entity work.calo_calo_calo_correlation_orm_condition
   {%- endblock entity %}
   {%- block generic_beg %}
--- correlations setting
+-- correlation cuts
     {%- if condition.deltaEtaOrm.enabled == 'true' %}
         deta_orm_cut => {{ condition.deltaEtaOrm.enabled }}, 
     {%- endif %}        
