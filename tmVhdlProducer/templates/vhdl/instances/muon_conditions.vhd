@@ -1,5 +1,5 @@
-{%- extends "instances/condition_base.vhd" %}
-{%- block instantiate_muon_condition %}
+{%- extends "instances/comb_conditions_base.vhd" %}
+{%- block instantiate_muon_conditions %}
 {%- block entity %}
 {{ condition.vhdl_signal }}_i: entity work.muon_conditions
 {%- endblock entity %}
@@ -28,5 +28,5 @@
     {%- endif %}
         condition_o => {{ condition.vhdl_signal }}
 {%- endblock port %}
-{%- endblock instantiate_muon_condition %}
+{%- endblock instantiate_muon_conditions %}
 {# eof #}

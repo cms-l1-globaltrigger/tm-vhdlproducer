@@ -81,7 +81,7 @@
     {%- endif %}        
   {%- endblock correlation_cuts %}
   {%- block generic_end %}
---
+-- selector one or two objects with orm
     {%- if condition.nr_objects == 3 %}
         obj_2plus1 => true
     {%- else %}        

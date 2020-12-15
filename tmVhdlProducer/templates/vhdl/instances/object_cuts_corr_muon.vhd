@@ -1,4 +1,4 @@
-{%- block object_cuts_muon_single %}
+{%- block object_cuts_corr_muon %}
 -- muon obj cuts
   {%- if o2.hasSlice %}
         muon_object_low => {{ o2.sliceLow }}, 
@@ -44,5 +44,5 @@
   {%- if o2.hasImpactParameter %}
         ip_lut_muon => X"{{ o2.impactParameterLUT|X01 }}",
   {%- endif %}
-{%- endblock object_cuts_muon_single %}
+{%- endblock object_cuts_corr_muon %}
 

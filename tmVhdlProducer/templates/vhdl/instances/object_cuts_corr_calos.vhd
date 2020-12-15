@@ -1,4 +1,4 @@
-{%- block object_cuts_calos %}
+{%- block object_cuts_corr_calos %}
   {%- if o.hasSlice %}
         calo{{i+1}}_object_low => {{ o.sliceLow }}, 
         calo{{i+1}}_object_high => {{ o.sliceHigh }}, 
@@ -30,5 +30,5 @@
   {%- if o.hasIsolation %}
         iso_lut_calo{{i+1}} => X"{{ o.isolationLUT|X01 }}",
   {%- endif %}
-{%- endblock object_cuts_calos %}
+{%- endblock object_cuts_corr_calos %}
 

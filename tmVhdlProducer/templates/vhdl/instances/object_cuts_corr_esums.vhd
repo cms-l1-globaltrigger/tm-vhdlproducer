@@ -1,4 +1,4 @@
-{%- block object_cuts_esums %}
+{%- block object_cuts_corr_esums %}
 -- esums obj cuts
   {%- if not o2.operator %}
         et_ge_mode_esums => {{ o2.operator|vhdl_bool }}, 
@@ -15,5 +15,5 @@
         phi_w2_upper_limit_esums => X"{{ o2.phiW2UpperLimit|X04 }}", 
         phi_w2_lower_limit_esums => X"{{ o2.phiW2LowerLimit|X04 }}",
   {%- endif %}        
-{%- endblock object_cuts_esums %}
+{%- endblock object_cuts_corr_esums %}
 
