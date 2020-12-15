@@ -1,16 +1,15 @@
-{%- extends "instances/muon_correlation_conditions_base.vhd" %}
-{%- set o1 = condition.objects[0] %}
-{%- set o2 = condition.objects[1] %}
-{%- set nr_muon_obj = condition.nr_objects %}
+{%- extends "instances/correlation_conditions_base.vhd" %}
 {%- block instantiate_muon_muon_correlation_condition %}
-{%- block entity %}
+  {%- block entity %}
 {{ condition.vhdl_signal }}_i: entity work.muon_muon_correlation_condition
-{%- endblock entity %}
-{%- block generic_end %}
+  {%- endblock entity %}
+  {%- block generic_end %}
 -- selector same/different bunch crossings
         same_bx => {{ condition.objectsInSameBx }}
-{%- endblock generic_end %}
-{%- block port %}
+  {%- endblock generic_end %}
+  {%- block port %}
+    {%- set o1 = condition.objects[0] %}
+    {%- set o2 = condition.objects[1] %}
         lhc_clk, {{ o1.type|lower }}_bx_{{ o1.bx }}, {{ o2.type|lower }}_bx_{{ o2.bx }},
     {%- if condition.chargeCorrelation is not none %}
         ls_charcorr_double_bx_{{ o1.bx }}_bx_{{ o2.bx }}, 
@@ -41,6 +40,6 @@
         {%- endif %}        
     {%- endif %}
         condition_o => {{ condition.vhdl_signal }}
-{%- endblock port %}
+  {%- endblock port %}
 {%- endblock instantiate_muon_muon_correlation_condition %}
 {# eof #}

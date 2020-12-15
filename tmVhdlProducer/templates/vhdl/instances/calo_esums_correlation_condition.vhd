@@ -1,4 +1,4 @@
-{%- extends "instances/calo_correlation_conditions_base.vhd" %}
+{%- extends "instances/correlation_conditions_base.vhd" %}
 {%- set o1 = condition.objects[0] %}
 {%- set o2 = condition.objects[1] %}
 {%- set nr_calo_obj = 1 %}

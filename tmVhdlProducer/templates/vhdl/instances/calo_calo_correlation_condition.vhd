@@ -1,8 +1,22 @@
-{%- extends "instances/calo_correlation_conditions_base.vhd" %}
+{%- extends "instances/correlation_conditions_base.vhd" %}
 {%- block instantiate_calo_calo_correlation_condition %}
   {%- block entity %}
 {{ condition.vhdl_signal }}_i: entity work.calo_calo_correlation_condition
   {%- endblock entity %}
+  {%- block generic_beg %}
+    {%- if condition.objects[1].is_calo_type %}
+      {%- set nr_objects = condition.nr_objects %}
+    {%- else %}        
+      {%- set nr_objects = 1 %}
+    {%- endif %}        
+    {%- for i in range(0,nr_objects) %}
+      {%- set o = condition.objects[i] %}
+      {%- if condition.objects[1].is_calo_type %}
+        nr_obj{{i+1}} => NR_{{ o.type|upper }}_OBJECTS,       
+        type_obj{{i+1}} => {{ o.type|upper }}_TYPE,       
+      {%- endif %}        
+    {%- endfor %}
+  {%- endblock generic_beg %}
   {%- block generic_end %}
 -- selector same/different bunch crossings
         same_bx => {{ condition.objectsInSameBx }}
