@@ -16,18 +16,18 @@
       {%- if i < 2 %}
         nr_calo{{i+1}}_objects => NR_{{ o.type|upper }}_OBJECTS,       
       {%- endif %}        
-      {%- include "instances/object_cuts_calos.vhd" %}
+      {%- include "instances/object_cuts_corr_calos.vhd" %}
     {%- else %}        
-      {%- include "instances/object_cuts_calo_single.vhd" %}
+      {%- include "instances/object_cuts_corr_calo.vhd" %}
     {%- endif %}        
   {%- endfor %}
   {%- if condition.objects[1].is_esums_type %}
     {%- set o2 = condition.objects[1] %}
-    {%- include "instances/object_cuts_esums.vhd" %}
+    {%- include "instances/object_cuts_corr_esums.vhd" %}
   {%- endif %}        
   {%- if condition.objects[1].is_muon_type %}
     {%- set o2 = condition.objects[1] %}
-    {%- include "instances/object_cuts_muon_single.vhd" %}
+    {%- include "instances/object_cuts_corr_muon.vhd" %}
   {%- endif %}
   {%- block correlation_cuts %}
     {%- include "instances/calo_correlation_cuts.vhd" %}

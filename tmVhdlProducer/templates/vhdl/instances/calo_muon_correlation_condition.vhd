@@ -64,7 +64,7 @@
     {%- endif %}        
 {%- endblock correlation_cuts %}
 {%- block generic_end %}
---
+-- number of calo objects
         nr_calo_objects => NR_{{ o1.type|upper }}_OBJECTS
 {%- endblock generic_end %}
 {%- block port %}
