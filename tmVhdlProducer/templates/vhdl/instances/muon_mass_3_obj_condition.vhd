@@ -8,7 +8,7 @@
 {%- endblock entity %}
 {%- block correlation_cuts %}
 -- correlation cuts
-    {%- if condition.chargeCorrelation is not none %}
+    {%- if condition.chargeCorrelation %}
         requested_charge_correlation => "{{ condition.chargeCorrelation }}",
     {%- endif %}        
         mass_upper_limit_vector => X"{{ condition.mass.upper|X16 }}", 
@@ -23,7 +23,7 @@
         {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }},
         {{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_cosh_deta_vector, 
         {{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_cos_dphi_vector,
-    {%- if condition.chargeCorrelation is not none %}
+    {%- if condition.chargeCorrelation %}
         ls_charcorr_triple => ls_charcorr_triple_bx_{{ o1.bx }}_bx_{{ o1.bx }}, 
         os_charcorr_triple => os_charcorr_triple_bx_{{ o1.bx }}_bx_{{ o1.bx }},
     {%- endif %}        

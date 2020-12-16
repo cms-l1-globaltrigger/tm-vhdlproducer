@@ -9,77 +9,15 @@
 {{ condition.vhdl_signal }}_i: entity work.calo_calo_calo_correlation_orm_condition
   {%- endblock entity %}
   {%- block generic_beg %}
--- correlation cuts
-    {%- if condition.deltaEtaOrm.enabled == 'true' %}
-        deta_orm_cut => {{ condition.deltaEtaOrm.enabled }}, 
-    {%- endif %}        
-    {%- if condition.deltaPhiOrm.enabled == 'true' %}
-        dphi_orm_cut => {{ condition.deltaPhiOrm.enabled }}, 
-    {%- endif %}        
-    {%- if condition.deltaROrm.enabled == 'true' %}
-        dr_orm_cut => {{ condition.deltaROrm.enabled }}, 
-    {%- endif %}        
-    {%- if condition.deltaEta.enabled == 'true' %}
-        deta_cut => {{ condition.deltaEta.enabled }}, 
-    {%- endif %}        
-    {%- if condition.deltaPhi.enabled == 'true' %}
-        dphi_cut => {{ condition.deltaPhi.enabled }}, 
-    {%- endif %}        
-    {%- if condition.deltaR.enabled == 'true' %}
-        dr_cut => {{ condition.deltaR.enabled }}, 
-    {%- endif %}        
-    {%- if condition.mass.enabled == 'true' %}
-        mass_cut => {{ condition.mass.enabled }}, 
-        mass_type => INVARIANT_MASS_TYPE, 
-    {%- endif %}        
-    {%- if condition.twoBodyPt.enabled == 'true' %}
-        twobody_pt_cut => {{ condition.twoBodyPt.enabled }}, 
-    {%- endif %}        
+    {%- for i in range(0,condition.nr_objects) %}
+      {%- set o = condition.objects[i] %}
+        nr_obj{{i+1}} => NR_{{ o.type|upper }}_OBJECTS,       
+        type_obj{{i+1}} => {{ o.type|upper }}_TYPE,       
+    {%- endfor %}
   {%- endblock generic_beg %}
-  {%- block correlation_cuts %}
-    {%- set o1 = condition.objects[0] %}
-    {%- set o2 = condition.objects[1] %}
--- correlation cuts
-    {%- if condition.hasDeltaEtaOrm %}
-        diff_eta_orm_upper_limit_vector => X"{{ condition.deltaEtaOrm.upper|X08 }}", 
-        diff_eta_orm_lower_limit_vector => X"{{ condition.deltaEtaOrm.lower|X08 }}",
-    {%- endif %}        
-    {%- if condition.hasDeltaPhiOrm %}
-        diff_phi_orm_upper_limit_vector => X"{{ condition.deltaPhiOrm.upper|X08 }}", 
-        diff_phi_orm_lower_limit_vector => X"{{ condition.deltaPhiOrm.lower|X08 }}",
-    {%- endif %}        
-    {%- if condition.hasDeltaROrm %}
-        dr_orm_upper_limit_vector => X"{{ condition.deltaROrm.upper|X16 }}", 
-        dr_orm_lower_limit_vector => X"{{ condition.deltaROrm.lower|X16 }}",
-    {%- endif %}        
-    {%- if condition.hasDeltaEta %}
-        diff_eta_upper_limit_vector => X"{{ condition.deltaEta.upper|X08 }}", 
-        diff_eta_lower_limit_vector => X"{{ condition.deltaEta.lower|X08 }}",
-    {%- endif %}        
-    {%- if condition.hasDeltaPhi %}
-        diff_phi_upper_limit_vector => X"{{ condition.deltaPhi.upper|X08 }}", 
-        diff_phi_lower_limit_vector => X"{{ condition.deltaPhi.lower|X08 }}",
-    {%- endif %}        
-    {%- if condition.hasDeltaR %}
-        dr_upper_limit_vector => X"{{ condition.deltaR.upper|X16 }}", 
-        dr_lower_limit_vector => X"{{ condition.deltaR.lower|X16 }}",
-    {%- endif %}        
-    {%- if (condition.hasMass) or (condition.hasTwoBodyPt)  %}
-        pt1_width => {{ o1.type|upper }}_PT_VECTOR_WIDTH, 
-        pt2_width => {{ o2.type|upper }}_PT_VECTOR_WIDTH, 
-    {%- endif %}        
-    {%- if condition.hasMass %}
-        mass_upper_limit_vector => X"{{ condition.mass.upper|X16 }}",
-        mass_lower_limit_vector => X"{{ condition.mass.lower|X16 }}",
-        mass_cosh_cos_precision => {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_PRECISION, 
-        cosh_cos_width => {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_VECTOR_WIDTH,
-    {%- endif %}        
-    {%- if condition.hasTwoBodyPt %}
-        pt_sq_threshold_vector => X"{{ condition.twoBodyPt.threshold|X16 }}", 
-        sin_cos_width => CALO_SIN_COS_VECTOR_WIDTH, 
-        pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o2.type|upper }}_SIN_COS_PRECISION,
-    {%- endif %}        
-  {%- endblock correlation_cuts %}
+  {%- block correlation_cuts_orm %}
+    {%- include "instances/correlation_cuts_orm.vhd" %}
+  {%- endblock correlation_cuts_orm %}
   {%- block generic_end %}
 -- selector one or two objects with orm
     {%- if condition.nr_objects == 3 %}

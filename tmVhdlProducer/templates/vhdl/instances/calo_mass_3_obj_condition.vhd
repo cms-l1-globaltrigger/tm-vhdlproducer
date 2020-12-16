@@ -10,11 +10,11 @@
         mass_lower_limit_vector => X"{{ condition.mass.lower|X16 }}",
         pt_width => {{ o1.type|upper }}_PT_VECTOR_WIDTH, 
         cosh_cos_precision => {{ o1.type|upper }}_{{ o1.type|upper }}_COSH_COS_PRECISION, 
-        cosh_cos_width => {{ o1.type|upper }}_{{ o1.type|upper }}_COSH_COS_VECTOR_WIDTH
+        cosh_cos_width => {{ o1.type|upper }}_{{ o1.type|upper }}_COSH_COS_VECTOR_WIDTH,
 {%- endblock correlation_cuts %}
 {%- block generic_end %}
         nr_obj => NR_{{ o1.type|upper }}_OBJECTS,
-        obj_type => {{ o1.type|upper }}_TYPE,
+        obj_type => {{ o1.type|upper }}_TYPE
 {%- endblock generic_end %}
 {%- block port %}
         lhc_clk, 

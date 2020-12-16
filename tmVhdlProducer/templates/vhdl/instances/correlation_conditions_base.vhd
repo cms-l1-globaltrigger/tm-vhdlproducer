@@ -28,6 +28,8 @@
     {%- set o2 = condition.objects[1] %}  
     {%- include "instances/correlation_cuts.vhd" %}
   {%- endblock correlation_cuts %}
+  {%- block correlation_cuts_orm %}
+  {%- endblock correlation_cuts_orm %}
   {%- block generic_end %}
   {%- endblock generic_end %}
     )
