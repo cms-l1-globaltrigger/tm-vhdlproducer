@@ -41,17 +41,16 @@ scales.
 
 """
 
-from distutils.version import StrictVersion
+import math
 import string
-import uuid
-import re, math
-import sys, os
+import re, os
+
+from distutils.version import StrictVersion
 
 import tmEventSetup
 import tmGrammar  # import after tmEventSetup
 
 from . import algodist
-from . import handles
 from . import __version__
 
 # -----------------------------------------------------------------------------
