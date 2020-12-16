@@ -38,17 +38,17 @@
 {%- include  "instances/correlation_conditions_mass_cuts.vhd" %}
 -- Instantiations of conditions
 {%- for condition in module.caloConditions %}
-{%- include  "instances/calo_conditions.vhd" %}
-{%- endfor %}
+{% include  "instances/calo_condition.vhd" %}
+{% endfor %}
 {%- for condition in module.caloConditionsOvRm %}
 {%- include  "instances/calo_conditions_orm.vhd" %}
 {%- endfor %}
 {%- for condition in module.muonConditions %}
-{%- include  "instances/muon_conditions.vhd" %}
-{%- endfor %}
+{% include  "instances/muon_condition.vhd" %}
+{% endfor %}
 {%- for condition in module.esumsConditions %}
-{%- include  "instances/esums_condition.vhd" %}
-{%- endfor %}
+{% include  "instances/esums_condition.vhd" %}
+{% endfor %}
 {%- for condition in module.caloCaloCorrConditions %}
 {%- include  "instances/calo_calo_correlation_condition.vhd" %}
 {%- endfor %}
