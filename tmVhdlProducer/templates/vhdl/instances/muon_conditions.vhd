@@ -1,9 +1,15 @@
 {%- extends "instances/comb_conditions_base.vhd" %}
 {%- block instantiate_muon_conditions %}
-{%- block entity %}
+  {%- block entity %}
 {{ condition.vhdl_signal }}_i: entity work.muon_conditions
-{%- endblock entity %}
-{%- block port %}
+  {%- endblock entity %}
+  {%- block charge_correlation %}
+    {%- if condition.chargeCorrelation  %}
+-- charge correlation cut
+        requested_charge_correlation => "{{ condition.chargeCorrelation }}",
+    {%- endif %}        
+  {%- endblock charge_correlation %}
+  {%- block port %}
         lhc_clk, 
         mu_bx_{{ condition.objects[0].bx }},
     {%- if (condition.nr_objects == 2) and (condition.hasTwoBodyPt is not none) and (condition.chargeCorrelation is not none) %}
@@ -27,6 +33,6 @@
         os_charcorr_quad => os_charcorr_quad_bx_{{ condition.objects[0].bx }}_bx_{{ condition.objects[0].bx }},
     {%- endif %}
         condition_o => {{ condition.vhdl_signal }}
-{%- endblock port %}
+  {%- endblock port %}
 {%- endblock instantiate_muon_conditions %}
 {# eof #}

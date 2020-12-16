@@ -18,35 +18,14 @@
   {%- set isolationLUTList = [o1.isolationLUT, o2.isolationLUT, o3.isolationLUT, o4.isolationLUT] %}
 {{ condition.vhdl_signal }}_i: entity work.calo_conditions_orm
     generic map(
-  {%- if condition.hasDeltaEtaOrm %}
-        diff_eta_orm_upper_limit_vector => X"{{ condition.deltaEtaOrm.upper|X08 }}", 
-        diff_eta_orm_lower_limit_vector => X"{{ condition.deltaEtaOrm.lower|X08 }}",
-  {%- endif %}        
-  {%- if condition.hasDeltaPhiOrm %}
-        diff_phi_orm_upper_limit_vector => X"{{ condition.deltaPhiOrm.upper|X08 }}", 
-        diff_phi_orm_lower_limit_vector => X"{{ condition.deltaPhiOrm.lower|X08 }}",
-  {%- endif %}        
-  {%- if condition.hasDeltaROrm %}
-        dr_orm_upper_limit_vector => X"{{ condition.deltaROrm.upper|X16 }}", 
-        dr_orm_lower_limit_vector => X"{{ condition.deltaROrm.lower|X16 }}",
-  {%- endif %}        
-  {%- if condition.hasDeltaEtaOrm %}
-        deta_orm_cut => {{ condition.deltaEtaOrm.enabled }}, 
-  {%- endif %}        
-  {%- if condition.hasDeltaPhiOrm %}
-        dphi_orm_cut => {{ condition.deltaPhiOrm.enabled }}, 
-  {%- endif %}        
-  {%- if condition.hasDeltaROrm %}
-        dr_orm_cut => {{ condition.deltaROrm.enabled }}, 
-  {%- endif %}        
   {%- for i in range(1,nr_requirements) %}
     {%- set o = condition.objects[i] %}
     {%- if nr_requirements > i and o.hasSlice %}
-        object_slice_{{i}}_low => {{ o.sliceLow }}, 
-        object_slice_{{i}}_high => {{ o.sliceHigh }}, 
+        slice_{{i+1}}_low_obj1 => {{ o.sliceLow }}, 
+        slice_{{i+1}}_high_obj1 => {{ o.sliceHigh }}, 
     {%- endif %}        
   {%- endfor %}        
--- object cuts
+-- objects cuts
   {%- if not o1.operator %}
         pt_ge_mode_calo1 => {{ o1.operator|vhdl_bool }}, 
   {%- endif %}        
@@ -76,27 +55,16 @@
     {%- set temp = isolationLUTList.pop(i) %}
   {%- endfor %}        
   {%- include "instances/object_cuts_calo_orm.vhd" %}
--- correlation cuts
-  {%- if condition.hasDeltaEtaOrm %}
-        diff_eta_orm_upper_limit_vector => X"{{ condition.deltaEtaOrm.upper|X08 }}", 
-        diff_eta_orm_lower_limit_vector => X"{{ condition.deltaEtaOrm.lower|X08 }}",
-  {%- endif %}        
-  {%- if condition.hasDeltaPhiOrm %}
-        diff_phi_orm_upper_limit_vector => X"{{ condition.deltaPhiOrm.upper|X08 }}", 
-        diff_phi_orm_lower_limit_vector => X"{{ condition.deltaPhiOrm.lower|X08 }}",
-  {%- endif %}        
-  {%- if condition.hasDeltaROrm %}
-        dr_orm_upper_limit_vector => X"{{ condition.deltaROrm.upper|X16 }}", 
-        dr_orm_lower_limit_vector => X"{{ condition.deltaROrm.lower|X16 }}",
-  {%- endif %}        
   {%- if condition.hasTwoBodyPt %}
+-- correlation cuts
         twobody_pt_cut => true, 
         pt_width => {{ o1.type|upper }}_PT_VECTOR_WIDTH, 
         pt_sq_threshold_vector => X"{{ condition.twoBodyPt.threshold|X16 }}",
         sin_cos_width => CALO_SIN_COS_VECTOR_WIDTH, 
         pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o1.type|upper }}_SIN_COS_PRECISION,
   {%- endif %}
---
+  {%- include "instances/correlation_cuts_orm.vhd" %}
+-- number of objects
         nr_calo1_objects => NR_{{ o1.type|upper }}_OBJECTS,
   {%- if nr_requirements == 1 %}
         nr_calo2_objects => NR_{{ o2.type|upper }}_OBJECTS,

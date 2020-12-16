@@ -49,4 +49,4 @@
         pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o2.type|upper }}_SIN_COS_PRECISION,
     {%- endif %}             
 {%- endblock correlation_cuts %}
-
+{# eof #}

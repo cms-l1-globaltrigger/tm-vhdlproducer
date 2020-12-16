@@ -10,6 +10,8 @@
   {%- endblock generic_beg %}
   {%- include  "instances/object_cuts_comb.vhd" %}
   {%- include  "instances/correlation_cuts_comb.vhd" %}
+  {%- block charge_correlation %}
+  {%- endblock charge_correlation %}
   {%- block generic_end %}
         nr_templates => {{ condition.nr_objects }}
   {%- endblock generic_end %}

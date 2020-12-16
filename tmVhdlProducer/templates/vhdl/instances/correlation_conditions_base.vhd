@@ -24,6 +24,10 @@
     {%- include "instances/object_cuts_corr_objects.vhd" %}
   {%- endif %}
   {%- block correlation_cuts %}
+    {%- if (condition.objects[0].is_muon_type) and (condition.objects[1].is_muon_type) and condition.chargeCorrelation %}
+-- charge correlation cut
+        requested_charge_correlation => "{{ condition.chargeCorrelation }}",     
+    {%- endif %}        
     {%- set o1 = condition.objects[0] %}  
     {%- set o2 = condition.objects[1] %}  
     {%- include "instances/correlation_cuts.vhd" %}
