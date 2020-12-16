@@ -18,7 +18,7 @@
 -- VHDL producer version
 -- v{{ menu.info.sw_version }}
 
--- eventSetup version
+-- tmEventSetup version
 -- v{{ menu.info.version }}
 
 -- HB 2016-09-16: constants for algo_mapping_rop.

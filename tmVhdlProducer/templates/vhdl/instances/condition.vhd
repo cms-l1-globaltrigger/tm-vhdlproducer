@@ -1,4 +1,4 @@
-{% block signal %}{{ condition.vhdl_signal }}{% endblock %}_i: entity {% block entity %}{% endblock %}
+{{ condition.vhdl_signal }}_i: entity {% block entity %}{% endblock %}
     generic map(
 {%- block generic_map %}
 {%- endblock %}

@@ -18,10 +18,11 @@
 -- VHDL producer version
 -- v{{ menu.info.sw_version }}
 
--- eventSetup version
+-- tmEventSetup version
 -- v{{ menu.info.version }}
 
 -- External condition assignment
+
 {%- for condition in module.externalConditions %}
 {{ condition.vhdl_signal }} <= ext_cond_bx_{{ condition.objects[0].bx }}({{ condition.objects[0].externalChannelId }}); -- {{ condition.vhdl_signal }}
 {%- endfor %}
@@ -36,7 +37,9 @@
 {%- include  "instances/correlation_conditions_differences.vhd" %}
 -- Instantiations of cosh-deta and cos-dphi LUTs for correlation conditions (used for mass and overlap_remover) - once for correlation conditions with two ObjectTypes in certain Bxs
 {%- include  "instances/correlation_conditions_mass_cuts.vhd" %}
+
 -- Instantiations of conditions
+
 {%- for condition in module.caloConditions %}
 {% include  "instances/calo_condition.vhd" %}
 {% endfor %}
@@ -74,15 +77,17 @@
 {%- include  "instances/muon_mass_3_obj_condition.vhd" %}
 {%- endfor %}
 {%- for condition in module.minBiasConditions %}
-{%- include  "instances/min_bias_hf_condition.vhd" %}
-{%- endfor %}
+{% include  "instances/min_bias_hf_condition.vhd" %}
+{% endfor %}
 {%- for condition in module.towerCountConditions %}
-{%- include  "instances/towercount_condition.vhd" %}
-{%- endfor %}
+{% include  "instances/towercount_condition.vhd" %}
+{% endfor %}
 {%- for condition in module.signalConditions %}
-{%- include  "instances/signal_condition.vhd" %}
-{%- endfor %}
+{% include  "instances/signal_condition.vhd" %}
+{% endfor %}
+
 -- Instantiations of algorithms
+
 {% for algorithm in module.algorithms|sort_by_attribute('index') %}
 -- {{ algorithm.index }} {{ algorithm.name }} : {{ algorithm.expression }}
 {{ algorithm.vhdl_signal }} <= {{ algorithm.vhdl_expression }};
