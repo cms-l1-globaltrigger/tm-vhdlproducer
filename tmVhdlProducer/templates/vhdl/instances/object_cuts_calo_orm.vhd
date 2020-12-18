@@ -1,4 +1,16 @@
 {%- block object_cuts_calo_orm %}
+  {%- for i in range(1,nr_requirements) %}
+    {%- set o = condition.objects[i] %}
+    {%- if nr_requirements > i and o.hasSlice %}
+        object_slice_{{i}}_low => {{ o.sliceLow }}, 
+        object_slice_{{i}}_high => {{ o.sliceHigh }}, 
+    {%- endif %}        
+  {%- endfor %}        
+-- object cuts
+  {%- if not o1.operator %}
+        pt_ge_mode_calo1 => {{ o1.operator|vhdl_bool }}, 
+  {%- endif %}        
+        obj_type_calo1 => {{ o1.type }}_TYPE,
         pt_thresholds_calo1 => (X"{{ thresholdList[0]|X04 }}", X"{{ thresholdList[1]|X04 }}", X"{{ thresholdList[2]|X04 }}", X"{{ thresholdList[3]|X04 }}"),
   {%- set max_eta_cuts = [etaNrCutsList[0], etaNrCutsList[1], etaNrCutsList[2], etaNrCutsList[3]]|max %}  
   {%- if etaNrCutsList[0] > 0 or etaNrCutsList[1] > 0 or etaNrCutsList[2] > 0 or etaNrCutsList[3] > 0 %}

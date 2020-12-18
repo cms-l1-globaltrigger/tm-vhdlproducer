@@ -1,17 +1,13 @@
-{%- extends "instances/correlation_conditions_base.vhd" %}
-{%- set o1 = condition.objects[0] %}
-{%- set o2 = condition.objects[1] %}
-{%- set nr_calo_obj = 1 %}
-{%- block entity %}
-{{ condition.vhdl_signal }}_i: entity work.calo_muon_correlation_condition
-{%- endblock entity %}
-{%- block generic_end %}
--- number and type of calo objects
-        type_obj1 => {{ o1.type|upper }}_TYPE;
+{% extends "instances/correlation_condition.vhd" %}
+
+{% block entity %}work.calo_muon_correlation_condition{% endblock %}
+
+{%- block generic_map_end %}
+-- number of calo objects
         nr_calo_objects => NR_{{ o1.type|upper }}_OBJECTS
-{%- endblock generic_end %}
-{%- block port %}
-        lhc_clk, 
+{%- endblock %}
+
+{%- block port_map %}
         {{ o1.type|lower }}_bx_{{ o1.bx }}, 
         {{ o2.type|lower }}_bx_{{ o2.bx }},
     {%- if condition.mass.type == condition.mass.InvariantMassDeltaRType %}
@@ -38,6 +34,4 @@
         sin_phi_2_integer => {{ o2.type|lower }}_sin_phi_bx_{{ o2.bx }},
         {%- endif %}        
     {%- endif %}
-        condition_o => {{ condition.vhdl_signal }}
-{%- endblock port %}
-{# eof #}
+{%- endblock %}

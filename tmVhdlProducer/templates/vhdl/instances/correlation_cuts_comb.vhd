@@ -1,4 +1,10 @@
 {%- block correlation_cuts_comb %}
+    {%- if o1.is_muon_type %}
+      {%- if condition.chargeCorrelation %}
+-- charge correlation cut
+        requested_charge_correlation => "{{ condition.chargeCorrelation }}",     
+      {%- endif %}        
+    {%- endif %} 
     {%- if condition.hasTwoBodyPt %}
 -- correlation cuts
         twobody_pt_cut => true, 
@@ -14,4 +20,3 @@
 -- no correlation cuts
     {%- endif %}
 {%- endblock correlation_cuts_comb %}
-

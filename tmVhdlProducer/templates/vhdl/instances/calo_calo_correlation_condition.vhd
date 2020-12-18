@@ -1,35 +1,18 @@
-{%- extends "instances/correlation_conditions_base.vhd" %}
-{%- block instantiate_calo_calo_correlation_condition %}
-  {%- block entity %}
-{{ condition.vhdl_signal }}_i: entity work.calo_calo_correlation_condition
-  {%- endblock entity %}
-  {%- block generic_beg %}
-    {%- if condition.objects[1].is_calo_type %}
-      {%- set nr_objects = condition.nr_objects %}
-    {%- else %}        
-      {%- set nr_objects = 1 %}
-    {%- endif %}        
-    {%- for i in range(0,nr_objects) %}
-      {%- set o = condition.objects[i] %}
-      {%- if condition.objects[1].is_calo_type %}
-        nr_obj{{i+1}} => NR_{{ o.type|upper }}_OBJECTS,       
-        type_obj{{i+1}} => {{ o.type|upper }}_TYPE,       
-      {%- endif %}        
-    {%- endfor %}
-  {%- endblock generic_beg %}
-  {%- block generic_end %}
+{% extends "instances/correlation_condition.vhd" %}
+
+{% block entity %}work.calo_calo_correlation_condition{% endblock %}
+
+{%- block generic_map_end %}
 -- selector same/different bunch crossings
         same_bx => {{ condition.objectsInSameBx }}
-  {%- endblock generic_end %}
-  {%- block port %}
-    {%- set o1 = condition.objects[0] %}
-    {%- set o2 = condition.objects[1] %}
-        lhc_clk, 
+{%- endblock %}
+
+{%- block port_map %}
         {{ o1.type|lower }}_bx_{{ o1.bx }}, 
         {{ o2.type|lower }}_bx_{{ o2.bx }},
-    {%- if condition.mass.type == condition.mass.InvariantMassDeltaRType %}
+  {%- if condition.mass.type == condition.mass.InvariantMassDeltaRType %}
         mass_div_dr => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr,
-    {%- else %}
+  {%- else %}
         {%- if (condition.hasDeltaEta) or (condition.hasDeltaR) %}
         diff_eta => diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_eta_vector,        
         {%- endif %}        
@@ -50,8 +33,5 @@
         sin_phi_1_integer => {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }}, 
         sin_phi_2_integer => {{ o2.type|lower }}_sin_phi_bx_{{ o2.bx }},
         {%- endif %}        
-    {%- endif %}
-        condition_o => {{ condition.vhdl_signal }}
-  {%- endblock port %}
-{%- endblock instantiate_calo_calo_correlation_condition %}
-{# eof #}
+  {%- endif %}
+{%- endblock %}

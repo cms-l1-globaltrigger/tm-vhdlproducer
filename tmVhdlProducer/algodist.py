@@ -21,9 +21,11 @@ Dump distribution to JSON file
 """
 
 import argparse
+import json
 import logging
-import json, uuid
+import uuid
 import sys, os
+
 from collections import namedtuple
 
 import tmEventSetup

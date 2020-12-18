@@ -1,21 +1,20 @@
 import json
-import shutil
 import logging
+import shutil
 import uuid
-import os, errno
+import os
 
-from jinja2 import Environment, FileSystemLoader, filters, StrictUndefined
-from os.path import join, exists, basename
-from itertools import cycle
 from binascii import hexlify
+
+from jinja2 import Environment
+from jinja2 import FileSystemLoader
+from jinja2 import StrictUndefined
 
 import tmEventSetup
 import tmTable
 
-from . import vhdlhelper
-from . import algodist
+from .vhdlhelper import MenuHelper
 
-from tmVhdlProducer import __version__
 __all__ = ['VhdlProducer', 'writeXmlMenu']
 
 # -----------------------------------------------------------------------------
@@ -133,9 +132,8 @@ class VhdlProducer(object):
     """VHDL producer class."""
 
     def __init__(self, searchpath):
-        self.VHDLProducerVersion = __all__[0]+__version__
         self.engine = TemplateEngine(searchpath)
-        
+
     def create_dirs(self, directory, n_modules):
         """Create directory tree for output."""
         directories = {
@@ -160,7 +158,7 @@ class VhdlProducer(object):
     def write(self, collection, directory):
         """Write distributed modules (VHDL templates) to *directory*."""
 
-        helper = vhdlhelper.MenuHelper(collection)
+        helper = MenuHelper(collection)
         logging.info("writing %s algorithms to %s module(s)", len(helper.algorithms), len(helper.modules))
         # Create directory tree
         directories = self.create_dirs(directory, len(collection))
@@ -188,7 +186,7 @@ class VhdlProducer(object):
         makedirs(os.path.dirname(filename)) # Create path if required
         with open(filename, 'w') as fp:
             fp.write(content)
-            
+
     def writeXmlMenu(self, filename, json_dir, dist=1):
         """Updates a XML menu file based on inforamtion from a JSON file (used to apply
         a previously calculated algorithm distribution over multiple modules).

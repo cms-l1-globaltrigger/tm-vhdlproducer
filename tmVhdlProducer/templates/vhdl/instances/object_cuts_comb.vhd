@@ -50,4 +50,3 @@
         ip_luts => (X"{{ o1.impactParameterLUT|X01 }}", X"{{ o2.impactParameterLUT|X01 }}", X"{{ o3.impactParameterLUT|X01 }}", X"{{ o4.impactParameterLUT|X01 }}"), 
   {%- endif %}        
 {%- endblock object_cuts_comb %}
-{# eof #}

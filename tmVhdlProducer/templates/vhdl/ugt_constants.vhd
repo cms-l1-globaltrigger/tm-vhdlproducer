@@ -18,7 +18,7 @@
 -- VHDL producer version
 -- v{{ menu.info.sw_version }}
 
--- eventSetup version
+-- tmEventSetup version
 -- v{{ menu.info.version }}
 
 -- Algorithms
