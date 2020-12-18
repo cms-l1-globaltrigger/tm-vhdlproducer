@@ -1,4 +1,4 @@
-{% extends "instances/comb_condition.vhd" %}
+{% extends "instances/sub_templ/comb_condition.vhd" %}
 
 {% block entity %}work.calo_conditions{% endblock %}
 

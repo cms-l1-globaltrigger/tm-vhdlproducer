@@ -1,6 +1,6 @@
-{% extends "instances/correlation_condition.vhd" %}
+{% extends "instances/sub_templ/correlation_condition.vhd" %}
 
-{% block entity %}work.calo_calo_calo_correlation_orm_condition{% endblock %}
+{% block entity %}work.calo_calo_correlation_condition_orm{% endblock %}
 
 {%- block generic_map_beg %}
     {%- if condition.hasDeltaEtaOrm %}
@@ -31,7 +31,7 @@
 {% endblock %}
 
 {%- block correlation_orm %}
-  {%- include "instances/correlation_cuts_orm.vhd" %}
+  {%- include "instances/sub_templ/correlation_cuts_orm.vhd" %}
 {% endblock %}
 
 {%- block generic_map_end %}

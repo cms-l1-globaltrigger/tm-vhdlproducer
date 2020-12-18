@@ -1,4 +1,4 @@
-{% extends "instances/comb_condition.vhd" %}
+{% extends "instances/sub_templ/comb_condition.vhd" %}
 
 {% set o5 = condition.objects[4] %}
 {% set nr_requirements = condition.nr_objects-1 %}
@@ -64,8 +64,8 @@
     {%- set temp = isolationLUTList.append(0) %}
     {%- set temp = isolationLUTList.pop(i) %}
   {%- endfor %}        
-  {%- include "instances/object_cuts_calo_orm.vhd" %}
-  {%- include "instances/correlation_cuts_orm.vhd" %}
+  {%- include "instances/sub_templ/object_cuts_calo_orm.vhd" %}
+  {%- include "instances/sub_templ/correlation_cuts_orm.vhd" %}
   {%- if condition.hasTwoBodyPt %}
 -- correlation cuts
         twobody_pt_cut => true, 

@@ -1,4 +1,4 @@
-{% extends "instances/correlation_condition.vhd" %}
+{% extends "instances/sub_templ/correlation_condition.vhd" %}
 
 {% block entity %}work.calo_calo_correlation_condition{% endblock %}
 

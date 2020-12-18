@@ -1,4 +1,4 @@
-{% extends "instances/condition.vhd" %}
+{% extends "instances/sub_templ/condition.vhd" %}
 
 {% set o = condition.objects[0] %}
 
