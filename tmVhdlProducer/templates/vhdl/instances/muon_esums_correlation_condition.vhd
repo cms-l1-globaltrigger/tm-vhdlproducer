@@ -1,29 +1,27 @@
-{%- extends "instances/muon_correlation_conditions_base.vhd" %}
-{%- set o1 = condition.objects[0] %}
-{%- set o2 = condition.objects[1] %}
-{%- set nr_muon_obj = 1 %}
-{%- block entity %}
-{{ condition.vhdl_signal }}_i: entity work.muon_esums_correlation_condition
-{%- endblock entity %}
-{%- block generic_beg %}
+{% extends "instances/correlation_condition.vhd" %}
+
+{% block entity %}work.muon_esums_correlation_condition{% endblock %}
+
+{%- block generic_map_beg %}
     {%- if condition.hasDeltaPhi %}
         dphi_cut => {{ condition.deltaPhi.enabled }}, 
     {%- endif %}        
     {%- if condition.hasMass %}
         mass_cut => {{ condition.mass.enabled }}, 
-        mass_type => TRANSVERSE_MASS_TYPE, 
+        mass_type => condition.mass.type, 
     {%- endif %}        
     {%- if condition.hasTwoBodyPt %}
         twobody_pt_cut => {{ condition.twoBodyPt.enabled }}, 
     {%- endif %}        
-{%- endblock generic_beg %}
+{% endblock %}
+
 {%- block correlation_cuts %}
 -- correlation cuts
     {%- if condition.hasDeltaPhi %}
         diff_phi_upper_limit_vector => X"{{ condition.deltaPhi.upper|X08 }}", 
         diff_phi_lower_limit_vector => X"{{ condition.deltaPhi.lower|X08 }}",
     {%- endif %}        
-    {%- if condition.hasMass or condition.hasTwoBodyPt %}
+    {%- if (condition.hasMass) or (condition.hasTwoBodyPt) %}
         pt1_width => {{ o1.type|upper }}_PT_VECTOR_WIDTH, 
         pt2_width => {{ o2.type|upper }}_PT_VECTOR_WIDTH, 
     {%- endif %}        
@@ -38,13 +36,14 @@
         sin_cos_width => CALO_SIN_COS_VECTOR_WIDTH, 
         pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o2.type|upper }}_SIN_COS_PRECISION,
     {%- endif %}
-{%- endblock correlation_cuts %}
-{%- block generic_end %}
+{% endblock %}
+
+{%- block generic_map_end %}
 -- type of esums object
         obj_type_esums => {{ o2.type|upper }}_TYPE
-{%- endblock generic_end %}
-{%- block port %}
-        lhc_clk, 
+{%- endblock %}
+
+{%- block port_map %}
         {{ o1.type|lower }}_bx_{{ o1.bx }}, 
         {{ o2.type|lower }}_bx_{{ o2.bx }},
     {%- if condition.hasDeltaPhi %}
@@ -63,6 +62,4 @@
         sin_phi_1_integer => {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }}, 
         sin_phi_2_integer => {{ o2.type|lower }}_sin_phi_bx_{{ o2.bx }},
     {%- endif %}        
-        condition_o => {{ condition.vhdl_signal }}
-{%- endblock port %}
-{# eof #}
+{%- endblock %}

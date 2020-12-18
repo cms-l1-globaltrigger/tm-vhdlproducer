@@ -1242,10 +1242,10 @@ class DeltaRCutHelper(RangeCutHelper):
 class MassCutHelper(RangeCutHelper):
 
     # VHDL enumeration
-    InvariantMassType = 0
-    TransverseMassType = 1
-    InvariantMassUptType = 2
-    InvariantMassDeltaRType = 3
+    InvariantMassType = "INVARIANT_MASS_TYPE"
+    TransverseMassType = "TRANSVERSE_MASS_TYPE"
+    InvariantMassUptType = "INVARIANT_MASS_UPT_TYPE"
+    InvariantMassDeltaRType = "INVARIANT_MASS_DIV_DR_TYPE"
 
     MassCutTypes = {
         tmEventSetup.InvariantMass: InvariantMassType,

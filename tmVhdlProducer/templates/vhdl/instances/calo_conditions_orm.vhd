@@ -1,10 +1,11 @@
-{%- block instantiate_calo_conditions_orm %}
-  {%- set o1 = condition.objects[0] %}
-  {%- set o2 = condition.objects[1] %}
-  {%- set o3 = condition.objects[2] %}
-  {%- set o4 = condition.objects[3] %}
-  {%- set o5 = condition.objects[4] %}
-  {%- set nr_requirements = condition.nr_objects-1 %}
+{% extends "instances/comb_condition.vhd" %}
+
+{% set o5 = condition.objects[4] %}
+{% set nr_requirements = condition.nr_objects-1 %}
+
+{% block entity %}work.calo_conditions_orm{% endblock %}
+
+{% block generic_map %}
   {%- set thresholdList = [o1.threshold, o2.threshold, o3.threshold, o4.threshold] %}
   {%- set etaNrCutsList = [o1.etaNrCuts, o2.etaNrCuts, o3.etaNrCuts, o4.etaNrCuts] %}
   {%- set phiNrCutsList = [o1.phiNrCuts, o2.phiNrCuts, o3.phiNrCuts, o4.phiNrCuts] %}
@@ -16,20 +17,6 @@
   {%- set phiLowerLimitList = [o1.phiLowerLimit, o2.phiLowerLimit, o3.phiLowerLimit, o4.phiLowerLimit] %}
   {%- set hasIsolationList = [o1.hasIsolation, o2.hasIsolation, o3.hasIsolation, o4.hasIsolation] %}
   {%- set isolationLUTList = [o1.isolationLUT, o2.isolationLUT, o3.isolationLUT, o4.isolationLUT] %}
-{{ condition.vhdl_signal }}_i: entity work.calo_conditions_orm
-    generic map(
-  {%- if condition.hasDeltaEtaOrm %}
-        diff_eta_orm_upper_limit_vector => X"{{ condition.deltaEtaOrm.upper|X08 }}", 
-        diff_eta_orm_lower_limit_vector => X"{{ condition.deltaEtaOrm.lower|X08 }}",
-  {%- endif %}        
-  {%- if condition.hasDeltaPhiOrm %}
-        diff_phi_orm_upper_limit_vector => X"{{ condition.deltaPhiOrm.upper|X08 }}", 
-        diff_phi_orm_lower_limit_vector => X"{{ condition.deltaPhiOrm.lower|X08 }}",
-  {%- endif %}        
-  {%- if condition.hasDeltaROrm %}
-        dr_orm_upper_limit_vector => X"{{ condition.deltaROrm.upper|X16 }}", 
-        dr_orm_lower_limit_vector => X"{{ condition.deltaROrm.lower|X16 }}",
-  {%- endif %}        
   {%- if condition.hasDeltaEtaOrm %}
         deta_orm_cut => {{ condition.deltaEtaOrm.enabled }}, 
   {%- endif %}        
@@ -39,18 +26,6 @@
   {%- if condition.hasDeltaROrm %}
         dr_orm_cut => {{ condition.deltaROrm.enabled }}, 
   {%- endif %}        
-  {%- for i in range(1,nr_requirements) %}
-    {%- set o = condition.objects[i] %}
-    {%- if nr_requirements > i and o.hasSlice %}
-        object_slice_{{i}}_low => {{ o.sliceLow }}, 
-        object_slice_{{i}}_high => {{ o.sliceHigh }}, 
-    {%- endif %}        
-  {%- endfor %}        
--- object cuts
-  {%- if not o1.operator %}
-        pt_ge_mode_calo1 => {{ o1.operator|vhdl_bool }}, 
-  {%- endif %}        
-        obj_type_calo1 => {{ o1.type }}_TYPE,
   {%- for i in range(nr_requirements,condition.ReqObjects-1)|reverse %}
     {%- set temp = thresholdList.append(0) %}
     {%- set temp = thresholdList.pop(i) %}
@@ -76,7 +51,7 @@
     {%- set temp = isolationLUTList.pop(i) %}
   {%- endfor %}        
   {%- include "instances/object_cuts_calo_orm.vhd" %}
--- correlation cuts
+-- correlation cuts orm
   {%- if condition.hasDeltaEtaOrm %}
         diff_eta_orm_upper_limit_vector => X"{{ condition.deltaEtaOrm.upper|X08 }}", 
         diff_eta_orm_lower_limit_vector => X"{{ condition.deltaEtaOrm.lower|X08 }}",
@@ -90,13 +65,14 @@
         dr_orm_lower_limit_vector => X"{{ condition.deltaROrm.lower|X16 }}",
   {%- endif %}        
   {%- if condition.hasTwoBodyPt %}
+-- correlation cuts
         twobody_pt_cut => true, 
         pt_width => {{ o1.type|upper }}_PT_VECTOR_WIDTH, 
         pt_sq_threshold_vector => X"{{ condition.twoBodyPt.threshold|X16 }}",
         sin_cos_width => CALO_SIN_COS_VECTOR_WIDTH, 
         pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o1.type|upper }}_SIN_COS_PRECISION,
   {%- endif %}
---
+-- number of objects
         nr_calo1_objects => NR_{{ o1.type|upper }}_OBJECTS,
   {%- if nr_requirements == 1 %}
         nr_calo2_objects => NR_{{ o2.type|upper }}_OBJECTS,
@@ -108,9 +84,9 @@
         nr_calo2_objects => NR_{{ o5.type|upper }}_OBJECTS,
   {%- endif %}        
         nr_templates => {{ nr_requirements }}
-    )
-    port map(
-        lhc_clk, 
+{%- endblock %}
+
+{% block port_map %}
         {{ o1.type|lower }}_bx_{{ o1.bx }}, 
   {%- if nr_requirements == 4 %}
         {{ o5.type|lower }}_bx_{{ o5.bx }},
@@ -132,9 +108,6 @@
   {%- if condition.hasTwoBodyPt %}
         pt => {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, 
         cos_phi_integer => {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, 
-        sin_phi_integer => {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }});
+        sin_phi_integer => {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }},
   {%- endif %}
-        condition_o => {{ condition.vhdl_signal }}
-    );
-{%- endblock instantiate_calo_conditions_orm %}
-{# eof #}
+{%- endblock %}
