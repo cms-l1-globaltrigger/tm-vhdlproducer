@@ -3,6 +3,12 @@
 {% block entity %}work.calo_calo_correlation_condition{% endblock %}
 
 {%- block generic_map_end %}
+-- number of objects and type
+  {%- for i in range(0,condition.nr_objects) %}
+    {%- set o = condition.objects[i] %}
+        nr_obj{{i+1}} => NR_{{ o.type|upper }}_OBJECTS,
+        type_obj{{i+1}} => {{ o.type|upper }}_TYPE,
+  {%- endfor %}
 -- selector same/different bunch crossings
         same_bx => {{ condition.objectsInSameBx }}
 {%- endblock %}
@@ -14,10 +20,10 @@
         mass_div_dr => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr,
   {%- else %}
         {%- if (condition.hasDeltaEta) or (condition.hasDeltaR) %}
-        diff_eta => diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_eta_vector,        
+        deta => diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_eta_vector,        
         {%- endif %}        
         {%- if (condition.hasDeltaPhi) or (condition.hasDeltaR) %}
-        diff_phi => diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_vector,
+        dphi => diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_vector,
         {%- endif %}        
         {%- if (condition.hasMass) or (condition.hasTwoBodyPt) %}
         pt1 => {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, 

@@ -73,4 +73,3 @@
         iso_lut_calo2 => X"{{ orm_obj.isolationLUT|X01 }}",
   {%- endif %}        
 {%- endblock object_cuts_calo_orm %}
-{# eof #}

@@ -17,8 +17,7 @@
   {%- set phiLowerLimitList = [o1.phiLowerLimit, o2.phiLowerLimit, o3.phiLowerLimit, o4.phiLowerLimit] %}
   {%- set hasIsolationList = [o1.hasIsolation, o2.hasIsolation, o3.hasIsolation, o4.hasIsolation] %}
   {%- set isolationLUTList = [o1.isolationLUT, o2.isolationLUT, o3.isolationLUT, o4.isolationLUT] %}
-{{ condition.vhdl_signal }}_i: entity work.calo_conditions_orm
-    generic map(
+
   {%- for i in range(1,nr_requirements) %}
     {%- set o = condition.objects[i] %}
     {%- if nr_requirements > i and o.hasSlice %}
@@ -26,19 +25,8 @@
         slice_{{i+1}}_high_obj1 => {{ o.sliceHigh }}, 
     {%- endif %}        
   {%- endfor %}        
--- objects cuts
   {%- if not o1.operator %}
         pt_ge_mode_calo1 => {{ o1.operator|vhdl_bool }}, 
-  {%- endif %}        
-        obj_type_calo1 => {{ o1.type }}_TYPE,
-  {%- if condition.hasDeltaEtaOrm %}
-        deta_orm_cut => {{ condition.deltaEtaOrm.enabled }}, 
-  {%- endif %}        
-  {%- if condition.hasDeltaPhiOrm %}
-        dphi_orm_cut => {{ condition.deltaPhiOrm.enabled }}, 
-  {%- endif %}        
-  {%- if condition.hasDeltaROrm %}
-        dr_orm_cut => {{ condition.deltaROrm.enabled }}, 
   {%- endif %}        
   {%- for i in range(nr_requirements,condition.ReqObjects-1)|reverse %}
     {%- set temp = thresholdList.append(0) %}
@@ -65,7 +53,6 @@
     {%- set temp = isolationLUTList.pop(i) %}
   {%- endfor %}        
   {%- include "instances/sub_templ/object_cuts_calo_orm.vhd" %}
-  {%- include "instances/sub_templ/correlation_cuts_orm.vhd" %}
   {%- if condition.hasTwoBodyPt %}
 -- correlation cuts
         twobody_pt_cut => true, 
@@ -74,17 +61,14 @@
         sin_cos_width => CALO_SIN_COS_VECTOR_WIDTH, 
         pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o1.type|upper }}_SIN_COS_PRECISION,
   {%- endif %}
--- number of objects
-        nr_calo1_objects => NR_{{ o1.type|upper }}_OBJECTS,
-  {%- if nr_requirements == 1 %}
-        nr_calo2_objects => NR_{{ o2.type|upper }}_OBJECTS,
-  {%- elif nr_requirements == 2 %}
-        nr_calo2_objects => NR_{{ o3.type|upper }}_OBJECTS,
-  {%- elif nr_requirements == 3 %}
-        nr_calo2_objects => NR_{{ o4.type|upper }}_OBJECTS,
-  {%- elif nr_requirements == 4 %}
-        nr_calo2_objects => NR_{{ o5.type|upper }}_OBJECTS,
-  {%- endif %}        
+-- correlation cuts orm
+  {%- include "instances/sub_templ/correlation_cuts_orm.vhd" %}
+-- number of objects and type
+  {%- set o_orm = condition.objects[nr_requirements] %}
+        type_obj1 => {{ o1.type|upper }}_TYPE,
+        type_obj2 => {{ o_orm.type|upper }}_TYPE,
+        nr_obj1 => NR_{{ o1.type|upper }}_OBJECTS,
+        nr_obj2 => NR_{{ o_orm.type|upper }}_OBJECTS,
         nr_templates => {{ nr_requirements }}
 {%- endblock %}
 
