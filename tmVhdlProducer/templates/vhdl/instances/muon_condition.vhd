@@ -7,13 +7,13 @@
     {%- if (condition.nr_objects == 2) and condition.hasTwoBodyPt and condition.chargeCorrelation %}
         ls_charcorr_double => ls_charcorr_double_bx_{{ o1.bx }}_bx_{{ o1.bx }},
         os_charcorr_double => os_charcorr_double_bx_{{ o1.bx }}_bx_{{ o1.bx }},
-        pt => {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }},
-        cos_phi_integer => {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }},
-        sin_phi_integer => {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }},
+        pt => {{ o1.type|lower }}_bx_{{ o1.bx }}_pt_vector,
+        cos_phi_integer => {{ o1.type|lower }}_bx_{{ o1.bx }}_cos_phi,
+        sin_phi_integer => {{ o1.type|lower }}_bx_{{ o1.bx }}_sin_phi,
     {%- elif (condition.nr_objects == 2) and condition.hasTwoBodyPt and condition.chargeCorrelation %}
-        pt => {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }},
-        cos_phi_integer => {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }},
-        sin_phi_integer => {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }},
+        pt => {{ o1.type|lower }}_bx_{{ o1.bx }}_pt_vector,
+        cos_phi_integer => {{ o1.type|lower }}_bx_{{ o1.bx }}_cos_phi,
+        sin_phi_integer => {{ o1.type|lower }}_bx_{{ o1.bx }}_sin_phi,
     {%- elif (condition.nr_objects == 2) and not condition.hasTwoBodyPt and condition.chargeCorrelation %}
         ls_charcorr_double => ls_charcorr_double_bx_{{ o1.bx }}_bx_{{ o1.bx }},
         os_charcorr_double => os_charcorr_double_bx_{{ o1.bx }}_bx_{{ o1.bx }},

@@ -49,8 +49,8 @@
         {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
   {%- endif %}    
   {%- if condition.hasTwoBodyPt %}
-        pt => {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, 
-        cos_phi_integer => {{ o1.type|lower }}_cos_phi_bx_{{ o1.bx }}, 
-        sin_phi_integer => {{ o1.type|lower }}_sin_phi_bx_{{ o1.bx }},
+        pt => {{ o1.type|lower }}_bx_{{ o1.bx }}_pt_vector, 
+        cos_phi_integer => {{ o1.type|lower }}_bx_{{ o1.bx }}_cos_phi, 
+        sin_phi_integer => {{ o1.type|lower }}_bx_{{ o1.bx }}_sin_phi,
   {%- endif %}
 {%- endblock %}

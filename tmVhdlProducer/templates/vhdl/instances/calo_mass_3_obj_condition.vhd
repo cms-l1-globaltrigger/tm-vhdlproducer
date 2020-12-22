@@ -18,7 +18,7 @@
 
 {%- block port_map %}
         {{ o1.type|lower }}_bx_{{ o1.bx }}, 
-        {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }},
+        {{ o1.type|lower }}_bx_{{ o1.bx }}_pt_vector,
         {{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_cosh_deta_vector, 
         {{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_cos_dphi_vector,
 {%- endblock %}
