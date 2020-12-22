@@ -1062,18 +1062,14 @@ class ObjectHelper(VhdlHelper):
         self.hasImpactParameter = False
         self.impactParameterLUT = 0xf
         # spatial cuts
+        # max. five eta cuts
         self.etaNrCuts = 0
         self.etaLowerLimit = [0, 0, 0, 0, 0]
         self.etaUpperLimit = [0, 0, 0, 0, 0]
+        # max. two phi cuts
         self.phiNrCuts = 0
-        self.phiFullRange = vhdl_bool(True)
-        self.phiW1LowerLimit = 0
-        self.phiW1UpperLimit = 0
-        self.phiW2Ignore = vhdl_bool(True)
-        self.phiW2LowerLimit = 0
-        self.phiW2UpperLimit = 0
-        #self.sliceLow = 0
-        #self.sliceHigh = 0
+        self.phiLowerLimit = [0, 0]
+        self.phiUpperLimit = [0, 0]
         self.hasSlice = False
         self.sliceLow = 0
         self.sliceHigh = 0
@@ -1147,14 +1143,12 @@ class ObjectHelper(VhdlHelper):
         # setup phi windows
         if len(phiCuts) > 0:
             self.phiNrCuts = 1
-            self.phiFullRange = vhdl_bool(False)
-            self.phiW1LowerLimit = phiCuts[0][0]
-            self.phiW1UpperLimit = phiCuts[0][1]
+            self.phiLowerLimit[0] = phiCuts[0][0]
+            self.phiUpperLimit[0] = phiCuts[0][1]
         if len(phiCuts) > 1:
             self.phiNrCuts = 2
-            self.phiW2Ignore = vhdl_bool(False)
-            self.phiW2LowerLimit = phiCuts[1][0]
-            self.phiW2UpperLimit = phiCuts[1][1]
+            self.phiLowerLimit[1] = phiCuts[1][0]
+            self.phiUpperLimit[1] = phiCuts[1][1]
         self.isValid = True
         self.handle = object_handle
 

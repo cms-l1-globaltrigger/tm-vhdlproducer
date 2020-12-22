@@ -6,18 +6,6 @@
 {% block entity %}work.calo_conditions_orm{% endblock %}
 
 {% block generic_map %}
-  {%- set thresholdList = [o1.threshold, o2.threshold, o3.threshold, o4.threshold] %}
-  {%- set etaNrCutsList = [o1.etaNrCuts, o2.etaNrCuts, o3.etaNrCuts, o4.etaNrCuts] %}
-  {%- set phiNrCutsList = [o1.phiNrCuts, o2.phiNrCuts, o3.phiNrCuts, o4.phiNrCuts] %}
-  {%- set etaUpperLimitList = [o1.etaUpperLimit, o2.etaUpperLimit, o3.etaUpperLimits, o4.etaUpperLimit] %}
-  {%- set etaLowerLimitList = [o1.etaLowerLimit, o2.etaLowerLimit, o3.etaLowerLimit, o4.etaLowerLimit] %}
-  {%- set phiFullRangeList = [o1.phiFullRange, o2.phiFullRange, o3.phiFullRange, o4.phiFullRange] %}
-  {%- set phiW2IgnoreList = [o1.phiW2Ignore, o2.phiW2Ignore, o3.phiW2Ignore, o4.phiW2Ignore] %}
-  {%- set phiUpperLimitList = [o1.phiUpperLimit, o2.phiUpperLimit, o3.phiUpperLimits, o4.phiUpperLimit] %}
-  {%- set phiLowerLimitList = [o1.phiLowerLimit, o2.phiLowerLimit, o3.phiLowerLimit, o4.phiLowerLimit] %}
-  {%- set hasIsolationList = [o1.hasIsolation, o2.hasIsolation, o3.hasIsolation, o4.hasIsolation] %}
-  {%- set isolationLUTList = [o1.isolationLUT, o2.isolationLUT, o3.isolationLUT, o4.isolationLUT] %}
-
   {%- for i in range(1,nr_requirements) %}
     {%- set o = condition.objects[i] %}
     {%- if nr_requirements > i and o.hasSlice %}
@@ -26,49 +14,18 @@
     {%- endif %}        
   {%- endfor %}        
   {%- if not o1.operator %}
-        pt_ge_mode_calo1 => {{ o1.operator|vhdl_bool }}, 
-  {%- endif %}        
-  {%- for i in range(nr_requirements,condition.ReqObjects-1)|reverse %}
-    {%- set temp = thresholdList.append(0) %}
-    {%- set temp = thresholdList.pop(i) %}
-    {%- set temp = etaNrCutsList.append(0) %}
-    {%- set temp = etaNrCutsList.pop(i) %}
-    {%- set temp = phiNrCutsList.append(0) %}
-    {%- set temp = phiNrCutsList.pop(i) %}
-    {%- set temp = etaUpperLimitList.append(0) %}
-    {%- set temp = etaUpperLimitList.pop(i) %}
-    {%- set temp = etaLowerLimitList.append(0) %}
-    {%- set temp = etaLowerLimitList.pop(i) %}
-    {%- set temp = phiFullRangeList.append(0) %}
-    {%- set temp = phiFullRangeList.pop(i) %}
-    {%- set temp = phiW2IgnoreList.append(0) %}
-    {%- set temp = phiW2IgnoreList.pop(i) %}
-    {%- set temp = phiUpperLimitList.append(0) %}
-    {%- set temp = phiUpperLimitList.pop(i) %}
-    {%- set temp = phiLowerLimitList.append(0) %}
-    {%- set temp = phiLowerLimitList.pop(i) %}
-    {%- set temp = hasIsolationList.append(0) %}
-    {%- set temp = hasIsolationList.pop(i) %}
-    {%- set temp = isolationLUTList.append(0) %}
-    {%- set temp = isolationLUTList.pop(i) %}
-  {%- endfor %}        
+        pt_ge_mode_obj1 => {{ o1.operator|vhdl_bool }}, 
+  {%- endif %}          
   {%- include "instances/sub_templ/object_cuts_calo_orm.vhd" %}
-  {%- if condition.hasTwoBodyPt %}
--- correlation cuts
-        twobody_pt_cut => true, 
-        pt_width => {{ o1.type|upper }}_PT_VECTOR_WIDTH, 
-        pt_sq_threshold_vector => X"{{ condition.twoBodyPt.threshold|X16 }}",
-        sin_cos_width => CALO_SIN_COS_VECTOR_WIDTH, 
-        pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o1.type|upper }}_SIN_COS_PRECISION,
-  {%- endif %}
+  {%- include "instances/sub_templ/correlation_cuts_comb.vhd" %}
 -- correlation cuts orm
   {%- include "instances/sub_templ/correlation_cuts_orm.vhd" %}
 -- number of objects and type
   {%- set o_orm = condition.objects[nr_requirements] %}
-        type_obj1 => {{ o1.type|upper }}_TYPE,
-        type_obj2 => {{ o_orm.type|upper }}_TYPE,
         nr_obj1 => NR_{{ o1.type|upper }}_OBJECTS,
+        type_obj1 => {{ o1.type|upper }}_TYPE,
         nr_obj2 => NR_{{ o_orm.type|upper }}_OBJECTS,
+        type_obj2 => {{ o_orm.type|upper }}_TYPE,
         nr_templates => {{ nr_requirements }}
 {%- endblock %}
 
@@ -76,20 +33,20 @@
         {{ o1.type|lower }}_bx_{{ o1.bx }}, 
   {%- if nr_requirements == 4 %}
         {{ o5.type|lower }}_bx_{{ o5.bx }},
-        diff_{{ o1.type|lower }}_{{ o5.type|lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_eta_vector, 
-        diff_{{ o1.type|lower }}_{{ o5.type|lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_phi_vector,
+        {{ o1.type|lower }}_{{ o5.type|lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_deta_vector, 
+        {{ o1.type|lower }}_{{ o5.type|lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_dphi_vector,
   {%- elif nr_requirements == 3 %}
         {{ o4.type|lower }}_bx_{{ o4.bx }},
-        diff_{{ o1.type|lower }}_{{ o4.type|lower }}_bx_{{ o1.bx }}_bx_{{ o4.bx }}_eta_vector, 
-        diff_{{ o1.type|lower }}_{{ o4.type|lower }}_bx_{{ o1.bx }}_bx_{{ o4.bx }}_phi_vector,
+        {{ o1.type|lower }}_{{ o4.type|lower }}_bx_{{ o1.bx }}_bx_{{ o4.bx }}_deta_vector, 
+        {{ o1.type|lower }}_{{ o4.type|lower }}_bx_{{ o1.bx }}_bx_{{ o4.bx }}_dphi_vector,
   {%- elif nr_requirements == 2 %}
         {{ o3.type|lower }}_bx_{{ o3.bx }},
-        diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_eta_vector, 
-        diff_{{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_phi_vector,
+        {{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_deta_vector, 
+        {{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_dphi_vector,
   {%- elif nr_requirements == 1 %}
         {{ o2.type|lower }}_bx_{{ o2.bx }},
-        diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_eta_vector, 
-        diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_vector,
+        {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector, 
+        {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
   {%- endif %}    
   {%- if condition.hasTwoBodyPt %}
         pt => {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, 

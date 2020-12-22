@@ -4,7 +4,7 @@
 
 {%- block generic_map_end %}
 -- number of calo objects and type
-        type_obj1 => {{ o1.type|upper }}_TYPE
+        type_obj1 => {{ o1.type|upper }}_TYPE,
         nr_calo_objects => NR_{{ o1.type|upper }}_OBJECTS
 {%- endblock %}
 
@@ -15,10 +15,10 @@
         mass_div_dr => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr,
     {%- else %}
         {%- if (condition.hasDeltaEta) or (condition.hasDeltaR) %}
-        deta => diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_eta_vector,        
+        deta => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector,        
         {%- endif %}        
         {%- if (condition.hasDeltaPhi) or (condition.hasDeltaR) %}
-        dphi => diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_vector,
+        dphi => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
         {%- endif %}        
         {%- if (condition.hasMass) or (condition.hasTwoBodyPt) %}
         pt1 => {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, 

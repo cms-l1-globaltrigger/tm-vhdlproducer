@@ -29,15 +29,17 @@
 {%- endblock %}
 
 {%- block generic_map_end %}
--- number of calo objects
-        nr_calo_objects => NR_{{ o1.type|upper }}_OBJECTS
+-- number of calo objects, types
+        nr_obj1 => NR_{{ o1.type|upper }}_OBJECTS,
+        type_obj1 => {{ o1.type|upper }}_TYPE,
+        obj_type_esums => {{ o2.type|upper }}_TYPE
 {%- endblock %}
 
 {%- block port_map %}
         {{ o1.type|lower }}_bx_{{ o1.bx }}, 
         {{ o2.type|lower }}_bx_{{ o2.bx }},
     {%- if condition.hasDeltaPhi %}
-        dphi => diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_vector,
+        dphi => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
     {%- endif %}        
     {%- if (condition.hasMass) or (condition.hasTwoBodyPt) %}
         pt1 => {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, 

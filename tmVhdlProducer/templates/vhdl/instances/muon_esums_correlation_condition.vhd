@@ -37,7 +37,7 @@
         {{ o1.type|lower }}_bx_{{ o1.bx }}, 
         {{ o2.type|lower }}_bx_{{ o2.bx }},
     {%- if condition.hasDeltaPhi %}
-        dphi => diff_{{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_phi_vector,
+        dphi => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
     {%- endif %}        
     {%- if condition.hasMass or condition.hasTwoBodyPt %}
         pt1 => {{ o1.type|lower }}_pt_vector_bx_{{ o1.bx }}, 
