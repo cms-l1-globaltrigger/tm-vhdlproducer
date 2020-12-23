@@ -30,23 +30,39 @@
 {%- endblock %}
 
 {% block port_map %}
-        {{ o1.type|lower }}_bx_{{ o1.bx }}, 
+        calo1 => {{ o1.type|lower }}_bx_{{ o1.bx }}, 
   {%- if nr_requirements == 4 %}
-        {{ o5.type|lower }}_bx_{{ o5.bx }},
-        {{ o1.type|lower }}_{{ o5.type|lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_deta_vector, 
-        {{ o1.type|lower }}_{{ o5.type|lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_dphi_vector,
+        calo2 => {{ o5.type|lower }}_bx_{{ o5.bx }},
+    {%- if (condition.hasDeltaEtaOrm) or (condition.hasDeltaROrm) %}
+        deta_orm => {{ o1.type|lower }}_{{ o5.type|lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_deta_vector, 
+    {%- endif %}        
+    {%- if (condition.hasDeltaPhiOrm) or (condition.hasDeltaROrm) %}
+        dphi_orm => {{ o1.type|lower }}_{{ o5.type|lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_dphi_vector,
+    {%- endif %}        
   {%- elif nr_requirements == 3 %}
-        {{ o4.type|lower }}_bx_{{ o4.bx }},
-        {{ o1.type|lower }}_{{ o4.type|lower }}_bx_{{ o1.bx }}_bx_{{ o4.bx }}_deta_vector, 
-        {{ o1.type|lower }}_{{ o4.type|lower }}_bx_{{ o1.bx }}_bx_{{ o4.bx }}_dphi_vector,
+        calo2 => {{ o4.type|lower }}_bx_{{ o4.bx }},
+    {%- if (condition.hasDeltaEtaOrm) or (condition.hasDeltaROrm) %}
+        deta_orm => {{ o1.type|lower }}_{{ o4.type|lower }}_bx_{{ o1.bx }}_bx_{{ o4.bx }}_deta_vector, 
+    {%- endif %}        
+    {%- if (condition.hasDeltaPhiOrm) or (condition.hasDeltaROrm) %}
+        dphi_orm => {{ o1.type|lower }}_{{ o4.type|lower }}_bx_{{ o1.bx }}_bx_{{ o4.bx }}_dphi_vector,
+    {%- endif %}        
   {%- elif nr_requirements == 2 %}
-        {{ o3.type|lower }}_bx_{{ o3.bx }},
-        {{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_deta_vector, 
-        {{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_dphi_vector,
+        calo2 => {{ o3.type|lower }}_bx_{{ o3.bx }},
+    {%- if (condition.hasDeltaEtaOrm) or (condition.hasDeltaROrm) %}
+        deta_orm => {{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_deta_vector, 
+    {%- endif %}        
+    {%- if (condition.hasDeltaPhiOrm) or (condition.hasDeltaROrm) %}
+        dphi_orm => {{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_dphi_vector,
+    {%- endif %}        
   {%- elif nr_requirements == 1 %}
-        {{ o2.type|lower }}_bx_{{ o2.bx }},
-        {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector, 
-        {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
+        calo2 => {{ o2.type|lower }}_bx_{{ o2.bx }},
+    {%- if (condition.hasDeltaEtaOrm) or (condition.hasDeltaROrm) %}
+        deta_orm => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector, 
+    {%- endif %}        
+    {%- if (condition.hasDeltaPhiOrm) or (condition.hasDeltaROrm) %}
+        dphi_orm => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
+    {%- endif %}        
   {%- endif %}    
   {%- if condition.hasTwoBodyPt %}
         pt => {{ o1.type|lower }}_bx_{{ o1.bx }}_pt_vector, 

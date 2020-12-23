@@ -27,19 +27,34 @@
   {%- set o2 = condition.objects[1] %}
   {%- if condition.nr_objects == 3 %}
     {%- set o3 = condition.objects[2] %}
-  {%- endif %}        
-        {{ o1.type|lower }}_bx_{{ o1.bx }},
-        {{ o2.type|lower }}_bx_{{ o2.bx }},
-        {{ o3.type|lower }}_bx_{{ o3.bx }},
-  {%- if condition.nr_objects == 3 %}
-        deta_orm => {{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_deta_vector,        
-        dphi_orm => {{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_dphi_vector,
+        calo1 => {{ o1.type|lower }}_bx_{{ o1.bx }},
+        calo2 => {{ o2.type|lower }}_bx_{{ o2.bx }},
+        calo3 => {{ o3.type|lower }}_bx_{{ o3.bx }},
   {%- elif condition.nr_objects == 2 %}        
-        deta_orm => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector,        
-        dphi_orm => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
+        calo1 => {{ o1.type|lower }}_bx_{{ o1.bx }},
+        calo3 => {{ o2.type|lower }}_bx_{{ o2.bx }},
   {%- endif %}        
+  {%- if condition.nr_objects == 3 %}
+    {%- if (condition.hasDeltaEtaOrm) or (condition.hasDeltaROrm) %}
+        deta_orm => {{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_deta_vector,        
+    {%- endif %}        
+    {%- if (condition.hasDeltaPhiOrm) or (condition.hasDeltaROrm) %}
+        dphi_orm => {{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_dphi_vector,
+    {%- endif %}        
+  {%- elif condition.nr_objects == 2 %}        
+    {%- if (condition.hasDeltaEtaOrm) or (condition.hasDeltaROrm) %}
+        deta_orm => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector,        
+    {%- endif %}        
+    {%- if (condition.hasDeltaPhiOrm) or (condition.hasDeltaROrm) %}
+        dphi_orm => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
+    {%- endif %}        
+  {%- endif %}        
+  {%- if (condition.hasDeltaEta) or (condition.hasDeltaR) %}
         deta => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector,        
+  {%- endif %}        
+  {%- if (condition.hasDeltaPhi) or (condition.hasDeltaR) %}
         dphi => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
+  {%- endif %}        
   {%- if (condition.hasMass) or (condition.hasTwoBodyPt) %}
         pt1 => {{ o1.type|lower }}_bx_{{ o1.bx }}_pt_vector, 
         pt2 => {{ o2.type|lower }}_bx_{{ o2.bx }}_pt_vector,
