@@ -25,29 +25,18 @@
 {%- block port_map %}
   {%- set o1 = condition.objects[0] %}
   {%- set o2 = condition.objects[1] %}
-  {%- if condition.nr_objects == 3 %}
-    {%- set o3 = condition.objects[2] %}
         calo1 => {{ o1.type|lower }}_bx_{{ o1.bx }},
         calo2 => {{ o2.type|lower }}_bx_{{ o2.bx }},
+  {%- if condition.nr_objects == 3 %}
+    {%- set o3 = condition.objects[2] %}
         calo3 => {{ o3.type|lower }}_bx_{{ o3.bx }},
-  {%- elif condition.nr_objects == 2 %}        
-        calo1 => {{ o1.type|lower }}_bx_{{ o1.bx }},
-        calo3 => {{ o2.type|lower }}_bx_{{ o2.bx }},
   {%- endif %}        
   {%- if condition.nr_objects == 3 %}
-    {%- if (condition.hasDeltaEtaOrm) or (condition.hasDeltaROrm) %}
         deta_orm => {{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_deta_vector,        
-    {%- endif %}        
-    {%- if (condition.hasDeltaPhiOrm) or (condition.hasDeltaROrm) %}
-        dphi_orm => {{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_dphi_vector,
-    {%- endif %}        
+        dphi_orm => {{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_dphi_vector,       
   {%- elif condition.nr_objects == 2 %}        
-    {%- if (condition.hasDeltaEtaOrm) or (condition.hasDeltaROrm) %}
         deta_orm => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector,        
-    {%- endif %}        
-    {%- if (condition.hasDeltaPhiOrm) or (condition.hasDeltaROrm) %}
         dphi_orm => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
-    {%- endif %}        
   {%- endif %}        
   {%- if (condition.hasDeltaEta) or (condition.hasDeltaR) %}
         deta => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector,        
