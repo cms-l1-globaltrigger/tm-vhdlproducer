@@ -14,8 +14,10 @@ import tmEventSetup
 import tmTable
 
 from .vhdlhelper import MenuHelper
+from .vhdlhelper import vhdl_bool
+from .vhdlhelper import bx_encode
 
-__all__ = ['VhdlProducer', 'writeXmlMenu']
+__all__ = ['VhdlProducer']
 
 # -----------------------------------------------------------------------------
 #  Jinja2 custom filters exposed to VHDL templates.
@@ -38,28 +40,6 @@ def uuid2hex_filter(s):
     """
     return uuid.UUID(s).hex.lower()
 
-def bx_encode(value):
-    """Encode relative bunch crossings into VHDL notation.
-
-    All positive values with the exception of zero are prefixed with m, all
-    negative values are prefixed with p instead of the minus sign.
-
-    >>> bx_encode(0)
-    '0'
-    >>> bx_encode(-1)
-    'm1'
-    >>> bx_encode(2)
-    'p2'
-    """
-    # Prefix positive values greater then zero with p.
-    if value > 0:
-        return 'p{0:d}'.format(value)
-    # Prefix negative values with m instead of minus sign (abs).
-    if value < 0:
-        return 'm{0:d}'.format(abs(value))
-    # Zero value is not prefixed according to VHDL documentation.
-    return '0'
-
 def sort_by_attribute(items, attribute, reverse=False):
     """Returns list of items sorted by attribute. Provided to overcome lack of
     sort filter in older Jinja2 versions.
@@ -81,13 +61,12 @@ CustomFilters = {
     'X04' : lambda x: "%04X" % int(float(x)),
     'X01' : lambda x: "%01X" % int(float(x)),
     'alpha' : lambda s: ''.join(c for c in s if c.isalpha()),
-    'bx_offset': bx_encode,
     'sort_by_attribute': sort_by_attribute,
     'hex': lambda d: format(int(d), 'x'), # plain hex format
     'hexstr': hexstr_filter,
     'hexuuid': uuid2hex_filter,
-    'vhdl_bool': lambda b: ('false', 'true')[bool(b)],
     'mmhashn': murmurhash,
+    'vhdl_bool': vhdl_bool
 }
 
 ModuleTemplates = [

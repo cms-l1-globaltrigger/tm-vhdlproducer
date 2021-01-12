@@ -25,7 +25,7 @@
 type global_index_array is array (0 to NR_ALGOS-1) of integer;
 constant global_index: global_index_array := (
 {#-- list mapping of global to local algorithm indices #}
-{%- for algorithm in module|sort_by_attribute('module_index') %}
+{%- for algorithm in module | sort_by_attribute('module_index') %}
         {{ "%3d" | format(algorithm.index) }}, -- module_index: {{ loop.index0 }}, name: {{ algorithm.name }}
 {%- endfor %}
     others => 0
