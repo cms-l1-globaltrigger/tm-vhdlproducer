@@ -6,11 +6,11 @@
 
 {% block generic_map %}
     {%- if not o.operator %}
-        et_ge_mode => {{ o.operator|vhdl_bool }},
+        et_ge_mode => {{ o.operator | vhdl_bool }},
     {%- endif %}
-        count_threshold => X"{{ o.count|X04 }}"
+        count_threshold => X"{{ o.count.threshold | X04 }}"
 {%- endblock %}
 
 {% block port_map %}
-        {{ o.type|lower }}_bx_{{ o.bx }},
+        {{ o.type | lower }}_bx_{{ o.bx }},
 {%- endblock %}
