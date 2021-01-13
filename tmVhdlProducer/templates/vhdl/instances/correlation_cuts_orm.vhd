@@ -1,6 +1,6 @@
 
         -- correlation cuts orm
-{% if condition.deltaEtaOrm %}
+{%- if condition.deltaEtaOrm %}
         diff_eta_orm_upper_limit_vector => X"{{ condition.deltaEtaOrm.upper | X08 }}",
         diff_eta_orm_lower_limit_vector => X"{{ condition.deltaEtaOrm.lower | X08 }}",
 {%- endif %}

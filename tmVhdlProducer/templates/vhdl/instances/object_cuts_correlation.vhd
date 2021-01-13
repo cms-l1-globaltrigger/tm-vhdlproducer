@@ -24,8 +24,8 @@
   {%- endif %}
   {%- for j in range(0,(o.etaNrCuts)) %}
     {%- if o.etaNrCuts > j %}
-        eta_w{{j+1 }}_upper_limit_{{ obj }}{{ i+1 }} => X"{{ o.etaUpperLimit[j] | X04 }}",
-        eta_w{{j+1 }}_lower_limit_{{ obj }}{{ i+1 }} => X"{{ o.etaLowerLimit[j] | X04 }}",
+        eta_w{{ j+1 }}_upper_limit_{{ obj }}{{ i+1 }} => X"{{ o.etaUpperLimit[j] | X04 }}",
+        eta_w{{ j+1 }}_lower_limit_{{ obj }}{{ i+1 }} => X"{{ o.etaLowerLimit[j] | X04 }}",
     {%- endif %}
   {%- endfor %}
   {%- if o.phiNrCuts > 0 %}
