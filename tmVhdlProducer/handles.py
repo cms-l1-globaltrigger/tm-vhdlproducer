@@ -270,7 +270,7 @@ class Payload(object):
     def __repr__(self):
         sliceLUTsPercent = self.sliceLUTs * 100
         processorsPercent = self.processors * 100
-        return "{self.__class__.__name__}(sliceLUTs={sliceLUTsPercent:.2f}%, DSPs={processorsPercent:.2f}%)".format(**locals())
+        return f"{self.__class__.__name__}(sliceLUTs={sliceLUTsPercent:.2f}%, DSPs={processorsPercent:.2f}%)"
 
 #
 #  Handle classes
@@ -302,7 +302,7 @@ class CutHandle(Handle):
         self.precision_math = 0
 
     def __repr__(self):
-        return "{self.__class__.__name__}(name={self.name})".format(**locals())
+        return f"{self.__class__.__name__}(name={self.name})"
 
 class ObjectHandle(Handle):
     """Represents an object."""
@@ -349,7 +349,7 @@ class ObjectHandle(Handle):
         return self.type in SignalObjectTypes
 
     def __repr__(self):
-        return "{self.__class__.__name__}(name={self.name})".format(**locals())
+        return f"{self.__class__.__name__}(name={self.name})"
 
 class ConditionHandle(Handle):
     """Represents an condition."""
@@ -420,7 +420,7 @@ class ConditionHandle(Handle):
         return self.type in CaloConditionOvRmTypes
 
     def __repr__(self):
-        return "{self.__class__.__name__}(name={self.name}, payload={self.payload})".format(**locals())
+        return f"{self.__class__.__name__}(name={self.name}, payload={self.payload})"
 
 class AlgorithmHandle(Handle):
     """Represents an algorithm."""
@@ -446,4 +446,4 @@ class AlgorithmHandle(Handle):
         return iter([condition for condition in self.conditions])
 
     def __repr__(self):
-        return "{self.__class__.__name__}(index={self.index}, name={self.name}, payload={self.payload})".format(**locals())
+        return f"{self.__class__.__name__}(index={self.index}, name={self.name}, payload={self.payload})"

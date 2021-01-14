@@ -122,7 +122,7 @@ class VhdlProducer(object):
             "doc" : os.path.join(directory, "doc"),
         }
         for i in range(n_modules):
-            module_id = "module_{i}".format(i=i)
+            module_id = f"module_{i:d}"
             directories[module_id] = os.path.join(directories['vhdl'], module_id, "src")
         # Check for exisiting directories (TODO obsolete?)
         for directory in directories:
@@ -150,11 +150,11 @@ class VhdlProducer(object):
                     'module': module,
                 }
                 content = self.engine.render(template, params)
-                module_id = "module_{id}".format(id=module.id)
+                module_id = f"module_{module.id:d}"
                 filename = os.path.join(directories[module_id], template)
                 with open(filename, 'w') as fp:
                     fp.write(content)
-                logging.info("{template:<24}: {filename}".format(**locals()))
+                logging.info(f"{template:<24}: {filename}")
 
         # Write JSON dump (TODO obsolete?)
         params = {
@@ -184,10 +184,13 @@ class VhdlProducer(object):
 
         message = tmTable.xml2menu(filename, menu, scale, ext_signal, False)
         if message:
-            logging.error("{filename}: {message}".format(message))
+            logging.error(f"{filename}: {message}")
             raise RuntimeError(message)
 
-        logging.info("processing menu \"%s\" ... ", menu.menu["name"])
+        menu_name = menu.menu["name"]
+
+
+        logging.info("processing menu \"%s\" ... ", menu_name)
 
         # Update menu information
         logging.info("updating menu information...")
@@ -217,7 +220,7 @@ class VhdlProducer(object):
             algorithm["module_index"] = str(module_index)
             menu.algorithms[id_] = algorithm
 
-        target = os.path.join(json_dir, '{name}-d{dist}.xml'.format(name=menu.menu['name'], dist=dist))
+        target = os.path.join(json_dir, f'{menu_name}-d{dist}.xml')
 
         logging.info("writing target XML menu file %s", target)
         tmTable.menu2xml(menu, scale, ext_signal, target)
