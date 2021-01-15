@@ -1,52 +1,25 @@
 {%- block object_cuts_calo_orm %}
-  {%- set thresholdList = [o1.threshold, o2.threshold, o3.threshold, o4.threshold] %}
-  {%- set etaNrCutsList = [o1.etaNrCuts, o2.etaNrCuts, o3.etaNrCuts, o4.etaNrCuts] %}
-  {%- set phiNrCutsList = [o1.phiNrCuts, o2.phiNrCuts, o3.phiNrCuts, o4.phiNrCuts] %}
-  {%- set etaUpperLimitList = [o1.etaUpperLimit, o2.etaUpperLimit, o3.etaUpperLimits, o4.etaUpperLimit] %}
-  {%- set etaLowerLimitList = [o1.etaLowerLimit, o2.etaLowerLimit, o3.etaLowerLimit, o4.etaLowerLimit] %}
-  {%- set phiFullRangeList = [o1.phiFullRange, o2.phiFullRange, o3.phiFullRange, o4.phiFullRange] %}
-  {%- set phiW2IgnoreList = [o1.phiW2Ignore, o2.phiW2Ignore, o3.phiW2Ignore, o4.phiW2Ignore] %}
-  {%- set phiUpperLimitList = [o1.phiUpperLimit, o2.phiUpperLimit, o3.phiUpperLimits, o4.phiUpperLimit] %}
-  {%- set phiLowerLimitList = [o1.phiLowerLimit, o2.phiLowerLimit, o3.phiLowerLimit, o4.phiLowerLimit] %}
-  {%- set hasIsolationList = [o1.hasIsolation, o2.hasIsolation, o3.hasIsolation, o4.hasIsolation] %}
-  {%- set isolationLUTList = [o1.isolationLUT, o2.isolationLUT, o3.isolationLUT, o4.isolationLUT] %}
+  {%- set thresholdList = condition.objects[0].thresholdListDef %}
+  {%- set etaNrCutsList = condition.objects[0].etaNrCutsListDef %}
+  {%- set phiNrCutsList = condition.objects[0].phiNrCutsListDef %}
+  {%- set etaUpperLimitList = condition.objects[0].etaUpperLimitListDef %}
+  {%- set etaLowerLimitList = condition.objects[0].etaLowerLimitListDef %}
+  {%- set phiUpperLimitList = condition.objects[0].phiUpperLimitListDef %}
+  {%- set phiLowerLimitList = condition.objects[0].phiLowerLimitListDef %}
+  {%- set hasIsolationList = condition.objects[0].hasIsolationListDef %}
+  {%- set isolationLUTList = condition.objects[0].isolationLUTListDef %}
 
-  {%- for i in range(nr_requirements,condition.ReqObjects-1)|reverse %}
-    {%- set temp = thresholdList.append(0) %}
-    {%- set temp = thresholdList.pop(i) %}
-    {%- set temp = etaNrCutsList.append(0) %}
-    {%- set temp = etaNrCutsList.pop(i) %}
-    {%- set temp = phiNrCutsList.append(0) %}
-    {%- set temp = phiNrCutsList.pop(i) %}
-    {%- set temp = etaUpperLimitList.append(0) %}
-    {%- set temp = etaUpperLimitList.pop(i) %}
-    {%- set temp = etaLowerLimitList.append(0) %}
-    {%- set temp = etaLowerLimitList.pop(i) %}
-    {%- set temp = phiFullRangeList.append(0) %}
-    {%- set temp = phiFullRangeList.pop(i) %}
-    {%- set temp = phiW2IgnoreList.append(0) %}
-    {%- set temp = phiW2IgnoreList.pop(i) %}
-    {%- set temp = phiUpperLimitList.append(0) %}
-    {%- set temp = phiUpperLimitList.pop(i) %}
-    {%- set temp = phiLowerLimitList.append(0) %}
-    {%- set temp = phiLowerLimitList.pop(i) %}
-    {%- set temp = hasIsolationList.append(0) %}
-    {%- set temp = hasIsolationList.pop(i) %}
-    {%- set temp = isolationLUTList.append(0) %}
-    {%- set temp = isolationLUTList.pop(i) %}
+  {%- for i in range(0,nr_requirements) %}
+    {%- if thresholdList.insert(i,condition.objects[i].threshold) %}{%- endif %}
+    {%- if etaNrCutsList.insert(i,condition.objects[i].etaNrCuts) %}{%- endif %}
+    {%- if phiNrCutsList.insert(i,condition.objects[i].phiNrCuts) %}{%- endif %}
+    {%- if etaUpperLimitList.insert(i,condition.objects[i].etaUpperLimit) %}{%- endif %}
+    {%- if etaLowerLimitList.insert(i,condition.objects[i].etaLowerLimit) %}{%- endif %}
+    {%- if phiUpperLimitList.insert(i,condition.objects[i].phiUpperLimit) %}{%- endif %}
+    {%- if phiLowerLimitList.insert(i,condition.objects[i].phiLowerLimit) %}{%- endif %}
+    {%- if hasIsolationList.insert(i,condition.objects[i].hasIsolation) %}{%- endif %}
+    {%- if isolationLUTList.insert(i,condition.objects[i].isolationLUT) %}{%- endif %}
   {%- endfor %}
-
-  {%- for i in range(1,nr_requirements) %}
-    {%- set o = condition.objects[i] %}
-    {%- if nr_requirements > i and o.hasSlice %}
-        slice_{{i}}_low_obj1 => {{ o.sliceLow }}, 
-        slice_{{i}}_high_obj1 => {{ o.sliceHigh }}, 
-    {%- endif %}        
-  {%- endfor %}        
--- object cuts
-  {%- if not o1.operator %}
-        pt_ge_mode_obj1 => {{ o1.operator|vhdl_bool }}, 
-  {%- endif %}        
         pt_thresholds_obj1 => (X"{{ thresholdList[0]|X04 }}", X"{{ thresholdList[1]|X04 }}", X"{{ thresholdList[2]|X04 }}", X"{{ thresholdList[3]|X04 }}"),
   {%- set max_eta_cuts = [etaNrCutsList[0], etaNrCutsList[1], etaNrCutsList[2], etaNrCutsList[3]]|max %}  
   {%- if etaNrCutsList[0] > 0 or etaNrCutsList[1] > 0 or etaNrCutsList[2] > 0 or etaNrCutsList[3] > 0 %}
@@ -82,7 +55,7 @@
   {%- endif %}        
 -- orm object cuts
   {%- if not orm_obj.operator %}
-        pt_ge_mode_obj2 => false, 
+        pt_ge_mode_obj2 => {{ orm_obj.operator|vhdl_bool }}, 
   {%- endif %}        
         pt_threshold_obj2 => X"{{ orm_obj.threshold|X04 }}",
   {%- if orm_obj.etaNrCuts > 0 %}

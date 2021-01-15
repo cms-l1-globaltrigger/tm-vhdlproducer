@@ -6,10 +6,10 @@
     {%- endif %}        
   {%- endfor %}
 -- object cuts
-  {%- if not condition.objects[0].operator %}
-        pt_ge_mode_obj1 => {{ condition.objects[0].operator|vhdl_bool }}, 
+  {%- if not o1.operator %}
+        pt_ge_mode_obj1 => {{ o1.operator|vhdl_bool }}, 
   {%- endif %}        
-        pt_thresholds_obj1 => (X"{{ condition.objects[0].threshold|X04 }}", X"{{ condition.objects[1].threshold|X04 }}", X"{{ condition.objects[2].threshold|X04 }}", X"{{ condition.objects[3].threshold|X04 }}"),
+        pt_thresholds_obj1 => (X"{{ o1.threshold|X04 }}", X"{{ o2.threshold|X04 }}", X"{{ o3.threshold|X04 }}", X"{{ o4.threshold|X04 }}"),
   {%- set max_eta_cuts = [condition.objects[0].etaNrCuts, condition.objects[1].etaNrCuts, condition.objects[2].etaNrCuts, condition.objects[3].etaNrCuts]|max %}  
   {%- if o1.etaNrCuts > 0 or o2.etaNrCuts > 0 or o3.etaNrCuts > 0 or o4.etaNrCuts > 0 %}
         nr_eta_windows_obj1 => ({{ o1.etaNrCuts }}, {{ o2.etaNrCuts }}, {{ o3.etaNrCuts }}, {{ o4.etaNrCuts }}),

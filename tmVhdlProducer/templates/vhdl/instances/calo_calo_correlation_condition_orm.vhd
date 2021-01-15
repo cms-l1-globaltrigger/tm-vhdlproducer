@@ -18,7 +18,7 @@
   {%- if condition.nr_objects == 3 %}
         obj_2plus1 => true
   {%- elif condition.nr_objects == 2 %}        
-        nr_obj3 => MAX_CALO_OBJECTS, -- for default number of calo3 input
+        nr_obj3 => MAX_CALO_OBJECTS, -- default number of calo3 input
         obj_2plus1 => false
   {%- endif %}        
 {%- endblock %}

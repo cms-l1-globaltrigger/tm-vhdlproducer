@@ -6,16 +6,16 @@
 {% block entity %}work.calo_conditions_orm{% endblock %}
 
 {% block generic_map %}
-  {%- for i in range(1,nr_requirements) %}
-    {%- set o = condition.objects[i] %}
-    {%- if nr_requirements > i and o.hasSlice %}
-        slice_{{i+1}}_low_obj1 => {{ o.sliceLow }}, 
-        slice_{{i+1}}_high_obj1 => {{ o.sliceHigh }}, 
+  {%- for i in range(0,condition.nr_objects) %}
+    {%- if condition.nr_objects > i and condition.objects[i].hasSlice  %}
+        slice_{{i+1}}_low_obj1 => {{ condition.objects[i].sliceLow }}, 
+        slice_{{i+1}}_high_obj1 => {{ condition.objects[i].sliceHigh }}, 
     {%- endif %}        
-  {%- endfor %}        
+  {%- endfor %}
+-- object cuts
   {%- if not o1.operator %}
         pt_ge_mode_obj1 => {{ o1.operator|vhdl_bool }}, 
-  {%- endif %}          
+  {%- endif %}        
   {%- include "instances/sub_templ/object_cuts_calo_orm.vhd" %}
   {%- include "instances/sub_templ/correlation_cuts_comb.vhd" %}
 -- correlation cuts orm

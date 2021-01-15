@@ -1076,7 +1076,7 @@ class ObjectHelper(VhdlHelper):
         # State of object
         self.isValid = False
         self.handle = None
-
+        
     def update(self, object_handle):
         self.name = object_handle.name
         self.type = ObjectTypes[object_handle.type]
@@ -1151,6 +1151,15 @@ class ObjectHelper(VhdlHelper):
             self.phiUpperLimit[1] = phiCuts[1][1]
         self.isValid = True
         self.handle = object_handle
+        self.thresholdListDef = [0, 0, 0, 0]
+        self.etaNrCutsListDef = [0, 0, 0, 0]
+        self.phiNrCutsListDef = [0, 0, 0, 0]
+        self.etaUpperLimitListDef = [0, 0, 0, 0]
+        self.etaLowerLimitListDef = [0, 0, 0, 0]
+        self.phiUpperLimitListDef = [0, 0, 0, 0]
+        self.phiLowerLimitListDef = [0, 0, 0, 0]
+        self.hasIsolationListDef = [False, False, False, False]
+        self.isolationLUTListDef = [0xf, 0xf, 0xf, 0xf]
 
     @property
     def is_muon_type(self):
