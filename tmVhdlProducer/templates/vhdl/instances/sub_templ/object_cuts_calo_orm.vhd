@@ -90,8 +90,8 @@
   {%- endif %}        
   {%- for j in range(0,(orm_obj.etaNrCuts)) %}
     {%- if orm_obj.etaNrCuts > j %}
-        eta_w{{j+1}}_upper_limit_calo => X"{{ orm_obj.etaUpperLimit[j]|X04 }}", 
-        eta_w{{j+1}}_lower_limit_calo => X"{{ orm_obj.etaLowerLimit[j]|X04 }}",
+        eta_w{{j+1}}_upper_limit_obj2 => X"{{ orm_obj.etaUpperLimit[j]|X04 }}", 
+        eta_w{{j+1}}_lower_limit_obj2 => X"{{ orm_obj.etaLowerLimit[j]|X04 }}",
     {%- endif %}        
   {%- endfor %}
   {%- if orm_obj.phiNrCuts > 0 %}
@@ -99,8 +99,8 @@
   {%- endif %}        
   {%- for j in range(0,(orm_obj.phiNrCuts)) %}
     {%- if orm_obj.phiNrCuts > j %}
-        phi_w{{j+1}}_upper_limit_calo => X"{{ orm_obj.phiUpperLimit[j]|X04 }}", 
-        phi_w{{j+1}}_lower_limit_calo => X"{{ orm_obj.phiLowerLimit[j]|X04 }}",
+        phi_w{{j+1}}_upper_limit_obj2 => X"{{ orm_obj.phiUpperLimit[j]|X04 }}", 
+        phi_w{{j+1}}_lower_limit_obj2 => X"{{ orm_obj.phiLowerLimit[j]|X04 }}",
     {%- endif %}        
   {%- endfor %}
   {%- if orm_obj.hasIsolation %}
