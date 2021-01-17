@@ -1,13 +1,13 @@
 {%- block object_cuts_calo_orm %}
-  {%- set thresholdList = condition.objects[0].thresholdListDef %}
-  {%- set etaNrCutsList = condition.objects[0].etaNrCutsListDef %}
-  {%- set phiNrCutsList = condition.objects[0].phiNrCutsListDef %}
-  {%- set etaUpperLimitList = condition.objects[0].etaUpperLimitListDef %}
-  {%- set etaLowerLimitList = condition.objects[0].etaLowerLimitListDef %}
-  {%- set phiUpperLimitList = condition.objects[0].phiUpperLimitListDef %}
-  {%- set phiLowerLimitList = condition.objects[0].phiLowerLimitListDef %}
-  {%- set hasIsolationList = condition.objects[0].hasIsolationListDef %}
-  {%- set isolationLUTList = condition.objects[0].isolationLUTListDef %}
+  {%- set thresholdList = o1.thresholdListDef %}
+  {%- set etaNrCutsList = o1.etaNrCutsListDef %}
+  {%- set phiNrCutsList = o1.phiNrCutsListDef %}
+  {%- set etaUpperLimitList = o1.etaUpperLimitListDef %}
+  {%- set etaLowerLimitList = o1.etaLowerLimitListDef %}
+  {%- set phiUpperLimitList = o1.phiUpperLimitListDef %}
+  {%- set phiLowerLimitList = o1.phiLowerLimitListDef %}
+  {%- set hasIsolationList = o1.hasIsolationListDef %}
+  {%- set isolationLUTList = o1.isolationLUTListDef %}
 
   {%- for i in range(0,nr_requirements) %}
     {%- if thresholdList.insert(i,condition.objects[i].threshold) %}{%- endif %}
