@@ -1,8 +1,8 @@
 import argparse
-import subprocess
 import glob
 import logging
 import re
+import subprocess
 import sys, os
 
 import tmEventSetup

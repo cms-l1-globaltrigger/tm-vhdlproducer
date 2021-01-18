@@ -18,6 +18,9 @@
 -- VHDL producer version
 -- v{{ menu.info.sw_version }}
 
+-- tmEventSetup version
+-- v{{ menu.info.version }}
+
 -- Signal definition of pt, eta and phi for correlation conditions.
 -- Insert "signal_correlation_conditions_pt_eta_phi_cos_sin_phi.vhd.j2" as often as an ObjectType at a certain Bx is used in a correlation condition.
 {%- include  "signals/signal_correlation_conditions_pt_eta_phi_cos_sin_phi.vhd.j2" %}
@@ -35,7 +38,7 @@
 {%- endfor %}
 
 -- Signal definition for algorithms names
-{%- for algorithm in module.algorithms|sort_by_attribute('index') %}
+{%- for algorithm in module.algorithms | sort_by_attribute('index') %}
     signal {{ algorithm.vhdl_signal }} : std_logic;
 {%- endfor %}
 
