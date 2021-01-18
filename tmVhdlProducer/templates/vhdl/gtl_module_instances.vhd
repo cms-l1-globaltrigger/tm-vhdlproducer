@@ -88,10 +88,10 @@
 
 -- Instantiations of algorithms
 
-{% for algorithm in module.algorithms|sort_by_attribute('index') %}
+{% for algorithm in module.algorithms | sort_by_attribute('index') %}
 -- {{ algorithm.index }} {{ algorithm.name }} : {{ algorithm.expression }}
 {{ algorithm.vhdl_signal }} <= {{ algorithm.vhdl_expression }};
-algo({{ algorithm.module_index | d}}) <= {{ algorithm.vhdl_signal }};
+algo({{ algorithm.module_index | d }}) <= {{ algorithm.vhdl_signal }};
 {% endfor %}
 
 -- ========================================================

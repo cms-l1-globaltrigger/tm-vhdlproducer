@@ -466,7 +466,7 @@ class ModuleHelper(VhdlHelper):
     def correlationCombinationsInvMassDivDr(self):
         combinations = {}
         for condition in self.conditions:
-            if hasattr(condition, 'mass') and condition.mass.enabled == vhdl_bool(True) and condition.mass.type == condition.mass.InvariantMassDeltaRType:
+            if hasattr(condition, 'mass') and condition.mass.enabled and condition.mass.type == condition.mass.InvariantMassDeltaRType:
                 if isinstance(condition, CorrelationConditionHelper):
                     a, b = condition.objects
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
@@ -489,7 +489,7 @@ class ModuleHelper(VhdlHelper):
             if condition.handle.isCaloConditionOvRm():
                 return True
             if hasattr(condition, 'hasTwoBodyPtCut'):
-                return bool(condition.hasTwoBodyPtCut)
+                return bool(condition.twoBodyPt)
             return False
         objects = {}
         for condition in filter(hasObjectCorrelation, self.conditions):
@@ -674,28 +674,26 @@ class CaloConditionHelper(ConditionHelper):
     def __init__(self, condition_handle):
         super().__init__(condition_handle)
         # Default attributes
-        self.hasTwoBodyPt = False
-        self.twoBodyPt = TwoBodyPtCutHelper(0)
+        self.twoBodyPt = TwoBodyPtCutHelper()
         self.update(condition_handle)
 
     def update(self, condition_handle):
         for cut_handle in condition_handle.cuts:
             if cut_handle.cut_type == tmEventSetup.TwoBodyPt:
                 self.twoBodyPt.update(cut_handle)
-                self.hasTwoBodyPt = True
 
 class MuonConditionHelper(ConditionHelper):
     """Muon condition template helper class.
 
     Attributes:
-        name         condition name from event setup [str]
-        type         condition type name [str]
-        vhdl_signal  VHDL safe condition signal name [str]
-        objects      list of object template helpers contained by condition
-        nr_objects   number of actually used objects [int]
-        handle       reference to underlying condition handle [ConditionHandle]
-        chargeCorrelation [str]
-        twoBodyPt    [TwoBodyPtCutHelper]
+        name              condition name from event setup [str]
+        type              condition type name [str]
+        vhdl_signal       VHDL safe condition signal name [str]
+        objects           list of object template helpers contained by condition
+        nr_objects        number of actually used objects [int]
+        handle            reference to underlying condition handle [ConditionHandle]
+        chargeCorrelation [ChargeCorrelationCutHelper]
+        twoBodyPt         [TwoBodyPtCutHelper]
     """
     ReqObjects = 4
     """Number of required objects."""
@@ -703,19 +701,16 @@ class MuonConditionHelper(ConditionHelper):
     def __init__(self, condition_handle):
         super().__init__(condition_handle)
         # Default attributes
-        #self.chargeCorrelation = charge_correlation_encode('ig')
-        self.chargeCorrelation = None
-        self.hasTwoBodyPt = False
-        self.twoBodyPt = TwoBodyPtCutHelper(0)
+        self.chargeCorrelation = ChargeCorrelationCutHelper('ig')
+        self.twoBodyPt = TwoBodyPtCutHelper()
         self.update_cuts(condition_handle)
 
     def update_cuts(self, condition_handle):
         for cut_handle in condition_handle.cuts:
             if cut_handle.cut_type == tmEventSetup.ChargeCorrelation:
-                self.chargeCorrelation = charge_correlation_encode(cut_handle.data)
+                self.chargeCorrelation.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.TwoBodyPt:
                 self.twoBodyPt.update(cut_handle)
-                self.hasTwoBodyPt = True
 
 class EsumsConditionHelper(ConditionHelper):
     """Esums condition template helper class."""
@@ -746,18 +741,18 @@ class CorrelationConditionHelper(ConditionHelper):
     """Correlation condition template helper class.
 
     Attributes:
-        name         condition name from event setup [str]
-        type         condition type name [str]
-        vhdl_signal  VHDL safe condition signal name [str]
-        objects      list of object template helpers contained by condition
-        nr_objects   number of actually used objects [int]
-        handle       reference to underlying condition handle [ConditionHandle]
-        deltaEta     [DeltaEtaCutHelper]
-        deltaPhi     [DeltaPhiCutHelper]
-        deltaR       [DeltaRCutHelper]
-        mass         [MassCutHelper]
-        twoBodyPt    [TwoBodyPtCutHelper]
-        chargeCorrelation [str]
+        name              condition name from event setup [str]
+        type              condition type name [str]
+        vhdl_signal       VHDL safe condition signal name [str]
+        objects           list of object template helpers contained by condition
+        nr_objects        number of actually used objects [int]
+        handle            reference to underlying condition handle [ConditionHandle]
+        deltaEta          [DeltaEtaCutHelper]
+        deltaPhi          [DeltaPhiCutHelper]
+        deltaR            [DeltaRCutHelper]
+        mass              [MassCutHelper]
+        twoBodyPt         [TwoBodyPtCutHelper]
+        chargeCorrelation [ChargeCorrelationCutHelper]
     """
 
     ReqObjects = 2
@@ -766,50 +761,37 @@ class CorrelationConditionHelper(ConditionHelper):
     def __init__(self, condition_handle):
         super().__init__(condition_handle)
         # Default attributes
-        self.hasDeltaEta = False
         self.deltaEta = DeltaEtaCutHelper()
-        self.hasDeltaPhi = False
         self.deltaPhi = DeltaPhiCutHelper()
-        self.hasDeltaR = False
         self.deltaR = DeltaRCutHelper()
-        self.hasMass = False
         self.mass = MassCutHelper()
-        self.hasTwoBodyPt = False
         self.twoBodyPt = TwoBodyPtCutHelper()
-        #self.chargeCorrelation = charge_correlation_encode('ig')
-        self.chargeCorrelation = None
+        self.chargeCorrelation = ChargeCorrelationCutHelper('ig')
         self.update(condition_handle)
 
     @property
     def objectsInSameBx(self):
         """Returns 'true' if all objects of same BX offset else returns 'false'."""
-        return vhdl_bool(len(set([obj.bx for obj in self.objects])) == 1)
+        return 1 == len(set([obj.bx for obj in self.objects]))
 
     def update(self, condition_handle):
         for cut_handle in condition_handle.cuts:
             if cut_handle.cut_type == tmEventSetup.DeltaEta:
                 self.deltaEta.update(cut_handle)
-                self.hasDeltaEta = True
             elif cut_handle.cut_type == tmEventSetup.DeltaPhi:
                 self.deltaPhi.update(cut_handle)
-                self.hasDeltaPhi = True
             elif cut_handle.cut_type == tmEventSetup.DeltaR:
                 self.deltaR.update(cut_handle)
-                self.hasDeltaR = True
             elif cut_handle.cut_type == tmEventSetup.Mass:
                 self.mass.update(cut_handle)
-                self.hasMass = True
             elif cut_handle.cut_type == tmEventSetup.MassUpt:
                 self.mass.update(cut_handle)
-                self.hasMass = True
             elif cut_handle.cut_type == tmEventSetup.MassDeltaR:
                 self.mass.update(cut_handle)
-                self.hasMass = True
             elif cut_handle.cut_type == tmEventSetup.TwoBodyPt:
                 self.twoBodyPt.update(cut_handle)
-                self.hasTwoBodyPt = True
             elif cut_handle.cut_type == tmEventSetup.ChargeCorrelation:
-                self.chargeCorrelation = charge_correlation_encode(cut_handle.data)
+                self.chargeCorrelation.update(cut_handle)
 
         # Set mass cut type
         self.mass.deduceType(condition_handle)
@@ -818,14 +800,14 @@ class Correlation3ConditionHelper(ConditionHelper):
     """Correlation of 3 objects condition template helper class.
 
     Attributes:
-        name         condition name from event setup [str]
-        type         condition type name [str]
-        vhdl_signal  VHDL safe condition signal name [str]
-        objects      list of object template helpers contained by condition
-        nr_objects   number of actually used objects [int]
-        handle       reference to underlying condition handle [ConditionHandle]
-        mass         [MassCutHelper]
-        chargeCorrelation [str]
+        name              condition name from event setup [str]
+        type              condition type name [str]
+        vhdl_signal       VHDL safe condition signal name [str]
+        objects           list of object template helpers contained by condition
+        nr_objects        number of actually used objects [int]
+        handle            reference to underlying condition handle [ConditionHandle]
+        mass              [MassCutHelper]
+        chargeCorrelation [ChargeCorrelationCutHelper]
     """
 
     ReqObjects = 3
@@ -835,21 +817,20 @@ class Correlation3ConditionHelper(ConditionHelper):
         super().__init__(condition_handle)
         # Default attributes
         self.mass = MassCutHelper()
-        #self.chargeCorrelation = charge_correlation_encode('ig')
-        self.chargeCorrelation = None
+        self.chargeCorrelation = ChargeCorrelationCutHelper('ig')
         self.update(condition_handle)
 
     @property
     def objectsInSameBx(self):
         """Returns 'true' if all objects of same BX offset else returns 'false'."""
-        return vhdl_bool(len(set([obj.bx for obj in self.objects])) == 1)
+        return 1 == len(set([obj.bx for obj in self.objects]))
 
     def update(self, condition_handle):
         for cut_handle in condition_handle.cuts:
             if cut_handle.cut_type == tmEventSetup.Mass:
                 self.mass.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.ChargeCorrelation:
-                self.chargeCorrelation = charge_correlation_encode(cut_handle.data)
+                self.chargeCorrelation.update(cut_handle)
 
         # Set mass cut type
         self.mass.deduceType(condition_handle)
@@ -858,21 +839,21 @@ class CorrelationConditionOvRmHelper(ConditionHelper):
     """Correlation condition template helper class.
 
     Attributes:
-        name         condition name from event setup [str]
-        type         condition type name [str]
-        vhdl_signal  VHDL safe condition signal name [str]
-        objects      list of object template helpers contained by condition
-        nr_objects   number of actually used objects [int]
-        handle       reference to underlying condition handle [ConditionHandle]
-        deltaEtaOrm  [DeltaEtaCutHelper]
-        deltaPhiOrm  [DeltaPhiCutHelper]
-        deltaROrm    [DeltaRCutHelper]
-        deltaEta     [DeltaEtaCutHelper]
-        deltaPhi     [DeltaPhiCutHelper]
-        deltaR       [DeltaRCutHelper]
-        mass         [MassCutHelper]
-        twoBodyPt    [TwoBodyPtCutHelper]
-        chargeCorrelation [str]
+        name              condition name from event setup [str]
+        type              condition type name [str]
+        vhdl_signal       VHDL safe condition signal name [str]
+        objects           list of object template helpers contained by condition
+        nr_objects        number of actually used objects [int]
+        handle            reference to underlying condition handle [ConditionHandle]
+        deltaEtaOrm       [DeltaEtaCutHelper]
+        deltaPhiOrm       [DeltaPhiCutHelper]
+        deltaROrm         [DeltaRCutHelper]
+        deltaEta          [DeltaEtaCutHelper]
+        deltaPhi          [DeltaPhiCutHelper]
+        deltaR            [DeltaRCutHelper]
+        mass              [MassCutHelper]
+        twoBodyPt         [TwoBodyPtCutHelper]
+        chargeCorrelation [ChargeCorrelationCutHelper]
     """
 
     ReqObjects = 3
@@ -881,59 +862,42 @@ class CorrelationConditionOvRmHelper(ConditionHelper):
     def __init__(self, condition_handle):
         super().__init__(condition_handle)
         # Default attributes
-        self.hasDeltaEtaOrm = False
         self.deltaEtaOrm = DeltaEtaCutHelper()
-        self.hasDeltaPhiOrm = False
         self.deltaPhiOrm = DeltaPhiCutHelper()
-        self.hasDeltaROrm = False
         self.deltaROrm = DeltaRCutHelper()
-        self.hasDeltaEta = False
         self.deltaEta = DeltaEtaCutHelper()
-        self.hasDeltaPhi = False
         self.deltaPhi = DeltaPhiCutHelper()
-        self.hasDeltaR = False
         self.deltaR = DeltaRCutHelper()
-        self.hasMass = False
         self.mass = MassCutHelper()
-        self.hasTwoBodyPt = False
         self.twoBodyPt = TwoBodyPtCutHelper()
-        #self.chargeCorrelation = charge_correlation_encode('ig')
-        self.chargeCorrelation = None
+        self.chargeCorrelation = ChargeCorrelationCutHelper('ig')
         self.update(condition_handle)
 
     @property
     def objectsInSameBx(self):
         """Returns 'true' if all objects of same BX offset else returns 'false'."""
-        return vhdl_bool(len(set([obj.bx for obj in self.objects])) == 1)
+        return 1 == len(set([obj.bx for obj in self.objects]))
 
     def update(self, condition_handle):
         for cut_handle in condition_handle.cuts:
             if cut_handle.cut_type == tmEventSetup.DeltaEta:
                 self.deltaEta.update(cut_handle)
-                self.hasDeltaEta = True
             elif cut_handle.cut_type == tmEventSetup.DeltaPhi:
                 self.deltaPhi.update(cut_handle)
-                self.hasDeltaPhi = True
             elif cut_handle.cut_type == tmEventSetup.DeltaR:
                 self.deltaR.update(cut_handle)
-                self.hasDeltaR = True
             elif cut_handle.cut_type == tmEventSetup.Mass:
                 self.mass.update(cut_handle)
-                self.hasMass = True
             elif cut_handle.cut_type == tmEventSetup.TwoBodyPt:
                 self.twoBodyPt.update(cut_handle)
-                self.hasTwoBodyPt = True
             elif cut_handle.cut_type == tmEventSetup.ChargeCorrelation:
-                self.chargeCorrelation = charge_correlation_encode(cut_handle.data)
+                self.chargeCorrelation.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.OvRmDeltaEta:
                 self.deltaEtaOrm.update(cut_handle)
-                self.hasDeltaEtaOrm = True
             elif cut_handle.cut_type == tmEventSetup.OvRmDeltaPhi:
                 self.deltaPhiOrm.update(cut_handle)
-                self.hasDeltaPhiOrm = True
             elif cut_handle.cut_type == tmEventSetup.OvRmDeltaR:
                 self.deltaROrm.update(cut_handle)
-                self.hasDeltaROrm = True
 
         # Set mass cut type
         self.mass.deduceType(condition_handle)
@@ -960,35 +924,27 @@ class CaloConditionOvRmHelper(ConditionHelper):
     def __init__(self, condition_handle):
         super().__init__(condition_handle)
         # Defaults
-        self.hasDeltaEtaOrm = False
         self.deltaEtaOrm = DeltaEtaCutHelper(0, 0)
-        self.hasDeltaPhiOrm = False
         self.deltaPhiOrm = DeltaPhiCutHelper(0, 0)
-        self.hasDeltaROrm = False
         self.deltaROrm = DeltaRCutHelper(0, 0)
-        self.hasTwoBodyPt = False
-        self.twoBodyPt = TwoBodyPtCutHelper(0)
+        self.twoBodyPt = TwoBodyPtCutHelper()
         self.update(condition_handle)
 
     @property
     def objectsInSameBx(self):
         """Returns 'true' if all objects of same BX offset else returns 'false'."""
-        return vhdl_bool(len(set([obj.bx for obj in self.objects])) == 1)
+        return 1 == len(set([obj.bx for obj in self.objects]))
 
     def update(self, condition_handle):
         for cut_handle in condition_handle.cuts:
             if cut_handle.cut_type == tmEventSetup.OvRmDeltaEta:
                 self.deltaEtaOrm.update(cut_handle)
-                self.hasDeltaEtaOrm = True
             elif cut_handle.cut_type == tmEventSetup.OvRmDeltaPhi:
                 self.deltaPhiOrm.update(cut_handle)
-                self.hasDeltaPhiOrm = True
             elif cut_handle.cut_type == tmEventSetup.OvRmDeltaR:
                 self.deltaROrm.update(cut_handle)
-                self.hasDeltaROrm = True
             elif cut_handle.cut_type == tmEventSetup.TwoBodyPt:
                 self.twoBodyPt.update(cut_handle)
-                self.hasTwoBodyPt = True
 
 # -----------------------------------------------------------------------------
 #  Object helpers
@@ -1005,32 +961,19 @@ class ObjectHelper(VhdlHelper):
         externalSignalName  [str]
         externalChannelId   [int]
         threshold           [int]
-        isolationLUT        [int]
-        qualityLUT          [int]
-        charge              [str]
-        hasCount            [str]
-        count               [int]
-        hasUpt              [str]
-        uptLowerLimit       [int]
-        uptUpperLimit       [int]
-        impactParameterLUT  [int]
+        isolation           [IsolationCutHelper]
+        quality             [QualityCutHelper]
+        charge              [ChargeCutHelper]
+        count               [CountCutHelper]
+        upt                 [UptCutHelper]
+        impactParameter     [ImpactParameterCutHelper]
         etaNrCuts           [int]
-        etaW1LowerLimit     [int]
-        etaW1UpperLimit     [int]
-        etaW2LowerLimit     [int]
-        etaW2UpperLimit     [int]
-        etaW3LowerLimit     [int]
-        etaW3UpperLimit     [int]
-        etaW4LowerLimit     [int]
-        etaW4UpperLimit     [int]
-        etaW5LowerLimit     [int]
-        etaW5UpperLimit     [int]
-        phiFullRange        [str]
-        phiW1LowerLimit     [int]
-        phiW1UpperLimit     [int]
-        phiW2Ignore         [str]
-        phiW2LowerLimit     [int]
-        phiW2UpperLimit     [int]
+        etaLowerLimit       [list]
+        etaLowerLimit       [list]
+        phi                 [list of RangeCutHelper]
+        phiFullRange        [bool]
+        phiW2Ignore         [bool]
+        slice               [SliceCutHelper]
         isValid             is False if object is not initialized [bool]
         is_muon_type        [bool]
         is_calo_type        [bool]
@@ -1048,19 +991,12 @@ class ObjectHelper(VhdlHelper):
         self.externalChannelId = 0
         # common cuts
         self.threshold = 0
-        self.hasIsolation = False
-        self.isolationLUT = 0xf
-        self.hasQuality = False
-        self.qualityLUT = 0xffff
-        self.hasCharge = False
-        self.charge = charge_encode('ign')
-        self.hasCount = False
-        self.count = 0
-        self.hasUpt = False
-        self.uptLowerLimit = 0
-        self.uptUpperLimit = 0
-        self.hasImpactParameter = False
-        self.impactParameterLUT = 0xf
+        self.isolation = IsolationCutHelper(0xf)
+        self.quality = QualityCutHelper(0xffff)
+        self.charge = ChargeCutHelper('ign')
+        self.count = CountCutHelper()
+        self.upt = UptCutHelper()
+        self.impactParameter = ImpactParameterCutHelper(0xf)
         # spatial cuts
         # max. five eta cuts
         self.etaNrCuts = 0
@@ -1085,7 +1021,7 @@ class ObjectHelper(VhdlHelper):
         self.externalSignalName = object_handle.external_signal_name
         self.externalChannelId = object_handle.external_channel_id
         # set the default slice range to maxNum - 1 (e.g. 0-11)
-        self.sliceHigh = ObjectCount[object_handle.type] - 1
+        self.slice.upper = ObjectCount[object_handle.type] - 1
         etaCuts = []
         phiCuts = []
         # setup cuts
@@ -1093,32 +1029,23 @@ class ObjectHelper(VhdlHelper):
             if cut_handle.cut_type == tmEventSetup.Threshold:
                 self.threshold = cut_handle.minimum.index
             elif cut_handle.cut_type == tmEventSetup.Isolation:
-                self.isolationLUT = int(cut_handle.data)
-                self.hasIsolation = True
+                self.isolation.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.Eta:
                 etaCuts.append((cut_handle.minimum.index, cut_handle.maximum.index))
             elif cut_handle.cut_type == tmEventSetup.Phi:
                 phiCuts.append((cut_handle.minimum.index, cut_handle.maximum.index))
             elif cut_handle.cut_type == tmEventSetup.Quality:
-                self.qualityLUT = int(cut_handle.data)
-                self.hasQuality = True
+                self.quality.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.Charge:
-                self.charge = charge_encode(cut_handle.data)
-                self.hasCharge = True
+                self.charge.update(cut_handle)
             if cut_handle.cut_type == tmEventSetup.Count:
-                self.count = cut_handle.minimum.index
-                self.hasCount = True
+                self.count.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.UnconstrainedPt:
-                self.uptLowerLimit = cut_handle.minimum.index
-                self.uptUpperLimit = cut_handle.maximum.index
-                self.hasUpt = True
+                self.upt.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.ImpactParameter:
-                self.impactParameterLUT = int(cut_handle.data)
-                self.hasImpactParameter = True
+                self.impactParameter.update(cut_handle)
             if cut_handle.cut_type == tmEventSetup.Slice:
-                self.sliceLow  =  int(cut_handle.minimum.value) # float to int
-                self.sliceHigh =  int(cut_handle.maximum.value)
-                self.hasSlice = True
+                self.slice.update(cut_handle)
         # setup eta windows
         if len(etaCuts) > 0:
             self.etaNrCuts = 1
@@ -1140,7 +1067,7 @@ class ObjectHelper(VhdlHelper):
             self.etaNrCuts = 5
             self.etaLowerLimit[4] = etaCuts[4][0]
             self.etaUpperLimit[4] = etaCuts[4][1]
-        # setup phi windows
+        # update phi window flags
         if len(phiCuts) > 0:
             self.phiNrCuts = 1
             self.phiLowerLimit[0] = phiCuts[0][0]
@@ -1188,13 +1115,24 @@ class ObjectHelper(VhdlHelper):
 
 class CutHelper(VhdlHelper):
 
-    pass
+    def __init__(self):
+        self.enabled = False
+
+    def __bool__(self):
+        return self.enabled
 
 class ThresholdCutHelper(CutHelper):
 
     def __init__(self, threshold=0):
+        super().__init__()
         self.threshold = threshold
-        self.enabled = vhdl_bool(False)
+
+class CountCutHelper(ThresholdCutHelper):
+
+    def update(self, cut_handle):
+        """Updates threshold and enables cut."""
+        self.threshold = cut_handle.minimum.index
+        self.enabled = True
 
 class TwoBodyPtCutHelper(ThresholdCutHelper):
 
@@ -1206,14 +1144,71 @@ class TwoBodyPtCutHelper(ThresholdCutHelper):
         assert cut_handle.precision_math != 0
         scale_math = 10**cut_handle.precision_math
         self.threshold = math.floor(cut_handle.minimum.value * scale) / scale * (scale_pt * scale_pt) * (scale_math * scale_math)
-        self.enabled = vhdl_bool(True)
+        self.enabled = True
+
+class LookupTableCutHelper(CutHelper):
+
+    def __init__(self, value=0):
+        super().__init__()
+        self.value = value
+
+class IsolationCutHelper(LookupTableCutHelper):
+
+    def update(self, cut_handle):
+        """Updates LUT value and enables cut."""
+        self.value = int(cut_handle.data)
+        self.enabled = True
+
+class QualityCutHelper(LookupTableCutHelper):
+
+    def update(self, cut_handle):
+        """Updates LUT value and enables cut."""
+        self.value = int(cut_handle.data)
+        self.enabled = True
+
+class ImpactParameterCutHelper(LookupTableCutHelper):
+
+    def update(self, cut_handle):
+        """Updates LUT value and enables cut."""
+        self.value = int(cut_handle.data)
+        self.enabled = True
+
+class ChargeCutHelper(CutHelper):
+
+    def __init__(self, value):
+        super().__init__()
+        self.value = charge_encode(value)
+
+    def update(self, cut_handle):
+        """Updates LUT value and enables cut."""
+        self.value = charge_encode(cut_handle.data)
+        self.enabled = True
+
+class ChargeCorrelationCutHelper(CutHelper):
+
+    def __init__(self, value):
+        super().__init__()
+        self.value = charge_correlation_encode(value)
+
+    def update(self, cut_handle):
+        """Updates LUT value and enables cut."""
+        self.value = charge_correlation_encode(cut_handle.data)
+        self.enabled = True
 
 class RangeCutHelper(CutHelper):
 
     def __init__(self, lower=0, upper=0):
+        super().__init__()
         self.lower = lower
         self.upper = upper
-        self.enabled = vhdl_bool(False)
+
+class UptCutHelper(RangeCutHelper):
+
+    def update(self, cut_handle):
+        """Updates limits and enables cut."""
+        self.lower = cut_handle.minimum.index
+        self.upper = cut_handle.maximum.index
+        self.enabled = True
 
 class DeltaEtaCutHelper(RangeCutHelper):
 
@@ -1222,7 +1217,7 @@ class DeltaEtaCutHelper(RangeCutHelper):
         scale = 10.**cut_handle.precision
         self.lower = math.floor(cut_handle.minimum.value * scale)
         self.upper = math.ceil(cut_handle.maximum.value * scale)
-        self.enabled = vhdl_bool(True)
+        self.enabled = True
 
 class DeltaPhiCutHelper(RangeCutHelper):
 
@@ -1231,7 +1226,7 @@ class DeltaPhiCutHelper(RangeCutHelper):
         scale = 10.**cut_handle.precision
         self.lower = math.floor(cut_handle.minimum.value * scale)
         self.upper = math.ceil(cut_handle.maximum.value * scale)
-        self.enabled = vhdl_bool(True)
+        self.enabled = True
 
 class DeltaRCutHelper(RangeCutHelper):
 
@@ -1240,7 +1235,7 @@ class DeltaRCutHelper(RangeCutHelper):
         scale = 10.**cut_handle.precision
         self.lower = math.floor(cut_handle.minimum.value * scale) / scale * (scale * scale)
         self.upper = math.ceil(cut_handle.maximum.value * scale) / scale * (scale * scale)
-        self.enabled = vhdl_bool(True)
+        self.enabled = True
 
 class MassCutHelper(RangeCutHelper):
 
@@ -1274,7 +1269,15 @@ class MassCutHelper(RangeCutHelper):
         scale_math = 10**cut_handle.precision_math
         self.lower = math.floor(cut_handle.minimum.value * scale) / scale * (scale_pt * scale_pt) * scale_math
         self.upper = math.ceil(cut_handle.maximum.value * scale) / scale * (scale_pt * scale_pt) * scale_math
-        self.enabled = vhdl_bool(True)
+        self.enabled = True
+
+class SliceCutHelper(RangeCutHelper):
+
+    def update(self, cut_handle):
+        """Updates limits and enables cut."""
+        self.lower = int(cut_handle.minimum.value)
+        self.upper = int(cut_handle.maximum.value)
+        self.enabled = True
 
 # -----------------------------------------------------------------------------
 #  Tests

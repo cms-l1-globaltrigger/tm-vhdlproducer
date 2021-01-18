@@ -15,7 +15,7 @@
         nr_obj1 => NR_{{ o1.type|upper }}_OBJECTS,
         type_obj1 => {{ o1.type|upper }}_TYPE,
         mass_3_obj => true,
-        same_bx => {{ condition.objectsInSameBx }}
+        same_bx => {{ condition.objectsInSameBx | vhdl_bool}}
 {%- endblock %}
 
 {%- block port_map %}

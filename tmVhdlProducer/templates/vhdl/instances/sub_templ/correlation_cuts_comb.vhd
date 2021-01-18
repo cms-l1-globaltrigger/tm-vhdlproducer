@@ -5,7 +5,7 @@
         requested_charge_correlation => "{{ condition.chargeCorrelation }}",     
     {%- endif %}        
   {%- endif %} 
-  {%- if condition.hasTwoBodyPt %}
+  {%- if condition.twoBodyPt %}
 -- correlation cuts
         twobody_pt_cut => true, 
         pt_width => {{ o1.type|upper }}_PT_VECTOR_WIDTH, 

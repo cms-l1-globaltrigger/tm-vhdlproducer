@@ -10,30 +10,30 @@
         type_obj{{i+1}} => {{ o.type|upper }}_TYPE,
   {%- endfor %}
 -- selector same/different bunch crossings
-        same_bx => {{ condition.objectsInSameBx }}
+        same_bx => {{ condition.objectsInSameBx | vhdl_bool }}
 {%- endblock %}
 
 {%- block port_map %}
         calo1 => {{ o1.type|lower }}_bx_{{ o1.bx }}, 
         calo2 => {{ o2.type|lower }}_bx_{{ o2.bx }},
   {%- if condition.mass.type == condition.mass.InvariantMassDeltaRType %}
-        mass_div_dr => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr,
+        mass_div_dr => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr,
   {%- else %}
-    {%- if (condition.hasDeltaEta) or (condition.hasDeltaR) %}
+    {%- if (condition.deltaEta) or (condition.deltaR) %}
         deta => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector,        
     {%- endif %}        
-    {%- if (condition.hasDeltaPhi) or (condition.hasDeltaR) %}
+    {%- if (condition.deltaPhi) or (condition.deltaR) %}
         dphi => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
     {%- endif %}        
-    {%- if (condition.hasMass) or (condition.hasTwoBodyPt) %}
+    {%- if (condition.mass) or (condition.twoBodyPt) %}
         pt1 => {{ o1.type|lower }}_bx_{{ o1.bx }}_pt_vector, 
         pt2 => {{ o2.type|lower }}_bx_{{ o2.bx }}_pt_vector,
     {%- endif %}        
-    {%- if condition.hasMass %}
+    {%- if condition.mass %}
         cosh_deta => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector, 
         cos_dphi => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
     {%- endif %}        
-    {%- if condition.hasTwoBodyPt %}
+    {%- if condition.twoBodyPt %}
         cos_phi_1_integer => {{ o1.type|lower }}_bx_{{ o1.bx }}_cos_phi, 
         cos_phi_2_integer => {{ o2.type|lower }}_bx_{{ o2.bx }}_cos_phi, 
         sin_phi_1_integer => {{ o1.type|lower }}_bx_{{ o1.bx }}_sin_phi, 

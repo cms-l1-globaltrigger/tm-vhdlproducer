@@ -38,7 +38,7 @@
 {%- endfor %}
 
 -- Signal definition for algorithms names
-{%- for algorithm in module.algorithms|sort_by_attribute('index') %}
+{%- for algorithm in module.algorithms | sort_by_attribute('index') %}
     signal {{ algorithm.vhdl_signal }} : std_logic;
 {%- endfor %}
 
