@@ -9,8 +9,8 @@
 {%- endblock %}
 
 {%- block port_map %}
-        {{ o1.type|lower }}_bx_{{ o1.bx }}, 
-        {{ o2.type|lower }}_bx_{{ o2.bx }},
+        calo => {{ o1.type|lower }}_bx_{{ o1.bx }}, 
+        muon => {{ o2.type|lower }}_bx_{{ o2.bx }},
   {%- if condition.mass.type == condition.mass.InvariantMassDeltaRType %}
         mass_div_dr => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr,
   {%- else %}

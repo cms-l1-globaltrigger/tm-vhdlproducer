@@ -36,8 +36,8 @@
 {%- endblock %}
 
 {%- block port_map %}
-        {{ o1.type|lower }}_bx_{{ o1.bx }}, 
-        {{ o2.type|lower }}_bx_{{ o2.bx }},
+        calo => {{ o1.type|lower }}_bx_{{ o1.bx }}, 
+        esums => {{ o2.type|lower }}_bx_{{ o2.bx }},
     {%- if condition.hasDeltaPhi %}
         dphi => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
     {%- endif %}        

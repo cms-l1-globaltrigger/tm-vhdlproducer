@@ -1,6 +1,6 @@
 {% extends "instances/sub_templ/correlation_condition.vhd" %}
 
-{% block entity %}work.calo_calo_correlation_condition_orm{% endblock %}
+{% block entity %}work.correlation_conditions_calo{% endblock %}
 
 {%- block correlation_orm %}
 -- correlation cuts orm
@@ -19,8 +19,9 @@
         obj_2plus1 => true
   {%- elif condition.nr_objects == 2 %}        
         nr_obj3 => MAX_CALO_OBJECTS, -- default number of calo3 input
-        obj_2plus1 => false
+        obj_2plus1 => false,
   {%- endif %}        
+        same_bx => {{ condition.objectsInSameBx }}
 {%- endblock %}
 
 {%- block port_map %}

@@ -1,6 +1,6 @@
 {% extends "instances/sub_templ/correlation_condition.vhd" %}
 
-{% block entity %}work.calo_calo_correlation_condition{% endblock %}
+{% block entity %}work.correlation_conditions_calo{% endblock %}
 
 {%- block generic_map_end %}
 -- number of objects and type
@@ -14,8 +14,8 @@
 {%- endblock %}
 
 {%- block port_map %}
-        {{ o1.type|lower }}_bx_{{ o1.bx }}, 
-        {{ o2.type|lower }}_bx_{{ o2.bx }},
+        calo1 => {{ o1.type|lower }}_bx_{{ o1.bx }}, 
+        calo2 => {{ o2.type|lower }}_bx_{{ o2.bx }},
   {%- if condition.mass.type == condition.mass.InvariantMassDeltaRType %}
         mass_div_dr => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr,
   {%- else %}
