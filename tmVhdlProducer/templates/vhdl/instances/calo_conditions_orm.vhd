@@ -9,9 +9,9 @@
 
 {% block generic_map %}
   {%- for i in range(0,condition.nr_objects) %}
-    {%- if condition.nr_objects > i and condition.objects[i].hasSlice  %}
-        slice_{{i+1}}_low_obj1 => {{ condition.objects[i].sliceLow }}, 
-        slice_{{i+1}}_high_obj1 => {{ condition.objects[i].sliceHigh }}, 
+    {%- if condition.nr_objects > i and condition.objects[i].slice  %}
+        slice_{{i+1}}_low_obj1 => {{ condition.objects[i].slice.lower }}, 
+        slice_{{i+1}}_high_obj1 => {{ condition.objects[i].slice.upper }}, 
     {%- endif %}        
   {%- endfor %}
 -- object cuts

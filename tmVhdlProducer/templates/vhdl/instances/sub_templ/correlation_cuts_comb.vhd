@@ -2,7 +2,7 @@
   {%- if o1.is_muon_type %}
     {%- if condition.chargeCorrelation %}
 -- charge correlation cut
-        requested_charge_correlation => "{{ condition.chargeCorrelation }}",     
+        requested_charge_correlation => "{{ condition.chargeCorrelation.value }}",     
     {%- endif %}        
   {%- endif %} 
   {%- if condition.twoBodyPt %}

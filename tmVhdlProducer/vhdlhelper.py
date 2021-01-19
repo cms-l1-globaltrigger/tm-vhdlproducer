@@ -1,18 +1,13 @@
 """Template helper classes.
-
 Overview of class hierarchy:
-
 Basic template helpers for menu, modules and algorithms.
-
   * VhdlHelper
   * VersionHelper
   * MenuHelper
   * InfoHelper
   * ModuleHelper
   * AlgorithmHelper
-
 Condition template helpers for needs of different condition types.
-
   * ConditionHelper
     * SimpleConditionHelper
     * CaloConditionHelper
@@ -21,15 +16,11 @@ Condition template helpers for needs of different condition types.
     * CorrelationConditionHelper
     * CorrelationConditionOvRmHelper
     * CaloConditionOvRmHelper
-
 Unified object template helper (proably better to create dedicated for every
 object type).
-
   * ObjectHelper
-
 Cut template helper, calculating thresholds and ranges according to provided
 scales.
-
   * CutHelper
     * ThresholdCutHelper
       * TwoBodyPtCutHelper
@@ -38,7 +29,6 @@ scales.
       * DeltaPhiCutHelper
       * DeltaRCutHelper
       * MassCutHelper
-
 """
 
 import math
@@ -276,7 +266,6 @@ class VersionHelper(VhdlHelper):
 
 class MenuHelper(VhdlHelper):
     """Menu template helper.
-
     Attributes:
         info [struct]
         algorithms  [list]
@@ -303,7 +292,6 @@ class MenuHelper(VhdlHelper):
 
 class InfoHelper(VhdlHelper):
     """Menu information template helper.
-
     Attributes:
         name  [str]
         uuid_menu  [str]
@@ -325,7 +313,6 @@ class InfoHelper(VhdlHelper):
 
 class ModuleHelper(VhdlHelper):
     """Module template helper.
-
     Attributes:
         id  [int]
         algorithms  [list]
@@ -558,7 +545,6 @@ class ModuleHelper(VhdlHelper):
 
 class AlgorithmHelper(VhdlHelper):
     """Algorithm template helper class.
-
     Attributes:
         index            algorithm index [int]
         name             algorithm name from event setup [str]
@@ -607,7 +593,6 @@ class AlgorithmHelper(VhdlHelper):
 
 class ConditionHelper(VhdlHelper):
     """Generic condition template helper class.
-
     Attributes:
         name         condition name from event setup [str]
         type         condition type name [str]
@@ -657,7 +642,6 @@ class ConditionHelper(VhdlHelper):
 
 class CaloConditionHelper(ConditionHelper):
     """Calorimeter condition template helper class.
-
     Attributes:
         name         condition name from event setup [str]
         type         condition type name [str]
@@ -684,7 +668,6 @@ class CaloConditionHelper(ConditionHelper):
 
 class MuonConditionHelper(ConditionHelper):
     """Muon condition template helper class.
-
     Attributes:
         name              condition name from event setup [str]
         type              condition type name [str]
@@ -739,7 +722,6 @@ class TowerCountConditionHelper(ConditionHelper):
 
 class CorrelationConditionHelper(ConditionHelper):
     """Correlation condition template helper class.
-
     Attributes:
         name              condition name from event setup [str]
         type              condition type name [str]
@@ -798,7 +780,6 @@ class CorrelationConditionHelper(ConditionHelper):
 
 class Correlation3ConditionHelper(ConditionHelper):
     """Correlation of 3 objects condition template helper class.
-
     Attributes:
         name              condition name from event setup [str]
         type              condition type name [str]
@@ -837,7 +818,6 @@ class Correlation3ConditionHelper(ConditionHelper):
 
 class CorrelationConditionOvRmHelper(ConditionHelper):
     """Correlation condition template helper class.
-
     Attributes:
         name              condition name from event setup [str]
         type              condition type name [str]
@@ -904,7 +884,6 @@ class CorrelationConditionOvRmHelper(ConditionHelper):
 
 class CaloConditionOvRmHelper(ConditionHelper):
     """Correlation condition template helper class.
-
     Attributes:
         name         condition name from event setup [str]
         type         condition type name [str]
@@ -952,7 +931,6 @@ class CaloConditionOvRmHelper(ConditionHelper):
 
 class ObjectHelper(VhdlHelper):
     """Generic object helper.
-
     Attributes:
         name                [str]
         type                [str]
@@ -998,7 +976,6 @@ class ObjectHelper(VhdlHelper):
         self.upt = UptCutHelper()
         self.impactParameter = ImpactParameterCutHelper(0xf)
         # spatial cuts
-        # max. five eta cuts
         self.etaNrCuts = 0
         self.etaLowerLimit = [0, 0, 0, 0, 0]
         self.etaUpperLimit = [0, 0, 0, 0, 0]
@@ -1006,13 +983,11 @@ class ObjectHelper(VhdlHelper):
         self.phiNrCuts = 0
         self.phiLowerLimit = [0, 0]
         self.phiUpperLimit = [0, 0]
-        self.hasSlice = False
-        self.sliceLow = 0
-        self.sliceHigh = 0
+        self.slice = SliceCutHelper()
         # State of object
         self.isValid = False
         self.handle = None
-        
+
     def update(self, object_handle):
         self.name = object_handle.name
         self.type = ObjectTypes[object_handle.type]
@@ -1078,15 +1053,6 @@ class ObjectHelper(VhdlHelper):
             self.phiUpperLimit[1] = phiCuts[1][1]
         self.isValid = True
         self.handle = object_handle
-        self.thresholdListDef = [0, 0, 0, 0]
-        self.etaNrCutsListDef = [0, 0, 0, 0]
-        self.phiNrCutsListDef = [0, 0, 0, 0]
-        self.etaUpperLimitListDef = [0, 0, 0, 0]
-        self.etaLowerLimitListDef = [0, 0, 0, 0]
-        self.phiUpperLimitListDef = [0, 0, 0, 0]
-        self.phiLowerLimitListDef = [0, 0, 0, 0]
-        self.hasIsolationListDef = [False, False, False, False]
-        self.isolationLUTListDef = [0xf, 0xf, 0xf, 0xf]
 
     @property
     def is_muon_type(self):

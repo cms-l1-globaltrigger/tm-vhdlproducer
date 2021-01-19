@@ -1,7 +1,7 @@
 {%- if o1.is_muon_type and o2.is_muon_type %}
   {%- if condition.chargeCorrelation %}
 -- charge correlation cut
-        requested_charge_correlation => "{{ condition.chargeCorrelation }}",     
+        requested_charge_correlation => "{{ condition.chargeCorrelation.value }}",     
   {%- endif %}        
 {%- endif %} 
 -- correlation cuts

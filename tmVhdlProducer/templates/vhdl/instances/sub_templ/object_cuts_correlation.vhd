@@ -5,9 +5,9 @@
 {%- endif %} 
 {%- for i in range(0,nr_o) %}
   {%- set o = condition.objects[i] %}
-  {%- if o.hasSlice %}
-        slice_low_obj{{i+1}} => {{ o.sliceLow }}, 
-        slice_high_obj{{i+1}} => {{ o.sliceHigh }}, 
+  {%- if o.slice %}
+        slice_low_obj{{i+1}} => {{ o.slice.lower }}, 
+        slice_high_obj{{i+1}} => {{ o.slice.upper }}, 
   {%- endif %}        
   {%- if not o.operator %}
         pt_ge_mode_obj{{i+1}} => {{ o.operator|vhdl_bool }}, 
@@ -31,21 +31,21 @@
         phi_w{{j+1}}_lower_limit_obj{{i+1}} => X"{{ o.phiLowerLimit[j]|X04 }}",
     {%- endif %}        
   {%- endfor %}
-  {%- if o.hasCharge %}
-        requested_charge_obj{{i+1}} => "{{ o.charge }}",
+  {%- if o.charge %}
+        requested_charge_obj{{i+1}} => "{{ o.charge.value }}",
   {%- endif %}        
-  {%- if o.hasQuality %}
-        qual_lut_obj{{i+1}} => X"{{ o.qualityLUT|X04 }}",
+  {%- if o.quality %}
+        qual_lut_obj{{i+1}} => X"{{ o.quality.value|X04 }}",
   {%- endif %}        
-  {%- if o.hasIsolation %}
-        iso_lut_obj{{i+1}} => X"{{ o.isolationLUT|X01 }}",
+  {%- if o.isolation %}
+        iso_lut_obj{{i+1}} => X"{{ o.isolation.value|X01 }}",
   {%- endif %}        
-  {%- if o.hasUpt %}
-        upt_cut_obj{{i+1}} => {{ o.hasUpt|vhdl_bool }}, 
-        upt_upper_limit_obj{{i+1}} => X"{{ o.uptUpperLimit|X04 }}", 
-        upt_lower_limit_obj{{i+1}} => X"{{ o.uptLowerLimit|X04 }}", 
+  {%- if o.upt %}
+        upt_cut_obj{{i+1}} => {{ o.upt|vhdl_bool }}, 
+        upt_upper_limit_obj{{i+1}} => X"{{ o.upt.upper|X04 }}", 
+        upt_lower_limit_obj{{i+1}} => X"{{ o.upt.lower|X04 }}", 
   {%- endif %}        
-  {%- if o.hasImpactParameter %}
-        ip_lut_obj{{i+1}} => X"{{ o.impactParameterLUT|X01 }}",
+  {%- if o.impactParameter %}
+        ip_lut_obj{{i+1}} => X"{{ o.impactParameter.value|X01 }}",
   {%- endif %}
 {%- endfor %}
