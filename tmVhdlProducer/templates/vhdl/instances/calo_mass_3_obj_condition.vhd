@@ -19,7 +19,7 @@
 {%- endblock %}
 
 {%- block port_map %}
-        calo1 => {{ o1.type|lower }}_bx_{{ o1.bx }}, 
+        obj1 => {{ o1.type|lower }}_bx_{{ o1.bx }}, 
         pt1 => {{ o1.type|lower }}_bx_{{ o1.bx }}_pt_vector,
         cosh_deta => {{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_cosh_deta_vector, 
         cos_dphi => {{ o1.type|lower }}_{{ o1.type|lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_cos_dphi_vector,

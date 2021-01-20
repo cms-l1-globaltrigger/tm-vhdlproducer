@@ -27,11 +27,11 @@
 {%- block port_map %}
   {%- set o1 = condition.objects[0] %}
   {%- set o2 = condition.objects[1] %}
-        calo1 => {{ o1.type|lower }}_bx_{{ o1.bx }},
-        calo2 => {{ o2.type|lower }}_bx_{{ o2.bx }},
+        obj1 => {{ o1.type|lower }}_bx_{{ o1.bx }},
+        obj2 => {{ o2.type|lower }}_bx_{{ o2.bx }},
   {%- if condition.nr_objects == 3 %}
     {%- set o3 = condition.objects[2] %}
-        calo3 => {{ o3.type|lower }}_bx_{{ o3.bx }},
+        obj3 => {{ o3.type|lower }}_bx_{{ o3.bx }},
   {%- endif %}        
   {%- if condition.nr_objects == 3 %}
         deta_orm => {{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_deta_vector,        
