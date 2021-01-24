@@ -1,6 +1,6 @@
 {% extends "instances/sub_templ/correlation_condition.vhd" %}
 
-{% block entity %}work.calo_esums_correlation_condition{% endblock %}
+{% block entity %}work.correlation_conditions{% endblock %}
 
 {%- block correlation_cuts %}
 -- correlation cuts
@@ -32,11 +32,11 @@
 -- number of calo objects, types
         nr_obj1 => NR_{{ o1.type|upper }}_OBJECTS,
         type_obj1 => {{ o1.type|upper }}_TYPE,
-        obj_type_esums => {{ o2.type|upper }}_TYPE
+        same_bx => {{ condition.objectsInSameBx | vhdl_bool }}
 {%- endblock %}
 
 {%- block port_map %}
-        calo => {{ o1.type|lower }}_bx_{{ o1.bx }}, 
+        obj1 => {{ o1.type|lower }}_bx_{{ o1.bx }}, 
         esums => {{ o2.type|lower }}_bx_{{ o2.bx }},
     {%- if condition.deltaPhi %}
         dphi => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,

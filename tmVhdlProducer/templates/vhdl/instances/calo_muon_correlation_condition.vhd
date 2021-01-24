@@ -1,16 +1,21 @@
 {% extends "instances/sub_templ/correlation_condition.vhd" %}
 
-{% block entity %}work.calo_muon_correlation_condition{% endblock %}
+{% block entity %}work.correlation_conditions{% endblock %}
 
 {%- block generic_map_end %}
--- number of calo objects and type
-        type_obj1 => {{ o1.type|upper }}_TYPE,
-        nr_calo_objects => NR_{{ o1.type|upper }}_OBJECTS
+-- number of objects and type
+  {%- for i in range(0,condition.nr_objects) %}
+    {%- set o = condition.objects[i] %}
+        nr_obj{{i+1}} => NR_{{ o.type|upper }}_OBJECTS,
+        type_obj{{i+1}} => {{ o.type|upper }}_TYPE,
+  {%- endfor %}
+        width_obj2 => MAX_MUON_BITS,
+        same_bx => {{ condition.objectsInSameBx | vhdl_bool }}
 {%- endblock %}
 
 {%- block port_map %}
-        calo => {{ o1.type|lower }}_bx_{{ o1.bx }}, 
-        muon => {{ o2.type|lower }}_bx_{{ o2.bx }},
+        obj1 => {{ o1.type|lower }}_bx_{{ o1.bx }}, 
+        obj2 => {{ o2.type|lower }}_bx_{{ o2.bx }},
   {%- if condition.mass.type == condition.mass.InvariantMassDeltaRType %}
         mass_div_dr => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr,
   {%- else %}

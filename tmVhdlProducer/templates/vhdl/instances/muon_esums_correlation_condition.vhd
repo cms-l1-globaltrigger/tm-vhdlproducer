@@ -1,6 +1,6 @@
 {% extends "instances/sub_templ/correlation_condition.vhd" %}
 
-{% block entity %}work.muon_esums_correlation_condition{% endblock %}
+{% block entity %}work.correlation_conditions{% endblock %}
 
 {%- block correlation_cuts %}
 -- correlation cuts
@@ -23,23 +23,26 @@
     {%- if condition.twoBodyPt %}
         twobody_pt_cut => {{ condition.twoBodyPt | vhdl_bool }}, 
         pt_sq_threshold_vector => X"{{ condition.twoBodyPt.threshold|X16 }}", 
-        sin_cos_width => CALO_SIN_COS_VECTOR_WIDTH, 
+        sin_cos_width => MUON_SIN_COS_VECTOR_WIDTH, 
         pt_sq_sin_cos_precision => {{ o1.type|upper }}_{{ o2.type|upper }}_SIN_COS_PRECISION,
     {%- endif %}
 {%- endblock %}
 
 {%- block generic_map_end %}
-        -- type of esums object
-        obj_type_esums => {{ o2.type | upper }}_TYPE
+-- number of calo/muon objects, types
+        nr_obj1 => NR_{{ o1.type|upper }}_OBJECTS,
+        type_obj1 => {{ o1.type|upper }}_TYPE,
+        width_obj1 => MAX_MUON_BITS,
+        same_bx => {{ condition.objectsInSameBx | vhdl_bool }}
 {%- endblock %}
 
 {%- block port_map %}
-        {{ o1.type|lower }}_bx_{{ o1.bx }}, 
-        {{ o2.type|lower }}_bx_{{ o2.bx }},
+        obj1 => {{ o1.type|lower }}_bx_{{ o1.bx }}, 
+        esums => {{ o2.type|lower }}_bx_{{ o2.bx }},
     {%- if condition.deltaPhi %}
         dphi => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
     {%- endif %}        
-    {%- if condition.mass or condition.twoBodyPt %}
+    {%- if (condition.mass) or (condition.twoBodyPt) %}
         pt1 => {{ o1.type|lower }}_bx_{{ o1.bx }}_pt_vector, 
         pt2 => {{ o2.type|lower }}_bx_{{ o2.bx }}_pt_vector,
     {%- endif %}        
