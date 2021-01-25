@@ -5,7 +5,7 @@
 {%- endif %} 
 {%- for i in range(0,nr_o) %}
   {%- set o = condition.objects[i] %}
-  {%- if o.slice %}
+  {%- if o.slice or o.is_muon_type %}
         slice_low_obj{{i+1}} => {{ o.slice.lower }}, 
         slice_high_obj{{i+1}} => {{ o.slice.upper }}, 
   {%- endif %}        

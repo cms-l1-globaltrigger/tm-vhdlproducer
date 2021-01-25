@@ -32,6 +32,8 @@
 -- number of calo objects, types
         nr_obj1 => NR_{{ o1.type|upper }}_OBJECTS,
         type_obj1 => {{ o1.type|upper }}_TYPE,
+        nr_obj2 => NR_{{ o2.type|upper }}_OBJECTS,
+        type_obj2 => {{ o2.type|upper }}_TYPE,
         same_bx => {{ condition.objectsInSameBx | vhdl_bool }}
 {%- endblock %}
 
