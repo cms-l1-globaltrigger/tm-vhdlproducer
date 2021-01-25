@@ -8,7 +8,6 @@
     {%- set o = condition.objects[i] %}
         nr_obj{{i+1}} => NR_{{ o.type|upper }}_OBJECTS,
         type_obj{{i+1}} => {{ o.type|upper }}_TYPE,
-        width_obj{{i+1}} => MAX_MUON_BITS,
 {%- endfor %}
 -- selector same/different bunch crossings
         same_bx => {{ condition.objectsInSameBx | vhdl_bool }}

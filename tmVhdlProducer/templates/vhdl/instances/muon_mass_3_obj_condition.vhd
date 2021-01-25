@@ -15,13 +15,10 @@
 {%- block generic_map_end %}
         nr_obj1 => NR_{{ o1.type|upper }}_OBJECTS,
         type_obj1 => {{ o1.type|upper }}_TYPE,
-        width_obj1 => MAX_MUON_BITS,
         nr_obj2 => NR_{{ o2.type|upper }}_OBJECTS,
         type_obj2 => {{ o2.type|upper }}_TYPE,
-        width_obj2 => MAX_MUON_BITS,
         nr_obj3 => NR_{{ o3.type|upper }}_OBJECTS,
         type_obj3 => {{ o3.type|upper }}_TYPE,
-        width_obj3 => MAX_MUON_BITS,
         mass_3_obj => true,
         same_bx => {{ condition.objectsInSameBx | vhdl_bool}}
 {%- endblock %}

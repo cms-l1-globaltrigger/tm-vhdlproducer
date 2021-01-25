@@ -9,7 +9,6 @@
         nr_obj{{i+1}} => NR_{{ o.type|upper }}_OBJECTS,
         type_obj{{i+1}} => {{ o.type|upper }}_TYPE,
   {%- endfor %}
-        width_obj2 => MAX_MUON_BITS,
         same_bx => {{ condition.objectsInSameBx | vhdl_bool }}
 {%- endblock %}
 

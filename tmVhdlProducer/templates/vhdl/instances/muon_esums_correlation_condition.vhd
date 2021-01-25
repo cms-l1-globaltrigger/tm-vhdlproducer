@@ -32,7 +32,6 @@
 -- number of calo/muon objects, types
         nr_obj1 => NR_{{ o1.type|upper }}_OBJECTS,
         type_obj1 => {{ o1.type|upper }}_TYPE,
-        width_obj1 => MAX_MUON_BITS,
         same_bx => {{ condition.objectsInSameBx | vhdl_bool }}
 {%- endblock %}
 
