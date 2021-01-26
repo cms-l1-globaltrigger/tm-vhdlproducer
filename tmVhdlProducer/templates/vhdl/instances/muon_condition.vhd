@@ -2,6 +2,10 @@
 
 {%- block entity %}work.muon_conditions{% endblock entity %}
 
+{%- block generic_map_end %}
+        nr_templates => {{ condition.nr_objects }}
+{%- endblock %}
+
 {%- block port_map %}
         mu_bx_{{ o1.bx }},
     {%- if (condition.nr_objects == 2) and condition.twoBodyPt and condition.chargeCorrelation %}

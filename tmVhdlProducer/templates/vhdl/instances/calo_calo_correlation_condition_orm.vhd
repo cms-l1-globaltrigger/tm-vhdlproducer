@@ -1,6 +1,6 @@
 {% extends "instances/sub_templ/correlation_condition.vhd" %}
 
-{% block entity %}work.correlation_conditions{% endblock %}
+{% block entity %}work.correlation_conditions_calo{% endblock %}
 
 {%- block correlation_orm %}
 -- correlation cuts orm

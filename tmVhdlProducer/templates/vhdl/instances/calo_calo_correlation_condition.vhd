@@ -1,6 +1,6 @@
 {% extends "instances/sub_templ/correlation_condition.vhd" %}
 
-{% block entity %}work.correlation_conditions{% endblock %}
+{% block entity %}work.correlation_conditions_calo{% endblock %}
 
 {%- block generic_map_end %}
 -- number of objects and type
