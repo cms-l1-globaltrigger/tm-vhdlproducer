@@ -1,11 +1,13 @@
 {%- if condition.objects[1].is_esums_type %}
   {%- set nr_o = 1 %}    
+        slice_low_obj2 => 0, 
+        slice_high_obj2 => 0, 
 {%- else %}
   {%- set nr_o = condition.nr_objects %}    
 {%- endif %} 
 {%- for i in range(0,nr_o) %}
   {%- set o = condition.objects[i] %}
-  {%- if o.slice or o.is_muon_type %}
+  {%- if o.slice %}
         slice_low_obj{{i+1}} => {{ o.slice.lower }}, 
         slice_high_obj{{i+1}} => {{ o.slice.upper }}, 
   {%- endif %}        
