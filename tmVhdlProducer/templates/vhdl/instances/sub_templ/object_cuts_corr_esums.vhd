@@ -1,6 +1,4 @@
         
-        sel_esums => true,
-        obj_type_esums => {{ o2.type|upper }}_TYPE,
   {%- if not o2.operator %}
         et_ge_mode_esums => {{ o2.operator|vhdl_bool }}, 
   {%- endif %}        
