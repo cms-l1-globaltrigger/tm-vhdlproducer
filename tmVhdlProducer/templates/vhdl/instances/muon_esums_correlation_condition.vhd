@@ -29,8 +29,11 @@
 {%- endblock %}
 
 {%- block generic_map_end %}
-        -- type of esums object
-        obj_type_esums => {{ o2.type | upper }}_TYPE
+-- number of calo objects, types
+        nr_obj1 => NR_{{ o1.type|upper }}_OBJECTS,
+        type_obj1 => {{ o1.type|upper }}_TYPE,
+        nr_obj2 => NR_{{ o2.type|upper }}_OBJECTS,
+        same_bx => {{ condition.objectsInSameBx | vhdl_bool }}
 {%- endblock %}
 
 {%- block port_map %}

@@ -15,6 +15,7 @@
     {%- endif %}        
     {%- if condition.mass %}
         mass_cut => {{ condition.mass | vhdl_bool }}, 
+        mass_type => {{ condition.mass.type }}, 
         mass_upper_limit_vector => X"{{ condition.mass.upper|X16 }}",
         mass_lower_limit_vector => X"{{ condition.mass.lower|X16 }}",
         mass_cosh_cos_precision => {{ o1.type|upper }}_{{ o2.type|upper }}_COSH_COS_PRECISION, 
