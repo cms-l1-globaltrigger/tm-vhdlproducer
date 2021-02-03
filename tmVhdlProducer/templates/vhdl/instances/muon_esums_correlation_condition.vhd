@@ -45,7 +45,7 @@
         pt2 => {{ o2.type|lower }}_bx_{{ o2.bx }}_pt_vector,
     {%- endif %}        
     {%- if condition.mass %}
-        cos_dphi => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
+        cos_dphi_esums => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
     {%- endif %}        
     {%- if condition.twoBodyPt %}
         cos_phi_1_integer => {{ o1.type|lower }}_bx_{{ o1.bx }}_cos_phi, 
