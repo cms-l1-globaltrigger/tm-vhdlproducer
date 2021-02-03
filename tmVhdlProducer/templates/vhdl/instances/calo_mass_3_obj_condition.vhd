@@ -1,6 +1,6 @@
 {% extends "instances/sub_templ/correlation_condition.vhd" %}
 
-{% block entity %}work.correlation_conditions{% endblock %}
+{% block entity %}work.correlation_conditions_calo{% endblock %}
 
 {%- block correlation_cuts %}
 -- correlation cuts
@@ -8,7 +8,7 @@
         pt2_width => {{ o2.type|upper }}_PT_VECTOR_WIDTH, 
         mass_upper_limit_vector => X"{{ condition.mass.upper|X16 }}", 
         mass_lower_limit_vector => X"{{ condition.mass.lower|X16 }}",
-        cosh_cos_precision => {{ o1.type|upper }}_{{ o1.type|upper }}_COSH_COS_PRECISION, 
+        mass_cosh_cos_precision => {{ o1.type|upper }}_{{ o1.type|upper }}_COSH_COS_PRECISION, 
         cosh_cos_width => {{ o1.type|upper }}_{{ o1.type|upper }}_COSH_COS_VECTOR_WIDTH,
 {%- endblock %}
 
