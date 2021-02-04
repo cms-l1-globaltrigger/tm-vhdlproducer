@@ -1,13 +1,16 @@
 {%- extends "instances/sub_templ/comb_condition.vhd" %}
 
-{%- block entity %}work.muon_conditions{% endblock entity %}
+{%- block entity %}work.comb_conditions{% endblock entity %}
 
 {%- block generic_map_end %}
+-- number of objects and type
+        nr_obj1 => NR_{{ o1.type }}_OBJECTS,
+        type_obj1 => {{ o1.type }}_TYPE,
         nr_templates => {{ condition.nr_objects }}
 {%- endblock %}
 
 {%- block port_map %}
-        mu_bx_{{ o1.bx }},
+        obj1_muon => mu_bx_{{ o1.bx }},
     {%- if (condition.nr_objects == 2) and condition.twoBodyPt and condition.chargeCorrelation %}
         ls_charcorr_double => ls_charcorr_double_bx_{{ o1.bx }}_bx_{{ o1.bx }},
         os_charcorr_double => os_charcorr_double_bx_{{ o1.bx }}_bx_{{ o1.bx }},
