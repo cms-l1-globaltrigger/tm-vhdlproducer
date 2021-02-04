@@ -5,7 +5,7 @@
 {% set nr_requirements = condition.nr_objects - 1 %}
 {% set orm_obj = condition.objects[nr_requirements] %}
 
-{% block entity %}work.calo_conditions_orm{% endblock %}
+{% block entity %}work.comb_conditions{% endblock %}
 
 {% block generic_map %}
   {%- for i in range(0,condition.nr_objects) %}
@@ -32,9 +32,9 @@
 {%- endblock %}
 
 {% block port_map %}
-        calo1 => {{ o1.type|lower }}_bx_{{ o1.bx }}, 
+        obj1_calo => {{ o1.type|lower }}_bx_{{ o1.bx }}, 
   {%- if nr_requirements == 4 %}
-        calo2 => {{ o5.type|lower }}_bx_{{ o5.bx }},
+        obj2_orm => {{ o5.type|lower }}_bx_{{ o5.bx }},
     {%- if (condition.deltaEtaOrm) or (condition.deltaROrm) %}
         deta_orm => {{ o1.type|lower }}_{{ o5.type|lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_deta_vector, 
     {%- endif %}        
@@ -42,7 +42,7 @@
         dphi_orm => {{ o1.type|lower }}_{{ o5.type|lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_dphi_vector,
     {%- endif %}        
   {%- elif nr_requirements == 3 %}
-        calo2 => {{ o4.type|lower }}_bx_{{ o4.bx }},
+        obj2_orm => {{ o4.type|lower }}_bx_{{ o4.bx }},
     {%- if (condition.deltaEtaOrm) or (condition.deltaROrm) %}
         deta_orm => {{ o1.type|lower }}_{{ o4.type|lower }}_bx_{{ o1.bx }}_bx_{{ o4.bx }}_deta_vector, 
     {%- endif %}        
@@ -50,7 +50,7 @@
         dphi_orm => {{ o1.type|lower }}_{{ o4.type|lower }}_bx_{{ o1.bx }}_bx_{{ o4.bx }}_dphi_vector,
     {%- endif %}        
   {%- elif nr_requirements == 2 %}
-        calo2 => {{ o3.type|lower }}_bx_{{ o3.bx }},
+        obj2_orm => {{ o3.type|lower }}_bx_{{ o3.bx }},
     {%- if (condition.deltaEtaOrm) or (condition.deltaROrm) %}
         deta_orm => {{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_deta_vector, 
     {%- endif %}        
@@ -58,7 +58,7 @@
         dphi_orm => {{ o1.type|lower }}_{{ o3.type|lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_dphi_vector,
     {%- endif %}        
   {%- elif nr_requirements == 1 %}
-        calo2 => {{ o2.type|lower }}_bx_{{ o2.bx }},
+        obj2_orm => {{ o2.type|lower }}_bx_{{ o2.bx }},
     {%- if (condition.deltaEtaOrm) or (condition.deltaROrm) %}
         deta_orm => {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector, 
     {%- endif %}        
