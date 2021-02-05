@@ -1,10 +1,10 @@
-{% extends "instances/sub_templ/correlation_condition.vhd" %}
+{% extends "instances/common/correlation_condition.vhd" %}
 
 {% block entity %}work.correlation_conditions_calo{% endblock %}
 
 {%- block correlation_orm %}
 -- correlation cuts orm
-  {%- include "instances/sub_templ/correlation_cuts_orm.vhd" %}
+  {%- include "instances/common/correlation_cuts_orm.vhd" %}
 {%- endblock %}
 
 {%- block generic_map_end %}

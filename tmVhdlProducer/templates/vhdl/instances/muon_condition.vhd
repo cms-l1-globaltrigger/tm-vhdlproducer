@@ -1,4 +1,4 @@
-{%- extends "instances/sub_templ/comb_condition.vhd" %}
+{%- extends "instances/common/comb_condition.vhd" %}
 
 {%- block entity %}work.comb_conditions{% endblock entity %}
 

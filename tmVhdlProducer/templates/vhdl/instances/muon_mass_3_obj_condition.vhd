@@ -1,4 +1,4 @@
-{% extends "instances/sub_templ/correlation_condition.vhd" %}
+{% extends "instances/common/correlation_condition.vhd" %}
 
 {% block entity %}work.correlation_conditions_muon{% endblock %}
 

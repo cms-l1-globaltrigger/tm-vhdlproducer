@@ -1,4 +1,4 @@
-{% extends "instances/sub_templ/comb_condition.vhd" %}
+{% extends "instances/common/comb_condition.vhd" %}
 
 {% set o5 = condition.objects[4] %}
 {% set base_objects = condition.objects[:4] %}
@@ -18,10 +18,10 @@
   {%- if not o1.operator %}
         pt_ge_mode_obj1 => {{ o1.operator|vhdl_bool }}, 
   {%- endif %}        
-  {%- include "instances/sub_templ/object_cuts_calo_orm.vhd" %}
-  {%- include "instances/sub_templ/correlation_cuts_comb.vhd" %}
+  {%- include "instances/common/object_cuts_calo_orm.vhd" %}
+  {%- include "instances/common/correlation_cuts_comb.vhd" %}
 -- correlation cuts orm
-  {%- include "instances/sub_templ/correlation_cuts_orm.vhd" %}
+  {%- include "instances/common/correlation_cuts_orm.vhd" %}
 -- number of objects and type
   {%- set o_orm = condition.objects[nr_requirements] %}
         nr_obj1 => NR_{{ o1.type|upper }}_OBJECTS,
