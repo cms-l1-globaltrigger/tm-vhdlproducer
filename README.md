@@ -3,7 +3,7 @@ VHDL Producer
 
 #### Documentation of templates
 
-Drawing of ![VHDL templates overview](./doc/templates_overview.png)
+Drawing of ![VHDL templates overview](https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/blob/dev_2_10_x/doc/templates_overview.png)
 
 ## Install
 
