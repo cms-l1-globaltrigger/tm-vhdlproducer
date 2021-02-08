@@ -266,6 +266,7 @@ class VersionHelper(VhdlHelper):
 
 class MenuHelper(VhdlHelper):
     """Menu template helper.
+    
     Attributes:
         info [struct]
         algorithms  [list]
@@ -292,6 +293,7 @@ class MenuHelper(VhdlHelper):
 
 class InfoHelper(VhdlHelper):
     """Menu information template helper.
+    
     Attributes:
         name  [str]
         uuid_menu  [str]
@@ -313,6 +315,7 @@ class InfoHelper(VhdlHelper):
 
 class ModuleHelper(VhdlHelper):
     """Module template helper.
+    
     Attributes:
         id  [int]
         algorithms  [list]
@@ -545,6 +548,7 @@ class ModuleHelper(VhdlHelper):
 
 class AlgorithmHelper(VhdlHelper):
     """Algorithm template helper class.
+    
     Attributes:
         index            algorithm index [int]
         name             algorithm name from event setup [str]
@@ -593,6 +597,7 @@ class AlgorithmHelper(VhdlHelper):
 
 class ConditionHelper(VhdlHelper):
     """Generic condition template helper class.
+    
     Attributes:
         name         condition name from event setup [str]
         type         condition type name [str]
@@ -642,6 +647,7 @@ class ConditionHelper(VhdlHelper):
 
 class CaloConditionHelper(ConditionHelper):
     """Calorimeter condition template helper class.
+    
     Attributes:
         name         condition name from event setup [str]
         type         condition type name [str]
@@ -668,6 +674,7 @@ class CaloConditionHelper(ConditionHelper):
 
 class MuonConditionHelper(ConditionHelper):
     """Muon condition template helper class.
+    
     Attributes:
         name              condition name from event setup [str]
         type              condition type name [str]
@@ -722,6 +729,7 @@ class TowerCountConditionHelper(ConditionHelper):
 
 class CorrelationConditionHelper(ConditionHelper):
     """Correlation condition template helper class.
+    
     Attributes:
         name              condition name from event setup [str]
         type              condition type name [str]
@@ -780,6 +788,7 @@ class CorrelationConditionHelper(ConditionHelper):
 
 class Correlation3ConditionHelper(ConditionHelper):
     """Correlation of 3 objects condition template helper class.
+    
     Attributes:
         name              condition name from event setup [str]
         type              condition type name [str]
@@ -818,6 +827,7 @@ class Correlation3ConditionHelper(ConditionHelper):
 
 class CorrelationConditionOvRmHelper(ConditionHelper):
     """Correlation condition template helper class.
+    
     Attributes:
         name              condition name from event setup [str]
         type              condition type name [str]
@@ -884,6 +894,7 @@ class CorrelationConditionOvRmHelper(ConditionHelper):
 
 class CaloConditionOvRmHelper(ConditionHelper):
     """Correlation condition template helper class.
+    
     Attributes:
         name         condition name from event setup [str]
         type         condition type name [str]
@@ -931,6 +942,7 @@ class CaloConditionOvRmHelper(ConditionHelper):
 
 class ObjectHelper(VhdlHelper):
     """Generic object helper.
+    
     Attributes:
         name                [str]
         type                [str]
