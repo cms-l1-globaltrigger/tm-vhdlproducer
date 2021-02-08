@@ -153,8 +153,8 @@ A TWiki page template and a HTML menu ducumentation is also written to the
 All messages printed to the screen are written to a log file in the output
 location (e.g. `L1Menu_sample/tm-vhdlproducer.log`).
 
-## Documentation of VHDL templates
+## VHDL template hierarchy
 
-VHDL templates overview:
+VHDL template hierarchy for condition instances located in [templates/vhdl/instances](tmVhdlProducer/templates/vhdl/instances).
 
-![VHDL templates overview](https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/blob/dev_2_10_x/doc/templates_overview.png)
+![VHDL templates overview](doc/templates_overview.png)
