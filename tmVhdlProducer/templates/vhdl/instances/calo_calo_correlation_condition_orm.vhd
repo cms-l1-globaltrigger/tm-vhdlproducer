@@ -17,10 +17,10 @@
 -- selector one or two objects with orm
   {%- if condition.nr_objects == 3 %}
         obj_2plus1 => true,
-  {%- elif condition.nr_objects == 2 %}        
+  {%- elif condition.nr_objects == 2 %}
         nr_obj3 => MAX_CALO_OBJECTS, -- default number of calo3 input
         obj_2plus1 => false,
-  {%- endif %}        
+  {%- endif %}
         same_bx => {{ condition.objectsInSameBx | vhdl_bool }}
 {%- endblock %}
 
@@ -32,32 +32,32 @@
   {%- if condition.nr_objects == 3 %}
     {%- set o3 = condition.objects[2] %}
         obj3 => {{ o3.type | lower }}_bx_{{ o3.bx }},
-  {%- endif %}        
+  {%- endif %}
   {%- if condition.nr_objects == 3 %}
-        deta_orm => {{ o1.type | lower }}_{{ o3.type | lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_deta_vector,        
-        dphi_orm => {{ o1.type | lower }}_{{ o3.type | lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_dphi_vector,       
-  {%- elif condition.nr_objects == 2 %}        
-        deta_orm => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector,        
+        deta_orm => {{ o1.type | lower }}_{{ o3.type | lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_deta_vector,
+        dphi_orm => {{ o1.type | lower }}_{{ o3.type | lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_dphi_vector,
+  {%- elif condition.nr_objects == 2 %}
+        deta_orm => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector,
         dphi_orm => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
-  {%- endif %}        
+  {%- endif %}
   {%- if (condition.deltaEta) or (condition.deltaR) %}
-        deta => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector,        
-  {%- endif %}        
+        deta => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector,
+  {%- endif %}
   {%- if (condition.deltaPhi) or (condition.deltaR) %}
         dphi => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
-  {%- endif %}        
+  {%- endif %}
   {%- if (condition.mass) or (condition.twoBodyPt) %}
-        pt1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_pt_vector, 
+        pt1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_pt_vector,
         pt2 => {{ o2.type | lower }}_bx_{{ o2.bx }}_pt_vector,
-  {%- endif %}        
+  {%- endif %}
   {%- if condition.mass %}
-        cosh_deta => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector, 
+        cosh_deta => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector,
         cos_dphi => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
-  {%- endif %}        
+  {%- endif %}
   {%- if condition.twoBodyPt %}
-        cos_phi_1_integer => {{ o1.type | lower }}_bx_{{ o1.bx }}_cos_phi, 
-        cos_phi_2_integer => {{ o2.type | lower }}_bx_{{ o2.bx }}_cos_phi, 
-        sin_phi_1_integer => {{ o1.type | lower }}_bx_{{ o1.bx }}_sin_phi, 
+        cos_phi_1_integer => {{ o1.type | lower }}_bx_{{ o1.bx }}_cos_phi,
+        cos_phi_2_integer => {{ o2.type | lower }}_bx_{{ o2.bx }}_cos_phi,
+        sin_phi_1_integer => {{ o1.type | lower }}_bx_{{ o1.bx }}_sin_phi,
         sin_phi_2_integer => {{ o2.type | lower }}_bx_{{ o2.bx }}_sin_phi,
-  {%- endif %}        
+  {%- endif %}
 {%- endblock %}

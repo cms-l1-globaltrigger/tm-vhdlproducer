@@ -52,12 +52,12 @@
   {%- endfor %}
   {%- if orm_obj.phiNrCuts > 0 %}
         nr_phi_windows_obj2 => {{ orm_obj.phiNrCuts }},
-  {%- endif %}        
+  {%- endif %}
   {%- for j in range(0,(orm_obj.phiNrCuts)) %}
     {%- if orm_obj.phiNrCuts > j %}
-        phi_w{{j+1}}_upper_limit_obj2 => X"{{ orm_obj.phiUpperLimit[j] | X04 }}", 
+        phi_w{{j+1}}_upper_limit_obj2 => X"{{ orm_obj.phiUpperLimit[j] | X04 }}",
         phi_w{{j+1}}_lower_limit_obj2 => X"{{ orm_obj.phiLowerLimit[j] | X04 }}",
-    {%- endif %}        
+    {%- endif %}
   {%- endfor %}
   {%- if orm_obj.isolation %}
         iso_lut_calo2 => X"{{ orm_obj.isolation.value | X01 }}",

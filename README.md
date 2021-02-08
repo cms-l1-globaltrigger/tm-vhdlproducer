@@ -148,6 +148,10 @@ L1Menu_sample-d1/
 A TWiki page template and a HTML menu ducumentation is also written to the
 `doc/` directory in the output location.
 
+### Templates
+
+![VHDL templates overview](doc/templates_overview.png)
+
 ## Logging
 
 All messages printed to the screen are written to a log file in the output

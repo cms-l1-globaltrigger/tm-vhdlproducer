@@ -21,15 +21,15 @@
 {%- endblock %}
 
 {%- block port_map %}
-        obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }}, 
-        obj2 => {{ o2.type | lower }}_bx_{{ o2.bx }}, 
-        obj3 => {{ o3.type | lower }}_bx_{{ o3.bx }}, 
+        obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }},
+        obj2 => {{ o2.type | lower }}_bx_{{ o2.bx }},
+        obj3 => {{ o3.type | lower }}_bx_{{ o3.bx }},
     {%- if condition.chargeCorrelation %}
-        ls_charcorr_triple => ls_charcorr_triple_bx_{{ o1.bx }}_bx_{{ o1.bx }}, 
+        ls_charcorr_triple => ls_charcorr_triple_bx_{{ o1.bx }}_bx_{{ o1.bx }},
         os_charcorr_triple => os_charcorr_triple_bx_{{ o1.bx }}_bx_{{ o1.bx }},
     {%- endif %}
         pt1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_pt_vector,
         pt2 => {{ o2.type | lower }}_bx_{{ o2.bx }}_pt_vector,
-        cosh_deta => {{ o1.type | lower }}_{{ o1.type | lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_cosh_deta_vector, 
+        cosh_deta => {{ o1.type | lower }}_{{ o1.type | lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_cosh_deta_vector,
         cos_dphi => {{ o1.type | lower }}_{{ o1.type | lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_cos_dphi_vector,
 {%- endblock %}
