@@ -152,10 +152,3 @@ A TWiki page template and a HTML menu ducumentation is also written to the
 
 All messages printed to the screen are written to a log file in the output
 location (e.g. `L1Menu_sample/tm-vhdlproducer.log`).
-
-## Documentation of templates
-
-VHDL templates overview:
-
-![VHDL templates overview](https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/blob/dev_2_10_x/doc/templates_overview.png)
-
