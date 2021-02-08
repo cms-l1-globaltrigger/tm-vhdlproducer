@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [2.10.0] - 2021-01-08
 ### Changed
 - templates for mp7_ugt_legacy v1.12.x
-- update structure of templates (created directory "../instances/sub_templ")
+- refactored VHDL instance templates
 
 ## [2.9.0] - 2020-12-07
 ### Changed
