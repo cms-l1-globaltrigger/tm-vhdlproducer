@@ -150,7 +150,7 @@ A TWiki page template and a HTML menu ducumentation is also written to the
 
 ### Templates
 
-Schema of ![VHDL templates overview](doc/templates_overview.png)
+Drawing of ![VHDL templates overview](./doc/templates_overview.png)
 
 ## Logging
 
