@@ -1,6 +1,10 @@
 VHDL Producer
 =============
 
+#### Documentation of templates
+
+Drawing of ![VHDL templates overview](./doc/templates_overview.png)
+
 ## Install
 
 Install using pip (>= 19.0)
@@ -147,10 +151,6 @@ L1Menu_sample-d1/
 
 A TWiki page template and a HTML menu ducumentation is also written to the
 `doc/` directory in the output location.
-
-### Templates
-
-Drawing of ![VHDL templates overview](./doc/templates_overview.png)
 
 ## Logging
 
