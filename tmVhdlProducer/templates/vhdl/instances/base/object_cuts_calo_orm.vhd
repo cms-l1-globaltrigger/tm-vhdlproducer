@@ -1,4 +1,3 @@
-{%- block object_cuts_calo_orm %}
   {%- for i in range(1, nr_requirements) %}
     {%- set o = condition.objects[i] %}
     {%- if nr_requirements > i and o.slice %}
@@ -62,4 +61,3 @@
   {%- if orm_obj.isolation %}
         iso_lut_calo2 => X"{{ orm_obj.isolation.value | X01 }}",
   {%- endif %}
-{%- endblock object_cuts_calo_orm %}

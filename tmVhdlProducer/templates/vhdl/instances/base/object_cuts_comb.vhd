@@ -1,4 +1,3 @@
-{%- block object_cuts_comb %}
   {%- for i in range(0,condition.nr_objects) %}
     {%- if condition.nr_objects > i %}
       {%- if condition.objects[i].slice %}
@@ -54,4 +53,3 @@
   {%- if (o1.impactParameter) or (o2.impactParameter) or (o3.impactParameter) or (o4.impactParameter) %}
         ip_luts_obj1 => (X"{{ o1.impactParameter.value | X01 }}", X"{{ o2.impactParameter.value | X01 }}", X"{{ o3.impactParameter.value | X01 }}", X"{{ o4.impactParameter.value | X01 }}"),
   {%- endif %}
-{%- endblock object_cuts_comb %}
