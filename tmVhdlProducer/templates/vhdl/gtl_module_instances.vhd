@@ -56,7 +56,7 @@
 {% include "instances/calo_calo_correlation_condition.vhd" %}
 {% endfor %}
 {%- for condition in module.caloCaloCorrOvRmConditions %}
-{% include "instances/calo_calo_calo_correlation_orm_condition.vhd" %}
+{% include "instances/calo_calo_correlation_condition_orm.vhd" %}
 {% endfor %}
 {%- for condition in module.caloMuonCorrConditions %}
 {% include "instances/calo_muon_correlation_condition.vhd" %}

@@ -38,7 +38,6 @@ scales.
       * DeltaPhiCutHelper
       * DeltaRCutHelper
       * MassCutHelper
-
 """
 
 import math
@@ -142,6 +141,7 @@ ComparisonOperator = {
 
 def snakecase(label, separator='_'):
     """Transformes camel case label to spaced lower case (snaked) label.
+
     >>> snakecase('CamelCaseLabel')
     'camel_case_label'
     """
@@ -165,6 +165,7 @@ def vhdl_bool(value): # TODO add to filters
 
 def vhdl_label(label): # TODO add to filters
     """Return normalized VHDL label for signal or instance names.
+
     >>> vhdl_label('001FooBar.value__@2_')
     'd001_foo_bar_value_2'
     """
@@ -180,6 +181,7 @@ def vhdl_label(label): # TODO add to filters
 
 def vhdl_expression(expression): # TODO add to filters
     """Return safe VHDL expression string using normalized signals for conditions.
+
     >>> vhdl_expression('(singleMu_1 and doubleMu_2)')
     '( single_mu_1 and double_mu_2 )'
     """
@@ -209,9 +211,9 @@ def charge_correlation_encode(value):
     return 'ig' # ignore
 
 def bx_encode(value):
-    """Encode relative bunch crossings into VHDL notation.
-    All positive values with the exception of zero are prefixed with m, all
-    negative values are prefixed with p instead of the minus sign.
+    """Encode relative bunch crossings into VHDL notation. All positive values
+    with the exception of zero are prefixed with m, all negative values are
+    prefixed with p instead of the minus sign.
     """
     # Prefix positive values greater then zero with p.
     if value > 0: return f'p{value:d}'
@@ -261,6 +263,7 @@ class VhdlHelper(object):
 
 class VersionHelper(VhdlHelper):
     """Version template helper, splitting string version numbers.
+
     >>> version = VersionHelper('1.2.3')
     >>> version.major, version.minor, version.patch
     (1, 2, 3)
@@ -1001,11 +1004,10 @@ class ObjectHelper(VhdlHelper):
         self.etaNrCuts = 0
         self.etaLowerLimit = [0, 0, 0, 0, 0]
         self.etaUpperLimit = [0, 0, 0, 0, 0]
+        # max. two phi cuts
         self.phiNrCuts = 0
-        self.phiFullRange = True
-        self.phiW1 = RangeCutHelper()
-        self.phiW2Ignore = True
-        self.phiW2 = RangeCutHelper()
+        self.phiLowerLimit = [0, 0]
+        self.phiUpperLimit = [0, 0]
         self.slice = SliceCutHelper()
         # State of object
         self.isValid = False
@@ -1068,16 +1070,12 @@ class ObjectHelper(VhdlHelper):
         # update phi window flags
         if len(phiCuts) > 0:
             self.phiNrCuts = 1
-            self.phiFullRange = False
-            self.phiW1.lower = phiCuts[0][0]
-            self.phiW1.upper = phiCuts[0][1]
-            self.phiW1.enabled = True
+            self.phiLowerLimit[0] = phiCuts[0][0]
+            self.phiUpperLimit[0] = phiCuts[0][1]
         if len(phiCuts) > 1:
             self.phiNrCuts = 2
-            self.phiW2Ignore = False
-            self.phiW2.lower = phiCuts[1][0]
-            self.phiW2.upper = phiCuts[1][1]
-            self.phiW2.enabled = True
+            self.phiLowerLimit[1] = phiCuts[1][0]
+            self.phiUpperLimit[1] = phiCuts[1][1]
         self.isValid = True
         self.handle = object_handle
 
