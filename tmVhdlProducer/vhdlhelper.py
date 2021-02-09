@@ -145,15 +145,15 @@ def snakecase(label, separator='_'):
     >>> snakecase('CamelCaseLabel')
     'camel_case_label'
     """
-    subbed = RegexCamelSnake1.sub(r'\1{sep}\2'.format(sep=separator), label)
-    return RegexCamelSnake2.sub(r'\1{sep}\2'.format(sep=separator), subbed).lower()
+    subbed = RegexCamelSnake1.sub(rf'\1{separator}\2', label)
+    return RegexCamelSnake2.sub(rf'\1{separator}\2', subbed).lower()
 
 def unique_name(name, names):
     """Generate unique signal name to prevent name collisions."""
     count = 1
     def suffixed():
         if count > 1:
-            return '{name}_{count}'.format(**locals())
+            return f'{name}_{count}'
         return name
     while suffixed() in names:
         count += 1
@@ -214,9 +214,9 @@ def bx_encode(value):
     negative values are prefixed with p instead of the minus sign.
     """
     # Prefix positive values greater then zero with p.
-    if value > 0: return 'p{0:d}'.format(value)
+    if value > 0: return f'p{value:d}'
     # Prefix negative values with m instead of minus sign (abs).
-    if value < 0: return 'm{0:d}'.format(abs(value))
+    if value < 0: return f'm{abs(value):d}'
     # Zero value is not prefixed according to VHDL documentation.
     return '0'
 
@@ -272,7 +272,7 @@ class VersionHelper(VhdlHelper):
         self.patch = version[2]
 
     def __str__(self):
-        return "{self.major}.{self.minor}.{self.patch}".format(**locals())
+        return f"{self.major}.{self.minor}.{self.patch}"
 
 class MenuHelper(VhdlHelper):
     """Menu template helper.
@@ -1333,15 +1333,15 @@ if __name__ == '__main__':
 
             print("module.muonBxCombinations:")
             for a, b in module.muonBxCombinations:
-                print("  {a} <> {b}".format(a=a, b=b))
+                print(f"  {a} <> {b}")
             print("-" * 80)
             print("module.conversionObjects:")
             for o in module.conversionObjects:
-                print("  {o.name} (type:{o.type}, threshold:{o.threshold}, bx:{o.bx})".format(o=o))
+                print(f"  {o.name} (type:{o.type}, threshold:{o.threshold}, bx:{o.bx})")
             print("-" * 80)
             print("module.correlationObjects:")
             for o in module.correlationObjects:
-                print("  {o.name} (type:{o.type}, threshold:{o.threshold}, bx:{o.bx})".format(o=o))
+                print(f"  {o.name} (type:{o.type}, threshold:{o.threshold}, bx:{o.bx})")
             print("-" * 80)
 
             mass_condition_types = (
