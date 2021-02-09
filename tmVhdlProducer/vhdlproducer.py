@@ -114,7 +114,9 @@ class VhdlProducer(object):
         self.engine = TemplateEngine(searchpath)
 
     def create_dirs(self, directory, n_modules):
-        """Create directory tree for output."""
+        """Create directory tree for output, return dictionary of created
+        directories.
+        """
         directories = {
             "vhdl" : os.path.join(directory, "vhdl"),
             "testvectors" : os.path.join(directory, "testvectors"),
@@ -123,15 +125,15 @@ class VhdlProducer(object):
         }
         for i in range(n_modules):
             module_id = f"module_{i:d}"
-            directories[module_id] = os.path.join(directories['vhdl'], module_id, "src")
+            directories[module_id] = os.path.join(directories["vhdl"], module_id, "src")
         # Check for exisiting directories (TODO obsolete?)
-        for directory in directories:
-            if os.path.exists(directory):
-                logging.warning("directory `%s' already exists. Will be overwritten.", directory)
-                shutil.rmtree(directory)
+        for path in directories.values():
+            if os.path.exists(path):
+                logging.warning("directory `%s' already exists. Will be overwritten.", path)
+                shutil.rmtree(path)
         # Create directries
-        for directory in directories:
-            makedirs(directories[directory])
+        for path in directories.values():
+            makedirs(path)
         return directories
 
     def write(self, collection, directory):
