@@ -2,7 +2,8 @@
 
 {% block entity %}work.correlation_conditions_calo{% endblock %}
 
-{%- block correlation_cuts %}
+{%- block generic_map_end %}
+{{ super() }}
 -- correlation cuts
     {%- if condition.deltaPhi %}
         dphi_cut => {{ condition.deltaPhi | vhdl_bool }},
@@ -27,9 +28,6 @@
         sin_cos_width => CALO_SIN_COS_VECTOR_WIDTH,
         pt_sq_sin_cos_precision => {{ o1.type | upper }}_{{ o2.type | upper }}_SIN_COS_PRECISION,
     {%- endif %}
-{%- endblock %}
-
-{%- block generic_map_end %}
 -- number of calo objects, types
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         type_obj1 => {{ o1.type | upper }}_TYPE,

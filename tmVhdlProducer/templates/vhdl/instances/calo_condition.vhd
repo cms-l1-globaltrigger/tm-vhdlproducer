@@ -2,7 +2,8 @@
 
 {% block entity %}work.comb_conditions{% endblock %}
 
-{%- block generic_map_end %}
+{%- block generic_map %}
+{{ super() }}
 -- number of objects and type
         nr_obj1 => NR_{{ o1.type }}_OBJECTS,
         type_obj1 => {{ o1.type }}_TYPE,

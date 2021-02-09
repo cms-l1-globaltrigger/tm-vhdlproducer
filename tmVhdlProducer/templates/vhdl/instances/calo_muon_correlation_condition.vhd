@@ -2,7 +2,8 @@
 
 {% block entity %}work.correlation_conditions_calo{% endblock %}
 
-{%- block generic_map_end %}
+{%- block generic_map %}
+{{ super() }}
   {%- if not o2.slice %}
 -- slices for muon
         slice_low_obj2 => {{ o2.slice.lower }},

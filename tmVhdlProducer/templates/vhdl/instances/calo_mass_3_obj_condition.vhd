@@ -2,7 +2,8 @@
 
 {% block entity %}work.correlation_conditions_calo{% endblock %}
 
-{%- block correlation_cuts %}
+{%- block generic_map %}
+{{ super() }}
 -- correlation cuts
         pt1_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH,
         pt2_width => {{ o2.type | upper }}_PT_VECTOR_WIDTH,
@@ -10,9 +11,7 @@
         mass_lower_limit_vector => X"{{ condition.mass.lower|X16 }}",
         mass_cosh_cos_precision => {{ o1.type | upper }}_{{ o1.type | upper }}_COSH_COS_PRECISION,
         cosh_cos_width => {{ o1.type | upper }}_{{ o1.type | upper }}_COSH_COS_VECTOR_WIDTH,
-{%- endblock %}
-
-{%- block generic_map_end %}
+-- number of calo objects, types
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         type_obj1 => {{ o1.type | upper }}_TYPE,
         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,

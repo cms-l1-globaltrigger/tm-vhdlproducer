@@ -18,11 +18,5 @@
     {%- set o = condition.objects[0] %}
     {%- include  "instances/base/object_cuts_correlation.vhd" %}
   {%- endif %}
-  {%- block correlation_cuts %}
     {%- include  "instances/base/correlation_cuts_correlation.vhd" %}
-  {%- endblock %}
-  {%- block correlation_orm %}
-  {%- endblock %}
-  {%- block generic_map_end %}
-  {%- endblock %}
 {%- endblock %}

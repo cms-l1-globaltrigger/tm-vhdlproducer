@@ -2,7 +2,8 @@
 
 {% block entity %}work.correlation_conditions_muon{% endblock %}
 
-{%- block correlation_cuts %}
+{%- block generic_map %}
+{{ super() }}
 -- correlation cuts
     {%- if condition.deltaPhi %}
         dphi_cut => {{ condition.deltaPhi | vhdl_bool }},
@@ -25,9 +26,6 @@
         pt_sq_threshold_vector => X"{{ condition.twoBodyPt.threshold|X16 }}",
         pt_sq_sin_cos_precision => {{ o1.type | upper }}_{{ o2.type | upper }}_SIN_COS_PRECISION,
     {%- endif %}
-{%- endblock %}
-
-{%- block generic_map_end %}
 -- number of object 2
         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
 -- selector same/different bunch crossings

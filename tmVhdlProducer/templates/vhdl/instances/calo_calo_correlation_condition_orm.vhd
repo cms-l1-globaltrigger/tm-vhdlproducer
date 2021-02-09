@@ -2,12 +2,10 @@
 
 {% block entity %}work.correlation_conditions_calo{% endblock %}
 
-{%- block correlation_orm %}
+{%- block generic_map %}
+{{ super() }}
 -- correlation cuts orm
   {%- include "instances/base/correlation_cuts_orm.vhd" %}
-{%- endblock %}
-
-{%- block generic_map_end %}
 -- number of objects and type
   {%- for i in range(0,condition.nr_objects) %}
     {%- set o = condition.objects[i] %}

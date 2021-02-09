@@ -2,7 +2,8 @@
 
 {% block entity %}work.correlation_conditions_calo{% endblock %}
 
-{%- block generic_map_end %}
+{%- block generic_map %}
+{{ super() }}
 -- number of objects and type
   {%- for i in range(0,condition.nr_objects) %}
     {%- set o = condition.objects[i] %}

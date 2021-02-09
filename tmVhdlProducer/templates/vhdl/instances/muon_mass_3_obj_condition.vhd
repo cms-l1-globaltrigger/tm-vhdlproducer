@@ -2,17 +2,15 @@
 
 {% block entity %}work.correlation_conditions_muon{% endblock %}
 
-{%- block correlation_cuts %}
-        -- correlation cuts
+{%- block generic_map %}
+{{ super() }}
+-- correlation cuts
         mass_upper_limit_vector => X"{{ condition.mass.upper | X16 }}",
         mass_lower_limit_vector => X"{{ condition.mass.lower | X16 }}",
         pt1_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH,
         pt2_width => {{ o2.type | upper }}_PT_VECTOR_WIDTH,
         mass_cosh_cos_precision => {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_PRECISION,
         cosh_cos_width => {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_VECTOR_WIDTH,
-{%- endblock %}
-
-{%- block generic_map_end %}
 -- number of object 2
         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
         mass_3_obj => true,

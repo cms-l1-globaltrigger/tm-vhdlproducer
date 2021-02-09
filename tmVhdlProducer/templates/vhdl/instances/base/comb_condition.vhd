@@ -8,8 +8,6 @@
 {% block generic_map %}
   {%- include  "instances/base/object_cuts_comb.vhd" %}
   {%- include  "instances/base/correlation_cuts_comb.vhd" %}
-  {%- block generic_map_end %}
-  {%- endblock %}
 {%- endblock %}
 
 

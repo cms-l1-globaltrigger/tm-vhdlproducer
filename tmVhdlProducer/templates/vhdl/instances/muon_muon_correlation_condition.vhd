@@ -2,8 +2,9 @@
 
 {% block entity %}work.correlation_conditions_muon{% endblock %}
 
-{%- block generic_map_end %}
- -- number of object 2
+{%- block generic_map %}
+{{ super() }}
+-- number of object 2
         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
 -- selector same/different bunch crossings
         same_bx => {{ condition.objectsInSameBx | vhdl_bool }}
