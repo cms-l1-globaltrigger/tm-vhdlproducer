@@ -1,13 +1,18 @@
 """Template helper classes.
+
 Overview of class hierarchy:
+
 Basic template helpers for menu, modules and algorithms.
+
   * VhdlHelper
   * VersionHelper
   * MenuHelper
   * InfoHelper
   * ModuleHelper
   * AlgorithmHelper
+
 Condition template helpers for needs of different condition types.
+
   * ConditionHelper
     * SimpleConditionHelper
     * CaloConditionHelper
@@ -16,11 +21,15 @@ Condition template helpers for needs of different condition types.
     * CorrelationConditionHelper
     * CorrelationConditionOvRmHelper
     * CaloConditionOvRmHelper
+
 Unified object template helper (proably better to create dedicated for every
 object type).
+
   * ObjectHelper
+
 Cut template helper, calculating thresholds and ranges according to provided
 scales.
+
   * CutHelper
     * ThresholdCutHelper
       * TwoBodyPtCutHelper
@@ -132,6 +141,7 @@ ComparisonOperator = {
 
 def snakecase(label, separator='_'):
     """Transformes camel case label to spaced lower case (snaked) label.
+
     >>> snakecase('CamelCaseLabel')
     'camel_case_label'
     """
@@ -155,6 +165,7 @@ def vhdl_bool(value): # TODO add to filters
 
 def vhdl_label(label): # TODO add to filters
     """Return normalized VHDL label for signal or instance names.
+
     >>> vhdl_label('001FooBar.value__@2_')
     'd001_foo_bar_value_2'
     """
@@ -170,6 +181,7 @@ def vhdl_label(label): # TODO add to filters
 
 def vhdl_expression(expression): # TODO add to filters
     """Return safe VHDL expression string using normalized signals for conditions.
+
     >>> vhdl_expression('(singleMu_1 and doubleMu_2)')
     '( single_mu_1 and double_mu_2 )'
     """
@@ -199,9 +211,9 @@ def charge_correlation_encode(value):
     return 'ig' # ignore
 
 def bx_encode(value):
-    """Encode relative bunch crossings into VHDL notation.
-    All positive values with the exception of zero are prefixed with m, all
-    negative values are prefixed with p instead of the minus sign.
+    """Encode relative bunch crossings into VHDL notation. All positive values
+    with the exception of zero are prefixed with m, all negative values are
+    prefixed with p instead of the minus sign.
     """
     # Prefix positive values greater then zero with p.
     if value > 0: return f'p{value:d}'
@@ -251,6 +263,7 @@ class VhdlHelper(object):
 
 class VersionHelper(VhdlHelper):
     """Version template helper, splitting string version numbers.
+
     >>> version = VersionHelper('1.2.3')
     >>> version.major, version.minor, version.patch
     (1, 2, 3)
