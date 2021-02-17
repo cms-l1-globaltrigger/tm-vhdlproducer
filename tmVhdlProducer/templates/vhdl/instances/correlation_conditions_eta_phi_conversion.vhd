@@ -1,13 +1,26 @@
-{%- block correlation_conditions_eta_phi_conversion_loop %}
-  {%- for o in module.conversionObjects %}
-    {%- if o.is_calo_type %}
-    {{ o.type | lower }}_bx_{{ o.bx }}_conv_2_muon_l: for i in 0 to NR_{{ o.type | upper }}_OBJECTS-1 generate
-        {{ o.type | lower }}_bx_{{ o.bx }}_eta_conv_2_muon_eta_integer(i) <= {{ o.type | upper }}_ETA_CONV_2_MUON_ETA_LUT(CONV_INTEGER({{ o.type | lower }}_bx_{{ o.bx }}(i)(D_S_I_{{ o.type | upper }}_V2.eta_high downto D_S_I_{{ o.type | upper }}_V2.eta_low)));
-        {{ o.type | lower }}_bx_{{ o.bx }}_phi_conv_2_muon_phi_integer(i) <= {{ o.type | upper }}_PHI_CONV_2_MUON_PHI_LUT(CONV_INTEGER({{ o.type | lower }}_bx_{{ o.bx }}(i)(D_S_I_{{ o.type | upper }}_V2.phi_high downto D_S_I_{{ o.type | upper }}_V2.phi_low)));
-    end generate {{ o.type | lower }}_bx_{{ o.bx }}_conv_2_muon_l;
-    {%- elif o.is_esums_type %}
-    {{ o.type | lower }}_bx_{{ o.bx }}_phi_conv_2_muon_phi_integer(0) <= {{ o.type | upper }}_PHI_CONV_2_MUON_PHI_LUT(CONV_INTEGER({{ o.type | lower }}_bx_{{ o.bx }}(D_S_I_{{ o.type | upper }}_V2.phi_high downto D_S_I_{{ o.type | upper }}_V2.phi_low)));
-    {%- endif %}
-  {%- endfor %}
-{%- endblock correlation_conditions_eta_phi_conversion_loop %}
-{# eof #}
+{%- for o in module.conversionObjects %}
+  {%- if o.is_calo_type %}
+{{ o.type | lower }}_bx_{{ o.bx }}_conv_eta_phi_i: entity work.conv_eta_phi
+    generic map(
+        nr_obj => NR_{{ o.type | upper }}_OBJECTS,
+        type_obj => {{ o.type | upper }}_TYPE
+    )
+    port map(
+        calo => {{ o.type | lower }}_bx_{{ o.bx }},
+        eta_conv => {{ o.type | lower }}_bx_{{ o.bx }}_eta_conv_2_muon_eta_integer,
+        phi_conv => {{ o.type | lower }}_bx_{{ o.bx }}_phi_conv_2_muon_phi_integer
+    );
+--
+  {%- elif o.is_esums_type %}
+{{ o.type | lower }}_bx_{{ o.bx }}_conv_eta_phi_i: entity work.conv_eta_phi
+    generic map(
+        nr_obj => NR_{{ o.type | upper }}_OBJECTS,
+        type_obj => {{ o.type | upper }}_TYPE
+    )
+    port map(
+        esums => {{ o.type | lower }}_bx_{{ o.bx }},
+        phi_conv => {{ o.type | lower }}_bx_{{ o.bx }}_phi_conv_2_muon_phi_integer
+    );
+--
+  {%- endif %}
+{%- endfor %}

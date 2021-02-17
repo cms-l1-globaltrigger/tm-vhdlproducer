@@ -1,69 +1,58 @@
-{%- block instantiate_correlation_conditions_differences %}
-  {%- for o1, o2 in module.correlationCombinations %}
-    {%- if o1.is_muon_type and o2.is_esums_type %}
-    {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_i: entity work.sub_phi_integer_obj_vs_obj
-        generic map(NR_{{ o1.type | upper }}_OBJECTS, NR_{{ o2.type | upper }}_OBJECTS, MUON_PHI_HALF_RANGE_BINS)
-        port map({{ o1.type | lower }}_bx_{{ o1.bx }}_phi_integer, {{ o2.type | lower }}_bx_{{ o2.bx }}_phi_conv_2_muon_phi_integer, {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer);
-    {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l1: for i in 0 to NR_{{ o1.type | upper }}_OBJECTS-1 generate
-        {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l2: for j in 0 to NR_{{ o2.type | upper }}_OBJECTS-1 generate
-            {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_PHI_LUT({{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
-        end generate {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l2;
-    end generate {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l1;
-
-    {%- elif o1.is_calo_type and o2.is_muon_type %}
-    {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_i: entity work.sub_eta_integer_obj_vs_obj
-        generic map(NR_{{ o1.type | upper }}_OBJECTS, NR_{{ o2.type | upper }}_OBJECTS)
-        port map({{ o1.type | lower }}_bx_{{ o1.bx }}_eta_conv_2_muon_eta_integer, {{ o2.type | lower }}_bx_{{ o2.bx }}_eta_integer, {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer);
-    {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_i: entity work.sub_phi_integer_obj_vs_obj
-        generic map(NR_{{ o1.type | upper }}_OBJECTS, NR_{{ o2.type | upper }}_OBJECTS, MUON_PHI_HALF_RANGE_BINS)
-        port map({{ o1.type | lower }}_bx_{{ o1.bx }}_phi_conv_2_muon_phi_integer, {{ o2.type | lower }}_bx_{{ o2.bx }}_phi_integer, {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer);
-    {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l1: for i in 0 to NR_{{ o1.type | upper }}_OBJECTS-1 generate
-        {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l2: for j in 0 to NR_{{ o2.type | upper }}_OBJECTS-1 generate
-            {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_ETA_LUT({{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
-            {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_PHI_LUT({{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
-        end generate {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l2;
-    end generate {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l1;
-
-    {%- elif o1.is_muon_type and o2.is_muon_type %}
-    {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_i: entity work.sub_eta_integer_obj_vs_obj
-        generic map(NR_{{ o1.type | upper }}_OBJECTS, NR_{{ o2.type | upper }}_OBJECTS)
-        port map({{ o1.type | lower }}_bx_{{ o1.bx }}_eta_integer, {{ o2.type | lower }}_bx_{{ o2.bx }}_eta_integer, {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer);
-    {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_i: entity work.sub_phi_integer_obj_vs_obj
-        generic map(NR_{{ o1.type | upper }}_OBJECTS, NR_{{ o2.type | upper }}_OBJECTS, MUON_PHI_HALF_RANGE_BINS)
-        port map({{ o1.type | lower }}_bx_{{ o1.bx }}_phi_integer, {{ o2.type | lower }}_bx_{{ o2.bx }}_phi_integer, {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer);
-    {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l1: for i in 0 to NR_{{ o1.type | upper }}_OBJECTS-1 generate
-        {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l2: for j in 0 to NR_{{ o2.type | upper }}_OBJECTS-1 generate
-            {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_ETA_LUT({{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
-            {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_PHI_LUT({{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
-        end generate {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l2;
-    end generate {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l1;
-
-    {%- elif o1.is_calo_type and o2.is_esums_type  %}
-    {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_i: entity work.sub_phi_integer_obj_vs_obj
-        generic map(NR_{{ o1.type | upper }}_OBJECTS, NR_{{ o2.type | upper }}_OBJECTS, CALO_PHI_HALF_RANGE_BINS)
-        port map({{ o1.type | lower }}_bx_{{ o1.bx }}_phi_integer, {{ o2.type | lower }}_bx_{{ o2.bx }}_phi_integer, {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer);
-    {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l1: for i in 0 to NR_{{ o1.type | upper }}_OBJECTS-1 generate
-        {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l2: for j in 0 to NR_{{ o2.type | upper }}_OBJECTS-1 generate
-            {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_PHI_LUT({{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
-        end generate {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l2;
-    end generate {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l1;
-
-    {%- else %}
-    {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_i: entity work.sub_eta_integer_obj_vs_obj
-        generic map(NR_{{ o1.type | upper }}_OBJECTS, NR_{{ o2.type | upper }}_OBJECTS)
-        port map({{ o1.type | lower }}_bx_{{ o1.bx }}_eta_integer, {{ o2.type | lower }}_bx_{{ o2.bx }}_eta_integer, {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer);
-    {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_i: entity work.sub_phi_integer_obj_vs_obj
-        generic map(NR_{{ o1.type | upper }}_OBJECTS, NR_{{ o2.type | upper }}_OBJECTS, CALO_PHI_HALF_RANGE_BINS)
-        port map({{ o1.type | lower }}_bx_{{ o1.bx }}_phi_integer, {{ o2.type | lower }}_bx_{{ o2.bx }}_phi_integer, {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer);
-    {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l1: for i in 0 to NR_{{ o1.type | upper }}_OBJECTS-1 generate
-        {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l2: for j in 0 to NR_{{ o2.type | upper }}_OBJECTS-1 generate
-            {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_ETA_LUT({{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
-            {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector(i,j) <= CONV_STD_LOGIC_VECTOR({{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_PHI_LUT({{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer(i,j)),DETA_DPHI_VECTOR_WIDTH_ALL);
-        end generate {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l2;
-    end generate {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_l1;
-
+{%- for o1, o2 in module.correlationCombinations %}
+{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_differences_i: entity work.differences
+    generic map(
+    {%- if o1.is_calo_type and o2.is_calo_type %}
+        calo_calo_deta_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_ETA_LUT,
     {%- endif %}
-
-  {%- endfor %}
-{%- endblock instantiate_correlation_conditions_differences %}
-{# eof #}
+    {%- if o1.is_calo_type and (o2.is_esums_type or o2.is_calo_type) %}
+        calo_calo_dphi_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_PHI_LUT,
+        phi_half_range => CALO_PHI_HALF_RANGE_BINS,
+    {%- endif %}
+    {%- if o1.is_calo_type and o2.is_muon_type %}
+        calo_muon_deta_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_ETA_LUT,
+        calo_muon_dphi_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_PHI_LUT,
+        phi_half_range => MUON_PHI_HALF_RANGE_BINS,
+    {%- endif %}
+    {%- if o1.is_muon_type and o2.is_esums_type %}
+        calo_muon_dphi_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_PHI_LUT,
+    {%- endif %}
+    {%- if o1.is_muon_type and o2.is_muon_type %}
+        muon_muon_deta_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_ETA_LUT
+        muon_muon_dphi_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_PHI_LUT,
+    {%- endif %}
+    {%- if o1.is_muon_type %}
+        phi_half_range => MUON_PHI_HALF_RANGE_BINS,
+    {%- endif %}
+        nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
+        type_obj1 => {{ o1.type | upper }}_TYPE,
+        nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
+        type_obj2 => {{ o2.type | upper }}_TYPE
+    )
+    port map(
+    {%- if (o1.is_calo_type and o2.is_calo_type) or (o1.is_muon_type and o2.is_muon_type) %}
+        eta_integer_obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_eta_integer,
+        phi_integer_obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_phi_integer,
+        eta_integer_obj2 => {{ o2.type | lower }}_bx_{{ o2.bx }}_eta_integer,
+        phi_integer_obj2 => {{ o2.type | lower }}_bx_{{ o2.bx }}_phi_integer,
+    {%- endif %}
+    {%- if o1.is_calo_type and o2.is_muon_type %}
+        eta_integer_obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_eta_conv_2_muon_eta_integer,
+        phi_integer_obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_phi_conv_2_muon_phi_integer,
+        eta_integer_obj2 => {{ o2.type | lower }}_bx_{{ o2.bx }}_eta_integer,
+        phi_integer_obj2 => {{ o2.type | lower }}_bx_{{ o2.bx }}_phi_integer,
+    {%- endif %}
+    {%- if o1.is_calo_type and o2.is_esums_type %}
+        phi_integer_obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_phi_integer,
+        phi_integer_obj2 => {{ o2.type | lower }}_bx_{{ o2.bx }}_phi_integer,
+    {%- endif %}
+    {%- if o1.is_muon_type and o2.is_esums_type %}
+        phi_integer_obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_phi_integer,
+        phi_integer_obj2 => {{ o2.type | lower }}_bx_{{ o2.bx }}_phi_conv_2_muon_phi_integer,
+    {%- endif %}
+    {%- if not o2.is_esums_type %}
+        deta_vector => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector,
+    {%- endif %}
+        dphi_vector => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector
+    );
+--
+{%- endfor %}
