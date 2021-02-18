@@ -17,7 +17,7 @@
         calo_muon_dphi_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_PHI_LUT,
     {%- endif %}
     {%- if o1.is_muon_type and o2.is_muon_type %}
-        muon_muon_deta_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_ETA_LUT
+        muon_muon_deta_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_ETA_LUT,
         muon_muon_dphi_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_PHI_LUT,
     {%- endif %}
     {%- if o1.is_muon_type %}
