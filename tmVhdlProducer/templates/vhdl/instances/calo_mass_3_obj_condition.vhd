@@ -2,7 +2,7 @@
 
 {% block entity %}work.correlation_conditions_calo{% endblock %}
 
-{%- block generic_map %}
+{%- block generic_map -%}
 {{ super() }}
 -- correlation cuts
         pt1_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH,

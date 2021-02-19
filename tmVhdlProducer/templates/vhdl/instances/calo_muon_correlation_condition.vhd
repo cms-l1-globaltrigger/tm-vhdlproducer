@@ -2,7 +2,7 @@
 
 {% block entity %}work.correlation_conditions_calo{% endblock %}
 
-{%- block generic_map %}
+{%- block generic_map -%}
 {{ super() }}
   {%- if not o2.slice %}
 -- slices for muon

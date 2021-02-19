@@ -2,7 +2,7 @@
 
 {% block entity %}work.correlation_conditions_muon{% endblock %}
 
-{%- block generic_map %}
+{%- block generic_map -%}
 {{ super() }}
 -- correlation cuts
         mass_upper_limit_vector => X"{{ condition.mass.upper | X16 }}",

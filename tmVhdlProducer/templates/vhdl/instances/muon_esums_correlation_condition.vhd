@@ -2,7 +2,7 @@
 
 {% block entity %}work.correlation_conditions_muon{% endblock %}
 
-{%- block generic_map %}
+{%- block generic_map -%}
 {{ super() }}
 -- correlation cuts
     {%- if condition.deltaPhi %}

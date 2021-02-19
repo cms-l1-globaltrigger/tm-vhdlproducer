@@ -2,7 +2,7 @@
 
 {% block entity %}work.correlation_conditions_muon{% endblock %}
 
-{%- block generic_map %}
+{%- block generic_map -%}
 {{ super() }}
 -- number of object 2
         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,

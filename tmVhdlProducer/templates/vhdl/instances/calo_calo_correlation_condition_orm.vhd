@@ -2,7 +2,7 @@
 
 {% block entity %}work.correlation_conditions_calo{% endblock %}
 
-{%- block generic_map %}
+{%- block generic_map -%}
 {{ super() }}
 -- correlation cuts orm
   {%- include "instances/base/correlation_cuts_orm.vhd" %}
