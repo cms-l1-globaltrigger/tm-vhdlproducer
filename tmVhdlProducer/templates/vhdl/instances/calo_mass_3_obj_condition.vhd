@@ -1,9 +1,15 @@
-{% extends "instances/base/correlation_condition.vhd" %}
+{% extends "instances/base/condition.vhd" %}
+
+{%- set o1 = condition.objects[0] %}
+{%- set o2 = condition.objects[1] %}
+{%- set o3 = condition.objects[2] %}
 
 {% block entity %}work.correlation_conditions_calo{% endblock %}
 
-{%- block generic_map -%}
-{{ super() }}
+{%- block generic_map %}
+-- obj cuts
+    {%- set o = condition.objects[0] %}
+    {%- include  "instances/base/object_cuts_correlation.vhd" %}
 -- correlation cuts
         pt1_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH,
         pt2_width => {{ o2.type | upper }}_PT_VECTOR_WIDTH,
