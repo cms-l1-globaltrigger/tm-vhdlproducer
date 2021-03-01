@@ -497,7 +497,7 @@ class ModuleHelper(VhdlHelper):
         objects = {}
         for condition in filter(hasObjectCorrelation, self.conditions):
             for obj in condition.objects:
-                if not (obj.type == 'UNDEFINED'):
+                if obj.isValid:
                     key = (obj.type, obj.bx) # create custom hash
                     objects[key] = obj
         return objects.values()
