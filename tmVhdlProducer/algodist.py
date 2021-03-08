@@ -32,6 +32,7 @@ import tmEventSetup
 import tmGrammar
 
 from .handles import Payload
+from .handles import ObjectHandle
 from .handles import ConditionHandle
 from .handles import AlgorithmHandle
 
@@ -174,6 +175,7 @@ kMassDeltaR = 'MassDeltaR'
 kTwoBodyPt = 'TwoBodyPt'
 kSlice = 'Slice'
 kChargeCorrelation = 'ChargeCorrelation'
+kCount = 'Count'
 kOvRmDeltaEta = 'OvRmDeltaEta'
 kOvRmDeltaPhi = 'OvRmDeltaPhi'
 kOvRmDeltaR = 'OvRmDeltaR'
@@ -212,6 +214,7 @@ CutTypeKey = {
     tmEventSetup.TwoBodyPt: kTwoBodyPt,
     tmEventSetup.Slice: kSlice,
     tmEventSetup.ChargeCorrelation: kChargeCorrelation,
+    tmEventSetup.Count: kCount,
     tmEventSetup.OvRmDeltaEta: kOvRmDeltaEta,
     tmEventSetup.OvRmDeltaPhi: kOvRmDeltaPhi,
     tmEventSetup.OvRmDeltaR: kOvRmDeltaR,
@@ -409,6 +412,9 @@ def parse_range(expr):
 # Classes
 #
 
+class VersionError(ValueError):
+    pass
+
 class ResourceOverflowError(RuntimeError):
     """Custom exception class for reosurce overflow errors."""
     pass
@@ -421,6 +427,8 @@ class ResourceTray(object):
     >>> tray.measure(condition)
     """
 
+    Version = 2
+
     # Instances used in resource configuration
     kMuonCondition = 'MuonCondition'
     kCaloCondition = 'CaloCondition'
@@ -432,8 +440,10 @@ class ResourceTray(object):
     def __init__(self, filename):
         """Attribute *filename* is a filename of an JSON payload configuration file."""
         with open(filename) as fp:
-            resources = json.load(fp, object_hook=self._object_hook).resources
-        self.resources = resources
+            data = json.load(fp, object_hook=self._object_hook)
+        if data.version != type(self).Version:
+            raise VersionError(f"invalid JSON file version: {data.version}")
+        self.resources = data.resources
         self.filename = filename
 
     def _object_hook(self, d):
@@ -488,6 +498,13 @@ class ResourceTray(object):
         """
         ceiling = self.resources.ceiling
         return Payload(sliceLUTs=ceiling.sliceLUTs, processors=ceiling.processors)
+
+    def find_object_cut(self, object):
+        """Returns object cut resource namedtuple for *key* or None if not found."""
+        assert isinstance(object, ObjectHandle)
+        def compare(instance):
+            return instance.type == self.map_object(ObjectTypeKey[object.type])
+        return filter_first(compare, self.resources.object_cuts)
 
     def find_instance(self, condition):
         """Returns instance resource namedtuple for *key* or None if not found."""
@@ -616,11 +633,28 @@ class ResourceTray(object):
             message = f"Missing configuration for condition of type '{condition_type}' with " \
                       f"objects {objects_types} in file '{self.filename}'."
             raise RuntimeError(message)
+        # calculate object cuts payload
+        sliceLUTs = instance_objects.sliceLUTs
+        processors = instance_objects.processors
+        for object in condition.objects:
+            object_key = self.map_object(ObjectTypeKey[object.type])
+            for cut in object.cuts:
+                cut_key = CutTypeKey[cut.cut_type]
+                object_cuts = self.resources.object_cuts._asdict().get(object_key)
+                if object_cuts is not None:
+                    object_cut = object_cuts._asdict().get(cut_key)
+                    if object_cut is not None:
+                        sliceLUTs += object_cut.sliceLUTs
+                        processors += object_cut.processors
+                    else:
+                        logging.warning(f"no object cut entry for cut type: {cut_key}")
+                else:
+                    logging.warning(f"no object cut entry for object type: {object_key}")
         # condition type dependent factor calculation (see also config/README.md)
         factor = self.calc_factor(condition)
         logging.debug("%s.calc_factor(<instance %s>) => %s", self.__class__.__name__, condition.name, factor)
-        sliceLUTs = instance_objects.sliceLUTs * factor
-        processors = instance_objects.processors * factor
+        sliceLUTs *= factor
+        processors *= factor
         payload = Payload(sliceLUTs, processors)
         for cut in condition.cuts:
             name = CutTypeKey[cut.cut_type]

@@ -1,4 +1,5 @@
 {
+    "version": 2,
     "resources": {
         "mapping": {
             "instances": {
@@ -119,6 +120,74 @@
         "ceiling": {
             "processors": 1.0,
             "sliceLUTs": 0.9
+        },
+        "object_cuts": {
+            "muon": {
+                "Threshold": {
+                    "processors": 0.0,
+                    "sliceLUTs": 0.0
+                },
+                "Eta": {
+                    "processors": 0.0,
+                    "sliceLUTs": 0.0
+                },
+                "Phi": {
+                    "processors": 0.0,
+                    "sliceLUTs": 0.0
+                },
+                "UnconstrainedPt": {
+                    "processors": 0.0,
+                    "sliceLUTs": 0.0
+                },
+                "ImpactParameter": {
+                    "processors": 0.0,
+                    "sliceLUTs": 0.0
+                },
+                "Charge": {
+                    "processors": 0.0,
+                    "sliceLUTs": 0.0
+                },
+                "Quality": {
+                    "processors": 0.0,
+                    "sliceLUTs": 0.0
+                },
+                "Isolation": {
+                    "processors": 0.0,
+                    "sliceLUTs": 0.0
+                },
+                "Slice": {
+                    "processors": 0.0,
+                    "sliceLUTs": 0.0
+                }
+            },
+            "calo": {
+                "Threshold": {
+                    "processors": 0.0,
+                    "sliceLUTs": 0.0
+                },
+                "Eta": {
+                    "processors": 0.0,
+                    "sliceLUTs": 0.0
+                },
+                "Phi": {
+                    "processors": 0.0,
+                    "sliceLUTs": 0.0
+                },
+                "Isolation": {
+                    "processors": 0.0,
+                    "sliceLUTs": 0.0
+                },
+                "Slice": {
+                    "processors": 0.0,
+                    "sliceLUTs": 0.0
+                }
+            },
+            "esum": {
+                "Threshold": {
+                    "processors": 0.0,
+                    "sliceLUTs": 0.0
+                }
+            }
         },
         "instances": [
             {
