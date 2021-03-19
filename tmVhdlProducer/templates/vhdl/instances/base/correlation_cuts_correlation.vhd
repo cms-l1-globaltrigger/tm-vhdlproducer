@@ -24,6 +24,10 @@
         pt1_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH,
         pt2_width => {{ o2.type | upper }}_PT_VECTOR_WIDTH,
 {%- endif %}
+{%- if (condition.mass) and (condition.mass.type == condition.mass.InvariantMassUptType) %}
+        upt1_width => {{ o1.type | upper }}_UPT_VECTOR_WIDTH,
+        upt2_width => {{ o2.type | upper }}_UPT_VECTOR_WIDTH,
+{%- endif %}
 {%- if condition.mass %}
         mass_cut => {{ condition.mass | vhdl_bool }},
         mass_type => {{ condition.mass.type }},
