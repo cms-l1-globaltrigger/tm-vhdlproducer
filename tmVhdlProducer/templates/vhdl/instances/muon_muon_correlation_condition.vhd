@@ -27,6 +27,10 @@
         pt1 => {{ o1.type | lower }}_pt_vector_bx_{{ o1.bx }},
         pt2 => {{ o2.type | lower }}_pt_vector_bx_{{ o2.bx }},
         {%- endif %}
+        {%- if (condition.mass) and (condition.mass.type == condition.mass.InvariantMassUptType) %}
+        upt1 => {{ o1.type | lower }}_upt_vector_bx_{{ o1.bx }},
+        upt2 => {{ o2.type | lower }}_upt_vector_bx_{{ o2.bx }},
+        {%- endif %}
         {%- if condition.mass %}
         cosh_deta => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector,
         cos_dphi => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,

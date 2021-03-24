@@ -14,6 +14,8 @@
         mass_type => {{ condition.mass.InvariantMassDeltaRType }},
     {%- elif condition.mass.type == condition.mass.InvariantMassType %}
         mass_type => {{ condition.mass.InvariantMassType }},
+    {%- elif condition.mass.type == condition.mass.InvariantMassUptType %}
+        mass_type => {{ condition.mass.InvariantMassUptType }},
     {%- endif %}
   {%- endif %}
   {%- if condition.twoBodyPt %}
