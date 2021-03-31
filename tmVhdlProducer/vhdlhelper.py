@@ -466,6 +466,17 @@ class ModuleHelper(VhdlHelper):
         return combinations.values()
 
     @property
+    def correlationCombinationsInvMass(self):
+        combinations = {}
+        for condition in self.conditions:
+            if hasattr(condition, 'mass') and condition.mass.enabled and condition.mass.type == condition.mass.InvariantMass:
+                if isinstance(condition, CorrelationConditionHelper):
+                    a, b = condition.objects
+                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
+                    combinations[key] = (a, b)
+        return combinations.values()
+
+    @property
     def correlationCombinationsInvMassDivDr(self):
         combinations = {}
         for condition in self.conditions:
