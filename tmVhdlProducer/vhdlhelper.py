@@ -469,7 +469,29 @@ class ModuleHelper(VhdlHelper):
     def correlationCombinationsInvMass(self):
         combinations = {}
         for condition in self.conditions:
-            if hasattr(condition, 'mass') and condition.mass.enabled and condition.mass.type == condition.mass.InvariantMass:
+            if hasattr(condition, 'mass') and condition.mass.enabled and condition.mass.type == condition.mass.InvariantMassType:
+                if isinstance(condition, CorrelationConditionHelper):
+                    a, b = condition.objects
+                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
+                    combinations[key] = (a, b)
+        return combinations.values()
+
+    @property
+    def correlationCombinationsInvMassUpt(self):
+        combinations = {}
+        for condition in self.conditions:
+            if hasattr(condition, 'mass') and condition.mass.enabled and condition.mass.type == condition.mass.InvariantMassUptType:
+                if isinstance(condition, CorrelationConditionHelper):
+                    a, b = condition.objects
+                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
+                    combinations[key] = (a, b)
+        return combinations.values()
+
+    @property
+    def correlationCombinationsTransMass(self):
+        combinations = {}
+        for condition in self.conditions:
+            if hasattr(condition, 'mass') and condition.mass.enabled and condition.mass.type == condition.mass.TransverseMassType:
                 if isinstance(condition, CorrelationConditionHelper):
                     a, b = condition.objects
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
@@ -1334,6 +1356,18 @@ if __name__ == '__main__':
             print("-" * 80)
             print("module.correlationCombinations:")
             for a, b in module.correlationCombinations:
+                print(" ", a.type, a.bx, "<>", b.type, b.bx)
+            print("-" * 80)
+            print("module.correlationCombinationsInvMass:")
+            for a, b in module.correlationCombinationsInvMass:
+                print(" ", a.type, a.bx, "<>", b.type, b.bx)
+            print("-" * 80)
+            print("module.correlationCombinationsInvMassUpt:")
+            for a, b in module.correlationCombinationsInvMassUpt:
+                print(" ", a.type, a.bx, "<>", b.type, b.bx)
+            print("-" * 80)
+            print("module.correlationCombinationsTransMass:")
+            for a, b in module.correlationCombinationsTransMass:
                 print(" ", a.type, a.bx, "<>", b.type, b.bx)
             print("-" * 80)
             print("module.correlationCombinationsInvMassDivDr:")

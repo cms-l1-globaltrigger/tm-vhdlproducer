@@ -40,27 +40,6 @@
 --
 {%- endfor %}
 
-{%- for o1, o2 in module.correlationCombinationsInvMass %}
--- Instantiations of invariant mass over deltaR calculation modules
-
-{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_i: entity work.mass_inv
-    generic map(
-        NR_{{ o1.type | upper }}_OBJECTS,
-        NR_{{ o2.type | upper }}_OBJECTS,
-        {{ o1.type | upper }}_PT_VECTOR_WIDTH,
-        {{ o2.type | upper }}_PT_VECTOR_WIDTH,
-        {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_VECTOR_WIDTH,
-        {{ o1.type | upper }}_{{ o2.type | upper }}_INV_MASS_SQ_VECTOR_WIDTH
-    )
-    port map(
-        lhc_clk,
-        {{ o1.type | lower }}_bx_0_pt_vector,
-        {{ o2.type | lower }}_bx_0_pt_vector,
-        {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector,
-        {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
-        {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv
-    );
-{%- endfor %}
 {%- for o1, o2 in module.correlationCombinationsInvMassDivDr %}
 
 -- Instantiations of invariant mass over deltaR calculation modules
@@ -88,3 +67,72 @@
         {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr
     );
 {%- endfor %}
+
+{%- for o1, o2 in module.correlationCombinationsInvMass %}
+
+-- Instantiations of invariant mass pt calculation modules
+
+{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_i: entity work.mass_inv_trans_upt
+    generic map(
+        NR_{{ o1.type | upper }}_OBJECTS,
+        NR_{{ o2.type | upper }}_OBJECTS,
+        {{ o1.type | upper }}_PT_VECTOR_WIDTH,
+        {{ o2.type | upper }}_PT_VECTOR_WIDTH,
+        {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_VECTOR_WIDTH,
+        {{ o1.type | upper }}_{{ o2.type | upper }}_INV_MASS_SQ_VECTOR_WIDTH
+    )
+    port map(
+        lhc_clk,
+        {{ o1.type | lower }}_bx_0_pt_vector,
+        {{ o2.type | lower }}_bx_0_pt_vector,
+        {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector,
+        {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
+        {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_pt
+    );
+{%- endfor %}
+
+{%- for o1, o2 in module.correlationCombinationsInvMassUpt %}
+
+-- Instantiations of invariant mass upt calculation modules
+
+{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_i: entity work.mass_inv_trans_upt
+    generic map(
+        NR_{{ o1.type | upper }}_OBJECTS,
+        NR_{{ o2.type | upper }}_OBJECTS,
+        {{ o1.type | upper }}_PT_VECTOR_WIDTH,
+        {{ o2.type | upper }}_PT_VECTOR_WIDTH,
+        {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_VECTOR_WIDTH,
+        {{ o1.type | upper }}_{{ o2.type | upper }}_INV_MASS_SQ_VECTOR_WIDTH
+    )
+    port map(
+        lhc_clk,
+        {{ o1.type | lower }}_bx_0_pt_vector,
+        {{ o2.type | lower }}_bx_0_pt_vector,
+        {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector,
+        {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
+        {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_upt
+    );
+{%- endfor %}
+
+{%- for o1, o2 in module.correlationCombinationsTransMass %}
+
+-- Instantiations of transverse mass calculation modules
+
+{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_i: entity work.mass_inv_trans_upt
+    generic map(
+        NR_{{ o1.type | upper }}_OBJECTS,
+        NR_{{ o2.type | upper }}_OBJECTS,
+        {{ o1.type | upper }}_PT_VECTOR_WIDTH,
+        {{ o2.type | upper }}_PT_VECTOR_WIDTH,
+        {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_VECTOR_WIDTH,
+        {{ o1.type | upper }}_{{ o2.type | upper }}_INV_MASS_SQ_VECTOR_WIDTH
+    )
+    port map(
+        lhc_clk,
+        {{ o1.type | lower }}_bx_0_pt_vector,
+        {{ o2.type | lower }}_bx_0_pt_vector,
+        {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
+        {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_trans
+    );
+{%- endfor %}
+
