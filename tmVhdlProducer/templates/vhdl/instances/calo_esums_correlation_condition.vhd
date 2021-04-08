@@ -30,4 +30,7 @@
         sin_phi_1_integer => {{ o1.type | lower }}_bx_{{ o1.bx }}_sin_phi,
         sin_phi_2_integer => {{ o2.type | lower }}_bx_{{ o2.bx }}_sin_phi,
     {%- endif %}
+    {%- if condition.mass and condition.mass.type == condition.mass.TransverseMassType %}
+        mass_trans => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_trans,
+    {%- endif %}
 {%- endblock %}

@@ -21,7 +21,7 @@
 {%- block port_map %}
         obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }},
         muon => {{ o2.type | lower }}_bx_{{ o2.bx }},
-  {%- if condition.mass.type == condition.mass.InvariantMassDeltaRType %}
+  {%- if condition.mass and condition.mass.type == condition.mass.InvariantMassDeltaRType %}
         mass_div_dr => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr,
   {%- else %}
     {%- if (condition.deltaEta) or (condition.deltaR) %}
@@ -43,6 +43,9 @@
         cos_phi_2_integer => {{ o2.type | lower }}_bx_{{ o2.bx }}_cos_phi,
         sin_phi_1_integer => {{ o1.type | lower }}_bx_{{ o1.bx }}_sin_phi,
         sin_phi_2_integer => {{ o2.type | lower }}_bx_{{ o2.bx }}_sin_phi,
+    {%- endif %}
+    {%- if condition.mass and condition.mass.type == condition.mass.InvariantMassType%}
+        mass_inv_pt => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_pt,
     {%- endif %}
   {%- endif %}
 {%- endblock %}

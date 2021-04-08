@@ -44,22 +44,22 @@
 
 -- Instantiations of invariant mass pt calculation modules
 
-{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_i: entity work.mass_calc_new
+{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_pt_i: entity work.correlation_cuts_calculation
     generic map(
-        NR_{{ o1.type | upper }}_OBJECTS,
-        NR_{{ o2.type | upper }}_OBJECTS,
-        {{ o1.type | upper }}_PT_VECTOR_WIDTH,
-        {{ o2.type | upper }}_PT_VECTOR_WIDTH,
-        {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_VECTOR_WIDTH,
-        {{ o1.type | upper }}_{{ o2.type | upper }}_INV_MASS_SQ_VECTOR_WIDTH
+        nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
+        nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
+        mass_type => INVARIANT_MASS_TYPE,
+        pt1_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH,
+        pt2_width => {{ o2.type | upper }}_PT_VECTOR_WIDTH,
+        cosh_cos_precision => {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_PRECISION,
+        cosh_cos_width => {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_VECTOR_WIDTH
     )
     port map(
-        lhc_clk,
-        {{ o1.type | lower }}_bx_0_pt_vector,
-        {{ o2.type | lower }}_bx_0_pt_vector,
-        {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector,
-        {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
-        {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_pt
+        pt1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_pt_vector,
+        pt2 => {{ o2.type | lower }}_bx_{{ o2.bx }}_pt_vector,
+        cosh_deta => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector,
+        cos_dphi => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
+        inv_mass_pt => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_pt
     );
 {%- endfor %}
 
@@ -67,13 +67,17 @@
 
 -- Instantiations of invariant mass over deltaR calculation modules
 
-{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr_i: entity work.mass_div_dr_new
+{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr_i: entity work.mass_div_dr
     generic map(
         NR_{{ o1.type | upper }}_OBJECTS,
         NR_{{ o2.type | upper }}_OBJECTS,
         {{ o1.type | upper }}_{{ o2.type | upper }}_ROM,
         {{ o1.type | upper }}_{{ o2.type | upper }}_DETA_BINS_WIDTH_ROM,
-        {{ o1.type | upper }}_{{ o2.type | upper }}_DPHI_BINS_WIDTH_ROM
+        {{ o1.type | upper }}_{{ o2.type | upper }}_DPHI_BINS_WIDTH_ROM,
+        {{ o1.type | upper }}_{{ o2.type | upper }}_INV_DR_SQ_VECTOR_WIDTH,
+        {{ o1.type | upper }}_PT_VECTOR_WIDTH,
+        {{ o2.type | upper }}_PT_VECTOR_WIDTH,
+        {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_VECTOR_WIDTH
     )
     port map(
         lhc_clk,
@@ -88,22 +92,22 @@
 
 -- Instantiations of invariant mass upt calculation modules
 
-{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_i: entity work.mass_calc_new
+{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_upt_i: entity work.correlation_cuts_calculation
     generic map(
-        NR_{{ o1.type | upper }}_OBJECTS,
-        NR_{{ o2.type | upper }}_OBJECTS,
-        {{ o1.type | upper }}_PT_VECTOR_WIDTH,
-        {{ o2.type | upper }}_PT_VECTOR_WIDTH,
-        {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_VECTOR_WIDTH,
-        {{ o1.type | upper }}_{{ o2.type | upper }}_INV_MASS_SQ_VECTOR_WIDTH
+        nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
+        nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
+        mass_type => INVARIANT_MASS_UPT_TYPE,
+        upt1_width => {{ o1.type | upper }}_UPT_VECTOR_WIDTH,
+        upt2_width => {{ o2.type | upper }}_UPT_VECTOR_WIDTH,
+        cosh_cos_precision => {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_PRECISION,
+        cosh_cos_width => {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_VECTOR_WIDTH
     )
     port map(
-        lhc_clk,
-        {{ o1.type | lower }}_bx_0_pt_vector,
-        {{ o2.type | lower }}_bx_0_pt_vector,
-        {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector,
-        {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
-        {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_upt
+        upt1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_upt_vector,
+        upt2 => {{ o2.type | lower }}_bx_{{ o2.bx }}_upt_vector,
+        cosh_deta => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector,
+        cos_dphi => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
+        inv_mass_upt => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_upt
     );
 {%- endfor %}
 
@@ -111,21 +115,21 @@
 
 -- Instantiations of transverse mass calculation modules
 
-{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_i: entity work.mass_calc_new
+{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_trans_i: entity work.correlation_cuts_calculation
     generic map(
-        NR_{{ o1.type | upper }}_OBJECTS,
-        NR_{{ o2.type | upper }}_OBJECTS,
-        {{ o1.type | upper }}_PT_VECTOR_WIDTH,
-        {{ o2.type | upper }}_PT_VECTOR_WIDTH,
-        {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_VECTOR_WIDTH,
-        {{ o1.type | upper }}_{{ o2.type | upper }}_INV_MASS_SQ_VECTOR_WIDTH
+        nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
+        nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
+        mass_type => TRANSVERSE_MASS_TYPE,
+        pt1_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH,
+        pt2_width => {{ o2.type | upper }}_PT_VECTOR_WIDTH,
+        cosh_cos_precision => {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_PRECISION,
+        cosh_cos_width => {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_VECTOR_WIDTH
     )
     port map(
-        lhc_clk,
-        {{ o1.type | lower }}_bx_0_pt_vector,
-        {{ o2.type | lower }}_bx_0_pt_vector,
-        {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
-        {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_trans
+        pt1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_pt_vector,
+        pt2 => {{ o2.type | lower }}_bx_{{ o2.bx }}_pt_vector,
+        cos_dphi => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
+        trans_mass => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_trans
     );
 {%- endfor %}
 

@@ -35,11 +35,11 @@
   {%- endfor %}
 
   {%- for o1, o2 in module.correlationCombinationsInvMass %}
-    signal {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_pt : mass_inv_pt_vector_array(0 to NR_{{ o1.type | upper }}_OBJECTS-1, 0 to NR_{{ o2.type | upper }}_OBJECTS-1) := (others => (others => (others => '0')));
+    signal {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_pt : mass_dim2_array(0 to NR_{{ o1.type | upper }}_OBJECTS-1, 0 to NR_{{ o2.type | upper }}_OBJECTS-1) := (others => (others => (others => '0')));
   {%- endfor %}
 
   {%- for o1, o2 in module.correlationCombinationsInvMassUpt %}
-    signal {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_upt : mass_inv_upt_vector_array(0 to NR_{{ o1.type | upper }}_OBJECTS-1, 0 to NR_{{ o2.type | upper }}_OBJECTS-1) := (others => (others => (others => '0')));
+    signal {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_upt : mass_dim2_array(0 to NR_{{ o1.type | upper }}_OBJECTS-1, 0 to NR_{{ o2.type | upper }}_OBJECTS-1) := (others => (others => (others => '0')));
   {%- endfor %}
 
   {%- for o1, o2 in module.correlationCombinationsInvMassDivDr %}
@@ -47,7 +47,7 @@
   {%- endfor %}
 
   {%- for o1, o2 in module.correlationCombinationsTransMass %}
-    signal {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_trans : mass_trans_vector_array(0 to NR_{{ o1.type | upper }}_OBJECTS-1, 0 to NR_{{ o2.type | upper }}_OBJECTS-1) := (others => (others => (others => '0')));
+    signal {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_trans : mass_dim2_array(0 to NR_{{ o1.type | upper }}_OBJECTS-1, 0 to NR_{{ o2.type | upper }}_OBJECTS-1) := (others => (others => (others => '0')));
   {%- endfor %}
 
 {%- endblock signal_correlation_conditions_differences %}
