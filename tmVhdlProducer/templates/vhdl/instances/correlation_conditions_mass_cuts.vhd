@@ -65,6 +65,7 @@
     generic map(
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
+        mass_cut => true,
         mass_type => INVARIANT_MASS_TYPE,
         pt1_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH,
         pt2_width => {{ o2.type | upper }}_PT_VECTOR_WIDTH,
@@ -113,6 +114,7 @@
     generic map(
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
+        mass_cut => true,
         mass_type => INVARIANT_MASS_UPT_TYPE,
         upt1_width => {{ o1.type | upper }}_UPT_VECTOR_WIDTH,
         upt2_width => {{ o2.type | upper }}_UPT_VECTOR_WIDTH,
@@ -136,6 +138,7 @@
     generic map(
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
+        mass_cut => true,
         mass_type => TRANSVERSE_MASS_TYPE,
         pt1_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH,
         pt2_width => {{ o2.type | upper }}_PT_VECTOR_WIDTH,
