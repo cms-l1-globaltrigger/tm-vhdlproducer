@@ -34,6 +34,10 @@
 
   {%- endfor %}
 
+  {%- for o1, o2 in module.correlationCombinationsDeltaR %}
+    signal {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dr : dr_dim2_array(0 to NR_{{ o1.type | upper }}_OBJECTS-1, 0 to NR_{{ o2.type | upper }}_OBJECTS-1) := (others => (others => (others => '0')));
+  {%- endfor %}
+
   {%- for o1, o2 in module.correlationCombinationsInvMass %}
     signal {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_pt : mass_dim2_array(0 to NR_{{ o1.type | upper }}_OBJECTS-1, 0 to NR_{{ o2.type | upper }}_OBJECTS-1) := (others => (others => (others => '0')));
   {%- endfor %}

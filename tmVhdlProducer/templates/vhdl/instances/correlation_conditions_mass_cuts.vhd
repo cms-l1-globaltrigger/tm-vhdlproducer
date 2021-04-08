@@ -40,9 +40,26 @@
 --
 {%- endfor %}
 
+{%- for o1, o2 in module.correlationCombinationsDeltaR %}
+
+-- Instantiations of deltaR calculation
+
+{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deltaR_i: entity work.correlation_cuts_calculation
+    generic map(
+        nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
+        nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
+        dr_cut => true
+    )
+    port map(
+        deta => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector,
+        dphi => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
+        dr => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dr
+    );
+{%- endfor %}
+
 {%- for o1, o2 in module.correlationCombinationsInvMass %}
 
--- Instantiations of invariant mass pt calculation modules
+-- Instantiations of invariant mass pt calculation
 
 {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_pt_i: entity work.correlation_cuts_calculation
     generic map(
@@ -65,7 +82,7 @@
 
 {%- for o1, o2 in module.correlationCombinationsInvMassDivDr %}
 
--- Instantiations of invariant mass over deltaR calculation modules
+-- Instantiations of invariant mass over deltaR calculation
 
 {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr_i: entity work.mass_div_dr
     generic map(
@@ -90,7 +107,7 @@
 
 {%- for o1, o2 in module.correlationCombinationsInvMassUpt %}
 
--- Instantiations of invariant mass upt calculation modules
+-- Instantiations of invariant mass upt calculation
 
 {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_upt_i: entity work.correlation_cuts_calculation
     generic map(
@@ -113,7 +130,7 @@
 
 {%- for o1, o2 in module.correlationCombinationsTransMass %}
 
--- Instantiations of transverse mass calculation modules
+-- Instantiations of transverse mass calculation
 
 {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_trans_i: entity work.correlation_cuts_calculation
     generic map(

@@ -466,6 +466,17 @@ class ModuleHelper(VhdlHelper):
         return combinations.values()
 
     @property
+    def correlationCombinationsDeltaR(self):
+        combinations = {}
+        for condition in self.conditions:
+            if hasattr(condition, 'deltaR') and condition.deltaR.enabled:
+                if isinstance(condition, CorrelationConditionHelper):
+                    a, b = condition.objects
+                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
+                    combinations[key] = (a, b)
+        return combinations.values()
+
+    @property
     def correlationCombinationsCoshCos(self):
         combinations = {}
         for condition in self.conditions:
