@@ -4,8 +4,9 @@
 
 {%- block generic_map -%}
 {{ super() }}
--- number of object 2
+-- number and type of object 2
         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
+        type_obj2 => {{ o2.type | upper }}_TYPE,
 -- selector same/different bunch crossings
         same_bx => {{ condition.objectsInSameBx | vhdl_bool }}
 {%- endblock %}
