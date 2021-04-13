@@ -1,5 +1,5 @@
 {%- for o in module.correlationObjects %}
-{{ o.type | lower }}_bx_{{ o.bx }}_parameter_i: entity work.obj_parameter
+parameter_{{ o.type | lower }}_bx_{{ o.bx }}_i: entity work.obj_parameter
     generic map(
         nr_obj => NR_{{ o.type | upper }}_OBJECTS,
         type_obj => {{ o.type | upper }}_TYPE

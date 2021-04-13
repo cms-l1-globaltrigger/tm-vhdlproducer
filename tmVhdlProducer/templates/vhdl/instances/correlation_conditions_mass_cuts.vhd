@@ -85,7 +85,7 @@
 
 -- Instantiations of invariant mass over deltaR calculation
 
-{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr_i: entity work.mass_div_dr
+mass_div_dr_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.mass_div_dr
     generic map(
         NR_{{ o1.type | upper }}_OBJECTS,
         NR_{{ o2.type | upper }}_OBJECTS,
