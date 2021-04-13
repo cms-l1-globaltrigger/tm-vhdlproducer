@@ -128,6 +128,21 @@
             "brams": 0,
             "sliceLUTs": 311
         },
+        "differences": {
+            "processors": 0,
+            "brams": 0,
+            "sliceLUTs": 101
+        },
+        "cosh_deta_cos_dphi": {
+            "processors": 0,
+            "brams": 0,
+            "sliceLUTs": 301
+        },
+        "massdr": {
+            "processors": 3,
+            "brams": 18,
+            "sliceLUTs": 143
+        },
         "object_cuts": {
             "muon": {
                 "Threshold": {
@@ -218,190 +233,6 @@
         },
         "instances": [
             {
-                "type": "Differences",
-                "objects": [
-                    {
-                        "types": ["calo", "calo"],
-                        "processors": 0,
-                        "sliceLUTs": 0,
-                        "brams": 0,
-                        "cuts": [
-                            {
-                                "type": "deta",
-                                "processors": 0,
-                                "sliceLUTs": 55,
-                                "brams": 0
-                            },
-                            {
-                                "type": "dphi",
-                                "processors": 0,
-                                "sliceLUTs": 41,
-                                "brams": 0
-                            },
-                            {
-                                "type": "deta_dphi_vector",
-                                "processors": 0,
-                                "sliceLUTs": 101,
-                                "brams": 0
-                            }
-                        ]
-                    },
-                    {
-                        "types": ["calo", "esum"],
-                        "processors": 0,
-                        "sliceLUTs": 0,
-                        "brams": 0,
-                        "cuts": [
-                            {
-                                "type": "dphi",
-                                "processors": 0,
-                                "sliceLUTs": 41,
-                                "brams": 0
-                            },
-                            {
-                                "type": "deta_dphi_vector",
-                                "processors": 0,
-                                "sliceLUTs": 0,
-                                "brams": 0
-                            }
-                        ]
-                    },
-                    {
-                        "types": ["muon", "muon"],
-                        "processors": 0,
-                        "sliceLUTs": 0,
-                        "brams": 0,
-                        "cuts": [
-                            {
-                                "type": "deta",
-                                "processors": 0,
-                                "sliceLUTs": 55,
-                                "brams": 0
-                            },
-                            {
-                                "type": "dphi",
-                                "processors": 0,
-                                "sliceLUTs": 46,
-                                "brams": 0
-                            },
-                            {
-                                "type": "deta_dphi_vector",
-                                "processors": 0,
-                                "sliceLUTs": 231,
-                                "brams": 0
-                            }
-                        ]
-                    }
-                ]
-            },
-            {
-                "type": "CoshDetaCosDphi",
-                "objects": [
-                    {
-                        "types": ["calo", "calo"],
-                        "processors": 0,
-                        "brams": 0,
-                        "sliceLUTs": 122,
-                        "types": ["calo", "esum"],
-                        "processors": 0,
-                        "brams": 0,
-                        "sliceLUTs": 40,
-                        "types": ["calo", "muon"],
-                        "processors": 0,
-                        "brams": 0,
-                        "sliceLUTs": 0,
-                        "types": ["muon", "esum"],
-                        "processors": 0,
-                        "brams": 0,
-                        "sliceLUTs": 0,
-                        "types": ["muon", "muon"],
-                        "processors": 0,
-                        "brams": 0,
-                        "sliceLUTs": 301
-                    }
-                ]
-            },
-            {
-                "type": "dr",
-                "objects": [
-                    {
-                        "types": ["calo", "calo"],
-                        "processors": 2,
-                        "brams": 0,
-                        "sliceLUTs": 0,
-                         "types": ["calo", "muon"],
-                        "processors": 2,
-                        "brams": 0,
-                        "sliceLUTs": 0,
-                        "types": ["muon", "muon"],
-                        "processors": 2,
-                        "brams": 0,
-                        "sliceLUTs": 0
-                    }
-                ]
-            },
-            {
-                "type": "mass",
-                "objects": [
-                    {
-                        "types": ["calo", "calo"],
-                        "processors": 3,
-                        "brams": 0,
-                        "sliceLUTs": 24,
-                        "types": ["calo", "esum"],
-                        "processors": 0,
-                        "brams": 0,
-                        "sliceLUTs": 0,
-                        "types": ["calo", "muon"],
-                        "processors": 0,
-                        "brams": 0,
-                        "sliceLUTs": 0,
-                        "types": ["muon", "esum"],
-                        "processors": 0,
-                        "brams": 0,
-                        "sliceLUTs": 0,
-                        "types": ["muon", "muon"],
-                        "processors": 3,
-                        "brams": 0,
-                        "sliceLUTs": 20
-                    }
-                ]
-            },
-            {
-                "type": "massdr",
-                "objects": [
-                    {
-                        "types": ["calo", "calo"],
-                        "processors": 0,
-                        "brams": 18,
-                        "sliceLUTs": 143,
-                        "types": ["muon", "muon"],
-                        "processors": 0,
-                        "brams": 0,
-                        "sliceLUTs": 0
-                    }
-                ]
-            },
-            {
-                "type": "tbpt",
-                "objects": [
-                    {
-                        "types": ["calo", "calo"],
-                        "processors": 12,
-                        "brams": 0,
-                        "sliceLUTs": 216,
-                        "types": ["calo", "muon"],
-                        "processors": 0,
-                        "brams": 0,
-                        "sliceLUTs": 0,
-                        "types": ["muon", "muon"],
-                        "processors": 12,
-                        "brams": 0,
-                        "sliceLUTs": 356
-                    }
-                ]
-            },
-            {
                 "type": "MuonCondition",
                 "objects": [
                     {
@@ -418,8 +249,8 @@
                         "cuts": [
                             {
                                 "type": "tbpt",
-                                "processors": 0,
-                                "sliceLUTs": 0,
+                                "processors": 12,
+                                "sliceLUTs": 356,
                                 "brams": 0
                             },
                             {
@@ -477,9 +308,9 @@
                         "cuts": [
                             {
                                 "type": "tbpt",
-                                "processors": 0,
+                                "processors": 12,
                                 "brams": 0,
-                                "sliceLUTs": 0
+                                "sliceLUTs": 216
                             }
                         ]
                     },
@@ -520,7 +351,7 @@
                             },
                             {
                                 "type": "dr",
-                                "processors": 0,
+                                "processors": 2,
                                 "brams": 0,
                                 "sliceLUTs": 0
                             }
@@ -546,15 +377,15 @@
                             },
                             {
                                 "type": "dr",
-                                "processors": 0,
+                                "processors": 2,
                                 "brams": 0,
                                 "sliceLUTs": 0
                             },
                             {
                                 "type": "tbpt",
-                                "processors": 0,
+                                "processors": 12,
                                 "brams": 0,
-                                "sliceLUTs": 0
+                                "sliceLUTs": 216
                             }
                         ]
                     },
@@ -578,7 +409,7 @@
                             },
                             {
                                 "type": "dr",
-                                "processors": 0,
+                                "processors": 2,
                                 "brams": 0,
                                "sliceLUTs": 0
                             }
@@ -604,7 +435,7 @@
                             },
                             {
                                 "type": "dr",
-                                "processors": 0,
+                                "processors": 2,
                                 "brams": 0,
                                 "sliceLUTs": 0
                             }
@@ -625,7 +456,7 @@
                                 "type": "deta",
                                 "processors": 0,
                                 "brams": 0,
-                                "sliceLUTs": 4
+                                "sliceLUTs": 0
                             },
                             {
                                 "type": "dphi",
@@ -635,27 +466,27 @@
                             },
                             {
                                 "type": "dr",
-                                "processors": 0,
+                                "processors": 2,
                                 "brams": 0,
-                                "sliceLUTs": 29
+                                "sliceLUTs": 13
                             },
                             {
                                 "type": "tbpt",
-                                "processors": 0,
+                                "processors": 12,
                                 "brams": 0,
-                                "sliceLUTs": 0
+                                "sliceLUTs": 87
                             },
                             {
                                 "type": "mass",
-                                "processors": 0,
+                                "processors": 3,
                                 "brams": 0,
-                                "sliceLUTs": 55
+                                "sliceLUTs": 143
                             },
                             {
                                 "type": "massdr",
-                                "processors": 0,
-                                "brams": 0,
-                                "sliceLUTs": 0
+                                "processors": 3,
+                                "brams": 16,
+                                "sliceLUTs": 143
                             }
                         ]
                     },
@@ -665,11 +496,11 @@
                         "brams": 0,
                         "sliceLUTs": 0,
                         "cuts": [
-                           {
+                            {
                                 "type": "deta",
                                 "processors": 0,
                                 "brams": 0,
-                                "sliceLUTs": 0
+                                "sliceLUTs": 22
                             },
                             {
                                 "type": "dphi",
@@ -679,27 +510,27 @@
                             },
                             {
                                 "type": "dr",
-                                "processors": 0,
+                                "processors": 2,
                                 "brams": 0,
-                                "sliceLUTs": 29
+                                "sliceLUTs": 7
                             },
                             {
                                 "type": "tbpt",
-                                "processors": 0,
+                                "processors": 14,
                                 "brams": 0,
-                                "sliceLUTs": 0
+                                "sliceLUTs": 13
                             },
                             {
                                 "type": "mass",
-                                "processors": 0,
+                                "processors": 5,
                                 "brams": 0,
-                                "sliceLUTs": 51
+                                "sliceLUTs": 533
                             },
                             {
                                 "type": "massdr",
-                                "processors": 0,
-                                "brams": 0,
-                                "sliceLUTs": 0
+                                "brams": 18,
+                                "processors": 3,
+                                "sliceLUTs": 143
                             }
                         ]
                     },
@@ -717,15 +548,15 @@
                             },
                             {
                                 "type": "tbpt",
-                                "processors": 0,
+                                "processors": 15,
                                 "brams": 0,
-                                "sliceLUTs": 0
+                                "sliceLUTs": 165
                             },
                             {
                                 "type": "mass",
-                                "processors": 0,
+                                "processors": 3,
                                 "brams": 0,
-                                "sliceLUTs": 0
+                                "sliceLUTs": 39
                             }
                         ]
                     },
@@ -743,15 +574,15 @@
                             },
                             {
                                 "type": "tbpt",
-                                "processors": 0,
+                                "processors": 22,
                                 "brams": 0,
-                                "sliceLUTs": 0
+                                "sliceLUTs": 87
                             },
                             {
                                 "type": "mass",
-                                "processors": 0,
+                                "processors": 5,
                                 "brams": 0,
-                                "sliceLUTs": 0
+                                "sliceLUTs": 87
                             }
                         ]
                     },
@@ -771,37 +602,37 @@
                                 "type": "dphi",
                                 "processors": 0,
                                 "brams": 0,
-                                "sliceLUTs": 0
+                                "sliceLUTs": 22
                             },
                             {
                                 "type": "dr",
-                                "processors": 0,
+                                "processors": 2,
                                 "brams": 0,
-                                "sliceLUTs": 29
+                                "sliceLUTs": 7
                             },
                             {
                                 "type": "tbpt",
-                                "processors": 0,
+                                "processors": 12,
                                 "brams": 0,
-                                "sliceLUTs": 0
+                                "sliceLUTs": 152
                             },
                             {
                                 "type": "mass",
-                                "processors": 0,
+                                "processors": 3,
                                 "brams": 0,
-                                "sliceLUTs": 47
+                                "sliceLUTs": 282
                             },
                             {
                                 "type": "massupt",
-                                "processors": 0,
+                                "processors": 3,
                                 "brams": 0,
-                                "sliceLUTs": 0
+                                "sliceLUTs": 143
                             },
                             {
                                 "type": "massdr",
-                                "processors": 0,
-                                "brams": 0,
-                                "sliceLUTs": 0
+                                "processors": 3,
+                                "brams": 18,
+                                "sliceLUTs": 143
                             },
                             {
                                 "type": "chgcor",
@@ -824,9 +655,9 @@
                         "cuts": [
                             {
                                 "type": "mass",
-                                "processors": 0,
+                                "processors": 3,
                                 "brams": 0,
-                                "sliceLUTs": 0
+                                "sliceLUTs": 143
                             }
                         ]
                     },
@@ -838,9 +669,9 @@
                         "cuts": [
                             {
                                 "type": "mass",
-                                "processors": 0,
+                                "processors": 3,
                                 "brams": 0,
-                                "sliceLUTs": 0
+                                "sliceLUTs": 143
                             }
                         ]
                     }
@@ -869,21 +700,21 @@
                             },
                             {
                                 "type": "dr",
-                                "processors": 0,
+                                "processors": 2,
                                 "brams": 0,
-                                "sliceLUTs": 0
+                                "sliceLUTs": 87
                             },
                             {
                                 "type": "tbpt",
-                                "processors": 0,
+                                "processors": 12,
                                 "brams": 0,
-                                "sliceLUTs": 0
+                                "sliceLUTs": 87
                             },
                             {
                                 "type": "mass",
-                                "processors": 0,
+                                "processors": 3,
                                 "brams": 0,
-                                "sliceLUTs": 0
+                                "sliceLUTs": 143
                             }
                         ]
                     },
@@ -897,7 +728,7 @@
                                 "type": "deta",
                                 "processors": 0,
                                 "brams": 0,
-                                "sliceLUTs": 0
+                                "sliceLUTs": 8
                             },
                             {
                                 "type": "dphi",
@@ -907,21 +738,21 @@
                             },
                             {
                                 "type": "dr",
-                                "processors": 0,
+                                "processors": 2,
                                 "brams": 0,
-                                "sliceLUTs": 0
+                                "sliceLUTs": 87
                             },
                             {
                                 "type": "tbpt",
-                                "processors": 0,
+                                "processors": 12,
                                 "brams": 0,
-                                "sliceLUTs": 0
+                                "sliceLUTs": 87
                             },
                             {
                                 "type": "mass",
-                                "processors": 0,
+                                "processors": 3,
                                 "brams": 0,
-                                "sliceLUTs": 0
+                                "sliceLUTs": 143
                             }
                         ]
                     }
