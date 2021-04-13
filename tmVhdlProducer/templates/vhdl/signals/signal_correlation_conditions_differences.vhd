@@ -54,5 +54,9 @@
     signal {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_trans : mass_dim2_array(0 to NR_{{ o1.type | upper }}_OBJECTS-1, 0 to NR_{{ o2.type | upper }}_OBJECTS-1) := (others => (others => (others => '0')));
   {%- endfor %}
 
+  {%- for o1, o2 in module.correlationCombinationsTbpt %}
+    signal {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt : tbpt_dim2_array(0 to NR_{{ o1.type | upper }}_OBJECTS-1, 0 to NR_{{ o2.type | upper }}_OBJECTS-1) := (others => (others => (others => '0')));
+  {%- endfor %}
+
 {%- endblock signal_correlation_conditions_differences %}
 {# eof #}

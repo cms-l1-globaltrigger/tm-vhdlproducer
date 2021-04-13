@@ -532,6 +532,17 @@ class ModuleHelper(VhdlHelper):
         return combinations.values()
 
     @property
+    def correlationCombinationsTbpt(self):
+        combinations = {}
+        for condition in self.conditions:
+            if hasattr(condition, 'twoBodyPt') and condition.twoBodyPt.enabled:
+                if isinstance(condition, CorrelationConditionHelper):
+                    a, b = condition.objects
+                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
+                    combinations[key] = (a, b)
+        return combinations.values()
+
+    @property
     def correlationObjects(self):
         """Retruns list of objects used by correlation conditions or any
         conditions using two body pt correlations.
