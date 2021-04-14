@@ -1,3 +1,6 @@
+
+-- Instantiations of cosh_deta and cos_dphi calculation
+
 {%- for o1, o2 in module.correlationCombinationsCoshCos %}
 {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_cos_dphi_i: entity work.cosh_deta_cos_dphi
     generic map(
@@ -40,9 +43,9 @@
 --
 {%- endfor %}
 
-{%- for o1, o2 in module.correlationCombinationsDeltaR %}
+-- Instantiations of DeltaR calculation
 
--- Instantiations of deltaR calculation
+{%- for o1, o2 in module.correlationCombinationsDeltaR %}
 
 {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deltaR_i: entity work.correlation_cuts_calculation
     generic map(
@@ -57,9 +60,9 @@
     );
 {%- endfor %}
 
-{%- for o1, o2 in module.correlationCombinationsInvMass %}
+-- Instantiations of Invariant mass calculation
 
--- Instantiations of invariant mass pt calculation
+{%- for o1, o2 in module.correlationCombinationsInvMass %}
 
 {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_pt_i: entity work.correlation_cuts_calculation
     generic map(
@@ -81,9 +84,9 @@
     );
 {%- endfor %}
 
-{%- for o1, o2 in module.correlationCombinationsInvMassDivDr %}
+-- Instantiations of Invariant mass divided DeltaR calculation
 
--- Instantiations of invariant mass over deltaR calculation
+{%- for o1, o2 in module.correlationCombinationsInvMassDivDr %}
 
 mass_div_dr_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.mass_div_dr
     generic map(
@@ -106,9 +109,9 @@ mass_div_dr_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.
     );
 {%- endfor %}
 
-{%- for o1, o2 in module.correlationCombinationsInvMassUpt %}
+-- Instantiations of Invariant mass unconstrained pt calculation
 
--- Instantiations of invariant mass upt calculation
+{%- for o1, o2 in module.correlationCombinationsInvMassUpt %}
 
 {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_upt_i: entity work.correlation_cuts_calculation
     generic map(
@@ -130,9 +133,9 @@ mass_div_dr_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.
     );
 {%- endfor %}
 
-{%- for o1, o2 in module.correlationCombinationsTransMass %}
+-- Instantiations of Transverse mass calculation
 
--- Instantiations of transverse mass calculation
+{%- for o1, o2 in module.correlationCombinationsTransMass %}
 
 {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_trans_i: entity work.correlation_cuts_calculation
     generic map(
@@ -153,9 +156,9 @@ mass_div_dr_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.
     );
 {%- endfor %}
 
-{%- for o1, o2 in module.correlationCombinationsTbpt %}
+-- Instantiations of Two-body pt calculation
 
--- Instantiations of two-body pt calculation
+{%- for o1, o2 in module.correlationCombinationsTbpt %}
 
 {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt_i: entity work.correlation_cuts_calculation
     generic map(

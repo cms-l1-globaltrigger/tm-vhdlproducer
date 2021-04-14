@@ -30,13 +30,13 @@
 -- Instantiations of muon charge correlations - only once for a certain bx combination, if there is at least one DoubleMuon, TripleMuon, QuadMuon condition
 -- or muon-muon correlation condition.
 {% include "instances/muon_charge_correlations.vhd" %}
--- Instantiations of eta and phi conversion to muon scale for calo-muon and muon-esums correlation conditions (used for DETA, DPHI, DR and mass) - once for every calo object type in certain bx used in correlation conditions
+-- Instantiations of eta and phi conversion to muon scale for calo-muon and muon-esums correlation conditions (used for DETA, DPHI, DR and mass)
 {% include "instances/correlation_conditions_eta_phi_conversion.vhd" %}
--- Instantiations of pt, eta, phi, cosine phi and sine phi for correlation conditions (used for DETA, DPHI, DR, mass, overlap_remover and two-body pt) - once for every object type in certain bx used in correlation conditions
+-- Instantiations of pt, eta, phi, cosine phi and sine phi for correlation conditions (used for DETA, DPHI, DR, mass, overlap_remover and two-body pt)
 {% include "instances/correlation_conditions_pt_eta_phi_cos_sin_phi.vhd" %}
--- Instantiations of differences for correlation conditions (used for DETA, DPHI, DR, mass and two-body pt) - once for correlation conditions with two object types in certain bxs
+-- Instantiations of deta and dphi calculations for correlation conditions (used for DETA, DPHI, DR, mass)
 {% include "instances/correlation_conditions_differences.vhd" %}
--- Instantiations of cosh deta and cos dphi LUTs for correlation conditions (used for mass) - once for correlation conditions with two object types in certain bxs
+-- Instantiations of cosh deta and cos dphi LUTs for correlation conditions (used for mass) and DR, mass and two-body pt calculations
 {% include "instances/correlation_conditions_mass_cuts.vhd" %}
 
 -- Instantiations of conditions

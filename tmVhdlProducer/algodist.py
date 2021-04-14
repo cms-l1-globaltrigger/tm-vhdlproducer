@@ -525,6 +525,14 @@ class ResourceTray(object):
         """
         cosh_deta_cos_dphi = self.resources.cosh_deta_cos_dphi
         return Payload(brams=cosh_deta_cos_dphi.brams, sliceLUTs=cosh_deta_cos_dphi.sliceLUTs, processors=cosh_deta_cos_dphi.processors)
+
+    def mass_calc(self):
+        """Returns resource consumption payload for one unit of mass_calc calculation for mass.
+        >>> tray.mass_calc()
+        Payload(sliceLUTs=301, processors=0, brams=0)
+        """
+        mass_calc = self.resources.mass_calc
+        return Payload(brams=mass_calc.brams, sliceLUTs=mass_calc.sliceLUTs, processors=mass_calc.processors)
 # =================================================================================
 
     def find_object_cut(self, object):
@@ -720,6 +728,7 @@ class Module(object):
 # =================================================================================
         self.differences = tray.differences()
         self.cosh_deta_cos_dphi = tray.cosh_deta_cos_dphi()
+        self.mass_calc = tray.mass_calc()
 # =================================================================================
 
     def __len__(self):
@@ -752,6 +761,8 @@ class Module(object):
         cond_orm = ['SingleEgammaOvRm', 'DoubleEgammaOvRm', 'TripleEgammaOvRm', 'QuadEgammaOvRm',
                     'SingleTauOvRm', 'DoubleTauOvRm', 'TripleTauOvRm', 'QuadTauOvRm',
                     'SingleJetOvRm', 'DoubleJetOvRm', 'TripleJetOvRm', 'QuadJetOvRm']
+        mass_cond = ['InvariantMass', 'InvariantMassUpt', 'TransverseMass', 'InvariantMassOvRm',
+                     'TransverseMassOvRm', 'InvariantMass3', 'InvariantMassDeltaR']
         calo_t = [1, 2, 3] #
         esums_t = [6, 7]
 
@@ -761,41 +772,41 @@ class Module(object):
         processors = self.fdl_algo_slice.processors * len(self.algorithms)
         fdl_payload = Payload(brams, sliceLUTs, processors)
         payload += fdl_payload
-        combinations = {}
+        combinations_diff = {}
         for algorithm in self.algorithms:
             for condition in algorithm.conditions:
                 condition_type = ConditionTypeKey[condition.type]
                 if condition_type in corr_cond_2_obj:
                     a, b = condition.objects
                     key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
-                    combinations[key] = (a, b)
+                    combinations_diff[key] = (a, b)
                 if condition_type in corr_cond_orm:
                     if len(condition.objects) == 3:
                         a, b, c = condition.objects
                         key = (a.type, b.type, a.bx_offset, b.bx_offset) # a-b combination
-                        combinations[key] = (a, b)
+                        combinations_diff[key] = (a, b)
                         key = (a.type, c.type, a.bx_offset, c.bx_offset) # a-c combination
-                        combinations[key] = (a, c)
+                        combinations_diff[key] = (a, c)
                         key = (b.type, c.type, b.bx_offset, c.bx_offset) # b-c combination
-                        combinations[key] = (b, c)
+                        combinations_diff[key] = (b, c)
                     else:
                         a = condition.objects[0]
                         b = condition.objects[1]
                         key = (a.type, b.type, a.bx_offset, b.bx_offset)
-                        combinations[key] = (a, b)
+                        combinations_diff[key] = (a, b)
                 if condition_type in cond_orm:
                     a = condition.objects[0]
                     b = condition.objects[len(condition.objects)-1]
                     key = (a.type, b.type, a.bx_offset, b.bx_offset)
-                    combinations[key] = (a, b)
+                    combinations_diff[key] = (a, b)
                 if condition_type == 'InvariantMassDeltaR':
                     a = condition.objects[0]
                     b = condition.objects[1]
                     key = (a.type, b.type, a.bx_offset, b.bx_offset)
-                    combinations[key] = (a, b)
+                    combinations_diff[key] = (a, b)
 
-        # payload for instances of "differences" and "cosh_deta_cos_dphi" calculations
-        for combination in combinations:
+        # payload for instances of "differences" calculations
+        for combination in combinations_diff:
             if combination[0] == combination[1]:
                 if combination[0] == 0:
                     factor = NR_MUONS * (NR_MUONS-1) / 2
@@ -815,13 +826,49 @@ class Module(object):
                     raise RuntimeError(message)
 
             sliceLUTs += self.differences.sliceLUTs * factor
-            # "cosh_deta_cos_dphi" should be added only for combinations with a mass cut - how to implement ?
-            sliceLUTs += self.cosh_deta_cos_dphi.sliceLUTs * factor
 
         brams = 0
         processors = 0
-        diff_cosh_cos_payload = Payload(brams, sliceLUTs, processors)
-        payload += diff_cosh_cos_payload
+        diff_payload = Payload(brams, sliceLUTs, processors)
+        payload += diff_payload
+
+        combinations_mass = {}
+        for algorithm in self.algorithms:
+            for condition in algorithm.conditions:
+                condition_type = ConditionTypeKey[condition.type]
+                if condition_type in mass_cond:
+                    a = condition.objects[0]
+                    b = condition.objects[1]
+                    key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
+                    combinations_mass[key] = (a, b)
+
+        # payload for instances of "cosh_deta_cos_dphi" calculations
+        for combination in combinations_mass:
+            if combination[0] == combination[1]:
+                if combination[0] == 0:
+                    factor = NR_MUONS * (NR_MUONS-1) / 2
+                else:
+                    factor = NR_CALOS * (NR_CALOS-1) / 2
+            else:
+                if (combination[0] in calo_t)  and (combination[1] in calo_t):
+                    factor = NR_CALOS * NR_CALOS
+                elif (combination[0] in calo_t)  and combination[1] == 0:
+                    factor = NR_CALOS * NR_MUONS
+                elif (combination[0] in calo_t) and (combination[1] in esums_t):
+                    factor = NR_CALOS
+                elif combination[0] == 0 and (combination[1] in esums_t):
+                    factor = NR_MUONS
+                else:
+                    message = f"Wrong factor for correlation combination."
+                    raise RuntimeError(message)
+
+            sliceLUTs += self.cosh_deta_cos_dphi.sliceLUTs * factor
+            sliceLUTs += self.mass_calc.sliceLUTs * factor
+            processors += self.mass_calc.processors * factor
+
+        brams = 0
+        cosh_cos_mass_payload = Payload(brams, sliceLUTs, processors)
+        payload += cosh_cos_mass_payload
 
 # =================================================================================
 

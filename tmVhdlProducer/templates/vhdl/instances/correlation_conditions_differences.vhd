@@ -1,5 +1,5 @@
 {%- for o1, o2 in module.correlationCombinations %}
-differences_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.differences
+deta_dphi_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.deta_dphi_calculations
     generic map(
     {%- if o1.is_calo_type and o2.is_calo_type %}
         calo_calo_deta_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_ETA_LUT,
