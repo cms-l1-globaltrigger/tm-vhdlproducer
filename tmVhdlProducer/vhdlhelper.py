@@ -474,6 +474,23 @@ class ModuleHelper(VhdlHelper):
                     a, b = condition.objects
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
                     combinations[key] = (a, b)
+            if isinstance(condition, CorrelationConditionOvRmHelper):
+                if condition.deltaROrm.enabled:
+                    if condition.nr_objects == 3:
+                        a, b, c = condition.objects
+                        key = (a.type, c.type, a.bx, c.bx) # a-c combination
+                        combinations[key] = (a, c)
+                    else:
+                        a = condition.objects[0]
+                        b = condition.objects[1]
+                        key = (a.type, b.type, a.bx, b.bx)
+                        combinations[key] = (a, b)
+            if isinstance(condition, CaloConditionOvRmHelper):
+                if condition.deltaROrm.enabled:
+                    a = condition.objects[0]
+                    b = condition.objects[condition.nr_objects-1]
+                    key = (a.type, b.type, a.bx, b.bx)
+                    combinations[key] = (a, b)
         return combinations.values()
 
     @property
