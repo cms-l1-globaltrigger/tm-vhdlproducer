@@ -553,7 +553,7 @@ class ModuleHelper(VhdlHelper):
         combinations = {}
         for condition in self.conditions:
             if hasattr(condition, 'twoBodyPt') and condition.twoBodyPt.enabled:
-                if isinstance(condition, CorrelationConditionHelper):
+                if isinstance(condition, (CorrelationConditionHelper, CaloConditionHelper, CaloConditionOvRmHelper, MuonConditionHelper)):
                     a, b = condition.objects
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
                     combinations[key] = (a, b)

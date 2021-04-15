@@ -21,29 +21,11 @@
   {%- if condition.mass and condition.mass.type == condition.mass.InvariantMassDeltaRType %}
         mass_div_dr => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr,
   {%- else %}
-    {%- if (condition.deltaEta) or (condition.deltaR) %}
+    {%- if condition.deltaEta %}
         deta => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector,
     {%- endif %}
-    {%- if (condition.deltaPhi) or (condition.deltaR) %}
+    {%- if condition.deltaPhi %}
         dphi => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
-    {%- endif %}
-    {%- if (condition.mass) or (condition.twoBodyPt) %}
-        pt1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_pt_vector,
-        pt2 => {{ o2.type | lower }}_bx_{{ o2.bx }}_pt_vector,
-    {%- endif %}
-    {%- if (condition.mass) and (condition.mass.type == condition.mass.InvariantMassUptType) %}
-        upt1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_upt_vector,
-        upt2 => {{ o2.type | lower }}_bx_{{ o2.bx }}_upt_vector,
-    {%- endif %}
-    {%- if condition.mass %}
-        cosh_deta => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_vector,
-        cos_dphi => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
-    {%- endif %}
-    {%- if condition.twoBodyPt %}
-        cos_phi_1_integer => {{ o1.type | lower }}_bx_{{ o1.bx }}_cos_phi,
-        cos_phi_2_integer => {{ o2.type | lower }}_bx_{{ o2.bx }}_cos_phi,
-        sin_phi_1_integer => {{ o1.type | lower }}_bx_{{ o1.bx }}_sin_phi,
-        sin_phi_2_integer => {{ o2.type | lower }}_bx_{{ o2.bx }}_sin_phi,
     {%- endif %}
     {%- if condition.deltaR %}
         dr => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dr,
@@ -54,6 +36,9 @@
       {%- elif  condition.mass.type == condition.mass.InvariantMassUptType %}
         mass_inv_upt => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_upt,
       {%- endif %}
+    {%- endif %}
+    {%- if condition.twoBodyPt %}
+        tbpt => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt,
     {%- endif %}
   {%- endif %}
 {%- endblock %}
