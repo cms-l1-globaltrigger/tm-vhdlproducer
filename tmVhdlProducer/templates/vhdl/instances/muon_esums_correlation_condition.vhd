@@ -15,7 +15,7 @@
         obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }},
         esums => {{ o2.type | lower }}_bx_{{ o2.bx }},
     {%- if condition.deltaPhi %}
-        dphi => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
+        dphi => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi,
     {%- endif %}
     {%- if condition.mass and condition.mass.type == condition.mass.TransverseMassType %}
         mass_trans => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_trans,

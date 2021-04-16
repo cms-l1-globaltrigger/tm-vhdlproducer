@@ -33,11 +33,11 @@
 -- Instantiations of eta and phi conversion to muon scale for calo-muon and muon-esums correlation conditions (used for DETA, DPHI, DR and mass)
 {% include "instances/correlation_conditions_eta_phi_conversion.vhd" %}
 -- Instantiations of pt, eta, phi, cosine phi and sine phi for correlation conditions (used for DETA, DPHI, DR, mass, overlap_remover and two-body pt)
-{% include "instances/correlation_conditions_pt_eta_phi_cos_sin_phi.vhd" %}
+{% include "instances/obj_parameter.vhd" %}
 -- Instantiations of deta and dphi calculations for correlation conditions (used for DETA, DPHI, DR, mass)
-{% include "instances/correlation_conditions_differences.vhd" %}
+{% include "instances/deta_dphi_calculations.vhd" %}
 -- Instantiations of cosh deta and cos dphi LUTs for correlation conditions (used for mass) and DR, mass and two-body pt calculations
-{% include "instances/correlation_conditions_mass_cuts.vhd" %}
+{% include "instances/correlation_cuts_calculations.vhd" %}
 
 -- Instantiations of conditions
 --

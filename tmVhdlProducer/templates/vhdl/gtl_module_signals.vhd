@@ -22,11 +22,11 @@
 -- v{{ menu.info.version }}
 
 -- Signal definition of pt, eta and phi for correlation conditions.
--- Insert "signal_correlation_conditions_pt_eta_phi_cos_sin_phi.vhd" as often as an ObjectType at a certain Bx is used in a correlation condition.
-{%- include  "signals/signal_correlation_conditions_pt_eta_phi_cos_sin_phi.vhd" %}
+-- Insert "signal_correlation_conditions_parameter.vhd" as often as an ObjectType at a certain Bx is used in a correlation condition.
+{%- include  "signals/signal_correlation_conditions_parameter.vhd" %}
 -- Signal definition of differences for correlation conditions.
--- Insert "signal_correlation_conditions_differences.vhd" once for correlation conditions of different ObjectTypes and Bx combinations.
-{%- include  "signals/signal_correlation_conditions_differences.vhd" %}
+-- Insert "signal_correlation_cuts.vhd" once for correlation conditions of different ObjectTypes and Bx combinations.
+{%- include  "signals/signal_correlation_cuts.vhd" %}
 -- Signal definition for muon charge correlations.
 -- Insert "signal_muon_charge_correlations.vhd" only once for a certain Bx combination,
 -- if there is at least one muon condition or one muon-muon correlation condition.
