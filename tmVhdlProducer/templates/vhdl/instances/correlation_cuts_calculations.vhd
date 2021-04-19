@@ -5,21 +5,21 @@
     generic map(
         deta_dphi_sel => true,
    {%- if o1.is_calo_type and o2.is_calo_type %}
-        calo_calo_deta_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_ETA_LUT,
+        calo_calo_deta_lut => CALO_CALO_DIFF_ETA_LUT,
     {%- endif %}
     {%- if o1.is_calo_type and (o2.is_esums_type or o2.is_calo_type) %}
-        calo_calo_dphi_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_PHI_LUT,
+        calo_calo_dphi_lut => CALO_CALO_DIFF_PHI_LUT,
     {%- endif %}
     {%- if o1.is_calo_type and o2.is_muon_type %}
-        calo_muon_deta_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_ETA_LUT,
-        calo_muon_dphi_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_PHI_LUT,
+        calo_muon_deta_lut => CALO_MU_DIFF_ETA_LUT,
+        calo_muon_dphi_lut => CALO_MU_DIFF_PHI_LUT,
     {%- endif %}
     {%- if o1.is_muon_type and o2.is_esums_type %}
-        calo_muon_dphi_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_PHI_LUT,
+        calo_muon_dphi_lut => CALO_MU_DIFF_PHI_LUT,
     {%- endif %}
     {%- if o1.is_muon_type and o2.is_muon_type %}
-        muon_muon_deta_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_ETA_LUT,
-        muon_muon_dphi_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_PHI_LUT,
+        muon_muon_deta_lut => MU_MU_DIFF_ETA_LUT,
+        muon_muon_dphi_lut => MU_MU_DIFF_PHI_LUT,
     {%- endif %}
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         type_obj1 => {{ o1.type | upper }}_TYPE,
@@ -44,22 +44,28 @@
     generic map(
         cosh_deta_cos_dphi_sel => true,
     {%- if o1.is_calo_type and o2.is_calo_type %}
-        calo_calo_cosh_deta_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_DETA_LUT,
+        calo_calo_cosh_deta_lut => CALO_CALO_COSH_DETA_LUT,
     {%- endif %}
     {%- if o1.is_calo_type and (o2.is_calo_type or o2.is_esums_type) %}
-        calo_calo_cos_dphi_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_COS_DPHI_LUT,
+        calo_calo_cos_dphi_lut => CALO_CALO_COS_DPHI_LUT,
     {%- endif %}
     {%- if o1.is_calo_type and o2.is_muon_type %}
-        calo_muon_cosh_deta_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_DETA_LUT,
+        calo_muon_cosh_deta_lut => CALO_MUON_COSH_DETA_LUT,
     {%- endif %}
     {%- if (o1.is_calo_type and o2.is_muon_type) or (o1.is_muon_type and o2.is_esums_type) %}
-        calo_muon_cos_dphi_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_COS_DPHI_LUT,
+        calo_muon_cos_dphi_lut => CALO_MUON__COS_DPHI_LUT,
     {%- endif %}
     {%- if o1.is_muon_type and o2.is_muon_type %}
-        muon_muon_cosh_deta_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_DETA_LUT,
-        muon_muon_cos_dphi_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_COS_DPHI_LUT,
+        muon_muon_cosh_deta_lut => MU_MU_COSH_DETA_LUT,
+        muon_muon_cos_dphi_lut => MU_MU_COS_DPHI_LUT,
     {%- endif %}
-        cosh_cos_vector_width => {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_VECTOR_WIDTH,
+    {%- if o1.is_calo_type and (o2.is_calo_type or o2.is_esums_type) %}
+        cosh_cos_vector_width => CALO_CALO_COSH_COS_VECTOR_WIDTH,
+    {%- elif (o1.is_calo_type and o2.is_muon_type) or (o1.is_muon_type or o2.is_esums_type) %}
+        cosh_cos_vector_width => CALO_MUON_COSH_COS_VECTOR_WIDTH,
+    {%- elif o1.is_muon_type or o2.is_muon_type %}
+        cosh_cos_vector_width => MUON_MUON_COSH_COS_VECTOR_WIDTH,
+    {%- endif %}
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         type_obj1 => {{ o1.type | upper }}_TYPE,
         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,

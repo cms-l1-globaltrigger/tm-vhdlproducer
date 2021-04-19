@@ -27,7 +27,13 @@
         mass_div_dr_vector_width => {{ o1.type | upper }}_{{ o2.type | upper }}_MASS_DIV_DR_VECTOR_WIDTH,
         mass_div_dr_threshold => X"{{ condition.mass.lower | X21 }}",
   {%- else %}
-        mass_vector_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH+{{ o2.type | upper }}_PT_VECTOR_WIDTH+{{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_VECTOR_WIDTH,
+    {%- if o1.is_calo_type and (o2.is_calo_type or o2.is_esums_type) %}
+        mass_vector_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH+{{ o2.type | upper }}_PT_VECTOR_WIDTH+CALO_CALO_COSH_COS_VECTOR_WIDTH,
+    {%- elif (o1.is_calo_type and o2.is_muon_type) or (o1.is_muon_type or o2.is_esums_type) %}
+        mass_vector_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH+{{ o2.type | upper }}_PT_VECTOR_WIDTH+CALO_MUON_COSH_COS_VECTOR_WIDTH,
+    {%- elif o1.is_muon_type or o2.is_muon_type %}
+        mass_vector_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH+{{ o2.type | upper }}_PT_VECTOR_WIDTH+MUON_MUON_COSH_COS_VECTOR_WIDTH,
+    {%- endif %}
         mass_upper_limit_vector => X"{{ condition.mass.upper | X16 }}",
         mass_lower_limit_vector => X"{{ condition.mass.lower | X16 }}",
   {%- endif %}
