@@ -31,14 +31,14 @@
     {%- set o3 = condition.objects[2] %}
         obj3 => {{ o3.type | lower }}_bx_{{ o3.bx }},
   {%- endif %}
-  {%- if condition.deltaEtaOrm or condition.deltaROrm %}
+  {%- if condition.deltaEtaOrm %}
     {%- if condition.nr_objects == 3 %}
         deta_orm => {{ o1.type | lower }}_{{ o3.type | lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_deta,
     {%- elif condition.nr_objects == 2 %}
         deta_orm => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta,
     {%- endif %}
   {%- endif %}
-  {%- if condition.deltaPhiOrm or condition.deltaROrm %}
+  {%- if condition.deltaPhiOrm %}
     {%- if condition.nr_objects == 3 %}
         dphi_orm => {{ o1.type | lower }}_{{ o3.type | lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_dphi,
     {%- elif condition.nr_objects == 2 %}

@@ -1,6 +1,6 @@
 -- Instantiations of deta and dphi LUTs
 
-{%- for o1, o2 in module.correlationCombinations %}
+{%- for o1, o2 in module.correlationCombinationsDetaDphi %}
 {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_dphi_luts_i: entity work.deta_dphi_cosh_cos_wrapper
     generic map(
         deta_dphi_sel => true,
