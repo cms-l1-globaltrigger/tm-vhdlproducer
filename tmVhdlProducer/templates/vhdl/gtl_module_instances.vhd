@@ -34,9 +34,10 @@
 {% include "instances/correlation_conditions_eta_phi_conversion.vhd" %}
 -- Instantiations of pt, eta, phi, cosine phi and sine phi for correlation conditions (used for DETA, DPHI, DR, mass, overlap_remover and two-body pt)
 {% include "instances/obj_parameter.vhd" %}
--- Instantiations of deta and dphi calculations for correlation conditions (used for DETA, DPHI, DR, mass)
+-- Instantiations of deta and dphi calculations for correlation conditions (used for DETA, DPHI)
 {% include "instances/deta_dphi_calculations.vhd" %}
--- Instantiations of cosh deta and cos dphi LUTs for correlation conditions (used for mass) and DR, mass and two-body pt calculations
+-- Instantiations of deta, dphi, cosh deta and cos dphi LUTs for correlation conditions (used for DR and mass)
+--
 {% include "instances/correlation_cuts_calculations.vhd" %}
 
 -- Instantiations of conditions

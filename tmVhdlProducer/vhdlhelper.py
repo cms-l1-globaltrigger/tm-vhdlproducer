@@ -466,6 +466,51 @@ class ModuleHelper(VhdlHelper):
         return combinations.values()
 
     @property
+    def correlationCombinationsDetaDphi(self):
+        combinations = {}
+        for condition in self.conditions:
+            if (hasattr(condition, 'deltaEta') and condition.deltaEta.enabled) or (hasattr(condition, 'deltaPhi') and condition.deltaPhi.enabled):
+                if isinstance(condition, CorrelationConditionHelper):
+                    a, b = condition.objects
+                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
+                    combinations[key] = (a, b)
+                if isinstance(condition, CorrelationConditionOvRmHelper):
+                    if condition.nr_objects == 3:
+                        a, b, c = condition.objects
+                        key = (a.type, b.type, a.bx, b.bx) # a-b combination
+                        combinations[key] = (a, b)
+                        key = (a.type, c.type, a.bx, c.bx) # a-c combination
+                        combinations[key] = (a, c)
+                        key = (b.type, c.type, b.bx, c.bx) # b-c combination
+                        combinations[key] = (b, c)
+                    else:
+                        a = condition.objects[0]
+                        b = condition.objects[1]
+                        key = (a.type, b.type, a.bx, b.bx)
+                        combinations[key] = (a, b)
+            if (hasattr(condition, 'deltaEtaOrm') and condition.deltaEtOrma.enabled) or (hasattr(condition, 'deltaPhiOrm') and condition.deltaPhiOrm.enabled):
+                if isinstance(condition, CaloConditionOvRmHelper):
+                    a = condition.objects[0]
+                    b = condition.objects[condition.nr_objects-1]
+                    key = (a.type, b.type, a.bx, b.bx)
+                    combinations[key] = (a, b)
+                if isinstance(condition, CorrelationConditionOvRmHelper):
+                    if condition.nr_objects == 3:
+                        a, b, c = condition.objects
+                        key = (a.type, b.type, a.bx, b.bx) # a-b combination
+                        combinations[key] = (a, b)
+                        key = (a.type, c.type, a.bx, c.bx) # a-c combination
+                        combinations[key] = (a, c)
+                        key = (b.type, c.type, b.bx, c.bx) # b-c combination
+                        combinations[key] = (b, c)
+                    else:
+                        a = condition.objects[0]
+                        b = condition.objects[1]
+                        key = (a.type, b.type, a.bx, b.bx)
+                        combinations[key] = (a, b)
+        return combinations.values()
+
+    @property
     def correlationCombinationsDeltaR(self):
         combinations = {}
         for condition in self.conditions:

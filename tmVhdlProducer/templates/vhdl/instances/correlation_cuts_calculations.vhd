@@ -1,9 +1,48 @@
+-- Instantiations of deta and dphi LUTs
 
--- Instantiations of cosh_deta and cos_dphi calculation
+{%- for o1, o2 in module.correlationCombinations %}
+{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_dphi_luts_i: entity work.deta_dphi_cosh_cos_wrapper
+    generic map(
+        deta_dphi_sel => true,
+   {%- if o1.is_calo_type and o2.is_calo_type %}
+        calo_calo_deta_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_ETA_LUT,
+    {%- endif %}
+    {%- if o1.is_calo_type and (o2.is_esums_type or o2.is_calo_type) %}
+        calo_calo_dphi_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_PHI_LUT,
+    {%- endif %}
+    {%- if o1.is_calo_type and o2.is_muon_type %}
+        calo_muon_deta_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_ETA_LUT,
+        calo_muon_dphi_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_PHI_LUT,
+    {%- endif %}
+    {%- if o1.is_muon_type and o2.is_esums_type %}
+        calo_muon_dphi_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_PHI_LUT,
+    {%- endif %}
+    {%- if o1.is_muon_type and o2.is_muon_type %}
+        muon_muon_deta_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_ETA_LUT,
+        muon_muon_dphi_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_DIFF_PHI_LUT,
+    {%- endif %}
+        nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
+        type_obj1 => {{ o1.type | upper }}_TYPE,
+        nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
+        type_obj2 => {{ o2.type | upper }}_TYPE
+    )
+    port map(
+        dphi_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer,
+    {%- if not o2.is_esums_type %}
+        deta_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer,
+        deta_vector => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta,
+    {%- endif %}
+        dphi_vector => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi
+    );
+--
+{%- endfor %}
+
+-- Instantiations of cosh_deta and cos_dphi LUTs
 
 {%- for o1, o2 in module.correlationCombinationsCoshCos %}
-{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_cos_dphi_i: entity work.cosh_deta_cos_dphi
+{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_cos_dphi_luts_i: entity work.deta_dphi_cosh_cos_wrapper
     generic map(
+        cosh_deta_cos_dphi_sel => true,
     {%- if o1.is_calo_type and o2.is_calo_type %}
         calo_calo_cosh_deta_lut => {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_DETA_LUT,
     {%- endif %}
