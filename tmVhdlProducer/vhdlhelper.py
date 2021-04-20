@@ -469,11 +469,28 @@ class ModuleHelper(VhdlHelper):
     def correlationCombinationsDetaDphi(self):
         combinations = {}
         for condition in self.conditions:
-            if (hasattr(condition, 'deltaEta') and condition.deltaEta.enabled) or (hasattr(condition, 'deltaPhi') and condition.deltaPhi.enabled):
-                if isinstance(condition, (CorrelationConditionHelper, CorrelationConditionOvRmHelper)):
-                    a, b = condition.objects
-                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
+            #if (hasattr(condition, 'deltaEta') and condition.deltaEta.enabled) or (hasattr(condition, 'deltaPhi') and condition.deltaPhi.enabled):
+                #if isinstance(condition, (CorrelationConditionHelper, CorrelationConditionOvRmHelper)):
+                    #a, b = condition.objects
+                    #key = (a.type, b.type, a.bx, b.bx) # create custom hash
+                    #combinations[key] = (a, b)
+            if isinstance(condition, CorrelationConditionHelper):
+                if condition.deltaEta.enabled or condition.deltaPhi.enabled or condition.deltaR.enabled:
+                    a = condition.objects[0]
+                    b = condition.objects[condition.nr_objects-1]
+                    key = (a.type, b.type, a.bx, b.bx)
                     combinations[key] = (a, b)
+            if isinstance(condition, CorrelationConditionOvRmHelper):
+                if condition.deltaEta.enabled or condition.deltaPhi.enabled or condition.deltaR.enabled:
+                    if condition.nr_objects == 3:
+                        a, b, c = condition.objects
+                        key = (a.type, c.type, a.bx, c.bx) # a-c combination
+                        combinations[key] = (a, c)
+                    else:
+                        a = condition.objects[0]
+                        b = condition.objects[1]
+                        key = (a.type, b.type, a.bx, b.bx)
+                        combinations[key] = (a, b)
             if isinstance(condition, CorrelationConditionOvRmHelper):
                 if condition.deltaEtaOrm.enabled or condition.deltaPhiOrm.enabled or condition.deltaROrm.enabled:
                     if condition.nr_objects == 3:

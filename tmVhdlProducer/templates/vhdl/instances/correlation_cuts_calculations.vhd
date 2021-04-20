@@ -82,6 +82,8 @@
 --
 {%- endfor %}
 
+-- Instantiations of correlation cuts calculations
+--
 -- Instantiations of DeltaR calculation
 
 {%- for o1, o2 in module.correlationCombinationsDeltaR %}
@@ -127,24 +129,48 @@
 
 {%- for o1, o2 in module.correlationCombinationsInvMassDivDr %}
 
-{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr_i: entity work.mass_div_dr
+-- {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_over_dr_i: entity work.mass_div_dr
+--     generic map(
+--         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
+--         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
+--         pt1_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH,
+--         pt2_width => {{ o2.type | upper }}_PT_VECTOR_WIDTH,
+--         cosh_cos_width => {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_VECTOR_WIDTH,
+--         rom_sel => {{ o1.type | upper }}_{{ o2.type | upper }}_ROM,
+--         deta_bins_width => {{ o1.type | upper }}_{{ o2.type | upper }}_DETA_BINS_WIDTH_ROM,
+--         dphi_bins_width => {{ o1.type | upper }}_{{ o2.type | upper }}_DPHI_BINS_WIDTH_ROM,
+--         inv_dr_sq_width => {{ o1.type | upper }}_{{ o2.type | upper }}_INV_DR_SQ_VECTOR_WIDTH
+--     )
+--     port map(
+--         lhc_clk,
+--         dphi_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer,
+--         deta_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer,
+--         mass_inv_pt => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_pt,
+--         mass_div_dr => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_over_dr
+--     );
+{%- endfor %}
+
+{%- for o1, o2 in module.correlationCombinationsInvMassDivDr %}
+
+{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_over_dr_i: entity work.correlation_cuts_calculation
     generic map(
-        NR_{{ o1.type | upper }}_OBJECTS,
-        NR_{{ o2.type | upper }}_OBJECTS,
-        {{ o1.type | upper }}_{{ o2.type | upper }}_ROM,
-        {{ o1.type | upper }}_{{ o2.type | upper }}_DETA_BINS_WIDTH_ROM,
-        {{ o1.type | upper }}_{{ o2.type | upper }}_DPHI_BINS_WIDTH_ROM,
-        {{ o1.type | upper }}_{{ o2.type | upper }}_INV_DR_SQ_VECTOR_WIDTH,
-        {{ o1.type | upper }}_PT_VECTOR_WIDTH,
-        {{ o2.type | upper }}_PT_VECTOR_WIDTH,
-        {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_VECTOR_WIDTH
+        nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
+        nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
+        pt1_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH,
+        pt2_width => {{ o2.type | upper }}_PT_VECTOR_WIDTH,
+        cosh_cos_width => {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_VECTOR_WIDTH,
+        mass_over_dr_cut => true,
+        rom_sel => {{ o1.type | upper }}_{{ o2.type | upper }}_ROM,
+        deta_bins_width => {{ o1.type | upper }}_{{ o2.type | upper }}_DETA_BINS_WIDTH_ROM,
+        dphi_bins_width => {{ o1.type | upper }}_{{ o2.type | upper }}_DPHI_BINS_WIDTH_ROM,
+        inverted_dr_sq_width => {{ o1.type | upper }}_{{ o2.type | upper }}_INV_DR_SQ_VECTOR_WIDTH
     )
     port map(
         lhc_clk,
         dphi_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer,
         deta_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer,
-        mass_inv_pt => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_pt,
-        mass_div_dr => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr
+        inv_mass_pt_in => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_pt,
+        mass_over_dr => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_over_dr
     );
 {%- endfor %}
 
@@ -221,7 +247,7 @@
     {%- if o1.is_muon_type and o2.is_esums_type %}
         sin_cos_width => MUON_SIN_COS_VECTOR_WIDTH,
     {%- endif %}
-        pt_sq_sin_cos_precision => {{ o1.type | upper }}_{{ o2.type | upper }}_SIN_COS_PRECISION
+        tbpt_sin_cos_precision => {{ o1.type | upper }}_{{ o2.type | upper }}_SIN_COS_PRECISION
     )
     port map(
         pt1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_pt_vector,

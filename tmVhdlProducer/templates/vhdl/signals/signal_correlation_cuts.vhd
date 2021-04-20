@@ -41,7 +41,7 @@
   {%- endfor %}
 
   {%- for o1, o2 in module.correlationCombinationsInvMassDivDr %}
-    signal {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr : mass_div_dr_vector_array(0 to NR_{{ o1.type | upper }}_OBJECTS-1, 0 to NR_{{ o2.type | upper }}_OBJECTS-1) := (others => (others => (others => '0')));
+    signal {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_over_dr : mass_div_dr_vector_array(0 to NR_{{ o1.type | upper }}_OBJECTS-1, 0 to NR_{{ o2.type | upper }}_OBJECTS-1) := (others => (others => (others => '0')));
   {%- endfor %}
 
   {%- for o1, o2 in module.correlationCombinationsTransMass %}
