@@ -1,6 +1,6 @@
 {%- for o in module.conversionObjects %}
   {%- if o.is_calo_type %}
-{{ o.type | lower }}_bx_{{ o.bx }}_conv_eta_phi_i: entity work.conv_eta_phi
+conv_eta_phi_{{ o.type | lower }}_bx_{{ o.bx }}_i: entity work.conv_eta_phi
     generic map(
         nr_obj => NR_{{ o.type | upper }}_OBJECTS,
         type_obj => {{ o.type | upper }}_TYPE
@@ -12,7 +12,7 @@
     );
 --
   {%- elif o.is_esums_type %}
-{{ o.type | lower }}_bx_{{ o.bx }}_conv_eta_phi_i: entity work.conv_eta_phi
+conv_eta_phi_{{ o.type | lower }}_bx_{{ o.bx }}_i: entity work.conv_eta_phi
     generic map(
         nr_obj => NR_{{ o.type | upper }}_OBJECTS,
         type_obj => {{ o.type | upper }}_TYPE

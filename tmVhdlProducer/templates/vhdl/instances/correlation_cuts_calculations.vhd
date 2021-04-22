@@ -1,7 +1,7 @@
 -- Instantiations of deta and dphi LUTs
 
 {%- for o1, o2 in module.correlationCombinationsDetaDphi %}
-{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_dphi_luts_i: entity work.deta_dphi_cosh_cos_wrapper
+calc_deta_dphi_luts_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.deta_dphi_cosh_cos_wrapper
     generic map(
         deta_dphi_sel => true,
    {%- if o1.is_calo_type and o2.is_calo_type %}
@@ -40,7 +40,7 @@
 -- Instantiations of cosh_deta and cos_dphi LUTs
 
 {%- for o1, o2 in module.correlationCombinationsCoshCos %}
-{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta_cos_dphi_luts_i: entity work.deta_dphi_cosh_cos_wrapper
+calc_cosh_deta_cos_dphi_luts_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.deta_dphi_cosh_cos_wrapper
     generic map(
         cosh_deta_cos_dphi_sel => true,
     {%- if o1.is_calo_type and o2.is_calo_type %}
@@ -88,7 +88,7 @@
 
 {%- for o1, o2 in module.correlationCombinationsDeltaR %}
 
-{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deltaR_i: entity work.correlation_cuts_calculation
+calc_deltaR_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
     generic map(
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
@@ -105,7 +105,7 @@
 
 {%- for o1, o2 in module.correlationCombinationsInvMass %}
 
-{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_pt_i: entity work.correlation_cuts_calculation
+calc_mass_inv_pt_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
     generic map(
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
@@ -113,8 +113,13 @@
         mass_type => INVARIANT_MASS_TYPE,
         pt1_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH,
         pt2_width => {{ o2.type | upper }}_PT_VECTOR_WIDTH,
-        cosh_cos_precision => {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_PRECISION,
-        cosh_cos_width => {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_VECTOR_WIDTH
+    {%- if o1.is_calo_type and (o2.is_calo_type or o2.is_esums_type) %}
+        cosh_cos_width => CALO_CALO_COSH_COS_VECTOR_WIDTH
+    {%- elif (o1.is_calo_type and o2.is_muon_type) or (o1.is_muon_type and o2.is_esums_type) %}
+        cosh_cos_width => CALO_MUON_COSH_COS_VECTOR_WIDTH
+    {%- elif o1.is_muon_type or o2.is_muon_type %}
+        cosh_cos_width => MUON_MUON_COSH_COS_VECTOR_WIDTH
+    {%- endif %}
     )
     port map(
         pt1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_pt_vector,
@@ -129,41 +134,33 @@
 
 {%- for o1, o2 in module.correlationCombinationsInvMassDivDr %}
 
--- {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_over_dr_i: entity work.mass_div_dr
---     generic map(
---         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
---         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
---         pt1_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH,
---         pt2_width => {{ o2.type | upper }}_PT_VECTOR_WIDTH,
---         cosh_cos_width => {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_VECTOR_WIDTH,
---         rom_sel => {{ o1.type | upper }}_{{ o2.type | upper }}_ROM,
---         deta_bins_width => {{ o1.type | upper }}_{{ o2.type | upper }}_DETA_BINS_WIDTH_ROM,
---         dphi_bins_width => {{ o1.type | upper }}_{{ o2.type | upper }}_DPHI_BINS_WIDTH_ROM,
---         inv_dr_sq_width => {{ o1.type | upper }}_{{ o2.type | upper }}_INV_DR_SQ_VECTOR_WIDTH
---     )
---     port map(
---         lhc_clk,
---         dphi_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer,
---         deta_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer,
---         mass_inv_pt => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_pt,
---         mass_div_dr => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_over_dr
---     );
-{%- endfor %}
-
-{%- for o1, o2 in module.correlationCombinationsInvMassDivDr %}
-
-{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_over_dr_i: entity work.correlation_cuts_calculation
+calc_mass_over_dr_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
     generic map(
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
         pt1_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH,
         pt2_width => {{ o2.type | upper }}_PT_VECTOR_WIDTH,
-        cosh_cos_width => {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_VECTOR_WIDTH,
+    {%- if o1.is_calo_type and (o2.is_calo_type or o2.is_esums_type) %}
+        cosh_cos_width => CALO_CALO_COSH_COS_VECTOR_WIDTH,
+    {%- elif (o1.is_calo_type and o2.is_muon_type) or (o1.is_muon_type or o2.is_esums_type) %}
+        cosh_cos_width => CALO_MUON_COSH_COS_VECTOR_WIDTH,
+    {%- elif o1.is_muon_type or o2.is_muon_type %}
+        cosh_cos_width => MUON_MUON_COSH_COS_VECTOR_WIDTH,
+    {%- endif %}
         mass_over_dr_cut => true,
         rom_sel => {{ o1.type | upper }}_{{ o2.type | upper }}_ROM,
-        deta_bins_width => {{ o1.type | upper }}_{{ o2.type | upper }}_DETA_BINS_WIDTH_ROM,
-        dphi_bins_width => {{ o1.type | upper }}_{{ o2.type | upper }}_DPHI_BINS_WIDTH_ROM,
-        inverted_dr_sq_width => {{ o1.type | upper }}_{{ o2.type | upper }}_INV_DR_SQ_VECTOR_WIDTH
+    {%- if o1.is_calo_type and o2.is_calo_type %}
+        deta_bins_width => CALO_DETA_BINS_WIDTH_ROM,
+        dphi_bins_width => CALO_DPHI_BINS_WIDTH_ROM,
+    {%- elif o1.is_muon_type or o2.is_muon_type %}
+        deta_bins_width => MU_DETA_BINS_WIDTH_ROM,
+        dphi_bins_width => MU_DETA_BINS_WIDTH_ROM,
+    {%- endif %}
+    {%- if o1.is_calo_type and o2.is_calo_type %}
+        inverted_dr_sq_width => CALO_CALO_INV_DR_SQ_VECTOR_WIDTH
+    {%- elif o1.is_muon_type or o2.is_muon_type %}
+        inverted_dr_sq_width => MU_MU_INV_DR_SQ_VECTOR_WIDTH
+    {%- endif %}
     )
     port map(
         lhc_clk,
@@ -178,7 +175,7 @@
 
 {%- for o1, o2 in module.correlationCombinationsInvMassUpt %}
 
-{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_upt_i: entity work.correlation_cuts_calculation
+calc_mass_inv_upt_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
     generic map(
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
@@ -186,8 +183,7 @@
         mass_type => INVARIANT_MASS_UPT_TYPE,
         upt1_width => {{ o1.type | upper }}_UPT_VECTOR_WIDTH,
         upt2_width => {{ o2.type | upper }}_UPT_VECTOR_WIDTH,
-        cosh_cos_precision => {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_PRECISION,
-        cosh_cos_width => {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_VECTOR_WIDTH
+        cosh_cos_width => MUON_MUON_COSH_COS_VECTOR_WIDTH
     )
     port map(
         upt1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_upt_vector,
@@ -202,7 +198,7 @@
 
 {%- for o1, o2 in module.correlationCombinationsTransMass %}
 
-{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_trans_i: entity work.correlation_cuts_calculation
+calc_mass_trans_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
     generic map(
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
@@ -210,8 +206,16 @@
         mass_type => TRANSVERSE_MASS_TYPE,
         pt1_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH,
         pt2_width => {{ o2.type | upper }}_PT_VECTOR_WIDTH,
-        cosh_cos_precision => {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_PRECISION,
-        cosh_cos_width => {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_VECTOR_WIDTH
+    {%- if o1.is_calo_type and o2.is_esums_type %}
+        cosh_cos_width => CALO_CALO_COSH_COS_VECTOR_WIDTH,
+    {%- elif o1.is_muon_type and o2.is_esums_type %}
+        cosh_cos_width => CALO_MUON_COSH_COS_VECTOR_WIDTH,
+    {%- endif %}
+    {%- if o1.is_calo_type and o2.is_esums_type %}
+        cosh_cos_precision => CALO_CALO_COSH_COS_PRECISION
+    {%- elif o1.is_muon_type and o2.is_esums_type %}
+        cosh_cos_precision => CALO_MUON_COSH_COS_PRECISION
+    {%- endif %}
     )
     port map(
         pt1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_pt_vector,
@@ -225,29 +229,23 @@
 
 {%- for o1, o2 in module.correlationCombinationsTbpt %}
 
-{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt_i: entity work.correlation_cuts_calculation
+calc_tbpt_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
     generic map(
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
         tbpt_cut => true,
         pt1_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH,
         pt2_width => {{ o2.type | upper }}_PT_VECTOR_WIDTH,
-    {%- if o1.is_calo_type and o2.is_calo_type %}
+    {%- if o1.is_calo_type and (o2.is_calo_type or o2.is_esums_type) %}
         sin_cos_width => CALO_SIN_COS_VECTOR_WIDTH,
-    {%- endif %}
-    {%- if o1.is_calo_type and o2.is_esums_type %}
-        sin_cos_width => CALO_SIN_COS_VECTOR_WIDTH,
-    {%- endif %}
-    {%- if o1.is_calo_type and o2.is_muon_type %}
+    {%- elif o1.is_muon_type or o2.is_muon_type %}
         sin_cos_width => MUON_SIN_COS_VECTOR_WIDTH,
     {%- endif %}
-    {%- if o1.is_muon_type and o2.is_muon_type %}
-        sin_cos_width => MUON_SIN_COS_VECTOR_WIDTH,
+    {%- if o1.is_calo_type and (o2.is_calo_type or o2.is_esums_type) %}
+        sin_cos_precision => CALO_SIN_COS_PRECISION
+    {%- elif o1.is_muon_type or o2.is_muon_type %}
+        sin_cos_precision => MUON_SIN_COS_PRECISION
     {%- endif %}
-    {%- if o1.is_muon_type and o2.is_esums_type %}
-        sin_cos_width => MUON_SIN_COS_VECTOR_WIDTH,
-    {%- endif %}
-        tbpt_sin_cos_precision => {{ o1.type | upper }}_{{ o2.type | upper }}_SIN_COS_PRECISION
     )
     port map(
         pt1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_pt_vector,

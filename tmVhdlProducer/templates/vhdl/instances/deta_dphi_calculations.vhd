@@ -1,5 +1,5 @@
 {%- for o1, o2 in module.correlationCombinations %}
-{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_dphi_calc_i: entity work.deta_dphi_calculations
+calc_deta_dphi_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.deta_dphi_calculations
     generic map(
     {%- if o1.is_muon_type or o2.is_muon_type %}
         phi_half_range => MUON_PHI_HALF_RANGE_BINS,
