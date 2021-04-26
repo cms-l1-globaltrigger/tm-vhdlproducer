@@ -1,89 +1,26 @@
+-- Instantiations of correlation cuts calculations
+--
 -- Instantiations of deta and dphi LUTs
 
 {%- for o1, o2 in module.correlationCombinationsDetaDphi %}
-calc_deta_dphi_luts_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.deta_dphi_cosh_cos_wrapper
+
+calc_deta_dphi_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
     generic map(
-        deta_dphi_sel => true,
-   {%- if o1.is_calo_type and o2.is_calo_type %}
-        calo_calo_deta_lut => CALO_CALO_DIFF_ETA_LUT,
-    {%- endif %}
-    {%- if o1.is_calo_type and (o2.is_esums_type or o2.is_calo_type) %}
-        calo_calo_dphi_lut => CALO_CALO_DIFF_PHI_LUT,
-    {%- endif %}
-    {%- if o1.is_calo_type and o2.is_muon_type %}
-        calo_muon_deta_lut => CALO_MU_DIFF_ETA_LUT,
-        calo_muon_dphi_lut => CALO_MU_DIFF_PHI_LUT,
-    {%- endif %}
-    {%- if o1.is_muon_type and o2.is_esums_type %}
-        calo_muon_dphi_lut => CALO_MU_DIFF_PHI_LUT,
-    {%- endif %}
-    {%- if o1.is_muon_type and o2.is_muon_type %}
-        muon_muon_deta_lut => MU_MU_DIFF_ETA_LUT,
-        muon_muon_dphi_lut => MU_MU_DIFF_PHI_LUT,
-    {%- endif %}
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         type_obj1 => {{ o1.type | upper }}_TYPE,
         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
-        type_obj2 => {{ o2.type | upper }}_TYPE
+        type_obj2 => {{ o2.type | upper }}_TYPE,
+        deta_cut => true,
+        dphi_cut => true
     )
     port map(
-        dphi_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer,
-    {%- if not o2.is_esums_type %}
         deta_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer,
-        deta_vector => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta,
-    {%- endif %}
-        dphi_vector => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi
+        dphi_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer,
+        deta => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta,
+        dphi => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi
     );
---
 {%- endfor %}
 
--- Instantiations of cosh_deta and cos_dphi LUTs
-
-{%- for o1, o2 in module.correlationCombinationsCoshCos %}
-calc_cosh_deta_cos_dphi_luts_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.deta_dphi_cosh_cos_wrapper
-    generic map(
-        cosh_deta_cos_dphi_sel => true,
-    {%- if o1.is_calo_type and o2.is_calo_type %}
-        calo_calo_cosh_deta_lut => CALO_CALO_COSH_DETA_LUT,
-    {%- endif %}
-    {%- if o1.is_calo_type and (o2.is_calo_type or o2.is_esums_type) %}
-        calo_calo_cos_dphi_lut => CALO_CALO_COS_DPHI_LUT,
-    {%- endif %}
-    {%- if o1.is_calo_type and o2.is_muon_type %}
-        calo_muon_cosh_deta_lut => CALO_MUON_COSH_DETA_LUT,
-    {%- endif %}
-    {%- if (o1.is_calo_type and o2.is_muon_type) or (o1.is_muon_type and o2.is_esums_type) %}
-        calo_muon_cos_dphi_lut => CALO_MUON__COS_DPHI_LUT,
-    {%- endif %}
-    {%- if o1.is_muon_type and o2.is_muon_type %}
-        muon_muon_cosh_deta_lut => MU_MU_COSH_DETA_LUT,
-        muon_muon_cos_dphi_lut => MU_MU_COS_DPHI_LUT,
-    {%- endif %}
-    {%- if o1.is_calo_type and (o2.is_calo_type or o2.is_esums_type) %}
-        cosh_cos_vector_width => CALO_CALO_COSH_COS_VECTOR_WIDTH,
-    {%- elif (o1.is_calo_type and o2.is_muon_type) or (o1.is_muon_type or o2.is_esums_type) %}
-        cosh_cos_vector_width => CALO_MUON_COSH_COS_VECTOR_WIDTH,
-    {%- elif o1.is_muon_type or o2.is_muon_type %}
-        cosh_cos_vector_width => MUON_MUON_COSH_COS_VECTOR_WIDTH,
-    {%- endif %}
-        nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
-        type_obj1 => {{ o1.type | upper }}_TYPE,
-        nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
-        type_obj2 => {{ o2.type | upper }}_TYPE
-    )
-    port map(
-        dphi_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer,
-    {%- if not o2.is_esums_type %}
-        deta_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer,
-        cosh_deta_vector => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta,
-    {%- endif %}
-        cos_dphi_vector => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi
-    );
---
-{%- endfor %}
-
--- Instantiations of correlation cuts calculations
---
 -- Instantiations of DeltaR calculation
 
 {%- for o1, o2 in module.correlationCombinationsDeltaR %}
@@ -91,12 +28,14 @@ calc_cosh_deta_cos_dphi_luts_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o
 calc_deltaR_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
     generic map(
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
+        type_obj1 => {{ o1.type | upper }}_TYPE,
         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
+        type_obj2 => {{ o2.type | upper }}_TYPE,
         dr_cut => true
     )
     port map(
-        deta => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta,
-        dphi => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi,
+        deta_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer,
+        dphi_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer,
         dr => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dr
     );
 {%- endfor %}
@@ -108,7 +47,9 @@ calc_deltaR_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.
 calc_mass_inv_pt_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
     generic map(
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
+        type_obj1 => {{ o1.type | upper }}_TYPE,
         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
+        type_obj2 => {{ o2.type | upper }}_TYPE,
         mass_cut => true,
         mass_type => INVARIANT_MASS_TYPE,
         pt1_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH,
@@ -122,10 +63,10 @@ calc_mass_inv_pt_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{
     {%- endif %}
     )
     port map(
+        deta_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer,
+        dphi_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer,
         pt1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_pt_vector,
         pt2 => {{ o2.type | lower }}_bx_{{ o2.bx }}_pt_vector,
-        cosh_deta => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta,
-        cos_dphi => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi,
         inv_mass_pt => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_pt
     );
 {%- endfor %}
@@ -137,7 +78,9 @@ calc_mass_inv_pt_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{
 calc_mass_over_dr_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
     generic map(
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
+        type_obj1 => {{ o1.type | upper }}_TYPE,
         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
+        type_obj2 => {{ o2.type | upper }}_TYPE,
         pt1_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH,
         pt2_width => {{ o2.type | upper }}_PT_VECTOR_WIDTH,
     {%- if o1.is_calo_type and (o2.is_calo_type or o2.is_esums_type) %}
@@ -164,8 +107,8 @@ calc_mass_over_dr_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_
     )
     port map(
         lhc_clk,
-        dphi_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer,
         deta_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer,
+        dphi_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer,
         inv_mass_pt_in => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_pt,
         mass_over_dr => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_over_dr
     );
@@ -178,7 +121,9 @@ calc_mass_over_dr_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_
 calc_mass_inv_upt_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
     generic map(
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
+        type_obj1 => {{ o1.type | upper }}_TYPE,
         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
+        type_obj2 => {{ o2.type | upper }}_TYPE,
         mass_cut => true,
         mass_type => INVARIANT_MASS_UPT_TYPE,
         upt1_width => {{ o1.type | upper }}_UPT_VECTOR_WIDTH,
@@ -186,10 +131,10 @@ calc_mass_inv_upt_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_
         cosh_cos_width => MUON_MUON_COSH_COS_VECTOR_WIDTH
     )
     port map(
+        deta_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer,
+        dphi_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer,
         upt1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_upt_vector,
         upt2 => {{ o2.type | lower }}_bx_{{ o2.bx }}_upt_vector,
-        cosh_deta => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cosh_deta,
-        cos_dphi => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi,
         inv_mass_upt => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_upt
     );
 {%- endfor %}
@@ -201,7 +146,9 @@ calc_mass_inv_upt_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_
 calc_mass_trans_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
     generic map(
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
+        type_obj1 => {{ o1.type | upper }}_TYPE,
         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
+        type_obj2 => {{ o2.type | upper }}_TYPE,
         mass_cut => true,
         mass_type => TRANSVERSE_MASS_TYPE,
         pt1_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH,
@@ -218,9 +165,9 @@ calc_mass_trans_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{
     {%- endif %}
     )
     port map(
+        dphi_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer,
         pt1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_pt_vector,
         pt2 => {{ o2.type | lower }}_bx_{{ o2.bx }}_pt_vector,
-        cos_dphi => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi,
         trans_mass => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_trans
     );
 {%- endfor %}

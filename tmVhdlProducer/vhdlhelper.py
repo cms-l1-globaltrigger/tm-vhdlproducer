@@ -475,13 +475,13 @@ class ModuleHelper(VhdlHelper):
                     #key = (a.type, b.type, a.bx, b.bx) # create custom hash
                     #combinations[key] = (a, b)
             if isinstance(condition, CorrelationConditionHelper):
-                if condition.deltaEta.enabled or condition.deltaPhi.enabled or condition.deltaR.enabled:
+                if condition.deltaEta.enabled or condition.deltaPhi.enabled:
                     a = condition.objects[0]
                     b = condition.objects[condition.nr_objects-1]
                     key = (a.type, b.type, a.bx, b.bx)
                     combinations[key] = (a, b)
             if isinstance(condition, CorrelationConditionOvRmHelper):
-                if condition.deltaEta.enabled or condition.deltaPhi.enabled or condition.deltaR.enabled:
+                if condition.deltaEta.enabled or condition.deltaPhi.enabled:
                     if condition.nr_objects == 3:
                         a, b, c = condition.objects
                         key = (a.type, c.type, a.bx, c.bx) # a-c combination
@@ -492,7 +492,7 @@ class ModuleHelper(VhdlHelper):
                         key = (a.type, b.type, a.bx, b.bx)
                         combinations[key] = (a, b)
             if isinstance(condition, CorrelationConditionOvRmHelper):
-                if condition.deltaEtaOrm.enabled or condition.deltaPhiOrm.enabled or condition.deltaROrm.enabled:
+                if condition.deltaEtaOrm.enabled or condition.deltaPhiOrm.enabled:
                     if condition.nr_objects == 3:
                         a, b, c = condition.objects
                         key = (a.type, c.type, a.bx, c.bx) # a-c combination
