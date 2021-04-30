@@ -554,9 +554,13 @@ class ModuleHelper(VhdlHelper):
         combinations = {}
         for condition in self.conditions:
             if hasattr(condition, 'mass') and condition.mass.enabled and (condition.mass.type == condition.mass.InvariantMassType or condition.mass.type == condition.mass.InvariantMassDeltaRType):
-                if isinstance(condition, CorrelationConditionHelper):
+               if isinstance(condition, CorrelationConditionHelper):
                     a, b = condition.objects
-                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
+                    key = (a.type, b.type, a.bx, b.bx)
+                    combinations[key] = (a, b)
+               if isinstance(condition, Correlation3ConditionHelper):
+                    a, b, c = condition.objects
+                    key = (a.type, b.type, a.bx, b.bx)
                     combinations[key] = (a, b)
         return combinations.values()
 

@@ -11,14 +11,9 @@
     {%- set o = condition.objects[0] %}
     {%- include  "instances/base/object_cuts_correlation.vhd" %}
 -- correlation cuts
-        pt1_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH,
-        pt2_width => {{ o2.type | upper }}_PT_VECTOR_WIDTH,
-        mass_cut => {{ condition.mass | vhdl_bool }},
-        mass_type => {{ condition.mass.type }},
         mass_upper_limit_vector => X"{{ condition.mass.upper|X16 }}",
         mass_lower_limit_vector => X"{{ condition.mass.lower|X16 }}",
-        mass_cosh_cos_precision => {{ o1.type | upper }}_{{ o1.type | upper }}_COSH_COS_PRECISION,
-        cosh_cos_width => {{ o1.type | upper }}_{{ o1.type | upper }}_COSH_COS_VECTOR_WIDTH,
+        mass_vector_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH+{{ o2.type | upper }}_PT_VECTOR_WIDTH+{{ o1.type | upper }}_{{ o1.type | upper }}_COSH_COS_VECTOR_WIDTH,
 -- number of calo objects, types
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         type_obj1 => {{ o1.type | upper }}_TYPE,
@@ -34,8 +29,5 @@
         obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }},
         obj2 => {{ o2.type | lower }}_bx_{{ o2.bx }},
         obj3 => {{ o3.type | lower }}_bx_{{ o3.bx }},
-        pt1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_pt_vector,
-        pt2 => {{ o2.type | lower }}_bx_{{ o2.bx }}_pt_vector,
-        cosh_deta => {{ o1.type | lower }}_{{ o1.type | lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_cosh_deta,
-        cos_dphi => {{ o1.type | lower }}_{{ o1.type | lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_cos_dphi,
+        mass_inv_pt => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_pt,
 {%- endblock %}
