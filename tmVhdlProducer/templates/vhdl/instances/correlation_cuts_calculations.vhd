@@ -1,8 +1,8 @@
 -- Instantiations of correlation cuts calculations
 --
--- Instantiations of deta and dphi LUTs
+-- Instantiations of DeltaEta LUTs
 
-{%- for o1, o2 in module.correlationCombinationsDetaDphi %}
+{%- for o1, o2 in module.correlationCombinationsDeta %}
 
 calc_deta_dphi_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
     generic map(
@@ -10,13 +10,28 @@ calc_deta_dphi_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ 
         type_obj1 => {{ o1.type | upper }}_TYPE,
         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
         type_obj2 => {{ o2.type | upper }}_TYPE,
-        deta_cut => true,
-        dphi_cut => true
+        deta_cut => true
     )
     port map(
         deta_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer,
+        deta => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta
+    );
+{%- endfor %}
+
+-- Instantiations of DeltaPhi LUTs
+
+{%- for o1, o2 in module.correlationCombinationsDphi %}
+
+calc_deta_dphi_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
+    generic map(
+        nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
+        type_obj1 => {{ o1.type | upper }}_TYPE,
+        nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
+        type_obj2 => {{ o2.type | upper }}_TYPE,
+        dphi_cut => true
+    )
+    port map(
         dphi_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer,
-        deta => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta,
         dphi => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi
     );
 {%- endfor %}
