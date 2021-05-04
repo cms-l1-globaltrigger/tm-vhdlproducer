@@ -4,7 +4,7 @@
 
 {%- for o1, o2 in module.correlationCombinationsDeta %}
 
-calc_deta_dphi_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
+calc_deta_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
     generic map(
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         type_obj1 => {{ o1.type | upper }}_TYPE,
@@ -22,7 +22,7 @@ calc_deta_dphi_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ 
 
 {%- for o1, o2 in module.correlationCombinationsDphi %}
 
-calc_deta_dphi_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
+calc_dphi_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
     generic map(
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         type_obj1 => {{ o1.type | upper }}_TYPE,
@@ -217,7 +217,7 @@ calc_tbpt_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx
         cos_phi_integer2 => {{ o2.type|lower }}_bx_{{ o2.bx }}_cos_phi,
         sin_phi_integer1 => {{ o1.type|lower }}_bx_{{ o1.bx }}_conv_sin_phi,
         sin_phi_integer2 => {{ o2.type|lower }}_bx_{{ o2.bx }}_sin_phi,
-    {%- elif o1.is_muon_type %}
+    {%- elif o1.is_muon_type and o2.is_esums_type %}
         cos_phi_integer1 => {{ o1.type|lower }}_bx_{{ o1.bx }}_cos_phi,
         cos_phi_integer2 => {{ o2.type|lower }}_bx_{{ o2.bx }}_conv_cos_phi,
         sin_phi_integer1 => {{ o1.type|lower }}_bx_{{ o1.bx }}_sin_phi,
