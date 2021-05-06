@@ -1,8 +1,8 @@
 import argparse
-import subprocess
 import glob
 import logging
 import re
+import subprocess
 import sys, os
 
 import tmEventSetup
@@ -77,43 +77,43 @@ def parse_args():
         metavar='<n>',
         required=True,
         type=modules_t,
-        help="number of modules ({0}-{1})".format(MinModules, MaxModules),
+        help=f"number of modules ({MinModules}-{MaxModules})"
     )
     parser.add_argument('--dist',
         metavar='<n>',
         required=True,
         type=dist_t,
-        help="firmware distribution number (starting with 1)",
+        help="firmware distribution number (starting with 1)"
     )
     parser.add_argument('--ratio',
         metavar='<f>',
         default=DefaultRatio,
         type=ratio_t,
-        help="algorithm shadow ratio (0.0 < ratio <= 1.0, default is {0})".format(DefaultRatio),
+        help=f"algorithm shadow ratio (0.0 < ratio <= 1.0, default is {DefaultRatio})"
     )
     parser.add_argument('--sorting',
         metavar='asc|desc',
         default=DefaultSorting,
         choices=(SortingAsc, SortingDesc),
-        help="sort order for condition weights ({0} or {1}, default is {2})".format(SortingAsc, SortingDesc, DefaultSorting),
+        help=f"sort order for condition weights ({SortingAsc} or {SortingDesc}, default is {DefaultSorting})"
     )
     parser.add_argument('--config',
         metavar='<file>',
         default=DefaultConfigFile,
         type=os.path.abspath,
-        help="JSON resource configuration file (default is {0})".format(DefaultConfigFile),
+        help=f"JSON resource configuration file (default is {DefaultConfigFile})"
     )
     parser.add_argument('--constraint',
         metavar='<condition:modules>',
         action='append',
         type=constraint_t,
-        help="limit condition type to a specific module, valid types are: {0}".format(", ".join(ConstraintTypes.keys())),
+        help=f"limit condition type to a specific module, valid types are: {', '.join(ConstraintTypes)}"
     )
     parser.add_argument('--output',
         metavar='<dir>',
         default=DefaultOutputDir,
         type=os.path.abspath,
-        help="directory to write VHDL producer output (default is {0})".format(DefaultOutputDir),
+        help=f"directory to write VHDL producer output (default is {DefaultOutputDir})"
     )
     parser.add_argument('--dryrun',
         action='store_true',
@@ -125,7 +125,7 @@ def parse_args():
     )
     parser.add_argument('--version',
         action='version',
-        version="L1 Trigger Menu VHDL producer version {0}".format(__version__),
+        version=f"L1 Trigger Menu VHDL producer version {__version__}"
     )
     return parser.parse_args()
 
@@ -145,7 +145,7 @@ def main():
 
     logging.info("loading XML menu: %s", args.menu)
     eventSetup = tmEventSetup.getTriggerMenu(args.menu)
-    output_dir = os.path.join(args.output, "{name}-d{dist}".format(name=eventSetup.getName(), dist=args.dist))
+    output_dir = os.path.join(args.output, f"{eventSetup.getName()}-d{args.dist}")
 
     # Prevent overwirting source menu
     dest = os.path.realpath(os.path.join(output_dir, 'xml'))
@@ -210,7 +210,7 @@ def main():
 
         logging.info("patching filenames...")
         for filename in glob.glob(os.path.join(doc_dir, '*')):
-            newname = re.sub(r'(.+)\.([a-z]+)$', r'\1-d{}.\2'.format(args.dist), filename)
+            newname = re.sub(r'(.+)\.([a-z]+)$', rf'\1-d{args.dist}.\2', filename)
             logging.info("%s --> %s", filename, newname)
             os.rename(filename, newname)
 

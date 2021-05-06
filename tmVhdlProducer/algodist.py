@@ -21,9 +21,11 @@ Dump distribution to JSON file
 """
 
 import argparse
+import json
 import logging
-import json, uuid
+import uuid
 import sys, os
+
 from collections import namedtuple
 
 import tmEventSetup
@@ -131,6 +133,9 @@ kCaloMuonCorrelation = 'CaloMuonCorrelation'
 kCaloCaloCorrelation = 'CaloCaloCorrelation'
 kCaloEsumCorrelation = 'CaloEsumCorrelation'
 kInvariantMass = 'InvariantMass'
+kInvariantMass3 = 'InvariantMass3'
+kInvariantMassUpt = 'InvariantMassUpt'
+kInvariantMassDeltaR = 'InvariantMassDeltaR'
 kTransverseMass = 'TransverseMass'
 kCaloCaloCorrelationOvRm = 'CaloCaloCorrelationOvRm'
 kInvariantMassOvRm = 'InvariantMassOvRm'
@@ -155,6 +160,8 @@ kQuadJetOvRm = 'QuadJetOvRm'
 kThreshold = 'Threshold'
 kEta = 'Eta'
 kPhi = 'Phi'
+kUnconstrainedPt = 'UnconstrainedPt'
+kImpactParameter = 'ImpactParameter'
 kCharge = 'Charge'
 kQuality = 'Quality'
 kIsolation = 'Isolation'
@@ -162,6 +169,8 @@ kDeltaEta = 'DeltaEta'
 kDeltaPhi = 'DeltaPhi'
 kDeltaR = 'DeltaR'
 kMass = 'Mass'
+kMassUpt = 'MassUpt'
+kMassDeltaR = 'MassDeltaR'
 kTwoBodyPt = 'TwoBodyPt'
 kSlice = 'Slice'
 kChargeCorrelation = 'ChargeCorrelation'
@@ -189,6 +198,8 @@ CutTypeKey = {
     tmEventSetup.Threshold: kThreshold,
     tmEventSetup.Eta: kEta,
     tmEventSetup.Phi: kPhi,
+    tmEventSetup.UnconstrainedPt: kUnconstrainedPt,
+    tmEventSetup.ImpactParameter: kImpactParameter,
     tmEventSetup.Charge: kCharge,
     tmEventSetup.Quality: kQuality,
     tmEventSetup.Isolation: kIsolation,
@@ -196,6 +207,8 @@ CutTypeKey = {
     tmEventSetup.DeltaPhi: kDeltaPhi,
     tmEventSetup.DeltaR: kDeltaR,
     tmEventSetup.Mass: kMass,
+    tmEventSetup.MassUpt: kMassUpt,
+    tmEventSetup.MassDeltaR: kMassDeltaR,
     tmEventSetup.TwoBodyPt: kTwoBodyPt,
     tmEventSetup.Slice: kSlice,
     tmEventSetup.ChargeCorrelation: kChargeCorrelation,
@@ -320,6 +333,9 @@ ConditionTypeKey = {
     tmEventSetup.CaloCaloCorrelation: kCaloCaloCorrelation,
     tmEventSetup.CaloEsumCorrelation: kCaloEsumCorrelation,
     tmEventSetup.InvariantMass: kInvariantMass,
+    tmEventSetup.InvariantMass3: kInvariantMass3,
+    tmEventSetup.InvariantMassUpt: kInvariantMassUpt,
+    tmEventSetup.InvariantMassDeltaR: kInvariantMassDeltaR,
     tmEventSetup.TransverseMass: kTransverseMass,
     tmEventSetup.CaloCaloCorrelationOvRm: kCaloCaloCorrelationOvRm,
     tmEventSetup.InvariantMassOvRm: kInvariantMassOvRm,
@@ -362,7 +378,7 @@ def get_condition_names(algorithm):
 def short_name(name, length):
     """Shortens long names, if longer then length replaces last characters by ..."""
     if len(name) > length:
-        return "{name}...".format(name=name[:length-3])
+        return f"{name[:length-3]}..."
     return name[:length]
 
 def expand_range(expr):
@@ -377,7 +393,7 @@ def expand_range(expr):
         return [int(tokens[0]), int(tokens[1])]
     if len(tokens) == 1:
         return [int(tokens[0])]
-    raise ValueError("invalid range {expr}".format(**locals()))
+    raise ValueError(f"invalid range '{expr}'")
 
 def parse_range(expr):
     """Parse and resolves numeric ranges.
@@ -410,6 +426,7 @@ class ResourceTray(object):
     kCaloCondition = 'CaloCondition'
     kCaloConditionOvRm = 'CaloConditionOvRm'
     kCorrelationCondition = 'CorrelationCondition'
+    kCorrelation3Condition = 'Correlation3Condition'
     kCorrelationConditionOvRm = 'CorrelationConditionOvRm'
 
     def __init__(self, filename):
@@ -506,12 +523,18 @@ class ResourceTray(object):
                 n_objects_1 = objects[0].slice_size
                 n_objects_2 = objects[1].slice_size
                 return n_objects_1 * n_objects_2
+        elif instance == self.kCorrelation3Condition:
+            if mapped_objects == ['calo', 'calo', 'calo']:
+                return n_objects * (n_objects - 1) * (n_objects - 2) / 6
+            elif mapped_objects == ['muon', 'muon', 'muon']:
+                return n_objects * (n_objects - 1) * (n_objects - 2) / 6
+            raise RuntimeError(f"missing mapped objects for '{instance}': {mapped_objects}")
         elif instance == self.kCorrelationConditionOvRm:
             if mapped_objects == ['calo', 'calo', 'calo']:
                 return n_objects * (n_objects - 1) * 0.5
             elif mapped_objects == ['calo', 'calo']:
                 return n_objects * n_objects_ovrm
-            raise RuntimeError("missing mapped objects for ovrm corr: {0}".format(mapped_objects))
+            raise RuntimeError(f"missing mapped objects for '{instance}': {mapped_objects}")
         return 1.
 
     def calc_cut_factor(self, condition, cut):
@@ -549,6 +572,12 @@ class ResourceTray(object):
                 n_objects_1 = objects[0].slice_size
                 n_objects_2 = objects[1].slice_size
                 return n_objects_1 * n_objects_2
+        elif instance == self.kCorrelation3Condition:
+            if mapped_objects == ['calo', 'calo', 'calo']:
+                return n_objects * (n_objects - 1) * 0.5
+            elif mapped_objects == ['muon', 'muon', 'muon']:
+                return n_objects * (n_objects - 1) * 0.5
+            raise RuntimeError(f"missing mapped objects for '{instance}': {mapped_objects}")
         elif instance == self.kCorrelationConditionOvRm:
             if mapped_objects == ['calo', 'calo', 'calo']:
                 if cut in (kOvRmDeltaEta, kOvRmDeltaPhi, kOvRmDeltaR):
@@ -557,7 +586,7 @@ class ResourceTray(object):
                     return n_objects * (n_objects - 1) * 0.5
             elif mapped_objects == ['calo', 'calo']:
                 return n_objects * n_objects_ovrm
-            raise RuntimeError("missing mapped objects for ovrm corr")
+            raise RuntimeError(f"missing mapped objects for '{instance}': {mapped_objects}")
         return 1.
 
     def measure(self, condition):
@@ -574,8 +603,8 @@ class ResourceTray(object):
         if not instance:
             condition_type = ConditionTypeKey[condition.type]
             objects_types = [ObjectTypeKey[object_.type] for object_ in condition.objects]
-            message = "Missing configuration for condition of type '{0}' with " \
-                      "objects {1} in file '{2}'.".format(condition_type, objects_types, self.filename)
+            message = f"Missing configuration for condition of type '{condition_type}' with " \
+                      f"objects {objects_types} in file '{self.filename}'."
             raise RuntimeError(message)
 
         # Pick object configuration
@@ -584,8 +613,8 @@ class ResourceTray(object):
         instance_objects = filter_first(lambda item: item.types == mapped_objects, instance.objects)
         if not instance_objects:
             condition_type = ConditionTypeKey[condition.type]
-            message = "Missing configuration for condition of type '{0}' with " \
-                      "objects {1} in file '{2}'.".format(condition_type, objects_types, self.filename)
+            message = f"Missing configuration for condition of type '{condition_type}' with " \
+                      f"objects {objects_types} in file '{self.filename}'."
             raise RuntimeError(message)
         # condition type dependent factor calculation (see also config/README.md)
         factor = self.calc_factor(condition)
@@ -661,8 +690,7 @@ class Module(object):
         self.algorithms.append(algorithm)
 
     def __repr__(self):
-        count = len(self)
-        return "{self.__class__.__name__}(id={self.id}, algorithms={count}, payload={self.payload})".format(**locals())
+        return f"{self.__class__.__name__}(id={self.id}, algorithms={len(self)}, payload={self.payload})"
 
 class ModuleCollection(object):
     """Collection of modules permitting various operations."""
@@ -688,7 +716,7 @@ class ModuleCollection(object):
             conditions = [self.condition_handles[condition] for condition in get_condition_names(algorithm)]
             self.algorithm_handles.append(AlgorithmHandle(algorithm, conditions))
         # pre sort
-        self.algorithm_handles.sort(key = lambda algorithm: algorithm.payload, reverse=self.reverse_sorting)
+        self.algorithm_handles.sort(key=lambda algorithm: algorithm.payload, reverse=self.reverse_sorting)
         #
         # HACK TODO batch updating condition cuts
         # * assigning precision_pt
@@ -698,7 +726,7 @@ class ModuleCollection(object):
             """Returns precision key for scales map."""
             left = ObjectGrammarKey[left.type]
             right = ObjectGrammarKey[right.type]
-            return 'PRECISION-{}-{}-{}'.format(left, right, name)
+            return f'PRECISION-{left}-{right}-{name}'
         scales = self.eventSetup.getScaleMapPtr()
         for condition in self.condition_handles.values():
             for cut in condition.cuts:
@@ -707,7 +735,7 @@ class ModuleCollection(object):
                     right = condition.objects[1]
                     cut.precision_pt = 1 # for all
                     cut.precision_math = scales[precision_key(left, right, 'TwoBodyPtMath')].getNbits()
-                elif cut.cut_type == tmEventSetup.Mass:
+                elif cut.cut_type in (tmEventSetup.Mass, tmEventSetup.MassUpt, tmEventSetup.MassDeltaR):
                     left = condition.objects[0]
                     right = condition.objects[1]
                     cut.precision_pt = scales[precision_key(left, right, 'MassPt')].getNbits()
@@ -728,8 +756,8 @@ class ModuleCollection(object):
         """Set module constraint for condition type."""
         # Force list for single numbers
         modules = modules if isinstance(modules, (list, tuple)) else [modules]
-        assert condition in ConditionTypeKey.values(), "no such constraint condition type '{condition}'".format(**locals())
-        assert max(modules) <= MaxModules, "exceeding constraint module range 'modules'".format(**locals())
+        assert condition in ConditionTypeKey.values(), f"no such constraint condition type '{condition}'"
+        assert max(modules) <= MaxModules, "exceeding constraint module range 'modules'"
         self.constraints[condition] = modules
 
     def capableModules(self):
@@ -741,7 +769,7 @@ class ModuleCollection(object):
         modules = self.modules
         if constraints:
             modules = [module for module in self.modules if module.id in constraints]
-        return sorted(modules, key = lambda module: module.payload)[0]
+        return sorted(modules, key=lambda module: module.payload)[0]
 
     @property
     def algorithms(self):
@@ -767,7 +795,7 @@ class ModuleCollection(object):
         """Distribute algorithms to modules, applying shadow ratio.
         """
         # sort algorithms
-        self.algorithm_handles.sort(key = lambda algorithm: algorithm.payload, reverse=self.reverse_sorting)
+        self.algorithm_handles.sort(key=lambda algorithm: algorithm.payload, reverse=self.reverse_sorting)
         # regenerate firmware UUID
         if self.regenerate_uuid:
             self.eventSetup.setFirmwareUuid(str(uuid.uuid4()))
@@ -895,8 +923,7 @@ class ModuleCollection(object):
         return shadowed
 
     def __repr__(self):
-        count = len(self)
-        return "{self.__class__.__name__}(modules={count})".format(**locals())
+        return f"{self.__class__.__name__}(modules={len(self)})"
 
 #
 # Application
@@ -911,7 +938,7 @@ def float_percent(value):
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('filename', metavar='<file>', type=os.path.abspath, help="XML menu")
-    parser.add_argument('--config', metavar='<file>', default=DefaultConfigFile, type=os.path.abspath, help="JSON resource configuration file, default {DefaultConfigFile}".format(**globals()))
+    parser.add_argument('--config', metavar='<file>', default=DefaultConfigFile, type=os.path.abspath, help=f"JSON resource configuration file, default {DefaultConfigFile}")
     parser.add_argument('--modules', metavar='<n>', default=2, type=int, help="number of modules, default is 2")
     parser.add_argument('--ratio', metavar='<f>', default=0.0, type=float, help="algorithm shadow ratio (0.0 < ratio <= 1.0, default 0.0)")
     parser.add_argument('--sorting', metavar='asc|desc', choices=('asc', 'desc'), default='asc', help="sort order for weighting (asc or desc, default asc)")
@@ -926,7 +953,7 @@ def list_resources(tray):
     def section(name, instance):
         sliceLUTsPercent = instance.sliceLUTs * 100
         processorsPercent = instance.processors * 100
-        return " * {name}: sliceLUTs={sliceLUTsPercent:.2f}%, processors={processorsPercent:.2f}%".format(**locals())
+        return f" * {name}: sliceLUTs={sliceLUTsPercent:.2f}%, processors={processorsPercent:.2f}%"
     logging.info("thresholds:")
     logging.info(section("floor", tray.floor()))
     logging.info(section("ceiling", tray.ceiling()))
@@ -934,11 +961,11 @@ def list_resources(tray):
     for instance in tray.resources.instances:
         for object_ in instance.objects:
             object_list = ', '.join(object_.types)
-            name = "{instance.type}[ {object_list} ]".format(**locals())
+            name = f"{instance.type}[ {object_list} ]"
             logging.info(section(name, object_))
             if hasattr(object_, 'cuts'):
                 for cut in object_.cuts:
-                    logging.info("  {0}: ".format(section(cut.type, cut)))
+                    logging.info("  %s", section(cut.type, cut))
 
 def list_algorithms(collection):
     logging.info("|-----------------------------------------------------------------------------|")
@@ -953,15 +980,15 @@ def list_algorithms(collection):
         sliceLUTs = algorithm.payload.sliceLUTs * 100.
         processors = algorithm.payload.processors * 100.
         name = short_name(algorithm.name, 41)
-        logging.info("| {algorithm.index:>5d} | {sliceLUTs:>8.3f}% | {processors:>6.3f}% | {name:<45} |".format(**locals()))
+        logging.info(f"| {algorithm.index:>5d} | {sliceLUTs:>8.3f}% | {processors:>6.3f}% | {name:<45} |")
     logging.info("|-------|-----------|---------|-----------------------------------------------|")
     logging.info("|-----------------------------------------------------------------------------|")
 
 def list_distribution(collection):
-    message = "Detailed distribition on {n} modules, shadow ratio: {r:.1f}".format(n=len(collection), r=collection.ratio)
+    message = f"Detailed distribition on {len(collection)} modules, shadow ratio: {collection.ratio:.1f}"
     logging.info("|-----------------------------------------------------------------------------|")
     logging.info("|                                                                             |")
-    logging.info("| {message:<75} |".format(**locals()))
+    logging.info(f"| {message:<75} |")
     logging.info("|                                                                             |")
     logging.info("|------------|----------------------------------------------------------------|")
     logging.info("| Module     | Algorithm                                                      |")
@@ -971,8 +998,8 @@ def list_distribution(collection):
         indices = sorted(str(algorithm.index) for algorithm in module)
         for algorithm in module:
             name = short_name(algorithm.name, 50)
-            line = "| {algorithm.module_id:>2d} | {algorithm.module_index:>5d} " \
-                   "| {algorithm.index:>5d} | {name:<54} |".format(**locals())
+            line = f"| {algorithm.module_id:>2d} | {algorithm.module_index:>5d} " \
+                   f"| {algorithm.index:>5d} | {name:<54} |"
             logging.info(line)
     logging.info("|----|-------|-------|--------------------------------------------------------|")
     logging.info("|-----------------------------------------------------------------------------|")
@@ -991,14 +1018,15 @@ def list_distribution(collection):
         for module in collection:
             if condition in module.conditions:
                 modules.append(module.id)
-        logging.info("| {name:<48} | {modules:<24} |".format(name=condition.name, modules=','.join([str(module) for module in modules])))
+        modules_list = ','.join([str(module) for module in modules])
+        logging.info(f"| {condition.name:<48} | {modules_list:<24} |")
     logging.info("|--------------------------------------------------|--------------------------|")
 
 def list_summary(collection):
-    message = "Summary for distribution on {n} modules, shadow ratio: {r:.1f}".format(n=len(collection), r=collection.ratio)
+    message = f"Summary for distribution on {len(collection)} modules, shadow ratio: {collection.ratio:.1f}"
     logging.info("|-----------------------------------------------------------------------------|")
     logging.info("|                                                                             |")
-    logging.info("| {message:<75} |".format(**locals()))
+    logging.info(f"| {message:<75} |")
     logging.info("|                                                                             |")
     logging.info("|-------------------------------------|---------------------------------------|")
     logging.info("| Module                              | Payload                               |")
@@ -1007,11 +1035,11 @@ def list_summary(collection):
     for module in collection:
         algorithms = len(module)
         conditions = len(module.conditions)
-        proportion = float(conditions) / algorithms
+        proportion = float(conditions) / algorithms if algorithms else 1.0
         sliceLUTs = module.payload.sliceLUTs * 100.
         processors = module.payload.processors * 100.
-        logging.info("| {module.id:>2} | {algorithms:>10} | {conditions:>10} | {proportion:>4.2f} | " \
-                     "{sliceLUTs:>8.2f}% | {processors:>6.2f}% |                 |".format(**locals()))
+        logging.info(f"| {module.id:>2} | {algorithms:>10} | {conditions:>10} | {proportion:>4.2f} | " \
+                     f"{sliceLUTs:>8.2f}% | {processors:>6.2f}% |                 |")
     logging.info("|----|------------|------------|------|-----------|---------|-----------------|")
 
 def dump_distribution(collection, args):
