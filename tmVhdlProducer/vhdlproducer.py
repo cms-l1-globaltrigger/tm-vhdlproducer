@@ -1,22 +1,23 @@
 import json
-import shutil
 import logging
+import shutil
 import uuid
-import os, errno
+import os
 
-from jinja2 import Environment, FileSystemLoader, filters, StrictUndefined
-from os.path import join, exists, basename
-from itertools import cycle
 from binascii import hexlify
+
+from jinja2 import Environment
+from jinja2 import FileSystemLoader
+from jinja2 import StrictUndefined
 
 import tmEventSetup
 import tmTable
 
-from . import vhdlhelper
-from . import algodist
+from .vhdlhelper import MenuHelper
+from .vhdlhelper import vhdl_bool
+from .vhdlhelper import bx_encode
 
-from tmVhdlProducer import __version__
-__all__ = ['VhdlProducer', 'writeXmlMenu']
+__all__ = ['VhdlProducer']
 
 # -----------------------------------------------------------------------------
 #  Jinja2 custom filters exposed to VHDL templates.
@@ -39,28 +40,6 @@ def uuid2hex_filter(s):
     """
     return uuid.UUID(s).hex.lower()
 
-def bx_encode(value):
-    """Encode relative bunch crossings into VHDL notation.
-
-    All positive values with the exception of zero are prefixed with m, all
-    negative values are prefixed with p instead of the minus sign.
-
-    >>> bx_encode(0)
-    '0'
-    >>> bx_encode(-1)
-    'm1'
-    >>> bx_encode(2)
-    'p2'
-    """
-    # Prefix positive values greater then zero with p.
-    if value > 0:
-        return 'p{0:d}'.format(value)
-    # Prefix negative values with m instead of minus sign (abs).
-    if value < 0:
-        return 'm{0:d}'.format(abs(value))
-    # Zero value is not prefixed according to VHDL documentation.
-    return '0'
-
 def sort_by_attribute(items, attribute, reverse=False):
     """Returns list of items sorted by attribute. Provided to overcome lack of
     sort filter in older Jinja2 versions.
@@ -76,18 +55,18 @@ def murmurhash(s):
 # -----------------------------------------------------------------------------
 
 CustomFilters = {
+    'X21' : lambda x: "%021X" % int(float(x)),
     'X16' : lambda x: "%016X" % int(float(x)),
     'X08' : lambda x: "%08X" % int(float(x)),
     'X04' : lambda x: "%04X" % int(float(x)),
     'X01' : lambda x: "%01X" % int(float(x)),
     'alpha' : lambda s: ''.join(c for c in s if c.isalpha()),
-    'bx_offset': bx_encode,
     'sort_by_attribute': sort_by_attribute,
     'hex': lambda d: format(int(d), 'x'), # plain hex format
     'hexstr': hexstr_filter,
     'hexuuid': uuid2hex_filter,
-    'vhdl_bool': lambda b: ('false', 'true')[bool(b)],
     'mmhashn': murmurhash,
+    'vhdl_bool': vhdl_bool
 }
 
 ModuleTemplates = [
@@ -132,11 +111,12 @@ class VhdlProducer(object):
     """VHDL producer class."""
 
     def __init__(self, searchpath):
-        self.VHDLProducerVersion = __all__[0]+__version__
         self.engine = TemplateEngine(searchpath)
 
     def create_dirs(self, directory, n_modules):
-        """Create directory tree for output."""
+        """Create directory tree for output, return dictionary of created
+        directories.
+        """
         directories = {
             "vhdl" : os.path.join(directory, "vhdl"),
             "testvectors" : os.path.join(directory, "testvectors"),
@@ -144,22 +124,22 @@ class VhdlProducer(object):
             "doc" : os.path.join(directory, "doc"),
         }
         for i in range(n_modules):
-            module_id = "module_{i}".format(i=i)
-            directories[module_id] = os.path.join(directories['vhdl'], module_id, "src")
+            module_id = f"module_{i:d}"
+            directories[module_id] = os.path.join(directories["vhdl"], module_id, "src")
         # Check for exisiting directories (TODO obsolete?)
-        for directory in directories:
-            if os.path.exists(directory):
-                logging.warning("directory `%s' already exists. Will be overwritten.", directory)
-                shutil.rmtree(directory)
+        for path in directories.values():
+            if os.path.exists(path):
+                logging.warning("directory `%s' already exists. Will be overwritten.", path)
+                shutil.rmtree(path)
         # Create directries
-        for directory in directories:
-            makedirs(directories[directory])
+        for path in directories.values():
+            makedirs(path)
         return directories
 
     def write(self, collection, directory):
         """Write distributed modules (VHDL templates) to *directory*."""
 
-        helper = vhdlhelper.MenuHelper(collection)
+        helper = MenuHelper(collection)
         logging.info("writing %s algorithms to %s module(s)", len(helper.algorithms), len(helper.modules))
         # Create directory tree
         directories = self.create_dirs(directory, len(collection))
@@ -172,11 +152,11 @@ class VhdlProducer(object):
                     'module': module,
                 }
                 content = self.engine.render(template, params)
-                module_id = "module_{id}".format(id=module.id)
+                module_id = f"module_{module.id:d}"
                 filename = os.path.join(directories[module_id], template)
                 with open(filename, 'w') as fp:
                     fp.write(content)
-                logging.info("{template:<24}: {filename}".format(**locals()))
+                logging.info(f"{template:<24}: {filename}")
 
         # Write JSON dump (TODO obsolete?)
         params = {
@@ -206,10 +186,13 @@ class VhdlProducer(object):
 
         message = tmTable.xml2menu(filename, menu, scale, ext_signal, False)
         if message:
-            logging.error("{filename}: {message}".format(message))
+            logging.error(f"{filename}: {message}")
             raise RuntimeError(message)
 
-        logging.info("processing menu \"%s\" ... ", menu.menu["name"])
+        menu_name = menu.menu["name"]
+
+
+        logging.info("processing menu \"%s\" ... ", menu_name)
 
         # Update menu information
         logging.info("updating menu information...")
@@ -239,7 +222,7 @@ class VhdlProducer(object):
             algorithm["module_index"] = str(module_index)
             menu.algorithms[id_] = algorithm
 
-        target = os.path.join(json_dir, '{name}-d{dist}.xml'.format(name=menu.menu['name'], dist=dist))
+        target = os.path.join(json_dir, f'{menu_name}-d{dist}.xml')
 
         logging.info("writing target XML menu file %s", target)
         tmTable.menu2xml(menu, scale, ext_signal, target)

@@ -1,18 +1,79 @@
-# Change Log
+# Changelog
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/)
-and this project adheres to [Semantic Versioning](http://semver.org/).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [2.11.0] - 2021-04-06
+### Changed
+- templates for mp7_ugt_legacy v1.13.x
+- refactored VHDL instance templates
+
+## [2.10.1] - 2021-04-06
+### Changed
+- templates for mp7_ugt_legacy v1.12.1
+### Fixed
+- muon_muon_correlation_condition.vhd
+- correlation_cuts_correlation.vhd
+
+## [2.10.0] - 2021-01-08
+### Changed
+- templates for mp7_ugt_legacy v1.12.x
+- refactored VHDL instance templates
+
+## [2.9.2] - 2021-02-09
+### Added
+- CI using github actions #21
+
+## [2.9.1] - 2021-02-09
+### Changed
+- using f-strings #16
+### Fixed
+- fixed removing existing directories #19
+
+## [2.9.0] - 2020-12-07
+### Changed
+- templates for mp7_ugt_legacy v1.11.x
+- default values in module vhdlhelper
+
+## [2.8.1] - 2020-08-26
+### Changed
+- module vhdlhelper
+- templates
+
+## [2.8.0] - 2020-07-20
+### Changed
+- depending on tm-python 0.8.0
+- depending on tm-reporter 2.8.0
+### Added
+- unconstrained pt for muons
+- impact parameter for muons
+- invariant mass for three particles
+
+## [2.7.5] - 2020-06-18
+### Fixed
+- supporting up to 5 eta windows
+
+## [2.7.4] - 2020-01-15
+### Fixed
+- calo_calo_calo_correlation_orm_condition.vhd.j2
+
+## [2.7.3] - 2020-01-08
+### Changed
+- depends on tm-python 0.7.4
+
+## [2.7.2] - 2019-10-16
+### Changed
+- depends on meta package tm-python
 
 ## [2.7.1] - 2019-10-15
-### Changed
-- bug fix in VHDL templates:
-  - calo_calo_calo_correlation_orm_condition.vhd.j2
-  - calo_conditions_orm.vhd.j2 
+### Fixed
+- calo_calo_calo_correlation_orm_condition.vhd.j2
+- calo_conditions_orm.vhd.j2
 
 ## [2.7.0] - 2019-10-03
 ### Added
-- depending on tmReporter package
+- depends on tm-reporter
 ### Changed
 - migrated to Python3
 - removed obsolete SVN/git revision tagging
@@ -29,7 +90,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [2.6.0] - 2019-06-17
 ### Changed
 - VHDL templates for "five eta cuts"
-- vhdlhelper.py for "five eta cuts"
+- module vhdlhelper for "five eta cuts"
 
 ## [2.5.1] - 2019-01-30
 ### Added

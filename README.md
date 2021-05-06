@@ -1,6 +1,36 @@
 VHDL Producer
 =============
 
+## Install
+
+Install using pip (>= 19.0)
+
+```bash
+pip install --upgrade pip
+pip install git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git@2.9.2
+```
+
+## Build from source
+
+Basic development instrcutions.
+
+```bash
+git clone https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git
+cd tm-vhdlproducer
+git checkout master
+```
+```bash
+python3 -m venv env
+. env/bin/activate
+```
+```bash
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+```bash
+python setup.py develop
+```
+
 ## Basic usage
 
 Generate VHDL output from XML trigger menu.
@@ -113,34 +143,6 @@ L1Menu_sample-d1/
  `-- tm-vhdlproducer.log
 ```
 
-## Dependencies
-
-Install following utm wheels or build utm python bindings.
-
- * [`tm-eventsetup>=0.7.3`](https://github.com/cms-l1-globaltrigger/tm-eventsetup)
- * [`tm-grammar>=0.7.3`](https://github.com/cms-l1-globaltrigger/tm-grammar)
- * [`tm-table>=0.7.3`](https://github.com/cms-l1-globaltrigger/tm-table)
-
-Install required utm tools.
-
- * [`tm-reporter>=2.7.1`](https://github.com/cms-l1-globaltrigger/tm-reporter)
-
-## Install
-
-Install using pip
-
-```bash
-pip install git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git@2.7.1
-```
-
-Install from local source
-
-```bash
-git clone https://gitlab.cern.ch/cms-l1-globaltrigger/tm-vhdlproducer.git
-cd tm-vhdlproducer
-python setup.py install
-```
-
 ## Documentation
 
 A TWiki page template and a HTML menu ducumentation is also written to the
@@ -150,3 +152,9 @@ A TWiki page template and a HTML menu ducumentation is also written to the
 
 All messages printed to the screen are written to a log file in the output
 location (e.g. `L1Menu_sample/tm-vhdlproducer.log`).
+
+## VHDL template hierarchy
+
+VHDL template hierarchy for condition instances located in [templates/vhdl/instances](tmVhdlProducer/templates/vhdl/instances).
+
+![VHDL templates overview](doc/templates_overview.png)
