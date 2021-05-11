@@ -1,6 +1,6 @@
 {% extends "instances/base/correlation_condition.vhd" %}
 
-{% block entity %}work.correlation_conditions_calo{% endblock %}
+{% block entity %}work.correlation_conditions{% endblock %}
 
 {%- block generic_map -%}
 {{ super() }}
@@ -19,17 +19,18 @@
         nr_obj3 => MAX_CALO_OBJECTS, -- default number of calo3 input
         obj_2plus1 => false,
   {%- endif %}
+-- selector same/different bunch crossings
         same_bx => {{ condition.objectsInSameBx | vhdl_bool }}
 {%- endblock %}
 
 {%- block port_map %}
   {%- set o1 = condition.objects[0] %}
   {%- set o2 = condition.objects[1] %}
-        obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }},
-        obj2 => {{ o2.type | lower }}_bx_{{ o2.bx }},
+        calo_obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }},
+        calo_obj2 => {{ o2.type | lower }}_bx_{{ o2.bx }},
   {%- if condition.nr_objects == 3 %}
     {%- set o3 = condition.objects[2] %}
-        obj3 => {{ o3.type | lower }}_bx_{{ o3.bx }},
+        calo_obj3 => {{ o3.type | lower }}_bx_{{ o3.bx }},
   {%- endif %}
   {%- if condition.deltaEtaOrm %}
     {%- if condition.nr_objects == 3 %}

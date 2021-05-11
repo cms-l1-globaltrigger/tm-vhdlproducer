@@ -1,25 +1,37 @@
 {% extends "instances/base/correlation_condition.vhd" %}
 
-{% block entity %}work.correlation_conditions_muon{% endblock %}
+{% block entity %}work.correlation_conditions{% endblock %}
 
-{%- block generic_map -%}
+{%- block generic_map %}
+-- slices for muon
+  {%- if not o1.slice %}
+        slice_low_obj1 => {{ o1.slice.lower }},
+        slice_high_obj1 => {{ o1.slice.upper }},
+  {%- endif -%}
+  {%- if not o2.slice %}
+        slice_low_obj2 => {{ o2.slice.lower }},
+        slice_high_obj2 => {{ o2.slice.upper }},
+  {%- endif -%}
 {{ super() }}
--- number and type of object 2
-        nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
-        type_obj2 => {{ o2.type | upper }}_TYPE,
+-- number of objects and type
+  {%- for i in range(0,condition.nr_objects) %}
+    {%- set o = condition.objects[i] %}
+        nr_obj{{i+1}} => NR_{{ o.type | upper }}_OBJECTS,
+        type_obj{{i+1}} => {{ o.type | upper }}_TYPE,
+  {%- endfor %}
 -- selector same/different bunch crossings
         same_bx => {{ condition.objectsInSameBx | vhdl_bool }}
 {%- endblock %}
 
 {%- block port_map %}
-        obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }},
-        obj2 => {{ o2.type | lower }}_bx_{{ o2.bx }},
+        muon_obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }},
+        muon_obj2 => {{ o2.type | lower }}_bx_{{ o2.bx }},
   {%- if condition.chargeCorrelation %}
         ls_charcorr_double => ls_charcorr_double_bx_{{ o1.bx }}_bx_{{ o2.bx }},
         os_charcorr_double => os_charcorr_double_bx_{{ o1.bx }}_bx_{{ o2.bx }},
   {%- endif %}
   {%- if condition.mass and condition.mass.type == condition.mass.InvariantMassDeltaRType %}
-        mass_div_dr => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr,
+        mass_div_dr => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_over_dr,
   {%- else %}
     {%- if condition.deltaEta %}
         deta => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta,

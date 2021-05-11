@@ -9,10 +9,8 @@
 
 {% block generic_map %}
   {%- for i in range(0,condition.nr_objects) %}
-    {%- if condition.nr_objects > i and condition.objects[i].slice  %}
         slice_{{i+1}}_low_obj1 => {{ condition.objects[i].slice.lower }},
         slice_{{i+1}}_high_obj1 => {{ condition.objects[i].slice.upper }},
-    {%- endif %}
   {%- endfor %}
 -- object cuts
   {%- if not o1.operator %}
@@ -36,10 +34,10 @@
   {%- if nr_requirements == 4 %}
         obj2 => {{ o5.type | lower }}_bx_{{ o5.bx }},
     {%- if condition.deltaEtaOrm or condition.deltaROrm %}
-        deta_orm => {{ o1.type | lower }}_{{ o5.type | lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_deta_vector,
+        deta_orm => {{ o1.type | lower }}_{{ o5.type | lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_deta,
     {%- endif %}
     {%- if condition.deltaPhiOrm or condition.deltaROrm %}
-        dphi_orm => {{ o1.type | lower }}_{{ o5.type | lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_dphi_vector,
+        dphi_orm => {{ o1.type | lower }}_{{ o5.type | lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_dphi,
     {%- endif %}
     {%- if condition.deltaROrm %}
         dr_orm => {{ o1.type | lower }}_{{ o5.type | lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_dr,
@@ -47,10 +45,10 @@
   {%- elif nr_requirements == 3 %}
         obj2 => {{ o4.type | lower }}_bx_{{ o4.bx }},
     {%- if condition.deltaEtaOrm or condition.deltaROrm %}
-        deta_orm => {{ o1.type | lower }}_{{ o4.type | lower }}_bx_{{ o1.bx }}_bx_{{ o4.bx }}_deta_vector,
+        deta_orm => {{ o1.type | lower }}_{{ o4.type | lower }}_bx_{{ o1.bx }}_bx_{{ o4.bx }}_deta,
     {%- endif %}
     {%- if condition.deltaPhiOrm or condition.deltaROrm %}
-        dphi_orm => {{ o1.type | lower }}_{{ o4.type | lower }}_bx_{{ o1.bx }}_bx_{{ o4.bx }}_dphi_vector,
+        dphi_orm => {{ o1.type | lower }}_{{ o4.type | lower }}_bx_{{ o1.bx }}_bx_{{ o4.bx }}_dphi,
     {%- endif %}
     {%- if condition.deltaROrm %}
         dr_orm => {{ o1.type | lower }}_{{ o4.type | lower }}_bx_{{ o1.bx }}_bx_{{ o4.bx }}_dr,
@@ -58,21 +56,21 @@
   {%- elif nr_requirements == 2 %}
         obj2 => {{ o3.type | lower }}_bx_{{ o3.bx }},
     {%- if condition.deltaEtaOrm or condition.deltaROrm %}
-        deta_orm => {{ o1.type | lower }}_{{ o3.type | lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_deta_vector,
+        deta_orm => {{ o1.type | lower }}_{{ o3.type | lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_deta,
     {%- endif %}
     {%- if condition.deltaPhiOrm or condition.deltaROrm %}
-        dphi_orm => {{ o1.type | lower }}_{{ o3.type | lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_dphi_vector,
+        dphi_orm => {{ o1.type | lower }}_{{ o3.type | lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_dphi,
     {%- endif %}
     {%- if condition.deltaROrm %}
-        dr_orm => {{ o1.type | lower }}_{{ o3.type | lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_r,
+        dr_orm => {{ o1.type | lower }}_{{ o3.type | lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_dr,
     {%- endif %}
   {%- elif nr_requirements == 1 %}
         obj2 => {{ o2.type | lower }}_bx_{{ o2.bx }},
     {%- if condition.deltaEtaOrm or condition.deltaROrm %}
-        deta_orm => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_vector,
+        deta_orm => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta,
     {%- endif %}
     {%- if condition.deltaPhiOrm or condition.deltaROrm %}
-        dphi_orm => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
+        dphi_orm => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi,
     {%- endif %}
     {%- if condition.deltaROrm %}
         dr_orm => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dr,

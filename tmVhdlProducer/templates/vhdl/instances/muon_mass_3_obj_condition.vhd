@@ -4,27 +4,43 @@
 {%- set o2 = condition.objects[1] %}
 {%- set o3 = condition.objects[2] %}
 
-{% block entity %}work.correlation_conditions_muon{% endblock %}
+{% block entity %}work.correlation_conditions{% endblock %}
 
 {%- block generic_map %}
--- obj cuts
+-- slices for muon
+  {%- if not o1.slice %}
+        slice_low_obj1 => {{ o1.slice.lower }},
+        slice_high_obj1 => {{ o1.slice.upper }},
+  {%- endif -%}
+  {%- if not o2.slice %}
+        slice_low_obj2 => {{ o2.slice.lower }},
+        slice_high_obj2 => {{ o2.slice.upper }},
+  {%- endif -%}
+  {%- if not o3.slice %}
+        slice_low_obj3 => {{ o3.slice.lower }},
+        slice_high_obj3 => {{ o3.slice.upper }},
+  {%- endif -%}
     {%- set o = condition.objects[0] %}
     {%- include  "instances/base/object_cuts_correlation.vhd" %}
 -- correlation cuts
         mass_upper_limit_vector => X"{{ condition.mass.upper | X16 }}",
         mass_lower_limit_vector => X"{{ condition.mass.lower | X16 }}",
         mass_vector_width => MU_PT_VECTOR_WIDTH+MU_PT_VECTOR_WIDTH+MU_MU_COSH_COS_VECTOR_WIDTH,
--- number of object 2
-        nr_obj2 => NR_MU_OBJECTS,
         mass_3_obj => true,
+-- number of objects and type
+  {%- for i in range(0,condition.nr_objects) %}
+    {%- set o = condition.objects[i] %}
+        nr_obj{{i+1}} => NR_{{ o.type | upper }}_OBJECTS,
+        type_obj{{i+1}} => {{ o.type | upper }}_TYPE,
+  {%- endfor %}
 -- selector same/different bunch crossings
         same_bx => {{ condition.objectsInSameBx | vhdl_bool}}
 {%- endblock %}
 
 {%- block port_map %}
-        obj1 => mu_bx_{{ o1.bx }},
-        obj2 => mu_bx_{{ o2.bx }},
-        obj3 => mu_bx_{{ o3.bx }},
+        muon_obj1 => mu_bx_{{ o1.bx }},
+        muon_obj2 => mu_bx_{{ o2.bx }},
+        muon_obj3 => mu_bx_{{ o3.bx }},
     {%- if condition.chargeCorrelation %}
         ls_charcorr_triple => ls_charcorr_triple_bx_{{ o1.bx }}_bx_{{ o1.bx }},
         os_charcorr_triple => os_charcorr_triple_bx_{{ o1.bx }}_bx_{{ o1.bx }},

@@ -24,7 +24,11 @@
         mass_cut => {{ condition.mass | vhdl_bool }},
         mass_type => {{ condition.mass.type }},
   {%- if condition.mass.type == condition.mass.InvariantMassDeltaRType %}
-        mass_div_dr_vector_width => {{ o1.type | upper }}_{{ o2.type | upper }}_MASS_DIV_DR_VECTOR_WIDTH,
+    {%- if o1.is_calo_type and o2.is_calo_type %}
+        mass_div_dr_vector_width => CALO_CALO_MASS_DIV_DR_VECTOR_WIDTH,
+    {%- elif o1.is_muon_type and o2.is_muon_type %}
+        mass_div_dr_vector_width => MU_MU_MASS_DIV_DR_VECTOR_WIDTH,
+    {%- endif %}
         mass_div_dr_threshold => X"{{ condition.mass.lower | X21 }}",
   {%- else %}
     {%- if o1.is_calo_type and (o2.is_calo_type or o2.is_esums_type) %}

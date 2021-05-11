@@ -1,6 +1,6 @@
 {% extends "instances/base/correlation_condition.vhd" %}
 
-{% block entity %}work.correlation_conditions_calo{% endblock %}
+{% block entity %}work.correlation_conditions{% endblock %}
 
 {%- block generic_map -%}
 {{ super() }}
@@ -15,10 +15,10 @@
 {%- endblock %}
 
 {%- block port_map %}
-        obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }},
-        obj2 => {{ o2.type | lower }}_bx_{{ o2.bx }},
+        calo_obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }},
+        calo_obj2 => {{ o2.type | lower }}_bx_{{ o2.bx }},
   {%- if condition.mass and condition.mass.type == condition.mass.InvariantMassDeltaRType %}
-        mass_div_dr => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_div_dr,
+        mass_div_dr => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_over_dr,
   {%- else %}
     {%- if (condition.deltaEta) or (condition.deltaR) %}
         deta => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta,

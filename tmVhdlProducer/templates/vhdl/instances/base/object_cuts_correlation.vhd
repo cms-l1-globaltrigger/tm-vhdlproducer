@@ -1,8 +1,12 @@
 {%- if condition.objects[1].is_esums_type %}
   {%- set nr_o = 1 %}
+-- slices for esums
+        slice_low_obj2 => 0,
+        slice_high_obj2 => 0,
 {%- else %}
   {%- set nr_o = condition.nr_objects %}
 {%- endif %}
+-- obj cuts
 {%- for i in range(0,nr_o) %}
   {%- set o = condition.objects[i] %}
   {%- if o.slice %}
@@ -49,8 +53,3 @@
         ip_lut_obj{{i+1}} => X"{{ o.impactParameter.value | X01 }}",
   {%- endif %}
 {%- endfor %}
-{%- if condition.objects[1].is_esums_type %}
--- slices for esums
-        slice_low_obj2 => 0,
-        slice_high_obj2 => 0,
-{%- endif %}

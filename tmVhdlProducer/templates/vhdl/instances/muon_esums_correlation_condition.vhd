@@ -1,18 +1,26 @@
 {% extends "instances/base/correlation_condition.vhd" %}
 
-{% block entity %}work.correlation_conditions_muon{% endblock %}
+{% block entity %}work.correlation_conditions{% endblock %}
 
-{%- block generic_map -%}
+{%- block generic_map %}
+  {%- if not o1.slice %}
+-- slices for muon
+        slice_low_obj1 => {{ o1.slice.lower }},
+        slice_high_obj1 => {{ o1.slice.upper }},
+  {%- endif -%}
 {{ super() }}
--- number and type of object 2
-        nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
-        type_obj2 => {{ o2.type | upper }}_TYPE,
+-- number of objects and type
+  {%- for i in range(0,condition.nr_objects) %}
+    {%- set o = condition.objects[i] %}
+        nr_obj{{i+1}} => NR_{{ o.type | upper }}_OBJECTS,
+        type_obj{{i+1}} => {{ o.type | upper }}_TYPE,
+  {%- endfor %}
 -- selector same/different bunch crossings
         same_bx => {{ condition.objectsInSameBx | vhdl_bool }}
 {%- endblock %}
 
 {%- block port_map %}
-        obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }},
+        muon_obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }},
         esums => {{ o2.type | lower }}_bx_{{ o2.bx }},
     {%- if condition.deltaPhi %}
         dphi => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi,

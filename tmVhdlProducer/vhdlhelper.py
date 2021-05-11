@@ -629,12 +629,9 @@ class ModuleHelper(VhdlHelper):
         combinations = {}
         for condition in self.conditions:
             if hasattr(condition, 'mass') and condition.mass.enabled and (condition.mass.type == condition.mass.InvariantMassType or condition.mass.type == condition.mass.InvariantMassDeltaRType):
-               if isinstance(condition, CorrelationConditionHelper):
-                    a, b = condition.objects
-                    key = (a.type, b.type, a.bx, b.bx)
-                    combinations[key] = (a, b)
-               if isinstance(condition, Correlation3ConditionHelper):
-                    a, b, c = condition.objects
+               if isinstance(condition, (CorrelationConditionHelper, CorrelationConditionOvRmHelper, Correlation3ConditionHelper)):
+                    a = condition.objects[0]
+                    b = condition.objects[1]
                     key = (a.type, b.type, a.bx, b.bx)
                     combinations[key] = (a, b)
         return combinations.values()
@@ -677,8 +674,9 @@ class ModuleHelper(VhdlHelper):
         combinations = {}
         for condition in self.conditions:
             if hasattr(condition, 'twoBodyPt') and condition.twoBodyPt.enabled:
-                if isinstance(condition, (CorrelationConditionHelper, CaloConditionHelper, CaloConditionOvRmHelper, MuonConditionHelper)):
-                    a, b = condition.objects
+                if isinstance(condition, (CorrelationConditionHelper, CorrelationConditionOvRmHelper, CaloConditionHelper, CaloConditionOvRmHelper, MuonConditionHelper)):
+                    a = condition.objects[0]
+                    b = condition.objects[1]
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
                     combinations[key] = (a, b)
         return combinations.values()
@@ -698,7 +696,7 @@ class ModuleHelper(VhdlHelper):
                 return True
             if condition.handle.isCaloConditionOvRm():
                 return True
-            if hasattr(condition, 'hasTwoBodyPtCut'):
+            if hasattr(condition, 'twoBodyPt'):
                 return bool(condition.twoBodyPt)
             return False
         objects = {}

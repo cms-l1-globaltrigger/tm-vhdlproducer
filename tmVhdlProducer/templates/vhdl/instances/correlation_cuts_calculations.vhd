@@ -100,13 +100,17 @@ calc_mass_over_dr_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_
         pt2_width => {{ o2.type | upper }}_PT_VECTOR_WIDTH,
     {%- if o1.is_calo_type and (o2.is_calo_type or o2.is_esums_type) %}
         cosh_cos_width => CALO_CALO_COSH_COS_VECTOR_WIDTH,
-    {%- elif (o1.is_calo_type and o2.is_muon_type) or (o1.is_muon_type or o2.is_esums_type) %}
-        cosh_cos_width => CALO_MUON_COSH_COS_VECTOR_WIDTH,
     {%- elif o1.is_muon_type or o2.is_muon_type %}
         cosh_cos_width => MUON_MUON_COSH_COS_VECTOR_WIDTH,
     {%- endif %}
         mass_over_dr_cut => true,
-        rom_sel => {{ o1.type | upper }}_{{ o2.type | upper }}_ROM,
+    {%- if o1.is_calo_type and o2.is_calo_type %}
+        rom_sel => CALO_CALO_ROM,
+    {%- elif o1.is_calo_type and o2.is_muon_type %}
+        rom_sel => CALO_MU_ROM,
+    {%- elif o1.is_muon_type and o2.is_muon_type %}
+        rom_sel => MU_MU_ROM,
+    {%- endif %}
     {%- if o1.is_calo_type and o2.is_calo_type %}
         deta_bins_width => CALO_DETA_BINS_WIDTH_ROM,
         dphi_bins_width => CALO_DPHI_BINS_WIDTH_ROM,
