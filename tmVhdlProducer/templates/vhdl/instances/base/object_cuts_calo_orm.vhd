@@ -32,7 +32,6 @@
   {%- if o1.isolation or o2.isolation or o3.isolation or o4.isolation %}
         iso_luts_obj1 => ({% for o in base_objects %}{% if loop.index0 %}, {% endif %}X"{{ o.isolation.value | X01 }}"{% endfor %}),
   {%- endif %}
-        -- orm object cuts
   {%- if orm_obj.slice %}
         slice_low_obj2 => {{ orm_obj.slice.lower }},
         slice_high_obj2 => {{ orm_obj.slice.upper }},

@@ -21,19 +21,7 @@
 -- tmEventSetup version
 -- v{{ menu.info.version }}
 
--- Instantiations of eta and phi conversion to muon scale for calo-muon and muon-esums correlation conditions (used for DETA, DPHI, DR and mass)
-{% include "instances/correlation_conditions_eta_phi_conversion.vhd" %}
--- Instantiations of pt, eta, phi, cosine phi and sine phi for correlation conditions (used for DETA, DPHI, DR, mass, overlap_remover and two-body pt)
-{% include "instances/obj_parameter.vhd" %}
--- Instantiations of deta and dphi calculations for correlation conditions (used for DETA, DPHI)
-{% include "instances/deta_dphi_calculations.vhd" %}
--- Instantiations of deta, dphi, cosh deta and cos dphi LUTs for correlation conditions (used for DR and mass)
---
-{% include "instances/correlation_cuts_calculations.vhd" %}
-
--- Instantiations of muon charge correlations - only once for a certain bx combination, if there is at least one DoubleMuon, TripleMuon, QuadMuon condition
--- or muon-muon correlation condition.
-{% include "instances/muon_charge_correlations.vhd" %}
+-- ========================================================
 -- Instantiations of conditions
 --
 {%- for condition in module.caloConditions %}
@@ -86,11 +74,26 @@
 {{ condition.vhdl_signal }} <= ext_cond_bx_{{ condition.objects[0].bx }}({{ condition.objects[0].externalChannelId }}); -- {{ condition.vhdl_signal }}
 {%- endfor %}
 
+-- ========================================================
 -- Instantiations of algorithms
 {% for algorithm in module.algorithms | sort_by_attribute('index') %}
 -- {{ algorithm.index }} {{ algorithm.name }} : {{ algorithm.expression }}
 {{ algorithm.vhdl_signal }} <= {{ algorithm.vhdl_expression }};
 algo({{ algorithm.module_index | d }}) <= {{ algorithm.vhdl_signal }};
 {% endfor %}
-
 -- ========================================================
+-- Instantiations of eta and phi conversion to muon scale for calo-muon and muon-esums correlation conditions (used for DETA, DPHI, DR and mass)
+{% include "instances/correlation_conditions_eta_phi_conversion.vhd" %}
+-- Instantiations of pt, eta, phi, cosine phi and sine phi for correlation conditions (used for DETA, DPHI, DR, mass, overlap_remover and two-body pt)
+{% include "instances/obj_parameter.vhd" %}
+-- Instantiations of deta and dphi calculations for correlation conditions (used for DETA, DPHI)
+{% include "instances/deta_dphi_calculations.vhd" %}
+-- Instantiations of deta, dphi, cosh deta and cos dphi LUTs for correlation conditions (used for DR and mass)
+--
+{% include "instances/correlation_cuts_calculations.vhd" %}
+
+-- Instantiations of muon charge correlations - only once for a certain bx combination, if there is at least one DoubleMuon, TripleMuon, QuadMuon condition
+-- or muon-muon correlation condition.
+{% include "instances/muon_charge_correlations.vhd" %}
+-- ========================================================
+
