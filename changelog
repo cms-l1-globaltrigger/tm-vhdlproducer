@@ -4,10 +4,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.1] - 2021-05-12
+### Changed
+- depending on tm-python 0.8.2
+- depending on tm-reporter 2.8.2
+
 ## [2.10.0] - 2021-01-08
 ### Changed
 - templates for mp7_ugt_legacy v1.12.x
 - refactored VHDL instance templates
+
+## [2.9.4] - 2021-05-12
+### Changed
+- depending on tm-python 0.8.2
+- depending on tm-reporter 2.8.2
+
+## [2.9.3] - 2021-03-24
+### Fixed
+- templates for mp7_ugt_legacy v1.11.2:
+- correlation_cuts_correlation.vhd
+- muon_muon_correlation_condition.vhd
 
 ## [2.9.2] - 2021-02-09
 ### Added
