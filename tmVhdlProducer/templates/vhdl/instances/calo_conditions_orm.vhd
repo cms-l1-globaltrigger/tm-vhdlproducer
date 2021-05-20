@@ -82,6 +82,6 @@
     {%- endif %}
   {%- endif %}
   {%- if condition.twoBodyPt %}
-        tbpt => {{ o1.type | lower }}_{{ o1.type | lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_tbpt,
+        tbpt => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt,
   {%- endif %}
 {%- endblock %}
