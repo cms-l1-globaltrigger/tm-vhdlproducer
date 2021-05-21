@@ -26,11 +26,11 @@
 {%- block port_map %}
   {%- set o1 = condition.objects[0] %}
   {%- set o2 = condition.objects[1] %}
-        calo_obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }},
-        calo_obj2 => {{ o2.type | lower }}_bx_{{ o2.bx }},
+        calo_obj1 => {{ o1.type | lower }}({{ o1.bx_arr }}),
+        calo_obj2 => {{ o2.type | lower }}({{ o2.bx_arr }}),
   {%- if condition.nr_objects == 3 %}
     {%- set o3 = condition.objects[2] %}
-        calo_obj3 => {{ o3.type | lower }}_bx_{{ o3.bx }},
+        calo_obj3 => {{ o3.type | lower }}({{ o3.bx_arr }}),
   {%- endif %}
   {%- if condition.deltaEtaOrm %}
     {%- if condition.nr_objects == 3 %}

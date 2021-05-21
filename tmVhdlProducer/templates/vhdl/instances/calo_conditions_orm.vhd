@@ -35,7 +35,8 @@
 {%- endblock %}
 
 {% block port_map %}
-        obj1_calo => {{ o1.type | lower }}_bx_{{ o1.bx }},
+--         obj1_calo => {{ o1.type | lower }}_bx_{{ o1.bx }},
+        obj1_calo => {{ o1.type | lower }}({{ o1.bx_arr }}),
   {%- if nr_requirements == 4 %}
         obj2 => {{ o5.type | lower }}_bx_{{ o5.bx }},
     {%- if condition.deltaEtaOrm %}

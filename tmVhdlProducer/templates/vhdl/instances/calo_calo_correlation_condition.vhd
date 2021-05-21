@@ -15,8 +15,8 @@
 {%- endblock %}
 
 {%- block port_map %}
-        calo_obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }},
-        calo_obj2 => {{ o2.type | lower }}_bx_{{ o2.bx }},
+        calo_obj1 => {{ o1.type | lower }}({{ o1.bx_arr }}),
+        calo_obj2 => {{ o2.type | lower }}({{ o2.bx_arr }}),
   {%- if condition.mass and condition.mass.type == condition.mass.InvariantMassDeltaRType %}
         mass_div_dr => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_over_dr,
   {%- else %}

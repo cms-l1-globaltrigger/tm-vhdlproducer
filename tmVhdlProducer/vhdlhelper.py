@@ -222,6 +222,16 @@ def bx_encode(value):
     # Zero value is not prefixed according to VHDL documentation.
     return '0'
 
+def bx_encode_4_array(value):
+    """Encode relative bunch crossings into VHDL notation (with bx array, where
+    p2 is array index 0, p1 is array index 1, and so on.
+    """
+    if value == 2: return '0'
+    if value == 1: return '1'
+    if value == 0: return '2'
+    if value == -1: return '3'
+    if value == -2: return '4'
+
 # -----------------------------------------------------------------------------
 #  Factories
 # -----------------------------------------------------------------------------
@@ -734,24 +744,37 @@ class ModuleHelper(VhdlHelper):
                 objects[key] = obj
         return objects.values()
 
+    #@property
+    #def muonBxCombinations(self):
+        #combinations = set()
+        #for condition in self.conditions:
+            #if isinstance(condition, (MuonConditionHelper, CorrelationConditionHelper)):
+                #if condition.nr_objects == 2:
+                    #a = condition.objects[0]
+                    #b = condition.objects[1]
+                    #combinations.add((a.bx, b.bx))
+            #elif isinstance(condition, Correlation3ConditionHelper):
+                #if condition.nr_objects == 3:
+                    #a = condition.objects[0]
+                    #b = condition.objects[1]
+                    #c = condition.objects[2]
+                    #combinations.add((a.bx, b.bx))
+                    #combinations.add((a.bx, c.bx))
+                    #combinations.add((b.bx, c.bx))
+        #return list(combinations)
+
     @property
     def muonBxCombinations(self):
-        combinations = set()
+        combinations = {}
         for condition in self.conditions:
-            if isinstance(condition, (MuonConditionHelper, CorrelationConditionHelper)):
-                if condition.nr_objects == 2:
-                    a = condition.objects[0]
-                    b = condition.objects[1]
-                    combinations.add((a.bx, b.bx))
-            elif isinstance(condition, Correlation3ConditionHelper):
-                if condition.nr_objects == 3:
-                    a = condition.objects[0]
-                    b = condition.objects[1]
-                    c = condition.objects[2]
-                    combinations.add((a.bx, b.bx))
-                    combinations.add((a.bx, c.bx))
-                    combinations.add((b.bx, c.bx))
-        return list(combinations)
+            if isinstance(condition, (MuonConditionHelper, CorrelationConditionHelper, Correlation3ConditionHelper)):
+                if condition.nr_objects > 1:
+                    if condition.objects[0].is_muon_type and condition.objects[1].is_muon_type:
+                        a = condition.objects[0]
+                        b = condition.objects[1]
+                        key = (a.type, b.type, a.bx, b.bx)
+                        combinations[key] = (a, b)
+        return combinations.values()
 
     def __len__(self):
         """Returns count of algorithms assigned to this module."""
@@ -1196,6 +1219,7 @@ class ObjectHelper(VhdlHelper):
         self.type = 'UNDEFINED'
         self.operator = True
         self.bx = bx_encode(0)
+        self.bx_arr = bx_encode_4_array(0)
         self.externalSignalName = 'UNDEFINED'
         self.externalChannelId = 0
         # common cuts
@@ -1224,6 +1248,7 @@ class ObjectHelper(VhdlHelper):
         self.type = ObjectTypes[object_handle.type]
         self.operator = ComparisonOperator[object_handle.comparison_operator]
         self.bx = bx_encode(object_handle.bx_offset)
+        self.bx_arr = bx_encode_4_array(object_handle.bx_offset)
         self.externalSignalName = object_handle.external_signal_name
         self.externalChannelId = object_handle.external_channel_id
         # set the default slice range to maxNum - 1 (e.g. 0-11)

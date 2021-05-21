@@ -20,8 +20,8 @@
 {%- endblock %}
 
 {%- block port_map %}
-        muon_obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }},
-        esums => {{ o2.type | lower }}_bx_{{ o2.bx }},
+        muon_obj1 => {{ o1.type | lower }}({{ o1.bx_arr }}),
+        esums => {{ o2.type | lower }}({{ o2.bx_arr }}),
     {%- if condition.deltaPhi %}
         dphi => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi,
     {%- endif %}
