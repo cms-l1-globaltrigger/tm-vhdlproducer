@@ -12,5 +12,5 @@
 {%- endblock %}
 
 {% block port_map %}
-        {{ o.type | lower }}({{ o.bx_arr }}),
+        bx_data.{{ o.type | lower }}({{ o.bx_arr }}),
 {%- endblock %}

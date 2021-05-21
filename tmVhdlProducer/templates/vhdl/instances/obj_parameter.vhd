@@ -6,11 +6,11 @@ calc_obj_parameter_{{ o.type | lower }}_bx_{{ o.bx }}_i: entity work.obj_paramet
     )
     port map(
     {%- if o.is_calo_type %}
-        calo => {{ o.type | lower }}({{ o.bx_arr }}),
+        calo => bx_data.{{ o.type | lower }}({{ o.bx_arr }}),
     {%- elif o.is_muon_type %}
-        muon => {{ o.type | lower }}({{ o.bx_arr }}),
+        muon => bx_data.{{ o.type | lower }}({{ o.bx_arr }}),
     {%- elif o.is_esums_type %}
-        esums => {{ o.type | lower }}({{ o.bx_arr }}),
+        esums => bx_data.{{ o.type | lower }}({{ o.bx_arr }}),
     {%- endif %}
     {%- if not o.is_muon_type %}
         phi_conv_2_muon_phi_integer => {{ o.type | lower }}_bx_{{ o.bx }}_phi_conv_2_muon_phi_integer,

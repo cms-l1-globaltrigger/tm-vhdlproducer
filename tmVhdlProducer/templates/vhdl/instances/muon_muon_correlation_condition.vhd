@@ -24,8 +24,8 @@
 {%- endblock %}
 
 {%- block port_map %}
-        muon_obj1 => {{ o1.type | lower }}({{ o1.bx_arr }}),
-        muon_obj2 => {{ o2.type | lower }}({{ o2.bx_arr }}),
+        muon_obj1 => bx_data.{{ o1.type | lower }}({{ o1.bx_arr }}),
+        muon_obj2 => bx_data.{{ o2.type | lower }}({{ o2.bx_arr }}),
   {%- if condition.chargeCorrelation %}
         ls_charcorr_double => ls_charcorr_double_bx_{{ o1.bx }}_bx_{{ o2.bx }},
         os_charcorr_double => os_charcorr_double_bx_{{ o1.bx }}_bx_{{ o2.bx }},

@@ -11,7 +11,7 @@
 {%- endblock %}
 
 {%- block port_map %}
-        obj1_muon => mu({{ o1.bx_arr }}),
+        obj1_muon =>bx_data. mu({{ o1.bx_arr }}),
     {%- if (condition.nr_objects == 2) and condition.twoBodyPt and condition.chargeCorrelation %}
         ls_charcorr_double => ls_charcorr_double_bx_{{ o1.bx }}_bx_{{ o1.bx }},
         os_charcorr_double => os_charcorr_double_bx_{{ o1.bx }}_bx_{{ o1.bx }},

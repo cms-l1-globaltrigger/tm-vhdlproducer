@@ -36,9 +36,9 @@
 
 {% block port_map %}
 --         obj1_calo => {{ o1.type | lower }}_bx_{{ o1.bx }},
-        obj1_calo => {{ o1.type | lower }}({{ o1.bx_arr }}),
+        obj1_calo => bx_data.{{ o1.type | lower }}({{ o1.bx_arr }}),
   {%- if nr_requirements == 4 %}
-        obj2 => {{ o5.type | lower }}_bx_{{ o5.bx }},
+        obj2 => bx_data.{{ o5.type | lower }}_bx_{{ o5.bx }},
     {%- if condition.deltaEtaOrm %}
         deta_orm => {{ o1.type | lower }}_{{ o5.type | lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_deta,
     {%- endif %}
@@ -49,7 +49,7 @@
         dr_orm => {{ o1.type | lower }}_{{ o5.type | lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_dr,
     {%- endif %}
   {%- elif nr_requirements == 3 %}
-        obj2 => {{ o4.type | lower }}_bx_{{ o4.bx }},
+        obj2 => bx_data.{{ o4.type | lower }}_bx_{{ o4.bx }},
     {%- if condition.deltaEtaOrm %}
         deta_orm => {{ o1.type | lower }}_{{ o4.type | lower }}_bx_{{ o1.bx }}_bx_{{ o4.bx }}_deta,
     {%- endif %}
@@ -60,7 +60,7 @@
         dr_orm => {{ o1.type | lower }}_{{ o4.type | lower }}_bx_{{ o1.bx }}_bx_{{ o4.bx }}_dr,
     {%- endif %}
   {%- elif nr_requirements == 2 %}
-        obj2 => {{ o3.type | lower }}_bx_{{ o3.bx }},
+        obj2 => bx_data.{{ o3.type | lower }}_bx_{{ o3.bx }},
     {%- if condition.deltaEtaOrm %}
         deta_orm => {{ o1.type | lower }}_{{ o3.type | lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_deta,
     {%- endif %}
@@ -71,7 +71,7 @@
         dr_orm => {{ o1.type | lower }}_{{ o3.type | lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_dr,
     {%- endif %}
   {%- elif nr_requirements == 1 %}
-        obj2 => {{ o2.type | lower }}_bx_{{ o2.bx }},
+        obj2 => bx_data.{{ o2.type | lower }}_bx_{{ o2.bx }},
     {%- if condition.deltaEtaOrm %}
         deta_orm => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta,
     {%- endif %}

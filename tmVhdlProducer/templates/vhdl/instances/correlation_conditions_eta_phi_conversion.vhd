@@ -6,7 +6,7 @@ conv_eta_phi_{{ o.type | lower }}_bx_{{ o.bx }}_i: entity work.conv_eta_phi
         type_obj => {{ o.type | upper }}_TYPE
     )
     port map(
-        calo => {{ o.type | lower }}({{ o.bx_arr }}),
+        calo => bx_data.{{ o.type | lower }}({{ o.bx_arr }}),
         eta_conv => {{ o.type | lower }}_bx_{{ o.bx }}_eta_conv_2_muon_eta_integer,
         phi_conv => {{ o.type | lower }}_bx_{{ o.bx }}_phi_conv_2_muon_phi_integer
     );
@@ -18,7 +18,7 @@ conv_eta_phi_{{ o.type | lower }}_bx_{{ o.bx }}_i: entity work.conv_eta_phi
         type_obj => {{ o.type | upper }}_TYPE
     )
     port map(
-        esums => {{ o.type | lower }}({{ o.bx_arr }}),
+        esums => bx_data.{{ o.type | lower }}({{ o.bx_arr }}),
         phi_conv => {{ o.type | lower }}_bx_{{ o.bx }}_phi_conv_2_muon_phi_integer
     );
 --

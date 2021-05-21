@@ -71,7 +71,7 @@
 {% endfor %}
 -- External condition assignment
 {% for condition in module.externalConditions %}
-{{ condition.vhdl_signal }} <= ext_cond({{ condition.objects[0].bx_arr }})({{ condition.objects[0].externalChannelId }}); -- {{ condition.vhdl_signal }}
+{{ condition.vhdl_signal }} <= bx_data.ext_cond({{ condition.objects[0].bx_arr }})({{ condition.objects[0].externalChannelId }}); -- {{ condition.vhdl_signal }}
 {%- endfor %}
 
 -- ========================================================

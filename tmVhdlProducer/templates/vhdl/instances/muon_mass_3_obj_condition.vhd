@@ -38,9 +38,9 @@
 {%- endblock %}
 
 {%- block port_map %}
-        muon_obj1 => mu({{ o1.bx_arr }}),
-        muon_obj2 => mu({{ o2.bx_arr }}),
-        muon_obj3 => mu({{ o3.bx_arr }}),
+        muon_obj1 => bx_data.mu({{ o1.bx_arr }}),
+        muon_obj2 => bx_data.mu({{ o2.bx_arr }}),
+        muon_obj3 => bx_data.mu({{ o3.bx_arr }}),
     {%- if condition.chargeCorrelation %}
         ls_charcorr_triple => ls_charcorr_triple_bx_{{ o1.bx }}_bx_{{ o1.bx }},
         os_charcorr_triple => os_charcorr_triple_bx_{{ o1.bx }}_bx_{{ o1.bx }},

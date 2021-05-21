@@ -11,8 +11,7 @@
 {%- endblock %}
 
 {% block port_map %}
---         obj1_calo => {{ o1.type | lower }}_bx_{{ o1.bx }},
-        obj1_calo => {{ o1.type | lower }}({{ o1.bx_arr }}),
+        obj1_calo => bx_data.{{ o1.type | lower }}({{ o1.bx_arr }}),
     {%- if condition.twoBodyPt %}
         tbpt => {{ o1.type | lower }}_{{ o1.type | lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_tbpt,
     {%- endif %}
