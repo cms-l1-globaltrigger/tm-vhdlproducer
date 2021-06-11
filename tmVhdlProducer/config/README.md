@@ -1,16 +1,14 @@
-Resource calculation
-====================
+# Resource calculation
 
+## Format Version 2
 
-Format
-------
-
-Base resource consumptions and hardware implementation mapping for resource
+Base resource consumption and hardware implementation mapping for resource
 calculation is stored in JSON format.
 
 Basic structure of the JSON file:
 
     {
+      "version": 2,
       "resources": {
         "mapping": {
           "instances": {
@@ -33,23 +31,40 @@ Basic structure of the JSON file:
             "processors": <threshold>,
             "sliceLUTs": <threshold>
         },
+        "object_cuts": {
+          ...
+        },
         "instances": [
           ...
         ]
       }
     }
 
-Key "mapping" is used to map condition types, object types and cut types from
+Key `mapping` is used to map condition types, object types and cut types from
 event setup (pyton interface) to VHDL implementation specific condition types,
 object types and cut types used in "instances".
 
-Absolute limits per hardware module (board) are set by "floor" representing the
+Absolute limits per hardware module (board) are set by `floor` representing the
 base resource consumption of the VHDL framework used to implement the trigger
-menu and "ceiling" to set a maximum threshold for resource consumption. The
-"ceiling" must not exceed 100.0 % (= 1.0) and is usually lower due to the fact
+menu and `ceiling` to set a maximum threshold for resource consumption. The
+`ceiling` must not exceed 100.0 % (= 1.0) and is usually lower due to the fact
 that routing fill fail even before all available chip resources are used.
 
-Structure of a condition "instance" entry:
+Structure of `object_cuts` entry defining resource consumption for object
+specific cuts:
+
+    {
+      "<object>": {
+        "<cut>": {
+          "processors": <consumption>,
+          "sliceLUTs": <consumption>
+        },
+        ...
+      },
+      ...
+    }
+
+Structure of a condition `instance` entry:
 
     {
       "type": "<condition>",
@@ -72,10 +87,9 @@ Structure of a condition "instance" entry:
     }
 
 
-Calculation
------------
+## Calculation
 
-The values for "processors" and "sliceLUTs" have to be multiplied by a factor,
+The values for `processors` and `sliceLUTs` have to be multiplied by a factor,
 depending on condition type, objects and cuts.
 
 After calculating the values for "objects" and "cuts" a sum of these has to be

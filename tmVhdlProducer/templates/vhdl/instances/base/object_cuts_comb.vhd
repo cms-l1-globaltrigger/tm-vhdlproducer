@@ -4,10 +4,14 @@
         slice_{{i+1}}_low_obj1 => {{ condition.objects[i].slice.lower }},
         slice_{{i+1}}_high_obj1 => {{ condition.objects[i].slice.upper }},
       {%- elif not condition.objects[i].slice and condition.objects[i].is_calo_type %}
-        {%- if i == 0 %}
+        {%- if i == 0 -%}
 -- setting slice high value(s) instead of default value(s) ("NR_MU_OBJECTS-1" => 7)
         {%- endif %}
         slice_{{i+1}}_high_obj1 => {{ condition.objects[i].slice.upper }},
+      {%- elif not condition.objects[i].slice and condition.objects[i].is_muon_type %}
+        {%- if i == 0 -%}
+-- no slice requirements
+        {%- endif %}
       {%- endif %}
     {%- endif %}
   {%- endfor %}

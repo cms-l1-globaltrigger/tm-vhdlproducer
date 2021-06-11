@@ -11,10 +11,8 @@
 {%- endblock %}
 
 {% block port_map %}
-        obj1_calo => {{ o1.type | lower }}_bx_{{ o1.bx }},
+        obj1_calo => bx_data.{{ o1.type | lower }}({{ o1.bx_arr }}),
     {%- if condition.twoBodyPt %}
-         pt => {{ o1.type | lower }}_bx_{{ o1.bx }}_pt_vector,
-         cos_phi_integer => {{ o1.type | lower }}_bx_{{ o1.bx }}_cos_phi,
-         sin_phi_integer => {{ o1.type | lower }}_bx_{{ o1.bx }}_sin_phi,
+        tbpt => {{ o1.type | lower }}_{{ o1.type | lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_tbpt,
     {%- endif %}
 {%- endblock %}

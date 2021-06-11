@@ -1,33 +1,49 @@
-{% extends "instances/base/correlation_condition.vhd" %}
+{% extends "instances/base/condition.vhd" %}
 
-{% block entity %}work.correlation_conditions_muon{% endblock %}
+{%- set o1 = condition.objects[0] %}
+{%- set o2 = condition.objects[1] %}
+{%- set o3 = condition.objects[2] %}
+
+{% block entity %}work.correlation_conditions{% endblock %}
 
 {%- block generic_map %}
-{{ super() }}
+-- slices for muon
+  {%- if not o1.slice %}
+        slice_low_obj1 => {{ o1.slice.lower }},
+        slice_high_obj1 => {{ o1.slice.upper }},
+  {%- endif -%}
+  {%- if not o2.slice %}
+        slice_low_obj2 => {{ o2.slice.lower }},
+        slice_high_obj2 => {{ o2.slice.upper }},
+  {%- endif -%}
+  {%- if not o3.slice %}
+        slice_low_obj3 => {{ o3.slice.lower }},
+        slice_high_obj3 => {{ o3.slice.upper }},
+  {%- endif -%}
+    {%- set o = condition.objects[0] %}
+    {%- include  "instances/base/object_cuts_correlation.vhd" %}
 -- correlation cuts
         mass_upper_limit_vector => X"{{ condition.mass.upper | X16 }}",
         mass_lower_limit_vector => X"{{ condition.mass.lower | X16 }}",
-        pt1_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH,
-        pt2_width => {{ o2.type | upper }}_PT_VECTOR_WIDTH,
-        mass_cosh_cos_precision => {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_PRECISION,
-        cosh_cos_width => {{ o1.type | upper }}_{{ o2.type | upper }}_COSH_COS_VECTOR_WIDTH,
--- number of object 2
-        nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
+        mass_vector_width => MU_PT_VECTOR_WIDTH+MU_PT_VECTOR_WIDTH+MU_MU_COSH_COS_VECTOR_WIDTH,
         mass_3_obj => true,
+-- number of objects and type
+  {%- for i in range(0,condition.nr_objects) %}
+    {%- set o = condition.objects[i] %}
+        nr_obj{{i+1}} => NR_{{ o.type | upper }}_OBJECTS,
+        type_obj{{i+1}} => {{ o.type | upper }}_TYPE,
+  {%- endfor %}
 -- selector same/different bunch crossings
         same_bx => {{ condition.objectsInSameBx | vhdl_bool}}
 {%- endblock %}
 
 {%- block port_map %}
-        obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }},
-        obj2 => {{ o2.type | lower }}_bx_{{ o2.bx }},
-        obj3 => {{ o3.type | lower }}_bx_{{ o3.bx }},
+        muon_obj1 => bx_data.mu({{ o1.bx_arr }}),
+        muon_obj2 => bx_data.mu({{ o2.bx_arr }}),
+        muon_obj3 => bx_data.mu({{ o3.bx_arr }}),
     {%- if condition.chargeCorrelation %}
         ls_charcorr_triple => ls_charcorr_triple_bx_{{ o1.bx }}_bx_{{ o1.bx }},
         os_charcorr_triple => os_charcorr_triple_bx_{{ o1.bx }}_bx_{{ o1.bx }},
     {%- endif %}
-        pt1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_pt_vector,
-        pt2 => {{ o2.type | lower }}_bx_{{ o2.bx }}_pt_vector,
-        cosh_deta => {{ o1.type | lower }}_{{ o1.type | lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_cosh_deta_vector,
-        cos_dphi => {{ o1.type | lower }}_{{ o1.type | lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_cos_dphi_vector,
+        mass_inv_pt => mu_mu_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_pt,
 {%- endblock %}

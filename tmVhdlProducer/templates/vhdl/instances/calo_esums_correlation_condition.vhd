@@ -1,33 +1,25 @@
 {% extends "instances/base/correlation_condition.vhd" %}
 
-{% block entity %}work.correlation_conditions_calo{% endblock %}
+{% block entity %}work.correlation_conditions{% endblock %}
 
-{%- block generic_map %}
+{%- block generic_map -%}
 {{ super() }}
 -- number of calo objects, types
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         type_obj1 => {{ o1.type | upper }}_TYPE,
-        nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
-        same_bx => {{ condition.objectsInSameBx | vhdl_bool }}
+        nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS
 {%- endblock %}
 
 {%- block port_map %}
-        obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }},
-        esums => {{ o2.type | lower }}_bx_{{ o2.bx }},
+        calo_obj1 => bx_data.{{ o1.type | lower }}({{ o1.bx_arr }}),
+        esums => bx_data.{{ o2.type | lower }}({{ o2.bx_arr }}),
     {%- if condition.deltaPhi %}
-        dphi => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_vector,
+        dphi => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi,
     {%- endif %}
-    {%- if (condition.mass) or (condition.twoBodyPt) %}
-        pt1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_pt_vector,
-        pt2 => {{ o2.type | lower }}_bx_{{ o2.bx }}_pt_vector,
-    {%- endif %}
-    {%- if condition.mass %}
-        cos_dphi => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_cos_dphi_vector,
+    {%- if condition.mass and condition.mass.type == condition.mass.TransverseMassType %}
+        mass_trans => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_trans,
     {%- endif %}
     {%- if condition.twoBodyPt %}
-        cos_phi_1_integer => {{ o1.type | lower }}_bx_{{ o1.bx }}_cos_phi,
-        cos_phi_2_integer => {{ o2.type | lower }}_bx_{{ o2.bx }}_cos_phi,
-        sin_phi_1_integer => {{ o1.type | lower }}_bx_{{ o1.bx }}_sin_phi,
-        sin_phi_2_integer => {{ o2.type | lower }}_bx_{{ o2.bx }}_sin_phi,
+        tbpt => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt,
     {%- endif %}
 {%- endblock %}
