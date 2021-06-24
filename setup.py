@@ -16,8 +16,8 @@ setup(
             'config/*.json',
             'templates/vhdl/*.vhd',
             'templates/vhdl/menu.json',
-            'templates/vhdl/instances/*.j2',
-            'templates/vhdl/signals/*.j2'
+            'templates/vhdl/instances/*.vhd',
+            'templates/vhdl/signals/*.vhd'
         ]
     },
     install_requires=[
