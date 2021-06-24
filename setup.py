@@ -17,6 +17,7 @@ setup(
             'templates/vhdl/*.vhd',
             'templates/vhdl/menu.json',
             'templates/vhdl/instances/*.vhd',
+            'templates/vhdl/instances/base/*.vhd',
             'templates/vhdl/signals/*.vhd'
         ]
     },
