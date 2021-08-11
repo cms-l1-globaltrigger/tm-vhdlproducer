@@ -4,7 +4,7 @@
 
 {%- for o1, o2 in module.correlationCombinationsDeta %}
 
-calc_deta_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
+calc_cut_deta_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
     generic map(
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         type_obj1 => {{ o1.type | upper }}_TYPE,
@@ -22,7 +22,7 @@ calc_deta_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx
 
 {%- for o1, o2 in module.correlationCombinationsDphi %}
 
-calc_dphi_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
+calc_cut_dphi_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
     generic map(
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         type_obj1 => {{ o1.type | upper }}_TYPE,
@@ -40,7 +40,7 @@ calc_dphi_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx
 
 {%- for o1, o2 in module.correlationCombinationsDeltaR %}
 
-calc_deltaR_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
+calc_cut_deltaR_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
     generic map(
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         type_obj1 => {{ o1.type | upper }}_TYPE,
@@ -59,7 +59,7 @@ calc_deltaR_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.
 
 {%- for o1, o2 in module.correlationCombinationsInvMass %}
 
-calc_mass_inv_pt_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
+calc_cut_mass_inv_pt_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
     generic map(
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         type_obj1 => {{ o1.type | upper }}_TYPE,
@@ -90,7 +90,7 @@ calc_mass_inv_pt_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{
 
 {%- for o1, o2 in module.correlationCombinationsInvMassDivDr %}
 
-calc_mass_over_dr_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
+calc_cut_mass_over_dr_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
     generic map(
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         type_obj1 => {{ o1.type | upper }}_TYPE,
@@ -137,7 +137,7 @@ calc_mass_over_dr_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_
 
 {%- for o1, o2 in module.correlationCombinationsInvMassUpt %}
 
-calc_mass_inv_upt_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
+calc_cut_mass_inv_upt_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
     generic map(
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         type_obj1 => {{ o1.type | upper }}_TYPE,
@@ -162,7 +162,7 @@ calc_mass_inv_upt_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_
 
 {%- for o1, o2 in module.correlationCombinationsTransMass %}
 
-calc_mass_trans_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
+calc_cut_mass_trans_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
     generic map(
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         type_obj1 => {{ o1.type | upper }}_TYPE,
@@ -195,7 +195,7 @@ calc_mass_trans_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{
 
 {%- for o1, o2 in module.correlationCombinationsTbpt %}
 
-calc_tbpt_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
+calc_cut_tbpt_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_i: entity work.correlation_cuts_calculation
     generic map(
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,

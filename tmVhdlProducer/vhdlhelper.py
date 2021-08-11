@@ -1456,7 +1456,10 @@ class DeltaRCutHelper(RangeCutHelper):
         """Updates limits and enables cut."""
         scale = 10.**cut_handle.precision
         self.lower = math.floor(cut_handle.minimum.value * scale) / scale * (scale * scale)
+        print("===> self.lower:", self.lower)
         self.upper = math.ceil(cut_handle.maximum.value * scale) / scale * (scale * scale)
+        print("===> self.upper:", self.upper)
+        print("=========================================")
         self.enabled = True
 
 class MassCutHelper(RangeCutHelper):
