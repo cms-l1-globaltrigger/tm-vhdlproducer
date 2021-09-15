@@ -926,6 +926,7 @@ class ModuleCollection(object):
         # HACK TODO batch updating condition cuts
         # * assigning precision_pt
         # * assigning precision_math
+        # * assigning precision_inverse_deltaR
         #
         def precision_key(left, right, name):
             """Returns precision key for scales map."""
@@ -940,11 +941,17 @@ class ModuleCollection(object):
                     right = condition.objects[1]
                     cut.precision_pt = 1 # for all
                     cut.precision_math = scales[precision_key(left, right, 'TwoBodyPtMath')].getNbits()
-                elif cut.cut_type in (tmEventSetup.Mass, tmEventSetup.MassUpt, tmEventSetup.MassDeltaR):
+                elif cut.cut_type in (tmEventSetup.Mass, tmEventSetup.MassUpt):
                     left = condition.objects[0]
                     right = condition.objects[1]
                     cut.precision_pt = scales[precision_key(left, right, 'MassPt')].getNbits()
                     cut.precision_math = scales[precision_key(left, right, 'Math')].getNbits()
+                elif cut.cut_type == tmEventSetup.MassDeltaR:
+                    left = condition.objects[0]
+                    right = condition.objects[1]
+                    cut.precision_pt = scales[precision_key(left, right, 'MassPt')].getNbits()
+                    cut.precision_math = scales[precision_key(left, right, 'Math')].getNbits()
+                    cut.precision_inverse_dr = scales[precision_key(left, right, 'InverseDeltaRMath')].getNbits()
         #
         # /END HACK
         #
