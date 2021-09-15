@@ -48,6 +48,10 @@ ObjectCollectionSize = {
     tmEventSetup.MBT1HFM: 1,
     tmEventSetup.MBT1HFP: 1,
     tmEventSetup.EXT: 1,
+    tmEventSetup.MUS0: 1,
+    tmEventSetup.MUS1: 1,
+    tmEventSetup.MUSOOT0: 1,
+    tmEventSetup.MUSOOT1: 1,
 }
 """Dictionary for object collection size (slices)."""
 
@@ -96,6 +100,10 @@ SignalConditionTypes = [
     tmEventSetup.Centrality5,
     tmEventSetup.Centrality6,
     tmEventSetup.Centrality7,
+    tmEventSetup.MuonShower0,
+    tmEventSetup.MuonShower1,
+    tmEventSetup.MuonShowerOOT0,
+    tmEventSetup.MuonShowerOOT1,
 ]
 
 ExternalConditionTypes = [
@@ -184,6 +192,10 @@ SignalObjectTypes = [
     tmEventSetup.CENT5,
     tmEventSetup.CENT6,
     tmEventSetup.CENT7,
+    tmEventSetup.MUS0,
+    tmEventSetup.MUS1,
+    tmEventSetup.MUSOOT0,
+    tmEventSetup.MUSOOT1,
 ]
 """List of signal object types."""
 
@@ -213,6 +225,10 @@ ObjectsOrder = [
     tmEventSetup.CENT5,
     tmEventSetup.CENT6,
     tmEventSetup.CENT7,
+    tmEventSetup.MUS0,
+    tmEventSetup.MUS1,
+    tmEventSetup.MUSOOT0,
+    tmEventSetup.MUSOOT1,
     tmEventSetup.MBT0HFM,
     tmEventSetup.MBT0HFP,
     tmEventSetup.MBT1HFM,
@@ -303,13 +319,13 @@ class CutHandle(Handle):
         self.maximum = CutValueHandle(cut.getMaximum())
         self.data = cut.getData()
         self.precision = cut.getPrecision()
-        if self.cut_type == 19:
-            print("===> self.name:", self.name)
-            print("===> self.cut_type:", self.cut_type)
-            print("===> self.precision:", self.precision)
+        #if self.cut_type == 19:
+            #print("===> self.name:", self.name)
+            #print("===> self.cut_type:", self.cut_type)
+            #print("===> self.precision:", self.precision)
         self.precision_pt = 0
         self.precision_math = 0
-        self.precision_inverse_dr = 0
+        #self.precision_inverse_dr = 0
 
     def __repr__(self):
         return f"{self.__class__.__name__}(name={self.name})"

@@ -94,6 +94,10 @@ ObjectTypes = {
     tmEventSetup.MBT0HFM: tmGrammar.MBT0HFM,
     tmEventSetup.MBT1HFM: tmGrammar.MBT1HFM,
     tmEventSetup.TOWERCOUNT: tmGrammar.TOWERCOUNT,
+    tmEventSetup.MUS0: tmGrammar.MUS0,
+    tmEventSetup.MUS1: tmGrammar.MUS1,
+    tmEventSetup.MUSOOT0: tmGrammar.MUSOOT0,
+    tmEventSetup.MUSOOT1: tmGrammar.MUSOOT1,
 }
 
 # Has the number of Objects of each Type
@@ -127,6 +131,10 @@ ObjectCount = {
     tmEventSetup.MBT0HFM:    1,
     tmEventSetup.MBT1HFM:    1,
     tmEventSetup.TOWERCOUNT: 1,
+    tmEventSetup.MUS0:       1,
+    tmEventSetup.MUS1:       1,
+    tmEventSetup.MUSOOT0:    1,
+    tmEventSetup.MUSOOT1:    1,
 }
 
 ComparisonOperator = {
@@ -1456,10 +1464,7 @@ class DeltaRCutHelper(RangeCutHelper):
         """Updates limits and enables cut."""
         scale = 10.**cut_handle.precision
         self.lower = math.floor(cut_handle.minimum.value * scale) / scale * (scale * scale)
-        print("===> self.lower:", self.lower)
         self.upper = math.ceil(cut_handle.maximum.value * scale) / scale * (scale * scale)
-        print("===> self.upper:", self.upper)
-        print("=========================================")
         self.enabled = True
 
 class MassCutHelper(RangeCutHelper):
@@ -1493,9 +1498,6 @@ class MassCutHelper(RangeCutHelper):
         assert cut_handle.precision_math != 0
         scale_math = 10**cut_handle.precision_math
         scale_inverse_dr = 10**cut_handle.precision_inverse_dr
-        print("===> scale_pt:", scale_pt)
-        print("===> scale_math:", scale_math)
-        print("===> scale_inverse_dr:", scale_inverse_dr)
         self.lower = math.floor(cut_handle.minimum.value * scale) / scale * (scale_pt * scale_pt) * scale_math
         self.upper = math.ceil(cut_handle.maximum.value * scale) / scale * (scale_pt * scale_pt) * scale_math
         self.enabled = True
