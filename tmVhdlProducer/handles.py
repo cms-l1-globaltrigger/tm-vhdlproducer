@@ -11,6 +11,7 @@ Classes:
 
 import tmEventSetup
 import tmGrammar
+import os
 
 from .constants import BRAMS_TOTAL, SLICELUTS_TOTAL, PROCESSORS_TOTAL
 
@@ -305,9 +306,11 @@ class CutHandle(Handle):
         self.precision = cut.getPrecision()
         self.precision_pt = 0
         self.precision_math = 0
+        self.precision_inverse_dr = 0
 
     def __repr__(self):
         return f"{self.__class__.__name__}(name={self.name})"
+
 
 class ObjectHandle(Handle):
     """Represents an object."""

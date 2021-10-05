@@ -1489,9 +1489,17 @@ class MassCutHelper(RangeCutHelper):
         scale_pt = 10**cut_handle.precision_pt
         assert cut_handle.precision_math != 0
         scale_math = 10**cut_handle.precision_math
-        self.lower = math.floor(cut_handle.minimum.value * scale) / scale * (scale_pt * scale_pt) * scale_math
-        self.upper = math.ceil(cut_handle.maximum.value * scale) / scale * (scale_pt * scale_pt) * scale_math
-        self.enabled = True
+        #assert cut_handle.precision_inverse_dr != 0
+        scale_inverse_dr = 10**cut_handle.precision_inverse_dr
+        # HACK to decide the type of mass
+        if cut_handle.precision_inverse_dr == 0:
+            self.lower = math.floor(cut_handle.minimum.value * scale) / scale * (scale_pt * scale_pt) * scale_math
+            self.upper = math.ceil(cut_handle.maximum.value * scale) / scale * (scale_pt * scale_pt) * scale_math
+            self.enabled = True
+        else:
+            self.lower = math.floor(cut_handle.minimum.value * scale) / scale * (scale_pt * scale_pt) * scale_math * scale_inverse_dr
+            self.upper = math.ceil(cut_handle.maximum.value * scale) / scale * (scale_pt * scale_pt) * scale_math * scale_inverse_dr
+            self.enabled = True
 
 class SliceCutHelper(RangeCutHelper):
 
