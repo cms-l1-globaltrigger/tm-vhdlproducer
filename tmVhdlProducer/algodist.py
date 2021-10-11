@@ -78,6 +78,10 @@ kCENT4 = 'CENT4'
 kCENT5 = 'CENT5'
 kCENT6 = 'CENT6'
 kCENT7 = 'CENT7'
+kMUS0 = 'MUS0'
+kMUS1 = 'MUS1'
+kMUSOOT0 = 'MUSOOT0'
+kMUSOOT1 = 'MUSOOT1'
 kMBT0HFM = 'MBT0HFM'
 kMBT0HFP = 'MBT0HFP'
 kMBT1HFM = 'MBT1HFM'
@@ -125,6 +129,10 @@ kCentrality4 = 'Centrality4'
 kCentrality5 = 'Centrality5'
 kCentrality6 = 'Centrality6'
 kCentrality7 = 'Centrality7'
+kMuonShower0 = 'MuonShower0'
+kMuonShower1 = 'MuonShower1'
+kMuonShowerOOT0 = 'MuonShowerOOT0'
+kMuonShowerOOT1 = 'MuonShowerOOT1'
 kMinBiasHFM0 = 'MinBiasHFM0'
 kMinBiasHFM1 = 'MinBiasHFM1'
 kMinBiasHFP0 = 'MinBiasHFP0'
@@ -248,6 +256,10 @@ ObjectTypeKey = {
     tmEventSetup.CENT5: kCENT5,
     tmEventSetup.CENT6: kCENT6,
     tmEventSetup.CENT7: kCENT7,
+    tmEventSetup.MUS0: kMUS0,
+    tmEventSetup.MUS1: kMUS1,
+    tmEventSetup.MUSOOT0: kMUSOOT0,
+    tmEventSetup.MUSOOT1: kMUSOOT1,
     tmEventSetup.MBT0HFM: kMBT0HFM,
     tmEventSetup.MBT0HFP: kMBT0HFP,
     tmEventSetup.MBT1HFM: kMBT1HFM,
@@ -281,6 +293,9 @@ ObjectGrammarKey = {
     tmEventSetup.CENT5: tmGrammar.CENT5,
     tmEventSetup.CENT6: tmGrammar.CENT6,
     tmEventSetup.CENT7: tmGrammar.CENT7,
+    tmEventSetup.MUS0: tmGrammar.MUS0,
+    tmEventSetup.MUS1: tmGrammar.MUS1,
+    tmEventSetup.MUSOOT0: tmGrammar.MUSOOT0,
     tmEventSetup.EXT: tmGrammar.EXT,
     tmEventSetup.MBT0HFP: tmGrammar.MBT0HFP,
     tmEventSetup.MBT1HFP: tmGrammar.MBT1HFP,
@@ -327,6 +342,10 @@ ConditionTypeKey = {
     tmEventSetup.Centrality5: kCentrality5,
     tmEventSetup.Centrality6: kCentrality6,
     tmEventSetup.Centrality7: kCentrality7,
+    tmEventSetup.MuonShower0: kMuonShower0,
+    tmEventSetup.MuonShower1: kMuonShower1,
+    tmEventSetup.MuonShowerOOT0: kMuonShowerOOT0,
+    tmEventSetup.MuonShowerOOT1: kMuonShowerOOT1,
     tmEventSetup.MinBiasHFM0: kMinBiasHFM0,
     tmEventSetup.MinBiasHFM1: kMinBiasHFM1,
     tmEventSetup.MinBiasHFP0: kMinBiasHFP0,

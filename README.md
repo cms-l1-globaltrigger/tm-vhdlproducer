@@ -15,7 +15,7 @@ pip install git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git@2.11
 Basic development instrcutions.
 
 ```bash
-git clone https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git
+git clone https://github.com/herbberg/tm-vhdlproducer.git
 cd tm-vhdlproducer
 git checkout master
 ```

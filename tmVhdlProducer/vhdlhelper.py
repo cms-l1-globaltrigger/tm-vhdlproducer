@@ -94,6 +94,10 @@ ObjectTypes = {
     tmEventSetup.MBT0HFM: tmGrammar.MBT0HFM,
     tmEventSetup.MBT1HFM: tmGrammar.MBT1HFM,
     tmEventSetup.TOWERCOUNT: tmGrammar.TOWERCOUNT,
+    tmEventSetup.MUS0: tmGrammar.MUS0,
+    tmEventSetup.MUS1: tmGrammar.MUS1,
+    tmEventSetup.MUSOOT0: tmGrammar.MUSOOT0,
+    tmEventSetup.MUSOOT1: tmGrammar.MUSOOT1,
 }
 
 # Has the number of Objects of each Type
@@ -127,6 +131,10 @@ ObjectCount = {
     tmEventSetup.MBT0HFM:    1,
     tmEventSetup.MBT1HFM:    1,
     tmEventSetup.TOWERCOUNT: 1,
+    tmEventSetup.MUS0:       1,
+    tmEventSetup.MUS1:       1,
+    tmEventSetup.MUSOOT0:    1,
+    tmEventSetup.MUSOOT1:    1,
 }
 
 ComparisonOperator = {
