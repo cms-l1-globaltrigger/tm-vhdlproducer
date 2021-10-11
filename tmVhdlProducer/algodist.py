@@ -844,74 +844,91 @@ class Module(object):
                     message = f"Invalid correlation combination: {left}, {right}"
                     raise RuntimeError(message)
 
-        # payload for FDL algo slices
-        brams = self.fdl_algo_slice.brams * len(self.algorithms)
-        sliceLUTs = self.fdl_algo_slice.sliceLUTs * len(self.algorithms)
-        processors = self.fdl_algo_slice.processors * len(self.algorithms)
-        fdl_payload = Payload(brams, sliceLUTs, processors)
-        payload += fdl_payload
+        def calc_fdl_payload() -> Payload:
+            """Payload for FDL algo slices."""
+            size = len(self.algorithms)
+            brams = self.fdl_algo_slice.brams * size
+            sliceLUTs = self.fdl_algo_slice.sliceLUTs * size
+            processors = self.fdl_algo_slice.processors * size
+            return Payload(brams, sliceLUTs, processors)
 
-        combinations_diff = {}
-        for algorithm in self.algorithms:
-            for condition in algorithm.conditions:
-                if condition.type in corr_cond_2_obj:
-                    a, b = condition.objects
-                    key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
-                    combinations_diff[key] = (a, b)
-                if condition.type in corr_cond_orm:
-                    if len(condition.objects) == 3:
-                        a, b, c = condition.objects
-                        key = (a.type, b.type, a.bx_offset, b.bx_offset) # a-b combination
-                        combinations_diff[key] = (a, b)
-                        key = (a.type, c.type, a.bx_offset, c.bx_offset) # a-c combination
-                        combinations_diff[key] = (a, c)
-                        key = (b.type, c.type, b.bx_offset, c.bx_offset) # b-c combination
-                        combinations_diff[key] = (b, c)
-                    else:
+        def calc_diff_combinations() -> dict:
+            """Object combinations for instances of "differences" calculations."""
+            combinations = {}
+            for algorithm in self.algorithms:
+                for condition in algorithm.conditions:
+                    if condition.type in corr_cond_2_obj:
+                        a, b = condition.objects
+                        key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
+                        combinations[key] = (a, b)
+                    if condition.type in corr_cond_orm:
+                        if len(condition.objects) == 3:
+                            a, b, c = condition.objects
+                            key = (a.type, b.type, a.bx_offset, b.bx_offset) # a-b combination
+                            combinations[key] = (a, b)
+                            key = (a.type, c.type, a.bx_offset, c.bx_offset) # a-c combination
+                            combinations[key] = (a, c)
+                            key = (b.type, c.type, b.bx_offset, c.bx_offset) # b-c combination
+                            combinations[key] = (b, c)
+                        else:
+                            a = condition.objects[0]
+                            b = condition.objects[1]
+                            key = (a.type, b.type, a.bx_offset, b.bx_offset)
+                            combinations[key] = (a, b)
+                    if condition.type in cond_orm:
+                        a = condition.objects[0]
+                        b = condition.objects[len(condition.objects)-1]
+                        key = (a.type, b.type, a.bx_offset, b.bx_offset)
+                        combinations[key] = (a, b)
+                    if condition.type == tmEventSetup.InvariantMassDeltaR:
                         a = condition.objects[0]
                         b = condition.objects[1]
                         key = (a.type, b.type, a.bx_offset, b.bx_offset)
-                        combinations_diff[key] = (a, b)
-                if condition.type in cond_orm:
-                    a = condition.objects[0]
-                    b = condition.objects[len(condition.objects)-1]
-                    key = (a.type, b.type, a.bx_offset, b.bx_offset)
-                    combinations_diff[key] = (a, b)
-                if condition.type == tmEventSetup.InvariantMassDeltaR:
-                    a = condition.objects[0]
-                    b = condition.objects[1]
-                    key = (a.type, b.type, a.bx_offset, b.bx_offset)
-                    combinations_diff[key] = (a, b)
+                        combinations[key] = (a, b)
+            return combinations
+
+        def calc_diff_payload() -> Payload:
+            """Payload for instances of "differences" calculations."""
+            brams = 0
+            sliceLUTs = 0
+            processors = 0
+            for combination in calc_diff_combinations():
+                factor = calc_factor(combination)
+                sliceLUTs += self.differences.sliceLUTs * factor
+            return Payload(brams, sliceLUTs, processors)
+
+        def calc_cosh_cos_mass_combinations() -> dict:
+            """Object combinations for instances of "cosh_deta_cos_dphi" calculations."""
+            combinations = {}
+            for algorithm in self.algorithms:
+                for condition in algorithm.conditions:
+                    if condition.type in mass_cond:
+                        a = condition.objects[0]
+                        b = condition.objects[1]
+                        key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
+                        combinations[key] = (a, b)
+            return combinations
+
+        def calc_cosh_cos_mass_payload() -> Payload:
+            """Payload for instances of "cosh_deta_cos_dphi" calculations."""
+            brams = 0
+            sliceLUTs = 0
+            processors = 0
+            for combination in calc_cosh_cos_mass_combinations():
+                factor = calc_factor(combination)
+                sliceLUTs += self.cosh_deta_cos_dphi.sliceLUTs * factor
+                sliceLUTs += self.mass_calc.sliceLUTs * factor
+                processors += self.mass_calc.processors * factor
+            return Payload(brams, sliceLUTs, processors)
+
+        # payload for FDL algo slices
+        payload += calc_fdl_payload()
 
         # payload for instances of "differences" calculations
-        for combination in combinations_diff:
-            factor = calc_factor(combination)
-            sliceLUTs += self.differences.sliceLUTs * factor
-
-        brams = 0
-        processors = 0
-        diff_payload = Payload(brams, sliceLUTs, processors)
-        payload += diff_payload
-
-        combinations_mass = {}
-        for algorithm in self.algorithms:
-            for condition in algorithm.conditions:
-                if condition.type in mass_cond:
-                    a = condition.objects[0]
-                    b = condition.objects[1]
-                    key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
-                    combinations_mass[key] = (a, b)
+        payload += calc_diff_payload()
 
         # payload for instances of "cosh_deta_cos_dphi" calculations
-        for combination in combinations_mass:
-            factor = calc_factor(combination)
-            sliceLUTs += self.cosh_deta_cos_dphi.sliceLUTs * factor
-            sliceLUTs += self.mass_calc.sliceLUTs * factor
-            processors += self.mass_calc.processors * factor
-
-        brams = 0
-        cosh_cos_mass_payload = Payload(brams, sliceLUTs, processors)
-        payload += cosh_cos_mass_payload
+        payload += calc_cosh_cos_mass_payload()
 
 # =================================================================================
 
