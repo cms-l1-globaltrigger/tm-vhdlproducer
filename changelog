@@ -8,7 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - mp7_ugt_legacy v1.15.0
 - refactored VHDL instance templates
-- updated vhdlhelper.py
+- updated module vhdlhelper
+- migration to utm 0.9.1 #27
 
 ## [2.10.1] - 2021-05-12
 ### Changed
