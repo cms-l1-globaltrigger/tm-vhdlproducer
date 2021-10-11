@@ -1,4 +1,5 @@
 {
+    "version": 2,
     "resources": {
         "mapping": {
             "instances": {
@@ -90,6 +91,10 @@
         "ceiling": {
             "processors": 6.0,
             "sliceLUTs": 5.9
+        },
+        "object_cuts": {
+            "muon": {},
+            "calo": {}
         },
         "instances": [
             {

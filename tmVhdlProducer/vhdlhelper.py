@@ -222,6 +222,16 @@ def bx_encode(value):
     # Zero value is not prefixed according to VHDL documentation.
     return '0'
 
+def bx_encode_4_array(value):
+    """Encode relative bunch crossings into VHDL notation (with bx array, where
+    p2 is array index 0, p1 is array index 1, and so on.
+    """
+    if value == 2: return '0'
+    if value == 1: return '1'
+    if value == 0: return '2'
+    if value == -1: return '3'
+    if value == -2: return '4'
+
 # -----------------------------------------------------------------------------
 #  Factories
 # -----------------------------------------------------------------------------
@@ -465,6 +475,199 @@ class ModuleHelper(VhdlHelper):
                 combinations[key] = (a, b)
         return combinations.values()
 
+    #@property
+    #def correlationCombinationsDetaDphi(self):
+        #combinations = {}
+        #for condition in self.conditions:
+            #if isinstance(condition, CorrelationConditionHelper):
+                #if condition.deltaEta.enabled or condition.deltaPhi.enabled:
+                    #a = condition.objects[0]
+                    #b = condition.objects[condition.nr_objects-1]
+                    #key = (a.type, b.type, a.bx, b.bx)
+                    #combinations[key] = (a, b)
+            #if isinstance(condition, CorrelationConditionOvRmHelper):
+                #if condition.deltaEta.enabled or condition.deltaPhi.enabled:
+                    #if condition.nr_objects == 3:
+                        #a, b, c = condition.objects
+                        #key = (a.type, c.type, a.bx, c.bx) # a-c combination
+                        #combinations[key] = (a, c)
+                    #else:
+                        #a = condition.objects[0]
+                        #b = condition.objects[1]
+                        #key = (a.type, b.type, a.bx, b.bx)
+                        #combinations[key] = (a, b)
+            #if isinstance(condition, CorrelationConditionOvRmHelper):
+                #if condition.deltaEtaOrm.enabled or condition.deltaPhiOrm.enabled:
+                    #if condition.nr_objects == 3:
+                        #a, b, c = condition.objects
+                        #key = (a.type, c.type, a.bx, c.bx) # a-c combination
+                        #combinations[key] = (a, c)
+                    #else:
+                        #a = condition.objects[0]
+                        #b = condition.objects[1]
+                        #key = (a.type, b.type, a.bx, b.bx)
+                        #combinations[key] = (a, b)
+            #if isinstance(condition, CaloConditionOvRmHelper):
+                #if condition.deltaEtaOrm.enabled or condition.deltaPhiOrm.enabled or condition.deltaROrm.enabled:
+                    #a = condition.objects[0]
+                    #b = condition.objects[condition.nr_objects-1]
+                    #key = (a.type, b.type, a.bx, b.bx)
+                    #combinations[key] = (a, b)
+        #return combinations.values()
+
+    @property
+    def correlationCombinationsDeta(self):
+        combinations = {}
+        for condition in self.conditions:
+            if isinstance(condition, CorrelationConditionHelper):
+                if condition.deltaEta.enabled:
+                    a = condition.objects[0]
+                    b = condition.objects[condition.nr_objects-1]
+                    key = (a.type, b.type, a.bx, b.bx)
+                    combinations[key] = (a, b)
+            if isinstance(condition, CorrelationConditionOvRmHelper):
+                if condition.deltaEta.enabled:
+                    if condition.nr_objects == 3:
+                        a, b, c = condition.objects
+                        key = (a.type, c.type, a.bx, c.bx) # a-c combination
+                        combinations[key] = (a, c)
+                    else:
+                        a = condition.objects[0]
+                        b = condition.objects[1]
+                        key = (a.type, b.type, a.bx, b.bx)
+                        combinations[key] = (a, b)
+            if isinstance(condition, CorrelationConditionOvRmHelper):
+                if condition.deltaEtaOrm.enabled:
+                    if condition.nr_objects == 3:
+                        a, b, c = condition.objects
+                        key = (a.type, c.type, a.bx, c.bx) # a-c combination
+                        combinations[key] = (a, c)
+                    else:
+                        a = condition.objects[0]
+                        b = condition.objects[1]
+                        key = (a.type, b.type, a.bx, b.bx)
+                        combinations[key] = (a, b)
+            if isinstance(condition, CaloConditionOvRmHelper):
+                if condition.deltaEtaOrm.enabled:
+                    a = condition.objects[0]
+                    b = condition.objects[condition.nr_objects-1]
+                    key = (a.type, b.type, a.bx, b.bx)
+                    combinations[key] = (a, b)
+        return combinations.values()
+
+    @property
+    def correlationCombinationsDphi(self):
+        combinations = {}
+        for condition in self.conditions:
+            if isinstance(condition, CorrelationConditionHelper):
+                if condition.deltaPhi.enabled:
+                    a = condition.objects[0]
+                    b = condition.objects[condition.nr_objects-1]
+                    key = (a.type, b.type, a.bx, b.bx)
+                    combinations[key] = (a, b)
+            if isinstance(condition, CorrelationConditionOvRmHelper):
+                if condition.deltaPhi.enabled:
+                    if condition.nr_objects == 3:
+                        a, b, c = condition.objects
+                        key = (a.type, c.type, a.bx, c.bx) # a-c combination
+                        combinations[key] = (a, c)
+                    else:
+                        a = condition.objects[0]
+                        b = condition.objects[1]
+                        key = (a.type, b.type, a.bx, b.bx)
+                        combinations[key] = (a, b)
+            if isinstance(condition, CorrelationConditionOvRmHelper):
+                if condition.deltaPhiOrm.enabled:
+                    if condition.nr_objects == 3:
+                        a, b, c = condition.objects
+                        key = (a.type, c.type, a.bx, c.bx) # a-c combination
+                        combinations[key] = (a, c)
+                    else:
+                        a = condition.objects[0]
+                        b = condition.objects[1]
+                        key = (a.type, b.type, a.bx, b.bx)
+                        combinations[key] = (a, b)
+            if isinstance(condition, CaloConditionOvRmHelper):
+                if condition.deltaPhiOrm.enabled:
+                    a = condition.objects[0]
+                    b = condition.objects[condition.nr_objects-1]
+                    key = (a.type, b.type, a.bx, b.bx)
+                    combinations[key] = (a, b)
+        return combinations.values()
+
+    @property
+    def correlationCombinationsDeltaR(self):
+        combinations = {}
+        for condition in self.conditions:
+            if hasattr(condition, 'deltaR') and condition.deltaR.enabled:
+                if isinstance(condition, CorrelationConditionHelper):
+                    a, b = condition.objects
+                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
+                    combinations[key] = (a, b)
+            if isinstance(condition, CorrelationConditionOvRmHelper):
+                if condition.deltaROrm.enabled:
+                    if condition.nr_objects == 3:
+                        a, b, c = condition.objects
+                        key = (a.type, c.type, a.bx, c.bx) # a-c combination
+                        combinations[key] = (a, c)
+                    else:
+                        a = condition.objects[0]
+                        b = condition.objects[1]
+                        key = (a.type, b.type, a.bx, b.bx)
+                        combinations[key] = (a, b)
+            if isinstance(condition, CaloConditionOvRmHelper):
+                if condition.deltaROrm.enabled:
+                    a = condition.objects[0]
+                    b = condition.objects[condition.nr_objects-1]
+                    key = (a.type, b.type, a.bx, b.bx)
+                    combinations[key] = (a, b)
+        return combinations.values()
+
+    @property
+    def correlationCombinationsCoshCos(self):
+        combinations = {}
+        for condition in self.conditions:
+            if hasattr(condition, 'mass') and condition.mass.enabled:
+                if isinstance(condition, CorrelationConditionHelper):
+                    a, b = condition.objects
+                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
+                    combinations[key] = (a, b)
+        return combinations.values()
+
+    @property
+    def correlationCombinationsInvMass(self):
+        combinations = {}
+        for condition in self.conditions:
+            if hasattr(condition, 'mass') and condition.mass.enabled and (condition.mass.type == condition.mass.InvariantMassType or condition.mass.type == condition.mass.InvariantMassDeltaRType):
+               if isinstance(condition, (CorrelationConditionHelper, CorrelationConditionOvRmHelper, Correlation3ConditionHelper)):
+                    a = condition.objects[0]
+                    b = condition.objects[1]
+                    key = (a.type, b.type, a.bx, b.bx)
+                    combinations[key] = (a, b)
+        return combinations.values()
+
+    @property
+    def correlationCombinationsInvMassUpt(self):
+        combinations = {}
+        for condition in self.conditions:
+            if hasattr(condition, 'mass') and condition.mass.enabled and condition.mass.type == condition.mass.InvariantMassUptType:
+                if isinstance(condition, CorrelationConditionHelper):
+                    a, b = condition.objects
+                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
+                    combinations[key] = (a, b)
+        return combinations.values()
+
+    @property
+    def correlationCombinationsTransMass(self):
+        combinations = {}
+        for condition in self.conditions:
+            if hasattr(condition, 'mass') and condition.mass.enabled and condition.mass.type == condition.mass.TransverseMassType:
+                if isinstance(condition, CorrelationConditionHelper):
+                    a, b = condition.objects
+                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
+                    combinations[key] = (a, b)
+        return combinations.values()
+
     @property
     def correlationCombinationsInvMassDivDr(self):
         combinations = {}
@@ -472,6 +675,18 @@ class ModuleHelper(VhdlHelper):
             if hasattr(condition, 'mass') and condition.mass.enabled and condition.mass.type == condition.mass.InvariantMassDeltaRType:
                 if isinstance(condition, CorrelationConditionHelper):
                     a, b = condition.objects
+                    key = (a.type, b.type, a.bx, b.bx) # create custom hash
+                    combinations[key] = (a, b)
+        return combinations.values()
+
+    @property
+    def correlationCombinationsTbpt(self):
+        combinations = {}
+        for condition in self.conditions:
+            if hasattr(condition, 'twoBodyPt') and condition.twoBodyPt.enabled:
+                if isinstance(condition, (CorrelationConditionHelper, CorrelationConditionOvRmHelper, CaloConditionHelper, CaloConditionOvRmHelper, MuonConditionHelper)):
+                    a = condition.objects[0]
+                    b = condition.objects[1]
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
                     combinations[key] = (a, b)
         return combinations.values()
@@ -491,14 +706,15 @@ class ModuleHelper(VhdlHelper):
                 return True
             if condition.handle.isCaloConditionOvRm():
                 return True
-            if hasattr(condition, 'hasTwoBodyPtCut'):
+            if hasattr(condition, 'twoBodyPt'):
                 return bool(condition.twoBodyPt)
             return False
         objects = {}
         for condition in filter(hasObjectCorrelation, self.conditions):
             for obj in condition.objects:
-                key = (obj.type, obj.bx) # create custom hash
-                objects[key] = obj
+                if obj.isValid:
+                    key = (obj.type, obj.bx) # create custom hash
+                    objects[key] = obj
         return objects.values()
 
     @property
@@ -528,24 +744,37 @@ class ModuleHelper(VhdlHelper):
                 objects[key] = obj
         return objects.values()
 
+    #@property
+    #def muonBxCombinations(self):
+        #combinations = set()
+        #for condition in self.conditions:
+            #if isinstance(condition, (MuonConditionHelper, CorrelationConditionHelper)):
+                #if condition.nr_objects == 2:
+                    #a = condition.objects[0]
+                    #b = condition.objects[1]
+                    #combinations.add((a.bx, b.bx))
+            #elif isinstance(condition, Correlation3ConditionHelper):
+                #if condition.nr_objects == 3:
+                    #a = condition.objects[0]
+                    #b = condition.objects[1]
+                    #c = condition.objects[2]
+                    #combinations.add((a.bx, b.bx))
+                    #combinations.add((a.bx, c.bx))
+                    #combinations.add((b.bx, c.bx))
+        #return list(combinations)
+
     @property
     def muonBxCombinations(self):
-        combinations = set()
+        combinations = {}
         for condition in self.conditions:
-            if isinstance(condition, (MuonConditionHelper, CorrelationConditionHelper)):
-                if condition.nr_objects == 2:
-                    a = condition.objects[0]
-                    b = condition.objects[1]
-                    combinations.add((a.bx, b.bx))
-            elif isinstance(condition, Correlation3ConditionHelper):
-                if condition.nr_objects == 3:
-                    a = condition.objects[0]
-                    b = condition.objects[1]
-                    c = condition.objects[2]
-                    combinations.add((a.bx, b.bx))
-                    combinations.add((a.bx, c.bx))
-                    combinations.add((b.bx, c.bx))
-        return list(combinations)
+            if isinstance(condition, (MuonConditionHelper, CorrelationConditionHelper, Correlation3ConditionHelper)):
+                if condition.nr_objects > 1:
+                    if condition.objects[0].is_muon_type and condition.objects[1].is_muon_type:
+                        a = condition.objects[0]
+                        b = condition.objects[1]
+                        key = (a.type, b.type, a.bx, b.bx)
+                        combinations[key] = (a, b)
+        return combinations.values()
 
     def __len__(self):
         """Returns count of algorithms assigned to this module."""
@@ -990,6 +1219,7 @@ class ObjectHelper(VhdlHelper):
         self.type = 'UNDEFINED'
         self.operator = True
         self.bx = bx_encode(0)
+        self.bx_arr = bx_encode_4_array(0)
         self.externalSignalName = 'UNDEFINED'
         self.externalChannelId = 0
         # common cuts
@@ -1018,6 +1248,7 @@ class ObjectHelper(VhdlHelper):
         self.type = ObjectTypes[object_handle.type]
         self.operator = ComparisonOperator[object_handle.comparison_operator]
         self.bx = bx_encode(object_handle.bx_offset)
+        self.bx_arr = bx_encode_4_array(object_handle.bx_offset)
         self.externalSignalName = object_handle.external_signal_name
         self.externalChannelId = object_handle.external_channel_id
         # set the default slice range to maxNum - 1 (e.g. 0-11)
@@ -1258,9 +1489,17 @@ class MassCutHelper(RangeCutHelper):
         scale_pt = 10**cut_handle.precision_pt
         assert cut_handle.precision_math != 0
         scale_math = 10**cut_handle.precision_math
-        self.lower = math.floor(cut_handle.minimum.value * scale) / scale * (scale_pt * scale_pt) * scale_math
-        self.upper = math.ceil(cut_handle.maximum.value * scale) / scale * (scale_pt * scale_pt) * scale_math
-        self.enabled = True
+        #assert cut_handle.precision_inverse_dr != 0
+        scale_inverse_dr = 10**cut_handle.precision_inverse_dr
+        # HACK to decide the type of mass
+        if cut_handle.precision_inverse_dr == 0:
+            self.lower = math.floor(cut_handle.minimum.value * scale) / scale * (scale_pt * scale_pt) * scale_math
+            self.upper = math.ceil(cut_handle.maximum.value * scale) / scale * (scale_pt * scale_pt) * scale_math
+            self.enabled = True
+        else:
+            self.lower = math.floor(cut_handle.minimum.value * scale) / scale * (scale_pt * scale_pt) * scale_math * scale_inverse_dr
+            self.upper = math.ceil(cut_handle.maximum.value * scale) / scale * (scale_pt * scale_pt) * scale_math * scale_inverse_dr
+            self.enabled = True
 
 class SliceCutHelper(RangeCutHelper):
 
@@ -1322,6 +1561,18 @@ if __name__ == '__main__':
             print("-" * 80)
             print("module.correlationCombinations:")
             for a, b in module.correlationCombinations:
+                print(" ", a.type, a.bx, "<>", b.type, b.bx)
+            print("-" * 80)
+            print("module.correlationCombinationsInvMass:")
+            for a, b in module.correlationCombinationsInvMass:
+                print(" ", a.type, a.bx, "<>", b.type, b.bx)
+            print("-" * 80)
+            print("module.correlationCombinationsInvMassUpt:")
+            for a, b in module.correlationCombinationsInvMassUpt:
+                print(" ", a.type, a.bx, "<>", b.type, b.bx)
+            print("-" * 80)
+            print("module.correlationCombinationsTransMass:")
+            for a, b in module.correlationCombinationsTransMass:
                 print(" ", a.type, a.bx, "<>", b.type, b.bx)
             print("-" * 80)
             print("module.correlationCombinationsInvMassDivDr:")

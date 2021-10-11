@@ -21,25 +21,9 @@
 -- tmEventSetup version
 -- v{{ menu.info.version }}
 
--- External condition assignment
-
-{%- for condition in module.externalConditions %}
-{{ condition.vhdl_signal }} <= ext_cond_bx_{{ condition.objects[0].bx }}({{ condition.objects[0].externalChannelId }}); -- {{ condition.vhdl_signal }}
-{%- endfor %}
--- Instantiations of muon charge correlations - only once for a certain Bx combination, if there is at least one DoubleMuon, TripleMuon, QuadMuon condition
--- or muon-muon correlation condition.
-{% include "instances/muon_charge_correlations.vhd" %}
--- Instantiations of eta and phi conversion to muon scale for calo-muon and muon-esums correlation conditions (used for DETA, DPHI, DR and mass) - once for every calo ObjectType in certain Bx used in correlation conditions
-{% include "instances/correlation_conditions_eta_phi_conversion.vhd" %}
--- Instantiations of pt, eta, phi, cos-phi and sin-phi for correlation conditions (used for DETA, DPHI, DR, mass, overlap_remover and b_tagging) - once for every ObjectType in certain Bx used in correlation conditions
-{% include "instances/correlation_conditions_pt_eta_phi_cos_sin_phi.vhd" %}
--- Instantiations of differences for correlation conditions (used for DETA, DPHI, DR, mass and b_tagging) - once for correlation conditions with two ObjectTypes in certain Bxs
-{% include "instances/correlation_conditions_differences.vhd" %}
--- Instantiations of cosh-deta and cos-dphi LUTs for correlation conditions (used for mass and overlap_remover) - once for correlation conditions with two ObjectTypes in certain Bxs
-{% include "instances/correlation_conditions_mass_cuts.vhd" %}
-
+-- ========================================================
 -- Instantiations of conditions
-
+--
 {%- for condition in module.caloConditions %}
 {% include "instances/calo_condition.vhd" %}
 {% endfor %}
@@ -85,13 +69,31 @@
 {%- for condition in module.signalConditions %}
 {% include "instances/signal_condition.vhd" %}
 {% endfor %}
+-- External condition assignment
+{% for condition in module.externalConditions %}
+{{ condition.vhdl_signal }} <= bx_data.ext_cond({{ condition.objects[0].bx_arr }})({{ condition.objects[0].externalChannelId }}); -- {{ condition.objects[0].name }}
+{%- endfor %}
 
+-- ========================================================
 -- Instantiations of algorithms
-
 {% for algorithm in module.algorithms | sort_by_attribute('index') %}
 -- {{ algorithm.index }} {{ algorithm.name }} : {{ algorithm.expression }}
 {{ algorithm.vhdl_signal }} <= {{ algorithm.vhdl_expression }};
 algo({{ algorithm.module_index | d }}) <= {{ algorithm.vhdl_signal }};
 {% endfor %}
-
 -- ========================================================
+-- Instantiations conversions, calculations, etc.
+-- eta and phi conversion to muon scale for calo-muon and muon-esums correlation conditions (used for DETA, DPHI, DR and mass)
+{% include "instances/correlation_conditions_eta_phi_conversion.vhd" %}
+-- pt, eta, phi, cosine phi and sine phi for correlation conditions (used for DETA, DPHI, DR, mass, overlap_remover and two-body pt)
+{% include "instances/obj_parameter.vhd" %}
+-- deta and dphi calculations for correlation conditions (used for DETA, DPHI)
+{% include "instances/deta_dphi_calculations.vhd" %}
+-- eta, dphi, cosh deta and cos dphi LUTs for correlation conditions (used for DR and mass)
+--
+{% include "instances/correlation_cuts_calculations.vhd" %}
+
+-- muon charge correlations
+{% include "instances/muon_charge_correlations.vhd" %}
+-- ========================================================
+

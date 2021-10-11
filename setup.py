@@ -4,7 +4,7 @@ long_description = open('README.md').read()
 
 setup(
     name="tm-vhdlproducer",
-    version='2.10.1',
+    version='2.11.0',
     url="https://github.com/cms-l1-globaltrigger/tm-vhdlproducer",
     author="Bernhard Arnold",
     author_email="bernhard.arnold@cern.ch",
@@ -16,8 +16,9 @@ setup(
             'config/*.json',
             'templates/vhdl/*.vhd',
             'templates/vhdl/menu.json',
-            'templates/vhdl/instances/*.j2',
-            'templates/vhdl/signals/*.j2'
+            'templates/vhdl/instances/*.vhd',
+            'templates/vhdl/instances/base/*.vhd',
+            'templates/vhdl/signals/*.vhd'
         ]
     },
     install_requires=[

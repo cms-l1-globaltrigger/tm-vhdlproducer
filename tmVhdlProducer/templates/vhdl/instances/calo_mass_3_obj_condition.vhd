@@ -1,33 +1,32 @@
-{% extends "instances/base/correlation_condition.vhd" %}
+{% extends "instances/base/condition.vhd" %}
 
-{% block entity %}work.correlation_conditions_calo{% endblock %}
+{%- set o1 = condition.objects[0] %}
+{%- set o2 = condition.objects[1] %}
+{%- set o3 = condition.objects[2] %}
+
+{% block entity %}work.correlation_conditions{% endblock %}
 
 {%- block generic_map %}
-{{ super() }}
+    {%- set o = condition.objects[0] %}
+    {%- include  "instances/base/object_cuts_correlation.vhd" %}
 -- correlation cuts
-        pt1_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH,
-        pt2_width => {{ o2.type | upper }}_PT_VECTOR_WIDTH,
         mass_upper_limit_vector => X"{{ condition.mass.upper|X16 }}",
         mass_lower_limit_vector => X"{{ condition.mass.lower|X16 }}",
-        mass_cosh_cos_precision => {{ o1.type | upper }}_{{ o1.type | upper }}_COSH_COS_PRECISION,
-        cosh_cos_width => {{ o1.type | upper }}_{{ o1.type | upper }}_COSH_COS_VECTOR_WIDTH,
--- number of calo objects, types
-        nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
-        type_obj1 => {{ o1.type | upper }}_TYPE,
-        nr_obj2 => NR_{{ o2.type | upper }}_OBJECTS,
-        type_obj2 => {{ o2.type | upper }}_TYPE,
-        nr_obj3 => NR_{{ o3.type | upper }}_OBJECTS,
-        type_obj3 => {{ o3.type | upper }}_TYPE,
+        mass_vector_width => {{ o1.type | upper }}_PT_VECTOR_WIDTH+{{ o2.type | upper }}_PT_VECTOR_WIDTH+CALO_CALO_COSH_COS_VECTOR_WIDTH,
         mass_3_obj => true,
+-- number of objects and type
+  {%- for i in range(0,condition.nr_objects) %}
+    {%- set o = condition.objects[i] %}
+        nr_obj{{i+1}} => NR_{{ o.type | upper }}_OBJECTS,
+        type_obj{{i+1}} => {{ o.type | upper }}_TYPE,
+  {%- endfor %}
+-- selector same/different bunch crossings
         same_bx => {{ condition.objectsInSameBx | vhdl_bool}}
 {%- endblock %}
 
 {%- block port_map %}
-        obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }},
-        obj2 => {{ o2.type | lower }}_bx_{{ o2.bx }},
-        obj3 => {{ o3.type | lower }}_bx_{{ o3.bx }},
-        pt1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_pt_vector,
-        pt2 => {{ o2.type | lower }}_bx_{{ o2.bx }}_pt_vector,
-        cosh_deta => {{ o1.type | lower }}_{{ o1.type | lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_cosh_deta_vector,
-        cos_dphi => {{ o1.type | lower }}_{{ o1.type | lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_cos_dphi_vector,
+        calo_obj1 => bx_data.{{ o1.type | lower }}({{ o1.bx_arr }}),
+        calo_obj2 => bx_data.{{ o2.type | lower }}({{ o2.bx_arr }}),
+        calo_obj3 => bx_data.{{ o3.type | lower }}({{ o3.bx_arr }}),
+        mass_inv_pt => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_pt,
 {%- endblock %}

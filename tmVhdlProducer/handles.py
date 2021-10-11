@@ -11,6 +11,9 @@ Classes:
 
 import tmEventSetup
 import tmGrammar
+import os
+
+from .constants import BRAMS_TOTAL, SLICELUTS_TOTAL, PROCESSORS_TOTAL
 
 #
 # Dictionaries
@@ -221,7 +224,6 @@ ObjectsOrder = [
 ]
 """Order of object types required by VHDL correlation conditions."""
 
-
 #
 # Functions
 #
@@ -237,28 +239,31 @@ def filter_first(func, data):
 class Payload(object):
     """Implements a generic payload represented by multiple attributes.
 
-    >>> payload = Payload(sliceLUTs, processors)
-    >>> payload < (payload + payload)
-    >>> payload.sliceLUTs, payload.processors
+    >>> payload = Payload(sliceLUTs, processors,brams)
+    >>> payload < (payload + payload + payload)
+    >>> payload.sliceLUTs, payload.processors, payload.brams
     """
-    def __init__(self, sliceLUTs=0, processors=0):
-        self.sliceLUTs = float(sliceLUTs)
-        self.processors = float(processors)
+
+    def __init__(self, brams=0, sliceLUTs=0, processors=0):
+        self.brams = int(brams)
+        self.sliceLUTs = int(sliceLUTs)
+        self.processors = int(processors)
 
     def _astuple(self):
         """Retrurns tuple of payload attributes ordered by significance (most
         significant last, least first).
         """
-        return self.sliceLUTs, self.processors
+        return self.brams, self.sliceLUTs, self.processors
 
     def _asdict(self):
-        return dict(sliceLUTs=self.sliceLUTs, processors=self.processors)
+        return dict(brams=self.brams, sliceLUTs=self.sliceLUTs, processors=self.processors)
 
     def __add__(self, payload):
         """Multiplicate payloads."""
+        brams = self.brams + payload.brams
         sliceLUTs = self.sliceLUTs + payload.sliceLUTs
         processors = self.processors + payload.processors
-        return Payload(sliceLUTs, processors)
+        return Payload(brams, sliceLUTs, processors)
 
     def __eq__(self, payload):
         return self._astuple() == payload._astuple()
@@ -268,9 +273,10 @@ class Payload(object):
         return self._astuple() < payload._astuple()
 
     def __repr__(self):
-        sliceLUTsPercent = self.sliceLUTs * 100
-        processorsPercent = self.processors * 100
-        return f"{self.__class__.__name__}(sliceLUTs={sliceLUTsPercent:.2f}%, DSPs={processorsPercent:.2f}%)"
+        bramsPercent = self.brams / BRAMS_TOTAL * 100
+        sliceLUTsPercent = self.sliceLUTs / SLICELUTS_TOTAL * 100
+        processorsPercent = self.processors / PROCESSORS_TOTAL * 100
+        return f"{self.__class__.__name__}(BRAMs={bramsPercent:.2f}%, sliceLUTs={sliceLUTsPercent:.2f}%, DSPs={processorsPercent:.2f}%)"
 
 #
 #  Handle classes
@@ -300,9 +306,11 @@ class CutHandle(Handle):
         self.precision = cut.getPrecision()
         self.precision_pt = 0
         self.precision_math = 0
+        self.precision_inverse_dr = 0
 
     def __repr__(self):
         return f"{self.__class__.__name__}(name={self.name})"
+
 
 class ObjectHandle(Handle):
     """Represents an object."""
@@ -368,7 +376,7 @@ class ConditionHandle(Handle):
         self.cuts = []
         for cut in condition.getCuts():
             self.cuts.append(CutHandle(cut))
-        self.payload = Payload(payload.sliceLUTs, payload.processors)
+        self.payload = Payload(payload.brams, payload.sliceLUTs, payload.processors)
 
     def sortedObjects(self, objects):
         """Returns list of condition objects sorted by VHDL notation (object order

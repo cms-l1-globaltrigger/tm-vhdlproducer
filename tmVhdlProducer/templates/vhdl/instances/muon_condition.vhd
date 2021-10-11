@@ -11,17 +11,13 @@
 {%- endblock %}
 
 {%- block port_map %}
-        obj1_muon => mu_bx_{{ o1.bx }},
+        obj1_muon =>bx_data. mu({{ o1.bx_arr }}),
     {%- if (condition.nr_objects == 2) and condition.twoBodyPt and condition.chargeCorrelation %}
         ls_charcorr_double => ls_charcorr_double_bx_{{ o1.bx }}_bx_{{ o1.bx }},
         os_charcorr_double => os_charcorr_double_bx_{{ o1.bx }}_bx_{{ o1.bx }},
-        pt => {{ o1.type | lower }}_bx_{{ o1.bx }}_pt_vector,
-        cos_phi_integer => {{ o1.type | lower }}_bx_{{ o1.bx }}_cos_phi,
-        sin_phi_integer => {{ o1.type | lower }}_bx_{{ o1.bx }}_sin_phi,
-    {%- elif (condition.nr_objects == 2) and condition.twoBodyPt and condition.chargeCorrelation %}
-        pt => {{ o1.type | lower }}_bx_{{ o1.bx }}_pt_vector,
-        cos_phi_integer => {{ o1.type | lower }}_bx_{{ o1.bx }}_cos_phi,
-        sin_phi_integer => {{ o1.type | lower }}_bx_{{ o1.bx }}_sin_phi,
+        tbpt => {{ o1.type | lower }}_{{ o1.type | lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_tbpt,
+    {%- elif (condition.nr_objects == 2) and condition.twoBodyPt and not condition.chargeCorrelation %}
+        tbpt => {{ o1.type | lower }}_{{ o1.type | lower }}_bx_{{ o1.bx }}_bx_{{ o1.bx }}_tbpt,
     {%- elif (condition.nr_objects == 2) and not condition.twoBodyPt and condition.chargeCorrelation %}
         ls_charcorr_double => ls_charcorr_double_bx_{{ o1.bx }}_bx_{{ o1.bx }},
         os_charcorr_double => os_charcorr_double_bx_{{ o1.bx }}_bx_{{ o1.bx }},

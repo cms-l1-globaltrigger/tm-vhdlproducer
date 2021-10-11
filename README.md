@@ -3,19 +3,14 @@ VHDL Producer
 
 ## Install
 
-Install using pip (>= 19.0)
-
-```bash
-pip install --upgrade pip
-pip install git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git@2.10.1
-```
+not for this branch!
 
 ## Build from source
 
 Basic development instrcutions.
 
 ```bash
-git clone https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git
+git clone https://github.com/herbberg/tm-vhdlproducer.git
 cd tm-vhdlproducer
 git checkout master
 ```
