@@ -105,8 +105,8 @@ SignalConditionTypes = [
     tmEventSetup.Centrality7,
     tmEventSetup.MuonShower0,
     tmEventSetup.MuonShower1,
-    tmEventSetup.MuonShowerOOT0,
-    tmEventSetup.MuonShowerOOT1,
+    tmEventSetup.MuonShowerOutOfTime0,
+    tmEventSetup.MuonShowerOutOfTime1,
 ]
 
 ExternalConditionTypes = [

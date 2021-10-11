@@ -131,8 +131,8 @@ kCentrality6 = 'Centrality6'
 kCentrality7 = 'Centrality7'
 kMuonShower0 = 'MuonShower0'
 kMuonShower1 = 'MuonShower1'
-kMuonShowerOOT0 = 'MuonShowerOOT0'
-kMuonShowerOOT1 = 'MuonShowerOOT1'
+kMuonShowerOutOfTime0 = 'MuonShowerOutOfTime0'
+kMuonShowerOutOfTime1 = 'MuonShowerOutOfTime1'
 kMinBiasHFM0 = 'MinBiasHFM0'
 kMinBiasHFM1 = 'MinBiasHFM1'
 kMinBiasHFP0 = 'MinBiasHFP0'
@@ -344,8 +344,8 @@ ConditionTypeKey = {
     tmEventSetup.Centrality7: kCentrality7,
     tmEventSetup.MuonShower0: kMuonShower0,
     tmEventSetup.MuonShower1: kMuonShower1,
-    tmEventSetup.MuonShowerOOT0: kMuonShowerOOT0,
-    tmEventSetup.MuonShowerOOT1: kMuonShowerOOT1,
+    tmEventSetup.MuonShowerOutOfTime0: kMuonShowerOutOfTime0,
+    tmEventSetup.MuonShowerOutOfTime1: kMuonShowerOutOfTime1,
     tmEventSetup.MinBiasHFM0: kMinBiasHFM0,
     tmEventSetup.MinBiasHFM1: kMinBiasHFM1,
     tmEventSetup.MinBiasHFP0: kMinBiasHFP0,
