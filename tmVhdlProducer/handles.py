@@ -15,8 +15,6 @@ import os
 
 from .constants import BRAMS_TOTAL, SLICELUTS_TOTAL, PROCESSORS_TOTAL
 
-from .constants import BRAMS_TOTAL, SLICELUTS_TOTAL, PROCESSORS_TOTAL
-
 #
 # Dictionaries
 #

@@ -7,12 +7,12 @@ Install using pip (>= 19.0)
 
 ```bash
 pip install --upgrade pip
-pip install git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git@2.11.0
+pip install git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git@2.11.1
 ```
 
 ## Build from source
 
-Basic development instrcutions.
+Basic development instructions.
 
 ```bash
 git clone https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git
@@ -24,7 +24,7 @@ Create virtual environment.
 python3 -m venv env
 . env/bin/activate
 ```
-Install dependecies using pip.
+Install dependencies using pip.
 ```bash
 pip install --upgrade pip
 pip install -r requirements.txt
@@ -148,7 +148,7 @@ L1Menu_sample-d1/
 
 ## Documentation
 
-A TWiki page template and a HTML menu ducumentation is also written to the
+A TWiki page template and a HTML menu documentation is also written to the
 `doc/` directory in the output location.
 
 ## Logging

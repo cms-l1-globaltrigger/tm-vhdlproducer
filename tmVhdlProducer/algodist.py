@@ -772,122 +772,163 @@ class Module(object):
         payload = self.floor
 
 # =================================================================================
-        corr_cond_2_obj = ['CaloCaloCorrelation', 'CaloEsumCorrelation' 'CaloMuonCorrelation',
-                           'MuonMuonCorrelation', 'MuonEsumCorrelation', 'InvariantMass',
-                           'InvariantMassUpt', 'TransverseMass']
-        corr_cond_orm = ['CaloCaloCorrelationOvRm', 'InvariantMassOvRm',
-                         'TransverseMassOvRm', 'InvariantMass3']
-        cond_orm = ['SingleEgammaOvRm', 'DoubleEgammaOvRm', 'TripleEgammaOvRm', 'QuadEgammaOvRm',
-                    'SingleTauOvRm', 'DoubleTauOvRm', 'TripleTauOvRm', 'QuadTauOvRm',
-                    'SingleJetOvRm', 'DoubleJetOvRm', 'TripleJetOvRm', 'QuadJetOvRm']
-        mass_cond = ['InvariantMass', 'InvariantMassUpt', 'TransverseMass', 'InvariantMassOvRm',
-                     'TransverseMassOvRm', 'InvariantMass3', 'InvariantMassDeltaR']
-        calo_t = [1, 2, 3] #
-        esums_t = [6, 7]
+        corr_cond_2_obj = [
+            tmEventSetup.CaloCaloCorrelation,
+            tmEventSetup.CaloEsumCorrelation,
+            tmEventSetup.CaloMuonCorrelation,
+            tmEventSetup.MuonMuonCorrelation,
+            tmEventSetup.MuonEsumCorrelation,
+            tmEventSetup.InvariantMass,
+            tmEventSetup.InvariantMassUpt,
+            tmEventSetup.TransverseMass,
+        ]
+        corr_cond_orm = [
+            tmEventSetup.CaloCaloCorrelationOvRm,
+            tmEventSetup.InvariantMassOvRm,
+            tmEventSetup.TransverseMassOvRm,
+            tmEventSetup.InvariantMass3,
+        ]
+        cond_orm = [
+            tmEventSetup.SingleEgammaOvRm,
+            tmEventSetup.DoubleEgammaOvRm,
+            tmEventSetup.TripleEgammaOvRm,
+            tmEventSetup.QuadEgammaOvRm,
+            tmEventSetup.SingleTauOvRm,
+            tmEventSetup.DoubleTauOvRm,
+            tmEventSetup.TripleTauOvRm,
+            tmEventSetup.QuadTauOvRm,
+            tmEventSetup.SingleJetOvRm,
+            tmEventSetup.DoubleJetOvRm,
+            tmEventSetup.TripleJetOvRm,
+            tmEventSetup.QuadJetOvRm,
+        ]
+        mass_cond = [
+            tmEventSetup.InvariantMass,
+            tmEventSetup.InvariantMassUpt,
+            tmEventSetup.TransverseMass,
+            tmEventSetup.InvariantMassOvRm,
+            tmEventSetup.TransverseMassOvRm,
+            tmEventSetup.InvariantMass3,
+            tmEventSetup.InvariantMassDeltaR,
+        ]
+        muon_type = [
+            tmEventSetup.Muon,
+        ]
+        calo_type = [
+            tmEventSetup.Egamma,
+            tmEventSetup.Tau,
+            tmEventSetup.Jet
+        ]
+        esums_type = [
+            tmEventSetup.ETM,
+            tmEventSetup.HTM
+        ]
 
-        # payload for FDL algo slices
-        brams = self.fdl_algo_slice.brams * len(self.algorithms)
-        sliceLUTs = self.fdl_algo_slice.sliceLUTs * len(self.algorithms)
-        processors = self.fdl_algo_slice.processors * len(self.algorithms)
-        fdl_payload = Payload(brams, sliceLUTs, processors)
-        payload += fdl_payload
-        combinations_diff = {}
-        for algorithm in self.algorithms:
-            for condition in algorithm.conditions:
-                condition_type = ConditionTypeKey[condition.type]
-                if condition_type in corr_cond_2_obj:
-                    a, b = condition.objects
-                    key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
-                    combinations_diff[key] = (a, b)
-                if condition_type in corr_cond_orm:
-                    if len(condition.objects) == 3:
-                        a, b, c = condition.objects
-                        key = (a.type, b.type, a.bx_offset, b.bx_offset) # a-b combination
-                        combinations_diff[key] = (a, b)
-                        key = (a.type, c.type, a.bx_offset, c.bx_offset) # a-c combination
-                        combinations_diff[key] = (a, c)
-                        key = (b.type, c.type, b.bx_offset, c.bx_offset) # b-c combination
-                        combinations_diff[key] = (b, c)
-                    else:
+        def calc_factor(combination) -> float:
+            left, right = combination[0], combination[1]
+            if left == right:
+                if left in muon_type:
+                    return NR_MUONS * (NR_MUONS - 1) / 2
+                else:
+                    return NR_CALOS * (NR_CALOS - 1) / 2
+            else:
+                if left in calo_type and right in calo_type:
+                    return NR_CALOS * NR_CALOS
+                elif left in calo_type and right in muon_type:
+                    return NR_CALOS * NR_MUONS
+                elif left in calo_type and right in esums_type:
+                    return NR_CALOS
+                elif left in muon_type and right in esums_type:
+                    return NR_MUONS
+                else:
+                    message = f"Invalid correlation combination: {left}, {right}"
+                    raise RuntimeError(message)
+
+        def calc_fdl_payload() -> Payload:
+            """Payload for FDL algo slices."""
+            size = len(self.algorithms)
+            brams = self.fdl_algo_slice.brams * size
+            sliceLUTs = self.fdl_algo_slice.sliceLUTs * size
+            processors = self.fdl_algo_slice.processors * size
+            return Payload(brams, sliceLUTs, processors)
+
+        def calc_diff_combinations() -> dict:
+            """Object combinations for instances of "differences" calculations."""
+            combinations = {}
+            for algorithm in self.algorithms:
+                for condition in algorithm.conditions:
+                    if condition.type in corr_cond_2_obj:
+                        a, b = condition.objects
+                        key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
+                        combinations[key] = (a, b)
+                    if condition.type in corr_cond_orm:
+                        if len(condition.objects) == 3:
+                            a, b, c = condition.objects
+                            key = (a.type, b.type, a.bx_offset, b.bx_offset) # a-b combination
+                            combinations[key] = (a, b)
+                            key = (a.type, c.type, a.bx_offset, c.bx_offset) # a-c combination
+                            combinations[key] = (a, c)
+                            key = (b.type, c.type, b.bx_offset, c.bx_offset) # b-c combination
+                            combinations[key] = (b, c)
+                        else:
+                            a = condition.objects[0]
+                            b = condition.objects[1]
+                            key = (a.type, b.type, a.bx_offset, b.bx_offset)
+                            combinations[key] = (a, b)
+                    if condition.type in cond_orm:
+                        a = condition.objects[0]
+                        b = condition.objects[len(condition.objects)-1]
+                        key = (a.type, b.type, a.bx_offset, b.bx_offset)
+                        combinations[key] = (a, b)
+                    if condition.type == tmEventSetup.InvariantMassDeltaR:
                         a = condition.objects[0]
                         b = condition.objects[1]
                         key = (a.type, b.type, a.bx_offset, b.bx_offset)
-                        combinations_diff[key] = (a, b)
-                if condition_type in cond_orm:
-                    a = condition.objects[0]
-                    b = condition.objects[len(condition.objects)-1]
-                    key = (a.type, b.type, a.bx_offset, b.bx_offset)
-                    combinations_diff[key] = (a, b)
-                if condition_type == 'InvariantMassDeltaR':
-                    a = condition.objects[0]
-                    b = condition.objects[1]
-                    key = (a.type, b.type, a.bx_offset, b.bx_offset)
-                    combinations_diff[key] = (a, b)
+                        combinations[key] = (a, b)
+            return combinations
+
+        def calc_diff_payload() -> Payload:
+            """Payload for instances of "differences" calculations."""
+            brams = 0
+            sliceLUTs = 0
+            processors = 0
+            for combination in calc_diff_combinations():
+                factor = calc_factor(combination)
+                sliceLUTs += self.differences.sliceLUTs * factor
+            return Payload(brams, sliceLUTs, processors)
+
+        def calc_cosh_cos_mass_combinations() -> dict:
+            """Object combinations for instances of "cosh_deta_cos_dphi" calculations."""
+            combinations = {}
+            for algorithm in self.algorithms:
+                for condition in algorithm.conditions:
+                    if condition.type in mass_cond:
+                        a = condition.objects[0]
+                        b = condition.objects[1]
+                        key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
+                        combinations[key] = (a, b)
+            return combinations
+
+        def calc_cosh_cos_mass_payload() -> Payload:
+            """Payload for instances of "cosh_deta_cos_dphi" calculations."""
+            brams = 0
+            sliceLUTs = 0
+            processors = 0
+            for combination in calc_cosh_cos_mass_combinations():
+                factor = calc_factor(combination)
+                sliceLUTs += self.cosh_deta_cos_dphi.sliceLUTs * factor
+                sliceLUTs += self.mass_calc.sliceLUTs * factor
+                processors += self.mass_calc.processors * factor
+            return Payload(brams, sliceLUTs, processors)
+
+        # payload for FDL algo slices
+        payload += calc_fdl_payload()
 
         # payload for instances of "differences" calculations
-        for combination in combinations_diff:
-            if combination[0] == combination[1]:
-                if combination[0] == 0:
-                    factor = NR_MUONS * (NR_MUONS-1) / 2
-                else:
-                    factor = NR_CALOS * (NR_CALOS-1) / 2
-            else:
-                if (combination[0] in calo_t)  and (combination[1] in calo_t):
-                    factor = NR_CALOS * NR_CALOS
-                elif (combination[0] in calo_t)  and combination[1] == 0:
-                    factor = NR_CALOS * NR_MUONS
-                elif (combination[0] in calo_t) and (combination[1] in esums_t):
-                    factor = NR_CALOS
-                elif combination[0] == 0 and (combination[1] in esums_t):
-                    factor = NR_MUONS
-                else:
-                    message = f"Wrong factor for correlation combination."
-                    raise RuntimeError(message)
-
-            sliceLUTs += self.differences.sliceLUTs * factor
-
-        brams = 0
-        processors = 0
-        diff_payload = Payload(brams, sliceLUTs, processors)
-        payload += diff_payload
-
-        combinations_mass = {}
-        for algorithm in self.algorithms:
-            for condition in algorithm.conditions:
-                condition_type = ConditionTypeKey[condition.type]
-                if condition_type in mass_cond:
-                    a = condition.objects[0]
-                    b = condition.objects[1]
-                    key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
-                    combinations_mass[key] = (a, b)
+        payload += calc_diff_payload()
 
         # payload for instances of "cosh_deta_cos_dphi" calculations
-        for combination in combinations_mass:
-            if combination[0] == combination[1]:
-                if combination[0] == 0:
-                    factor = NR_MUONS * (NR_MUONS-1) / 2
-                else:
-                    factor = NR_CALOS * (NR_CALOS-1) / 2
-            else:
-                if (combination[0] in calo_t)  and (combination[1] in calo_t):
-                    factor = NR_CALOS * NR_CALOS
-                elif (combination[0] in calo_t)  and combination[1] == 0:
-                    factor = NR_CALOS * NR_MUONS
-                elif (combination[0] in calo_t) and (combination[1] in esums_t):
-                    factor = NR_CALOS
-                elif combination[0] == 0 and (combination[1] in esums_t):
-                    factor = NR_MUONS
-                else:
-                    message = f"Wrong factor for correlation combination."
-                    raise RuntimeError(message)
-
-            sliceLUTs += self.cosh_deta_cos_dphi.sliceLUTs * factor
-            sliceLUTs += self.mass_calc.sliceLUTs * factor
-            processors += self.mass_calc.processors * factor
-
-        brams = 0
-        cosh_cos_mass_payload = Payload(brams, sliceLUTs, processors)
-        payload += cosh_cos_mass_payload
+        payload += calc_cosh_cos_mass_payload()
 
 # =================================================================================
 
