@@ -15,18 +15,21 @@ pip install git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git@2.11
 Basic development instrcutions.
 
 ```bash
-git clone https://github.com/herbberg/tm-vhdlproducer.git
+git clone https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git
 cd tm-vhdlproducer
 git checkout master
 ```
+Create virtual environment.
 ```bash
 python3 -m venv env
 . env/bin/activate
 ```
+Install dependecies using pip.
 ```bash
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
+Install package for local development.
 ```bash
 python setup.py develop
 ```
