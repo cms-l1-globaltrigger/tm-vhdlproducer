@@ -320,10 +320,6 @@ class CutHandle(Handle):
         self.maximum = CutValueHandle(cut.getMaximum())
         self.data = cut.getData()
         self.precision = cut.getPrecision()
-        #if self.cut_type == 19:
-            #print("===> self.name:", self.name)
-            #print("===> self.cut_type:", self.cut_type)
-            #print("===> self.precision:", self.precision)
         self.precision_pt = 0
         self.precision_math = 0
         self.precision_inverse_dr = 0

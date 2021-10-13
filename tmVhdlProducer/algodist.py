@@ -1002,7 +1002,7 @@ class ModuleCollection(object):
                     cut.precision_pt = 1 # for all
                     cut.precision_math = scales[precision_key(left, right, 'TwoBodyPtMath')].getNbits()
                 elif cut.cut_type in (tmEventSetup.Mass, tmEventSetup.MassUpt):
-                    left = condition.objects[0]
+                   left = condition.objects[0]
                     right = condition.objects[1]
                     cut.precision_pt = scales[precision_key(left, right, 'MassPt')].getNbits()
                     cut.precision_math = scales[precision_key(left, right, 'Math')].getNbits()
