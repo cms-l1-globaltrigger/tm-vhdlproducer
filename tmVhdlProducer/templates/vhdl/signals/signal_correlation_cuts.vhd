@@ -9,6 +9,10 @@
     signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer: dim2_max_phi_range_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => 0));
     signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi: deta_dphi_vector_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => (others => '0')));
     {%- endif %}
+    {%- if o2.is_muon_type %}
+    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer_half_res: dim2_max_eta_range_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => 0));
+    signal {{ o1.type|lower }}_{{ o2.type|lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer_half_res: dim2_max_phi_range_array(0 to NR_{{ o1.type|upper }}_OBJECTS-1, 0 to NR_{{ o2.type|upper }}_OBJECTS-1) := (others => (others => 0));
+    {%- endif %}
   {%- endfor %}
 
   {%- for o1, o2 in module.correlationCombinationsDeltaR %}

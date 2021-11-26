@@ -23,6 +23,10 @@ calc_obj_parameter_{{ o.type | lower }}_bx_{{ o.bx }}_i: entity work.obj_paramet
         eta_integer => {{ o.type | lower }}_bx_{{ o.bx }}_eta_integer,
     {%- endif %}
         phi_integer => {{ o.type | lower }}_bx_{{ o.bx }}_phi_integer,
+    {%- if o.is_muon_type %}
+        eta_integer_h_r => {{ o.type | lower }}_bx_{{ o.bx }}_eta_integer_half_res,
+        phi_integer_h_r => {{ o.type | lower }}_bx_{{ o.bx }}_phi_integer_half_res,
+    {%- endif %}
         cos_phi => {{ o.type | lower }}_bx_{{ o.bx }}_cos_phi,
     {%- if not o.is_muon_type %}
         sin_phi => {{ o.type | lower }}_bx_{{ o.bx }}_sin_phi,

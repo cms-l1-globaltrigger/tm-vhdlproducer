@@ -3,6 +3,7 @@ calc_deta_dphi_integer_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }
     generic map(
     {%- if o1.is_muon_type or o2.is_muon_type %}
         phi_half_range => MUON_PHI_HALF_RANGE_BINS,
+        phi_h_r_half_range => MUON_PHI_HALF_RES_HALF_RANGE_BINS,
     {%- endif %}
         nr_obj1 => NR_{{ o1.type | upper }}_OBJECTS,
         type_obj1 => {{ o1.type | upper }}_TYPE,
@@ -29,6 +30,16 @@ calc_deta_dphi_integer_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }
     {%- if o1.is_muon_type and o2.is_esums_type %}
         phi_integer_obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_phi_integer,
         phi_integer_obj2 => {{ o2.type | lower }}_bx_{{ o2.bx }}_phi_conv_2_muon_phi_integer,
+    {%- endif %}
+    {%- if (o1.is_muon_type and o2.is_muon_type) %}
+        eta_integer_h_r_obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_eta_integer_half_res,
+        phi_integer_h_r_obj1 => {{ o1.type | lower }}_bx_{{ o1.bx }}_phi_integer_half_res,
+        eta_integer_h_r_obj2 => {{ o2.type | lower }}_bx_{{ o2.bx }}_eta_integer_half_res,
+        phi_integer_h_r_obj2 => {{ o2.type | lower }}_bx_{{ o2.bx }}_phi_integer_half_res,
+    {%- endif %}
+    {%- if (o1.is_muon_type and o2.is_muon_type) %}
+        deta_integer_half_res => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer_half_res,
+        dphi_integer_half_res => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer_half_res,
     {%- endif %}
     {%- if not o2.is_esums_type %}
         deta_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer,
