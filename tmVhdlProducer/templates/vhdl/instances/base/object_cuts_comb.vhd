@@ -43,6 +43,10 @@
   {%- if (o1.isolation) or (o2.isolation) or (o3.isolation) or (o4.isolation) %}
         iso_luts_obj1 => (X"{{ o1.isolation.value | X01 }}", X"{{ o2.isolation.value | X01 }}", X"{{ o3.isolation.value | X01 }}", X"{{ o4.isolation.value | X01 }}"),
   {%- endif %}
+  {%- if (o1.displaced) or (o2.displaced) or (o3.displaced) or (o4.displaced) %}
+        disp_cuts_obj1 => ({{ o1.displaced | vhdl_bool }}, {{ o2.displaced | vhdl_bool }}, {{ o3.displaced | vhdl_bool }}, {{ o4.displaced | vhdl_bool }}),
+        disp_requs_obj1 => ({{ o1.displaced.state | vhdl_bool }}, {{ o2.displaced.state | vhdl_bool}}, {{ o3.displaced.state | vhdl_bool}}, {{ o4.displaced.state | vhdl_bool}}),
+  {% endif %}
   {%- if (o1.charge) or (o2.charge) or (o3.charge) or (o4.charge) %}
         requested_charges_obj1 => ("{{ o1.charge.value }}", "{{ o2.charge.value }}", "{{ o3.charge.value }}", "{{ o4.charge.value }}"),
   {%- endif %}
