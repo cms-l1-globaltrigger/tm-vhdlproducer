@@ -225,6 +225,11 @@
                     "brams": 0,
                     "sliceLUTs": 1
                 },
+                "Displaced": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 1
+                },
                 "Slice": {
                     "processors": 0,
                     "brams": 0,

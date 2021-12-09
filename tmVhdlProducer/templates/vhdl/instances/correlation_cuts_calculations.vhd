@@ -126,8 +126,13 @@ calc_cut_mass_over_dr_{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}
     )
     port map(
         lhc_clk,
+    {%- if o1.is_calo_type and o2.is_calo_type %}
         deta_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer,
         dphi_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer,
+    {%- elif o1.is_muon_type or o2.is_muon_type %}
+        deta_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta_integer_half_res,
+        dphi_integer => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi_integer_half_res,
+    {%- endif %}
         inv_mass_pt_in => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_pt,
         mass_over_dr => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_over_dr
     );

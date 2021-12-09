@@ -176,6 +176,7 @@ kImpactParameter = 'ImpactParameter'
 kCharge = 'Charge'
 kQuality = 'Quality'
 kIsolation = 'Isolation'
+kDisplaced = 'Displaced'
 kDeltaEta = 'DeltaEta'
 kDeltaPhi = 'DeltaPhi'
 kDeltaR = 'DeltaR'
@@ -215,6 +216,7 @@ CutTypeKey = {
     tmEventSetup.Charge: kCharge,
     tmEventSetup.Quality: kQuality,
     tmEventSetup.Isolation: kIsolation,
+    tmEventSetup.Displaced: kDisplaced,
     tmEventSetup.DeltaEta: kDeltaEta,
     tmEventSetup.DeltaPhi: kDeltaPhi,
     tmEventSetup.DeltaR: kDeltaR,
