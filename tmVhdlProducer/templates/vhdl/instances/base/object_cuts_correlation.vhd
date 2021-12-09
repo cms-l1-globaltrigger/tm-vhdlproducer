@@ -46,7 +46,7 @@
   {%- endif %}
   {%- if o.displaced %}
         disp_cut_obj{{i+1}} => {{ o.displaced | vhdl_bool }},
-        disp_requ_obj{{i+1}} => X"{{ o.displaced.value | X01 }}",
+        disp_requ_obj{{i+1}} => {{ o.displaced.state | vhdl_bool }},
   {% endif %}
   {%- if o.upt %}
         upt_cut_obj{{i+1}} => {{ o.upt | vhdl_bool }},
