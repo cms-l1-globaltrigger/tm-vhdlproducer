@@ -1237,7 +1237,7 @@ class ObjectHelper(VhdlHelper):
         self.count = CountCutHelper()
         self.upt = UptCutHelper()
         self.impactParameter = ImpactParameterCutHelper(0xf)
-        self.displaced = DisplacedCutHelper(0x0)
+        self.displaced = DisplacedCutHelper()
         # spatial cuts
         self.etaNrCuts = 0
         self.etaLowerLimit = [0, 0, 0, 0, 0]
@@ -1352,7 +1352,7 @@ class CutHelper(VhdlHelper):
 
     def __bool__(self):
         return self.enabled
-
+     
 class ThresholdCutHelper(CutHelper):
 
     def __init__(self, threshold=0):
@@ -1405,11 +1405,16 @@ class ImpactParameterCutHelper(LookupTableCutHelper):
         self.value = int(cut_handle.data)
         self.enabled = True
 
-class DisplacedCutHelper(LookupTableCutHelper):
+class BooleanCutHelper(CutHelper):
+
+    def __init__(self, state=False):
+        super().__init__()
+        self.state = state
+
+class DisplacedCutHelper(BooleanCutHelper):
 
     def update(self, cut_handle):
-        """Updates LUT value and enables cut."""
-        self.value = int(cut_handle.data)
+        self.state = bool(int(cut_handle.data))
         self.enabled = True
 
 class ChargeCutHelper(CutHelper):
