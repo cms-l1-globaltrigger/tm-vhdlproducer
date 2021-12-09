@@ -102,7 +102,7 @@ class VhdlHelperTest(unittest.TestCase):
             self.assertEqual(r, value)
 
     def test_cut_helper(self):
-        cut = vhdlhelper.CutHelper())
+        cut = vhdlhelper.CutHelper()
         self.assertEqual(cut.enabled, False)
 
     def test_boolean_cut_helper(self):
