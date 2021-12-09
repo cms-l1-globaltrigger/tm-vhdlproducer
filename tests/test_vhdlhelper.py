@@ -1,6 +1,11 @@
 import unittest
+from collections import namedtuple
 
 from tmVhdlProducer import vhdlhelper
+
+
+CutHandle = namedtuple('CutHandle', 'data')
+
 
 class VhdlHelperTest(unittest.TestCase):
 
@@ -95,6 +100,21 @@ class VhdlHelperTest(unittest.TestCase):
         for key, value in ref.items():
             r = vhdlhelper.bx_encode_4_array(key)
             self.assertEqual(r, value)
+
+    def test_cut_helper(self):
+        cut = vhdlhelper.CutHelper())
+        self.assertEqual(cut.enabled, False)
+
+    def test_boolean_cut_helper(self):
+        cut = vhdlhelper.BooleanCutHelper()
+        self.assertEqual(cut.enabled, False)
+        self.assertEqual(cut.state, False)
+        cut.update(CutHandle(data="1"))
+        self.assertEqual(cut.enabled, True)
+        self.assertEqual(cut.state, True)
+        cut.update(CutHandle(data="0"))
+        self.assertEqual(cut.enabled, True)
+        self.assertEqual(cut.state, False)
 
 if __name__ == '__main__':
     unittest.main()
