@@ -99,9 +99,9 @@ class TemplateEngine(object):
         self.environment = Environment(loader=loader, undefined=StrictUndefined)
         self.environment.filters.update(CustomFilters)
 
-    def render(self, template, data={}):
+    def render(self, template, data=None):
         template = self.environment.get_template(template)
-        return template.render(data)
+        return template.render(data or {})
 
 # -----------------------------------------------------------------------------
 #  VHDL producer class.
