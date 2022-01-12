@@ -3,25 +3,33 @@ VHDL Producer
 
 ## Install
 
-not for this branch!
+Install using pip (>= 19.0)
+
+```bash
+pip install --upgrade pip
+pip install git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git@2.12.0
+```
 
 ## Build from source
 
-Basic development instrcutions.
+Basic development instructions.
 
 ```bash
-git clone https://github.com/herbberg/tm-vhdlproducer.git
+git clone https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git
 cd tm-vhdlproducer
 git checkout master
 ```
+Create virtual environment.
 ```bash
 python3 -m venv env
 . env/bin/activate
 ```
+Install dependencies using pip.
 ```bash
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
+Install package for local development.
 ```bash
 python setup.py develop
 ```
@@ -140,7 +148,7 @@ L1Menu_sample-d1/
 
 ## Documentation
 
-A TWiki page template and a HTML menu ducumentation is also written to the
+A TWiki page template and a HTML menu documentation is also written to the
 `doc/` directory in the output location.
 
 ## Logging

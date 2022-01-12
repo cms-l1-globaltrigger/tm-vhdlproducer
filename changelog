@@ -4,11 +4,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.12.0] - 2021-12-06
+### Added
+- support for displaced jets
+### Changed
+- depending on tm-python 0.10.0
+- depending on tm-reporter 2.10.1
+
+## [2.11.1] - 2021-10-12
+### Changed
+- refactored resource calculation
+
 ## [2.11.0] - 2021-06-11
 ### Changed
 - mp7_ugt_legacy v1.15.0
 - refactored VHDL instance templates
-- updated vhdlhelper.py
+- updated module vhdlhelper
+- migration to utm 0.9.1 #27
 
 ## [2.10.1] - 2021-05-12
 ### Changed

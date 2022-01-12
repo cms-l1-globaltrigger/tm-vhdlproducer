@@ -45,6 +45,7 @@ import string
 import re, os
 
 from distutils.version import StrictVersion
+from typing import Iterable
 
 import tmEventSetup
 import tmGrammar  # import after tmEventSetup
@@ -56,9 +57,9 @@ from . import __version__
 #  Precompiled regular expressions
 # -----------------------------------------------------------------------------
 
-RegexCamelSnake1=re.compile(r'([^_])([A-Z][a-z]+)')
-RegexCamelSnake2=re.compile('([a-z0-9])([A-Z])')
-RegexVhdlLabel=re.compile('[^A-Za-z0-9_]')
+RegexCamelSnake1 = re.compile(r'([^_])([A-Z][a-z]+)')
+RegexCamelSnake2 = re.compile('([a-z0-9])([A-Z])')
+RegexVhdlLabel = re.compile('[^A-Za-z0-9_]')
 
 # -----------------------------------------------------------------------------
 #  Conversion dictionaries
@@ -94,6 +95,10 @@ ObjectTypes = {
     tmEventSetup.MBT0HFM: tmGrammar.MBT0HFM,
     tmEventSetup.MBT1HFM: tmGrammar.MBT1HFM,
     tmEventSetup.TOWERCOUNT: tmGrammar.TOWERCOUNT,
+    tmEventSetup.MUS0: tmGrammar.MUS0,
+    tmEventSetup.MUS1: tmGrammar.MUS1,
+    tmEventSetup.MUSOOT0: tmGrammar.MUSOOT0,
+    tmEventSetup.MUSOOT1: tmGrammar.MUSOOT1,
 }
 
 # Has the number of Objects of each Type
@@ -127,6 +132,10 @@ ObjectCount = {
     tmEventSetup.MBT0HFM:    1,
     tmEventSetup.MBT1HFM:    1,
     tmEventSetup.TOWERCOUNT: 1,
+    tmEventSetup.MUS0:       1,
+    tmEventSetup.MUS1:       1,
+    tmEventSetup.MUSOOT0:    1,
+    tmEventSetup.MUSOOT1:    1,
 }
 
 ComparisonOperator = {
@@ -139,7 +148,7 @@ ComparisonOperator = {
 #  Filters
 # -----------------------------------------------------------------------------
 
-def snakecase(label, separator='_'):
+def snakecase(label: str, separator: str = '_') -> str:
     """Transformes camel case label to spaced lower case (snaked) label.
 
     >>> snakecase('CamelCaseLabel')
@@ -148,7 +157,7 @@ def snakecase(label, separator='_'):
     subbed = RegexCamelSnake1.sub(rf'\1{separator}\2', label)
     return RegexCamelSnake2.sub(rf'\1{separator}\2', subbed).lower()
 
-def unique_name(name, names):
+def unique_name(name: str, names: Iterable) -> str:
     """Generate unique signal name to prevent name collisions."""
     count = 1
     def suffixed():
@@ -159,11 +168,11 @@ def unique_name(name, names):
         count += 1
     return suffixed()
 
-def vhdl_bool(value): # TODO add to filters
+def vhdl_bool(value: bool) -> str: # TODO add to filters
     """Returns VHDL boolean equivalent to value."""
     return 'true' if bool(value) else 'false'
 
-def vhdl_label(label): # TODO add to filters
+def vhdl_label(label: str) -> str: # TODO add to filters
     """Return normalized VHDL label for signal or instance names.
 
     >>> vhdl_label('001FooBar.value__@2_')
@@ -179,7 +188,7 @@ def vhdl_label(label): # TODO add to filters
         label = ''.join(('d', label))
     return snakecase(label) # Convert to spaced lower case
 
-def vhdl_expression(expression): # TODO add to filters
+def vhdl_expression(expression: str) -> str: # TODO add to filters
     """Return safe VHDL expression string using normalized signals for conditions.
 
     >>> vhdl_expression('(singleMu_1 and doubleMu_2)')
@@ -194,7 +203,7 @@ def vhdl_expression(expression): # TODO add to filters
         tokens.append(token)
     return ' '.join(tokens)
 
-def charge_encode(value):
+def charge_encode(value: str) -> str:
     """Encode charge value to VHDL string literal."""
     if value in ('positive', 'pos', '1'):
         return 'pos' # positive
@@ -202,7 +211,7 @@ def charge_encode(value):
         return 'neg' # negative
     return 'ign' # ignore
 
-def charge_correlation_encode(value):
+def charge_correlation_encode(value: str) -> str:
     """Encode charge correlation value to VHDL string literal."""
     if value in ('like', 'ls', '0'):
         return 'ls' # like sign
@@ -210,7 +219,7 @@ def charge_correlation_encode(value):
         return 'os' # opposite sign
     return 'ig' # ignore
 
-def bx_encode(value):
+def bx_encode(value: int) -> str:
     """Encode relative bunch crossings into VHDL notation. All positive values
     with the exception of zero are prefixed with m, all negative values are
     prefixed with p instead of the minus sign.
@@ -222,15 +231,12 @@ def bx_encode(value):
     # Zero value is not prefixed according to VHDL documentation.
     return '0'
 
-def bx_encode_4_array(value):
+def bx_encode_4_array(value: int) -> str:
     """Encode relative bunch crossings into VHDL notation (with bx array, where
     p2 is array index 0, p1 is array index 1, and so on.
     """
-    if value == 2: return '0'
-    if value == 1: return '1'
-    if value == 0: return '2'
-    if value == -1: return '3'
-    if value == -2: return '4'
+    return format([2, 1, 0, -1, -2].index(value), 'd')
+
 
 # -----------------------------------------------------------------------------
 #  Factories
@@ -1199,6 +1205,7 @@ class ObjectHelper(VhdlHelper):
         count               [CountCutHelper]
         upt                 [UptCutHelper]
         impactParameter     [ImpactParameterCutHelper]
+        displaced           [DisplacedCutHelper]
         etaNrCuts           [int]
         etaLowerLimit       [list]
         etaLowerLimit       [list]
@@ -1230,6 +1237,7 @@ class ObjectHelper(VhdlHelper):
         self.count = CountCutHelper()
         self.upt = UptCutHelper()
         self.impactParameter = ImpactParameterCutHelper(0xf)
+        self.displaced = DisplacedCutHelper()
         # spatial cuts
         self.etaNrCuts = 0
         self.etaLowerLimit = [0, 0, 0, 0, 0]
@@ -1275,6 +1283,8 @@ class ObjectHelper(VhdlHelper):
                 self.upt.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.ImpactParameter:
                 self.impactParameter.update(cut_handle)
+            elif cut_handle.cut_type == tmEventSetup.Displaced:
+                self.displaced.update(cut_handle)
             if cut_handle.cut_type == tmEventSetup.Slice:
                 self.slice.update(cut_handle)
         # setup eta windows
@@ -1342,7 +1352,7 @@ class CutHelper(VhdlHelper):
 
     def __bool__(self):
         return self.enabled
-
+     
 class ThresholdCutHelper(CutHelper):
 
     def __init__(self, threshold=0):
@@ -1394,6 +1404,20 @@ class ImpactParameterCutHelper(LookupTableCutHelper):
         """Updates LUT value and enables cut."""
         self.value = int(cut_handle.data)
         self.enabled = True
+
+class BooleanCutHelper(CutHelper):
+
+    def __init__(self, state=False):
+        super().__init__()
+        self.state = state
+     
+    def update(self, cut_handle):
+        self.state = bool(int(cut_handle.data))
+        self.enabled = True
+
+class DisplacedCutHelper(BooleanCutHelper):
+
+    pass
 
 class ChargeCutHelper(CutHelper):
 

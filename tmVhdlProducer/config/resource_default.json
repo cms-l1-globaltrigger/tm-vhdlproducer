@@ -58,6 +58,10 @@
                 "Centrality5": "SignalCondition",
                 "Centrality6": "SignalCondition",
                 "Centrality7": "SignalCondition",
+                "MuonShower0": "SignalCondition",
+                "MuonShower1": "SignalCondition",
+                "MuonShowerOutOfTime0": "SignalCondition",
+                "MuonShowerOutOfTime1": "SignalCondition",
                 "TowerCount": "TowerCountCondition",
                 "Externals": "ExternalCondition",
                 "InvariantMass": "CorrelationCondition",
@@ -92,6 +96,10 @@
                 "CENT5": "signal",
                 "CENT6": "signal",
                 "CENT7": "signal",
+                "MUS0": "signal",
+                "MUS1": "signal",
+                "MUSOOT0": "signal",
+                "MUSOOT1": "signal",
                 "MBT0HFP": "bias",
                 "MBT1HFP": "bias",
                 "MBT0HFM": "bias",
@@ -213,6 +221,11 @@
                     "sliceLUTs": 2
                 },
                 "Isolation": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 1
+                },
+                "Displaced": {
                     "processors": 0,
                     "brams": 0,
                     "sliceLUTs": 1
