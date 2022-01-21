@@ -71,7 +71,11 @@
 {% endfor %}
 -- External condition assignment
 {% for condition in module.externalConditions %}
+    {%- if condition.objects[0].externalChannelId == 63 %}
+{% include "instances/adt_dummy.vhd" %}
+    {%- else %}
 {{ condition.vhdl_signal }} <= bx_data.ext_cond({{ condition.objects[0].bx_arr }})({{ condition.objects[0].externalChannelId }}); -- {{ condition.objects[0].name }}
+    {%- endif %}
 {%- endfor %}
 
 -- ========================================================
