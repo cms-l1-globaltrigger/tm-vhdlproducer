@@ -13,15 +13,16 @@ cond_adt_5_i: entity work.adt_5_dummy
 {%- endif %}
     port map(
         lhc_clk,
-        bx_data.muon(2),
-        bx_data.eg(2),
-        bx_data.jet(2),
-        bx_data.tau(2),
-        bx_data.ett(2),
-        bx_data.htt(2),
-        bx_data.etm(2),
-        bx_data.htm(2),
-        bx_data.ettem(2),
-        bx_data.etmhf(2),
+--         clk240: in std_logic;
+        bx_data.mu,
+        bx_data.eg,
+        bx_data.jet,
+        bx_data.tau,
+        bx_data.ett,
+        bx_data.htt,
+        bx_data.etm,
+        bx_data.htm,
+        bx_data.ettem,
+        bx_data.etmhf,
         {{ condition.vhdl_signal }}
     );
