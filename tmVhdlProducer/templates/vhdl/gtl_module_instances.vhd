@@ -69,8 +69,10 @@
 {%- for condition in module.signalConditions %}
 {% include "instances/signal_condition.vhd" %}
 {% endfor %}
+{%- set adt_0_ext_cond_id = 250 %}
+{%- set adt_5_ext_cond_id = 255 %}
 {%- for condition in module.externalConditions %}
-    {%- if (condition.objects[0].externalChannelId >= 58) and (condition.objects[0].externalChannelId < 64) %}
+    {%- if (condition.objects[0].externalChannelId >= adt_0_ext_cond_id) and (condition.objects[0].externalChannelId <= adt_5_ext_cond_id) %}
 {% include "instances/adt_dummy/adt_dummy.vhd" %}
     {%- else %}
 -- External condition assignment
