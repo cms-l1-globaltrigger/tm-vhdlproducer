@@ -31,7 +31,7 @@ from collections import namedtuple
 import tmEventSetup
 import tmGrammar
 
-from .constants import BRAMS_TOTAL, SLICELUTS_TOTAL, PROCESSORS_TOTAL, NR_CALOS, NR_MUONS
+from .constants import BRAMS_TOTAL, SLICELUTS_TOTAL, PROCESSORS_TOTAL, NR_CALOS, NR_MUONS, NR_ADT, adt_obj_name
 
 from .handles import Payload
 from .handles import ObjectHandle
@@ -674,7 +674,6 @@ class ResourceTray(object):
 
         # Pick resource instance
         instance = self.find_instance(condition)
-        #print("===> instance: ",instance)
         if not instance:
             condition_type = ConditionTypeKey[condition.type]
             objects_types = [ObjectTypeKey[object_.type] for object_ in condition.objects]
@@ -684,37 +683,19 @@ class ResourceTray(object):
 
         # Pick object configuration
         objects_types = [ObjectTypeKey[object_.type] for object_ in condition.objects]
-        print("===> objects_types(0): ",objects_types[0])
+        # adt_obj_name from constant.py
         if objects_types[0] == 'EXT':
-            print("===> EXT obj type")
             for object in condition.objects:
-                #print("===> object.name: ",object.name)
-                if object.name == 'EXT_ADT_0':
-                    instance_objects = filter_first(lambda item: item.types == ['adt_0'], instance.objects)
-                    print("===> instance_objects adt_0: ",instance_objects)
-                elif object.name == 'EXT_ADT_1':
-                    instance_objects = filter_first(lambda item: item.types == ['adt_1'], instance.objects)
-                    print("===> instance_objects adt_1: ",instance_objects)
-                elif object.name == 'EXT_ADT_2':
-                    instance_objects = filter_first(lambda item: item.types == ['adt_2'], instance.objects)
-                    print("===> instance_objects adt_2: ",instance_objects)
-                elif object.name == 'EXT_ADT_3':
-                    instance_objects = filter_first(lambda item: item.types == ['adt_3'], instance.objects)
-                    print("===> instance_objects adt_3: ",instance_objects)
-                elif object.name == 'EXT_ADT_4':
-                    instance_objects = filter_first(lambda item: item.types == ['adt_4'], instance.objects)
-                    print("===> instance_objects adt_4: ",instance_objects)
-                elif object.name == 'EXT_ADT_5':
-                    instance_objects = filter_first(lambda item: item.types == ['adt_5'], instance.objects)
-                    print("===> instance_objects adt_5: ",instance_objects)
+                if object.name in adt_obj_name:
+                    for i in range (0,NR_ADT):
+                        if object.name == adt_obj_name[i]:
+                            instance_objects = filter_first(lambda item: item.types == ['adt_{}'.format(i)], instance.objects)
                 else:
                     mapped_objects = self.map_objects(objects_types)
                     instance_objects = filter_first(lambda item: item.types == mapped_objects, instance.objects)
-                    print("===> instance_objects ext: ",instance_objects)
         else:
             mapped_objects = self.map_objects(objects_types)
             instance_objects = filter_first(lambda item: item.types == mapped_objects, instance.objects)
-            print("===> instance_objects others: ",instance_objects)
 
         if not instance_objects:
             condition_type = ConditionTypeKey[condition.type]
