@@ -9,7 +9,7 @@
         et_ge_mode => {{ o.operator | vhdl_bool }},
   {%- endif %}
   {%- if o.count  %}
-        count_threshold => X"{{ o.count.threshold | X04 }}",
+        et_threshold => X"{{ o.count.threshold | X04 }}",
   {%- else %}
         et_threshold => X"{{ o.threshold | X04 }}",
   {%- endif %}
