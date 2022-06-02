@@ -898,6 +898,8 @@ class Module(object):
             for combination in calc_diff_combinations():
                 factor = calc_factor(combination)
                 sliceLUTs += self.differences.sliceLUTs * factor
+                sliceLUTs_loc = self.differences.sliceLUTs * factor
+                print("===> calc_diff_payload - objects/bx:", combination, "sliceLUTs:", int(sliceLUTs_loc), "sliceLUTs sum:", int(sliceLUTs))           
             return Payload(brams, sliceLUTs, processors)
 
         def calc_cosh_cos_mass_combinations() -> dict:
@@ -922,6 +924,10 @@ class Module(object):
                 sliceLUTs += self.cosh_deta_cos_dphi.sliceLUTs * factor
                 sliceLUTs += self.mass_calc.sliceLUTs * factor
                 processors += self.mass_calc.processors * factor
+                sliceLUTs_loc = self.cosh_deta_cos_dphi.sliceLUTs * factor
+                sliceLUTs_loc += self.mass_calc.sliceLUTs * factor
+                processors_loc = self.mass_calc.processors * factor
+                print("===> calc_cosh_cos_mass_payload - objects/bx:", combination, "sliceLUTs:", int(sliceLUTs_loc), "sliceLUTs sum:", int(sliceLUTs), "DSPs:", int(processors_loc), "DSPs sum:", int(processors))
             return Payload(brams, sliceLUTs, processors)
 
         # payload for FDL algo slices
@@ -1287,8 +1293,9 @@ def list_distribution(collection):
         logging.info("| Condition distribution, sorted by weight (ascending)                        |")
     logging.info("|                                                                             |")
     logging.info("|-----------------------------------------------------------------------------|")
-    logging.info("| Name                                             | Modules                  |")
-    logging.info("|--------------------------------------------------|--------------------------|")
+    logging.info("|-----------------------------------------------------------------------------------|")
+    logging.info("| Name                                             | Modules | sLUTs | DSPs | BRAMs |")
+    logging.info("|--------------------------------------------------|---------|-------|------|-------|")
     conditions = sorted(collection.conditions, key=lambda condition: condition.payload, reverse=collection.reverse_sorting)
     for condition in conditions:
         modules = []
@@ -1296,8 +1303,8 @@ def list_distribution(collection):
             if condition in module.conditions:
                 modules.append(module.id)
         modules_list = ','.join([str(module) for module in modules])
-        logging.info(f"| {condition.name:<48} | {modules_list:<24} |")
-    logging.info("|--------------------------------------------------|--------------------------|")
+        logging.info(f"| {condition.name:<48} | {modules_list:<7} | {condition.payload.sliceLUTs:<6}| {condition.payload.processors:<5}| {condition.payload.brams:<5} |")
+    logging.info("|--------------------------------------------------|---------|-------|------|-------|")
 
 #def list_summary(collection):
     #message = f"Summary for distribution on {len(collection)} modules, shadow ratio: {collection.ratio:.1f}"

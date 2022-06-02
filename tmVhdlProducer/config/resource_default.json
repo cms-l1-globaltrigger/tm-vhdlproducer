@@ -144,7 +144,7 @@
         "cosh_deta_cos_dphi": {
             "processors": 0,
             "brams": 0,
-            "sliceLUTs": 301
+            "sliceLUTs": 81
         },
         "mass_calc": {
             "processors": 3,
