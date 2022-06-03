@@ -139,6 +139,21 @@
         "differences": {
             "processors": 0,
             "brams": 0,
+            "sliceLUTs": 97
+        },
+        "deta_calc": {
+            "processors": 0,
+            "brams": 0,
+            "sliceLUTs": 51
+        },
+        "dphi_calc": {
+            "processors": 0,
+            "brams": 0,
+            "sliceLUTs": 50
+        },
+        "dr_calc": {
+            "processors": 2,
+            "brams": 0,
             "sliceLUTs": 101
         },
         "cosh_deta_cos_dphi": {

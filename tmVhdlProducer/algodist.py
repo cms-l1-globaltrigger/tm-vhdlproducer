@@ -539,6 +539,30 @@ class ResourceTray(object):
         differences = self.resources.differences
         return Payload(brams=differences.brams, sliceLUTs=differences.sliceLUTs, processors=differences.processors)
 
+    def deta_calc(self):
+        """Returns resource consumption payload for one unit of deta_calc calculation.
+        >>> tray.deta_calc()
+        Payload(sliceLUTs=301, processors=0, brams=0)
+        """
+        deta_calc = self.resources.deta_calc
+        return Payload(brams=deta_calc.brams, sliceLUTs=deta_calc.sliceLUTs, processors=deta_calc.processors)
+
+    def dphi_calc(self):
+        """Returns resource consumption payload for one unit of dphi_calc calculation.
+        >>> tray.dphi_calc()
+        Payload(sliceLUTs=301, processors=0, brams=0)
+        """
+        dphi_calc = self.resources.dphi_calc
+        return Payload(brams=dphi_calc.brams, sliceLUTs=dphi_calc.sliceLUTs, processors=dphi_calc.processors)
+
+    def dr_calc(self):
+        """Returns resource consumption payload for one unit of dr_calc calculation.
+        >>> tray.dr_calc()
+        Payload(sliceLUTs=301, processors=0, brams=0)
+        """
+        dr_calc = self.resources.dr_calc
+        return Payload(brams=dr_calc.brams, sliceLUTs=dr_calc.sliceLUTs, processors=dr_calc.processors)
+
     def cosh_deta_cos_dphi(self):
         """Returns resource consumption payload for one unit of cosh_deta_cos_dphi calculation for mass.
         >>> tray.cosh_deta_cos_dphi()
@@ -748,6 +772,9 @@ class Module(object):
 
 # =================================================================================
         self.differences = tray.differences()
+        self.deta_calc = tray.deta_calc()
+        self.dphi_calc = tray.dphi_calc()
+        self.dr_calc = tray.dr_calc()
         self.cosh_deta_cos_dphi = tray.cosh_deta_cos_dphi()
         self.mass_calc = tray.mass_calc()
 # =================================================================================
@@ -899,11 +926,90 @@ class Module(object):
                 factor = calc_factor(combination)
                 sliceLUTs += self.differences.sliceLUTs * factor
                 sliceLUTs_loc = self.differences.sliceLUTs * factor
-                print("===> calc_diff_payload - objects/bx:", combination, "sliceLUTs:", int(sliceLUTs_loc), "sliceLUTs sum:", int(sliceLUTs))           
+            return Payload(brams, sliceLUTs, processors)
+
+        def calc_deta_combinations() -> dict:
+            """Object combinations for instances of "deltaR" calculations."""
+            combinations = {}
+            for algorithm in self.algorithms:
+                for condition in algorithm.conditions:
+                    if condition.type in corr_cond_2_obj:
+                        for cut in condition.cuts:
+                            if cut.cut_type == tmEventSetup.DeltaEta:
+                                a = condition.objects[0]
+                                b = condition.objects[1]
+                                key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
+                                combinations[key] = (a, b)
+            return combinations
+
+        def calc_deta_payload() -> Payload:
+            """Payload for instances of "cosh_deta_cos_dphi" calculations."""
+            brams = 0
+            sliceLUTs = 0
+            processors = 0
+            for combination in calc_deta_combinations():
+                factor = calc_factor(combination)
+                sliceLUTs += self.deta_calc.sliceLUTs * factor
+                sliceLUTs_loc = self.deta_calc.sliceLUTs * factor
+                #print("===> calc_deta_payload - objects/bx:", combination, "sliceLUTs:", int(sliceLUTs_loc), "sliceLUTs sum:")
+            return Payload(brams, sliceLUTs, processors)
+
+        def calc_dphi_combinations() -> dict:
+            """Object combinations for instances of "deltaR" calculations."""
+            combinations = {}
+            for algorithm in self.algorithms:
+                for condition in algorithm.conditions:
+                    if condition.type in corr_cond_2_obj:
+                        for cut in condition.cuts:
+                            if cut.cut_type == tmEventSetup.DeltaPhi:
+                                a = condition.objects[0]
+                                b = condition.objects[1]
+                                key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
+                                combinations[key] = (a, b)
+            return combinations
+
+        def calc_dphi_payload() -> Payload:
+            """Payload for instances of "cosh_dphi_cos_dphi" calculations."""
+            brams = 0
+            sliceLUTs = 0
+            processors = 0
+            for combination in calc_dphi_combinations():
+                factor = calc_factor(combination)
+                sliceLUTs += self.dphi_calc.sliceLUTs * factor
+                sliceLUTs_loc = self.dphi_calc.sliceLUTs * factor
+                #print("===> calc_dphi_payload - objects/bx:", combination, "sliceLUTs:", int(sliceLUTs_loc), "sliceLUTs sum:")
+            return Payload(brams, sliceLUTs, processors)
+
+        def calc_dr_combinations() -> dict:
+            """Object combinations for instances of "deltaR" calculations."""
+            combinations = {}
+            for algorithm in self.algorithms:
+                for condition in algorithm.conditions:
+                    if condition.type in corr_cond_2_obj:
+                        for cut in condition.cuts:
+                            if cut.cut_type == tmEventSetup.DeltaR:
+                                a = condition.objects[0]
+                                b = condition.objects[1]
+                                key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
+                                combinations[key] = (a, b)
+            return combinations
+
+        def calc_dr_payload() -> Payload:
+            """Payload for instances of "cosh_deta_cos_dphi" calculations."""
+            brams = 0
+            sliceLUTs = 0
+            processors = 0
+            for combination in calc_dr_combinations():
+                factor = calc_factor(combination)
+                sliceLUTs += self.dr_calc.sliceLUTs * factor
+                processors += self.dr_calc.processors * factor
+                sliceLUTs_loc = self.dr_calc.sliceLUTs * factor
+                processors_loc = self.dr_calc.processors * factor
+                #print("===> calc_dr_payload - objects/bx:", combination, "sliceLUTs:", int(sliceLUTs_loc), "sliceLUTs sum:", int(sliceLUTs), "DSPs:", int(processors_loc), "DSPs sum:", int(processors))
             return Payload(brams, sliceLUTs, processors)
 
         def calc_cosh_cos_mass_combinations() -> dict:
-            """Object combinations for instances of "cosh_deta_cos_dphi" calculations."""
+            """Object combinations for instances of "mass" calculations."""
             combinations = {}
             for algorithm in self.algorithms:
                 for condition in algorithm.conditions:
@@ -915,7 +1021,7 @@ class Module(object):
             return combinations
 
         def calc_cosh_cos_mass_payload() -> Payload:
-            """Payload for instances of "cosh_deta_cos_dphi" calculations."""
+            """Payload for instances of "mass" calculations."""
             brams = 0
             sliceLUTs = 0
             processors = 0
@@ -927,7 +1033,6 @@ class Module(object):
                 sliceLUTs_loc = self.cosh_deta_cos_dphi.sliceLUTs * factor
                 sliceLUTs_loc += self.mass_calc.sliceLUTs * factor
                 processors_loc = self.mass_calc.processors * factor
-                print("===> calc_cosh_cos_mass_payload - objects/bx:", combination, "sliceLUTs:", int(sliceLUTs_loc), "sliceLUTs sum:", int(sliceLUTs), "DSPs:", int(processors_loc), "DSPs sum:", int(processors))
             return Payload(brams, sliceLUTs, processors)
 
         # payload for FDL algo slices
@@ -936,7 +1041,16 @@ class Module(object):
         # payload for instances of "differences" calculations
         payload += calc_diff_payload()
 
-        # payload for instances of "cosh_deta_cos_dphi" calculations
+        # payload for instances of "deltaEta" calculations
+        payload += calc_deta_payload()
+
+        # payload for instances of "deltaPhi" calculations
+        payload += calc_dphi_payload()
+
+        # payload for instances of "deltaR" calculations
+        payload += calc_dr_payload()
+
+        # payload for instances of "mass" calculations
         payload += calc_cosh_cos_mass_payload()
 
 # =================================================================================
