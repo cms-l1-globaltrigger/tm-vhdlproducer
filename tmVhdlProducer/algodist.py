@@ -926,6 +926,7 @@ class Module(object):
                 factor = calc_factor(combination)
                 sliceLUTs += self.differences.sliceLUTs * factor
                 sliceLUTs_loc = self.differences.sliceLUTs * factor
+                #print("===> calc_diff_payload - objects/bx:", combination, "sliceLUTs:", int(sliceLUTs_loc))
             return Payload(brams, sliceLUTs, processors)
 
         def calc_deta_combinations() -> dict:
@@ -951,7 +952,7 @@ class Module(object):
                 factor = calc_factor(combination)
                 sliceLUTs += self.deta_calc.sliceLUTs * factor
                 sliceLUTs_loc = self.deta_calc.sliceLUTs * factor
-                #print("===> calc_deta_payload - objects/bx:", combination, "sliceLUTs:", int(sliceLUTs_loc), "sliceLUTs sum:")
+                #print("===> calc_deta_payload - objects/bx:", combination, "sliceLUTs:", int(sliceLUTs_loc))
             return Payload(brams, sliceLUTs, processors)
 
         def calc_dphi_combinations() -> dict:
@@ -977,7 +978,7 @@ class Module(object):
                 factor = calc_factor(combination)
                 sliceLUTs += self.dphi_calc.sliceLUTs * factor
                 sliceLUTs_loc = self.dphi_calc.sliceLUTs * factor
-                #print("===> calc_dphi_payload - objects/bx:", combination, "sliceLUTs:", int(sliceLUTs_loc), "sliceLUTs sum:")
+                #print("===> calc_dphi_payload - objects/bx:", combination, "sliceLUTs:", int(sliceLUTs_loc))
             return Payload(brams, sliceLUTs, processors)
 
         def calc_dr_combinations() -> dict:
@@ -1005,7 +1006,7 @@ class Module(object):
                 processors += self.dr_calc.processors * factor
                 sliceLUTs_loc = self.dr_calc.sliceLUTs * factor
                 processors_loc = self.dr_calc.processors * factor
-                #print("===> calc_dr_payload - objects/bx:", combination, "sliceLUTs:", int(sliceLUTs_loc), "sliceLUTs sum:", int(sliceLUTs), "DSPs:", int(processors_loc), "DSPs sum:", int(processors))
+                #print("===> calc_dr_payload - objects/bx:", combination, "sliceLUTs:", int(sliceLUTs_loc), "DSPs:", int(processors_loc))
             return Payload(brams, sliceLUTs, processors)
 
         def calc_cosh_cos_mass_combinations() -> dict:
@@ -1033,6 +1034,7 @@ class Module(object):
                 sliceLUTs_loc = self.cosh_deta_cos_dphi.sliceLUTs * factor
                 sliceLUTs_loc += self.mass_calc.sliceLUTs * factor
                 processors_loc = self.mass_calc.processors * factor
+                #print("===> calc_cosh_cos_mass_payload - objects/bx:", combination, "sliceLUTs:", int(sliceLUTs_loc), "DSPs:", int(processors_loc))
             return Payload(brams, sliceLUTs, processors)
 
         # payload for FDL algo slices
