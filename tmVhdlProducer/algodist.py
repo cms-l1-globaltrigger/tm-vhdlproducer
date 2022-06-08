@@ -431,6 +431,45 @@ def parse_range(expr):
         result.update(expand_range(token))
     return list(result)
 
+def obj_type_to_str(argument):
+    switcher = {
+        0: "MU",
+        1: "EG",
+        2: "TAU",
+        3: "JET",
+        4: "ETT",
+        5: "HTT",
+        6: "ETM",
+        7: "HTM",
+        8: "EXT",
+        13: "MBT0HFP",
+        14: "MBT1HFP",
+        15: "MBT0HFM",
+        16: "MBT1HFM",
+        17: "ETTEM",
+        18: "ETMHF",
+        19: "TOWERCOUNT",
+        26: "ASYMET",
+        27: "ASYMHT",
+        28: "ASYMETHF",
+        29: "ASYMHTHF",
+        30: "CENT0",
+        31: "CENT1",
+        32: "CENT2",
+        33: "CENT3",
+        34: "CENT4",
+        35: "CENT5",
+        36: "CENT6",
+        37: "CENT7",
+        38: "MUS0",
+        39: "MUS1",
+        40: "MUSOOT0",
+        41: "MUSOOT1",
+    }
+    if (argument > 9 and argument < 13) or (argument > 19 and argument < 26) or argument > 41:
+        raise ValueError(f"invalid range '{argument}'")
+    return switcher.get(argument, "nothing")
+
 #
 # Classes
 #
@@ -880,6 +919,7 @@ class Module(object):
             brams = self.fdl_algo_slice.brams * size
             sliceLUTs = self.fdl_algo_slice.sliceLUTs * size
             processors = self.fdl_algo_slice.processors * size
+            logging.debug("calc_fdl_payload - %s sliceLUTs: %s DSPs: %s BRAMs: %s",  self.id, int(sliceLUTs), int(processors), int(brams))
             return Payload(brams, sliceLUTs, processors)
 
         def calc_diff_combinations() -> dict:
@@ -926,7 +966,7 @@ class Module(object):
                 factor = calc_factor(combination)
                 sliceLUTs += self.differences.sliceLUTs * factor
                 sliceLUTs_loc = self.differences.sliceLUTs * factor
-                #print("===> calc_diff_payload - objects/bx:", combination, "sliceLUTs:", int(sliceLUTs_loc))
+                logging.debug("calc_diff_payload - %s combination: %s objects: %s %s bx: %s %s sliceLUTs: %s",  self.id, combination, obj_type_to_str(combination[0]), obj_type_to_str(combination[1]), combination[2], combination[3], int(sliceLUTs_loc))
             return Payload(brams, sliceLUTs, processors)
 
         def calc_deta_combinations() -> dict:
@@ -952,7 +992,7 @@ class Module(object):
                 factor = calc_factor(combination)
                 sliceLUTs += self.deta_calc.sliceLUTs * factor
                 sliceLUTs_loc = self.deta_calc.sliceLUTs * factor
-                #print("===> calc_deta_payload - objects/bx:", combination, "sliceLUTs:", int(sliceLUTs_loc))
+                logging.debug("calc_deta_payload - %s combination: %s objects: %s %s bx: %s %s sliceLUTs: %s",  self.id, combination, obj_type_to_str(combination[0]), obj_type_to_str(combination[1]), combination[2], combination[3], int(sliceLUTs_loc))
             return Payload(brams, sliceLUTs, processors)
 
         def calc_dphi_combinations() -> dict:
@@ -978,7 +1018,7 @@ class Module(object):
                 factor = calc_factor(combination)
                 sliceLUTs += self.dphi_calc.sliceLUTs * factor
                 sliceLUTs_loc = self.dphi_calc.sliceLUTs * factor
-                #print("===> calc_dphi_payload - objects/bx:", combination, "sliceLUTs:", int(sliceLUTs_loc))
+                logging.debug("calc_dphi_payload - %s combination: %s objects: %s %s bx: %s %s sliceLUTs: %s",  self.id, combination, obj_type_to_str(combination[0]), obj_type_to_str(combination[1]), combination[2], combination[3], int(sliceLUTs_loc))
             return Payload(brams, sliceLUTs, processors)
 
         def calc_dr_combinations() -> dict:
@@ -1006,7 +1046,7 @@ class Module(object):
                 processors += self.dr_calc.processors * factor
                 sliceLUTs_loc = self.dr_calc.sliceLUTs * factor
                 processors_loc = self.dr_calc.processors * factor
-                #print("===> calc_dr_payload - objects/bx:", combination, "sliceLUTs:", int(sliceLUTs_loc), "DSPs:", int(processors_loc))
+                logging.debug("calc_dr_payload - %s combination: %s objects: %s %s bx: %s %s sliceLUTs: %s DSPs: %s", self.id, combination, obj_type_to_str(combination[0]), obj_type_to_str(combination[1]), combination[2], combination[3], int(sliceLUTs_loc), int(processors_loc))
             return Payload(brams, sliceLUTs, processors)
 
         def calc_cosh_cos_mass_combinations() -> dict:
@@ -1034,7 +1074,7 @@ class Module(object):
                 sliceLUTs_loc = self.cosh_deta_cos_dphi.sliceLUTs * factor
                 sliceLUTs_loc += self.mass_calc.sliceLUTs * factor
                 processors_loc = self.mass_calc.processors * factor
-                #print("===> calc_cosh_cos_mass_payload - objects/bx:", combination, "sliceLUTs:", int(sliceLUTs_loc), "DSPs:", int(processors_loc))
+                logging.debug("calc_cosh_cos_mass_payload -  %s combination: %s objects: %s %s bx: %s %s sliceLUTs: %s DSPs: %s",  self.id, combination, obj_type_to_str(combination[0]), obj_type_to_str(combination[1]), combination[2], combination[3], int(sliceLUTs_loc), int(processors_loc))
             return Payload(brams, sliceLUTs, processors)
 
         # payload for FDL algo slices
