@@ -123,8 +123,8 @@
         },
         "floor": {
             "processors": 0,
-            "sliceLUTs": 31556,
-            "brams": 608
+            "sliceLUTs": 43254,
+            "brams": 544
         },
         "ceiling": {
             "processors": 3600,
@@ -135,6 +135,11 @@
             "processors": 0,
             "brams": 0,
             "sliceLUTs": 311
+        },
+        "fdl_algo_floor": {
+            "processors": 0,
+            "brams": 64,
+            "sliceLUTs": 23300
         },
         "differences": {
             "processors": 0,

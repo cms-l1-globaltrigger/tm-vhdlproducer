@@ -569,6 +569,14 @@ class ResourceTray(object):
         fdl_algo_slice = self.resources.fdl_algo_slice
         return Payload(brams=fdl_algo_slice.brams, sliceLUTs=fdl_algo_slice.sliceLUTs, processors=fdl_algo_slice.processors)
 
+    def fdl_algo_floor(self):
+        """Returns resource consumption payload for one FDL "floor".
+        >>> tray.fdl_algo_floor()
+        Payload(sliceLUTs=311, processors=0, brams=0)
+        """
+        fdl_algo_floor = self.resources.fdl_algo_floor
+        return Payload(brams=fdl_algo_floor.brams, sliceLUTs=fdl_algo_floor.sliceLUTs, processors=fdl_algo_floor.processors)
+
 # =================================================================================
     def differences(self):
         """Returns resource consumption payload for one unit of differences calculation.
@@ -808,6 +816,7 @@ class Module(object):
         self.floor = tray.floor()
         self.ceiling = tray.ceiling()
         self.fdl_algo_slice = tray.fdl_algo_slice()
+        self.fdl_algo_floor = tray.fdl_algo_floor()
 
 # =================================================================================
         self.differences = tray.differences()
@@ -817,6 +826,7 @@ class Module(object):
         self.cosh_deta_cos_dphi = tray.cosh_deta_cos_dphi()
         self.mass_calc = tray.mass_calc()
 # =================================================================================
+        self.debug = False
 
     def __len__(self):
         """Returns count of algorithms assigned to this module."""
@@ -838,6 +848,10 @@ class Module(object):
     @property
     def payload(self):
         payload = self.floor
+        calc_name = "floor"
+        n_a = "n.a."
+        if self.debug:
+            logging.debug(f"| {calc_name:<30} | {n_a:<7} | {n_a:<7}| {n_a:<4}| {n_a:<4}| {int(self.floor.sliceLUTs):>5} | {int(self.floor.processors):>5} | {int(self.floor.brams):>5} |")
 
 # =================================================================================
         corr_cond_2_obj = [
@@ -915,11 +929,16 @@ class Module(object):
 
         def calc_fdl_payload() -> Payload:
             """Payload for FDL algo slices."""
+            calc_name = "fdl_module"
             size = len(self.algorithms)
             brams = self.fdl_algo_slice.brams * size
             sliceLUTs = self.fdl_algo_slice.sliceLUTs * size
             processors = self.fdl_algo_slice.processors * size
-            logging.debug("calc_fdl_payload - %s sliceLUTs: %s DSPs: %s BRAMs: %s",  self.id, int(sliceLUTs), int(processors), int(brams))
+            brams += self.fdl_algo_floor.brams
+            sliceLUTs += self.fdl_algo_floor.sliceLUTs
+            processors += self.fdl_algo_floor.processors
+            if self.debug:
+                logging.debug(f"| {calc_name:<30} | {n_a:<7} | {n_a:<7}| {n_a:<4}| {n_a:<4}| {int(sliceLUTs):>5} | {int(processors):>5} | {int(brams):>5} |")
             return Payload(brams, sliceLUTs, processors)
 
         def calc_diff_combinations() -> dict:
@@ -959,6 +978,7 @@ class Module(object):
 
         def calc_diff_payload() -> Payload:
             """Payload for instances of "differences" calculations."""
+            calc_name = "calc_deta_dphi_integer"
             brams = 0
             sliceLUTs = 0
             processors = 0
@@ -966,7 +986,8 @@ class Module(object):
                 factor = calc_factor(combination)
                 sliceLUTs += self.differences.sliceLUTs * factor
                 sliceLUTs_loc = self.differences.sliceLUTs * factor
-                logging.debug("calc_diff_payload - %s combination: %s objects: %s %s bx: %s %s sliceLUTs: %s",  self.id, combination, obj_type_to_str(combination[0]), obj_type_to_str(combination[1]), combination[2], combination[3], int(sliceLUTs_loc))
+                if self.debug:
+                    logging.debug(f"| {calc_name:<30} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}| {int(sliceLUTs_loc):>5} | {processors:>5} | {brams:>5} |")
             return Payload(brams, sliceLUTs, processors)
 
         def calc_deta_combinations() -> dict:
@@ -985,6 +1006,7 @@ class Module(object):
 
         def calc_deta_payload() -> Payload:
             """Payload for instances of "cosh_deta_cos_dphi" calculations."""
+            calc_name = "calc_cut_deta"
             brams = 0
             sliceLUTs = 0
             processors = 0
@@ -992,7 +1014,8 @@ class Module(object):
                 factor = calc_factor(combination)
                 sliceLUTs += self.deta_calc.sliceLUTs * factor
                 sliceLUTs_loc = self.deta_calc.sliceLUTs * factor
-                logging.debug("calc_deta_payload - %s combination: %s objects: %s %s bx: %s %s sliceLUTs: %s",  self.id, combination, obj_type_to_str(combination[0]), obj_type_to_str(combination[1]), combination[2], combination[3], int(sliceLUTs_loc))
+                if self.debug:
+                    logging.debug(f"| {calc_name:<30} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}| {int(sliceLUTs_loc):>5} | {processors:>5} | {brams:>5} |")
             return Payload(brams, sliceLUTs, processors)
 
         def calc_dphi_combinations() -> dict:
@@ -1011,6 +1034,7 @@ class Module(object):
 
         def calc_dphi_payload() -> Payload:
             """Payload for instances of "cosh_dphi_cos_dphi" calculations."""
+            calc_name = "calc_cut_dphi"
             brams = 0
             sliceLUTs = 0
             processors = 0
@@ -1018,7 +1042,8 @@ class Module(object):
                 factor = calc_factor(combination)
                 sliceLUTs += self.dphi_calc.sliceLUTs * factor
                 sliceLUTs_loc = self.dphi_calc.sliceLUTs * factor
-                logging.debug("calc_dphi_payload - %s combination: %s objects: %s %s bx: %s %s sliceLUTs: %s",  self.id, combination, obj_type_to_str(combination[0]), obj_type_to_str(combination[1]), combination[2], combination[3], int(sliceLUTs_loc))
+                if self.debug:
+                    logging.debug(f"| {calc_name:<30} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}| {int(sliceLUTs_loc):>5} | {processors:>5} | {brams:>5} |")
             return Payload(brams, sliceLUTs, processors)
 
         def calc_dr_combinations() -> dict:
@@ -1037,6 +1062,7 @@ class Module(object):
 
         def calc_dr_payload() -> Payload:
             """Payload for instances of "cosh_deta_cos_dphi" calculations."""
+            calc_name = "calc_cut_deltaR"
             brams = 0
             sliceLUTs = 0
             processors = 0
@@ -1046,7 +1072,8 @@ class Module(object):
                 processors += self.dr_calc.processors * factor
                 sliceLUTs_loc = self.dr_calc.sliceLUTs * factor
                 processors_loc = self.dr_calc.processors * factor
-                logging.debug("calc_dr_payload - %s combination: %s objects: %s %s bx: %s %s sliceLUTs: %s DSPs: %s", self.id, combination, obj_type_to_str(combination[0]), obj_type_to_str(combination[1]), combination[2], combination[3], int(sliceLUTs_loc), int(processors_loc))
+                if self.debug:
+                    logging.debug(f"| {calc_name:<30} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}| {int(sliceLUTs_loc):>5} | {int(processors_loc):>5} | {brams:>5} |")
             return Payload(brams, sliceLUTs, processors)
 
         def calc_cosh_cos_mass_combinations() -> dict:
@@ -1063,6 +1090,7 @@ class Module(object):
 
         def calc_cosh_cos_mass_payload() -> Payload:
             """Payload for instances of "mass" calculations."""
+            calc_name = "calc_cut_mass_inv_pt"
             brams = 0
             sliceLUTs = 0
             processors = 0
@@ -1074,7 +1102,8 @@ class Module(object):
                 sliceLUTs_loc = self.cosh_deta_cos_dphi.sliceLUTs * factor
                 sliceLUTs_loc += self.mass_calc.sliceLUTs * factor
                 processors_loc = self.mass_calc.processors * factor
-                logging.debug("calc_cosh_cos_mass_payload -  %s combination: %s objects: %s %s bx: %s %s sliceLUTs: %s DSPs: %s",  self.id, combination, obj_type_to_str(combination[0]), obj_type_to_str(combination[1]), combination[2], combination[3], int(sliceLUTs_loc), int(processors_loc))
+                if self.debug:
+                    logging.debug(f"| {calc_name:<30} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}| {int(sliceLUTs_loc):>5} | {int(processors_loc):>5} | {brams:>5} |")
             return Payload(brams, sliceLUTs, processors)
 
         # payload for FDL algo slices
@@ -1462,33 +1491,6 @@ def list_distribution(collection):
         logging.info(f"| {condition.name:<48} | {modules_list:<7} | {condition.payload.sliceLUTs:<6}| {condition.payload.processors:<5}| {condition.payload.brams:<5} |")
     logging.info("|--------------------------------------------------|---------|-------|------|-------|")
 
-#def list_summary(collection):
-    #message = f"Summary for distribution on {len(collection)} modules, shadow ratio: {collection.ratio:.1f}"
-    #logging.info("|--------------------------------------------------------------------------------------|")
-    #logging.info("|                                                                                      |")
-    #logging.info(f"| {message:<84} |")
-    #logging.info("|                                                                                      |")
-    #logging.info("|-------------------------------------|------------------------------------------------|")
-    #logging.info("|                                     |                    Payload                     |")
-    #logging.info("|-------------------------------------|------------------------------------------------|")
-    #logging.info("|              Module                 |     BRAMs     |   SliceLUTs    |     DSPs      |")
-    #logging.info("|-------------------------------------|------------------------------------------------|")
-    #logging.info("| ID | Algorithms | Conditions | Rel. | Value |  [%]  | Value  |  [%]  | Value |  [%]  |")
-    #logging.info("|----|------------|------------|------|-------|-------|--------|-------|-------|-------|")
-    #for module in collection:
-        #algorithms = len(module)
-        #conditions = len(module.conditions)
-        #proportion = float(conditions) / algorithms if algorithms else 1.0
-        #brams_val = module.payload.brams
-        #sliceLUTs_val = module.payload.sliceLUTs
-        #processors_val = module.payload.processors
-        #brams = module.payload.brams / BRAMS_TOTAL * 100.
-        #sliceLUTs = module.payload.sliceLUTs / SLICELUTS_TOTAL * 100.
-        #processors = module.payload.processors / PROCESSORS_TOTAL * 100.
-        #logging.info(f"| {module.id:>2} | {algorithms:>10} | {conditions:>10} | {proportion:>4.2f} | " \
-                     #f"{brams_val:>5.0f} | {brams:>5.2f} | {sliceLUTs_val:>6.0f} | {sliceLUTs:>5.2f} | {processors_val:>5.0f} | {processors:>5.2f} |")
-    #logging.info("|----|------------|------------|------|-------|-------|--------|-------|-------|-------|")
-
 def list_summary(collection):
     message = f"Summary for distribution on {len(collection)} modules, shadow ratio: {collection.ratio:.1f}"
     logging.info("|--------------------------------------------------------------------------------------|")
@@ -1515,6 +1517,26 @@ def list_summary(collection):
         logging.info(f"| {module.id:>2} | {algorithms:>10} | {conditions:>10} | {proportion:>4.2f} | " \
                      f"{sliceLUTs_val:>6.0f} | {sliceLUTs:>5.2f} | {brams_val:>5.0f} | {brams:>5.2f} | {processors_val:>5.0f} | {processors:>5.2f} |")
     logging.info("|----|------------|------------|------|--------|-------|-------|-------|-------|-------|")
+
+def list_calc_debug(collection):
+    message = f"Summary for distribution of calculation instantiations on {len(collection)} modules"
+    logging.debug("|---------------------------------------------------------------------------------------|")
+    logging.debug("|                                                                                       |")
+    logging.debug(f"| {message:<85} |")
+    logging.debug("|                                                                                       |")
+    logging.debug("|---------------------------------------------------------------------------------------|")
+    for module in collection:
+        module.debug = True
+        logging.debug("module_%s:", module.id)
+        logging.debug("|---------------------------------------------------------------------------------------|")
+        logging.debug("| calculation instantiation name | obj 1   | obj 2  | bx 1| bx 2| sLUTs | DSPs  | BRAMs |")
+        logging.debug("|--------------------------------|---------|--------|-----|-----|-------|-------|-------|")
+        sliceLUTs_val = module.payload.sliceLUTs # dummy for debug listing
+        logging.debug("|--------------------------------|---------|--------|-----|-----|-------|-------|-------|")
+        for algorithm in module:
+            for condition in algorithm.conditions:
+                logging.debug(f"| {condition.name:<62}| {condition.payload.sliceLUTs:<5} | {condition.payload.processors:>5} | {condition.payload.brams:>5} |")
+        logging.debug("|---------------------------------------------------------------------------------------|")
 
 def dump_distribution(collection, args):
     logging.info(":: writing menu distribution JSON dump: %s", args.o)
@@ -1549,7 +1571,8 @@ def distribute(eventSetup, modules, config, ratio, reverse_sorting, constraints=
     # Diagnostic output
     list_distribution(collection)
     list_summary(collection)
-
+    list_calc_debug(collection)
+    
     # Perform some checks
     collection.validate()
 
@@ -1592,6 +1615,8 @@ def main():
     list_distribution(collection)
 
     list_summary(collection)
+
+    list_calc_debug(collection)
 
     if args.o:
         dump_distribution(collection, args)
