@@ -123,23 +123,28 @@
         },
         "floor": {
             "processors": 0,
-            "sliceLUTs": 43254,
-            "brams": 544
+            "sliceLUTs": 39071,
+            "brams": 188
         },
         "ceiling": {
             "processors": 3600,
             "sliceLUTs": 389880,
             "brams": 1470
         },
-        "fdl_algo_slice": {
+        "frame_floor": {
             "processors": 0,
-            "brams": 0,
-            "sliceLUTs": 311
+            "brams": 365,
+            "sliceLUTs": 4183
         },
         "fdl_algo_floor": {
             "processors": 0,
             "brams": 64,
             "sliceLUTs": 23300
+        },
+        "fdl_algo_slice": {
+            "processors": 0,
+            "brams": 0,
+            "sliceLUTs": 311
         },
         "differences": {
             "processors": 0,
