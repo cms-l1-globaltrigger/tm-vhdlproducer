@@ -1070,6 +1070,20 @@ class Module(object):
                                 b = condition.objects[1]
                                 key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
                                 combinations[key] = (a, b)
+                    if condition.type in corr_cond_orm:
+                        for cut in condition.cuts:
+                            if cut.cut_type == tmEventSetup.OvRmDeltaEta:
+                                a = condition.objects[0]
+                                b = condition.objects[1]
+                                key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
+                                combinations[key] = (a, b)
+                    if condition.type in cond_orm:
+                        for cut in condition.cuts:
+                            if cut.cut_type == tmEventSetup.OvRmDeltaEta:
+                                a = condition.objects[0]
+                                b = condition.objects[1]
+                                key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
+                                combinations[key] = (a, b)
             return combinations
 
         def calc_deta_payload() -> Payload:
@@ -1098,6 +1112,20 @@ class Module(object):
                                 b = condition.objects[1]
                                 key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
                                 combinations[key] = (a, b)
+                    if condition.type in corr_cond_orm:
+                        for cut in condition.cuts:
+                            if cut.cut_type == tmEventSetup.OvRmDeltaPhi:
+                                a = condition.objects[0]
+                                b = condition.objects[1]
+                                key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
+                                combinations[key] = (a, b)
+                    if condition.type in cond_orm:
+                        for cut in condition.cuts:
+                            if cut.cut_type == tmEventSetup.OvRmDeltaPhi:
+                                a = condition.objects[0]
+                                b = condition.objects[1]
+                                key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
+                                combinations[key] = (a, b)
             return combinations
 
         def calc_dphi_payload() -> Payload:
@@ -1122,6 +1150,20 @@ class Module(object):
                     if condition.type in corr_cond_2_obj:
                         for cut in condition.cuts:
                             if cut.cut_type == tmEventSetup.DeltaR:
+                                a = condition.objects[0]
+                                b = condition.objects[1]
+                                key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
+                                combinations[key] = (a, b)
+                    if condition.type in corr_cond_orm:
+                        for cut in condition.cuts:
+                            if cut.cut_type == tmEventSetup.OvRmDeltaR:
+                                a = condition.objects[0]
+                                b = condition.objects[1]
+                                key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
+                                combinations[key] = (a, b)
+                    if condition.type in cond_orm:
+                        for cut in condition.cuts:
+                            if cut.cut_type == tmEventSetup.OvRmDeltaR:
                                 a = condition.objects[0]
                                 b = condition.objects[1]
                                 key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
@@ -1188,7 +1230,7 @@ class Module(object):
                 sliceLUTs += self.mass_calc.sliceLUTs * factor
                 processors += self.mass_calc.processors * factor
                 sliceLUTs_inst += self.mass_calc.sliceLUTs * factor
-                processors_inst = self.mass_calc.processors * factor                    
+                processors_inst = self.mass_calc.processors * factor
                 if self.debug:
                     logging.debug(f"| {calc_name:<37} | {int(sliceLUTs_inst):>5} | {int(processors_inst):>5} | {brams:>5} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}|")
             return Payload(brams, sliceLUTs, processors)
