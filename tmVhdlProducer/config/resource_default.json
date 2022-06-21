@@ -723,11 +723,11 @@
                         "types": ["muon", "muon", "muon"],
                         "brams": 0,
                         "processors": 0,
-                        "sliceLUTs": 0,
+                        "sliceLUTs": 813,
                         "cuts": [
                             {
                                 "type": "mass",
-                                "processors": 0,
+                                "processors": 2,
                                 "brams": 0,
                                 "sliceLUTs": 0
                             }

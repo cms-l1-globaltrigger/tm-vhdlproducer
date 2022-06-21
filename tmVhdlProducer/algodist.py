@@ -751,9 +751,11 @@ class ResourceTray(object):
                 return n_objects_1 * n_objects_2
         elif instance == self.kCorrelation3Condition:
             if mapped_objects == ['calo', 'calo', 'calo']:
-                return n_objects * (n_objects - 1) * 0.5
+                return n_objects * (n_objects - 1) * (n_objects - 2) / 6
+                #return n_objects * (n_objects - 1) * 0.5
             elif mapped_objects == ['muon', 'muon', 'muon']:
-                return n_objects * (n_objects - 1) * 0.5
+                return n_objects * (n_objects - 1) * (n_objects - 2) / 6
+                #return n_objects * (n_objects - 1) * 0.5
             raise RuntimeError(f"missing mapped objects for '{instance}': {mapped_objects}")
         elif instance == self.kCorrelationConditionOvRm:
             if mapped_objects == ['calo', 'calo', 'calo']:
