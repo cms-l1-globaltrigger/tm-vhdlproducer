@@ -602,13 +602,29 @@ class ResourceTray(object):
         deta_calc = self.resources.deta_calc
         return Payload(brams=deta_calc.brams, sliceLUTs=deta_calc.sliceLUTs, processors=deta_calc.processors)
 
-    def dphi_calc(self):
-        """Returns resource consumption payload for one unit of dphi_calc calculation.
-        >>> tray.dphi_calc()
+    def dphi_calc_calo_calo(self):
+        """Returns resource consumption payload for one unit of dphi_calc_calo_calo calculation.
+        >>> tray.dphi_calc_calo_calo()
         Payload(sliceLUTs=301, processors=0, brams=0)
         """
-        dphi_calc = self.resources.dphi_calc
-        return Payload(brams=dphi_calc.brams, sliceLUTs=dphi_calc.sliceLUTs, processors=dphi_calc.processors)
+        dphi_calc_calo_calo = self.resources.dphi_calc_calo_calo
+        return Payload(brams=dphi_calc_calo_calo.brams, sliceLUTs=dphi_calc_calo_calo.sliceLUTs, processors=dphi_calc_calo_calo.processors)
+
+    def dphi_calc_calo_muon(self):
+        """Returns resource consumption payload for one unit of dphi_calc_calo_muon calculation.
+        >>> tray.dphi_calc_calo_muon()
+        Payload(sliceLUTs=301, processors=0, brams=0)
+        """
+        dphi_calc_calo_muon = self.resources.dphi_calc_calo_muon
+        return Payload(brams=dphi_calc_calo_muon.brams, sliceLUTs=dphi_calc_calo_muon.sliceLUTs, processors=dphi_calc_calo_muon.processors)
+
+    def dphi_calc_muon_muon(self):
+        """Returns resource consumption payload for one unit of dphi_calc_muon_muon calculation.
+        >>> tray.dphi_calc_muon_muon()
+        Payload(sliceLUTs=301, processors=0, brams=0)
+        """
+        dphi_calc_muon_muon = self.resources.dphi_calc_muon_muon
+        return Payload(brams=dphi_calc_muon_muon.brams, sliceLUTs=dphi_calc_muon_muon.sliceLUTs, processors=dphi_calc_muon_muon.processors)
 
     def dr_calc_calo_calo(self):
         """Returns resource consumption payload for one unit of dr_calc_calo_calo calculation.
@@ -856,7 +872,9 @@ class Module(object):
 # =================================================================================
         self.differences = tray.differences()
         self.deta_calc = tray.deta_calc()
-        self.dphi_calc = tray.dphi_calc()
+        self.dphi_calc_calo_calo = tray.dphi_calc_calo_calo()
+        self.dphi_calc_calo_muon = tray.dphi_calc_calo_muon()
+        self.dphi_calc_muon_muon = tray.dphi_calc_muon_muon()
         self.dr_calc_calo_calo = tray.dr_calc_calo_calo()
         self.dr_calc_calo_muon = tray.dr_calc_calo_muon()
         self.dr_calc_muon_muon = tray.dr_calc_muon_muon()
@@ -949,7 +967,12 @@ class Module(object):
 
         def calc_factor(combination) -> float:
             left, right = combination[0], combination[1]
-            if left == right:
+            if combination[2] != combination[3]:
+                if left in muon_type:
+                    return NR_MUONS * NR_MUONS
+                else:
+                    return NR_CALOS * NR_CALOS
+            elif left == right:
                 if left in muon_type:
                     return NR_MUONS * (NR_MUONS - 1) / 2
                 else:
@@ -1076,14 +1099,14 @@ class Module(object):
                         for cut in condition.cuts:
                             if cut.cut_type == tmEventSetup.OvRmDeltaEta:
                                 a = condition.objects[0]
-                                b = condition.objects[1]
+                                b = condition.objects[-1]
                                 key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
                                 combinations[key] = (a, b)
                     if condition.type in cond_orm:
                         for cut in condition.cuts:
                             if cut.cut_type == tmEventSetup.OvRmDeltaEta:
                                 a = condition.objects[0]
-                                b = condition.objects[1]
+                                b = condition.objects[-1]
                                 key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
                                 combinations[key] = (a, b)
             return combinations
@@ -1118,14 +1141,14 @@ class Module(object):
                         for cut in condition.cuts:
                             if cut.cut_type == tmEventSetup.OvRmDeltaPhi:
                                 a = condition.objects[0]
-                                b = condition.objects[1]
+                                b = condition.objects[-1]
                                 key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
                                 combinations[key] = (a, b)
                     if condition.type in cond_orm:
                         for cut in condition.cuts:
                             if cut.cut_type == tmEventSetup.OvRmDeltaPhi:
                                 a = condition.objects[0]
-                                b = condition.objects[1]
+                                b = condition.objects[-1]
                                 key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
                                 combinations[key] = (a, b)
             return combinations
@@ -1137,9 +1160,22 @@ class Module(object):
             sliceLUTs = 0
             processors = 0
             for combination in calc_dphi_combinations():
+                obj_0 = obj_type_to_str(combination[0])
+                obj_1 = obj_type_to_str(combination[1])
                 factor = calc_factor(combination)
-                sliceLUTs += self.dphi_calc.sliceLUTs * factor
-                sliceLUTs_inst = self.dphi_calc.sliceLUTs * factor
+
+                if obj_0 == "MU" and obj_1 == "MU":
+                    sliceLUTs += self.dphi_calc_muon_muon.sliceLUTs * factor
+                    sliceLUTs_inst = self.dphi_calc_muon_muon.sliceLUTs * factor
+                elif (obj_0 == "EG" or obj_0 == "JET" or obj_0 == "TAU") and obj_1 == "MU":
+                    sliceLUTs += self.dphi_calc_calo_muon.sliceLUTs * factor
+                    sliceLUTs_inst = self.dphi_calc_calo_muon.sliceLUTs * factor
+                else:
+                    sliceLUTs += self.dphi_calc_calo_calo.sliceLUTs * factor
+                    sliceLUTs_inst = self.dphi_calc_calo_calo.sliceLUTs * factor
+
+                #sliceLUTs += self.dphi_calc.sliceLUTs * factor
+                #sliceLUTs_inst = self.dphi_calc.sliceLUTs * factor
                 if self.debug:
                     logging.debug(f"| {calc_name:<37} | {int(sliceLUTs_inst):>5} | {processors:>5} | {brams:>5} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}|")
             return Payload(brams, sliceLUTs, processors)
@@ -1160,14 +1196,14 @@ class Module(object):
                         for cut in condition.cuts:
                             if cut.cut_type == tmEventSetup.OvRmDeltaR:
                                 a = condition.objects[0]
-                                b = condition.objects[1]
+                                b = condition.objects[-1]
                                 key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
                                 combinations[key] = (a, b)
                     if condition.type in cond_orm:
                         for cut in condition.cuts:
                             if cut.cut_type == tmEventSetup.OvRmDeltaR:
                                 a = condition.objects[0]
-                                b = condition.objects[1]
+                                b = condition.objects[-1]
                                 key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
                                 combinations[key] = (a, b)
             return combinations

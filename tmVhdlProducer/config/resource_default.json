@@ -156,10 +156,20 @@
             "brams": 0,
             "sliceLUTs": 51
         },
-        "dphi_calc": {
+        "dphi_calc_calo_calo": {
             "processors": 0,
             "brams": 0,
             "sliceLUTs": 50
+        },
+        "dphi_calc_calo_muon": {
+            "processors": 0,
+            "brams": 0,
+            "sliceLUTs": 50
+        },
+        "dphi_calc_muon_muon": {
+            "processors": 0,
+            "brams": 0,
+            "sliceLUTs": 141
         },
         "dr_calc_calo_calo": {
             "processors": 2,
@@ -654,13 +664,13 @@
                                 "type": "deta",
                                 "brams": 0,
                                 "processors": 0,
-                                "sliceLUTs": 0
+                                "sliceLUTs": 5
                             },
                             {
                                 "type": "dphi",
                                 "processors": 0,
                                 "brams": 0,
-                                "sliceLUTs": 0
+                                "sliceLUTs": 5
                             },
                             {
                                 "type": "dr",
