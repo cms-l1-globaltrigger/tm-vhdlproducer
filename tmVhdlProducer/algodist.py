@@ -586,93 +586,118 @@ class ResourceTray(object):
         return Payload(brams=fdl_algo_floor.brams, sliceLUTs=fdl_algo_floor.sliceLUTs, processors=fdl_algo_floor.processors)
 
 # =================================================================================
-    def differences(self):
-        """Returns resource consumption payload for one unit of differences calculation.
-        >>> tray.differences()
+    def calc_deta_dphi(self):
+        """Returns resource consumption payload for one unit of calc_deta_dphi calculation.
+        >>> tray.calc_deta_dphi()
         Payload(sliceLUTs=101, processors=0, brams=0)
         """
-        differences = self.resources.differences
-        return Payload(brams=differences.brams, sliceLUTs=differences.sliceLUTs, processors=differences.processors)
+        calc_deta_dphi = self.resources.calc_deta_dphi
+        return Payload(brams=calc_deta_dphi.brams, sliceLUTs=calc_deta_dphi.sliceLUTs, processors=calc_deta_dphi.processors)
 
-    def deta_calc(self):
-        """Returns resource consumption payload for one unit of deta_calc calculation.
-        >>> tray.deta_calc()
+    def calc_cut_deta_calo_calo(self):
+        """Returns resource consumption payload for one unit of calc_cut_deta_calo_calo calculation.
+        >>> tray.calc_cut_deta_calo_calo()
         Payload(sliceLUTs=301, processors=0, brams=0)
         """
-        deta_calc = self.resources.deta_calc
-        return Payload(brams=deta_calc.brams, sliceLUTs=deta_calc.sliceLUTs, processors=deta_calc.processors)
+        calc_cut_deta_calo_calo = self.resources.calc_cut_deta_calo_calo
+        return Payload(brams=calc_cut_deta_calo_calo.brams, sliceLUTs=calc_cut_deta_calo_calo.sliceLUTs, processors=calc_cut_deta_calo_calo.processors)
 
-    def dphi_calc_calo_calo(self):
-        """Returns resource consumption payload for one unit of dphi_calc_calo_calo calculation.
-        >>> tray.dphi_calc_calo_calo()
+    def calc_cut_deta_calo_muon(self):
+        """Returns resource consumption payload for one unit of calc_cut_deta_calo_muon calculation.
+        >>> tray.calc_cut_deta_calo_muon()
         Payload(sliceLUTs=301, processors=0, brams=0)
         """
-        dphi_calc_calo_calo = self.resources.dphi_calc_calo_calo
-        return Payload(brams=dphi_calc_calo_calo.brams, sliceLUTs=dphi_calc_calo_calo.sliceLUTs, processors=dphi_calc_calo_calo.processors)
+        calc_cut_deta_calo_muon = self.resources.calc_cut_deta_calo_muon
+        return Payload(brams=calc_cut_deta_calo_muon.brams, sliceLUTs=calc_cut_deta_calo_muon.sliceLUTs, processors=calc_cut_deta_calo_muon.processors)
 
-    def dphi_calc_calo_muon(self):
-        """Returns resource consumption payload for one unit of dphi_calc_calo_muon calculation.
-        >>> tray.dphi_calc_calo_muon()
+    def calc_cut_deta_muon_muon(self):
+        """Returns resource consumption payload for one unit of calc_cut_deta_muon_muon calculation.
+        >>> tray.calc_cut_deta_muon_muon()
         Payload(sliceLUTs=301, processors=0, brams=0)
         """
-        dphi_calc_calo_muon = self.resources.dphi_calc_calo_muon
-        return Payload(brams=dphi_calc_calo_muon.brams, sliceLUTs=dphi_calc_calo_muon.sliceLUTs, processors=dphi_calc_calo_muon.processors)
+        calc_cut_deta_muon_muon = self.resources.calc_cut_deta_muon_muon
+        return Payload(brams=calc_cut_deta_muon_muon.brams, sliceLUTs=calc_cut_deta_muon_muon.sliceLUTs, processors=calc_cut_deta_muon_muon.processors)
 
-    def dphi_calc_muon_muon(self):
-        """Returns resource consumption payload for one unit of dphi_calc_muon_muon calculation.
-        >>> tray.dphi_calc_muon_muon()
+    def calc_cut_dphi_calo_calo(self):
+        """Returns resource consumption payload for one unit of calc_cut_dphi_calo_calo calculation.
+        >>> tray.calc_cut_dphi_calo_calo()
         Payload(sliceLUTs=301, processors=0, brams=0)
         """
-        dphi_calc_muon_muon = self.resources.dphi_calc_muon_muon
-        return Payload(brams=dphi_calc_muon_muon.brams, sliceLUTs=dphi_calc_muon_muon.sliceLUTs, processors=dphi_calc_muon_muon.processors)
+        calc_cut_dphi_calo_calo = self.resources.calc_cut_dphi_calo_calo
+        return Payload(brams=calc_cut_dphi_calo_calo.brams, sliceLUTs=calc_cut_dphi_calo_calo.sliceLUTs, processors=calc_cut_dphi_calo_calo.processors)
 
-    def dr_calc_calo_calo(self):
-        """Returns resource consumption payload for one unit of dr_calc_calo_calo calculation.
-        >>> tray.dr_calc_calo_calo()
+    def calc_cut_dphi_calo_esums(self):
+        """Returns resource consumption payload for one unit of calc_cut_dphi_calo_esums calculation.
+        >>> tray.calc_cut_dphi_calo_esums()
         Payload(sliceLUTs=301, processors=0, brams=0)
         """
-        dr_calc_calo_calo = self.resources.dr_calc_calo_calo
-        return Payload(brams=dr_calc_calo_calo.brams, sliceLUTs=dr_calc_calo_calo.sliceLUTs, processors=dr_calc_calo_calo.processors)
+        calc_cut_dphi_calo_esums = self.resources.calc_cut_dphi_calo_esums
+        return Payload(brams=calc_cut_dphi_calo_esums.brams, sliceLUTs=calc_cut_dphi_calo_esums.sliceLUTs, processors=calc_cut_dphi_calo_esums.processors)
 
-    def dr_calc_calo_muon(self):
-        """Returns resource consumption payload for one unit of dr_calc_calo_muon calculation.
-        >>> tray.dr_calc_calo_muon()
+    def calc_cut_dphi_calo_muon(self):
+        """Returns resource consumption payload for one unit of calc_cut_dphi_calo_muon calculation.
+        >>> tray.calc_cut_dphi_calo_muon()
         Payload(sliceLUTs=301, processors=0, brams=0)
         """
-        dr_calc_calo_muon = self.resources.dr_calc_calo_muon
-        return Payload(brams=dr_calc_calo_muon.brams, sliceLUTs=dr_calc_calo_muon.sliceLUTs, processors=dr_calc_calo_muon.processors)
+        calc_cut_dphi_calo_muon = self.resources.calc_cut_dphi_calo_muon
+        return Payload(brams=calc_cut_dphi_calo_muon.brams, sliceLUTs=calc_cut_dphi_calo_muon.sliceLUTs, processors=calc_cut_dphi_calo_muon.processors)
 
-    def dr_calc_muon_muon(self):
-        """Returns resource consumption payload for one unit of dr_calc_muon_muon calculation.
-        >>> tray.dr_calc_muon_muon()
+    def calc_cut_dphi_muon_muon(self):
+        """Returns resource consumption payload for one unit of calc_cut_dphi_muon_muon calculation.
+        >>> tray.calc_cut_dphi_muon_muon()
         Payload(sliceLUTs=301, processors=0, brams=0)
         """
-        dr_calc_muon_muon = self.resources.dr_calc_muon_muon
-        return Payload(brams=dr_calc_muon_muon.brams, sliceLUTs=dr_calc_muon_muon.sliceLUTs, processors=dr_calc_muon_muon.processors)
+        calc_cut_dphi_muon_muon = self.resources.calc_cut_dphi_muon_muon
+        return Payload(brams=calc_cut_dphi_muon_muon.brams, sliceLUTs=calc_cut_dphi_muon_muon.sliceLUTs, processors=calc_cut_dphi_muon_muon.processors)
 
-    def cosh_deta_cos_dphi_calo_calo(self):
-        """Returns resource consumption payload for one unit of cosh_deta_cos_dphi_calo_calo calculation for mass.
-        >>> tray.cosh_deta_cos_dphi_calo_calo()
+    def calc_cut_dr_calo_calo(self):
+        """Returns resource consumption payload for one unit of calc_cut_dr_calo_calo calculation.
+        >>> tray.calc_cut_dr_calo_calo()
         Payload(sliceLUTs=301, processors=0, brams=0)
         """
-        cosh_deta_cos_dphi_calo_calo = self.resources.cosh_deta_cos_dphi_calo_calo
-        return Payload(brams=cosh_deta_cos_dphi_calo_calo.brams, sliceLUTs=cosh_deta_cos_dphi_calo_calo.sliceLUTs, processors=cosh_deta_cos_dphi_calo_calo.processors)
+        calc_cut_dr_calo_calo = self.resources.calc_cut_dr_calo_calo
+        return Payload(brams=calc_cut_dr_calo_calo.brams, sliceLUTs=calc_cut_dr_calo_calo.sliceLUTs, processors=calc_cut_dr_calo_calo.processors)
 
-    def cosh_deta_cos_dphi_muon_muon(self):
-        """Returns resource consumption payload for one unit of cosh_deta_cos_dphi_muon_muon calculation for mass.
-        >>> tray.cosh_deta_cos_dphi_muon_muon()
+    def calc_cut_dr_calo_muon(self):
+        """Returns resource consumption payload for one unit of calc_cut_dr_calo_muon calculation.
+        >>> tray.calc_cut_dr_calo_muon()
         Payload(sliceLUTs=301, processors=0, brams=0)
         """
-        cosh_deta_cos_dphi_muon_muon = self.resources.cosh_deta_cos_dphi_muon_muon
-        return Payload(brams=cosh_deta_cos_dphi_muon_muon.brams, sliceLUTs=cosh_deta_cos_dphi_muon_muon.sliceLUTs, processors=cosh_deta_cos_dphi_muon_muon.processors)
+        calc_cut_dr_calo_muon = self.resources.calc_cut_dr_calo_muon
+        return Payload(brams=calc_cut_dr_calo_muon.brams, sliceLUTs=calc_cut_dr_calo_muon.sliceLUTs, processors=calc_cut_dr_calo_muon.processors)
 
-    def mass_calc(self):
-        """Returns resource consumption payload for one unit of mass_calc calculation for mass.
-        >>> tray.mass_calc()
+    def calc_cut_dr_muon_muon(self):
+        """Returns resource consumption payload for one unit of calc_cut_dr_muon_muon calculation.
+        >>> tray.calc_cut_dr_muon_muon()
         Payload(sliceLUTs=301, processors=0, brams=0)
         """
-        mass_calc = self.resources.mass_calc
-        return Payload(brams=mass_calc.brams, sliceLUTs=mass_calc.sliceLUTs, processors=mass_calc.processors)
+        calc_cut_dr_muon_muon = self.resources.calc_cut_dr_muon_muon
+        return Payload(brams=calc_cut_dr_muon_muon.brams, sliceLUTs=calc_cut_dr_muon_muon.sliceLUTs, processors=calc_cut_dr_muon_muon.processors)
+
+    def calc_cut_mass_calo_calo(self):
+        """Returns resource consumption payload for one unit of calc_cut_mass_calo_calo calculation for mass.
+        >>> tray.calc_cut_mass_calo_calo()
+        Payload(sliceLUTs=301, processors=0, brams=0)
+        """
+        calc_cut_mass_calo_calo = self.resources.calc_cut_mass_calo_calo
+        return Payload(brams=calc_cut_mass_calo_calo.brams, sliceLUTs=calc_cut_mass_calo_calo.sliceLUTs, processors=calc_cut_mass_calo_calo.processors)
+
+    def calc_cut_mass_calo_esums(self):
+        """Returns resource consumption payload for one unit of calc_cut_mass_calo_esums calculation for mass.
+        >>> tray.calc_cut_mass_calo_esums()
+        Payload(sliceLUTs=301, processors=0, brams=0)
+        """
+        calc_cut_mass_calo_esums = self.resources.calc_cut_mass_calo_esums
+        return Payload(brams=calc_cut_mass_calo_esums.brams, sliceLUTs=calc_cut_mass_calo_esums.sliceLUTs, processors=calc_cut_mass_calo_esums.processors)
+
+    def calc_cut_mass_muon_muon(self):
+        """Returns resource consumption payload for one unit of calc_cut_mass_muon_muon calculation for mass.
+        >>> tray.calc_cut_mass_muon_muon()
+        Payload(sliceLUTs=301, processors=0, brams=0)
+        """
+        calc_cut_mass_muon_muon = self.resources.calc_cut_mass_muon_muon
+        return Payload(brams=calc_cut_mass_muon_muon.brams, sliceLUTs=calc_cut_mass_muon_muon.sliceLUTs, processors=calc_cut_mass_muon_muon.processors)
+
 # =================================================================================
 
     def find_object_cut(self, object):
@@ -870,17 +895,20 @@ class Module(object):
         self.fdl_algo_floor = tray.fdl_algo_floor()
 
 # =================================================================================
-        self.differences = tray.differences()
-        self.deta_calc = tray.deta_calc()
-        self.dphi_calc_calo_calo = tray.dphi_calc_calo_calo()
-        self.dphi_calc_calo_muon = tray.dphi_calc_calo_muon()
-        self.dphi_calc_muon_muon = tray.dphi_calc_muon_muon()
-        self.dr_calc_calo_calo = tray.dr_calc_calo_calo()
-        self.dr_calc_calo_muon = tray.dr_calc_calo_muon()
-        self.dr_calc_muon_muon = tray.dr_calc_muon_muon()
-        self.cosh_deta_cos_dphi_calo_calo = tray.cosh_deta_cos_dphi_calo_calo()
-        self.cosh_deta_cos_dphi_muon_muon = tray.cosh_deta_cos_dphi_muon_muon()
-        self.mass_calc = tray.mass_calc()
+        self.calc_deta_dphi = tray.calc_deta_dphi()
+        self.calc_cut_deta_calo_calo = tray.calc_cut_deta_calo_calo()
+        self.calc_cut_deta_calo_muon = tray.calc_cut_deta_calo_muon()
+        self.calc_cut_deta_muon_muon = tray.calc_cut_deta_muon_muon()
+        self.calc_cut_dphi_calo_calo = tray.calc_cut_dphi_calo_calo()
+        self.calc_cut_dphi_calo_esums = tray.calc_cut_dphi_calo_esums()
+        self.calc_cut_dphi_calo_muon = tray.calc_cut_dphi_calo_muon()
+        self.calc_cut_dphi_muon_muon = tray.calc_cut_dphi_muon_muon()
+        self.calc_cut_dr_calo_calo = tray.calc_cut_dr_calo_calo()
+        self.calc_cut_dr_calo_muon = tray.calc_cut_dr_calo_muon()
+        self.calc_cut_dr_muon_muon = tray.calc_cut_dr_muon_muon()
+        self.calc_cut_mass_calo_calo = tray.calc_cut_mass_calo_calo()
+        self.calc_cut_mass_calo_esums = tray.calc_cut_mass_calo_esums()
+        self.calc_cut_mass_muon_muon = tray.calc_cut_mass_muon_muon()
 # =================================================================================
         self.debug = False
 
@@ -1034,7 +1062,7 @@ class Module(object):
                 logging.debug(f"| {gtl_name:<92} |")
             return Payload(brams, sliceLUTs, processors)
 
-        def calc_diff_combinations() -> dict:
+        def calc_deta_dphi_combinations() -> dict:
             """Object combinations for instances of "deta_dphi_integer" calculations."""
             combinations = {}
             for algorithm in self.algorithms:
@@ -1069,21 +1097,21 @@ class Module(object):
                         combinations[key] = (a, b)
             return combinations
 
-        def calc_diff_payload() -> Payload:
+        def calc_deta_dphi_payload() -> Payload:
             """Payload for instances of "deta_dphi_integer" calculations."""
             calc_name = "calc_deta_dphi_integer"
             brams = 0
             sliceLUTs = 0
             processors = 0
-            for combination in calc_diff_combinations():
+            for combination in calc_deta_dphi_combinations():
                 factor = calc_factor(combination)
-                sliceLUTs += self.differences.sliceLUTs * factor
-                sliceLUTs_inst = self.differences.sliceLUTs * factor
+                sliceLUTs += self.calc_deta_dphi.sliceLUTs * factor
+                sliceLUTs_inst = self.calc_deta_dphi.sliceLUTs * factor
                 if self.debug:
                     logging.debug(f"| {calc_name:<37} | {int(sliceLUTs_inst):>5} | {processors:>5} | {brams:>5} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}|")
             return Payload(brams, sliceLUTs, processors)
 
-        def calc_deta_combinations() -> dict:
+        def calc_cut_deta_combinations() -> dict:
             """Object combinations for instances of "deltaR" calculations."""
             combinations = {}
             for algorithm in self.algorithms:
@@ -1111,21 +1139,30 @@ class Module(object):
                                 combinations[key] = (a, b)
             return combinations
 
-        def calc_deta_payload() -> Payload:
+        def calc_cut_deta_payload() -> Payload:
             """Payload for instances of "deta" calculations."""
             calc_name = "calc_cut_deta"
             brams = 0
             sliceLUTs = 0
             processors = 0
-            for combination in calc_deta_combinations():
+            for combination in calc_cut_deta_combinations():
+                obj_0 = combination[0]
+                obj_1 = combination[1]
                 factor = calc_factor(combination)
-                sliceLUTs += self.deta_calc.sliceLUTs * factor
-                sliceLUTs_inst = self.deta_calc.sliceLUTs * factor
+                if obj_0 == 0 and obj_1 == 0:
+                    sliceLUTs += self.calc_cut_deta_muon_muon.sliceLUTs * factor
+                    sliceLUTs_inst = self.calc_cut_deta_muon_muon.sliceLUTs * factor
+                elif (obj_0 >= 1 and obj_0 <= 3) and obj_1 == 0:
+                    sliceLUTs += self.calc_cut_deta_calo_muon.sliceLUTs * factor
+                    sliceLUTs_inst = self.calc_cut_deta_calo_muon.sliceLUTs * factor
+                elif (obj_0 >= 1 and obj_0 <= 3) and (obj_1 >= 1 and obj_1 <= 3):
+                    sliceLUTs += self.calc_cut_deta_calo_calo.sliceLUTs * factor
+                    sliceLUTs_inst = self.calc_cut_deta_calo_calo.sliceLUTs * factor
                 if self.debug:
                     logging.debug(f"| {calc_name:<37} | {int(sliceLUTs_inst):>5} | {processors:>5} | {brams:>5} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}|")
             return Payload(brams, sliceLUTs, processors)
 
-        def calc_dphi_combinations() -> dict:
+        def calc_cut_dphi_combinations() -> dict:
             """Object combinations for instances of "deltaR" calculations."""
             combinations = {}
             for algorithm in self.algorithms:
@@ -1153,34 +1190,33 @@ class Module(object):
                                 combinations[key] = (a, b)
             return combinations
 
-        def calc_dphi_payload() -> Payload:
+        def calc_cut_dphi_payload() -> Payload:
             """Payload for instances of "cosh_dphi_cos_dphi" calculations."""
             calc_name = "calc_cut_dphi"
             brams = 0
             sliceLUTs = 0
             processors = 0
-            for combination in calc_dphi_combinations():
-                obj_0 = obj_type_to_str(combination[0])
-                obj_1 = obj_type_to_str(combination[1])
+            for combination in calc_cut_dphi_combinations():
+                obj_0 = combination[0]
+                obj_1 = combination[1]
                 factor = calc_factor(combination)
-
-                if obj_0 == "MU" and obj_1 == "MU":
-                    sliceLUTs += self.dphi_calc_muon_muon.sliceLUTs * factor
-                    sliceLUTs_inst = self.dphi_calc_muon_muon.sliceLUTs * factor
-                elif (obj_0 == "EG" or obj_0 == "JET" or obj_0 == "TAU") and obj_1 == "MU":
-                    sliceLUTs += self.dphi_calc_calo_muon.sliceLUTs * factor
-                    sliceLUTs_inst = self.dphi_calc_calo_muon.sliceLUTs * factor
-                else:
-                    sliceLUTs += self.dphi_calc_calo_calo.sliceLUTs * factor
-                    sliceLUTs_inst = self.dphi_calc_calo_calo.sliceLUTs * factor
-
-                #sliceLUTs += self.dphi_calc.sliceLUTs * factor
-                #sliceLUTs_inst = self.dphi_calc.sliceLUTs * factor
+                if obj_0 == 0 and obj_1 == 0:
+                    sliceLUTs += self.calc_cut_dphi_muon_muon.sliceLUTs * factor
+                    sliceLUTs_inst = self.calc_cut_dphi_muon_muon.sliceLUTs * factor
+                elif (obj_0 >= 1 and obj_0 <= 3) and obj_1 == 0:
+                    sliceLUTs += self.calc_cut_dphi_calo_muon.sliceLUTs * factor
+                    sliceLUTs_inst = self.calc_cut_dphi_calo_muon.sliceLUTs * factor
+                elif (obj_0 >= 1 and obj_0 <= 3) and (obj_1 >= 1 and obj_1 <= 3):
+                    sliceLUTs += self.calc_cut_dphi_calo_calo.sliceLUTs * factor
+                    sliceLUTs_inst = self.calc_cut_dphi_calo_calo.sliceLUTs * factor
+                elif (obj_0 >= 1 and obj_0 <= 3) and (obj_1 == 6 or obj_1 == 7 or obj_1 == 18):
+                    sliceLUTs += self.calc_cut_dphi_calo_esums.sliceLUTs * factor
+                    sliceLUTs_inst = self.calc_cut_dphi_calo_esums.sliceLUTs * factor
                 if self.debug:
                     logging.debug(f"| {calc_name:<37} | {int(sliceLUTs_inst):>5} | {processors:>5} | {brams:>5} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}|")
             return Payload(brams, sliceLUTs, processors)
 
-        def calc_dr_combinations() -> dict:
+        def calc_cut_dr_combinations() -> dict:
             """Object combinations for instances of "deltaR" calculations."""
             combinations = {}
             for algorithm in self.algorithms:
@@ -1208,36 +1244,36 @@ class Module(object):
                                 combinations[key] = (a, b)
             return combinations
 
-        def calc_dr_payload() -> Payload:
+        def calc_cut_dr_payload() -> Payload:
             """Payload for instances of "deltaR" calculations."""
             calc_name = "calc_cut_deltaR"
             brams = 0
             sliceLUTs = 0
             processors = 0
-            for combination in calc_dr_combinations():
-                obj_0 = obj_type_to_str(combination[0])
-                obj_1 = obj_type_to_str(combination[1])
+            for combination in calc_cut_dr_combinations():
+                obj_0 = combination[0]
+                obj_1 = combination[1]
                 factor = calc_factor(combination)
-                if obj_0 == "MU" and obj_1 == "MU":
-                    sliceLUTs += self.dr_calc_muon_muon.sliceLUTs * factor
-                    processors += self.dr_calc_muon_muon.processors * factor
-                    sliceLUTs_inst = self.dr_calc_muon_muon.sliceLUTs * factor
-                    processors_inst = self.dr_calc_muon_muon.processors * factor
-                elif (obj_0 == "EG" or obj_0 == "JET" or obj_0 == "TAU") and obj_1 == "MU":
-                    sliceLUTs += self.dr_calc_calo_muon.sliceLUTs * factor
-                    processors += self.dr_calc_calo_muon.processors * factor
-                    sliceLUTs_inst = self.dr_calc_calo_muon.sliceLUTs * factor
-                    processors_inst = self.dr_calc_calo_muon.processors * factor
-                else:
-                    sliceLUTs += self.dr_calc_calo_calo.sliceLUTs * factor
-                    processors += self.dr_calc_calo_calo.processors * factor
-                    sliceLUTs_inst = self.dr_calc_calo_calo.sliceLUTs * factor
-                    processors_inst = self.dr_calc_calo_calo.processors * factor
+                if obj_0 == 0 and obj_1 == 0:
+                    sliceLUTs += self.calc_cut_dr_muon_muon.sliceLUTs * factor
+                    processors += self.calc_cut_dr_muon_muon.processors * factor
+                    sliceLUTs_inst = self.calc_cut_dr_muon_muon.sliceLUTs * factor
+                    processors_inst = self.calc_cut_dr_muon_muon.processors * factor
+                elif (obj_0 >= 1 and obj_0 <= 3) and obj_1 == 0:
+                    sliceLUTs += self.calc_cut_dr_calo_muon.sliceLUTs * factor
+                    processors += self.calc_cut_dr_calo_muon.processors * factor
+                    sliceLUTs_inst = self.calc_cut_dr_calo_muon.sliceLUTs * factor
+                    processors_inst = self.calc_cut_dr_calo_muon.processors * factor
+                elif (obj_0 >= 1 and obj_0 <= 3) and (obj_1 >= 1 and obj_1 <= 3):
+                    sliceLUTs += self.calc_cut_dr_calo_calo.sliceLUTs * factor
+                    processors += self.calc_cut_dr_calo_calo.processors * factor
+                    sliceLUTs_inst = self.calc_cut_dr_calo_calo.sliceLUTs * factor
+                    processors_inst = self.calc_cut_dr_calo_calo.processors * factor
                 if self.debug:
                     logging.debug(f"| {calc_name:<37} | {int(sliceLUTs_inst):>5} | {int(processors_inst):>5} | {brams:>5} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}|")
             return Payload(brams, sliceLUTs, processors)
 
-        def calc_cosh_cos_mass_combinations() -> dict:
+        def calc_cut_mass_combinations() -> dict:
             """Object combinations for instances of "mass" calculations."""
             combinations = {}
             for algorithm in self.algorithms:
@@ -1249,26 +1285,31 @@ class Module(object):
                         combinations[key] = (a, b)
             return combinations
 
-        def calc_cosh_cos_mass_payload() -> Payload:
+        def calc_cut_mass_payload() -> Payload:
             """Payload for instances of "mass" calculations."""
             calc_name = "calc_cut_mass_inv_pt"
             brams = 0
             sliceLUTs = 0
             processors = 0
-            for combination in calc_cosh_cos_mass_combinations():
-                obj_0 = obj_type_to_str(combination[0])
-                obj_1 = obj_type_to_str(combination[1])
+            for combination in calc_cut_mass_combinations():
+                obj_0 = combination[0]
+                obj_1 = combination[1]
                 factor = calc_factor(combination)
-                if obj_0 == "MU" and obj_1 == "MU":
-                    sliceLUTs += self.cosh_deta_cos_dphi_muon_muon.sliceLUTs * factor
-                    sliceLUTs_inst = self.cosh_deta_cos_dphi_muon_muon.sliceLUTs * factor
-                elif (obj_0 == "EG" or obj_0 == "JET" or obj_0 == "TAU") and (obj_1 == "EG" or obj_1 == "JET" or obj_1 == "TAU"):
-                    sliceLUTs += self.cosh_deta_cos_dphi_calo_calo.sliceLUTs * factor
-                    sliceLUTs_inst = self.cosh_deta_cos_dphi_calo_calo.sliceLUTs * factor
-                sliceLUTs += self.mass_calc.sliceLUTs * factor
-                processors += self.mass_calc.processors * factor
-                sliceLUTs_inst += self.mass_calc.sliceLUTs * factor
-                processors_inst = self.mass_calc.processors * factor
+                if obj_0 == 0 and obj_1 == 0:
+                    sliceLUTs += self.calc_cut_mass_muon_muon.sliceLUTs * factor
+                    processors += self.calc_cut_mass_muon_muon.processors * factor
+                    sliceLUTs_inst = self.calc_cut_mass_muon_muon.sliceLUTs * factor
+                    processors_inst = self.calc_cut_mass_muon_muon.processors * factor
+                elif (obj_0 >= 1 and obj_0 <= 3) and (obj_1 >= 1 and obj_1 <= 3):
+                    sliceLUTs += self.calc_cut_mass_calo_calo.sliceLUTs * factor
+                    processors += self.calc_cut_mass_calo_calo.processors * factor
+                    sliceLUTs_inst = self.calc_cut_mass_calo_calo.sliceLUTs * factor
+                    processors_inst = self.calc_cut_mass_calo_calo.processors * factor
+                elif (obj_0 >= 1 and obj_0 <= 3) and (obj_1 == 6 or obj_1 == 7 or obj_1 == 18):
+                    sliceLUTs += self.calc_cut_mass_calo_esums.sliceLUTs * factor
+                    processors += self.calc_cut_mass_calo_esums.processors * factor
+                    sliceLUTs_inst = self.calc_cut_mass_calo_esums.sliceLUTs * factor
+                    processors_inst = self.calc_cut_mass_calo_esums.processors * factor
                 if self.debug:
                     logging.debug(f"| {calc_name:<37} | {int(sliceLUTs_inst):>5} | {int(processors_inst):>5} | {brams:>5} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}|")
             return Payload(brams, sliceLUTs, processors)
@@ -1280,19 +1321,19 @@ class Module(object):
         payload += calc_fdl_payload()
 
         # payload for instances of "deltaR" calculations
-        payload += calc_dr_payload()
+        payload += calc_cut_dr_payload()
 
         # payload for instances of "deltaEta" calculations
-        payload += calc_deta_payload()
+        payload += calc_cut_deta_payload()
 
         # payload for instances of "deltaPhi" calculations
-        payload += calc_dphi_payload()
+        payload += calc_cut_dphi_payload()
 
         # payload for instances of "mass" calculations
-        payload += calc_cosh_cos_mass_payload()
+        payload += calc_cut_mass_payload()
 
-        # payload for instances of "differences" calculations
-        payload += calc_diff_payload()
+        # payload for instances of "deta dphi integer" calculations
+        payload += calc_deta_dphi_payload()
 
 # =================================================================================
 
