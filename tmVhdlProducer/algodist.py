@@ -586,13 +586,21 @@ class ResourceTray(object):
         return Payload(brams=fdl_algo_floor.brams, sliceLUTs=fdl_algo_floor.sliceLUTs, processors=fdl_algo_floor.processors)
 
 # =================================================================================
-    def calc_deta_dphi(self):
-        """Returns resource consumption payload for one unit of calc_deta_dphi calculation.
-        >>> tray.calc_deta_dphi()
+    def calc_deta_integer(self):
+        """Returns resource consumption payload for one unit of calc_deta_integer calculation.
+        >>> tray.calc_deta_integer()
         Payload(sliceLUTs=101, processors=0, brams=0)
         """
-        calc_deta_dphi = self.resources.calc_deta_dphi
-        return Payload(brams=calc_deta_dphi.brams, sliceLUTs=calc_deta_dphi.sliceLUTs, processors=calc_deta_dphi.processors)
+        calc_deta_integer = self.resources.calc_deta_integer
+        return Payload(brams=calc_deta_integer.brams, sliceLUTs=calc_deta_integer.sliceLUTs, processors=calc_deta_integer.processors)
+
+    def calc_dphi_integer(self):
+        """Returns resource consumption payload for one unit of calc_dphi_integer calculation.
+        >>> tray.calc_dphi_integer()
+        Payload(sliceLUTs=101, processors=0, brams=0)
+        """
+        calc_dphi_integer = self.resources.calc_dphi_integer
+        return Payload(brams=calc_dphi_integer.brams, sliceLUTs=calc_dphi_integer.sliceLUTs, processors=calc_dphi_integer.processors)
 
     def calc_cut_deta_calo_calo(self):
         """Returns resource consumption payload for one unit of calc_cut_deta_calo_calo calculation.
@@ -895,7 +903,8 @@ class Module(object):
         self.fdl_algo_floor = tray.fdl_algo_floor()
 
 # =================================================================================
-        self.calc_deta_dphi = tray.calc_deta_dphi()
+        self.calc_deta_integer = tray.calc_deta_integer()
+        self.calc_dphi_integer = tray.calc_dphi_integer()
         self.calc_cut_deta_calo_calo = tray.calc_cut_deta_calo_calo()
         self.calc_cut_deta_calo_muon = tray.calc_cut_deta_calo_muon()
         self.calc_cut_deta_muon_muon = tray.calc_cut_deta_muon_muon()
@@ -1104,9 +1113,17 @@ class Module(object):
             sliceLUTs = 0
             processors = 0
             for combination in calc_deta_dphi_combinations():
+                obj_0 = combination[0]
+                obj_1 = combination[1]
                 factor = calc_factor(combination)
-                sliceLUTs += self.calc_deta_dphi.sliceLUTs * factor
-                sliceLUTs_inst = self.calc_deta_dphi.sliceLUTs * factor
+                if (obj_1 == 6 or obj_1 == 7 or obj_1 == 18):
+                    sliceLUTs += self.calc_dphi_integer.sliceLUTs * factor
+                    sliceLUTs_inst = self.calc_dphi_integer.sliceLUTs * factor
+                else:
+                    sliceLUTs += self.calc_deta_integer.sliceLUTs * factor
+                    sliceLUTs_inst = self.calc_deta_integer.sliceLUTs * factor
+                    sliceLUTs += self.calc_dphi_integer.sliceLUTs * factor
+                    sliceLUTs_inst += self.calc_dphi_integer.sliceLUTs * factor
                 if self.debug:
                     logging.debug(f"| {calc_name:<37} | {int(sliceLUTs_inst):>5} | {processors:>5} | {brams:>5} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}|")
             return Payload(brams, sliceLUTs, processors)
