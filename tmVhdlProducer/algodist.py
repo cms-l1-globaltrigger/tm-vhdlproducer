@@ -470,6 +470,23 @@ def obj_type_to_str(argument):
         raise ValueError(f"invalid range '{argument}'")
     return switcher.get(argument, "nothing")
 
+def obj_type_to_cat(argument):
+    switcher = {
+        0: "muon",
+        1: "calo",
+        2: "calo",
+        3: "calo",
+        4: "esum",
+        5: "esum",
+        6: "esum",
+        7: "esum",
+        17: "esum",
+        18: "esum",
+    }
+    if (argument > 7 and argument < 17) or argument > 18:
+        raise ValueError(f"invalid range '{argument}'")
+    return switcher.get(argument, "nothing")
+
 #
 # Classes
 #
@@ -920,6 +937,13 @@ class Module(object):
         """Iterate over algorithms."""
         return iter([algorithm for algorithm in self.algorithms])
 
+    def map_object(self, key):
+        """Returns mapped condition object type for *key*.
+        >>> tray.map_object("Egamma")
+        'calo'
+        """
+        return self.resources.mapping.objects._asdict()[key]
+
     @property
     def conditions(self):
         """Returns list of conditions assigned to this module."""
@@ -1314,6 +1338,21 @@ class Module(object):
                     logging.debug(f"| {calc_name:<37} | {int(sliceLUTs_inst):>5} | {int(processors_inst):>5} | {brams:>5} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}|")
             return Payload(brams, sliceLUTs, processors)
 
+        def calc_cut_mass_payload_test() -> Payload:
+            """Payload for instances of "mass" calculations."""
+            calc_name = "calc_cut_mass_inv_pt"
+            brams = 0
+            sliceLUTs = 0
+            processors = 0
+            for combination in calc_cut_mass_combinations():
+                #obj_0 = combination[0]
+                #obj_1 = combination[1]
+                obj_0_mapped = obj_type_to_cat(combination[0])
+                obj_1_mapped = obj_type_to_cat(combination[1])
+                mapped_obj = obj_0_mapped + "_" + obj_1_mapped
+                print("===> mapped objects:", obj_0_mapped, obj_1_mapped, mapped_obj)
+            return Payload(brams, sliceLUTs, processors)
+
         # payload for "frame"
         payload += calc_frame_payload()
 
@@ -1331,6 +1370,7 @@ class Module(object):
 
         # payload for instances of "mass" calculations
         payload += calc_cut_mass_payload()
+        payload += calc_cut_mass_payload_test()
 
         # payload for instances of "deta dphi integer" calculations
         payload += calc_deta_dphi_payload()
