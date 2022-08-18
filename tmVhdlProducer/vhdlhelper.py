@@ -1352,7 +1352,7 @@ class CutHelper(VhdlHelper):
 
     def __bool__(self):
         return self.enabled
-     
+
 class ThresholdCutHelper(CutHelper):
 
     def __init__(self, threshold=0):
@@ -1410,7 +1410,7 @@ class BooleanCutHelper(CutHelper):
     def __init__(self, state=False):
         super().__init__()
         self.state = state
-     
+
     def update(self, cut_handle):
         self.state = bool(int(cut_handle.data))
         self.enabled = True
