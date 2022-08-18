@@ -156,104 +156,93 @@
             "brams": 0,
             "sliceLUTs": 43
         },
-        "calc_cut_deta_calo_calo": {
-            "processors": 0,
-            "brams": 0,
-            "sliceLUTs": 51
+        "calc_cut_deta": {
+            "calo_calo": {
+                "processors": 0,
+                "brams": 0,
+                "sliceLUTs": 51
+            },
+            "calo_muon": {
+                "processors": 0,
+                "brams": 0,
+                "sliceLUTs": 0
+            },
+            "muon_muon": {
+                "processors": 0,
+                "brams": 0,
+                "sliceLUTs": 89
+            }
         },
-        "calc_cut_deta_calo_muon": {
-            "processors": 0,
-            "brams": 0,
-            "sliceLUTs": 0
+        "calc_cut_dphi": {
+            "calo_calo": {
+                "processors": 0,
+                "brams": 0,
+                "sliceLUTs": 50
+            },
+            "calo_esum": {
+                "processors": 0,
+                "brams": 0,
+                "sliceLUTs": 50
+            },
+            "calo_muon": {
+                "processors": 0,
+                "brams": 0,
+                "sliceLUTs": 0
+            },
+            "muon_muon": {
+                "processors": 0,
+                "brams": 0,
+                "sliceLUTs": 141
+            },
+            "muon_esum": {
+                "processors": 0,
+                "brams": 0,
+                "sliceLUTs": 0
+            }
         },
-        "calc_cut_deta_muon_muon": {
-            "processors": 0,
-            "brams": 0,
-            "sliceLUTs": 89
-        },
-        "calc_cut_dphi_calo_calo": {
-            "processors": 0,
-            "brams": 0,
-            "sliceLUTs": 50
-        },
-        "calc_cut_dphi_calo_esums": {
-            "processors": 0,
-            "brams": 0,
-            "sliceLUTs": 50
-        },
-        "calc_cut_dphi_calo_muon": {
-            "processors": 0,
-            "brams": 0,
-            "sliceLUTs": 0
-        },
-        "calc_cut_dphi_muon_muon": {
-            "processors": 0,
-            "brams": 0,
-            "sliceLUTs": 141
-        },
-        "calc_cut_dr_calo_calo": {
-            "processors": 2,
-            "brams": 0,
-            "sliceLUTs": 101
-        },
-        "calc_cut_dr_calo_muon": {
-            "processors": 2,
-            "brams": 0,
-            "sliceLUTs": 295
-        },
-        "calc_cut_dr_muon_muon": {
-            "processors": 2,
-            "brams": 0,
-            "sliceLUTs": 230
-        },
-        "calc_cut_mass_calo_calo": {
-            "processors": 3,
-            "brams": 0,
-            "sliceLUTs": 145
-        },
-        "calc_cut_mass_calo_esums": {
-            "processors": 3,
-            "brams": 0,
-            "sliceLUTs": 46
-        },
-        "calc_cut_mass_muon_muon": {
-            "processors": 3,
-            "brams": 0,
-            "sliceLUTs": 321
+        "calc_cut_dr": {
+            "calo_calo": {
+                "processors": 2,
+                "brams": 0,
+                "sliceLUTs": 101
+            },
+            "calo_muon": {
+                "processors": 2,
+                "brams": 0,
+                "sliceLUTs": 295
+            },
+            "muon_muon": {
+                "processors": 2,
+                "brams": 0,
+                "sliceLUTs": 230
+            }
         },
         "calc_cut_mass": {
-            "objects": [
-                {
-                    "types": ["calo", "calo"],
-                    "processors": 3,
-                    "sliceLUTs": 0,
-                    "brams": 145
-                },
-                {
-                    "types": ["calo", "esum"],
-                    "processors": 3,
-                    "sliceLUTs": 0,
-                    "brams": 46
-                },
-                {
-                    "types": ["calo", "muon"],
-                    "processors": 0,
-                    "sliceLUTs": 0,
-                    "brams": 0
-                },
-                {
-                    "types": ["muon", "muon"],
-                    "processors": 3,
-                    "sliceLUTs": 0,
-                    "brams": 321
-                },
-                {
-                    "types": ["muon", "esum"],
-                    "processors": 0,
-                    "sliceLUTs": 0,
-                    "brams": 0
-                }
-            ]
+            "calo_calo": {
+                "processors": 3,
+                "brams": 0,
+                "sliceLUTs": 145
+            },
+            "calo_esum": {
+                "processors": 3,
+                "brams": 0,
+                "sliceLUTs": 46
+            },
+            "calo_muon": {
+                "processors": 0,
+                "brams": 0,
+                "sliceLUTs": 0
+            },
+            "muon_muon": {
+                "processors": 3,
+                "brams": 0,
+                "sliceLUTs": 321
+            },
+            "muon_esum": {
+                "processors": 0,
+                "brams": 0,
+                "sliceLUTs": 0
+            }
         },
         "massdr_calc": {
             "processors": 3,
