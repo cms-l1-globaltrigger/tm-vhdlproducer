@@ -1129,10 +1129,12 @@ class Module(object):
             sliceLUTs = 0
             processors = 0
             for combination in calc_deta_dphi_combinations():
-                obj_0 = combination[0]
-                obj_1 = combination[1]
+                obj_0 = obj_type_to_str(combination[0])
+                obj_1 = obj_type_to_str(combination[1])
                 factor = calc_factor(combination)
-                if (obj_1 == 6 or obj_1 == 7 or obj_1 == 18):
+                if not(obj_0 == "EG" or obj_0 == "JET" or obj_0 == "TAU" or obj_0 == "MU"):
+                    raise RuntimeError(f"wrong objects for calc_cut_deta_payload ==> obj_0='{obj_0}', obj_1='{obj_1}'")
+                elif (obj_1 == "ETM" or obj_1 == "HTM" or obj_1 == "ETMHF"):
                     sliceLUTs += self.calc_dphi_integer.sliceLUTs * factor
                     sliceLUTs_inst = self.calc_dphi_integer.sliceLUTs * factor
                 else:
@@ -1179,18 +1181,20 @@ class Module(object):
             sliceLUTs = 0
             processors = 0
             for combination in calc_cut_deta_combinations():
-                obj_0 = combination[0]
-                obj_1 = combination[1]
+                obj_0 = obj_type_to_str(combination[0])
+                obj_1 = obj_type_to_str(combination[1])
                 factor = calc_factor(combination)
-                if obj_0 == 0 and obj_1 == 0:
+                if obj_0 == "MU" and obj_1 == "MU":
                     sliceLUTs += self.calc_cut_deta_muon_muon.sliceLUTs * factor
                     sliceLUTs_inst = self.calc_cut_deta_muon_muon.sliceLUTs * factor
-                elif (obj_0 >= 1 and obj_0 <= 3) and obj_1 == 0:
+                elif (obj_0 >= "EG" and obj_0 <= "TAU") and obj_1 == "MU":
                     sliceLUTs += self.calc_cut_deta_calo_muon.sliceLUTs * factor
                     sliceLUTs_inst = self.calc_cut_deta_calo_muon.sliceLUTs * factor
-                elif (obj_0 >= 1 and obj_0 <= 3) and (obj_1 >= 1 and obj_1 <= 3):
+                elif (obj_0 >= "EG" and obj_0 <= "TAU") and (obj_1 >= "EG" and obj_1 <= "TAU"):
                     sliceLUTs += self.calc_cut_deta_calo_calo.sliceLUTs * factor
                     sliceLUTs_inst = self.calc_cut_deta_calo_calo.sliceLUTs * factor
+                else:
+                    raise RuntimeError(f"wrong objects for calc_cut_deta_payload ==> obj_0='{obj_0}', obj_1='{obj_1}'")
                 if self.debug:
                     logging.debug(f"| {calc_name:<37} | {int(sliceLUTs_inst):>5} | {processors:>5} | {brams:>5} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}|")
             return Payload(brams, sliceLUTs, processors)
@@ -1230,21 +1234,23 @@ class Module(object):
             sliceLUTs = 0
             processors = 0
             for combination in calc_cut_dphi_combinations():
-                obj_0 = combination[0]
-                obj_1 = combination[1]
+                obj_0 = obj_type_to_str(combination[0])
+                obj_1 = obj_type_to_str(combination[1])
                 factor = calc_factor(combination)
-                if obj_0 == 0 and obj_1 == 0:
+                if obj_0 == "MU" and obj_1 == "MU":
                     sliceLUTs += self.calc_cut_dphi_muon_muon.sliceLUTs * factor
                     sliceLUTs_inst = self.calc_cut_dphi_muon_muon.sliceLUTs * factor
-                elif (obj_0 >= 1 and obj_0 <= 3) and obj_1 == 0:
+                elif (obj_0 >= "EG" and obj_0 <= "TAU") and obj_1 == "MU":
                     sliceLUTs += self.calc_cut_dphi_calo_muon.sliceLUTs * factor
                     sliceLUTs_inst = self.calc_cut_dphi_calo_muon.sliceLUTs * factor
-                elif (obj_0 >= 1 and obj_0 <= 3) and (obj_1 >= 1 and obj_1 <= 3):
+                elif (obj_0 >= "EG" and obj_0 <= "TAU") and (obj_1 >= "EG" and obj_1 <= "TAU"):
                     sliceLUTs += self.calc_cut_dphi_calo_calo.sliceLUTs * factor
                     sliceLUTs_inst = self.calc_cut_dphi_calo_calo.sliceLUTs * factor
-                elif (obj_0 >= 1 and obj_0 <= 3) and (obj_1 == 6 or obj_1 == 7 or obj_1 == 18):
+                elif (obj_0 >= "EG" and obj_0 <= "TAU") and (obj_1 == "ETM" or obj_1 == "HTM" or obj_1 == "ETMHF"):
                     sliceLUTs += self.calc_cut_dphi_calo_esums.sliceLUTs * factor
                     sliceLUTs_inst = self.calc_cut_dphi_calo_esums.sliceLUTs * factor
+                else:
+                    raise RuntimeError(f"wrong objects for calc_cut_dphi_payload ==> obj_0='{obj_0}', obj_1='{obj_1}'")
                 if self.debug:
                     logging.debug(f"| {calc_name:<37} | {int(sliceLUTs_inst):>5} | {processors:>5} | {brams:>5} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}|")
             return Payload(brams, sliceLUTs, processors)
@@ -1284,24 +1290,26 @@ class Module(object):
             sliceLUTs = 0
             processors = 0
             for combination in calc_cut_dr_combinations():
-                obj_0 = combination[0]
-                obj_1 = combination[1]
+                obj_0 = obj_type_to_str(combination[0])
+                obj_1 = obj_type_to_str(combination[1])
                 factor = calc_factor(combination)
-                if obj_0 == 0 and obj_1 == 0:
+                if obj_0 == "MU" and obj_1 == "MU":
                     sliceLUTs += self.calc_cut_dr_muon_muon.sliceLUTs * factor
                     processors += self.calc_cut_dr_muon_muon.processors * factor
                     sliceLUTs_inst = self.calc_cut_dr_muon_muon.sliceLUTs * factor
                     processors_inst = self.calc_cut_dr_muon_muon.processors * factor
-                elif (obj_0 >= 1 and obj_0 <= 3) and obj_1 == 0:
+                elif (obj_0 >= "EG" and obj_0 <= "TAU") and obj_1 == "MU":
                     sliceLUTs += self.calc_cut_dr_calo_muon.sliceLUTs * factor
                     processors += self.calc_cut_dr_calo_muon.processors * factor
                     sliceLUTs_inst = self.calc_cut_dr_calo_muon.sliceLUTs * factor
                     processors_inst = self.calc_cut_dr_calo_muon.processors * factor
-                elif (obj_0 >= 1 and obj_0 <= 3) and (obj_1 >= 1 and obj_1 <= 3):
+                elif (obj_0 >= "EG" and obj_0 <= "TAU") and (obj_1 >= "EG" and obj_1 <= "TAU"):
                     sliceLUTs += self.calc_cut_dr_calo_calo.sliceLUTs * factor
                     processors += self.calc_cut_dr_calo_calo.processors * factor
                     sliceLUTs_inst = self.calc_cut_dr_calo_calo.sliceLUTs * factor
                     processors_inst = self.calc_cut_dr_calo_calo.processors * factor
+                else:
+                    raise RuntimeError(f"wrong objects for calc_cut_dr_payload ==> obj_0='{obj_0}', obj_1='{obj_1}'")
                 if self.debug:
                     logging.debug(f"| {calc_name:<37} | {int(sliceLUTs_inst):>5} | {int(processors_inst):>5} | {brams:>5} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}|")
             return Payload(brams, sliceLUTs, processors)
@@ -1343,6 +1351,8 @@ class Module(object):
                     processors += self.calc_cut_mass_calo_esums.processors * factor
                     sliceLUTs_inst = self.calc_cut_mass_calo_esums.sliceLUTs * factor
                     processors_inst = self.calc_cut_mass_calo_esums.processors * factor
+                else:
+                    raise RuntimeError(f"wrong objects for calc_cut_mass_payload ==> obj_0='{obj_0}', obj_1='{obj_1}'")
                 if self.debug:
                     logging.debug(f"| {calc_name:<37} | {int(sliceLUTs_inst):>5} | {int(processors_inst):>5} | {brams:>5} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}|")
             return Payload(brams, sliceLUTs, processors)
