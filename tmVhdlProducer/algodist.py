@@ -561,20 +561,20 @@ class ResourceTray(object):
         ceiling = self.resources.ceiling
         return Payload(brams=ceiling.brams, sliceLUTs=ceiling.sliceLUTs, processors=ceiling.processors)
 
-    def frame_floor(self):
+    def frame(self):
         """Returns resource consumption payload for "frame".
-        >>> tray.frame_floor()
+        >>> tray.frame()
         Payload(sliceLUTs=311, processors=0, brams=0)
         """
-        frame_floor = self.resources.frame_floor
-        return Payload(brams=frame_floor.brams, sliceLUTs=frame_floor.sliceLUTs, processors=frame_floor.processors)
+        frame = self.resources.frame
+        return Payload(brams=frame.brams, sliceLUTs=frame.sliceLUTs, processors=frame.processors)
 
     def fdl_algo_slice(self):
         """Returns resource consumption payload for one FDL algo slice.
         >>> tray.fdl_algo_slice()
         Payload(sliceLUTs=311, processors=0, brams=0)
         """
-        fdl_algo_slice = self.resources.fdl_algo.slice
+        fdl_algo_slice = self.resources.fdl.algo_slice
         return Payload(brams=fdl_algo_slice.brams, sliceLUTs=fdl_algo_slice.sliceLUTs, processors=fdl_algo_slice.processors)
 
     def fdl_algo_floor(self):
@@ -582,7 +582,7 @@ class ResourceTray(object):
         >>> tray.fdl_algo_floor()
         Payload(sliceLUTs=311, processors=0, brams=0)
         """
-        fdl_algo_floor = self.resources.fdl_algo.floor
+        fdl_algo_floor = self.resources.fdl.floor
         return Payload(brams=fdl_algo_floor.brams, sliceLUTs=fdl_algo_floor.sliceLUTs, processors=fdl_algo_floor.processors)
 
 # =================================================================================
@@ -904,7 +904,7 @@ class Module(object):
         self.algorithms = []
         self.floor = tray.floor()
         self.ceiling = tray.ceiling()
-        self.frame_floor = tray.frame_floor()
+        self.frame = tray.frame()
         self.fdl_algo_slice = tray.fdl_algo_slice()
         self.fdl_algo_floor = tray.fdl_algo_floor()
 
@@ -1046,9 +1046,9 @@ class Module(object):
         def calc_frame_payload() -> Payload:
             """Payload for FDL algo slices."""
             calc_name = "frame:"
-            brams = self.frame_floor.brams
-            sliceLUTs = self.frame_floor.sliceLUTs
-            processors = self.frame_floor.processors
+            brams = self.frame.brams
+            sliceLUTs = self.frame.sliceLUTs
+            processors = self.frame.processors
             if self.debug:
                 logging.debug(f"| {n_a:<92} |")
                 logging.debug(f"| {calc_name:<92} |")
