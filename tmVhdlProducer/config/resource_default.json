@@ -186,7 +186,7 @@
                     "brams": 0,
                     "sliceLUTs": 50
                 },
-                "esum": {
+                "esums": {
                     "processors": 0,
                     "brams": 0,
                     "sliceLUTs": 50
@@ -203,7 +203,7 @@
                     "brams": 0,
                     "sliceLUTs": 141
                 },
-                "esum": {
+                "esums": {
                     "processors": 0,
                     "brams": 0,
                     "sliceLUTs": 0
@@ -238,7 +238,7 @@
                     "brams": 0,
                     "sliceLUTs": 145
                 },
-                "esum": {
+                "esums": {
                     "processors": 3,
                     "brams": 0,
                     "sliceLUTs": 46
@@ -255,7 +255,7 @@
                     "brams": 0,
                     "sliceLUTs": 321
                 },
-                "esum": {
+                "esums": {
                     "processors": 0,
                     "brams": 0,
                     "sliceLUTs": 0
