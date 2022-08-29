@@ -901,39 +901,9 @@
                         "sliceLUTs": 0
                     },
                     {
-                        "types": ["adt_0"],
-                        "processors": 108,
-                        "brams": 6,
-                        "sliceLUTs": 38988
-                    },
-                    {
-                        "types": ["adt_1"],
-                        "processors": 108,
-                        "brams": 6,
-                        "sliceLUTs": 38988
-                    },
-                    {
-                        "types": ["adt_2"],
-                        "processors": 108,
-                        "brams": 6,
-                        "sliceLUTs": 38988
-                    },
-                    {
-                        "types": ["adt_3"],
-                        "processors": 108,
-                        "brams": 6,
-                        "sliceLUTs": 38988
-                    },
-                    {
-                        "types": ["adt_4"],
-                        "processors": 108,
-                        "brams": 6,
-                        "sliceLUTs": 38988
-                    },
-                    {
-                        "types": ["adt_5"],
-                        "processors": 108,
-                        "brams": 6,
+                        "types": ["adt"],
+                        "processors": 0,
+                        "brams": 0,
                         "sliceLUTs": 38988
                     }
                 ]
