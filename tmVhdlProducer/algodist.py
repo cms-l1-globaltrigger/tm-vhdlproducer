@@ -298,6 +298,7 @@ ObjectGrammarKey = {
     tmEventSetup.MUS0: tmGrammar.MUS0,
     tmEventSetup.MUS1: tmGrammar.MUS1,
     tmEventSetup.MUSOOT0: tmGrammar.MUSOOT0,
+    tmEventSetup.MUSOOT1: tmGrammar.MUSOOT1,
     tmEventSetup.EXT: tmGrammar.EXT,
     tmEventSetup.MBT0HFP: tmGrammar.MBT0HFP,
     tmEventSetup.MBT1HFP: tmGrammar.MBT1HFP,
@@ -431,46 +432,14 @@ def parse_range(expr):
         result.update(expand_range(token))
     return list(result)
 
-def obj_type_to_str(argument):
-    switcher = {
-        0: "MU",
-        1: "EG",
-        2: "TAU",
-        3: "JET",
-        4: "ETT",
-        5: "HTT",
-        6: "ETM",
-        7: "HTM",
-        8: "EXT",
-        13: "MBT0HFP",
-        14: "MBT1HFP",
-        15: "MBT0HFM",
-        16: "MBT1HFM",
-        17: "ETTEM",
-        18: "ETMHF",
-        19: "TOWERCOUNT",
-        26: "ASYMET",
-        27: "ASYMHT",
-        28: "ASYMETHF",
-        29: "ASYMHTHF",
-        30: "CENT0",
-        31: "CENT1",
-        32: "CENT2",
-        33: "CENT3",
-        34: "CENT4",
-        35: "CENT5",
-        36: "CENT6",
-        37: "CENT7",
-        38: "MUS0",
-        39: "MUS1",
-        40: "MUSOOT0",
-        41: "MUSOOT1",
-    }
-    if (argument > 9 and argument < 13) or (argument > 19 and argument < 26) or argument > 41:
-        raise ValueError(f"invalid range '{argument}'")
-    return switcher.get(argument, "nothing")
+def obj_type_to_str(object_type: int) -> str:
+    """Converts object type to string representation."""
+    if object_type not in ObjectTypeKey:
+        raise ValueError(f"invalid object type: {object_type}")
+    return ObjectTypeKey.get(object_type)
 
 def obj_type_to_cat(argument):
+    """Converts object type to object catagory representation."""
     switcher = {
         0: "muon",
         1: "calo",
@@ -483,7 +452,7 @@ def obj_type_to_cat(argument):
         17: "esums",
         18: "esums",
     }
-    if (argument > 7 and argument < 17) or argument > 18:
+    if argument not in switcher:
         raise ValueError(f"invalid range '{argument}'")
     return switcher.get(argument, "nothing")
 
