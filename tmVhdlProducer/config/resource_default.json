@@ -262,10 +262,26 @@
                 }
             }
         },
-        "massdr_calc": {
-            "processors": 3,
-            "brams": 18,
-            "sliceLUTs": 143
+        "calc_cut_massdr": {
+            "calo": {
+                "calo": {
+                    "processors": 3,
+                    "brams": 18,
+                    "sliceLUTs": 143
+                },
+                "muon": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 0
+                }
+            },
+            "muon": {
+                "muon": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 0
+                }
+            }
         },
         "object_cuts": {
             "muon": {

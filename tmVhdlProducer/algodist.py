@@ -673,7 +673,7 @@ class ResourceTray(object):
             raise RuntimeError(f"missing mapped objects for '{instance}': {mapped_objects}")
         return 1.
 
-    def calc_cut_factor(self, condition, cut):
+    def calc_cut_factor(self, condition, cut: str):
         """Returns calculated multiplication factor for cut resources.
         Argument *cut* must be an event setup cut name (not a mapped one).
 
