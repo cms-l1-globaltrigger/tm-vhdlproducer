@@ -23,8 +23,9 @@ EXEC_REPORTER = 'tm-reporter'
 SortingAsc = 'asc'
 SortingDesc = 'desc'
 
+DefaultNrModules = 6
 DefaultRatio = 0.0
-DefaultSorting = SortingAsc
+DefaultSorting = SortingDesc
 DefaultOutputDir = os.getcwd()
 from .algodist import DefaultConfigFile
 
@@ -75,11 +76,11 @@ def parse_args():
     )
     parser.add_argument('--modules',
         metavar='<n>',
-        required=True,
         type=modules_t,
-        help=f"number of modules ({MinModules}-{MaxModules})"
+        default=DefaultNrModules,
+        help=f"number of modules ({MinModules}-{MaxModules}, default is {DefaultNrModules}))"
     )
-    parser.add_argument('--dist',
+    parser.add_argument('-d', '--dist',
         metavar='<n>',
         required=True,
         type=dist_t,
@@ -109,7 +110,7 @@ def parse_args():
         type=constraint_t,
         help=f"limit condition type to a specific module, valid types are: {', '.join(ConstraintTypes)}"
     )
-    parser.add_argument('--output',
+    parser.add_argument('-o', '--output',
         metavar='<dir>',
         default=DefaultOutputDir,
         type=os.path.abspath,
