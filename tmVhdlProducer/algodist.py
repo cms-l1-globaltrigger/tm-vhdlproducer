@@ -31,6 +31,8 @@ from collections import namedtuple
 import tmEventSetup
 import tmGrammar
 
+from typing import List, Optional
+
 from .constants import BRAMS_TOTAL, SLICELUTS_TOTAL, PROCESSORS_TOTAL, NR_CALOS, NR_MUONS
 
 from .handles import Payload
@@ -432,7 +434,7 @@ def parse_range(expr):
         result.update(expand_range(token))
     return list(result)
 
-def obj_type_to_str(object_type: int) -> str:
+def obj_type_to_str(object_type: int) -> Optional[str]:
     """Converts object type to string representation."""
     if object_type not in ObjectTypeKey:
         raise ValueError(f"invalid object type: {object_type}")
@@ -514,7 +516,7 @@ class ResourceTray(object):
         """
         return self.resources.mapping.objects._asdict()[key]
 
-    def map_objects(self, keys):
+    def map_objects(self, keys: List[str]) -> List[str]:
         """Returns mapped condition object types for *keys*.
         >>> tray.map_objects(["Jet", "Tau"])
         ['calo', 'calo']
@@ -528,35 +530,35 @@ class ResourceTray(object):
         """
         return self.resources.mapping.cuts._asdict()[key]
 
-    def floor(self) -> int:
+    def floor(self) -> Payload:
         """Returns minimum resource consumption payload.
         >>> tray.floor()
         """
         floor = self.resources.floor
         return Payload(brams=floor.brams, sliceLUTs=floor.sliceLUTs, processors=floor.processors)
 
-    def ceiling(self) -> int:
+    def ceiling(self) -> Payload:
         """Returns maximum payload threshold for resource consumption.
         >>> tray.ceiling()
         """
         ceiling = self.resources.ceiling
         return Payload(brams=ceiling.brams, sliceLUTs=ceiling.sliceLUTs, processors=ceiling.processors)
 
-    def frame(self) -> int:
+    def frame(self) -> Payload:
         """Returns resource consumption payload for "frame".
         >>> tray.frame()
         """
         frame = self.resources.frame
         return Payload(brams=frame.brams, sliceLUTs=frame.sliceLUTs, processors=frame.processors)
 
-    def fdl_algo_slice(self) -> int:
+    def fdl_algo_slice(self) -> Payload:
         """Returns resource consumption payload for one FDL algo slice.
         >>> tray.fdl_algo_slice()
         """
         fdl_algo_slice = self.resources.fdl.algo_slice
         return Payload(brams=fdl_algo_slice.brams, sliceLUTs=fdl_algo_slice.sliceLUTs, processors=fdl_algo_slice.processors)
 
-    def fdl_algo_floor(self) -> int:
+    def fdl_algo_floor(self) -> Payload:
         """Returns resource consumption payload for FDL "floor".
         >>> tray.fdl_algo_floor()
         """
@@ -564,21 +566,21 @@ class ResourceTray(object):
         return Payload(brams=fdl_algo_floor.brams, sliceLUTs=fdl_algo_floor.sliceLUTs, processors=fdl_algo_floor.processors)
 
 # =================================================================================
-    def calc_deta_integer(self) -> int:
+    def calc_deta_integer(self) -> Payload:
         """Returns resource consumption payload for one unit of calc_deta_integer calculation.
         >>> tray.calc_deta_integer()
         """
         calc_deta_integer = self.resources.calc_deta_integer
         return Payload(brams=calc_deta_integer.brams, sliceLUTs=calc_deta_integer.sliceLUTs, processors=calc_deta_integer.processors)
 
-    def calc_dphi_integer(self) -> int:
+    def calc_dphi_integer(self) -> Payload:
         """Returns resource consumption payload for one unit of calc_dphi_integer calculation.
         >>> tray.calc_dphi_integer()
         """
         calc_dphi_integer = self.resources.calc_dphi_integer
         return Payload(brams=calc_dphi_integer.brams, sliceLUTs=calc_dphi_integer.sliceLUTs, processors=calc_dphi_integer.processors)
 
-    def calc_cut_deta(self, obj0, obj1) -> int:
+    def calc_cut_deta(self, obj0, obj1) -> Payload:
         """Returns resource consumption payload for one unit of calc_cut_deta calculation.
         >>> tray.calc_cut_deta()
         """
@@ -587,7 +589,7 @@ class ResourceTray(object):
         processors = self.resources.calc_cut_deta._asdict()[obj0]._asdict()[obj1].processors
         return Payload(brams, sliceLUTs, processors)
 
-    def calc_cut_dphi(self, obj0, obj1) -> int:
+    def calc_cut_dphi(self, obj0, obj1) -> Payload:
         """Returns resource consumption payload for one unit of calc_cut_dphi calculation.
         >>> tray.calc_cut_dphi()
         """
@@ -596,7 +598,7 @@ class ResourceTray(object):
         processors = self.resources.calc_cut_dphi._asdict()[obj0]._asdict()[obj1].processors
         return Payload(brams, sliceLUTs, processors)
 
-    def calc_cut_dr(self, obj0, obj1) -> int:
+    def calc_cut_dr(self, obj0, obj1) -> Payload:
         """Returns resource consumption payload for one unit of calc_cut_dr calculation.
         >>> tray.calc_cut_dr()
         """
@@ -605,7 +607,7 @@ class ResourceTray(object):
         processors = self.resources.calc_cut_dr._asdict()[obj0]._asdict()[obj1].processors
         return Payload(brams, sliceLUTs, processors)
         
-    def calc_cut_mass(self, obj0, obj1) -> int:
+    def calc_cut_mass(self, obj0, obj1) -> Payload:
         """Returns resource consumption payload for one unit of calc_cut_mass calculation for mass.
         >>> tray.calc_cut_mass()
         """
