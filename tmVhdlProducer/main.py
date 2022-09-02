@@ -40,26 +40,26 @@ ConstraintTypes: Dict[str, str] = {
 #  Helpers
 # -----------------------------------------------------------------------------
 
-def modules_t(value):
+def modules_t(value: str) -> int:
     """Validate number of modules input."""
-    value = int(value)
-    if 1 <= value <= MaxModules:
-        return value
-    raise ValueError(value)
+    modules = int(value)
+    if 1 <= modules <= MaxModules:
+        return modules
+    raise ValueError(modules)
 
-def dist_t(value):
+def dist_t(value: str) -> int:
     """Validate firmware distribution number."""
-    value = int(value)
-    if 1 <= value:
-        return value
-    raise ValueError(value)
+    dist = int(value)
+    if 1 <= dist:
+        return dist
+    raise ValueError(dist)
 
-def ratio_t(value):
+def ratio_t(value: str) -> float:
     """Validates shadow ratio input."""
-    value = float(value)
-    if .0 <= value <= 1.:
-        return value
-    raise ValueError(value)
+    ratio = float(value)
+    if .0 <= ratio <= 1.:
+        return ratio
+    raise ValueError(ratio)
 
 # -----------------------------------------------------------------------------
 #  Command line parser
@@ -136,7 +136,7 @@ def parse_args():
 #  Main routine
 # -----------------------------------------------------------------------------
 
-def main():
+def main() -> int:
     """Main routine."""
     args = parse_args()
 

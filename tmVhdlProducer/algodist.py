@@ -26,7 +26,7 @@ import logging
 import uuid
 import sys, os
 from collections import namedtuple
-from typing import Dict, List, Optional
+from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
 
 import tmEventSetup
 import tmGrammar
@@ -386,7 +386,7 @@ ConditionTypeKey: Dict[int, str] = {
 # Functions
 #
 
-def constraint_t(value):
+def constraint_t(value: str) -> Tuple[str, List[int]]:
     tokens = value.split(':')
     try:
         return tokens[0], parse_range(tokens[1])
@@ -394,21 +394,21 @@ def constraint_t(value):
         pass
     raise ValueError(value)
 
-def filter_first(func, data):
+def filter_first(func: Callable, data: Iterable[Any]) -> Optional[Any]:
     """Returns first result for filter() or None if not match found."""
     return (list(filter(func, data)) or [None])[0]
 
-def get_condition_names(algorithm):
+def get_condition_names(algorithm: tmEventSetup.esAlgorithm) -> List[str]:
     """Returns list of condition names of an algorithm (from RPN vector)."""
     return [label for label in algorithm.getRpnVector() if label not in Operators]
 
-def short_name(name, length):
+def short_name(name: str, length: int) -> str:
     """Shortens long names, if longer then length replaces last characters by ..."""
     if len(name) > length:
         return f"{name[:length-3]}..."
     return name[:length]
 
-def expand_range(expr):
+def expand_range(expr: str) -> List[int]:
     """Parse and resolves numeric ranges.
     >>> parse_range("3")
     [3]
@@ -422,7 +422,7 @@ def expand_range(expr):
         return [int(tokens[0])]
     raise ValueError(f"invalid range '{expr}'")
 
-def parse_range(expr):
+def parse_range(expr: str) -> List[int]:
     """Parse and resolves numeric ranges.
     >>> parse_range("2,4-7,5,9")
     [2, 4, 5, 6, 7, 9]
@@ -435,8 +435,8 @@ def parse_range(expr):
 def obj_type_to_str(object_type: int) -> Optional[str]:
     """Converts object type to string representation."""
     if object_type not in ObjectTypeKey:
-        raise ValueError(f"invalid object type: {object_type}")
-    return ObjectTypeKey.get(object_type)
+        raise ValueError(f"invalid object type: {object_type!r}")
+    return ObjectTypeKey[object_type]
 
 def obj_type_to_cat(object_type: int) -> str:
     """Converts object type to object catagory representation."""
@@ -453,8 +453,8 @@ def obj_type_to_cat(object_type: int) -> str:
         18: "esums",
     }
     if object_type not in switcher:
-        raise ValueError(f"invalid range '{object_type}'")
-    return switcher.get(object_type, "nothing")
+        raise ValueError(f"invalid object type: {object_type!r}")
+    return switcher[object_type]
 
 #
 # Classes
@@ -467,7 +467,7 @@ class ResourceOverflowError(RuntimeError):
     """Custom exception class for reosurce overflow errors."""
     pass
 
-class ResourceTray(object):
+class ResourceTray:
     """Scale tray for calculating condition and algorithm payloads. It loads
     payload and threshold specifications from a JSON file.
 
@@ -796,7 +796,7 @@ class ResourceTray(object):
         logging.debug("%s.measure(<instance %s>) => %s", self.__class__.__name__, condition.name, payload)
         return payload
 
-class Module(object):
+class Module:
     """Represents a uGT module implementation holding a subset of algorithms."""
 
     def __init__(self, id, tray):
@@ -1236,7 +1236,7 @@ class Module(object):
     def __repr__(self):
         return f"{self.__class__.__name__}(id={self.id}, algorithms={len(self)}, payload={self.payload})"
 
-class ModuleCollection(object):
+class ModuleCollection:
     """Collection of modules permitting various operations."""
     def __init__(self, es, tray):
         """Attribute *modules* represents the number of instantiated modules."""
@@ -1342,7 +1342,7 @@ class ModuleCollection(object):
         """Retruns unsorted list of all conditions."""
         return [condition for _, condition in self.condition_handles.items()]
 
-    def distribute(self, modules):
+    def distribute(self, modules: int):
         """Distribute algorithms to modules, applying shadow ratio.
         """
         # sort algorithms
@@ -1480,7 +1480,7 @@ class ModuleCollection(object):
 # Application
 #
 
-def float_percent(value):
+def float_percent(value: float) -> float:
     value = float(value)
     if .0 <= value <= 1.:
         return value
@@ -1499,7 +1499,7 @@ def parse_args():
     parser.add_argument("--verbose", dest="verbose", action="store_true")
     return parser.parse_args()
 
-def list_resources(tray):
+def list_resources(tray: ResourceTray) -> None:
     logging.info(":: listing resources...")
     def section(name, instance):
         bramsPercent = instance.brams / BRAMS_TOTAL * 100
@@ -1519,7 +1519,7 @@ def list_resources(tray):
                 for cut in object_.cuts:
                     logging.info("  %s", section(cut.type, cut))
 
-def list_algorithms(collection):
+def list_algorithms(collection: ModuleCollection) -> None:
     logging.info("|---------------------------------------------------------------------------------------|")
     logging.info("|                                                                                       |")
     logging.info("| Algorithms sorted by payload (descending)                                             |")
@@ -1537,7 +1537,7 @@ def list_algorithms(collection):
     logging.info("|-------|---------|-----------|---------|-----------------------------------------------|")
     logging.info("|---------------------------------------------------------------------------------------|")
 
-def list_distribution(collection):
+def list_distribution(collection: ModuleCollection) -> None:
     message = f"Detailed distribition on {len(collection)} modules, shadow ratio: {collection.ratio:.1f}"
     logging.info("|-----------------------------------------------------------------------------|")
     logging.info("|                                                                             |")
@@ -1576,7 +1576,7 @@ def list_distribution(collection):
         logging.info(f"| {condition.name:<48} | {modules_list:<7} | {condition.payload.sliceLUTs:<6}| {condition.payload.processors:<5}| {condition.payload.brams:<5} |")
     logging.info("|--------------------------------------------------|---------|-------|------|-------|")
 
-def list_summary(collection):
+def list_summary(collection: ModuleCollection) -> None:
     message = f"Summary for distribution on {len(collection)} modules, shadow ratio: {collection.ratio:.1f}"
     logging.info("|--------------------------------------------------------------------------------------|")
     logging.info("|                                                                                      |")
@@ -1603,7 +1603,7 @@ def list_summary(collection):
                      f"{sliceLUTs_val:>6.0f} | {sliceLUTs:>5.2f} | {brams_val:>5.0f} | {brams:>5.2f} | {processors_val:>5.0f} | {processors:>5.2f} |")
     logging.info("|----|------------|------------|------|--------|-------|-------|-------|-------|-------|")
 
-def list_instantiations_debug(collection):
+def list_instantiations_debug(collection: ModuleCollection) -> None:
     n_a = " "
     message = f"Summary of instantiations resources on {len(collection)} modules"
     logging.debug("|----------------------------------------------------------------------------------------------|")
@@ -1625,12 +1625,12 @@ def list_instantiations_debug(collection):
                 logging.debug(f"| {cond_name:<37} | {condition.payload.sliceLUTs:>5} | {condition.payload.processors:>5} | {condition.payload.brams:>5} | {n_a:<7} | {n_a:<7}| {n_a:<4}| {n_a:<4}|")
         logging.debug("|----------------------------------------------------------------------------------------------|")
 
-def dump_distribution(collection, args):
-    logging.info(":: writing menu distribution JSON dump: %s", args.o)
-    with open(args.o, 'w') as fp:
+def dump_distribution(collection: ModuleCollection, filename: str):
+    logging.info(":: writing menu distribution JSON dump: %s", filename)
+    with open(filename, 'w') as fp:
         collection.dump(fp)
 
-def distribute(eventSetup, modules, config, ratio, reverse_sorting, constraints=None):
+def distribute(eventSetup, modules: int, config: str, ratio: float, reverse_sorting: bool, constraints: Dict[str, str] = None) -> ModuleCollection:
     """Distribution wrapper function, provided for convenience."""
     logging.info("distributing menu...")
 
@@ -1665,7 +1665,7 @@ def distribute(eventSetup, modules, config, ratio, reverse_sorting, constraints=
 
     return collection
 
-def main():
+def main() -> int:
     args = parse_args()
     print("args.resource_list:",args.resource_list)
     level = logging.DEBUG if args.verbose else logging.INFO
@@ -1706,7 +1706,7 @@ def main():
     list_instantiations_debug(collection)
 
     if args.o:
-        dump_distribution(collection, args)
+        dump_distribution(collection, args.o)
 
     logging.info("done.")
 

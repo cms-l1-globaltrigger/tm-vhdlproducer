@@ -12,7 +12,7 @@ Classes:
 import tmEventSetup
 import tmGrammar
 import os
-from typing import Dict, List
+from typing import Any, Callable, Dict, Iterable, List, Optional
 
 from .constants import BRAMS_TOTAL, SLICELUTS_TOTAL, PROCESSORS_TOTAL
 
@@ -245,7 +245,7 @@ ObjectsOrder: List[int] = [
 # Functions
 #
 
-def filter_first(func, data):
+def filter_first(func: Callable, data: Iterable[Any]) -> Optional[Any]:
     """Returns first result for filter() or None if not match found."""
     return (list(filter(func, data)) or [None])[0]
 
@@ -253,7 +253,7 @@ def filter_first(func, data):
 #  Utility classes
 #
 
-class Payload(object):
+class Payload:
     """Implements a generic payload represented by multiple attributes.
 
     >>> payload = Payload(sliceLUTs, processors,brams)
@@ -299,7 +299,7 @@ class Payload(object):
 #  Handle classes
 #
 
-class Handle(object):
+class Handle:
     """Base class for handles."""
     pass
 

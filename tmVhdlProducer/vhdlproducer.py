@@ -80,7 +80,7 @@ ModuleTemplates: List[str] = [
 # Additional Helpers
 # -----------------------------------------------------------------------------
 
-def makedirs(path):
+def makedirs(path: str) -> None:
     """Creates a directory recusively, ignores it if the path already exists."""
     logging.debug("creating directory: %s", path)
     if not os.path.exists(path):
