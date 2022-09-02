@@ -1,9 +1,11 @@
 import argparse
 import glob
 import logging
+import os
 import re
 import subprocess
-import sys, os
+import sys
+from typing import Dict
 
 import tmEventSetup
 import tmReporter
@@ -15,21 +17,21 @@ from .algodist import MinModules, MaxModules
 from .algodist import kExternals
 from . import __version__
 
-EXIT_SUCCESS = 0
-EXIT_FAILURE = 1
-LOGFILE = 'tm-vhdlproducer.log'
-EXEC_REPORTER = 'tm-reporter'
+EXIT_SUCCESS: int = 0
+EXIT_FAILURE: int = 1
+LOGFILE: str = 'tm-vhdlproducer.log'
+EXEC_REPORTER: str = 'tm-reporter'
 
-SortingAsc = 'asc'
-SortingDesc = 'desc'
+SortingAsc: str = 'asc'
+SortingDesc: str = 'desc'
 
-DefaultNrModules = 6
-DefaultRatio = 0.0
-DefaultSorting = SortingDesc
-DefaultOutputDir = os.getcwd()
+DefaultNrModules: int = 6
+DefaultRatio: float = 0.0
+DefaultSorting: str = SortingDesc
+DefaultOutputDir: str = os.getcwd()
 from .algodist import DefaultConfigFile
 
-ConstraintTypes = {
+ConstraintTypes: Dict[str, str] = {
     'ext': kExternals,
 }
 """Mapping constraint types to esCondition types, provided for convenience."""

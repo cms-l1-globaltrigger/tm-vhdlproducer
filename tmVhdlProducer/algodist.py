@@ -25,13 +25,11 @@ import json
 import logging
 import uuid
 import sys, os
-
 from collections import namedtuple
+from typing import Dict, List, Optional
 
 import tmEventSetup
 import tmGrammar
-
-from typing import List, Optional
 
 from .constants import BRAMS_TOTAL, SLICELUTS_TOTAL, PROCESSORS_TOTAL, NR_CALOS, NR_MUONS
 
@@ -40,176 +38,176 @@ from .handles import ObjectHandle
 from .handles import ConditionHandle
 from .handles import AlgorithmHandle
 
-MinModules = 1
-MaxModules = 6
+MinModules: int = 1
+MaxModules: int = 6
 
-ProjectDir = os.path.abspath(os.path.join(os.path.dirname(__file__)))
+ProjectDir: str = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 """Projects root directory."""
 
-DefaultConfigDir = os.path.join(ProjectDir, 'config')
+DefaultConfigDir: str = os.path.join(ProjectDir, 'config')
 """Default directory for resource configuration files."""
 
-DefaultConfigFile = os.path.join(DefaultConfigDir, 'resource_default.json')
+DefaultConfigFile: str = os.path.join(DefaultConfigDir, 'resource_default.json')
 """Default resource configuration file."""
 
 #
 # Keys for object types
 #
 
-kMuon = 'Muon'
-kEgamma = 'Egamma'
-kTau = 'Tau'
-kJet = 'Jet'
-kETT = 'ETT'
-kETTEM = 'ETTEM'
-kHTT = 'HTT'
-kTOWERCOUNT = 'TOWERCOUNT'
-kETM = 'ETM'
-kHTM = 'HTM'
-kETMHF = 'ETMHF'
-#kHTMHF = 'HTMHF'
-kASYMET = 'ASYMET'
-kASYMHT = 'ASYMHT'
-kASYMETHF = 'ASYMETHF'
-kASYMHTHF = 'ASYMHTHF'
-kCENT0 = 'CENT0'
-kCENT1 = 'CENT1'
-kCENT2 = 'CENT2'
-kCENT3 = 'CENT3'
-kCENT4 = 'CENT4'
-kCENT5 = 'CENT5'
-kCENT6 = 'CENT6'
-kCENT7 = 'CENT7'
-kMUS0 = 'MUS0'
-kMUS1 = 'MUS1'
-kMUSOOT0 = 'MUSOOT0'
-kMUSOOT1 = 'MUSOOT1'
-kMBT0HFM = 'MBT0HFM'
-kMBT0HFP = 'MBT0HFP'
-kMBT1HFM = 'MBT1HFM'
-kMBT1HFP = 'MBT1HFP'
-kEXT = 'EXT'
-kPrecision = 'Precision'
+kMuon: str = 'Muon'
+kEgamma: str = 'Egamma'
+kTau: str = 'Tau'
+kJet: str = 'Jet'
+kETT: str = 'ETT'
+kETTEM: str = 'ETTEM'
+kHTT: str = 'HTT'
+kTOWERCOUNT: str = 'TOWERCOUNT'
+kETM: str = 'ETM'
+kHTM: str = 'HTM'
+kETMHF: str = 'ETMHF'
+#kHTMHF: str = 'HTMHF'
+kASYMET: str = 'ASYMET'
+kASYMHT: str = 'ASYMHT'
+kASYMETHF: str = 'ASYMETHF'
+kASYMHTHF: str = 'ASYMHTHF'
+kCENT0: str = 'CENT0'
+kCENT1: str = 'CENT1'
+kCENT2: str = 'CENT2'
+kCENT3: str = 'CENT3'
+kCENT4: str = 'CENT4'
+kCENT5: str = 'CENT5'
+kCENT6: str = 'CENT6'
+kCENT7: str = 'CENT7'
+kMUS0: str = 'MUS0'
+kMUS1: str = 'MUS1'
+kMUSOOT0: str = 'MUSOOT0'
+kMUSOOT1: str = 'MUSOOT1'
+kMBT0HFM: str = 'MBT0HFM'
+kMBT0HFP: str = 'MBT0HFP'
+kMBT1HFM: str = 'MBT1HFM'
+kMBT1HFP: str = 'MBT1HFP'
+kEXT: str = 'EXT'
+kPrecision: str = 'Precision'
 
 #
 # Keys for condition types
 #
 
-kSingleMuon = 'SingleMuon'
-kDoubleMuon = 'DoubleMuon'
-kTripleMuon = 'TripleMuon'
-kQuadMuon = 'QuadMuon'
-kSingleEgamma = 'SingleEgamma'
-kDoubleEgamma = 'DoubleEgamma'
-kTripleEgamma = 'TripleEgamma'
-kQuadEgamma = 'QuadEgamma'
-kSingleTau = 'SingleTau'
-kDoubleTau = 'DoubleTau'
-kTripleTau = 'TripleTau'
-kQuadTau = 'QuadTau'
-kSingleJet = 'SingleJet'
-kDoubleJet = 'DoubleJet'
-kTripleJet = 'TripleJet'
-kQuadJet = 'QuadJet'
-kTotalEt = 'TotalEt'
-kTotalEtEM = 'TotalEtEM'
-kTotalHt = 'TotalHt'
-kTowerCount = 'TowerCount'
-kMissingEt = 'MissingEt'
-kMissingHt = 'MissingHt'
-kMissingEtHF = 'MissingEtHF'
-#kMissingHtHF = 'MissingHtHF'
-kAsymmetryEt = 'AsymmetryEt'
-kAsymmetryHt = 'AsymmetryHt'
-kAsymmetryEtHF = 'AsymmetryEtHF'
-kAsymmetryHtHF = 'AsymmetryHtHF'
-kCentrality0 = 'Centrality0'
-kCentrality1 = 'Centrality1'
-kCentrality2 = 'Centrality2'
-kCentrality3 = 'Centrality3'
-kCentrality4 = 'Centrality4'
-kCentrality5 = 'Centrality5'
-kCentrality6 = 'Centrality6'
-kCentrality7 = 'Centrality7'
-kMuonShower0 = 'MuonShower0'
-kMuonShower1 = 'MuonShower1'
-kMuonShowerOutOfTime0 = 'MuonShowerOutOfTime0'
-kMuonShowerOutOfTime1 = 'MuonShowerOutOfTime1'
-kMinBiasHFM0 = 'MinBiasHFM0'
-kMinBiasHFM1 = 'MinBiasHFM1'
-kMinBiasHFP0 = 'MinBiasHFP0'
-kMinBiasHFP1 = 'MinBiasHFP1'
-kExternals = 'Externals'
-kMuonMuonCorrelation = 'MuonMuonCorrelation'
-kMuonEsumCorrelation = 'MuonEsumCorrelation'
-kCaloMuonCorrelation = 'CaloMuonCorrelation'
-kCaloCaloCorrelation = 'CaloCaloCorrelation'
-kCaloEsumCorrelation = 'CaloEsumCorrelation'
-kInvariantMass = 'InvariantMass'
-kInvariantMass3 = 'InvariantMass3'
-kInvariantMassUpt = 'InvariantMassUpt'
-kInvariantMassDeltaR = 'InvariantMassDeltaR'
-kTransverseMass = 'TransverseMass'
-kCaloCaloCorrelationOvRm = 'CaloCaloCorrelationOvRm'
-kInvariantMassOvRm = 'InvariantMassOvRm'
-kTransverseMassOvRm = 'TransverseMassOvRm'
-kSingleEgammaOvRm = 'SingleEgammaOvRm'
-kDoubleEgammaOvRm = 'DoubleEgammaOvRm'
-kTripleEgammaOvRm = 'TripleEgammaOvRm'
-kQuadEgammaOvRm = 'QuadEgammaOvRm'
-kSingleTauOvRm = 'SingleTauOvRm'
-kDoubleTauOvRm = 'DoubleTauOvRm'
-kTripleTauOvRm = 'TripleTauOvRm'
-kQuadTauOvRm = 'QuadTauOvRm'
-kSingleJetOvRm = 'SingleJetOvRm'
-kDoubleJetOvRm = 'DoubleJetOvRm'
-kTripleJetOvRm = 'TripleJetOvRm'
-kQuadJetOvRm = 'QuadJetOvRm'
+kSingleMuon: str = 'SingleMuon'
+kDoubleMuon: str = 'DoubleMuon'
+kTripleMuon: str = 'TripleMuon'
+kQuadMuon: str = 'QuadMuon'
+kSingleEgamma: str = 'SingleEgamma'
+kDoubleEgamma: str = 'DoubleEgamma'
+kTripleEgamma: str = 'TripleEgamma'
+kQuadEgamma: str = 'QuadEgamma'
+kSingleTau: str = 'SingleTau'
+kDoubleTau: str = 'DoubleTau'
+kTripleTau: str = 'TripleTau'
+kQuadTau: str = 'QuadTau'
+kSingleJet: str = 'SingleJet'
+kDoubleJet: str = 'DoubleJet'
+kTripleJet: str = 'TripleJet'
+kQuadJet: str = 'QuadJet'
+kTotalEt: str = 'TotalEt'
+kTotalEtEM: str = 'TotalEtEM'
+kTotalHt: str = 'TotalHt'
+kTowerCount: str = 'TowerCount'
+kMissingEt: str = 'MissingEt'
+kMissingHt: str = 'MissingHt'
+kMissingEtHF: str = 'MissingEtHF'
+#kMissingHtHF: str = 'MissingHtHF'
+kAsymmetryEt: str = 'AsymmetryEt'
+kAsymmetryHt: str = 'AsymmetryHt'
+kAsymmetryEtHF: str = 'AsymmetryEtHF'
+kAsymmetryHtHF: str = 'AsymmetryHtHF'
+kCentrality0: str = 'Centrality0'
+kCentrality1: str = 'Centrality1'
+kCentrality2: str = 'Centrality2'
+kCentrality3: str = 'Centrality3'
+kCentrality4: str = 'Centrality4'
+kCentrality5: str = 'Centrality5'
+kCentrality6: str = 'Centrality6'
+kCentrality7: str = 'Centrality7'
+kMuonShower0: str = 'MuonShower0'
+kMuonShower1: str = 'MuonShower1'
+kMuonShowerOutOfTime0: str = 'MuonShowerOutOfTime0'
+kMuonShowerOutOfTime1: str = 'MuonShowerOutOfTime1'
+kMinBiasHFM0: str = 'MinBiasHFM0'
+kMinBiasHFM1: str = 'MinBiasHFM1'
+kMinBiasHFP0: str = 'MinBiasHFP0'
+kMinBiasHFP1: str = 'MinBiasHFP1'
+kExternals: str = 'Externals'
+kMuonMuonCorrelation: str = 'MuonMuonCorrelation'
+kMuonEsumCorrelation: str = 'MuonEsumCorrelation'
+kCaloMuonCorrelation: str = 'CaloMuonCorrelation'
+kCaloCaloCorrelation: str = 'CaloCaloCorrelation'
+kCaloEsumCorrelation: str = 'CaloEsumCorrelation'
+kInvariantMass: str = 'InvariantMass'
+kInvariantMass3: str = 'InvariantMass3'
+kInvariantMassUpt: str = 'InvariantMassUpt'
+kInvariantMassDeltaR: str = 'InvariantMassDeltaR'
+kTransverseMass: str = 'TransverseMass'
+kCaloCaloCorrelationOvRm: str = 'CaloCaloCorrelationOvRm'
+kInvariantMassOvRm: str = 'InvariantMassOvRm'
+kTransverseMassOvRm: str = 'TransverseMassOvRm'
+kSingleEgammaOvRm: str = 'SingleEgammaOvRm'
+kDoubleEgammaOvRm: str = 'DoubleEgammaOvRm'
+kTripleEgammaOvRm: str = 'TripleEgammaOvRm'
+kQuadEgammaOvRm: str = 'QuadEgammaOvRm'
+kSingleTauOvRm: str = 'SingleTauOvRm'
+kDoubleTauOvRm: str = 'DoubleTauOvRm'
+kTripleTauOvRm: str = 'TripleTauOvRm'
+kQuadTauOvRm: str = 'QuadTauOvRm'
+kSingleJetOvRm: str = 'SingleJetOvRm'
+kDoubleJetOvRm: str = 'DoubleJetOvRm'
+kTripleJetOvRm: str = 'TripleJetOvRm'
+kQuadJetOvRm: str = 'QuadJetOvRm'
 
 #
 # Keys for cut types
 #
 
-kThreshold = 'Threshold'
-kEta = 'Eta'
-kPhi = 'Phi'
-kUnconstrainedPt = 'UnconstrainedPt'
-kImpactParameter = 'ImpactParameter'
-kCharge = 'Charge'
-kQuality = 'Quality'
-kIsolation = 'Isolation'
-kDisplaced = 'Displaced'
-kDeltaEta = 'DeltaEta'
-kDeltaPhi = 'DeltaPhi'
-kDeltaR = 'DeltaR'
-kMass = 'Mass'
-kMassUpt = 'MassUpt'
-kMassDeltaR = 'MassDeltaR'
-kTwoBodyPt = 'TwoBodyPt'
-kSlice = 'Slice'
-kChargeCorrelation = 'ChargeCorrelation'
-kCount = 'Count'
-kOvRmDeltaEta = 'OvRmDeltaEta'
-kOvRmDeltaPhi = 'OvRmDeltaPhi'
-kOvRmDeltaR = 'OvRmDeltaR'
+kThreshold: str = 'Threshold'
+kEta: str = 'Eta'
+kPhi: str = 'Phi'
+kUnconstrainedPt: str = 'UnconstrainedPt'
+kImpactParameter: str = 'ImpactParameter'
+kCharge: str = 'Charge'
+kQuality: str = 'Quality'
+kIsolation: str = 'Isolation'
+kDisplaced: str = 'Displaced'
+kDeltaEta: str = 'DeltaEta'
+kDeltaPhi: str = 'DeltaPhi'
+kDeltaR: str = 'DeltaR'
+kMass: str = 'Mass'
+kMassUpt: str = 'MassUpt'
+kMassDeltaR: str = 'MassDeltaR'
+kTwoBodyPt: str = 'TwoBodyPt'
+kSlice: str = 'Slice'
+kChargeCorrelation: str = 'ChargeCorrelation'
+kCount: str = 'Count'
+kOvRmDeltaEta: str = 'OvRmDeltaEta'
+kOvRmDeltaPhi: str = 'OvRmDeltaPhi'
+kOvRmDeltaR: str = 'OvRmDeltaR'
 
 #
 # Operators
 #
 
-Operators = (
+Operators: List[str] = [
     tmGrammar.AND,
     tmGrammar.OR,
     tmGrammar.XOR,
     tmGrammar.NOT,
-)
+]
 """List of valid algorithm expression operators."""
 
 #
 # Dictionaries
 #
 
-CutTypeKey = {
+CutTypeKey: Dict[int, str] = {
     tmEventSetup.Threshold: kThreshold,
     tmEventSetup.Eta: kEta,
     tmEventSetup.Phi: kPhi,
@@ -235,7 +233,7 @@ CutTypeKey = {
 }
 """Dictionary for cut type enumerations."""
 
-ObjectTypeKey = {
+ObjectTypeKey: Dict[int, str] = {
     tmEventSetup.Muon: kMuon,
     tmEventSetup.Egamma: kEgamma,
     tmEventSetup.Tau: kTau,
@@ -273,7 +271,7 @@ ObjectTypeKey = {
 }
 """Dictionary for object type enumerations."""
 
-ObjectGrammarKey = {
+ObjectGrammarKey: Dict[int, str] = {
     tmEventSetup.Muon: tmGrammar.MU,
     tmEventSetup.Egamma: tmGrammar.EG,
     tmEventSetup.Tau: tmGrammar.TAU,
@@ -310,7 +308,7 @@ ObjectGrammarKey = {
 }
 """Dictionary for object grammar type enumerations."""
 
-ConditionTypeKey = {
+ConditionTypeKey: Dict[int, str] = {
     tmEventSetup.SingleMuon: kSingleMuon,
     tmEventSetup.DoubleMuon: kDoubleMuon,
     tmEventSetup.TripleMuon: kTripleMuon,

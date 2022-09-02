@@ -12,6 +12,7 @@ Classes:
 import tmEventSetup
 import tmGrammar
 import os
+from typing import Dict, List
 
 from .constants import BRAMS_TOTAL, SLICELUTS_TOTAL, PROCESSORS_TOTAL
 
@@ -19,7 +20,7 @@ from .constants import BRAMS_TOTAL, SLICELUTS_TOTAL, PROCESSORS_TOTAL
 # Dictionaries
 #
 
-ObjectCollectionSize = {
+ObjectCollectionSize: Dict[int, int] = {
     tmEventSetup.Egamma: 12,
     tmEventSetup.Jet: 12,
     tmEventSetup.Tau: 12,
@@ -56,14 +57,14 @@ ObjectCollectionSize = {
 }
 """Dictionary for object collection size (slices)."""
 
-MuonConditionTypes = [
+MuonConditionTypes: List[int] = [
     tmEventSetup.SingleMuon,
     tmEventSetup.DoubleMuon,
     tmEventSetup.TripleMuon,
     tmEventSetup.QuadMuon,
 ]
 
-CaloConditionTypes = [
+CaloConditionTypes: List[int] = [
     tmEventSetup.SingleEgamma,
     tmEventSetup.DoubleEgamma,
     tmEventSetup.TripleEgamma,
@@ -78,7 +79,7 @@ CaloConditionTypes = [
     tmEventSetup.QuadJet,
 ]
 
-EsumsConditionTypes = [
+EsumsConditionTypes: List[int] = [
     tmEventSetup.TotalEt,
     tmEventSetup.TotalEtEM,
     tmEventSetup.TotalHt,
@@ -92,7 +93,7 @@ EsumsConditionTypes = [
     tmEventSetup.AsymmetryHtHF,
 ]
 
-SignalConditionTypes = [
+SignalConditionTypes: List[int] = [
     tmEventSetup.Centrality0,
     tmEventSetup.Centrality1,
     tmEventSetup.Centrality2,
@@ -107,22 +108,22 @@ SignalConditionTypes = [
     tmEventSetup.MuonShowerOutOfTime1,
 ]
 
-ExternalConditionTypes = [
+ExternalConditionTypes: List[int] = [
     tmEventSetup.Externals,
 ]
 
-MinBiasConditionTypes = [
+MinBiasConditionTypes: List[int] = [
     tmEventSetup.MinBiasHFM0,
     tmEventSetup.MinBiasHFM1,
     tmEventSetup.MinBiasHFP0,
     tmEventSetup.MinBiasHFP1,
 ]
 
-TowerCountConditionTypes = [
+TowerCountConditionTypes: List[int] = [
     tmEventSetup.TowerCount,
 ]
 
-CorrelationConditionTypes = [
+CorrelationConditionTypes: List[int] = [
     tmEventSetup.MuonMuonCorrelation,
     tmEventSetup.MuonEsumCorrelation,
     tmEventSetup.CaloMuonCorrelation,
@@ -134,17 +135,17 @@ CorrelationConditionTypes = [
     tmEventSetup.TransverseMass,
 ]
 
-Correlation3ConditionTypes = [
+Correlation3ConditionTypes: List[int] = [
     tmEventSetup.InvariantMass3,
 ]
 
-CorrelationConditionOvRmTypes = [
+CorrelationConditionOvRmTypes: List[int] = [
     tmEventSetup.CaloCaloCorrelationOvRm,
     tmEventSetup.InvariantMassOvRm,
     tmEventSetup.TransverseMassOvRm,
 ]
 
-CaloConditionOvRmTypes = [
+CaloConditionOvRmTypes: List[int] = [
     tmEventSetup.SingleEgammaOvRm,
     tmEventSetup.DoubleEgammaOvRm,
     tmEventSetup.TripleEgammaOvRm,
@@ -159,17 +160,17 @@ CaloConditionOvRmTypes = [
     tmEventSetup.QuadJetOvRm,
 ]
 
-MuonObjectTypes = [
+MuonObjectTypes: List[int] = [
     tmEventSetup.Muon,
 ]
 
-CaloObjectTypes = [
+CaloObjectTypes: List[int] = [
     tmEventSetup.Egamma,
     tmEventSetup.Tau,
     tmEventSetup.Jet,
 ]
 
-EsumsObjectTypes = [
+EsumsObjectTypes: List[int] = [
     tmEventSetup.ETT,
     tmEventSetup.ETTEM,
     tmEventSetup.HTT,
@@ -184,7 +185,7 @@ EsumsObjectTypes = [
 ]
 """List of energy sums object types."""
 
-SignalObjectTypes = [
+SignalObjectTypes: List[int] = [
     tmEventSetup.CENT0,
     tmEventSetup.CENT1,
     tmEventSetup.CENT2,
@@ -200,7 +201,7 @@ SignalObjectTypes = [
 ]
 """List of signal object types."""
 
-ObjectsOrder = [
+ObjectsOrder: List[int] = [
 # objects used in correlation conditions
     tmEventSetup.Egamma,
     tmEventSetup.Jet,

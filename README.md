@@ -7,7 +7,7 @@ Install using pip (>= 19.0)
 
 ```bash
 pip install --upgrade pip
-pip install git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git@2.12.1
+pip install git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git@2.13.0
 ```
 
 ## Build from source
@@ -24,14 +24,11 @@ Create virtual environment.
 python3 -m venv env
 . env/bin/activate
 ```
-Install dependencies using pip.
-```bash
-pip install --upgrade pip
-pip install -r requirements.txt
-```
+
 Install package for local development.
 ```bash
-python setup.py develop
+pip install --upgrade pip
+pip install --editable .
 ```
 
 ## Basic usage
@@ -39,9 +36,9 @@ python setup.py develop
 Generate VHDL output from XML trigger menu.
 
 ```
-tm-vhdlproducer --modules <n> --dist <n> [--ratio <f>]
-                  [--sorting asc|desc] [--constraint <type:modules>]
-                  [--dryrun] <menu>
+tm-vhdlproducer --modules <n> -d|--dist <n> [--ratio <f>]
+               [--sorting asc|desc] [--constraint <type:modules>]
+               [--dryrun] <menu>
 ```
 
 ### Distribute to multiple modules
