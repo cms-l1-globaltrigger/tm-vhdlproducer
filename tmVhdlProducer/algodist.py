@@ -606,7 +606,7 @@ class ResourceTray(object):
         sliceLUTs = self.resources.calc_cut_dr._asdict()[obj0]._asdict()[obj1].sliceLUTs
         processors = self.resources.calc_cut_dr._asdict()[obj0]._asdict()[obj1].processors
         return Payload(brams, sliceLUTs, processors)
-        
+
     def calc_cut_mass(self, obj0, obj1) -> Payload:
         """Returns resource consumption payload for one unit of calc_cut_mass calculation for mass.
         >>> tray.calc_cut_mass()
@@ -823,13 +823,6 @@ class Module(object):
     def __iter__(self):
         """Iterate over algorithms."""
         return iter([algorithm for algorithm in self.algorithms])
-
-    def map_object(self, key):
-        """Returns mapped condition object type for *key*.
-        >>> tray.map_object("Egamma")
-        'calo'
-        """
-        return self.resources.mapping.objects._asdict()[key]
 
     @property
     def conditions(self):
