@@ -1,9 +1,11 @@
 import argparse
 import glob
 import logging
+import os
 import re
 import subprocess
-import sys, os
+import sys
+from typing import Dict
 
 import tmEventSetup
 import tmReporter
@@ -15,21 +17,21 @@ from .algodist import MinModules, MaxModules
 from .algodist import kExternals
 from . import __version__
 
-EXIT_SUCCESS = 0
-EXIT_FAILURE = 1
-LOGFILE = 'tm-vhdlproducer.log'
-EXEC_REPORTER = 'tm-reporter'
+EXIT_SUCCESS: int = 0
+EXIT_FAILURE: int = 1
+LOGFILE: str = 'tm-vhdlproducer.log'
+EXEC_REPORTER: str = 'tm-reporter'
 
-SortingAsc = 'asc'
-SortingDesc = 'desc'
+SortingAsc: str = 'asc'
+SortingDesc: str = 'desc'
 
-DefaultNrModules = 6
-DefaultRatio = 0.0
-DefaultSorting = SortingDesc
-DefaultOutputDir = os.getcwd()
+DefaultNrModules: int = 6
+DefaultRatio: float = 0.0
+DefaultSorting: str = SortingDesc
+DefaultOutputDir: str = os.getcwd()
 from .algodist import DefaultConfigFile
 
-ConstraintTypes = {
+ConstraintTypes: Dict[str, str] = {
     'ext': kExternals,
 }
 """Mapping constraint types to esCondition types, provided for convenience."""
@@ -38,26 +40,26 @@ ConstraintTypes = {
 #  Helpers
 # -----------------------------------------------------------------------------
 
-def modules_t(value):
+def modules_t(value: str) -> int:
     """Validate number of modules input."""
-    value = int(value)
-    if 1 <= value <= MaxModules:
-        return value
-    raise ValueError(value)
+    modules = int(value)
+    if 1 <= modules <= MaxModules:
+        return modules
+    raise ValueError(modules)
 
-def dist_t(value):
+def dist_t(value: str) -> int:
     """Validate firmware distribution number."""
-    value = int(value)
-    if 1 <= value:
-        return value
-    raise ValueError(value)
+    dist = int(value)
+    if 1 <= dist:
+        return dist
+    raise ValueError(dist)
 
-def ratio_t(value):
+def ratio_t(value: str) -> float:
     """Validates shadow ratio input."""
-    value = float(value)
-    if .0 <= value <= 1.:
-        return value
-    raise ValueError(value)
+    ratio = float(value)
+    if .0 <= ratio <= 1.:
+        return ratio
+    raise ValueError(ratio)
 
 # -----------------------------------------------------------------------------
 #  Command line parser
@@ -134,7 +136,7 @@ def parse_args():
 #  Main routine
 # -----------------------------------------------------------------------------
 
-def main():
+def main() -> int:
     """Main routine."""
     args = parse_args()
 
