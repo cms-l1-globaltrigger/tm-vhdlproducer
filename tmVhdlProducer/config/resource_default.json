@@ -131,20 +131,22 @@
             "sliceLUTs": 389880,
             "brams": 1470
         },
-        "frame_floor": {
+        "frame": {
             "processors": 0,
             "brams": 356,
             "sliceLUTs": 4183
         },
-        "fdl_algo_floor": {
-            "processors": 0,
-            "brams": 64,
-            "sliceLUTs": 23300
-        },
-        "fdl_algo_slice": {
-            "processors": 0,
-            "brams": 0,
-            "sliceLUTs": 311
+        "fdl": {
+            "floor": {
+                "processors": 0,
+                "brams": 64,
+                "sliceLUTs": 23300
+            },
+            "algo_slice": {
+                "processors": 0,
+                "brams": 0,
+                "sliceLUTs": 311
+            }
         },
         "calc_deta_integer": {
             "processors": 0,
@@ -157,97 +159,129 @@
             "sliceLUTs": 43
         },
         "calc_cut_deta": {
-            "calo_calo": {
-                "processors": 0,
-                "brams": 0,
-                "sliceLUTs": 51
+            "calo": {
+                "calo": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 51
+                },
+                "muon": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 0
+                }
             },
-            "calo_muon": {
-                "processors": 0,
-                "brams": 0,
-                "sliceLUTs": 0
-            },
-            "muon_muon": {
-                "processors": 0,
-                "brams": 0,
-                "sliceLUTs": 89
+            "muon": {
+                "muon": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 89
+                }
             }
         },
         "calc_cut_dphi": {
-            "calo_calo": {
-                "processors": 0,
-                "brams": 0,
-                "sliceLUTs": 50
+            "calo": {
+                "calo": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 50
+                },
+                "esums": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 50
+                },
+                "muon": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 0
+                }
             },
-            "calo_esum": {
-                "processors": 0,
-                "brams": 0,
-                "sliceLUTs": 50
-            },
-            "calo_muon": {
-                "processors": 0,
-                "brams": 0,
-                "sliceLUTs": 0
-            },
-            "muon_muon": {
-                "processors": 0,
-                "brams": 0,
-                "sliceLUTs": 141
-            },
-            "muon_esum": {
-                "processors": 0,
-                "brams": 0,
-                "sliceLUTs": 0
+            "muon": {
+                "muon": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 141
+                },
+                "esums": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 0
+                }
             }
         },
         "calc_cut_dr": {
-            "calo_calo": {
-                "processors": 2,
-                "brams": 0,
-                "sliceLUTs": 101
+            "calo": {
+                "calo": {
+                    "processors": 2,
+                    "brams": 0,
+                    "sliceLUTs": 101
+                },
+                "muon": {
+                    "processors": 2,
+                    "brams": 0,
+                    "sliceLUTs": 295
+                }
             },
-            "calo_muon": {
-                "processors": 2,
-                "brams": 0,
-                "sliceLUTs": 295
-            },
-            "muon_muon": {
-                "processors": 2,
-                "brams": 0,
-                "sliceLUTs": 230
+            "muon": {
+                "muon": {
+                    "processors": 2,
+                    "brams": 0,
+                    "sliceLUTs": 230
+                }
             }
         },
         "calc_cut_mass": {
-            "calo_calo": {
-                "processors": 3,
-                "brams": 0,
-                "sliceLUTs": 145
+            "calo": {
+                "calo": {
+                    "processors": 3,
+                    "brams": 0,
+                    "sliceLUTs": 145
+                },
+                "esums": {
+                    "processors": 3,
+                    "brams": 0,
+                    "sliceLUTs": 46
+                },
+                "muon": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 0
+                }
             },
-            "calo_esum": {
-                "processors": 3,
-                "brams": 0,
-                "sliceLUTs": 46
-            },
-            "calo_muon": {
-                "processors": 0,
-                "brams": 0,
-                "sliceLUTs": 0
-            },
-            "muon_muon": {
-                "processors": 3,
-                "brams": 0,
-                "sliceLUTs": 321
-            },
-            "muon_esum": {
-                "processors": 0,
-                "brams": 0,
-                "sliceLUTs": 0
+            "muon": {
+                "muon": {
+                    "processors": 3,
+                    "brams": 0,
+                    "sliceLUTs": 321
+                },
+                "esums": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 0
+                }
             }
         },
-        "massdr_calc": {
-            "processors": 3,
-            "brams": 18,
-            "sliceLUTs": 143
+        "calc_cut_massdr": {
+            "calo": {
+                "calo": {
+                    "processors": 3,
+                    "brams": 18,
+                    "sliceLUTs": 143
+                },
+                "muon": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 0
+                }
+            },
+            "muon": {
+                "muon": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 0
+                }
+            }
         },
         "object_cuts": {
             "muon": {
