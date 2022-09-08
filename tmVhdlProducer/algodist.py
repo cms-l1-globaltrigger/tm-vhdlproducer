@@ -25,15 +25,11 @@ import json
 import logging
 import uuid
 import sys, os
-
 from collections import namedtuple
+from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
 
 import tmEventSetup
 import tmGrammar
-
-from .constants import BRAMS_TOTAL, SLICELUTS_TOTAL, PROCESSORS_TOTAL, NR_CALOS, NR_MUONS, NR_ADT, adt_obj_name
-
-from typing import List, Optional
 
 from .constants import BRAMS_TOTAL, SLICELUTS_TOTAL, PROCESSORS_TOTAL, NR_CALOS, NR_MUONS
 
@@ -42,176 +38,176 @@ from .handles import ObjectHandle
 from .handles import ConditionHandle
 from .handles import AlgorithmHandle
 
-MinModules = 1
-MaxModules = 6
+MinModules: int = 1
+MaxModules: int = 6
 
-ProjectDir = os.path.abspath(os.path.join(os.path.dirname(__file__)))
+ProjectDir: str = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 """Projects root directory."""
 
-DefaultConfigDir = os.path.join(ProjectDir, 'config')
+DefaultConfigDir: str = os.path.join(ProjectDir, 'config')
 """Default directory for resource configuration files."""
 
-DefaultConfigFile = os.path.join(DefaultConfigDir, 'resource_default.json')
+DefaultConfigFile: str = os.path.join(DefaultConfigDir, 'resource_default.json')
 """Default resource configuration file."""
 
 #
 # Keys for object types
 #
 
-kMuon = 'Muon'
-kEgamma = 'Egamma'
-kTau = 'Tau'
-kJet = 'Jet'
-kETT = 'ETT'
-kETTEM = 'ETTEM'
-kHTT = 'HTT'
-kTOWERCOUNT = 'TOWERCOUNT'
-kETM = 'ETM'
-kHTM = 'HTM'
-kETMHF = 'ETMHF'
-#kHTMHF = 'HTMHF'
-kASYMET = 'ASYMET'
-kASYMHT = 'ASYMHT'
-kASYMETHF = 'ASYMETHF'
-kASYMHTHF = 'ASYMHTHF'
-kCENT0 = 'CENT0'
-kCENT1 = 'CENT1'
-kCENT2 = 'CENT2'
-kCENT3 = 'CENT3'
-kCENT4 = 'CENT4'
-kCENT5 = 'CENT5'
-kCENT6 = 'CENT6'
-kCENT7 = 'CENT7'
-kMUS0 = 'MUS0'
-kMUS1 = 'MUS1'
-kMUSOOT0 = 'MUSOOT0'
-kMUSOOT1 = 'MUSOOT1'
-kMBT0HFM = 'MBT0HFM'
-kMBT0HFP = 'MBT0HFP'
-kMBT1HFM = 'MBT1HFM'
-kMBT1HFP = 'MBT1HFP'
-kEXT = 'EXT'
-kPrecision = 'Precision'
+kMuon: str = 'Muon'
+kEgamma: str = 'Egamma'
+kTau: str = 'Tau'
+kJet: str = 'Jet'
+kETT: str = 'ETT'
+kETTEM: str = 'ETTEM'
+kHTT: str = 'HTT'
+kTOWERCOUNT: str = 'TOWERCOUNT'
+kETM: str = 'ETM'
+kHTM: str = 'HTM'
+kETMHF: str = 'ETMHF'
+#kHTMHF: str = 'HTMHF'
+kASYMET: str = 'ASYMET'
+kASYMHT: str = 'ASYMHT'
+kASYMETHF: str = 'ASYMETHF'
+kASYMHTHF: str = 'ASYMHTHF'
+kCENT0: str = 'CENT0'
+kCENT1: str = 'CENT1'
+kCENT2: str = 'CENT2'
+kCENT3: str = 'CENT3'
+kCENT4: str = 'CENT4'
+kCENT5: str = 'CENT5'
+kCENT6: str = 'CENT6'
+kCENT7: str = 'CENT7'
+kMUS0: str = 'MUS0'
+kMUS1: str = 'MUS1'
+kMUSOOT0: str = 'MUSOOT0'
+kMUSOOT1: str = 'MUSOOT1'
+kMBT0HFM: str = 'MBT0HFM'
+kMBT0HFP: str = 'MBT0HFP'
+kMBT1HFM: str = 'MBT1HFM'
+kMBT1HFP: str = 'MBT1HFP'
+kEXT: str = 'EXT'
+kPrecision: str = 'Precision'
 
 #
 # Keys for condition types
 #
 
-kSingleMuon = 'SingleMuon'
-kDoubleMuon = 'DoubleMuon'
-kTripleMuon = 'TripleMuon'
-kQuadMuon = 'QuadMuon'
-kSingleEgamma = 'SingleEgamma'
-kDoubleEgamma = 'DoubleEgamma'
-kTripleEgamma = 'TripleEgamma'
-kQuadEgamma = 'QuadEgamma'
-kSingleTau = 'SingleTau'
-kDoubleTau = 'DoubleTau'
-kTripleTau = 'TripleTau'
-kQuadTau = 'QuadTau'
-kSingleJet = 'SingleJet'
-kDoubleJet = 'DoubleJet'
-kTripleJet = 'TripleJet'
-kQuadJet = 'QuadJet'
-kTotalEt = 'TotalEt'
-kTotalEtEM = 'TotalEtEM'
-kTotalHt = 'TotalHt'
-kTowerCount = 'TowerCount'
-kMissingEt = 'MissingEt'
-kMissingHt = 'MissingHt'
-kMissingEtHF = 'MissingEtHF'
-#kMissingHtHF = 'MissingHtHF'
-kAsymmetryEt = 'AsymmetryEt'
-kAsymmetryHt = 'AsymmetryHt'
-kAsymmetryEtHF = 'AsymmetryEtHF'
-kAsymmetryHtHF = 'AsymmetryHtHF'
-kCentrality0 = 'Centrality0'
-kCentrality1 = 'Centrality1'
-kCentrality2 = 'Centrality2'
-kCentrality3 = 'Centrality3'
-kCentrality4 = 'Centrality4'
-kCentrality5 = 'Centrality5'
-kCentrality6 = 'Centrality6'
-kCentrality7 = 'Centrality7'
-kMuonShower0 = 'MuonShower0'
-kMuonShower1 = 'MuonShower1'
-kMuonShowerOutOfTime0 = 'MuonShowerOutOfTime0'
-kMuonShowerOutOfTime1 = 'MuonShowerOutOfTime1'
-kMinBiasHFM0 = 'MinBiasHFM0'
-kMinBiasHFM1 = 'MinBiasHFM1'
-kMinBiasHFP0 = 'MinBiasHFP0'
-kMinBiasHFP1 = 'MinBiasHFP1'
-kExternals = 'Externals'
-kMuonMuonCorrelation = 'MuonMuonCorrelation'
-kMuonEsumCorrelation = 'MuonEsumCorrelation'
-kCaloMuonCorrelation = 'CaloMuonCorrelation'
-kCaloCaloCorrelation = 'CaloCaloCorrelation'
-kCaloEsumCorrelation = 'CaloEsumCorrelation'
-kInvariantMass = 'InvariantMass'
-kInvariantMass3 = 'InvariantMass3'
-kInvariantMassUpt = 'InvariantMassUpt'
-kInvariantMassDeltaR = 'InvariantMassDeltaR'
-kTransverseMass = 'TransverseMass'
-kCaloCaloCorrelationOvRm = 'CaloCaloCorrelationOvRm'
-kInvariantMassOvRm = 'InvariantMassOvRm'
-kTransverseMassOvRm = 'TransverseMassOvRm'
-kSingleEgammaOvRm = 'SingleEgammaOvRm'
-kDoubleEgammaOvRm = 'DoubleEgammaOvRm'
-kTripleEgammaOvRm = 'TripleEgammaOvRm'
-kQuadEgammaOvRm = 'QuadEgammaOvRm'
-kSingleTauOvRm = 'SingleTauOvRm'
-kDoubleTauOvRm = 'DoubleTauOvRm'
-kTripleTauOvRm = 'TripleTauOvRm'
-kQuadTauOvRm = 'QuadTauOvRm'
-kSingleJetOvRm = 'SingleJetOvRm'
-kDoubleJetOvRm = 'DoubleJetOvRm'
-kTripleJetOvRm = 'TripleJetOvRm'
-kQuadJetOvRm = 'QuadJetOvRm'
+kSingleMuon: str = 'SingleMuon'
+kDoubleMuon: str = 'DoubleMuon'
+kTripleMuon: str = 'TripleMuon'
+kQuadMuon: str = 'QuadMuon'
+kSingleEgamma: str = 'SingleEgamma'
+kDoubleEgamma: str = 'DoubleEgamma'
+kTripleEgamma: str = 'TripleEgamma'
+kQuadEgamma: str = 'QuadEgamma'
+kSingleTau: str = 'SingleTau'
+kDoubleTau: str = 'DoubleTau'
+kTripleTau: str = 'TripleTau'
+kQuadTau: str = 'QuadTau'
+kSingleJet: str = 'SingleJet'
+kDoubleJet: str = 'DoubleJet'
+kTripleJet: str = 'TripleJet'
+kQuadJet: str = 'QuadJet'
+kTotalEt: str = 'TotalEt'
+kTotalEtEM: str = 'TotalEtEM'
+kTotalHt: str = 'TotalHt'
+kTowerCount: str = 'TowerCount'
+kMissingEt: str = 'MissingEt'
+kMissingHt: str = 'MissingHt'
+kMissingEtHF: str = 'MissingEtHF'
+#kMissingHtHF: str = 'MissingHtHF'
+kAsymmetryEt: str = 'AsymmetryEt'
+kAsymmetryHt: str = 'AsymmetryHt'
+kAsymmetryEtHF: str = 'AsymmetryEtHF'
+kAsymmetryHtHF: str = 'AsymmetryHtHF'
+kCentrality0: str = 'Centrality0'
+kCentrality1: str = 'Centrality1'
+kCentrality2: str = 'Centrality2'
+kCentrality3: str = 'Centrality3'
+kCentrality4: str = 'Centrality4'
+kCentrality5: str = 'Centrality5'
+kCentrality6: str = 'Centrality6'
+kCentrality7: str = 'Centrality7'
+kMuonShower0: str = 'MuonShower0'
+kMuonShower1: str = 'MuonShower1'
+kMuonShowerOutOfTime0: str = 'MuonShowerOutOfTime0'
+kMuonShowerOutOfTime1: str = 'MuonShowerOutOfTime1'
+kMinBiasHFM0: str = 'MinBiasHFM0'
+kMinBiasHFM1: str = 'MinBiasHFM1'
+kMinBiasHFP0: str = 'MinBiasHFP0'
+kMinBiasHFP1: str = 'MinBiasHFP1'
+kExternals: str = 'Externals'
+kMuonMuonCorrelation: str = 'MuonMuonCorrelation'
+kMuonEsumCorrelation: str = 'MuonEsumCorrelation'
+kCaloMuonCorrelation: str = 'CaloMuonCorrelation'
+kCaloCaloCorrelation: str = 'CaloCaloCorrelation'
+kCaloEsumCorrelation: str = 'CaloEsumCorrelation'
+kInvariantMass: str = 'InvariantMass'
+kInvariantMass3: str = 'InvariantMass3'
+kInvariantMassUpt: str = 'InvariantMassUpt'
+kInvariantMassDeltaR: str = 'InvariantMassDeltaR'
+kTransverseMass: str = 'TransverseMass'
+kCaloCaloCorrelationOvRm: str = 'CaloCaloCorrelationOvRm'
+kInvariantMassOvRm: str = 'InvariantMassOvRm'
+kTransverseMassOvRm: str = 'TransverseMassOvRm'
+kSingleEgammaOvRm: str = 'SingleEgammaOvRm'
+kDoubleEgammaOvRm: str = 'DoubleEgammaOvRm'
+kTripleEgammaOvRm: str = 'TripleEgammaOvRm'
+kQuadEgammaOvRm: str = 'QuadEgammaOvRm'
+kSingleTauOvRm: str = 'SingleTauOvRm'
+kDoubleTauOvRm: str = 'DoubleTauOvRm'
+kTripleTauOvRm: str = 'TripleTauOvRm'
+kQuadTauOvRm: str = 'QuadTauOvRm'
+kSingleJetOvRm: str = 'SingleJetOvRm'
+kDoubleJetOvRm: str = 'DoubleJetOvRm'
+kTripleJetOvRm: str = 'TripleJetOvRm'
+kQuadJetOvRm: str = 'QuadJetOvRm'
 
 #
 # Keys for cut types
 #
 
-kThreshold = 'Threshold'
-kEta = 'Eta'
-kPhi = 'Phi'
-kUnconstrainedPt = 'UnconstrainedPt'
-kImpactParameter = 'ImpactParameter'
-kCharge = 'Charge'
-kQuality = 'Quality'
-kIsolation = 'Isolation'
-kDisplaced = 'Displaced'
-kDeltaEta = 'DeltaEta'
-kDeltaPhi = 'DeltaPhi'
-kDeltaR = 'DeltaR'
-kMass = 'Mass'
-kMassUpt = 'MassUpt'
-kMassDeltaR = 'MassDeltaR'
-kTwoBodyPt = 'TwoBodyPt'
-kSlice = 'Slice'
-kChargeCorrelation = 'ChargeCorrelation'
-kCount = 'Count'
-kOvRmDeltaEta = 'OvRmDeltaEta'
-kOvRmDeltaPhi = 'OvRmDeltaPhi'
-kOvRmDeltaR = 'OvRmDeltaR'
+kThreshold: str = 'Threshold'
+kEta: str = 'Eta'
+kPhi: str = 'Phi'
+kUnconstrainedPt: str = 'UnconstrainedPt'
+kImpactParameter: str = 'ImpactParameter'
+kCharge: str = 'Charge'
+kQuality: str = 'Quality'
+kIsolation: str = 'Isolation'
+kDisplaced: str = 'Displaced'
+kDeltaEta: str = 'DeltaEta'
+kDeltaPhi: str = 'DeltaPhi'
+kDeltaR: str = 'DeltaR'
+kMass: str = 'Mass'
+kMassUpt: str = 'MassUpt'
+kMassDeltaR: str = 'MassDeltaR'
+kTwoBodyPt: str = 'TwoBodyPt'
+kSlice: str = 'Slice'
+kChargeCorrelation: str = 'ChargeCorrelation'
+kCount: str = 'Count'
+kOvRmDeltaEta: str = 'OvRmDeltaEta'
+kOvRmDeltaPhi: str = 'OvRmDeltaPhi'
+kOvRmDeltaR: str = 'OvRmDeltaR'
 
 #
 # Operators
 #
 
-Operators = (
+Operators: List[str] = [
     tmGrammar.AND,
     tmGrammar.OR,
     tmGrammar.XOR,
     tmGrammar.NOT,
-)
+]
 """List of valid algorithm expression operators."""
 
 #
 # Dictionaries
 #
 
-CutTypeKey = {
+CutTypeKey: Dict[int, str] = {
     tmEventSetup.Threshold: kThreshold,
     tmEventSetup.Eta: kEta,
     tmEventSetup.Phi: kPhi,
@@ -237,7 +233,7 @@ CutTypeKey = {
 }
 """Dictionary for cut type enumerations."""
 
-ObjectTypeKey = {
+ObjectTypeKey: Dict[int, str] = {
     tmEventSetup.Muon: kMuon,
     tmEventSetup.Egamma: kEgamma,
     tmEventSetup.Tau: kTau,
@@ -275,7 +271,7 @@ ObjectTypeKey = {
 }
 """Dictionary for object type enumerations."""
 
-ObjectGrammarKey = {
+ObjectGrammarKey: Dict[int, str] = {
     tmEventSetup.Muon: tmGrammar.MU,
     tmEventSetup.Egamma: tmGrammar.EG,
     tmEventSetup.Tau: tmGrammar.TAU,
@@ -312,7 +308,7 @@ ObjectGrammarKey = {
 }
 """Dictionary for object grammar type enumerations."""
 
-ConditionTypeKey = {
+ConditionTypeKey: Dict[int, str] = {
     tmEventSetup.SingleMuon: kSingleMuon,
     tmEventSetup.DoubleMuon: kDoubleMuon,
     tmEventSetup.TripleMuon: kTripleMuon,
@@ -390,7 +386,7 @@ ConditionTypeKey = {
 # Functions
 #
 
-def constraint_t(value):
+def constraint_t(value: str) -> Tuple[str, List[int]]:
     tokens = value.split(':')
     try:
         return tokens[0], parse_range(tokens[1])
@@ -398,21 +394,21 @@ def constraint_t(value):
         pass
     raise ValueError(value)
 
-def filter_first(func, data):
+def filter_first(func: Callable, data: Iterable[Any]) -> Optional[Any]:
     """Returns first result for filter() or None if not match found."""
     return (list(filter(func, data)) or [None])[0]
 
-def get_condition_names(algorithm):
+def get_condition_names(algorithm: tmEventSetup.esAlgorithm) -> List[str]:
     """Returns list of condition names of an algorithm (from RPN vector)."""
     return [label for label in algorithm.getRpnVector() if label not in Operators]
 
-def short_name(name, length):
+def short_name(name: str, length: int) -> str:
     """Shortens long names, if longer then length replaces last characters by ..."""
     if len(name) > length:
         return f"{name[:length-3]}..."
     return name[:length]
 
-def expand_range(expr):
+def expand_range(expr: str) -> List[int]:
     """Parse and resolves numeric ranges.
     >>> parse_range("3")
     [3]
@@ -426,7 +422,7 @@ def expand_range(expr):
         return [int(tokens[0])]
     raise ValueError(f"invalid range '{expr}'")
 
-def parse_range(expr):
+def parse_range(expr: str) -> List[int]:
     """Parse and resolves numeric ranges.
     >>> parse_range("2,4-7,5,9")
     [2, 4, 5, 6, 7, 9]
@@ -439,8 +435,8 @@ def parse_range(expr):
 def obj_type_to_str(object_type: int) -> Optional[str]:
     """Converts object type to string representation."""
     if object_type not in ObjectTypeKey:
-        raise ValueError(f"invalid object type: {object_type}")
-    return ObjectTypeKey.get(object_type)
+        raise ValueError(f"invalid object type: {object_type!r}")
+    return ObjectTypeKey[object_type]
 
 def obj_type_to_cat(object_type: int) -> str:
     """Converts object type to object catagory representation."""
@@ -457,8 +453,8 @@ def obj_type_to_cat(object_type: int) -> str:
         18: "esums",
     }
     if object_type not in switcher:
-        raise ValueError(f"invalid range '{object_type}'")
-    return switcher.get(object_type, "nothing")
+        raise ValueError(f"invalid object type: {object_type!r}")
+    return switcher[object_type]
 
 #
 # Classes
@@ -471,7 +467,7 @@ class ResourceOverflowError(RuntimeError):
     """Custom exception class for reosurce overflow errors."""
     pass
 
-class ResourceTray(object):
+class ResourceTray:
     """Scale tray for calculating condition and algorithm payloads. It loads
     payload and threshold specifications from a JSON file.
 
@@ -608,7 +604,7 @@ class ResourceTray(object):
         sliceLUTs = self.resources.calc_cut_dr._asdict()[obj0]._asdict()[obj1].sliceLUTs
         processors = self.resources.calc_cut_dr._asdict()[obj0]._asdict()[obj1].processors
         return Payload(brams, sliceLUTs, processors)
-        
+
     def calc_cut_mass(self, obj0, obj1) -> Payload:
         """Returns resource consumption payload for one unit of calc_cut_mass calculation for mass.
         >>> tray.calc_cut_mass()
@@ -749,7 +745,6 @@ class ResourceTray(object):
 
         # Pick object configuration
         objects_types = [ObjectTypeKey[object_.type] for object_ in condition.objects]
-        # adt_obj_name from constant.py
         if objects_types[0] == 'EXT':
             for object in condition.objects:
                 if object.name.split('_')[1] == 'ADT':
@@ -810,7 +805,7 @@ class ResourceTray(object):
         logging.debug("%s.measure(<instance %s>) => %s", self.__class__.__name__, condition.name, payload)
         return payload
 
-class Module(object):
+class Module:
     """Represents a uGT module implementation holding a subset of algorithms."""
 
     def __init__(self, id, tray):
@@ -835,13 +830,6 @@ class Module(object):
     def __iter__(self):
         """Iterate over algorithms."""
         return iter([algorithm for algorithm in self.algorithms])
-
-    def map_object(self, key):
-        """Returns mapped condition object type for *key*.
-        >>> tray.map_object("Egamma")
-        'calo'
-        """
-        return self.resources.mapping.objects._asdict()[key]
 
     @property
     def conditions(self):
@@ -1257,7 +1245,7 @@ class Module(object):
     def __repr__(self):
         return f"{self.__class__.__name__}(id={self.id}, algorithms={len(self)}, payload={self.payload})"
 
-class ModuleCollection(object):
+class ModuleCollection:
     """Collection of modules permitting various operations."""
     def __init__(self, es, tray):
         """Attribute *modules* represents the number of instantiated modules."""
@@ -1363,7 +1351,7 @@ class ModuleCollection(object):
         """Retruns unsorted list of all conditions."""
         return [condition for _, condition in self.condition_handles.items()]
 
-    def distribute(self, modules):
+    def distribute(self, modules: int):
         """Distribute algorithms to modules, applying shadow ratio.
         """
         # sort algorithms
@@ -1501,7 +1489,7 @@ class ModuleCollection(object):
 # Application
 #
 
-def float_percent(value):
+def float_percent(value: float) -> float:
     value = float(value)
     if .0 <= value <= 1.:
         return value
@@ -1520,7 +1508,7 @@ def parse_args():
     parser.add_argument("--verbose", dest="verbose", action="store_true")
     return parser.parse_args()
 
-def list_resources(tray):
+def list_resources(tray: ResourceTray) -> None:
     logging.info(":: listing resources...")
     def section(name, instance):
         bramsPercent = instance.brams / BRAMS_TOTAL * 100
@@ -1540,7 +1528,7 @@ def list_resources(tray):
                 for cut in object_.cuts:
                     logging.info("  %s", section(cut.type, cut))
 
-def list_algorithms(collection):
+def list_algorithms(collection: ModuleCollection) -> None:
     logging.info("|---------------------------------------------------------------------------------------|")
     logging.info("|                                                                                       |")
     logging.info("| Algorithms sorted by payload (descending)                                             |")
@@ -1558,7 +1546,7 @@ def list_algorithms(collection):
     logging.info("|-------|---------|-----------|---------|-----------------------------------------------|")
     logging.info("|---------------------------------------------------------------------------------------|")
 
-def list_distribution(collection):
+def list_distribution(collection: ModuleCollection) -> None:
     message = f"Detailed distribition on {len(collection)} modules, shadow ratio: {collection.ratio:.1f}"
     logging.info("|-----------------------------------------------------------------------------|")
     logging.info("|                                                                             |")
@@ -1597,7 +1585,7 @@ def list_distribution(collection):
         logging.info(f"| {condition.name:<48} | {modules_list:<7} | {condition.payload.sliceLUTs:<6}| {condition.payload.processors:<5}| {condition.payload.brams:<5} |")
     logging.info("|--------------------------------------------------|---------|-------|------|-------|")
 
-def list_summary(collection):
+def list_summary(collection: ModuleCollection) -> None:
     message = f"Summary for distribution on {len(collection)} modules, shadow ratio: {collection.ratio:.1f}"
     logging.info("|--------------------------------------------------------------------------------------|")
     logging.info("|                                                                                      |")
@@ -1624,7 +1612,7 @@ def list_summary(collection):
                      f"{sliceLUTs_val:>6.0f} | {sliceLUTs:>5.2f} | {brams_val:>5.0f} | {brams:>5.2f} | {processors_val:>5.0f} | {processors:>5.2f} |")
     logging.info("|----|------------|------------|------|--------|-------|-------|-------|-------|-------|")
 
-def list_instantiations_debug(collection):
+def list_instantiations_debug(collection: ModuleCollection) -> None:
     n_a = " "
     message = f"Summary of instantiations resources on {len(collection)} modules"
     logging.debug("|----------------------------------------------------------------------------------------------|")
@@ -1646,12 +1634,12 @@ def list_instantiations_debug(collection):
                 logging.debug(f"| {cond_name:<37} | {condition.payload.sliceLUTs:>5} | {condition.payload.processors:>5} | {condition.payload.brams:>5} | {n_a:<7} | {n_a:<7}| {n_a:<4}| {n_a:<4}|")
         logging.debug("|----------------------------------------------------------------------------------------------|")
 
-def dump_distribution(collection, args):
-    logging.info(":: writing menu distribution JSON dump: %s", args.o)
-    with open(args.o, 'w') as fp:
+def dump_distribution(collection: ModuleCollection, filename: str):
+    logging.info(":: writing menu distribution JSON dump: %s", filename)
+    with open(filename, 'w') as fp:
         collection.dump(fp)
 
-def distribute(eventSetup, modules, config, ratio, reverse_sorting, constraints=None):
+def distribute(eventSetup, modules: int, config: str, ratio: float, reverse_sorting: bool, constraints: Dict[str, str] = None) -> ModuleCollection:
     """Distribution wrapper function, provided for convenience."""
     logging.info("distributing menu...")
 
@@ -1686,7 +1674,7 @@ def distribute(eventSetup, modules, config, ratio, reverse_sorting, constraints=
 
     return collection
 
-def main():
+def main() -> int:
     args = parse_args()
     print("args.resource_list:",args.resource_list)
     level = logging.DEBUG if args.verbose else logging.INFO
@@ -1727,7 +1715,7 @@ def main():
     list_instantiations_debug(collection)
 
     if args.o:
-        dump_distribution(collection, args)
+        dump_distribution(collection, args.o)
 
     logging.info("done.")
 

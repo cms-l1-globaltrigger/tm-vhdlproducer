@@ -45,7 +45,7 @@ import string
 import re, os
 
 from distutils.version import StrictVersion
-from typing import Iterable
+from typing import Dict, Iterable
 
 import tmEventSetup
 import tmGrammar  # import after tmEventSetup
@@ -65,7 +65,7 @@ RegexVhdlLabel = re.compile('[^A-Za-z0-9_]')
 #  Conversion dictionaries
 # -----------------------------------------------------------------------------
 
-ObjectTypes = {
+ObjectTypes: Dict[int, str] = {
     tmEventSetup.Muon: tmGrammar.MU,
     tmEventSetup.Egamma: tmGrammar.EG,
     tmEventSetup.Tau: tmGrammar.TAU,
@@ -102,7 +102,7 @@ ObjectTypes = {
 }
 
 # Has the number of Objects of each Type
-ObjectCount = {
+ObjectCount: Dict[int, int] = {
     tmEventSetup.Muon:       8,
     tmEventSetup.Egamma:    12,
     tmEventSetup.Tau:       12,
@@ -138,7 +138,7 @@ ObjectCount = {
     tmEventSetup.MUSOOT1:    1,
 }
 
-ComparisonOperator = {
+ComparisonOperator: Dict[int, bool] = {
     tmEventSetup.GE: True,
     tmEventSetup.EQ: False,
 }

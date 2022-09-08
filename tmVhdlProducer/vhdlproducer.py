@@ -6,6 +6,7 @@ import os
 import math
 
 from binascii import hexlify
+from typing import Callable, Dict, List
 
 from jinja2 import Environment
 from jinja2 import FileSystemLoader
@@ -55,7 +56,7 @@ def murmurhash(s):
 #  Constants
 # -----------------------------------------------------------------------------
 
-CustomFilters = {
+CustomFilters: Dict[str, Callable] = {
     'X21' : lambda x: "%021X" % int(float(x)),
     'X16' : lambda x: "%016X" % int(float(x)),
     'X08' : lambda x: "%08X" % int(float(x)),
@@ -67,10 +68,10 @@ CustomFilters = {
     'hexstr': hexstr_filter,
     'hexuuid': uuid2hex_filter,
     'mmhashn': murmurhash,
-    'vhdl_bool': vhdl_bool
+    'vhdl_bool': vhdl_bool,
 }
 
-ModuleTemplates = [
+ModuleTemplates: List[str] = [
     'algo_index.vhd',
     'gtl_module_signals.vhd',
     'gtl_module_instances.vhd',
@@ -81,7 +82,7 @@ ModuleTemplates = [
 # Additional Helpers
 # -----------------------------------------------------------------------------
 
-def makedirs(path):
+def makedirs(path: str) -> None:
     """Creates a directory recusively, ignores it if the path already exists."""
     logging.debug("creating directory: %s", path)
     if not os.path.exists(path):
