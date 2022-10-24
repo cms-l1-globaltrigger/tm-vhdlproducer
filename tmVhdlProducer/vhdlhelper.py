@@ -89,6 +89,7 @@ ObjectTypes: Dict[int, str] = {
     tmEventSetup.CENT5: tmGrammar.CENT5,
     tmEventSetup.CENT6: tmGrammar.CENT6,
     tmEventSetup.CENT7: tmGrammar.CENT7,
+#    tmEventSetup.ZDC: tmGrammar.ZDC,
     tmEventSetup.EXT: tmGrammar.EXT,
     tmEventSetup.MBT0HFP: tmGrammar.MBT0HFP,
     tmEventSetup.MBT1HFP: tmGrammar.MBT1HFP,
@@ -126,6 +127,7 @@ ObjectCount: Dict[int, int] = {
     tmEventSetup.CENT5:      1,
     tmEventSetup.CENT6:      1,
     tmEventSetup.CENT7:      1,
+#    tmEventSetup.ZDC:        1,
     tmEventSetup.EXT:        1,
     tmEventSetup.MBT0HFP:    1,
     tmEventSetup.MBT1HFP:    1,
@@ -250,6 +252,8 @@ def conditionFactory(condition_handle):
         return MuonConditionHelper(condition_handle)
     elif condition_handle.isEsumsCondition():
         return EsumsConditionHelper(condition_handle)
+    #elif condition_handle.isZdcCondition():
+        #return ZdcConditionHelper(condition_handle)
     elif condition_handle.isSignalCondition():
         return SignalConditionHelper(condition_handle)
     elif condition_handle.isExternalCondition():
@@ -395,6 +399,10 @@ class ModuleHelper(VhdlHelper):
     @property
     def esumsConditions(self):
         return filter(lambda condition: condition.handle.isEsumsCondition(), self.conditions)
+
+    #@property
+    #def ZdcConditions(self):
+        #return filter(lambda condition: condition.handle.isZdcCondition(), self.conditions)
 
     @property
     def signalConditions(self):
@@ -955,6 +963,11 @@ class EsumsConditionHelper(ConditionHelper):
     ReqObjects = 1
     """Number of required objects."""
 
+#class ZdcConditionHelper(ConditionHelper):
+    #"""ZDC condition template helper class."""
+    #ReqObjects = 1
+    #"""Number of required objects."""
+
 class SignalConditionHelper(ConditionHelper):
     """Signal condition template helper class."""
     ReqObjects = 1
@@ -1334,6 +1347,11 @@ class ObjectHelper(VhdlHelper):
     def is_esums_type(self):
         """Retruns True if object is of energy sums type."""
         return self.handle and self.handle.isEsumsObject()
+
+    #@property
+    #def is_zdc_type(self):
+        #"""Retruns True if object is of energy sums type."""
+        #return self.handle and self.handle.isZdcObject()
 
     @property
     def is_signal_type(self):
