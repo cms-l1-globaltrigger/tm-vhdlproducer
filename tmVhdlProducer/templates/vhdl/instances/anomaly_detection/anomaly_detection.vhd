@@ -1,5 +1,6 @@
 -- Anomaly detection instantiation
 cond_{{ condition.objects[0].name | lower}}_i: entity work.adt_wrapper
+    generic map(false)
     port map(
         lhc_clk,
         bx_data.mu(2),
