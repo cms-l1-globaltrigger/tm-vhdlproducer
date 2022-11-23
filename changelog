@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.13.1] - 2022-11-16
 ### Changed
-- bug fix in template ("muon_mass_3_obj_condition.vhd": missing generic parameter)
+- bug fix in template ("muon_mass_3_obj_condition.vhd": missing generic parameters)
 
 ## [2.13.0] - 2022-08-25
 ### Added
