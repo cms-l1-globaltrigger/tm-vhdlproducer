@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.14.0] - 2022-08-22
 ### Added
-- support for "anomaly detection trigger (ADT)" tests
+- support for "anomaly detection trigger (ADT)"
 ### Changed
 - templates for ADT
 
