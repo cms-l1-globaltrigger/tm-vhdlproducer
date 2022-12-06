@@ -99,6 +99,7 @@ ObjectTypes: Dict[int, str] = {
     tmEventSetup.MUS1: tmGrammar.MUS1,
     tmEventSetup.MUSOOT0: tmGrammar.MUSOOT0,
     tmEventSetup.MUSOOT1: tmGrammar.MUSOOT1,
+    tmEventSetup.MUS2: tmGrammar.MUS2,
 }
 
 # Has the number of Objects of each Type
@@ -136,6 +137,7 @@ ObjectCount: Dict[int, int] = {
     tmEventSetup.MUS1:       1,
     tmEventSetup.MUSOOT0:    1,
     tmEventSetup.MUSOOT1:    1,
+    tmEventSetup.MUS2:       1,
 }
 
 ComparisonOperator: Dict[int, bool] = {

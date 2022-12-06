@@ -82,6 +82,7 @@ kMUS0: str = 'MUS0'
 kMUS1: str = 'MUS1'
 kMUSOOT0: str = 'MUSOOT0'
 kMUSOOT1: str = 'MUSOOT1'
+kMUSOOT1: str = 'MUS2'
 kMBT0HFM: str = 'MBT0HFM'
 kMBT0HFP: str = 'MBT0HFP'
 kMBT1HFM: str = 'MBT1HFM'
@@ -262,6 +263,7 @@ ObjectTypeKey: Dict[int, str] = {
     tmEventSetup.MUS1: kMUS1,
     tmEventSetup.MUSOOT0: kMUSOOT0,
     tmEventSetup.MUSOOT1: kMUSOOT1,
+    tmEventSetup.MUS2: kMUS2,
     tmEventSetup.MBT0HFM: kMBT0HFM,
     tmEventSetup.MBT0HFP: kMBT0HFP,
     tmEventSetup.MBT1HFM: kMBT1HFM,
@@ -299,6 +301,7 @@ ObjectGrammarKey: Dict[int, str] = {
     tmEventSetup.MUS1: tmGrammar.MUS1,
     tmEventSetup.MUSOOT0: tmGrammar.MUSOOT0,
     tmEventSetup.MUSOOT1: tmGrammar.MUSOOT1,
+    tmEventSetup.MUS2: tmGrammar.MUS2,
     tmEventSetup.EXT: tmGrammar.EXT,
     tmEventSetup.MBT0HFP: tmGrammar.MBT0HFP,
     tmEventSetup.MBT1HFP: tmGrammar.MBT1HFP,
