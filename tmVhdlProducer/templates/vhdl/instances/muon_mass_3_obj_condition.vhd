@@ -33,6 +33,10 @@
         nr_obj{{i+1}} => NR_{{ o.type | upper }}_OBJECTS,
         type_obj{{i+1}} => {{ o.type | upper }}_TYPE,
   {%- endfor %}
+  {%- if condition.chargeCorrelation %}
+-- requested charge correlation
+        requested_charge_correlation => "{{ condition.chargeCorrelation.value }}",
+  {%- endif %}
 -- selector same/different bunch crossings
         same_bx => {{ condition.objectsInSameBx | vhdl_bool}}
 {%- endblock %}
