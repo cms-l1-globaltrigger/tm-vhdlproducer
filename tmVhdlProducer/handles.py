@@ -52,9 +52,9 @@ ObjectCollectionSize: Dict[int, int] = {
     tmEventSetup.EXT: 1,
     tmEventSetup.MUS0: 1,
     tmEventSetup.MUS1: 1,
+    tmEventSetup.MUS2: 1,
     tmEventSetup.MUSOOT0: 1,
     tmEventSetup.MUSOOT1: 1,
-    tmEventSetup.MUS2: 1,
 }
 """Dictionary for object collection size (slices)."""
 
@@ -105,9 +105,9 @@ SignalConditionTypes: List[int] = [
     tmEventSetup.Centrality7,
     tmEventSetup.MuonShower0,
     tmEventSetup.MuonShower1,
+    tmEventSetup.MuonShower2,
     tmEventSetup.MuonShowerOutOfTime0,
     tmEventSetup.MuonShowerOutOfTime1,
-    tmEventSetup.MuonShower2,
 ]
 
 ExternalConditionTypes: List[int] = [
@@ -198,9 +198,9 @@ SignalObjectTypes: List[int] = [
     tmEventSetup.CENT7,
     tmEventSetup.MUS0,
     tmEventSetup.MUS1,
+    tmEventSetup.MUS2,
     tmEventSetup.MUSOOT0,
     tmEventSetup.MUSOOT1,
-    tmEventSetup.MUS2,
 ]
 """List of signal object types."""
 
@@ -232,9 +232,9 @@ ObjectsOrder: List[int] = [
     tmEventSetup.CENT7,
     tmEventSetup.MUS0,
     tmEventSetup.MUS1,
+    tmEventSetup.MUS2,
     tmEventSetup.MUSOOT0,
     tmEventSetup.MUSOOT1,
-    tmEventSetup.MUS2,
     tmEventSetup.MBT0HFM,
     tmEventSetup.MBT0HFP,
     tmEventSetup.MBT1HFM,
