@@ -937,8 +937,8 @@
                     {
                         "types": ["adt"],
                         "processors": 0,
-                        "brams": 15,
-                        "sliceLUTs": 56003
+                        "brams": 19,
+                        "sliceLUTs": 21444
                     }
                 ]
             },

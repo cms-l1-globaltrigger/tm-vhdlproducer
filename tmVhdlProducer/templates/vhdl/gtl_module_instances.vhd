@@ -83,16 +83,9 @@
 -- ========================================================
 -- Instantiations of algorithms
 {% for algorithm in module.algorithms | sort_by_attribute('index') %}
-    {%- set ext_string = algorithm.conditions[0].objects[0].name.split("_")[0] %}
-    {%- set adt_string = algorithm.conditions[0].objects[0].name.split("_")[1] %}
 -- {{ algorithm.index }} {{ algorithm.name }} : {{ algorithm.expression }}
 {{ algorithm.vhdl_signal }} <= {{ algorithm.vhdl_expression }};
-    {%- if ext_string == "EXT" and adt_string == "ADT"%}
-algo_o({{ algorithm.module_index | d }}) <= {{ algorithm.vhdl_signal }};
-    {%- else %}
-algo_{{ algorithm.module_index | d }}_p : entity work.reg
-    port map (lhc_clk, {{ algorithm.vhdl_signal }}, algo_o({{ algorithm.module_index | d }}));
-    {%- endif %}
+algo({{ algorithm.module_index | d }}) <= {{ algorithm.vhdl_signal }};
 {% endfor %}
 -- ========================================================
 -- Instantiations conversions, calculations, etc.
