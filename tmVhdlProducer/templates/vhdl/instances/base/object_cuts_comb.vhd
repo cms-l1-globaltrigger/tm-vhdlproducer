@@ -30,6 +30,16 @@
         eta_w{{i+1}}_lower_limits_obj1 => (X"{{ o1.etaLowerLimit[i] | X04 }}", X"{{ o2.etaLowerLimit[i] | X04 }}", X"{{ o3.etaLowerLimit[i] | X04 }}", X"{{ o4.etaLowerLimit[i] | X04 }}"),
     {%- endif %}
   {%- endfor %}
+  {%- set max_idx_cuts = [condition.objects[0].idxNrCuts, condition.objects[1].idxNrCuts, condition.objects[2].idxNrCuts, condition.objects[3].idxNrCuts] | max %}
+  {%- if o1.idxNrCuts > 0 or o2.idxNrCuts > 0 or o3.idxNrCuts > 0 or o4.idxNrCuts > 0 %}
+        nr_idx_windows_obj1 => ({{ o1.idxNrCuts }}, {{ o2.idxNrCuts }}, {{ o3.idxNrCuts }}, {{ o4.idxNrCuts }}),
+  {%- endif %}
+  {%- for i in range(0,max_idx_cuts) %}
+    {%- if o1.idxNrCuts > i or o2.idxNrCuts > i or o3.idxNrCuts > i or o4.idxNrCuts > i %}
+        idx_w{{i+1}}_upper_limits_obj1 => (X"{{ o1.idxUpperLimit[i] | X04 }}", X"{{ o2.idxUpperLimit[i] | X04 }}", X"{{ o3.idxUpperLimit[i] | X04}}", X"{{ o4.idxUpperLimit[i] | X04 }}"),
+        idx_w{{i+1}}_lower_limits_obj1 => (X"{{ o1.idxLowerLimit[i] | X04 }}", X"{{ o2.idxLowerLimit[i] | X04 }}", X"{{ o3.idxLowerLimit[i] | X04 }}", X"{{ o4.idxLowerLimit[i] | X04 }}"),
+    {%- endif %}
+  {%- endfor %}
   {%- set max_phi_cuts = [condition.objects[0].phiNrCuts, condition.objects[1].phiNrCuts, condition.objects[2].phiNrCuts, condition.objects[3].phiNrCuts] | max %}
   {%- if o1.phiNrCuts > 0 or o2.phiNrCuts > 0 or o3.phiNrCuts > 0 or o4.phiNrCuts > 0 %}
         nr_phi_windows_obj1 => ({{ o1.phiNrCuts }}, {{ o2.phiNrCuts }}, {{ o3.phiNrCuts }}, {{ o4.phiNrCuts }}),

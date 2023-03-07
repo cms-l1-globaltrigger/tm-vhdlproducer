@@ -1209,6 +1209,9 @@ class ObjectHelper(VhdlHelper):
         etaNrCuts           [int]
         etaLowerLimit       [list]
         etaLowerLimit       [list]
+        idxNrCuts           [int]
+        idxLowerLimit       [list]
+        idxLowerLimit       [list]
         phi                 [list of RangeCutHelper]
         phiFullRange        [bool]
         phiW2Ignore         [bool]
@@ -1242,6 +1245,10 @@ class ObjectHelper(VhdlHelper):
         self.etaNrCuts = 0
         self.etaLowerLimit = [0, 0, 0, 0, 0]
         self.etaUpperLimit = [0, 0, 0, 0, 0]
+        # cuts on muon index bits
+        self.idxNrCuts = 0
+        self.idxLowerLimit = [0, 0, 0, 0, 0]
+        self.idxUpperLimit = [0, 0, 0, 0, 0]
         # max. two phi cuts
         self.phiNrCuts = 0
         self.phiLowerLimit = [0, 0]
@@ -1262,6 +1269,7 @@ class ObjectHelper(VhdlHelper):
         # set the default slice range to maxNum - 1 (e.g. 0-11)
         self.slice.upper = ObjectCount[object_handle.type] - 1
         etaCuts = []
+        idxCuts = []
         phiCuts = []
         # setup cuts
         for cut_handle in object_handle.cuts:
@@ -1271,6 +1279,8 @@ class ObjectHelper(VhdlHelper):
                 self.isolation.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.Eta:
                 etaCuts.append((cut_handle.minimum.index, cut_handle.maximum.index))
+            elif cut_handle.cut_type == tmEventSetup.Idx:
+                idxCuts.append((cut_handle.minimum.index, cut_handle.maximum.index))
             elif cut_handle.cut_type == tmEventSetup.Phi:
                 phiCuts.append((cut_handle.minimum.index, cut_handle.maximum.index))
             elif cut_handle.cut_type == tmEventSetup.Quality:
@@ -1308,6 +1318,27 @@ class ObjectHelper(VhdlHelper):
             self.etaNrCuts = 5
             self.etaLowerLimit[4] = etaCuts[4][0]
             self.etaUpperLimit[4] = etaCuts[4][1]
+        # setup idx windows
+        if len(idxCuts) > 0:
+            self.idxNrCuts = 1
+            self.idxLowerLimit[0] = idxCuts[0][0]
+            self.idxUpperLimit[0] = idxCuts[0][1]
+        if len(idxCuts) > 1:
+            self.idxNrCuts = 2
+            self.idxLowerLimit[1] = idxCuts[1][0]
+            self.idxUpperLimit[1] = idxCuts[1][1]
+        if len(idxCuts) > 2:
+            self.idxNrCuts = 3
+            self.idxLowerLimit[2] = idxCuts[2][0]
+            self.idxUpperLimit[2] = idxCuts[2][1]
+        if len(idxCuts) > 3:
+            self.idxNrCuts = 4
+            self.idxLowerLimit[3] = idxCuts[3][0]
+            self.idxUpperLimit[3] = idxCuts[3][1]
+        if len(idxCuts) > 4:
+            self.idxNrCuts = 5
+            self.idxLowerLimit[4] = idxCuts[4][0]
+            self.idxUpperLimit[4] = idxCuts[4][1]
         # update phi window flags
         if len(phiCuts) > 0:
             self.phiNrCuts = 1
