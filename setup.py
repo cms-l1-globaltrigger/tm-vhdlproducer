@@ -4,7 +4,7 @@ long_description = open('README.md').read()
 
 setup(
     name="tm-vhdlproducer",
-    version='2.13.1',
+    version='2.14.0',
     url="https://github.com/cms-l1-globaltrigger/tm-vhdlproducer",
     author="Bernhard Arnold",
     author_email="bernhard.arnold@cern.ch",
@@ -24,8 +24,8 @@ setup(
     install_requires=[
         'Jinja2==2.11.*',
         'markupsafe==2.0.*',
-        'tm-python @ git+https://github.com/cms-l1-globaltrigger/tm-python@0.10.0',
-        'tm-reporter @ git+https://github.com/cms-l1-globaltrigger/tm-reporter@2.10.1'
+        'tm-python @ git+https://github.com/cms-l1-globaltrigger/tm-python@0.11.0',
+        'tm-reporter @ git+https://github.com/cms-l1-globaltrigger/tm-reporter@devel-2.11.x'
     ],
     entry_points={
         'console_scripts': [
