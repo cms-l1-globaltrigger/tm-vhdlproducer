@@ -66,6 +66,9 @@
 {%- for condition in module.towerCountConditions %}
 {% include "instances/towercount_condition.vhd" %}
 {% endfor %}
+{%- for condition in module.anomalyDetectionTriggerConditions %}
+{% include "instances/anomaly_detection/anomaly_detection.vhd" %}
+{% endfor %}
 {%- for condition in module.signalConditions %}
 {% include "instances/signal_condition.vhd" %}
 {% endfor %}

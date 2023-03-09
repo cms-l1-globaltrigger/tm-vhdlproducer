@@ -71,7 +71,8 @@
                 "TransverseMass": "CorrelationCondition",
                 "CaloCaloCorrelationOvRm": "CorrelationConditionOvRm",
                 "InvariantMassOvRm": "CorrelationConditionOvRm",
-                "TransverseMassOvRm": "CorrelationConditionOvRm"
+                "TransverseMassOvRm": "CorrelationConditionOvRm",
+                "AnomalyDetectionTrigger": "AnomalyDetectionTrigger"
             },
             "objects": {
                 "Egamma": "calo",
@@ -105,6 +106,7 @@
                 "MBT0HFM": "bias",
                 "MBT1HFM": "bias",
                 "TOWERCOUNT": "count",
+                "ADT": "count",
                 "EXT": "ext"
             },
             "cuts": {
@@ -373,6 +375,13 @@
                     "processors": 0,
                     "brams": 0,
                     "sliceLUTs": 2
+                }
+            },
+            "adt": {
+                "AnomalyScore": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 8440
                 }
             }
         },
@@ -950,6 +959,17 @@
                         "processors": 0,
                         "brams": 0,
                         "sliceLUTs": 4
+                    }
+                ]
+            },
+            {
+                "type": "AnomalyDetectionTrigger",
+                "objects": [
+                    {
+                        "types": ["count"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 0
                     }
                 ]
             },

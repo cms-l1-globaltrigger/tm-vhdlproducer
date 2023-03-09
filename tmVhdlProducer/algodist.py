@@ -86,6 +86,7 @@ kMBT0HFM: str = 'MBT0HFM'
 kMBT0HFP: str = 'MBT0HFP'
 kMBT1HFM: str = 'MBT1HFM'
 kMBT1HFP: str = 'MBT1HFP'
+kADT: str = 'ADT'
 kEXT: str = 'EXT'
 kPrecision: str = 'Precision'
 
@@ -163,7 +164,7 @@ kSingleJetOvRm: str = 'SingleJetOvRm'
 kDoubleJetOvRm: str = 'DoubleJetOvRm'
 kTripleJetOvRm: str = 'TripleJetOvRm'
 kQuadJetOvRm: str = 'QuadJetOvRm'
-
+kAnomalyDetectionTrigger: str = 'AnomalyDetectionTrigger'
 #
 # Keys for cut types
 #
@@ -190,6 +191,7 @@ kCount: str = 'Count'
 kOvRmDeltaEta: str = 'OvRmDeltaEta'
 kOvRmDeltaPhi: str = 'OvRmDeltaPhi'
 kOvRmDeltaR: str = 'OvRmDeltaR'
+kAnomalyScore: str = 'AnomalyScore'
 
 #
 # Operators
@@ -230,6 +232,7 @@ CutTypeKey: Dict[int, str] = {
     tmEventSetup.OvRmDeltaEta: kOvRmDeltaEta,
     tmEventSetup.OvRmDeltaPhi: kOvRmDeltaPhi,
     tmEventSetup.OvRmDeltaR: kOvRmDeltaR,
+    tmEventSetup.AnomalyScore: kAnomalyScore,
 }
 """Dictionary for cut type enumerations."""
 
@@ -266,6 +269,7 @@ ObjectTypeKey: Dict[int, str] = {
     tmEventSetup.MBT0HFP: kMBT0HFP,
     tmEventSetup.MBT1HFM: kMBT1HFM,
     tmEventSetup.MBT1HFP: kMBT1HFP,
+    tmEventSetup.ADT: kADT,
     tmEventSetup.EXT: kEXT,
     tmEventSetup.Precision: kPrecision,
 }
@@ -305,6 +309,7 @@ ObjectGrammarKey: Dict[int, str] = {
     tmEventSetup.MBT0HFM: tmGrammar.MBT0HFM,
     tmEventSetup.MBT1HFM: tmGrammar.MBT1HFM,
     tmEventSetup.TOWERCOUNT: tmGrammar.TOWERCOUNT,
+    tmEventSetup.ADT: tmGrammar.ADT,
 }
 """Dictionary for object grammar type enumerations."""
 
@@ -379,6 +384,7 @@ ConditionTypeKey: Dict[int, str] = {
     tmEventSetup.DoubleJetOvRm: kDoubleJetOvRm,
     tmEventSetup.TripleJetOvRm: kTripleJetOvRm,
     tmEventSetup.QuadJetOvRm: kQuadJetOvRm,
+    tmEventSetup.AnomalyDetectionTrigger: kAnomalyDetectionTrigger,
 }
 """Dictionary for condition type enumerations."""
 
@@ -451,6 +457,7 @@ def obj_type_to_cat(object_type: int) -> str:
         7: "esums",
         17: "esums",
         18: "esums",
+        43: "adt",
     }
     if object_type not in switcher:
         raise ValueError(f"invalid object type: {object_type!r}")
@@ -484,6 +491,7 @@ class ResourceTray:
     kCorrelationCondition = 'CorrelationCondition'
     kCorrelation3Condition = 'Correlation3Condition'
     kCorrelationConditionOvRm = 'CorrelationConditionOvRm'
+    kAnomalyDetectionTrigger = 'AnomalyDetectionTrigger'
 
     def __init__(self, filename):
         """Attribute *filename* is a filename of an JSON payload configuration file."""
@@ -648,7 +656,7 @@ class ResourceTray:
         # instance
         instance = self.map_instance(ConditionTypeKey[condition.type])
         # select
-        if instance in (self.kMuonCondition, self.kCaloCondition, self.kCaloConditionOvRm):
+        if instance in (self.kMuonCondition, self.kCaloCondition, self.kCaloConditionOvRm, self.kAnomalyDetectionTrigger):
             return n_objects * n_requirements
         elif instance == self.kCorrelationCondition:
             if condition.same_object_types and condition.same_object_bxs:

@@ -54,6 +54,7 @@ ObjectCollectionSize: Dict[int, int] = {
     tmEventSetup.MUS1: 1,
     tmEventSetup.MUSOOT0: 1,
     tmEventSetup.MUSOOT1: 1,
+    tmEventSetup.ADT: 1,
 }
 """Dictionary for object collection size (slices)."""
 
@@ -121,6 +122,10 @@ MinBiasConditionTypes: List[int] = [
 
 TowerCountConditionTypes: List[int] = [
     tmEventSetup.TowerCount,
+]
+
+AnomalyDetectionTriggerConditionTypes: List[int] = [
+    tmEventSetup.AnomalyDetectionTrigger,
 ]
 
 CorrelationConditionTypes: List[int] = [
@@ -201,6 +206,10 @@ SignalObjectTypes: List[int] = [
 ]
 """List of signal object types."""
 
+AdtObjectTypes: List[int] = [
+    tmEventSetup.ADT,
+]
+
 ObjectsOrder: List[int] = [
 # objects used in correlation conditions
     tmEventSetup.Egamma,
@@ -236,6 +245,7 @@ ObjectsOrder: List[int] = [
     tmEventSetup.MBT1HFM,
     tmEventSetup.MBT1HFP,
     tmEventSetup.TOWERCOUNT,
+    tmEventSetup.ADT,
     tmEventSetup.EXT,
     tmEventSetup.Precision,
 ]
@@ -370,6 +380,9 @@ class ObjectHandle(Handle):
     def isEsumsObject(self):
         return self.type in EsumsObjectTypes
 
+    def isAdtObject(self):
+        return self.type in AdtObjectTypes
+
     def isSignalObject(self):
         return self.type in SignalObjectTypes
 
@@ -443,6 +456,9 @@ class ConditionHandle(Handle):
 
     def isCaloConditionOvRm(self):
         return self.type in CaloConditionOvRmTypes
+
+    def isAnomalyDetectionTrigger(self):
+        return self.type in AnomalyDetectionTriggerConditionTypes
 
     def __repr__(self):
         return f"{self.__class__.__name__}(name={self.name}, payload={self.payload})"

@@ -99,6 +99,7 @@ ObjectTypes: Dict[int, str] = {
     tmEventSetup.MUS1: tmGrammar.MUS1,
     tmEventSetup.MUSOOT0: tmGrammar.MUSOOT0,
     tmEventSetup.MUSOOT1: tmGrammar.MUSOOT1,
+    tmEventSetup.ADT: tmGrammar.ADT,
 }
 
 # Has the number of Objects of each Type
@@ -136,6 +137,7 @@ ObjectCount: Dict[int, int] = {
     tmEventSetup.MUS1:       1,
     tmEventSetup.MUSOOT0:    1,
     tmEventSetup.MUSOOT1:    1,
+    tmEventSetup.ADT:        1,
 }
 
 ComparisonOperator: Dict[int, bool] = {
@@ -266,6 +268,8 @@ def conditionFactory(condition_handle):
         return CorrelationConditionOvRmHelper(condition_handle)
     elif condition_handle.isCaloConditionOvRm():
         return CaloConditionOvRmHelper(condition_handle)
+    elif condition_handle.isAnomalyDetectionTrigger():
+        return AnomalyDetectionTriggerHelper(condition_handle)
     else:
         raise RuntimeError("unknown condition type")
 
@@ -451,6 +455,10 @@ class ModuleHelper(VhdlHelper):
     @property
     def towerCountConditions(self):
         return filter(lambda condition: condition.handle.isTowerCountCondition(), self.conditions)
+
+    @property
+    def anomalyDetectionTriggerConditions(self):
+        return filter(lambda condition: condition.handle.isAnomalyDetectionTrigger(), self.conditions)
 
     @property
     def correlationCombinations(self):
@@ -971,7 +979,12 @@ class MinBiasConditionHelper(ConditionHelper):
     """Number of required objects."""
 
 class TowerCountConditionHelper(ConditionHelper):
-    """Minimum bias condition template helper class."""
+    """Towercount condition template helper class."""
+    ReqObjects = 1
+    """Number of required objects."""
+
+class AnomalyDetectionTriggerHelper(ConditionHelper):
+    """Anomaly detection Trigger condition template helper class."""
     ReqObjects = 1
     """Number of required objects."""
 
@@ -1217,6 +1230,7 @@ class ObjectHelper(VhdlHelper):
         is_muon_type        [bool]
         is_calo_type        [bool]
         is_esums_type       [bool]
+        anomalyScore        [AnomalyScoreCutHelper]
         handle              handle to underlying object handle [None|ObjectHandle]
     """
 
@@ -1235,6 +1249,7 @@ class ObjectHelper(VhdlHelper):
         self.quality = QualityCutHelper(0xffff)
         self.charge = ChargeCutHelper('ign')
         self.count = CountCutHelper()
+        self.anomalyScore = AnomalyScoreCutHelper(0)
         self.upt = UptCutHelper()
         self.impactParameter = ImpactParameterCutHelper(0xf)
         self.displaced = DisplacedCutHelper()
@@ -1281,6 +1296,8 @@ class ObjectHelper(VhdlHelper):
                 self.count.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.UnconstrainedPt:
                 self.upt.update(cut_handle)
+            elif cut_handle.cut_type == tmEventSetup.AnomalyScore:
+                self.anomalyScore.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.ImpactParameter:
                 self.impactParameter.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.Displaced:
@@ -1336,6 +1353,11 @@ class ObjectHelper(VhdlHelper):
         return self.handle and self.handle.isEsumsObject()
 
     @property
+    def is_adt_type(self):
+        """Retruns True if object is of adt type."""
+        return self.handle and self.handle.isAdtObject()
+
+    @property
     def is_signal_type(self):
         """Retruns True if object is of energy sums type."""
         return self.handle and self.handle.isSignalObject()
@@ -1364,6 +1386,19 @@ class CountCutHelper(ThresholdCutHelper):
     def update(self, cut_handle):
         """Updates threshold and enables cut."""
         self.threshold = cut_handle.minimum.index
+        self.enabled = True
+
+class AscoreCutHelper(CutHelper):
+
+    def __init__(self, anomalyScore=0):
+        super().__init__()
+        self.anomalyScore = anomalyScore
+
+class AnomalyScoreCutHelper(AscoreCutHelper):
+
+    def update(self, cut_handle):
+        """Updates anomaly score and enables cut."""
+        self.anomalyScore = int(cut_handle.minimum.value)
         self.enabled = True
 
 class TwoBodyPtCutHelper(ThresholdCutHelper):
