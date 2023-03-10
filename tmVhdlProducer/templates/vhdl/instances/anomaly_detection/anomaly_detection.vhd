@@ -1,7 +1,7 @@
 -- Anomaly detection instantiation
 {% set o = condition.objects[0] %}
 cond_{{ condition.vhdl_signal }}_i: entity work.adt_wrapper
-    generic map(false, "{{ o.anomalyScore }}")
+    generic map(false, {{ o.anomalyScore.value }})
     port map(
         lhc_clk,
         bx_data.mu(2),

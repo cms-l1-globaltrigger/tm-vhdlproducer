@@ -1388,17 +1388,15 @@ class CountCutHelper(ThresholdCutHelper):
         self.threshold = cut_handle.minimum.index
         self.enabled = True
 
-class AscoreCutHelper(CutHelper):
+class AnomalyScoreCutHelper(CutHelper):
 
-    def __init__(self, anomalyScore=0):
+    def __init__(self, value=0):
         super().__init__()
-        self.anomalyScore = anomalyScore
-
-class AnomalyScoreCutHelper(AscoreCutHelper):
+        self.value = value
 
     def update(self, cut_handle):
         """Updates anomaly score and enables cut."""
-        self.anomalyScore = int(cut_handle.minimum.value)
+        self.value = int(cut_handle.minimum.value)
         self.enabled = True
 
 class TwoBodyPtCutHelper(ThresholdCutHelper):
