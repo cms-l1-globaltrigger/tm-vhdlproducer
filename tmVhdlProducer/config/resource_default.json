@@ -297,6 +297,11 @@
                     "brams": 0,
                     "sliceLUTs": 3
                 },
+                "Idx": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 3
+                },
                 "Phi": {
                     "processors": 0,
                     "brams": 0,

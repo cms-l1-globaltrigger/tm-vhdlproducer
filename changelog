@@ -6,9 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.14.0] - 2023-03-10
 ### Added
-- support for utm 0.11.0
-### Changed
-- templates for ADT
+- support for utm 0.11.0 (ADT object cut, muon index cut
 
 ## [2.13.1] - 2022-11-16
 ### Changed

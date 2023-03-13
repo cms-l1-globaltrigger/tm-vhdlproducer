@@ -26,6 +26,12 @@
         eta_w{{j+1}}_lower_limit_obj{{i+1}} => X"{{ o.etaLowerLimit[j] | X04 }}",
     {%- endif %}
   {%- endfor %}
+  {%- for j in range(0,(o.indexNrCuts)) %}
+    {%- if o.indexNrCuts > j %}
+        idx_w{{j+1}}_upper_limit_obj{{i+1}} => X"{{ o.indexUpperLimit[j] | X04 }}",
+        idx_w{{j+1}}_lower_limit_obj{{i+1}} => X"{{ o.indexLowerLimit[j] | X04 }}",
+    {%- endif %}
+  {%- endfor %}
   {%- if o.phiNrCuts > 0 %}
         nr_phi_windows_obj{{i+1}} => {{ o.phiNrCuts }},
   {%- endif %}
