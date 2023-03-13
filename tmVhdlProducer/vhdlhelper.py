@@ -1294,7 +1294,7 @@ class ObjectHelper(VhdlHelper):
                 self.isolation.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.Eta:
                 etaCuts.append((cut_handle.minimum.index, cut_handle.maximum.index))
-            elif cut_handle.cut_type == tmEventSetup.Idx:
+            elif cut_handle.cut_type == tmEventSetup.Index:
                 indexCuts.append((cut_handle.minimum.index, cut_handle.maximum.index))
             elif cut_handle.cut_type == tmEventSetup.Phi:
                 phiCuts.append((cut_handle.minimum.index, cut_handle.maximum.index))
