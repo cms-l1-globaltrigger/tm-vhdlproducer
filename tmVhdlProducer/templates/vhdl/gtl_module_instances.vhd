@@ -68,6 +68,7 @@
 {% endfor %}
 {%- for condition in module.anomalyDetectionTriggerConditions %}
 {% include "instances/anomaly_detection/anomaly_detection.vhd" %}
+{% endfor %}
 {%- for condition in module.zdcConditions %}
 {% include "instances/zdc_condition.vhd" %}
 {% endfor %}
