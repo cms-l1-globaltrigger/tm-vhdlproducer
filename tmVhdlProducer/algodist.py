@@ -80,6 +80,7 @@ kCENT6: str = 'CENT6'
 kCENT7: str = 'CENT7'
 kMUS0: str = 'MUS0'
 kMUS1: str = 'MUS1'
+kMUS2: str = 'MUS2'
 kMUSOOT0: str = 'MUSOOT0'
 kMUSOOT1: str = 'MUSOOT1'
 kMBT0HFM: str = 'MBT0HFM'
@@ -132,6 +133,7 @@ kCentrality6: str = 'Centrality6'
 kCentrality7: str = 'Centrality7'
 kMuonShower0: str = 'MuonShower0'
 kMuonShower1: str = 'MuonShower1'
+kMuonShower2: str = 'MuonShower2'
 kMuonShowerOutOfTime0: str = 'MuonShowerOutOfTime0'
 kMuonShowerOutOfTime1: str = 'MuonShowerOutOfTime1'
 kMinBiasHFM0: str = 'MinBiasHFM0'
@@ -263,6 +265,7 @@ ObjectTypeKey: Dict[int, str] = {
     tmEventSetup.CENT7: kCENT7,
     tmEventSetup.MUS0: kMUS0,
     tmEventSetup.MUS1: kMUS1,
+    tmEventSetup.MUS2: kMUS2,
     tmEventSetup.MUSOOT0: kMUSOOT0,
     tmEventSetup.MUSOOT1: kMUSOOT1,
     tmEventSetup.MBT0HFM: kMBT0HFM,
@@ -301,6 +304,7 @@ ObjectGrammarKey: Dict[int, str] = {
     tmEventSetup.CENT7: tmGrammar.CENT7,
     tmEventSetup.MUS0: tmGrammar.MUS0,
     tmEventSetup.MUS1: tmGrammar.MUS1,
+    tmEventSetup.MUS2: tmGrammar.MUS2,
     tmEventSetup.MUSOOT0: tmGrammar.MUSOOT0,
     tmEventSetup.MUSOOT1: tmGrammar.MUSOOT1,
     tmEventSetup.EXT: tmGrammar.EXT,
@@ -352,6 +356,7 @@ ConditionTypeKey: Dict[int, str] = {
     tmEventSetup.Centrality7: kCentrality7,
     tmEventSetup.MuonShower0: kMuonShower0,
     tmEventSetup.MuonShower1: kMuonShower1,
+    tmEventSetup.MuonShower2: kMuonShower2,
     tmEventSetup.MuonShowerOutOfTime0: kMuonShowerOutOfTime0,
     tmEventSetup.MuonShowerOutOfTime1: kMuonShowerOutOfTime1,
     tmEventSetup.MinBiasHFM0: kMinBiasHFM0,
