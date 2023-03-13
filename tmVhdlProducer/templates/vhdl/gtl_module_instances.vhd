@@ -66,6 +66,9 @@
 {%- for condition in module.towerCountConditions %}
 {% include "instances/towercount_condition.vhd" %}
 {% endfor %}
+{%- for condition in module.zdcConditions %}
+{% include "instances/zdc_condition.vhd" %}
+{% endfor %}
 {%- for condition in module.signalConditions %}
 {% include "instances/signal_condition.vhd" %}
 {% endfor %}
