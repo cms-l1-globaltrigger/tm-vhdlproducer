@@ -88,6 +88,8 @@ kMBT0HFP: str = 'MBT0HFP'
 kMBT1HFM: str = 'MBT1HFM'
 kMBT1HFP: str = 'MBT1HFP'
 kADT: str = 'ADT'
+kZDCP: str = 'ZDCP'
+kZDCM: str = 'ZDCM'
 kEXT: str = 'EXT'
 kPrecision: str = 'Precision'
 
@@ -140,6 +142,8 @@ kMinBiasHFM0: str = 'MinBiasHFM0'
 kMinBiasHFM1: str = 'MinBiasHFM1'
 kMinBiasHFP0: str = 'MinBiasHFP0'
 kMinBiasHFP1: str = 'MinBiasHFP1'
+kZDCPlus: str = 'ZDCPlus'
+kZDCMinus: str = 'ZDCMinus'
 kExternals: str = 'Externals'
 kMuonMuonCorrelation: str = 'MuonMuonCorrelation'
 kMuonEsumCorrelation: str = 'MuonEsumCorrelation'
@@ -273,6 +277,8 @@ ObjectTypeKey: Dict[int, str] = {
     tmEventSetup.MBT1HFM: kMBT1HFM,
     tmEventSetup.MBT1HFP: kMBT1HFP,
     tmEventSetup.ADT: kADT,
+    tmEventSetup.ZDCP: kZDCP,
+    tmEventSetup.ZDCM: kZDCM,
     tmEventSetup.EXT: kEXT,
     tmEventSetup.Precision: kPrecision,
 }
@@ -307,6 +313,8 @@ ObjectGrammarKey: Dict[int, str] = {
     tmEventSetup.MUS2: tmGrammar.MUS2,
     tmEventSetup.MUSOOT0: tmGrammar.MUSOOT0,
     tmEventSetup.MUSOOT1: tmGrammar.MUSOOT1,
+    tmEventSetup.ZDCP: tmGrammar.ZDCP,
+    tmEventSetup.ZDCM: tmGrammar.ZDCM,
     tmEventSetup.EXT: tmGrammar.EXT,
     tmEventSetup.MBT0HFP: tmGrammar.MBT0HFP,
     tmEventSetup.MBT1HFP: tmGrammar.MBT1HFP,
@@ -363,6 +371,8 @@ ConditionTypeKey: Dict[int, str] = {
     tmEventSetup.MinBiasHFM1: kMinBiasHFM1,
     tmEventSetup.MinBiasHFP0: kMinBiasHFP0,
     tmEventSetup.MinBiasHFP1: kMinBiasHFP1,
+    tmEventSetup.ZDCPlus: kZDCPlus,
+    tmEventSetup.ZDCMinus: kZDCMinus,
     tmEventSetup.Externals: kExternals,
     tmEventSetup.MuonMuonCorrelation: kMuonMuonCorrelation,
     tmEventSetup.MuonEsumCorrelation: kMuonEsumCorrelation,

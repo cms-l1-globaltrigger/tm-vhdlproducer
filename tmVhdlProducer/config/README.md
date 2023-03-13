@@ -45,7 +45,8 @@ event setup (pyton interface) to VHDL implementation specific condition types,
 object types and cut types used in "instances".
 
 Absolute limits per hardware module (board) are set by `floor` representing the
-base resource consumption of the VHDL framework used to implement the trigger
+base resource consumption of the MP7 VHDL framework (containing submodules
+"ctrl", "datapath", "infra", "readout" and "ttc") used to implement the trigger
 menu and `ceiling` to set a maximum threshold for resource consumption. The
 `ceiling` must not exceed 100.0 % (= 1.0) and is usually lower due to the fact
 that routing fill fail even before all available chip resources are used.

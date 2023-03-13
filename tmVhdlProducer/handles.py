@@ -56,6 +56,8 @@ ObjectCollectionSize: Dict[int, int] = {
     tmEventSetup.MUSOOT0: 1,
     tmEventSetup.MUSOOT1: 1,
     tmEventSetup.ADT: 1,
+    tmEventSetup.ZDCP: 1,
+    tmEventSetup.ZDCM: 1,
 }
 """Dictionary for object collection size (slices)."""
 
@@ -130,6 +132,11 @@ AnomalyDetectionTriggerConditionTypes: List[int] = [
     tmEventSetup.AnomalyDetectionTrigger,
 ]
 
+ZdcConditionTypes: List[int] = [
+    tmEventSetup.ZDCPlus,
+    tmEventSetup.ZDCMinus,
+]
+
 CorrelationConditionTypes: List[int] = [
     tmEventSetup.MuonMuonCorrelation,
     tmEventSetup.MuonEsumCorrelation,
@@ -192,6 +199,11 @@ EsumsObjectTypes: List[int] = [
 ]
 """List of energy sums object types."""
 
+ZdcObjectTypes: List[int] = [
+    tmEventSetup.ZDCP,
+    tmEventSetup.ZDCM,
+]
+
 SignalObjectTypes: List[int] = [
     tmEventSetup.CENT0,
     tmEventSetup.CENT1,
@@ -250,6 +262,8 @@ ObjectsOrder: List[int] = [
     tmEventSetup.MBT1HFP,
     tmEventSetup.TOWERCOUNT,
     tmEventSetup.ADT,
+    tmEventSetup.ZDCP,
+    tmEventSetup.ZDCM,
     tmEventSetup.EXT,
     tmEventSetup.Precision,
 ]
@@ -387,6 +401,9 @@ class ObjectHandle(Handle):
     def isAdtObject(self):
         return self.type in AdtObjectTypes
 
+    def isZdcObject(self):
+        return self.type in ZdcObjectTypes
+
     def isSignalObject(self):
         return self.type in SignalObjectTypes
 
@@ -436,6 +453,9 @@ class ConditionHandle(Handle):
 
     def isEsumsCondition(self):
         return self.type in EsumsConditionTypes
+
+    def isZdcCondition(self):
+        return self.type in ZdcConditionTypes
 
     def isSignalCondition(self):
         return self.type in SignalConditionTypes
