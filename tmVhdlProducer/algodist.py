@@ -177,6 +177,7 @@ kAnomalyDetectionTrigger: str = 'AnomalyDetectionTrigger'
 
 kThreshold: str = 'Threshold'
 kEta: str = 'Eta'
+kIndex: str = 'Index'
 kPhi: str = 'Phi'
 kUnconstrainedPt: str = 'UnconstrainedPt'
 kImpactParameter: str = 'ImpactParameter'
@@ -218,6 +219,7 @@ Operators: List[str] = [
 CutTypeKey: Dict[int, str] = {
     tmEventSetup.Threshold: kThreshold,
     tmEventSetup.Eta: kEta,
+    tmEventSetup.Index: kIndex,
     tmEventSetup.Phi: kPhi,
     tmEventSetup.UnconstrainedPt: kUnconstrainedPt,
     tmEventSetup.ImpactParameter: kImpactParameter,

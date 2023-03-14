@@ -73,7 +73,9 @@
                 "CaloCaloCorrelationOvRm": "CorrelationConditionOvRm",
                 "InvariantMassOvRm": "CorrelationConditionOvRm",
                 "TransverseMassOvRm": "CorrelationConditionOvRm",
-                "AnomalyDetectionTrigger": "AnomalyDetectionTrigger"
+                "AnomalyDetectionTrigger": "AnomalyDetectionTrigger",
+                "ZDCPlus": "ZDCPlus",
+                "ZDCMinus": "ZDCMinus"
             },
             "objects": {
                 "Egamma": "calo",
@@ -108,7 +110,9 @@
                 "MBT0HFM": "bias",
                 "MBT1HFM": "bias",
                 "TOWERCOUNT": "count",
-                "ADT": "count",
+                "ADT": "adt",
+                "ZDCP": "count",
+                "ZDCM": "count",
                 "EXT": "ext"
             },
             "cuts": {
@@ -299,7 +303,7 @@
                     "brams": 0,
                     "sliceLUTs": 3
                 },
-                "Idx": {
+                "Index": {
                     "processors": 0,
                     "brams": 0,
                     "sliceLUTs": 3
@@ -382,13 +386,6 @@
                     "processors": 0,
                     "brams": 0,
                     "sliceLUTs": 2
-                }
-            },
-            "adt": {
-                "AnomalyScore": {
-                    "processors": 0,
-                    "brams": 0,
-                    "sliceLUTs": 8440
                 }
             }
         },
@@ -973,10 +970,32 @@
                 "type": "AnomalyDetectionTrigger",
                 "objects": [
                     {
+                        "types": ["adt"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 8440
+                    }
+                ]
+            },
+            {
+                "type": "ZDCPlus",
+                "objects": [
+                    {
                         "types": ["count"],
                         "processors": 0,
                         "brams": 0,
-                        "sliceLUTs": 0
+                        "sliceLUTs": 100
+                    }
+                ]
+            },
+            {
+                "type": "ZDCMinus",
+                "objects": [
+                    {
+                        "types": ["count"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 100
                     }
                 ]
             },
