@@ -25,7 +25,7 @@ setup(
         'Jinja2==2.11.*',
         'markupsafe==2.0.*',
         'tm-python @ git+https://github.com/cms-l1-globaltrigger/tm-python@0.11.0',
-        'tm-reporter @ git+https://github.com/cms-l1-globaltrigger/tm-reporter@2.11.0'
+        'tm-reporter @ git+https://github.com/cms-l1-globaltrigger/tm-reporter@2.11.1'
     ],
     entry_points={
         'console_scripts': [
