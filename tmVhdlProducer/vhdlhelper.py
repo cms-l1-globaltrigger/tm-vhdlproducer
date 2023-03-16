@@ -258,8 +258,6 @@ def conditionFactory(condition_handle):
         return MuonConditionHelper(condition_handle)
     elif condition_handle.isEsumsCondition():
         return EsumsConditionHelper(condition_handle)
-    elif condition_handle.isZdcCondition():
-        return ZdcConditionHelper(condition_handle)
     elif condition_handle.isSignalCondition():
         return SignalConditionHelper(condition_handle)
     elif condition_handle.isExternalCondition():
@@ -407,10 +405,6 @@ class ModuleHelper(VhdlHelper):
     @property
     def esumsConditions(self):
         return filter(lambda condition: condition.handle.isEsumsCondition(), self.conditions)
-
-    @property
-    def zdcConditions(self):
-        return filter(lambda condition: condition.handle.isZdcCondition(), self.conditions)
 
     @property
     def signalConditions(self):
@@ -975,11 +969,6 @@ class EsumsConditionHelper(ConditionHelper):
     ReqObjects = 1
     """Number of required objects."""
 
-class ZdcConditionHelper(ConditionHelper):
-    """ZDC condition template helper class."""
-    ReqObjects = 1
-    """Number of required objects."""
-
 class SignalConditionHelper(ConditionHelper):
     """Signal condition template helper class."""
     ReqObjects = 1
@@ -1404,11 +1393,6 @@ class ObjectHelper(VhdlHelper):
     def is_adt_type(self):
         """Retruns True if object is of adt type."""
         return self.handle and self.handle.isAdtObject()
-
-    @property
-    def is_zdc_type(self):
-        """Retruns True if object is of energy sums type."""
-        return self.handle and self.handle.isZdcObject()
 
     @property
     def is_signal_type(self):

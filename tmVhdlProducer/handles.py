@@ -126,15 +126,12 @@ MinBiasConditionTypes: List[int] = [
 
 TowerCountConditionTypes: List[int] = [
     tmEventSetup.TowerCount,
+    tmEventSetup.ZDCPlus,
+    tmEventSetup.ZDCMinus,
 ]
 
 AnomalyDetectionTriggerConditionTypes: List[int] = [
     tmEventSetup.AnomalyDetectionTrigger,
-]
-
-ZdcConditionTypes: List[int] = [
-    tmEventSetup.ZDCPlus,
-    tmEventSetup.ZDCMinus,
 ]
 
 CorrelationConditionTypes: List[int] = [
@@ -453,9 +450,6 @@ class ConditionHandle(Handle):
 
     def isEsumsCondition(self):
         return self.type in EsumsConditionTypes
-
-    def isZdcCondition(self):
-        return self.type in ZdcConditionTypes
 
     def isSignalCondition(self):
         return self.type in SignalConditionTypes
