@@ -131,8 +131,8 @@
         },
         "floor": {
             "processors": 0,
-            "sliceLUTs": 51585,
-            "brams": 230
+            "sliceLUTs": 39100,
+            "brams": 188
         },
         "ceiling": {
             "processors": 3600,
@@ -148,7 +148,7 @@
             "floor": {
                 "processors": 0,
                 "brams": 64,
-                "sliceLUTs": 23300
+                "sliceLUTs": 16800
             },
             "algo_slice": {
                 "processors": 0,
@@ -984,7 +984,7 @@
                         "types": ["count"],
                         "processors": 0,
                         "brams": 0,
-                        "sliceLUTs": 100
+                        "sliceLUTs": 2
                     }
                 ]
             },
@@ -995,7 +995,7 @@
                         "types": ["count"],
                         "processors": 0,
                         "brams": 0,
-                        "sliceLUTs": 100
+                        "sliceLUTs": 2
                     }
                 ]
             },
