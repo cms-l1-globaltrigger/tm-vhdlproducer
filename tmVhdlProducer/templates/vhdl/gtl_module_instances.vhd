@@ -66,11 +66,12 @@
 {%- for condition in module.towerCountConditions %}
 {% include "instances/towercount_condition.vhd" %}
 {% endfor %}
-{%- for condition in module.anomalyDetectionTriggerConditions %}
-{% include "instances/anomaly_detection/anomaly_detection.vhd" %}
-{% endfor %}
 {%- for condition in module.signalConditions %}
+   {%- if condition.objects[0].type == "ADT" %}
+{% include "instances/anomaly_detection/anomaly_detection.vhd" %}
+    {%- else %}
 {% include "instances/signal_condition.vhd" %}
+    {%- endif %}
 {% endfor %}
 {%- set adt_low_ext_cond_id = 192 %}
 {%- set adt_high_ext_cond_id = 223 %}

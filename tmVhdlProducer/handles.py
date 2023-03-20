@@ -111,6 +111,7 @@ SignalConditionTypes: List[int] = [
     tmEventSetup.MuonShower2,
     tmEventSetup.MuonShowerOutOfTime0,
     tmEventSetup.MuonShowerOutOfTime1,
+    tmEventSetup.AnomalyDetectionTrigger,
 ]
 
 ExternalConditionTypes: List[int] = [
@@ -128,10 +129,6 @@ TowerCountConditionTypes: List[int] = [
     tmEventSetup.TowerCount,
     tmEventSetup.ZDCPlus,
     tmEventSetup.ZDCMinus,
-]
-
-AnomalyDetectionTriggerConditionTypes: List[int] = [
-    tmEventSetup.AnomalyDetectionTrigger,
 ]
 
 CorrelationConditionTypes: List[int] = [
@@ -196,11 +193,6 @@ EsumsObjectTypes: List[int] = [
 ]
 """List of energy sums object types."""
 
-ZdcObjectTypes: List[int] = [
-    tmEventSetup.ZDCP,
-    tmEventSetup.ZDCM,
-]
-
 SignalObjectTypes: List[int] = [
     tmEventSetup.CENT0,
     tmEventSetup.CENT1,
@@ -215,12 +207,9 @@ SignalObjectTypes: List[int] = [
     tmEventSetup.MUS2,
     tmEventSetup.MUSOOT0,
     tmEventSetup.MUSOOT1,
-]
-"""List of signal object types."""
-
-AdtObjectTypes: List[int] = [
     tmEventSetup.ADT,
 ]
+"""List of signal object types."""
 
 ObjectsOrder: List[int] = [
 # objects used in correlation conditions
@@ -474,9 +463,6 @@ class ConditionHandle(Handle):
 
     def isCaloConditionOvRm(self):
         return self.type in CaloConditionOvRmTypes
-
-    def isAnomalyDetectionTrigger(self):
-        return self.type in AnomalyDetectionTriggerConditionTypes
 
     def __repr__(self):
         return f"{self.__class__.__name__}(name={self.name}, payload={self.payload})"

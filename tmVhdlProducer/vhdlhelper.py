@@ -274,8 +274,6 @@ def conditionFactory(condition_handle):
         return CorrelationConditionOvRmHelper(condition_handle)
     elif condition_handle.isCaloConditionOvRm():
         return CaloConditionOvRmHelper(condition_handle)
-    elif condition_handle.isAnomalyDetectionTrigger():
-        return AnomalyDetectionTriggerHelper(condition_handle)
     else:
         raise RuntimeError("unknown condition type")
 
@@ -461,10 +459,6 @@ class ModuleHelper(VhdlHelper):
     @property
     def towerCountConditions(self):
         return filter(lambda condition: condition.handle.isTowerCountCondition(), self.conditions)
-
-    @property
-    def anomalyDetectionTriggerConditions(self):
-        return filter(lambda condition: condition.handle.isAnomalyDetectionTrigger(), self.conditions)
 
     @property
     def correlationCombinations(self):
@@ -989,11 +983,6 @@ class TowerCountConditionHelper(ConditionHelper):
     ReqObjects = 1
     """Number of required objects."""
 
-class AnomalyDetectionTriggerHelper(ConditionHelper):
-    """Anomaly detection Trigger condition template helper class."""
-    ReqObjects = 1
-    """Number of required objects."""
-
 class CorrelationConditionHelper(ConditionHelper):
     """Correlation condition template helper class.
 
@@ -1310,10 +1299,10 @@ class ObjectHelper(VhdlHelper):
                 self.charge.update(cut_handle)
             if cut_handle.cut_type == tmEventSetup.Count:
                 self.count.update(cut_handle)
-            elif cut_handle.cut_type == tmEventSetup.UnconstrainedPt:
-                self.upt.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.AnomalyScore:
                 self.anomalyScore.update(cut_handle)
+            elif cut_handle.cut_type == tmEventSetup.UnconstrainedPt:
+                self.upt.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.ImpactParameter:
                 self.impactParameter.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.Displaced:
@@ -1388,11 +1377,6 @@ class ObjectHelper(VhdlHelper):
     def is_esums_type(self):
         """Retruns True if object is of energy sums type."""
         return self.handle and self.handle.isEsumsObject()
-
-    @property
-    def is_adt_type(self):
-        """Retruns True if object is of adt type."""
-        return self.handle and self.handle.isAdtObject()
 
     @property
     def is_signal_type(self):

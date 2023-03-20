@@ -508,7 +508,7 @@ class ResourceTray:
     kCorrelationCondition = 'CorrelationCondition'
     kCorrelation3Condition = 'Correlation3Condition'
     kCorrelationConditionOvRm = 'CorrelationConditionOvRm'
-    kAnomalyDetectionTrigger = 'AnomalyDetectionTrigger'
+    #kAnomalyDetectionTrigger = 'AnomalyDetectionTrigger'
 
     def __init__(self, filename):
         """Attribute *filename* is a filename of an JSON payload configuration file."""
@@ -673,7 +673,8 @@ class ResourceTray:
         # instance
         instance = self.map_instance(ConditionTypeKey[condition.type])
         # select
-        if instance in (self.kMuonCondition, self.kCaloCondition, self.kCaloConditionOvRm, self.kAnomalyDetectionTrigger):
+        #if instance in (self.kMuonCondition, self.kCaloCondition, self.kCaloConditionOvRm, self.kAnomalyDetectionTrigger):
+        if instance in (self.kMuonCondition, self.kCaloCondition, self.kCaloConditionOvRm):
             return n_objects * n_requirements
         elif instance == self.kCorrelationCondition:
             if condition.same_object_types and condition.same_object_bxs:
