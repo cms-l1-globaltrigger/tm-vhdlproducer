@@ -1,5 +1,11 @@
+{%- set obj_name = condition.objects[0].name.split('_')[0] -%}
+{%- set ascore = condition.objects[0].name.split('_')[2] -%}
 cond_{{ condition.vhdl_signal }}_i: entity work.adt_wrapper
+{%- if obj_name == "EXT" %}
+    generic map(false, {{ ascore }})
+{%- else %}
     generic map(false, {{ condition.objects[0].anomalyScore.value }})
+{%- endif %}
     port map(
         lhc_clk,
         bx_data.mu(2),
