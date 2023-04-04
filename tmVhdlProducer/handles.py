@@ -384,12 +384,6 @@ class ObjectHandle(Handle):
     def isEsumsObject(self):
         return self.type in EsumsObjectTypes
 
-    def isAdtObject(self):
-        return self.type in AdtObjectTypes
-
-    def isZdcObject(self):
-        return self.type in ZdcObjectTypes
-
     def isSignalObject(self):
         return self.type in SignalObjectTypes
 
