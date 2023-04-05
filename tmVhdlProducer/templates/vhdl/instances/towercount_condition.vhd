@@ -2,7 +2,13 @@
 
 {% set o = condition.objects[0] %}
 
-{% block entity %}work.towercount_condition{% endblock entity %}
+{%- if o.type == "ZDCP" or o.type == "ZDCM" %}
+{% set e = "zdc_condition" %}
+{%- else %}
+{% set e = "towercount_condition" %}
+{%- endif %}
+
+{% block entity %}work.{{e}}{% endblock entity %}
 
 {% block generic_map %}
     {%- if not o.operator %}

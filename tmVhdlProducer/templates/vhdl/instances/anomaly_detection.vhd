@@ -1,7 +1,10 @@
 {%- set o = condition.objects[0] -%}
-{%- if o.type == "ADT" -%}
+-- {{o.name}}
+{%- set value = o.name.split('_')[2] -%}
+{%- set ascore = value.split('+')[0] %}
+{%- set ascore = ascore.split('-')[0] %}
 cond_{{ condition.vhdl_signal }}_i: entity work.adt_wrapper
-    generic map(false, {{ o.anomalyScore.value }})
+    generic map(false, {{ ascore }})
     port map(
         lhc_clk,
         bx_data.mu({{ o.bx_arr }}),
@@ -15,6 +18,3 @@ cond_{{ condition.vhdl_signal }}_i: entity work.adt_wrapper
         bx_data.etmhf({{ o.bx_arr }}),
         {{ condition.vhdl_signal }}
     );
-{%- elif o.is_signal_type -%}
-{{ condition.vhdl_signal }} <= bx_data.{{ o.type | lower }}({{ o.bx_arr }});
-{%- endif -%}

@@ -80,12 +80,16 @@ kCENT6: str = 'CENT6'
 kCENT7: str = 'CENT7'
 kMUS0: str = 'MUS0'
 kMUS1: str = 'MUS1'
+kMUS2: str = 'MUS2'
 kMUSOOT0: str = 'MUSOOT0'
 kMUSOOT1: str = 'MUSOOT1'
 kMBT0HFM: str = 'MBT0HFM'
 kMBT0HFP: str = 'MBT0HFP'
 kMBT1HFM: str = 'MBT1HFM'
 kMBT1HFP: str = 'MBT1HFP'
+kADT: str = 'ADT'
+kZDCP: str = 'ZDCP'
+kZDCM: str = 'ZDCM'
 kEXT: str = 'EXT'
 kPrecision: str = 'Precision'
 
@@ -131,12 +135,15 @@ kCentrality6: str = 'Centrality6'
 kCentrality7: str = 'Centrality7'
 kMuonShower0: str = 'MuonShower0'
 kMuonShower1: str = 'MuonShower1'
+kMuonShower2: str = 'MuonShower2'
 kMuonShowerOutOfTime0: str = 'MuonShowerOutOfTime0'
 kMuonShowerOutOfTime1: str = 'MuonShowerOutOfTime1'
 kMinBiasHFM0: str = 'MinBiasHFM0'
 kMinBiasHFM1: str = 'MinBiasHFM1'
 kMinBiasHFP0: str = 'MinBiasHFP0'
 kMinBiasHFP1: str = 'MinBiasHFP1'
+kZDCPlus: str = 'ZDCPlus'
+kZDCMinus: str = 'ZDCMinus'
 kExternals: str = 'Externals'
 kMuonMuonCorrelation: str = 'MuonMuonCorrelation'
 kMuonEsumCorrelation: str = 'MuonEsumCorrelation'
@@ -163,13 +170,14 @@ kSingleJetOvRm: str = 'SingleJetOvRm'
 kDoubleJetOvRm: str = 'DoubleJetOvRm'
 kTripleJetOvRm: str = 'TripleJetOvRm'
 kQuadJetOvRm: str = 'QuadJetOvRm'
-
+kAnomalyDetectionTrigger: str = 'AnomalyDetectionTrigger'
 #
 # Keys for cut types
 #
 
 kThreshold: str = 'Threshold'
 kEta: str = 'Eta'
+kIndex: str = 'Index'
 kPhi: str = 'Phi'
 kUnconstrainedPt: str = 'UnconstrainedPt'
 kImpactParameter: str = 'ImpactParameter'
@@ -190,6 +198,7 @@ kCount: str = 'Count'
 kOvRmDeltaEta: str = 'OvRmDeltaEta'
 kOvRmDeltaPhi: str = 'OvRmDeltaPhi'
 kOvRmDeltaR: str = 'OvRmDeltaR'
+kAnomalyScore: str = 'AnomalyScore'
 
 #
 # Operators
@@ -210,6 +219,7 @@ Operators: List[str] = [
 CutTypeKey: Dict[int, str] = {
     tmEventSetup.Threshold: kThreshold,
     tmEventSetup.Eta: kEta,
+    tmEventSetup.Index: kIndex,
     tmEventSetup.Phi: kPhi,
     tmEventSetup.UnconstrainedPt: kUnconstrainedPt,
     tmEventSetup.ImpactParameter: kImpactParameter,
@@ -230,6 +240,7 @@ CutTypeKey: Dict[int, str] = {
     tmEventSetup.OvRmDeltaEta: kOvRmDeltaEta,
     tmEventSetup.OvRmDeltaPhi: kOvRmDeltaPhi,
     tmEventSetup.OvRmDeltaR: kOvRmDeltaR,
+    tmEventSetup.AnomalyScore: kAnomalyScore,
 }
 """Dictionary for cut type enumerations."""
 
@@ -260,12 +271,16 @@ ObjectTypeKey: Dict[int, str] = {
     tmEventSetup.CENT7: kCENT7,
     tmEventSetup.MUS0: kMUS0,
     tmEventSetup.MUS1: kMUS1,
+    tmEventSetup.MUS2: kMUS2,
     tmEventSetup.MUSOOT0: kMUSOOT0,
     tmEventSetup.MUSOOT1: kMUSOOT1,
     tmEventSetup.MBT0HFM: kMBT0HFM,
     tmEventSetup.MBT0HFP: kMBT0HFP,
     tmEventSetup.MBT1HFM: kMBT1HFM,
     tmEventSetup.MBT1HFP: kMBT1HFP,
+    tmEventSetup.ADT: kADT,
+    tmEventSetup.ZDCP: kZDCP,
+    tmEventSetup.ZDCM: kZDCM,
     tmEventSetup.EXT: kEXT,
     tmEventSetup.Precision: kPrecision,
 }
@@ -297,14 +312,18 @@ ObjectGrammarKey: Dict[int, str] = {
     tmEventSetup.CENT7: tmGrammar.CENT7,
     tmEventSetup.MUS0: tmGrammar.MUS0,
     tmEventSetup.MUS1: tmGrammar.MUS1,
+    tmEventSetup.MUS2: tmGrammar.MUS2,
     tmEventSetup.MUSOOT0: tmGrammar.MUSOOT0,
     tmEventSetup.MUSOOT1: tmGrammar.MUSOOT1,
+    tmEventSetup.ZDCP: tmGrammar.ZDCP,
+    tmEventSetup.ZDCM: tmGrammar.ZDCM,
     tmEventSetup.EXT: tmGrammar.EXT,
     tmEventSetup.MBT0HFP: tmGrammar.MBT0HFP,
     tmEventSetup.MBT1HFP: tmGrammar.MBT1HFP,
     tmEventSetup.MBT0HFM: tmGrammar.MBT0HFM,
     tmEventSetup.MBT1HFM: tmGrammar.MBT1HFM,
     tmEventSetup.TOWERCOUNT: tmGrammar.TOWERCOUNT,
+    tmEventSetup.ADT: tmGrammar.ADT,
 }
 """Dictionary for object grammar type enumerations."""
 
@@ -347,12 +366,15 @@ ConditionTypeKey: Dict[int, str] = {
     tmEventSetup.Centrality7: kCentrality7,
     tmEventSetup.MuonShower0: kMuonShower0,
     tmEventSetup.MuonShower1: kMuonShower1,
+    tmEventSetup.MuonShower2: kMuonShower2,
     tmEventSetup.MuonShowerOutOfTime0: kMuonShowerOutOfTime0,
     tmEventSetup.MuonShowerOutOfTime1: kMuonShowerOutOfTime1,
     tmEventSetup.MinBiasHFM0: kMinBiasHFM0,
     tmEventSetup.MinBiasHFM1: kMinBiasHFM1,
     tmEventSetup.MinBiasHFP0: kMinBiasHFP0,
     tmEventSetup.MinBiasHFP1: kMinBiasHFP1,
+    tmEventSetup.ZDCPlus: kZDCPlus,
+    tmEventSetup.ZDCMinus: kZDCMinus,
     tmEventSetup.Externals: kExternals,
     tmEventSetup.MuonMuonCorrelation: kMuonMuonCorrelation,
     tmEventSetup.MuonEsumCorrelation: kMuonEsumCorrelation,
@@ -379,6 +401,7 @@ ConditionTypeKey: Dict[int, str] = {
     tmEventSetup.DoubleJetOvRm: kDoubleJetOvRm,
     tmEventSetup.TripleJetOvRm: kTripleJetOvRm,
     tmEventSetup.QuadJetOvRm: kQuadJetOvRm,
+    tmEventSetup.AnomalyDetectionTrigger: kAnomalyDetectionTrigger,
 }
 """Dictionary for condition type enumerations."""
 
@@ -451,6 +474,7 @@ def obj_type_to_cat(object_type: int) -> str:
         7: "esums",
         17: "esums",
         18: "esums",
+        43: "adt",
     }
     if object_type not in switcher:
         raise ValueError(f"invalid object type: {object_type!r}")
@@ -484,6 +508,7 @@ class ResourceTray:
     kCorrelationCondition = 'CorrelationCondition'
     kCorrelation3Condition = 'Correlation3Condition'
     kCorrelationConditionOvRm = 'CorrelationConditionOvRm'
+    #kAnomalyDetectionTrigger = 'AnomalyDetectionTrigger'
 
     def __init__(self, filename):
         """Attribute *filename* is a filename of an JSON payload configuration file."""
@@ -648,6 +673,7 @@ class ResourceTray:
         # instance
         instance = self.map_instance(ConditionTypeKey[condition.type])
         # select
+        #if instance in (self.kMuonCondition, self.kCaloCondition, self.kCaloConditionOvRm, self.kAnomalyDetectionTrigger):
         if instance in (self.kMuonCondition, self.kCaloCondition, self.kCaloConditionOvRm):
             return n_objects * n_requirements
         elif instance == self.kCorrelationCondition:
@@ -745,8 +771,17 @@ class ResourceTray:
 
         # Pick object configuration
         objects_types = [ObjectTypeKey[object_.type] for object_ in condition.objects]
-        mapped_objects = self.map_objects(objects_types)
-        instance_objects = filter_first(lambda item: item.types == mapped_objects, instance.objects)
+        if objects_types[0] == 'EXT':
+            for object in condition.objects:
+                if object.name.split('_')[1] == 'ADT':
+                    instance_objects = filter_first(lambda item: item.types == ['adt'], instance.objects)
+                else:
+                    mapped_objects = self.map_objects(objects_types)
+                    instance_objects = filter_first(lambda item: item.types == mapped_objects, instance.objects)
+        else:
+            mapped_objects = self.map_objects(objects_types)
+            instance_objects = filter_first(lambda item: item.types == mapped_objects, instance.objects)
+
         if not instance_objects:
             condition_type = ConditionTypeKey[condition.type]
             message = f"Missing configuration for condition of type '{condition_type}' with " \

@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.14.0] - 2023-03-13
+### Added
+- support for utm 0.11.0 (ADT object cut, muon index cut, implementation of "MUS2" and ZDC)
+
+## [2.13.2] - 2022-12-14
+### Added
+- changed values for "floor" in resource_default.json (3 additional quads used for ZDC conversion in MP7)
+### Changed
+- resource_default.json
+
 ## [2.13.1] - 2022-11-16
 ### Changed
 - bug fix in template ("muon_mass_3_obj_condition.vhd": missing generic parameters)

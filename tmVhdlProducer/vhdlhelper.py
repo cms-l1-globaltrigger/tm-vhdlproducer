@@ -97,8 +97,12 @@ ObjectTypes: Dict[int, str] = {
     tmEventSetup.TOWERCOUNT: tmGrammar.TOWERCOUNT,
     tmEventSetup.MUS0: tmGrammar.MUS0,
     tmEventSetup.MUS1: tmGrammar.MUS1,
+    tmEventSetup.MUS2: tmGrammar.MUS2,
     tmEventSetup.MUSOOT0: tmGrammar.MUSOOT0,
     tmEventSetup.MUSOOT1: tmGrammar.MUSOOT1,
+    tmEventSetup.ADT: tmGrammar.ADT,
+    tmEventSetup.ZDCP: tmGrammar.ZDCP,
+    tmEventSetup.ZDCM: tmGrammar.ZDCM,
 }
 
 # Has the number of Objects of each Type
@@ -134,8 +138,12 @@ ObjectCount: Dict[int, int] = {
     tmEventSetup.TOWERCOUNT: 1,
     tmEventSetup.MUS0:       1,
     tmEventSetup.MUS1:       1,
+    tmEventSetup.MUS2:       1,
     tmEventSetup.MUSOOT0:    1,
     tmEventSetup.MUSOOT1:    1,
+    tmEventSetup.ADT:        1,
+    tmEventSetup.ZDCP:       1,
+    tmEventSetup.ZDCM:       1,
 }
 
 ComparisonOperator: Dict[int, bool] = {
@@ -971,7 +979,7 @@ class MinBiasConditionHelper(ConditionHelper):
     """Number of required objects."""
 
 class TowerCountConditionHelper(ConditionHelper):
-    """Minimum bias condition template helper class."""
+    """Towercount condition template helper class."""
     ReqObjects = 1
     """Number of required objects."""
 
@@ -1209,6 +1217,9 @@ class ObjectHelper(VhdlHelper):
         etaNrCuts           [int]
         etaLowerLimit       [list]
         etaLowerLimit       [list]
+        indexNrCuts         [int]
+        indexLowerLimit     [list]
+        indexLowerLimit     [list]
         phi                 [list of RangeCutHelper]
         phiFullRange        [bool]
         phiW2Ignore         [bool]
@@ -1217,6 +1228,7 @@ class ObjectHelper(VhdlHelper):
         is_muon_type        [bool]
         is_calo_type        [bool]
         is_esums_type       [bool]
+        anomalyScore        [AnomalyScoreCutHelper]
         handle              handle to underlying object handle [None|ObjectHandle]
     """
 
@@ -1235,6 +1247,7 @@ class ObjectHelper(VhdlHelper):
         self.quality = QualityCutHelper(0xffff)
         self.charge = ChargeCutHelper('ign')
         self.count = CountCutHelper()
+        self.anomalyScore = AnomalyScoreCutHelper(0)
         self.upt = UptCutHelper()
         self.impactParameter = ImpactParameterCutHelper(0xf)
         self.displaced = DisplacedCutHelper()
@@ -1242,6 +1255,10 @@ class ObjectHelper(VhdlHelper):
         self.etaNrCuts = 0
         self.etaLowerLimit = [0, 0, 0, 0, 0]
         self.etaUpperLimit = [0, 0, 0, 0, 0]
+        # cuts on muon index bits
+        self.indexNrCuts = 0
+        self.indexLowerLimit = [0, 0, 0, 0, 0]
+        self.indexUpperLimit = [0, 0, 0, 0, 0]
         # max. two phi cuts
         self.phiNrCuts = 0
         self.phiLowerLimit = [0, 0]
@@ -1262,6 +1279,7 @@ class ObjectHelper(VhdlHelper):
         # set the default slice range to maxNum - 1 (e.g. 0-11)
         self.slice.upper = ObjectCount[object_handle.type] - 1
         etaCuts = []
+        indexCuts = []
         phiCuts = []
         # setup cuts
         for cut_handle in object_handle.cuts:
@@ -1271,6 +1289,8 @@ class ObjectHelper(VhdlHelper):
                 self.isolation.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.Eta:
                 etaCuts.append((cut_handle.minimum.index, cut_handle.maximum.index))
+            elif cut_handle.cut_type == tmEventSetup.Index:
+                indexCuts.append((cut_handle.minimum.index, cut_handle.maximum.index))
             elif cut_handle.cut_type == tmEventSetup.Phi:
                 phiCuts.append((cut_handle.minimum.index, cut_handle.maximum.index))
             elif cut_handle.cut_type == tmEventSetup.Quality:
@@ -1279,6 +1299,8 @@ class ObjectHelper(VhdlHelper):
                 self.charge.update(cut_handle)
             if cut_handle.cut_type == tmEventSetup.Count:
                 self.count.update(cut_handle)
+            elif cut_handle.cut_type == tmEventSetup.AnomalyScore:
+                self.anomalyScore.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.UnconstrainedPt:
                 self.upt.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.ImpactParameter:
@@ -1308,6 +1330,27 @@ class ObjectHelper(VhdlHelper):
             self.etaNrCuts = 5
             self.etaLowerLimit[4] = etaCuts[4][0]
             self.etaUpperLimit[4] = etaCuts[4][1]
+        # setup index windows
+        if len(indexCuts) > 0:
+            self.indexNrCuts = 1
+            self.indexLowerLimit[0] = indexCuts[0][0]
+            self.indexUpperLimit[0] = indexCuts[0][1]
+        if len(indexCuts) > 1:
+            self.indexNrCuts = 2
+            self.indexLowerLimit[1] = indexCuts[1][0]
+            self.indexUpperLimit[1] = indexCuts[1][1]
+        if len(indexCuts) > 2:
+            self.indexNrCuts = 3
+            self.indexLowerLimit[2] = indexCuts[2][0]
+            self.indexUpperLimit[2] = indexCuts[2][1]
+        if len(indexCuts) > 3:
+            self.indexNrCuts = 4
+            self.indexLowerLimit[3] = indexCuts[3][0]
+            self.indexUpperLimit[3] = indexCuts[3][1]
+        if len(indexCuts) > 4:
+            self.indexNrCuts = 5
+            self.indexLowerLimit[4] = indexCuts[4][0]
+            self.indexUpperLimit[4] = indexCuts[4][1]
         # update phi window flags
         if len(phiCuts) > 0:
             self.phiNrCuts = 1
@@ -1364,6 +1407,17 @@ class CountCutHelper(ThresholdCutHelper):
     def update(self, cut_handle):
         """Updates threshold and enables cut."""
         self.threshold = cut_handle.minimum.index
+        self.enabled = True
+
+class AnomalyScoreCutHelper(CutHelper):
+
+    def __init__(self, value=0):
+        super().__init__()
+        self.value = value
+
+    def update(self, cut_handle):
+        """Updates anomaly score and enables cut."""
+        self.value = int(cut_handle.minimum.value)
         self.enabled = True
 
 class TwoBodyPtCutHelper(ThresholdCutHelper):

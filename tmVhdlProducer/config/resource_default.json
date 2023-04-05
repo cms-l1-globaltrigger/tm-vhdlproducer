@@ -60,6 +60,7 @@
                 "Centrality7": "SignalCondition",
                 "MuonShower0": "SignalCondition",
                 "MuonShower1": "SignalCondition",
+                "MuonShower2": "SignalCondition",
                 "MuonShowerOutOfTime0": "SignalCondition",
                 "MuonShowerOutOfTime1": "SignalCondition",
                 "TowerCount": "TowerCountCondition",
@@ -71,7 +72,10 @@
                 "TransverseMass": "CorrelationCondition",
                 "CaloCaloCorrelationOvRm": "CorrelationConditionOvRm",
                 "InvariantMassOvRm": "CorrelationConditionOvRm",
-                "TransverseMassOvRm": "CorrelationConditionOvRm"
+                "TransverseMassOvRm": "CorrelationConditionOvRm",
+                "AnomalyDetectionTrigger": "AnomalyDetectionTrigger",
+                "ZDCPlus": "ZDCPlus",
+                "ZDCMinus": "ZDCMinus"
             },
             "objects": {
                 "Egamma": "calo",
@@ -98,6 +102,7 @@
                 "CENT7": "signal",
                 "MUS0": "signal",
                 "MUS1": "signal",
+                "MUS2": "signal",
                 "MUSOOT0": "signal",
                 "MUSOOT1": "signal",
                 "MBT0HFP": "bias",
@@ -105,6 +110,9 @@
                 "MBT0HFM": "bias",
                 "MBT1HFM": "bias",
                 "TOWERCOUNT": "count",
+                "ADT": "adt",
+                "ZDCP": "count",
+                "ZDCM": "count",
                 "EXT": "ext"
             },
             "cuts": {
@@ -123,7 +131,7 @@
         },
         "floor": {
             "processors": 0,
-            "sliceLUTs": 39071,
+            "sliceLUTs": 39100,
             "brams": 188
         },
         "ceiling": {
@@ -134,13 +142,13 @@
         "frame": {
             "processors": 0,
             "brams": 356,
-            "sliceLUTs": 4183
+            "sliceLUTs": 4221
         },
         "fdl": {
             "floor": {
                 "processors": 0,
                 "brams": 64,
-                "sliceLUTs": 23300
+                "sliceLUTs": 16800
             },
             "algo_slice": {
                 "processors": 0,
@@ -291,6 +299,11 @@
                     "sliceLUTs": 3
                 },
                 "Eta": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 3
+                },
+                "Index": {
                     "processors": 0,
                     "brams": 0,
                     "sliceLUTs": 3
@@ -933,6 +946,12 @@
                         "processors": 0,
                         "brams": 0,
                         "sliceLUTs": 0
+                    },
+                    {
+                        "types": ["adt"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 8440
                     }
                 ]
             },
@@ -944,6 +963,39 @@
                         "processors": 0,
                         "brams": 0,
                         "sliceLUTs": 4
+                    }
+                ]
+            },
+            {
+                "type": "AnomalyDetectionTrigger",
+                "objects": [
+                    {
+                        "types": ["adt"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 8440
+                    }
+                ]
+            },
+            {
+                "type": "ZDCPlus",
+                "objects": [
+                    {
+                        "types": ["count"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 2
+                    }
+                ]
+            },
+            {
+                "type": "ZDCMinus",
+                "objects": [
+                    {
+                        "types": ["count"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 2
                     }
                 ]
             },
