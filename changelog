@@ -6,7 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.14.0] - 2023-03-13
 ### Added
-- support for utm 0.11.0 (ADT object cut, muon index cut, implementation of "MUS2" and ZDC)
+- support for MUS2, ZDC, ADT, muon index cut
+### Changed
+- depending on tm-python 0.11.2
+- depending on tm-reporter 2.11.3
 
 ## [2.13.2] - 2022-12-14
 ### Added
