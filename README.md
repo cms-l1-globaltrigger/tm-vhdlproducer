@@ -116,6 +116,10 @@ or to a subset of modules
 tm-vhdlproducer L1Menu_sample.xml --modules 2 --dist 1 --constraint ext:2,4-6  # limit external conditions to modules 2, 4, 5 and 6
 ```
 
+List of supported condition constraints:
+ - `ext`: external conditions
+ - `zdc`: both ZDC+ and ZDC- conditions
+
 ### Dryrun
 
 To try out different optimizations use the `--dryrun` flag to prevent writing
