@@ -5,7 +5,7 @@ import os
 import re
 import subprocess
 import sys
-from typing import Dict
+from typing import Dict, List
 
 import tmEventSetup
 import tmReporter
@@ -14,7 +14,7 @@ from .vhdlproducer import VhdlProducer
 from .algodist import ProjectDir
 from .algodist import distribute, constraint_t
 from .algodist import MinModules, MaxModules
-from .algodist import kExternals
+from .algodist import kExternals, kZDCPlus, kZDCMinus
 from . import __version__
 
 EXIT_SUCCESS: int = 0
@@ -31,8 +31,9 @@ DefaultSorting: str = SortingDesc
 DefaultOutputDir: str = os.getcwd()
 from .algodist import DefaultConfigFile
 
-ConstraintTypes: Dict[str, str] = {
-    'ext': kExternals,
+ConstraintTypes: Dict[str, List[str]] = {
+    'ext': [kExternals],
+    'zdc': [kZDCPlus, kZDCMinus],
 }
 """Mapping constraint types to esCondition types, provided for convenience."""
 
@@ -176,9 +177,11 @@ def main() -> int:
     reverse_sorting = (args.sorting == 'desc')
     # Collect condition constraints
     constraints = {}
-    if args.constraint:
-        for k, v in args.constraint:
-            constraints[ConstraintTypes[k]] = v
+    for alias, module in args.constraint:
+        if alias not in ConstraintTypes:
+            raise ValueError(f"no such constraint: {alias!r}")
+        for key in ConstraintTypes[alias]:
+            constraints[key] = module
     # Run distibution
     collection = distribute(
         eventSetup=eventSetup,
