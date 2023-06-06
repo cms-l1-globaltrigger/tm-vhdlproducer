@@ -1395,9 +1395,11 @@ class ModuleCollection:
                 module = self.lightestModule()
                 # ######## constraints ########
                 for condition in algorithm:
-                    if condition.type in self.constraints:
-                        module = self.lightestModule(self.constraints[condition.type])
-                        logging.info("[*] applying condition constraint %s => module %s", condition.type, module.id)
+                    condition_type_name = ConditionTypeKey[condition.type]
+                    if condition_type_name in self.constraints:
+                        module = self.lightestModule(self.constraints[condition_type_name])
+                        logging.info("[*] applying condition constraint %r => module %r", condition_type_name, module.id)
+                        break
                 # ######## /constraints ########
                 logging.info(" . adding %s (%d) to module %s", algorithm.name, algorithm.index, module.id)
                 module.append(algorithm)
@@ -1407,9 +1409,10 @@ class ModuleCollection:
                     has_constraint = False
                     i = stack.index(shadowed)
                     for condition in stack[i]:
-                        if condition.type in self.constraints:
-                            if module.id != self.constraints[condition.type]:
-                                logging.info("[*] applying condition constraint, ignoring shadowed algorithm %s", stack[i].name)
+                        condition_type_name = ConditionTypeKey[condition.type]
+                        if condition_type_name in self.constraints:
+                            if module.id != self.constraints[condition_type_name]:
+                                logging.info("[*] applying condition constraint %r, ignoring shadowed algorithm %s", condition_type_name, stack[i].name)
                                 has_constraint = True
                                 break
                     if has_constraint:
