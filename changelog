@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.14.3] - 2023-09-15
+
+### Changed
+- main.py, inserted fix constraint for ZDC
+
 ## [2.14.2] - 2023-06-15
 
 ### Fixed

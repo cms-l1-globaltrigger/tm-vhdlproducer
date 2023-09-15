@@ -176,7 +176,7 @@ def main() -> int:
     # Distribute algorithms, set sort order (asc or desc)
     reverse_sorting = (args.sorting == 'desc')
     # Collect condition constraints
-    constraints = {}
+    constraints = {'ZDCPlus': [0], 'ZDCMinus': [0]}
     # Note: args.constraint is None if not used.
     if args.constraint:
         for alias, module in args.constraint:
