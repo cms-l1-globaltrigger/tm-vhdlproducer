@@ -35,6 +35,8 @@ ConstraintTypes: Dict[str, List[str]] = {
     'ext': [kExternals],
     'zdc': [kZDCPlus, kZDCMinus],
 }
+
+DefaultModuleZdc = 0
 """Mapping constraint types to esCondition types, provided for convenience."""
 
 # -----------------------------------------------------------------------------
@@ -184,6 +186,17 @@ def main() -> int:
                 raise ValueError(f"no such constraint: {alias!r}")
             for key in ConstraintTypes[alias]:
                 constraints[key] = module
+
+    # Default constraint for ZDC
+    zdc_constraint = True
+    for key in constraints.keys():
+        if (key == kZDCPlus) or (key == kZDCMinus):
+            zdc_constraint = True
+        else:
+            zdc_constraint = False
+    if (not zdc_constraint) or (len(constraints) == 0):
+        constraints.update( [(kZDCPlus, [DefaultModuleZdc]),(kZDCMinus, [DefaultModuleZdc])] )
+            
     # Run distibution
     collection = distribute(
         eventSetup=eventSetup,
