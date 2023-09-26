@@ -7,10 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.14.3] - 2023-09-20
+## [2.15.0] - 2023-09-26
 
 ### Added
-- default value (mdule = 0) for `zdc` constraints
+- default value (module = 0) for `zdc` constraints
 
 ## [2.14.2] - 2023-06-15
 
@@ -283,7 +283,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - adjusted `--dryrun` and `--ratio` options.
 
-[unreleased]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/v2.14.2...HEAD
+[unreleased]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/v2.15.0...HEAD
+[2.15.0]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.14.2...2.15.0
 [2.14.2]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.14.1...2.14.2
 [2.14.1]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.14.0...2.14.1
 [2.14.0]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.13.2...2.14.0

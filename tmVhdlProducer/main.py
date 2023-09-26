@@ -25,6 +25,7 @@ EXEC_REPORTER: str = 'tm-reporter'
 SortingAsc: str = 'asc'
 SortingDesc: str = 'desc'
 
+DefaultModuleZdc: int = 0
 DefaultNrModules: int = 6
 DefaultRatio: float = 0.0
 DefaultSorting: str = SortingDesc
@@ -35,8 +36,6 @@ ConstraintTypes: Dict[str, List[str]] = {
     'ext': [kExternals],
     'zdc': [kZDCPlus, kZDCMinus],
 }
-
-DefaultModuleZdc = 0
 """Mapping constraint types to esCondition types, provided for convenience."""
 
 # -----------------------------------------------------------------------------
@@ -188,15 +187,9 @@ def main() -> int:
                 constraints[key] = module
 
     # Default constraint for ZDC
-    zdc_constraint = True
-    for key in constraints.keys():
-        if (key == kZDCPlus) or (key == kZDCMinus):
-            zdc_constraint = True
-        else:
-            zdc_constraint = False
-    if (not zdc_constraint) or (len(constraints) == 0):
-        constraints.update( [(kZDCPlus, [DefaultModuleZdc]),(kZDCMinus, [DefaultModuleZdc])] )
-            
+    constraints.setdefault(kZDCMinus, [DefaultModuleZdc])
+    constraints.setdefault(kZDCPlus, [DefaultModuleZdc])    
+                
     # Run distibution
     collection = distribute(
         eventSetup=eventSetup,
