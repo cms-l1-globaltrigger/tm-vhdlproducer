@@ -25,6 +25,7 @@ EXEC_REPORTER: str = 'tm-reporter'
 SortingAsc: str = 'asc'
 SortingDesc: str = 'desc'
 
+DefaultModuleZdc: int = 0
 DefaultNrModules: int = 6
 DefaultRatio: float = 0.0
 DefaultSorting: str = SortingDesc
@@ -184,6 +185,11 @@ def main() -> int:
                 raise ValueError(f"no such constraint: {alias!r}")
             for key in ConstraintTypes[alias]:
                 constraints[key] = module
+
+    # Default constraint for ZDC
+    constraints.setdefault(kZDCMinus, [DefaultModuleZdc])
+    constraints.setdefault(kZDCPlus, [DefaultModuleZdc])    
+                
     # Run distibution
     collection = distribute(
         eventSetup=eventSetup,
