@@ -132,7 +132,7 @@
         "floor": {
             "processors": 0,
             "sliceLUTs": 39100,
-            "brams": 188
+            "brams": 216
         },
         "ceiling": {
             "processors": 3600,
