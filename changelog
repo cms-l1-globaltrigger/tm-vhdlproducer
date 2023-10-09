@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.15.1] - 2023-10-05
+
+### Changed
+- changed value for "brams" in "floor" (resource_default.json)
+
 ## [2.15.0] - 2023-09-26
 
 ### Added
@@ -283,7 +288,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - adjusted `--dryrun` and `--ratio` options.
 
-[unreleased]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/v2.15.0...HEAD
+[unreleased]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/v2.15.1...HEAD
+[2.15.1]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.15.0...2.15.1
 [2.15.0]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.14.2...2.15.0
 [2.14.2]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.14.1...2.14.2
 [2.14.1]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.14.0...2.14.1
