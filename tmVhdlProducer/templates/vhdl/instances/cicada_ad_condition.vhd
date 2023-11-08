@@ -1,8 +1,11 @@
-cond_{{ condition.vhdl_signal }}_i: entity work.cicada_ad_hi_comp
+cond_{{ condition.vhdl_signal }}_i: entity work.cicada_ad_hi_condition
     generic map(
+  {%- if not o1.operator %}
+        ge_mode => {{ o1.operator | vhdl_bool }},
+  {%- endif %}
         ad_requ => true,
-        ad_dec_thr => X"{{ TBD | X02 }}",
-        ad_int_thr => X"{{ TBD | X02 }}"
+        ad_dec_thr => X"{{ o1.threshold | X04 }}",
+        ad_int_thr => X"{{ o2.threshold | X04 }}"
         )
     port map(
         lhc_clk => lhc_clk,

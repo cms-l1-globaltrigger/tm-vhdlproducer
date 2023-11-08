@@ -58,6 +58,9 @@ ObjectCollectionSize: Dict[int, int] = {
     tmEventSetup.ADT: 1,
     tmEventSetup.ZDCP: 1,
     tmEventSetup.ZDCM: 1,
+    tmEventSetup.CICADAADDEC: 1,
+    tmEventSetup.CICADAADINT: 1,
+    tmEventSetup.CICADAHI: 1,
 }
 """Dictionary for object collection size (slices)."""
 
@@ -191,6 +194,12 @@ EsumsObjectTypes: List[int] = [
     tmEventSetup.ASYMETHF,
     tmEventSetup.ASYMHTHF,
 ]
+
+CicadaObjectTypes: List[int] = [
+    tmEventSetup.CICADAADDEC,
+    tmEventSetup.CICADAADINT,
+    tmEventSetup.CICADAHI,
+]
 """List of energy sums object types."""
 
 SignalObjectTypes: List[int] = [
@@ -250,6 +259,9 @@ ObjectsOrder: List[int] = [
     tmEventSetup.ADT,
     tmEventSetup.ZDCP,
     tmEventSetup.ZDCM,
+    tmEventSetup.CICADAADDEC,
+    tmEventSetup.CICADAADINT,
+    tmEventSetup.CICADAHI,
     tmEventSetup.EXT,
     tmEventSetup.Precision,
 ]
@@ -445,6 +457,12 @@ class ConditionHandle(Handle):
 
     def isTowerCountCondition(self):
         return self.type in TowerCountConditionTypes
+    
+    def isCicadaAnomalyDetectionCondition(self):
+        return self.type in CicadaAnomalyDetectionConditionTypes
+    
+    def isCicadaHeavyIonCondition(self):
+        return self.type in CicadaHeavyIonConditionTypes
 
     def isCorrelationCondition(self):
         return self.type in CorrelationConditionTypes

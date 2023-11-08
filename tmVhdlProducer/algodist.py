@@ -91,6 +91,9 @@ kADT: str = 'ADT'
 kZDCP: str = 'ZDCP'
 kZDCM: str = 'ZDCM'
 kEXT: str = 'EXT'
+kCICADAADDEC: str = 'CICADAADDEC'
+kCICADAADINT: str = 'CICADAADINT'
+kCICADAHI: str = 'CICADAHI'
 kPrecision: str = 'Precision'
 
 #
@@ -171,6 +174,8 @@ kDoubleJetOvRm: str = 'DoubleJetOvRm'
 kTripleJetOvRm: str = 'TripleJetOvRm'
 kQuadJetOvRm: str = 'QuadJetOvRm'
 kAnomalyDetectionTrigger: str = 'AnomalyDetectionTrigger'
+kCicadaAnomalyDetectionTrigger: str = 'CicadaAnomalyDetectionTrigger'
+kCicadaHeavyIonTrigger: str = 'CicadaHeavyIonTrigger'
 #
 # Keys for cut types
 #
@@ -281,6 +286,8 @@ ObjectTypeKey: Dict[int, str] = {
     tmEventSetup.ADT: kADT,
     tmEventSetup.ZDCP: kZDCP,
     tmEventSetup.ZDCM: kZDCM,
+    tmEventSetup.CICADAAD: kCICADAAD,
+    tmEventSetup.CICADAHI: kCICADAHI,
     tmEventSetup.EXT: kEXT,
     tmEventSetup.Precision: kPrecision,
 }
@@ -324,6 +331,9 @@ ObjectGrammarKey: Dict[int, str] = {
     tmEventSetup.MBT1HFM: tmGrammar.MBT1HFM,
     tmEventSetup.TOWERCOUNT: tmGrammar.TOWERCOUNT,
     tmEventSetup.ADT: tmGrammar.ADT,
+    tmEventSetup.CICADAADDEC: tmGrammar.CICADAADDEC,
+    tmEventSetup.CICADAADINT: tmGrammar.CICADAADINT,
+    tmEventSetup.CICADAHI: tmGrammar.CICADAHI,
 }
 """Dictionary for object grammar type enumerations."""
 
@@ -402,6 +412,8 @@ ConditionTypeKey: Dict[int, str] = {
     tmEventSetup.TripleJetOvRm: kTripleJetOvRm,
     tmEventSetup.QuadJetOvRm: kQuadJetOvRm,
     tmEventSetup.AnomalyDetectionTrigger: kAnomalyDetectionTrigger,
+    tmEventSetup.CicadaAnomalyDetectionTrigger: kCicadaAnomalyDetectionTrigger,
+    tmEventSetup.CicadaHeavyIonTrigger: kCicadaHeavyIonTrigger,
 }
 """Dictionary for condition type enumerations."""
 
@@ -462,7 +474,7 @@ def obj_type_to_str(object_type: int) -> Optional[str]:
     return ObjectTypeKey[object_type]
 
 def obj_type_to_cat(object_type: int) -> str:
-    """Converts object type to object catagory representation."""
+    """Converts object type to object category representation."""
     switcher = {
         0: "muon",
         1: "calo",
@@ -475,6 +487,9 @@ def obj_type_to_cat(object_type: int) -> str:
         17: "esums",
         18: "esums",
         43: "adt",
+        46: "cicada",
+        47: "cicada",
+        48: "cicada",
     }
     if object_type not in switcher:
         raise ValueError(f"invalid object type: {object_type!r}")

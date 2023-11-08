@@ -103,6 +103,9 @@ ObjectTypes: Dict[int, str] = {
     tmEventSetup.ADT: tmGrammar.ADT,
     tmEventSetup.ZDCP: tmGrammar.ZDCP,
     tmEventSetup.ZDCM: tmGrammar.ZDCM,
+    tmEventSetup.CICADAADDEC: tmGrammar.CICADAADDEC,
+    tmEventSetup.CICADAADINT: tmGrammar.CICADAADINT,
+    tmEventSetup.CICADAHI: tmGrammar.CICADAHI,
 }
 
 # Has the number of Objects of each Type
@@ -144,6 +147,9 @@ ObjectCount: Dict[int, int] = {
     tmEventSetup.ADT:        1,
     tmEventSetup.ZDCP:       1,
     tmEventSetup.ZDCM:       1,
+    tmEventSetup.CICADAADDEC:       1,
+    tmEventSetup.CICADAADINT:       1,
+    tmEventSetup.CICADAHI:       1,
 }
 
 ComparisonOperator: Dict[int, bool] = {
@@ -274,6 +280,10 @@ def conditionFactory(condition_handle):
         return CorrelationConditionOvRmHelper(condition_handle)
     elif condition_handle.isCaloConditionOvRm():
         return CaloConditionOvRmHelper(condition_handle)
+    elif condition_handle.isCicadaAnomalyDetectionCondition():
+        return CicadaAnomalyDetectionConditionHelper(condition_handle)
+    elif condition_handle.isCicadaHeavyIonCondition():
+        return CicadaHeavyIonHelper(condition_handle)
     else:
         raise RuntimeError("unknown condition type")
 
@@ -459,6 +469,14 @@ class ModuleHelper(VhdlHelper):
     @property
     def towerCountConditions(self):
         return filter(lambda condition: condition.handle.isTowerCountCondition(), self.conditions)
+
+    @property
+    def cicadaAnomalyDetectionConditions(self):
+        return filter(lambda condition: condition.handle.isCicadaAnomalyDetectionCondition(), self.conditions)
+
+    @property
+    def cicadaHeavyIonConditions(self):
+        return filter(lambda condition: condition.handle.isCicadaHeavyIonCondition(), self.conditions)
 
     @property
     def correlationCombinations(self):
@@ -980,6 +998,16 @@ class MinBiasConditionHelper(ConditionHelper):
 
 class TowerCountConditionHelper(ConditionHelper):
     """Towercount condition template helper class."""
+    ReqObjects = 1
+    """Number of required objects."""
+
+class CicadaAnomalyDetectionConditionHelper(ConditionHelper):
+    """Cicada Anomaly Detection condition template helper class."""
+    ReqObjects = 2
+    """Number of required objects."""
+
+class CicadaHeavyIonConditionHelper(ConditionHelper):
+    """Cicada Heavy Ion condition template helper class."""
     ReqObjects = 1
     """Number of required objects."""
 
