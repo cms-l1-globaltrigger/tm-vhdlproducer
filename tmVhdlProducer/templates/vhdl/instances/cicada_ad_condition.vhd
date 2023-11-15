@@ -4,6 +4,7 @@ cond_{{ condition.vhdl_signal }}_i: entity work.cicada_ad_hi_condition
         ge_mode => {{ o1.operator | vhdl_bool }},
   {%- endif %}
         ad_requ => true,
+        -- thr = {{...}} ("fix precision" value - decimal)
         ad_dec_thr => X"{{ o1.threshold | X04 }}",
         ad_int_thr => X"{{ o2.threshold | X04 }}"
         )
