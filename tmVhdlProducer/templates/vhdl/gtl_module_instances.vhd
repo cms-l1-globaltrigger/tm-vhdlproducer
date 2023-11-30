@@ -66,12 +66,6 @@
 {%- for condition in module.towerCountConditions %}
 {% include "instances/towercount_condition.vhd" %}
 {% endfor %}
-{%- for condition in module.cicadaAnomalyDetectionConditions %}
-{% include "instances/cicada_ad_condition.vhd" %}
-{% endfor %}
-{%- for condition in module.cicadaHeavyIonConditions %}
-{% include "instances/cicada_hi_condition.vhd" %}
-{% endfor %}
 {%- for condition in module.signalConditions %}
 {% include "instances/signal_condition.vhd" %}
 {% endfor %}

@@ -103,9 +103,7 @@ ObjectTypes: Dict[int, str] = {
     tmEventSetup.ADT: tmGrammar.ADT,
     tmEventSetup.ZDCP: tmGrammar.ZDCP,
     tmEventSetup.ZDCM: tmGrammar.ZDCM,
-    tmEventSetup.CICADAADDEC: tmGrammar.CICADAADDEC,
-    tmEventSetup.CICADAADINT: tmGrammar.CICADAADINT,
-    tmEventSetup.CICADAHI: tmGrammar.CICADAHI,
+    tmEventSetup.CICADA: tmGrammar.CICADA,
 }
 
 # Has the number of Objects of each Type
@@ -147,9 +145,7 @@ ObjectCount: Dict[int, int] = {
     tmEventSetup.ADT:        1,
     tmEventSetup.ZDCP:       1,
     tmEventSetup.ZDCM:       1,
-    tmEventSetup.CICADAADDEC:       1,
-    tmEventSetup.CICADAADINT:       1,
-    tmEventSetup.CICADAHI:       1,
+    tmEventSetup.CICADA:     1,
 }
 
 ComparisonOperator: Dict[int, bool] = {
@@ -280,10 +276,6 @@ def conditionFactory(condition_handle):
         return CorrelationConditionOvRmHelper(condition_handle)
     elif condition_handle.isCaloConditionOvRm():
         return CaloConditionOvRmHelper(condition_handle)
-    elif condition_handle.isCicadaAnomalyDetectionCondition():
-        return CicadaAnomalyDetectionConditionHelper(condition_handle)
-    elif condition_handle.isCicadaHeavyIonCondition():
-        return CicadaHeavyIonHelper(condition_handle)
     else:
         raise RuntimeError("unknown condition type")
 
@@ -469,14 +461,6 @@ class ModuleHelper(VhdlHelper):
     @property
     def towerCountConditions(self):
         return filter(lambda condition: condition.handle.isTowerCountCondition(), self.conditions)
-
-    @property
-    def cicadaAnomalyDetectionConditions(self):
-        return filter(lambda condition: condition.handle.isCicadaAnomalyDetectionCondition(), self.conditions)
-
-    @property
-    def cicadaHeavyIonConditions(self):
-        return filter(lambda condition: condition.handle.isCicadaHeavyIonCondition(), self.conditions)
 
     @property
     def correlationCombinations(self):
@@ -1001,16 +985,6 @@ class TowerCountConditionHelper(ConditionHelper):
     ReqObjects = 1
     """Number of required objects."""
 
-class CicadaAnomalyDetectionConditionHelper(ConditionHelper):
-    """Cicada Anomaly Detection condition template helper class."""
-    ReqObjects = 2
-    """Number of required objects."""
-
-class CicadaHeavyIonConditionHelper(ConditionHelper):
-    """Cicada Heavy Ion condition template helper class."""
-    ReqObjects = 1
-    """Number of required objects."""
-
 class CorrelationConditionHelper(ConditionHelper):
     """Correlation condition template helper class.
 
@@ -1276,6 +1250,7 @@ class ObjectHelper(VhdlHelper):
         self.charge = ChargeCutHelper('ign')
         self.count = CountCutHelper()
         self.anomalyScore = AnomalyScoreCutHelper(0)
+        self.cicadaScore = CicadaScoreCutHelper(0)
         self.upt = UptCutHelper()
         self.impactParameter = ImpactParameterCutHelper(0xf)
         self.displaced = DisplacedCutHelper()
@@ -1329,6 +1304,8 @@ class ObjectHelper(VhdlHelper):
                 self.count.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.AnomalyScore:
                 self.anomalyScore.update(cut_handle)
+            elif cut_handle.cut_type == tmEventSetup.CicadaScore:
+                self.cicadaScore.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.UnconstrainedPt:
                 self.upt.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.ImpactParameter:
@@ -1446,6 +1423,22 @@ class AnomalyScoreCutHelper(CutHelper):
     def update(self, cut_handle):
         """Updates anomaly score and enables cut."""
         self.value = int(cut_handle.minimum.value)
+        self.enabled = True
+
+class CicadaScoreCutHelper(CutHelper):
+
+    def __init__(self, value=0):
+        super().__init__()
+        self.value = value
+
+    def update(self, cut_handle):
+        """Updates cicada score and enables cut."""
+        self.value = int(cut_handle.minimum.index)
+        #print("===> CicadaScore index",self.value)
+        self.value_int = self.value>>8
+        #print("===> CicadaScore value_int",self.value_int)
+        self.value_dec = int(((self.value / 256) - self.value_int) * 256)
+        #print("===> CicadaScore value_dec",self.value_dec)
         self.enabled = True
 
 class TwoBodyPtCutHelper(ThresholdCutHelper):

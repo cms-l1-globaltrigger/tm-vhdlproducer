@@ -76,8 +76,7 @@
                 "AnomalyDetectionTrigger": "AnomalyDetectionTrigger",
                 "ZDCPlus": "ZDCPlus",
                 "ZDCMinus": "ZDCMinus",
-                "CicadaAnomalyDetectionTrigger": "CicadaAnomalyDetectionTrigger",
-                "CicadaHeavyIonTrigger": "CicadaHeavyIonTrigger"                
+                "CicadaTrigger": "CicadaTrigger"                
             },
             "objects": {
                 "Egamma": "calo",
@@ -115,9 +114,7 @@
                 "ADT": "adt",
                 "ZDCP": "count",
                 "ZDCM": "count",
-                "CICADAADDEC": "cicada",
-                "CICADAADINT": "cicada",
-                "CICADAHI": "cicada",
+                "CICADA": "cicada",
                 "EXT": "ext"
             },
             "cuts": {
@@ -1005,24 +1002,13 @@
                 ]
             },
             {
-                "type": "CicadaAnomalyDetectionTrigger",
-                "objects": [
-                    {
-                        "types": ["cicada", "cicada"],
-                        "processors": 0,
-                        "brams": 0,
-                        "sliceLUTs": 4
-                    }
-                ]
-            },
-            {
-                "type": "CicadaHeavyIonTrigger",
+                "type": "CicadaTrigger",
                 "objects": [
                     {
                         "types": ["cicada"],
                         "processors": 0,
                         "brams": 0,
-                        "sliceLUTs": 2
+                        "sliceLUTs": 4
                     }
                 ]
             },
