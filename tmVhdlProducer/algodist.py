@@ -1310,8 +1310,6 @@ class ModuleCollection:
         # * assigning precision_math
         # * assigning precision_inverse_deltaR
         #
-        #self.precision_cicada_int = 0
-        #self.precision_cicada_dec = 0
         def precision_key(left, right, name):
             """Returns precision key for scales map."""
             left = ObjectGrammarKey[left.type]
@@ -1320,11 +1318,12 @@ class ModuleCollection:
         scales = self.eventSetup.getScaleMapPtr()
 
         for condition in self.condition_handles.values():
-            if condition.type == 73:
+            condition_name = condition.name.split("_")[0]
+            if condition_name == kCicadaTrigger:
                 for object in condition.objects:                
                     for cut in object.cuts:
                         left = condition.objects[0]
-                        right = condition.objects[0]
+                        right = left
                         cut.precision_cicada_int = scales[precision_key(left, right, 'CicadaInteger')].getNbits()
                         cut.precision_cicada_dec = scales[precision_key(left, right, 'CicadaDecimal')].getNbits()
             for cut in condition.cuts:
