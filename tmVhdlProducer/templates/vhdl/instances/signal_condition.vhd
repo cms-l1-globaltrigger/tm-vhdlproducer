@@ -22,13 +22,11 @@ cond_{{ condition.vhdl_signal }}_i: entity work.cicada_ad_hi_condition
         ge_mode => {{ o.operator | vhdl_bool }},
   {%- endif %}
         ad_requ => true,
-        ad_dec_thr => X"{{ o.cicadaScore.value_dec | X04 }}",
-        ad_int_thr => X"{{ o.cicadaScore.value_int | X04 }}"
+        ad_thr => X"{{ o.cicadaScore.value | X04 }}",
     )
     port map(
         lhc_clk => lhc_clk,
-        ad_dec_i => bx_data.cicada_ad_dec({{ o.bx_arr }}),
-        ad_int_i => bx_data.cicada_ad_int({{ o.bx_arr }}),
+        ad_i => bx_data.cicada({{ o.bx_arr }}),
         ad_comp_o => {{ condition.vhdl_signal }}
     );
 {%- elif o.is_signal_type -%}

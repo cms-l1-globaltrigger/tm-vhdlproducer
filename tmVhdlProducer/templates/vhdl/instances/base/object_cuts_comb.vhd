@@ -71,12 +71,3 @@
   {%- if (o1.impactParameter) or (o2.impactParameter) or (o3.impactParameter) or (o4.impactParameter) %}
         ip_luts_obj1 => (X"{{ o1.impactParameter.value | X01 }}", X"{{ o2.impactParameter.value | X01 }}", X"{{ o3.impactParameter.value | X01 }}", X"{{ o4.impactParameter.value | X01 }}"),
   {%- endif %}
-  {%- if hi_bits_requ %}
-        hi_bits_requ => {{ hi_bits_requ | vhdl_bool }},
-        hi_bits_val => X"{{ ad_dec_thr | X02 }}",
-  {%- endif %}
-  {%- if ad_requ %}
-        ad_requ => {{ ad_requ | vhdl_bool }},
-        ad_int_thr => X"{{ ad_int_thr | X02 }}",
-        ad_dec_thr => X"{{ ad_dec_thr | X02 }}",
-  {%- endif %}

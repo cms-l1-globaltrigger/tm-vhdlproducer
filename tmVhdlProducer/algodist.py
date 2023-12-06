@@ -1310,13 +1310,23 @@ class ModuleCollection:
         # * assigning precision_math
         # * assigning precision_inverse_deltaR
         #
+        #self.precision_cicada_int = 0
+        #self.precision_cicada_dec = 0
         def precision_key(left, right, name):
             """Returns precision key for scales map."""
             left = ObjectGrammarKey[left.type]
             right = ObjectGrammarKey[right.type]
             return f'PRECISION-{left}-{right}-{name}'
         scales = self.eventSetup.getScaleMapPtr()
+
         for condition in self.condition_handles.values():
+            if condition.type == 73:
+                for object in condition.objects:                
+                    for cut in object.cuts:
+                        left = condition.objects[0]
+                        right = condition.objects[0]
+                        cut.precision_cicada_int = scales[precision_key(left, right, 'CicadaInteger')].getNbits()
+                        cut.precision_cicada_dec = scales[precision_key(left, right, 'CicadaDecimal')].getNbits()
             for cut in condition.cuts:
                 if cut.cut_type == tmEventSetup.TwoBodyPt:
                     left = condition.objects[0]
@@ -1690,7 +1700,7 @@ def distribute(eventSetup, modules: int, config: str, ratio: float, reverse_sort
 
     # Create empty module collection
     collection = ModuleCollection(eventSetup, tray)
-
+    
     # Diagnostic output
     list_algorithms(collection)
 
@@ -1744,6 +1754,8 @@ def main() -> int:
             collection.setConstraint(k, v)
     # Run distibution
     collection.distribute(args.modules)
+    
+    
 
     list_distribution(collection)
 

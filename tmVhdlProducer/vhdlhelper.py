@@ -1433,12 +1433,9 @@ class CicadaScoreCutHelper(CutHelper):
 
     def update(self, cut_handle):
         """Updates cicada score and enables cut."""
-        self.value = int(cut_handle.minimum.index)
-        #print("===> CicadaScore index",self.value)
-        self.value_int = self.value>>8
-        #print("===> CicadaScore value_int",self.value_int)
-        self.value_dec = int(((self.value / 256) - self.value_int) * 256)
-        #print("===> CicadaScore value_dec",self.value_dec)
+        self.value = cut_handle.minimum.value
+        prec_cicada_dec = cut_handle.precision_cicada_dec
+        self.value = int(self.value * (2**prec_cicada_dec))
         self.enabled = True
 
 class TwoBodyPtCutHelper(ThresholdCutHelper):
