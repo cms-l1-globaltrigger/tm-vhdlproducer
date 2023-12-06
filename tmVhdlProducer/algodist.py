@@ -1318,10 +1318,9 @@ class ModuleCollection:
         scales = self.eventSetup.getScaleMapPtr()
 
         for condition in self.condition_handles.values():
-            condition_name = condition.name.split("_")[0]
-            if condition_name == kCicadaTrigger:
-                for object in condition.objects:                
-                    for cut in object.cuts:
+            for object in condition.objects:                
+                for cut in object.cuts:
+                    if cut.cut_type == tmEventSetup.CicadaScore:
                         left = condition.objects[0]
                         right = left
                         cut.precision_cicada_int = scales[precision_key(left, right, 'CicadaInteger')].getNbits()
