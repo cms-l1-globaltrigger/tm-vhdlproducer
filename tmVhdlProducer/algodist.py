@@ -815,7 +815,10 @@ class ResourceTray:
                     else:
                         logging.warning(f"no object cut entry for cut type: {cut_key}")
                 else:
-                    logging.warning(f"no object cut entry for object type: {object_key}")
+                    if (object_key == "cicada") or (object_key == "adt"):
+                        None
+                    else:
+                        logging.warning(f"no object cut entry for object type: {object_key}")
         payload = Payload(brams, sliceLUTs, processors)
 # =================================================================================
 
