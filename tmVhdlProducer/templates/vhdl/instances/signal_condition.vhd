@@ -21,13 +21,12 @@ cond_{{ condition.vhdl_signal }}_i: entity work.cicada_ad_hi_condition
   {%- if not o.operator %}
         ge_mode => {{ o.operator | vhdl_bool }},
   {%- endif %}
-        ad_requ => true,
-        ad_thr => X"{{ o.cicadaScore.value | X04 }}",
+        cscore => X"{{ o.cicadaScore.value | X04 }}",
     )
     port map(
         lhc_clk => lhc_clk,
-        ad_i => bx_data.cicada({{ o.bx_arr }}),
-        ad_comp_o => {{ condition.vhdl_signal }}
+        cicada_i => bx_data.cicada({{ o.bx_arr }}),
+        c_comp_o => {{ condition.vhdl_signal }}
     );
 {%- elif o.is_signal_type -%}
 {{ condition.vhdl_signal }} <= bx_data.{{ o.type | lower }}({{ o.bx_arr }});
