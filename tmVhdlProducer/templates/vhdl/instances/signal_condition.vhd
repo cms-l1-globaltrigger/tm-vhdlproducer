@@ -16,12 +16,12 @@ cond_{{ condition.vhdl_signal }}_i: entity work.adt_wrapper
         {{ condition.vhdl_signal }}
     );
 {%- elif o.type == "CICADA" -%}
-cond_{{ condition.vhdl_signal }}_i: entity work.cicada_ad_hi_condition
+cond_{{ condition.vhdl_signal }}_i: entity work.cicada_condition
     generic map(
   {%- if not o.operator %}
         ge_mode => {{ o.operator | vhdl_bool }},
   {%- endif %}
-        cscore => X"{{ o.cicadaScore.value | X04 }}",
+        cscore => X"{{ o.cicadaScore.value | X04 }}"
     )
     port map(
         lhc_clk => lhc_clk,
