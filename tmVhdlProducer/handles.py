@@ -56,6 +56,7 @@ ObjectCollectionSize: Dict[int, int] = {
     tmEventSetup.MUSOOT0: 1,
     tmEventSetup.MUSOOT1: 1,
     tmEventSetup.ADT: 1,
+    tmEventSetup.TOPO: 1,
     tmEventSetup.ZDCP: 1,
     tmEventSetup.ZDCM: 1,
     tmEventSetup.CICADA: 1,
@@ -113,6 +114,7 @@ SignalConditionTypes: List[int] = [
     tmEventSetup.MuonShowerOutOfTime0,
     tmEventSetup.MuonShowerOutOfTime1,
     tmEventSetup.AnomalyDetectionTrigger,
+    tmEventSetup.TopologicalTrigger,
     tmEventSetup.CicadaTrigger,
 ]
 
@@ -211,6 +213,7 @@ SignalObjectTypes: List[int] = [
     tmEventSetup.MUSOOT0,
     tmEventSetup.MUSOOT1,
     tmEventSetup.ADT,
+    tmEventSetup.TOPO,
     tmEventSetup.CICADA,
 ]
 """List of signal object types."""
@@ -252,6 +255,7 @@ ObjectsOrder: List[int] = [
     tmEventSetup.MBT1HFP,
     tmEventSetup.TOWERCOUNT,
     tmEventSetup.ADT,
+    tmEventSetup.TOPO,
     tmEventSetup.ZDCP,
     tmEventSetup.ZDCM,
     tmEventSetup.CICADA,

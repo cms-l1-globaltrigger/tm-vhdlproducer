@@ -7,10 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.17.0] - 2023-10-20
+## [2.17.0] - 2023-12-18
 
 ### Added
-- CICADA implementation.
+- CICADA and TOPO implementation.
 
 ## [2.16.0] - 2023-10-10
 

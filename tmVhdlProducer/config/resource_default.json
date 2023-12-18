@@ -74,6 +74,7 @@
                 "InvariantMassOvRm": "CorrelationConditionOvRm",
                 "TransverseMassOvRm": "CorrelationConditionOvRm",
                 "AnomalyDetectionTrigger": "AnomalyDetectionTrigger",
+                "TopologicalTrigger": "TopologicalTrigger",
                 "ZDCPlus": "ZDCPlus",
                 "ZDCMinus": "ZDCMinus",
                 "CicadaTrigger": "CicadaTrigger"                
@@ -112,6 +113,7 @@
                 "MBT1HFM": "bias",
                 "TOWERCOUNT": "count",
                 "ADT": "adt",
+                "TOPO": "topo",
                 "ZDCP": "count",
                 "ZDCM": "count",
                 "CICADA": "cicada",
@@ -973,6 +975,17 @@
                 "objects": [
                     {
                         "types": ["adt"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 8440
+                    }
+                ]
+            },
+            {
+                "type": "TopologicalTrigger",
+                "objects": [
+                    {
+                        "types": ["topo"],
                         "processors": 0,
                         "brams": 0,
                         "sliceLUTs": 8440

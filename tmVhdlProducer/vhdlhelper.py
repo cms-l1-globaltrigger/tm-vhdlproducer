@@ -104,6 +104,7 @@ ObjectTypes: Dict[int, str] = {
     tmEventSetup.ZDCP: tmGrammar.ZDCP,
     tmEventSetup.ZDCM: tmGrammar.ZDCM,
     tmEventSetup.CICADA: tmGrammar.CICADA,
+    tmEventSetup.TOPO: tmGrammar.TOPO,
 }
 
 # Has the number of Objects of each Type
@@ -143,6 +144,7 @@ ObjectCount: Dict[int, int] = {
     tmEventSetup.MUSOOT0:    1,
     tmEventSetup.MUSOOT1:    1,
     tmEventSetup.ADT:        1,
+    tmEventSetup.TOPO:       1,
     tmEventSetup.ZDCP:       1,
     tmEventSetup.ZDCM:       1,
     tmEventSetup.CICADA:     1,
@@ -1231,6 +1233,7 @@ class ObjectHelper(VhdlHelper):
         is_calo_type        [bool]
         is_esums_type       [bool]
         anomalyScore        [AnomalyScoreCutHelper]
+        topologicalScore    [TopologicalScoreCutHelper]
         handle              handle to underlying object handle [None|ObjectHandle]
     """
 
@@ -1250,6 +1253,7 @@ class ObjectHelper(VhdlHelper):
         self.charge = ChargeCutHelper('ign')
         self.count = CountCutHelper()
         self.anomalyScore = AnomalyScoreCutHelper(0)
+        self.topologicalScore = TopologicalScoreCutHelper(0)
         self.cicadaScore = CicadaScoreCutHelper(0)
         self.upt = UptCutHelper()
         self.impactParameter = ImpactParameterCutHelper(0xf)
@@ -1304,6 +1308,8 @@ class ObjectHelper(VhdlHelper):
                 self.count.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.AnomalyScore:
                 self.anomalyScore.update(cut_handle)
+            elif cut_handle.cut_type == tmEventSetup.TopologicalScore:
+                self.topologicalScore.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.CicadaScore:
                 self.cicadaScore.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.UnconstrainedPt:
@@ -1422,6 +1428,17 @@ class AnomalyScoreCutHelper(CutHelper):
 
     def update(self, cut_handle):
         """Updates anomaly score and enables cut."""
+        self.value = int(cut_handle.minimum.value)
+        self.enabled = True
+
+class TopologicalScoreCutHelper(CutHelper):
+
+    def __init__(self, value=0):
+        super().__init__()
+        self.value = value
+
+    def update(self, cut_handle):
+        """Updates topological score and enables cut."""
         self.value = int(cut_handle.minimum.value)
         self.enabled = True
 

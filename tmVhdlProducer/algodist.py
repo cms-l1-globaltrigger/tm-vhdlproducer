@@ -92,6 +92,7 @@ kZDCP: str = 'ZDCP'
 kZDCM: str = 'ZDCM'
 kEXT: str = 'EXT'
 kCICADA: str = 'CICADA'
+kTOPO: str = 'TOPO'
 kPrecision: str = 'Precision'
 
 #
@@ -173,6 +174,7 @@ kTripleJetOvRm: str = 'TripleJetOvRm'
 kQuadJetOvRm: str = 'QuadJetOvRm'
 kAnomalyDetectionTrigger: str = 'AnomalyDetectionTrigger'
 kCicadaTrigger: str = 'CicadaTrigger'
+kTopologicalTrigger: str = 'TopologicalTrigger'
 #
 # Keys for cut types
 #
@@ -202,6 +204,7 @@ kOvRmDeltaPhi: str = 'OvRmDeltaPhi'
 kOvRmDeltaR: str = 'OvRmDeltaR'
 kAnomalyScore: str = 'AnomalyScore'
 kCicadaScore: str = 'CicadaScore'
+kTopologicalScore: str = 'TopologicalScore'
 
 #
 # Operators
@@ -245,6 +248,7 @@ CutTypeKey: Dict[int, str] = {
     tmEventSetup.OvRmDeltaR: kOvRmDeltaR,
     tmEventSetup.AnomalyScore: kAnomalyScore,
     tmEventSetup.CicadaScore: kCicadaScore,
+    tmEventSetup.TopologicalScore: kTopologicalScore,
 }
 """Dictionary for cut type enumerations."""
 
@@ -283,6 +287,7 @@ ObjectTypeKey: Dict[int, str] = {
     tmEventSetup.MBT1HFM: kMBT1HFM,
     tmEventSetup.MBT1HFP: kMBT1HFP,
     tmEventSetup.ADT: kADT,
+    tmEventSetup.TOPO: kTOPO,
     tmEventSetup.ZDCP: kZDCP,
     tmEventSetup.ZDCM: kZDCM,
     tmEventSetup.CICADA: kCICADA,
@@ -329,6 +334,7 @@ ObjectGrammarKey: Dict[int, str] = {
     tmEventSetup.MBT1HFM: tmGrammar.MBT1HFM,
     tmEventSetup.TOWERCOUNT: tmGrammar.TOWERCOUNT,
     tmEventSetup.ADT: tmGrammar.ADT,
+    tmEventSetup.TOPO: tmGrammar.TOPO,
     tmEventSetup.CICADA: tmGrammar.CICADA,
 }
 """Dictionary for object grammar type enumerations."""
@@ -409,6 +415,7 @@ ConditionTypeKey: Dict[int, str] = {
     tmEventSetup.QuadJetOvRm: kQuadJetOvRm,
     tmEventSetup.AnomalyDetectionTrigger: kAnomalyDetectionTrigger,
     tmEventSetup.CicadaTrigger: kCicadaTrigger,
+    tmEventSetup.TopologicalTrigger: kTopologicalTrigger,
 }
 """Dictionary for condition type enumerations."""
 
@@ -483,6 +490,7 @@ def obj_type_to_cat(object_type: int) -> str:
         18: "esums",
         43: "adt",
         46: "cicada",
+        47: "topo",
     }
     if object_type not in switcher:
         raise ValueError(f"invalid object type: {object_type!r}")
