@@ -791,6 +791,8 @@ class ResourceTray:
             for object in condition.objects:
                 if object.name.split('_')[1] == 'ADT':
                     instance_objects = filter_first(lambda item: item.types == ['adt'], instance.objects)
+                elif object.name.split('_')[1] == 'TOPO':
+                    instance_objects = filter_first(lambda item: item.types == ['topo'], instance.objects)
                 else:
                     mapped_objects = self.map_objects(objects_types)
                     instance_objects = filter_first(lambda item: item.types == mapped_objects, instance.objects)
@@ -823,7 +825,7 @@ class ResourceTray:
                     else:
                         logging.warning(f"no object cut entry for cut type: {cut_key}")
                 else:
-                    if (object_key == "cicada") or (object_key == "adt"):
+                    if (object_key == "cicada") or (object_key == "adt") or (object_key == "topo"):
                         None
                     else:
                         logging.warning(f"no object cut entry for object type: {object_key}")

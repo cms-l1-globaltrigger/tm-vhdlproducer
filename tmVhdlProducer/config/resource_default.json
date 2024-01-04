@@ -956,6 +956,12 @@
                         "processors": 0,
                         "brams": 0,
                         "sliceLUTs": 8440
+                    },
+                    {
+                        "types": ["topo"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 8440
                     }
                 ]
             },
