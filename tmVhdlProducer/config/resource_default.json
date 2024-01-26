@@ -112,7 +112,7 @@
                 "MBT0HFM": "bias",
                 "MBT1HFM": "bias",
                 "TOWERCOUNT": "count",
-                "ADT": "adt",
+                "AXOL1TL": "axol1tl",
                 "TOPO": "topo",
                 "ZDCP": "count",
                 "ZDCM": "count",
@@ -952,7 +952,7 @@
                         "sliceLUTs": 0
                     },
                     {
-                        "types": ["adt"],
+                        "types": ["axol1tl"],
                         "processors": 0,
                         "brams": 0,
                         "sliceLUTs": 8440
@@ -980,7 +980,7 @@
                 "type": "AnomalyDetectionTrigger",
                 "objects": [
                     {
-                        "types": ["adt"],
+                        "types": ["axol1tl"],
                         "processors": 0,
                         "brams": 0,
                         "sliceLUTs": 8440

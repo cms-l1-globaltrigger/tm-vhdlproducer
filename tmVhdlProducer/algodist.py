@@ -87,7 +87,7 @@ kMBT0HFM: str = 'MBT0HFM'
 kMBT0HFP: str = 'MBT0HFP'
 kMBT1HFM: str = 'MBT1HFM'
 kMBT1HFP: str = 'MBT1HFP'
-kADT: str = 'ADT'
+kAXOL1TL: str = 'AXOL1TL'
 kZDCP: str = 'ZDCP'
 kZDCM: str = 'ZDCM'
 kEXT: str = 'EXT'
@@ -286,7 +286,7 @@ ObjectTypeKey: Dict[int, str] = {
     tmEventSetup.MBT0HFP: kMBT0HFP,
     tmEventSetup.MBT1HFM: kMBT1HFM,
     tmEventSetup.MBT1HFP: kMBT1HFP,
-    tmEventSetup.ADT: kADT,
+    tmEventSetup.AXOL1TL: kAXOL1TL,
     tmEventSetup.TOPO: kTOPO,
     tmEventSetup.ZDCP: kZDCP,
     tmEventSetup.ZDCM: kZDCM,
@@ -333,7 +333,7 @@ ObjectGrammarKey: Dict[int, str] = {
     tmEventSetup.MBT0HFM: tmGrammar.MBT0HFM,
     tmEventSetup.MBT1HFM: tmGrammar.MBT1HFM,
     tmEventSetup.TOWERCOUNT: tmGrammar.TOWERCOUNT,
-    tmEventSetup.ADT: tmGrammar.ADT,
+    tmEventSetup.AXOL1TL: tmGrammar.AXOL1TL,
     tmEventSetup.TOPO: tmGrammar.TOPO,
     tmEventSetup.CICADA: tmGrammar.CICADA,
 }
@@ -488,7 +488,7 @@ def obj_type_to_cat(object_type: int) -> str:
         7: "esums",
         17: "esums",
         18: "esums",
-        43: "adt",
+        43: "axol1tl",
         46: "cicada",
         47: "topo",
     }
@@ -789,13 +789,8 @@ class ResourceTray:
         objects_types = [ObjectTypeKey[object_.type] for object_ in condition.objects]
         if objects_types[0] == 'EXT':
             for object in condition.objects:
-                if object.name.split('_')[1] == 'ADT':
-                    instance_objects = filter_first(lambda item: item.types == ['adt'], instance.objects)
-                elif object.name.split('_')[1] == 'TOPO':
-                    instance_objects = filter_first(lambda item: item.types == ['topo'], instance.objects)
-                else:
-                    mapped_objects = self.map_objects(objects_types)
-                    instance_objects = filter_first(lambda item: item.types == mapped_objects, instance.objects)
+                mapped_objects = self.map_objects(objects_types)
+                instance_objects = filter_first(lambda item: item.types == mapped_objects, instance.objects)
         else:
             mapped_objects = self.map_objects(objects_types)
             instance_objects = filter_first(lambda item: item.types == mapped_objects, instance.objects)
@@ -814,21 +809,23 @@ class ResourceTray:
         for object in condition.objects:
             object_key = self.map_object(ObjectTypeKey[object.type])
             for cut in object.cuts:
-                cut_key = CutTypeKey[cut.cut_type]
-                object_cuts = self.resources.object_cuts._asdict().get(object_key)
-                if object_cuts is not None:
-                    object_cut = object_cuts._asdict().get(cut_key)
-                    if object_cut is not None:
-                        brams += object_cut.brams * object.slice_size
-                        sliceLUTs += object_cut.sliceLUTs * object.slice_size
-                        processors += object_cut.processors * object.slice_size
+                print("===> cut.cut_type:", cut.cut_type)
+                if cut.cut_type != 27 and cut.cut_type != 26:
+                    cut_key = CutTypeKey[cut.cut_type]
+                    object_cuts = self.resources.object_cuts._asdict().get(object_key)
+                    if object_cuts is not None:
+                        object_cut = object_cuts._asdict().get(cut_key)
+                        if object_cut is not None:
+                            brams += object_cut.brams * object.slice_size
+                            sliceLUTs += object_cut.sliceLUTs * object.slice_size
+                            processors += object_cut.processors * object.slice_size
+                        else:
+                            logging.warning(f"no object cut entry for cut type: {cut_key}")
                     else:
-                        logging.warning(f"no object cut entry for cut type: {cut_key}")
-                else:
-                    if (object_key == "cicada") or (object_key == "adt") or (object_key == "topo"):
-                        None
-                    else:
-                        logging.warning(f"no object cut entry for object type: {object_key}")
+                        if (object_key == "cicada") or (object_key == "axol1tl") or (object_key == "topo"):
+                            None
+                        else:
+                            logging.warning(f"no object cut entry for object type: {object_key}")
         payload = Payload(brams, sliceLUTs, processors)
 # =================================================================================
 
@@ -1331,13 +1328,13 @@ class ModuleCollection:
         scales = self.eventSetup.getScaleMapPtr()
 
         for condition in self.condition_handles.values():
-            for object in condition.objects:                
-                for cut in object.cuts:
-                    if cut.cut_type == tmEventSetup.CicadaScore:
-                        left = condition.objects[0]
-                        right = left
-                        cut.precision_cicada_int = scales[precision_key(left, right, 'CicadaInteger')].getNbits()
-                        cut.precision_cicada_dec = scales[precision_key(left, right, 'CicadaDecimal')].getNbits()
+            #for object in condition.objects:                
+                #for cut in object.cuts:
+                    #if cut.cut_type == tmEventSetup.CicadaScore:
+                        #left = condition.objects[0]
+                        #right = left
+                        ##cut.precision_cicada_int = scales[precision_key(left, right, 'CicadaInteger')].getNbits()
+                        #cut.precision_cscore_values = scales[precision_key(left, right, 'CicadaCscoreValues')].getMaximum()
             for cut in condition.cuts:
                 if cut.cut_type == tmEventSetup.TwoBodyPt:
                     left = condition.objects[0]

@@ -100,7 +100,7 @@ ObjectTypes: Dict[int, str] = {
     tmEventSetup.MUS2: tmGrammar.MUS2,
     tmEventSetup.MUSOOT0: tmGrammar.MUSOOT0,
     tmEventSetup.MUSOOT1: tmGrammar.MUSOOT1,
-    tmEventSetup.ADT: tmGrammar.ADT,
+    tmEventSetup.AXOL1TL: tmGrammar.AXOL1TL,
     tmEventSetup.ZDCP: tmGrammar.ZDCP,
     tmEventSetup.ZDCM: tmGrammar.ZDCM,
     tmEventSetup.CICADA: tmGrammar.CICADA,
@@ -143,7 +143,7 @@ ObjectCount: Dict[int, int] = {
     tmEventSetup.MUS2:       1,
     tmEventSetup.MUSOOT0:    1,
     tmEventSetup.MUSOOT1:    1,
-    tmEventSetup.ADT:        1,
+    tmEventSetup.AXOL1TL:    1,
     tmEventSetup.TOPO:       1,
     tmEventSetup.ZDCP:       1,
     tmEventSetup.ZDCM:       1,
@@ -828,7 +828,7 @@ class AlgorithmHelper(VhdlHelper):
         self.module_index = algorithm_handle.module_index
         self.expression = algorithm_handle.expression
         self.vhdl_signal = vhdl_label(algorithm_handle.name)
-        self.vhdl_expression =  vhdl_expression( algorithm_handle.expression_in_condition )
+        self.vhdl_expression = vhdl_expression(algorithm_handle.expression_in_condition)
         self.conditions = self.collect_conditions(algorithm_handle)
         self.handle = algorithm_handle
 
@@ -1253,7 +1253,9 @@ class ObjectHelper(VhdlHelper):
         self.charge = ChargeCutHelper('ign')
         self.count = CountCutHelper()
         self.anomalyScore = AnomalyScoreCutHelper(0)
+        self.anomalyModel = AnomalyModelCutHelper("")
         self.topologicalScore = TopologicalScoreCutHelper(0)
+        self.topologicalModel = TopologicalModelCutHelper("")
         self.cicadaScore = CicadaScoreCutHelper(0)
         self.upt = UptCutHelper()
         self.impactParameter = ImpactParameterCutHelper(0xf)
@@ -1308,8 +1310,12 @@ class ObjectHelper(VhdlHelper):
                 self.count.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.AnomalyScore:
                 self.anomalyScore.update(cut_handle)
+            elif cut_handle.cut_type == tmEventSetup.AnomalyModel:
+                self.anomalyModel.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.TopologicalScore:
                 self.topologicalScore.update(cut_handle)
+            elif cut_handle.cut_type == tmEventSetup.TopologicalModel:
+                self.topologicalModel.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.CicadaScore:
                 self.cicadaScore.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.UnconstrainedPt:
@@ -1431,6 +1437,17 @@ class AnomalyScoreCutHelper(CutHelper):
         self.value = int(cut_handle.minimum.value)
         self.enabled = True
 
+class AnomalyModelCutHelper(CutHelper):
+
+    def __init__(self, value=""):
+        super().__init__()
+        self.value = value
+
+    def update(self, cut_handle):
+        """Updates anomaly model and enables cut."""
+        self.value = cut_handle.data
+        self.enabled = True
+
 class TopologicalScoreCutHelper(CutHelper):
 
     def __init__(self, value=0):
@@ -1442,6 +1459,17 @@ class TopologicalScoreCutHelper(CutHelper):
         self.value = int(cut_handle.minimum.value)
         self.enabled = True
 
+class TopologicalModelCutHelper(CutHelper):
+
+    def __init__(self, value=""):
+        super().__init__()
+        self.value = value
+
+    def update(self, cut_handle):
+        """Updates topological model and enables cut."""
+        self.value = cut_handle.data
+        self.enabled = True
+
 class CicadaScoreCutHelper(CutHelper):
 
     def __init__(self, value=0):
@@ -1450,9 +1478,7 @@ class CicadaScoreCutHelper(CutHelper):
 
     def update(self, cut_handle):
         """Updates cicada score and enables cut."""
-        self.value = cut_handle.minimum.value
-        prec_cicada_dec = cut_handle.precision_cicada_dec
-        self.value = int(self.value * (2**prec_cicada_dec))
+        self.value = cut_handle.maximum.value
         self.enabled = True
 
 class TwoBodyPtCutHelper(ThresholdCutHelper):

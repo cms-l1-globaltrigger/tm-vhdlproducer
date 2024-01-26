@@ -55,7 +55,7 @@ ObjectCollectionSize: Dict[int, int] = {
     tmEventSetup.MUS2: 1,
     tmEventSetup.MUSOOT0: 1,
     tmEventSetup.MUSOOT1: 1,
-    tmEventSetup.ADT: 1,
+    tmEventSetup.AXOL1TL: 1,
     tmEventSetup.TOPO: 1,
     tmEventSetup.ZDCP: 1,
     tmEventSetup.ZDCM: 1,
@@ -212,7 +212,7 @@ SignalObjectTypes: List[int] = [
     tmEventSetup.MUS2,
     tmEventSetup.MUSOOT0,
     tmEventSetup.MUSOOT1,
-    tmEventSetup.ADT,
+    tmEventSetup.AXOL1TL,
     tmEventSetup.TOPO,
     tmEventSetup.CICADA,
 ]
@@ -254,7 +254,7 @@ ObjectsOrder: List[int] = [
     tmEventSetup.MBT1HFM,
     tmEventSetup.MBT1HFP,
     tmEventSetup.TOWERCOUNT,
-    tmEventSetup.ADT,
+    tmEventSetup.AXOL1TL,
     tmEventSetup.TOPO,
     tmEventSetup.ZDCP,
     tmEventSetup.ZDCM,
@@ -347,8 +347,7 @@ class CutHandle(Handle):
         self.precision_pt = 0
         self.precision_math = 0
         self.precision_inverse_dr = 0
-        self.precision_cicada_int = 0
-        self.precision_cicada_dec = 0
+        #self.precision_cscore_values = 0.
 
     def __repr__(self):
         return f"{self.__class__.__name__}(name={self.name})"
