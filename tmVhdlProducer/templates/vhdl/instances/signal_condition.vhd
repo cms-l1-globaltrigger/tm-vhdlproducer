@@ -1,6 +1,6 @@
 {%- set o = condition.objects[0] -%}
 {%- if o.type == "AXOL1TL" -%}
-cond_{{ condition.vhdl_signal }}_i: entity work.axol1tl_{{ o.anomalyModel.value }}_wrapper
+cond_{{ condition.vhdl_signal }}: entity work.axol1tl_{{ o.anomalyModel.value }}_wrapper
     generic map(false, {{ o.anomalyScore.value }})
     port map(
         lhc_clk,
@@ -16,7 +16,7 @@ cond_{{ condition.vhdl_signal }}_i: entity work.axol1tl_{{ o.anomalyModel.value 
         {{ condition.vhdl_signal }}
     );
 {%- elif o.type == "TOPO" -%}
-cond_{{ condition.vhdl_signal }}_i: entity work.topo_{{ o.topologicalModel.value }}_wrapper
+cond_{{ condition.vhdl_signal }}: entity work.topo_{{ o.topologicalModel.value }}_wrapper
     generic map({{ o.topologicalScore.value }})
     port map(
         lhc_clk,
@@ -32,7 +32,7 @@ cond_{{ condition.vhdl_signal }}_i: entity work.topo_{{ o.topologicalModel.value
         {{ condition.vhdl_signal }}
     );
 {%- elif o.type == "CICADA" -%}
-cond_{{ condition.vhdl_signal }}_i: entity work.cicada_condition
+cond_{{ condition.vhdl_signal }}: entity work.cicada_condition
     generic map(
   {%- if not o.operator %}
         ge_mode => {{ o.operator | vhdl_bool }},

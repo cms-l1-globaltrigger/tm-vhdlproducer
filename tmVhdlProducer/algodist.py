@@ -1319,6 +1319,7 @@ class ModuleCollection:
         # * assigning precision_pt
         # * assigning precision_math
         # * assigning precision_inverse_deltaR
+        # * assigning precision_cscore_values
         #
         def precision_key(left, right, name):
             """Returns precision key for scales map."""
@@ -1328,13 +1329,12 @@ class ModuleCollection:
         scales = self.eventSetup.getScaleMapPtr()
 
         for condition in self.condition_handles.values():
-            #for object in condition.objects:                
-                #for cut in object.cuts:
-                    #if cut.cut_type == tmEventSetup.CicadaScore:
-                        #left = condition.objects[0]
-                        #right = left
-                        ##cut.precision_cicada_int = scales[precision_key(left, right, 'CicadaInteger')].getNbits()
-                        #cut.precision_cscore_values = scales[precision_key(left, right, 'CicadaCscoreValues')].getMaximum()
+            for object in condition.objects:                
+                for cut in object.cuts:
+                    if cut.cut_type == tmEventSetup.CicadaScore:
+                        left = condition.objects[0]
+                        right = left
+                        cut.precision_cscore_values = scales[precision_key(left, right, 'CscoreValues')].getMaximum()
             for cut in condition.cuts:
                 if cut.cut_type == tmEventSetup.TwoBodyPt:
                     left = condition.objects[0]

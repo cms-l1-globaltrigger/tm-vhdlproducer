@@ -347,7 +347,7 @@ class CutHandle(Handle):
         self.precision_pt = 0
         self.precision_math = 0
         self.precision_inverse_dr = 0
-        #self.precision_cscore_values = 0.
+        self.precision_cscore_values = 0.
 
     def __repr__(self):
         return f"{self.__class__.__name__}(name={self.name})"
