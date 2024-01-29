@@ -16,7 +16,7 @@ cond_{{ condition.vhdl_signal }}: entity work.axol1tl_{{ o.anomalyModel.value }}
         {{ condition.vhdl_signal }}
     );
 {%- elif o.type == "TOPO" -%}
-cond_{{ condition.vhdl_signal }}: entity work.topo_{{ o.topologicalModel.value }}_wrapper
+cond_{{ condition.vhdl_signal }}: entity work.topo_trigger_{{ o.topologicalModel.value }}_wrapper
     generic map({{ o.topologicalScore.value }})
     port map(
         lhc_clk,
