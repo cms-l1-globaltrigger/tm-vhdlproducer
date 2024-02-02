@@ -205,6 +205,8 @@ kOvRmDeltaR: str = 'OvRmDeltaR'
 kAnomalyScore: str = 'AnomalyScore'
 kCicadaScore: str = 'CicadaScore'
 kTopologicalScore: str = 'TopologicalScore'
+kAnomalyModel: str = 'AnomalyModel'
+kTopologicalModel: str = 'TopologicalModel'
 
 #
 # Operators
@@ -249,6 +251,8 @@ CutTypeKey: Dict[int, str] = {
     tmEventSetup.AnomalyScore: kAnomalyScore,
     tmEventSetup.CicadaScore: kCicadaScore,
     tmEventSetup.TopologicalScore: kTopologicalScore,
+    tmEventSetup.AnomalyModel: kAnomalyModel,
+    tmEventSetup.TopologicalModel: kTopologicalModel,
 }
 """Dictionary for cut type enumerations."""
 
@@ -809,23 +813,32 @@ class ResourceTray:
         for object in condition.objects:
             object_key = self.map_object(ObjectTypeKey[object.type])
             for cut in object.cuts:
-                print("===> cut.cut_type:", cut.cut_type)
-                if cut.cut_type != 27 and cut.cut_type != 26:
-                    cut_key = CutTypeKey[cut.cut_type]
-                    object_cuts = self.resources.object_cuts._asdict().get(object_key)
-                    if object_cuts is not None:
-                        object_cut = object_cuts._asdict().get(cut_key)
-                        if object_cut is not None:
-                            brams += object_cut.brams * object.slice_size
-                            sliceLUTs += object_cut.sliceLUTs * object.slice_size
-                            processors += object_cut.processors * object.slice_size
-                        else:
-                            logging.warning(f"no object cut entry for cut type: {cut_key}")
+                cut_key = CutTypeKey[cut.cut_type]
+                object_cuts = self.resources.object_cuts._asdict().get(object_key)
+                if object_cuts is not None:
+                    object_cut = object_cuts._asdict().get(cut_key)
+                    if object_cut is not None:
+                        brams += object_cut.brams * object.slice_size
+                        sliceLUTs += object_cut.sliceLUTs * object.slice_size
+                        processors += object_cut.processors * object.slice_size
+                        # add optional cut data dependent resources
+                        data_cut = object_cut._asdict().get("data")
+                        if data_cut is not None:
+                            for data_key, cut_data in data_cut._asdict().items():
+                                if cut.data == data_key:  # TODO extend with regex in future
+                                    brams += cut_data.brams * object.slice_size
+                                    sliceLUTs += cut_data.sliceLUTs * object.slice_size
+                                    processors += cut_data.processors * object.slice_size
+
+                        # for data_key, cut_data in object_cut._asdict().get("data", {}).items():  # + .items()
+                        #     if cut.data == data_key:  # TODO extend with regex in future
+                        #         brams += cut_data.brams * object.slice_size
+                        #         sliceLUTs += cut_data.sliceLUTs * object.slice_size
+                        #         processors += cut_data.processors * object.slice_size
                     else:
-                        if (object_key == "cicada") or (object_key == "axol1tl") or (object_key == "topo"):
-                            None
-                        else:
-                            logging.warning(f"no object cut entry for object type: {object_key}")
+                        logging.warning(f"no object cut entry for cut type: {cut_key}")
+                else:
+                    logging.warning(f"no object cut entry for object type: {object_key}")
         payload = Payload(brams, sliceLUTs, processors)
 # =================================================================================
 

@@ -391,6 +391,49 @@
                     "brams": 0,
                     "sliceLUTs": 2
                 }
+            },
+            "axol1tl": {
+                "AnomalyModel": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 0,
+                    "data": {
+                        "v1": {
+                            "processors": 0,
+                            "brams": 0,
+                            "sliceLUTs": 8000
+                        },
+                        "v3": {
+                            "processors": 0,
+                            "brams": 0,
+                            "sliceLUTs": 7736
+                        }
+                    }
+                }
+            },
+            "topo": {
+                "TopologicalModel": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 0,
+                    "data": {
+                        "hh_ele": {
+                            "processors": 0,
+                            "brams": 0,
+                            "sliceLUTs": 541
+                        },
+                        "hh_had": {
+                            "processors": 0,
+                            "brams": 0,
+                            "sliceLUTs": 600
+                        },
+                        "hh_mu": {
+                            "processors": 0,
+                            "brams": 0,
+                            "sliceLUTs": 800
+                        }
+                    }
+                }
             }
         },
         "instances": [
@@ -950,18 +993,6 @@
                         "processors": 0,
                         "brams": 0,
                         "sliceLUTs": 0
-                    },
-                    {
-                        "types": ["axol1tl"],
-                        "processors": 0,
-                        "brams": 0,
-                        "sliceLUTs": 8440
-                    },
-                    {
-                        "types": ["topo"],
-                        "processors": 0,
-                        "brams": 0,
-                        "sliceLUTs": 8440
                     }
                 ]
             },
@@ -983,7 +1014,7 @@
                         "types": ["axol1tl"],
                         "processors": 0,
                         "brams": 0,
-                        "sliceLUTs": 8440
+                        "sliceLUTs": 0
                     }
                 ]
             },
@@ -994,7 +1025,7 @@
                         "types": ["topo"],
                         "processors": 0,
                         "brams": 0,
-                        "sliceLUTs": 8440
+                        "sliceLUTs": 0
                     }
                 ]
             },
