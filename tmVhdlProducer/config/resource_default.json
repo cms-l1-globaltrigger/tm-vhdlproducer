@@ -73,7 +73,7 @@
                 "CaloCaloCorrelationOvRm": "CorrelationConditionOvRm",
                 "InvariantMassOvRm": "CorrelationConditionOvRm",
                 "TransverseMassOvRm": "CorrelationConditionOvRm",
-                "AnomalyDetectionTrigger": "AnomalyDetectionTrigger",
+                "Axol1tlTrigger": "Axol1tlTrigger",
                 "TopologicalTrigger": "TopologicalTrigger",
                 "ZDCPlus": "ZDCPlus",
                 "ZDCMinus": "ZDCMinus",
@@ -1008,7 +1008,7 @@
                 ]
             },
             {
-                "type": "AnomalyDetectionTrigger",
+                "type": "Axol1tlTrigger",
                 "objects": [
                     {
                         "types": ["axol1tl"],

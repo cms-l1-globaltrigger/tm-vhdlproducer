@@ -172,7 +172,7 @@ kSingleJetOvRm: str = 'SingleJetOvRm'
 kDoubleJetOvRm: str = 'DoubleJetOvRm'
 kTripleJetOvRm: str = 'TripleJetOvRm'
 kQuadJetOvRm: str = 'QuadJetOvRm'
-kAnomalyDetectionTrigger: str = 'AnomalyDetectionTrigger'
+kAxol1tlTrigger: str = 'Axol1tlTrigger'
 kCicadaTrigger: str = 'CicadaTrigger'
 kTopologicalTrigger: str = 'TopologicalTrigger'
 #
@@ -417,7 +417,7 @@ ConditionTypeKey: Dict[int, str] = {
     tmEventSetup.DoubleJetOvRm: kDoubleJetOvRm,
     tmEventSetup.TripleJetOvRm: kTripleJetOvRm,
     tmEventSetup.QuadJetOvRm: kQuadJetOvRm,
-    tmEventSetup.AnomalyDetectionTrigger: kAnomalyDetectionTrigger,
+    tmEventSetup.Axol1tlTrigger: kAxol1tlTrigger,
     tmEventSetup.CicadaTrigger: kCicadaTrigger,
     tmEventSetup.TopologicalTrigger: kTopologicalTrigger,
 }
@@ -528,7 +528,6 @@ class ResourceTray:
     kCorrelationCondition = 'CorrelationCondition'
     kCorrelation3Condition = 'Correlation3Condition'
     kCorrelationConditionOvRm = 'CorrelationConditionOvRm'
-    #kAnomalyDetectionTrigger = 'AnomalyDetectionTrigger'
 
     def __init__(self, filename):
         """Attribute *filename* is a filename of an JSON payload configuration file."""
@@ -693,7 +692,6 @@ class ResourceTray:
         # instance
         instance = self.map_instance(ConditionTypeKey[condition.type])
         # select
-        #if instance in (self.kMuonCondition, self.kCaloCondition, self.kCaloConditionOvRm, self.kAnomalyDetectionTrigger):
         if instance in (self.kMuonCondition, self.kCaloCondition, self.kCaloConditionOvRm):
             return n_objects * n_requirements
         elif instance == self.kCorrelationCondition:

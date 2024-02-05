@@ -113,7 +113,7 @@ SignalConditionTypes: List[int] = [
     tmEventSetup.MuonShower2,
     tmEventSetup.MuonShowerOutOfTime0,
     tmEventSetup.MuonShowerOutOfTime1,
-    tmEventSetup.AnomalyDetectionTrigger,
+    tmEventSetup.Axol1tlTrigger,
     tmEventSetup.TopologicalTrigger,
     tmEventSetup.CicadaTrigger,
 ]
