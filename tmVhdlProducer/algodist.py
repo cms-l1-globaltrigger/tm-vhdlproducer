@@ -423,6 +423,18 @@ ConditionTypeKey: Dict[int, str] = {
 }
 """Dictionary for condition type enumerations."""
 
+ValidAmodels: List[str] = [
+    "v1",
+    "v3",
+]
+
+ValidTmodels: List[str] = [
+    "hh_ele_v1",
+    "hh_had_v1",
+    "hh_mu_v1",
+]
+"""Valid models for axol1tl and topological (AMODEL and TMODEL)."""
+
 #
 # Functions
 #
@@ -820,19 +832,25 @@ class ResourceTray:
                         sliceLUTs += object_cut.sliceLUTs * object.slice_size
                         processors += object_cut.processors * object.slice_size
                         # add optional cut data dependent resources
+                        amodel_ok = False
+                        tmodel_ok = False
                         data_cut = object_cut._asdict().get("data")
                         if data_cut is not None:
+                            for amodel in ValidAmodels:
+                                if cut.data == amodel: amodel_ok = True
+                            for tmodel in ValidTmodels:
+                                if cut.data == tmodel: tmodel_ok = True
+                            if not (amodel_ok or tmodel_ok):
+                                message = f"not a valid model for AMODEL or TMODEL cuts: {cut.data} -" \
+                                    f" valid models for AMODEL are: {ValidAmodels}, for TMODEL: {ValidTmodels}"
+                                raise RuntimeError(message)
+                            amodel_ok = False
+                            tmodel_ok = False
                             for data_key, cut_data in data_cut._asdict().items():
                                 if cut.data == data_key:  # TODO extend with regex in future
                                     brams += cut_data.brams * object.slice_size
                                     sliceLUTs += cut_data.sliceLUTs * object.slice_size
                                     processors += cut_data.processors * object.slice_size
-
-                        # for data_key, cut_data in object_cut._asdict().get("data", {}).items():  # + .items()
-                        #     if cut.data == data_key:  # TODO extend with regex in future
-                        #         brams += cut_data.brams * object.slice_size
-                        #         sliceLUTs += cut_data.sliceLUTs * object.slice_size
-                        #         processors += cut_data.processors * object.slice_size
                     else:
                         logging.warning(f"no object cut entry for cut type: {cut_key}")
                 else:

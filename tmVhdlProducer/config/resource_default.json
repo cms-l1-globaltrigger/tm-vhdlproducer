@@ -393,6 +393,11 @@
                 }
             },
             "axol1tl": {
+                "AnomalyScore": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 0
+                },
                 "AnomalyModel": {
                     "processors": 0,
                     "brams": 0,
@@ -411,23 +416,35 @@
                     }
                 }
             },
+            "cicada": {
+                "CicadaScore": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 4
+                }
+            },
             "topo": {
+                "TopologicalScore": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 0
+                },
                 "TopologicalModel": {
                     "processors": 0,
                     "brams": 0,
                     "sliceLUTs": 0,
                     "data": {
-                        "hh_ele": {
+                        "hh_ele_v1": {
                             "processors": 0,
                             "brams": 0,
                             "sliceLUTs": 541
                         },
-                        "hh_had": {
+                        "hh_had_v1": {
                             "processors": 0,
                             "brams": 0,
                             "sliceLUTs": 600
                         },
-                        "hh_mu": {
+                        "hh_mu_v1": {
                             "processors": 0,
                             "brams": 0,
                             "sliceLUTs": 800
@@ -1058,7 +1075,7 @@
                         "types": ["cicada"],
                         "processors": 0,
                         "brams": 0,
-                        "sliceLUTs": 4
+                        "sliceLUTs": 0
                     }
                 ]
             },
