@@ -406,7 +406,7 @@
                         "v1": {
                             "processors": 0,
                             "brams": 0,
-                            "sliceLUTs": 8000
+                            "sliceLUTs": 1639
                         },
                         "v3": {
                             "processors": 0,
@@ -437,17 +437,17 @@
                         "hh_ele_v1": {
                             "processors": 0,
                             "brams": 0,
-                            "sliceLUTs": 541
+                            "sliceLUTs": 581
                         },
                         "hh_had_v1": {
                             "processors": 0,
                             "brams": 0,
-                            "sliceLUTs": 600
+                            "sliceLUTs": 581
                         },
                         "hh_mu_v1": {
                             "processors": 0,
                             "brams": 0,
-                            "sliceLUTs": 800
+                            "sliceLUTs": 581
                         }
                     }
                 }
