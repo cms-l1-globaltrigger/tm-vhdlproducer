@@ -73,10 +73,11 @@
                 "CaloCaloCorrelationOvRm": "CorrelationConditionOvRm",
                 "InvariantMassOvRm": "CorrelationConditionOvRm",
                 "TransverseMassOvRm": "CorrelationConditionOvRm",
-                "Axol1tlTrigger": "Axol1tlTrigger",
-                "TopologicalTrigger": "TopologicalTrigger",
+                "AnomalyDetectionTrigger": "AnomalyDetectionTrigger",
                 "ZDCPlus": "ZDCPlus",
                 "ZDCMinus": "ZDCMinus",
+                "AxoTrigger": "AxoTrigger",
+                "TopologicalTrigger": "TopologicalTrigger",
                 "CicadaTrigger": "CicadaTrigger"                
             },
             "objects": {
@@ -112,7 +113,7 @@
                 "MBT0HFM": "bias",
                 "MBT1HFM": "bias",
                 "TOWERCOUNT": "count",
-                "AXOL1TL": "axol1tl",
+                "AXO": "axo",
                 "TOPO": "topo",
                 "ZDCP": "count",
                 "ZDCM": "count",
@@ -392,13 +393,13 @@
                     "sliceLUTs": 2
                 }
             },
-            "axol1tl": {
-                "AnomalyScore": {
+            "axo": {
+                "Score": {
                     "processors": 0,
                     "brams": 0,
                     "sliceLUTs": 0
                 },
-                "AnomalyModel": {
+                "Model": {
                     "processors": 0,
                     "brams": 0,
                     "sliceLUTs": 0,
@@ -424,12 +425,12 @@
                 }
             },
             "topo": {
-                "TopologicalScore": {
+                "Score": {
                     "processors": 0,
                     "brams": 0,
                     "sliceLUTs": 0
                 },
-                "TopologicalModel": {
+                "Model": {
                     "processors": 0,
                     "brams": 0,
                     "sliceLUTs": 0,
@@ -1025,10 +1026,21 @@
                 ]
             },
             {
-                "type": "Axol1tlTrigger",
+                "type": "AnomalyDetectionTrigger",
                 "objects": [
                     {
-                        "types": ["axol1tl"],
+                        "types": ["adt"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 7736
+                    }
+                ]
+            },
+            {
+                "type": "AxoTrigger",
+                "objects": [
+                    {
+                        "types": ["axo"],
                         "processors": 0,
                         "brams": 0,
                         "sliceLUTs": 0

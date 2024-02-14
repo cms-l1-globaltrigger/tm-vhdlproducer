@@ -87,12 +87,13 @@ kMBT0HFM: str = 'MBT0HFM'
 kMBT0HFP: str = 'MBT0HFP'
 kMBT1HFM: str = 'MBT1HFM'
 kMBT1HFP: str = 'MBT1HFP'
-kAXOL1TL: str = 'AXOL1TL'
+kADT: str = 'ADT'
 kZDCP: str = 'ZDCP'
 kZDCM: str = 'ZDCM'
-kEXT: str = 'EXT'
-kCICADA: str = 'CICADA'
+kAXO: str = 'AXO'
 kTOPO: str = 'TOPO'
+kCICADA: str = 'CICADA'
+kEXT: str = 'EXT'
 kPrecision: str = 'Precision'
 
 #
@@ -172,9 +173,10 @@ kSingleJetOvRm: str = 'SingleJetOvRm'
 kDoubleJetOvRm: str = 'DoubleJetOvRm'
 kTripleJetOvRm: str = 'TripleJetOvRm'
 kQuadJetOvRm: str = 'QuadJetOvRm'
-kAxol1tlTrigger: str = 'Axol1tlTrigger'
-kCicadaTrigger: str = 'CicadaTrigger'
+kAnomalyDetectionTrigger: str = 'AnomalyDetectionTrigger'
+kAxoTrigger: str = 'AxoTrigger'
 kTopologicalTrigger: str = 'TopologicalTrigger'
+kCicadaTrigger: str = 'CicadaTrigger'
 #
 # Keys for cut types
 #
@@ -203,10 +205,9 @@ kOvRmDeltaEta: str = 'OvRmDeltaEta'
 kOvRmDeltaPhi: str = 'OvRmDeltaPhi'
 kOvRmDeltaR: str = 'OvRmDeltaR'
 kAnomalyScore: str = 'AnomalyScore'
+kScore: str = 'Score'
 kCicadaScore: str = 'CicadaScore'
-kTopologicalScore: str = 'TopologicalScore'
-kAnomalyModel: str = 'AnomalyModel'
-kTopologicalModel: str = 'TopologicalModel'
+kModel: str = 'Model'
 
 #
 # Operators
@@ -249,10 +250,9 @@ CutTypeKey: Dict[int, str] = {
     tmEventSetup.OvRmDeltaPhi: kOvRmDeltaPhi,
     tmEventSetup.OvRmDeltaR: kOvRmDeltaR,
     tmEventSetup.AnomalyScore: kAnomalyScore,
+    tmEventSetup.Score: kScore,
+    tmEventSetup.Model: kModel,
     tmEventSetup.CicadaScore: kCicadaScore,
-    tmEventSetup.TopologicalScore: kTopologicalScore,
-    tmEventSetup.AnomalyModel: kAnomalyModel,
-    tmEventSetup.TopologicalModel: kTopologicalModel,
 }
 """Dictionary for cut type enumerations."""
 
@@ -290,10 +290,11 @@ ObjectTypeKey: Dict[int, str] = {
     tmEventSetup.MBT0HFP: kMBT0HFP,
     tmEventSetup.MBT1HFM: kMBT1HFM,
     tmEventSetup.MBT1HFP: kMBT1HFP,
-    tmEventSetup.AXOL1TL: kAXOL1TL,
-    tmEventSetup.TOPO: kTOPO,
+    tmEventSetup.ADT: kADT,
     tmEventSetup.ZDCP: kZDCP,
     tmEventSetup.ZDCM: kZDCM,
+    tmEventSetup.AXO: kAXO,
+    tmEventSetup.TOPO: kTOPO,
     tmEventSetup.CICADA: kCICADA,
     tmEventSetup.EXT: kEXT,
     tmEventSetup.Precision: kPrecision,
@@ -337,7 +338,8 @@ ObjectGrammarKey: Dict[int, str] = {
     tmEventSetup.MBT0HFM: tmGrammar.MBT0HFM,
     tmEventSetup.MBT1HFM: tmGrammar.MBT1HFM,
     tmEventSetup.TOWERCOUNT: tmGrammar.TOWERCOUNT,
-    tmEventSetup.AXOL1TL: tmGrammar.AXOL1TL,
+    tmEventSetup.ADT: tmGrammar.ADT,
+    tmEventSetup.AXO: tmGrammar.AXO,
     tmEventSetup.TOPO: tmGrammar.TOPO,
     tmEventSetup.CICADA: tmGrammar.CICADA,
 }
@@ -417,7 +419,8 @@ ConditionTypeKey: Dict[int, str] = {
     tmEventSetup.DoubleJetOvRm: kDoubleJetOvRm,
     tmEventSetup.TripleJetOvRm: kTripleJetOvRm,
     tmEventSetup.QuadJetOvRm: kQuadJetOvRm,
-    tmEventSetup.Axol1tlTrigger: kAxol1tlTrigger,
+    tmEventSetup.AnomalyDetectionTrigger: kAnomalyDetectionTrigger,
+    tmEventSetup.AxoTrigger: kAxoTrigger,
     tmEventSetup.CicadaTrigger: kCicadaTrigger,
     tmEventSetup.TopologicalTrigger: kTopologicalTrigger,
 }
@@ -433,7 +436,7 @@ ValidTmodels: List[str] = [
     "hh_had_v1",
     "hh_mu_v1",
 ]
-"""Valid models for axol1tl and topological (AMODEL and TMODEL)."""
+"""Valid models for axol1tl and topological."""
 
 #
 # Functions
@@ -504,9 +507,10 @@ def obj_type_to_cat(object_type: int) -> str:
         7: "esums",
         17: "esums",
         18: "esums",
-        43: "axol1tl",
+        43: "adt",
         46: "cicada",
-        47: "topo",
+        47: "axo",
+        48: "topo",
     }
     if object_type not in switcher:
         raise ValueError(f"invalid object type: {object_type!r}")
@@ -792,6 +796,7 @@ class ResourceTray:
 
         # Pick resource instance
         instance = self.find_instance(condition)
+        print("===> instance:", instance)
         if not instance:
             condition_type = ConditionTypeKey[condition.type]
             objects_types = [ObjectTypeKey[object_.type] for object_ in condition.objects]
@@ -841,8 +846,8 @@ class ResourceTray:
                             for tmodel in ValidTmodels:
                                 if cut.data == tmodel: tmodel_ok = True
                             if not (amodel_ok or tmodel_ok):
-                                message = f"not a valid model for AMODEL or TMODEL cuts: {cut.data} -" \
-                                    f" valid models for AMODEL are: {ValidAmodels}, for TMODEL: {ValidTmodels}"
+                                message = f"not a valid model for AXOL1TL or TOPO model cuts: {cut.data} -" \
+                                    f" valid models for AXOL1TL are: {ValidAmodels}, for TOPO: {ValidTmodels}"
                                 raise RuntimeError(message)
                             amodel_ok = False
                             tmodel_ok = False
