@@ -113,6 +113,7 @@
                 "MBT0HFM": "bias",
                 "MBT1HFM": "bias",
                 "TOWERCOUNT": "count",
+                "ADT": "adt",
                 "AXO": "axo",
                 "TOPO": "topo",
                 "ZDCP": "count",

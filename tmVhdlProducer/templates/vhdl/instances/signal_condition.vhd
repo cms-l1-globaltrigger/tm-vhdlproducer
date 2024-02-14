@@ -16,8 +16,8 @@ cond_{{ condition.vhdl_signal }}_i: entity work.adt_wrapper
         {{ condition.vhdl_signal }}
     );
 {%- elif o.type == "AXO" -%}
-cond_{{ condition.vhdl_signal }}: entity work.axol1tl_{{ o.anomalyModel.value }}_wrapper
-    generic map(false, {{ o.anomalyScore.value }})
+cond_{{ condition.vhdl_signal }}: entity work.axol1tl_{{ o.model.value }}_wrapper
+    generic map(false, {{ o.score.value }})
     port map(
         lhc_clk,
         bx_data.mu({{ o.bx_arr }}),
@@ -32,8 +32,8 @@ cond_{{ condition.vhdl_signal }}: entity work.axol1tl_{{ o.anomalyModel.value }}
         {{ condition.vhdl_signal }}
     );
 {%- elif o.type == "TOPO" -%}
-cond_{{ condition.vhdl_signal }}: entity work.topo_trigger_{{ o.topologicalModel.value }}_wrapper
-    generic map({{ o.topologicalScore.value }})
+cond_{{ condition.vhdl_signal }}: entity work.topo_trigger_{{ o.model.value }}_wrapper
+    generic map({{ o.score.value }})
     port map(
         lhc_clk,
         bx_data.mu({{ o.bx_arr }}),
