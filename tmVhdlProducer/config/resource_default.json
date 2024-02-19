@@ -76,7 +76,7 @@
                 "AnomalyDetectionTrigger": "AnomalyDetectionTrigger",
                 "ZDCPlus": "ZDCPlus",
                 "ZDCMinus": "ZDCMinus",
-                "AxoTrigger": "AxoTrigger",
+                "Axol1tlTrigger": "Axol1tlTrigger",
                 "TopologicalTrigger": "TopologicalTrigger",
                 "CicadaTrigger": "CicadaTrigger"                
             },
@@ -114,11 +114,11 @@
                 "MBT1HFM": "bias",
                 "TOWERCOUNT": "count",
                 "ADT": "adt",
-                "AXO": "axo",
-                "TOPO": "topo",
+                "Axol1tl": "axol1tl",
+                "Topological": "topological",
                 "ZDCP": "count",
                 "ZDCM": "count",
-                "CICADA": "cicada",
+                "Cicada": "cicada",
                 "EXT": "ext"
             },
             "cuts": {
@@ -394,7 +394,7 @@
                     "sliceLUTs": 2
                 }
             },
-            "axo": {
+            "axol1tl": {
                 "Score": {
                     "processors": 0,
                     "brams": 0,
@@ -425,7 +425,7 @@
                     "sliceLUTs": 4
                 }
             },
-            "topo": {
+            "topological": {
                 "Score": {
                     "processors": 0,
                     "brams": 0,
@@ -1038,10 +1038,10 @@
                 ]
             },
             {
-                "type": "AxoTrigger",
+                "type": "Axol1tlTrigger",
                 "objects": [
                     {
-                        "types": ["axo"],
+                        "types": ["axol1tl"],
                         "processors": 0,
                         "brams": 0,
                         "sliceLUTs": 0
@@ -1052,7 +1052,7 @@
                 "type": "TopologicalTrigger",
                 "objects": [
                     {
-                        "types": ["topo"],
+                        "types": ["topological"],
                         "processors": 0,
                         "brams": 0,
                         "sliceLUTs": 0

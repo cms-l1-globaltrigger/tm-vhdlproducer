@@ -90,9 +90,9 @@ kMBT1HFP: str = 'MBT1HFP'
 kADT: str = 'ADT'
 kZDCP: str = 'ZDCP'
 kZDCM: str = 'ZDCM'
-kAXO: str = 'AXO'
-kTOPO: str = 'TOPO'
-kCICADA: str = 'CICADA'
+kAxol1tl: str = 'Axol1tl'
+kTopological: str = 'Topological'
+kCicada: str = 'Cicada'
 kEXT: str = 'EXT'
 kPrecision: str = 'Precision'
 
@@ -174,7 +174,7 @@ kDoubleJetOvRm: str = 'DoubleJetOvRm'
 kTripleJetOvRm: str = 'TripleJetOvRm'
 kQuadJetOvRm: str = 'QuadJetOvRm'
 kAnomalyDetectionTrigger: str = 'AnomalyDetectionTrigger'
-kAxoTrigger: str = 'AxoTrigger'
+kAxol1tlTrigger: str = 'Axol1tlTrigger'
 kTopologicalTrigger: str = 'TopologicalTrigger'
 kCicadaTrigger: str = 'CicadaTrigger'
 #
@@ -293,9 +293,9 @@ ObjectTypeKey: Dict[int, str] = {
     tmEventSetup.ADT: kADT,
     tmEventSetup.ZDCP: kZDCP,
     tmEventSetup.ZDCM: kZDCM,
-    tmEventSetup.AXO: kAXO,
-    tmEventSetup.TOPO: kTOPO,
-    tmEventSetup.CICADA: kCICADA,
+    tmEventSetup.Axol1tl: kAxol1tl,
+    tmEventSetup.Topological: kTopological,
+    tmEventSetup.Cicada: kCicada,
     tmEventSetup.EXT: kEXT,
     tmEventSetup.Precision: kPrecision,
 }
@@ -339,9 +339,9 @@ ObjectGrammarKey: Dict[int, str] = {
     tmEventSetup.MBT1HFM: tmGrammar.MBT1HFM,
     tmEventSetup.TOWERCOUNT: tmGrammar.TOWERCOUNT,
     tmEventSetup.ADT: tmGrammar.ADT,
-    tmEventSetup.AXO: tmGrammar.AXO,
-    tmEventSetup.TOPO: tmGrammar.TOPO,
-    tmEventSetup.CICADA: tmGrammar.CICADA,
+    tmEventSetup.Axol1tl: tmGrammar.AXO,
+    tmEventSetup.Topological: tmGrammar.TOPO,
+    tmEventSetup.Cicada: tmGrammar.CICADA,
 }
 """Dictionary for object grammar type enumerations."""
 
@@ -420,7 +420,7 @@ ConditionTypeKey: Dict[int, str] = {
     tmEventSetup.TripleJetOvRm: kTripleJetOvRm,
     tmEventSetup.QuadJetOvRm: kQuadJetOvRm,
     tmEventSetup.AnomalyDetectionTrigger: kAnomalyDetectionTrigger,
-    tmEventSetup.AxoTrigger: kAxoTrigger,
+    tmEventSetup.Axol1tlTrigger: kAxol1tlTrigger,
     tmEventSetup.CicadaTrigger: kCicadaTrigger,
     tmEventSetup.TopologicalTrigger: kTopologicalTrigger,
 }
@@ -509,8 +509,8 @@ def obj_type_to_cat(object_type: int) -> str:
         18: "esums",
         43: "adt",
         46: "cicada",
-        47: "axo",
-        48: "topo",
+        47: "axol1tl",
+        48: "topological",
     }
     if object_type not in switcher:
         raise ValueError(f"invalid object type: {object_type!r}")
@@ -796,7 +796,6 @@ class ResourceTray:
 
         # Pick resource instance
         instance = self.find_instance(condition)
-        print("===> instance:", instance)
         if not instance:
             condition_type = ConditionTypeKey[condition.type]
             objects_types = [ObjectTypeKey[object_.type] for object_ in condition.objects]
@@ -1353,7 +1352,7 @@ class ModuleCollection:
         # * assigning precision_pt
         # * assigning precision_math
         # * assigning precision_inverse_deltaR
-        # * assigning precision_cscore_values
+        # * assigning precision_cscore
         #
         def precision_key(left, right, name):
             """Returns precision key for scales map."""
@@ -1366,9 +1365,7 @@ class ModuleCollection:
             for object in condition.objects:                
                 for cut in object.cuts:
                     if cut.cut_type == tmEventSetup.CicadaScore:
-                        left = condition.objects[0]
-                        right = left
-                        cut.precision_cscore_values = scales[precision_key(left, right, 'CscoreValues')].getMaximum()
+                        cut.precision_cscore = scales['PRECISION-CICADA-CScore'].getNbits()
             for cut in condition.cuts:
                 if cut.cut_type == tmEventSetup.TwoBodyPt:
                     left = condition.objects[0]

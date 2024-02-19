@@ -103,9 +103,9 @@ ObjectTypes: Dict[int, str] = {
     tmEventSetup.ADT: tmGrammar.ADT,
     tmEventSetup.ZDCP: tmGrammar.ZDCP,
     tmEventSetup.ZDCM: tmGrammar.ZDCM,
-    tmEventSetup.AXO: tmGrammar.AXO,
-    tmEventSetup.TOPO: tmGrammar.TOPO,
-    tmEventSetup.CICADA: tmGrammar.CICADA,
+    tmEventSetup.Axol1tl: tmGrammar.AXO,
+    tmEventSetup.Topological: tmGrammar.TOPO,
+    tmEventSetup.Cicada: tmGrammar.CICADA,
 }
 
 # Has the number of Objects of each Type
@@ -147,9 +147,9 @@ ObjectCount: Dict[int, int] = {
     tmEventSetup.ADT:        1,
     tmEventSetup.ZDCP:       1,
     tmEventSetup.ZDCM:       1,
-    tmEventSetup.AXO:        1,
-    tmEventSetup.TOPO:       1,
-    tmEventSetup.CICADA:     1,
+    tmEventSetup.Axol1tl:    1,
+    tmEventSetup.Topological:1,
+    tmEventSetup.Cicada:     1,
 }
 
 ComparisonOperator: Dict[int, bool] = {
@@ -1468,7 +1468,7 @@ class CicadaScoreCutHelper(CutHelper):
     def update(self, cut_handle):
         """Updates cicada score and enables cut."""
         self.value = cut_handle.minimum.value
-        self.value = self.value * cut_handle.precision_cscore_values
+        self.value = self.value * cut_handle.precision_cscore
         self.enabled = True
 
 class TwoBodyPtCutHelper(ThresholdCutHelper):

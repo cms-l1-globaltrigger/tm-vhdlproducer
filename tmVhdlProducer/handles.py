@@ -58,9 +58,9 @@ ObjectCollectionSize: Dict[int, int] = {
     tmEventSetup.ADT: 1,
     tmEventSetup.ZDCP: 1,
     tmEventSetup.ZDCM: 1,
-    tmEventSetup.AXO: 1,
-    tmEventSetup.TOPO: 1,
-    tmEventSetup.CICADA: 1,
+    tmEventSetup.Axol1tl: 1,
+    tmEventSetup.Topological: 1,
+    tmEventSetup.Cicada: 1,
 }
 """Dictionary for object collection size (slices)."""
 
@@ -115,7 +115,7 @@ SignalConditionTypes: List[int] = [
     tmEventSetup.MuonShowerOutOfTime0,
     tmEventSetup.MuonShowerOutOfTime1,
     tmEventSetup.AnomalyDetectionTrigger,
-    tmEventSetup.AxoTrigger,
+    tmEventSetup.Axol1tlTrigger,
     tmEventSetup.TopologicalTrigger,
     tmEventSetup.CicadaTrigger,
 ]
@@ -215,9 +215,9 @@ SignalObjectTypes: List[int] = [
     tmEventSetup.MUSOOT0,
     tmEventSetup.MUSOOT1,
     tmEventSetup.ADT,
-    tmEventSetup.AXO,
-    tmEventSetup.TOPO,
-    tmEventSetup.CICADA,
+    tmEventSetup.Axol1tl,
+    tmEventSetup.Topological,
+    tmEventSetup.Cicada,
 ]
 """List of signal object types."""
 
@@ -260,9 +260,9 @@ ObjectsOrder: List[int] = [
     tmEventSetup.ADT,
     tmEventSetup.ZDCP,
     tmEventSetup.ZDCM,
-    tmEventSetup.AXO,
-    tmEventSetup.TOPO,
-    tmEventSetup.CICADA,
+    tmEventSetup.Axol1tl,
+    tmEventSetup.Topological,
+    tmEventSetup.Cicada,
     tmEventSetup.EXT,
     tmEventSetup.Precision,
 ]
@@ -351,7 +351,7 @@ class CutHandle(Handle):
         self.precision_pt = 0
         self.precision_math = 0
         self.precision_inverse_dr = 0
-        self.precision_cscore_values = 0.
+        self.precision_cscore = 0.
 
     def __repr__(self):
         return f"{self.__class__.__name__}(name={self.name})"
