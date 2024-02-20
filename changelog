@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - CICADA and TOPO with models implementation.
+- depending on tm-python 0.12.0 (#43).
+- depending on tm-reporter 2.12.0
 
 ## [2.16.0] - 2023-10-10
 
