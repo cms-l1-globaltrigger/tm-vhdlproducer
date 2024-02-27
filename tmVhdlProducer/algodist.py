@@ -426,18 +426,6 @@ ConditionTypeKey: Dict[int, str] = {
 }
 """Dictionary for condition type enumerations."""
 
-ValidAmodels: List[str] = [
-    "v1",
-    "v3",
-]
-
-ValidTmodels: List[str] = [
-    "hh_ele_v1",
-    "hh_had_v1",
-    "hh_mu_v1",
-]
-"""Valid models for axol1tl and topological."""
-
 #
 # Functions
 #
@@ -535,7 +523,7 @@ class ResourceTray:
     >>> tray.measure(condition)
     """
 
-    Version = 2
+    Version = 3
 
     # Instances used in resource configuration
     kMuonCondition = 'MuonCondition'
@@ -836,22 +824,13 @@ class ResourceTray:
                         sliceLUTs += object_cut.sliceLUTs * object.slice_size
                         processors += object_cut.processors * object.slice_size
                         # add optional cut data dependent resources
-                        amodel_ok = False
-                        tmodel_ok = False
                         data_cut = object_cut._asdict().get("data")
                         if data_cut is not None:
-                            for amodel in ValidAmodels:
-                                if cut.data == amodel: amodel_ok = True
-                            for tmodel in ValidTmodels:
-                                if cut.data == tmodel: tmodel_ok = True
-                            if not (amodel_ok or tmodel_ok):
-                                message = f"not a valid model for AXOL1TL or TOPO model cuts: {cut.data} -" \
-                                    f" valid models for AXOL1TL are: {ValidAmodels}, for TOPO: {ValidTmodels}"
-                                raise RuntimeError(message)
-                            amodel_ok = False
-                            tmodel_ok = False
+                            # TODO extend with regex in future?
+                            if cut.data not in data_cut._asdict():
+                                raise RuntimeError(f"missing cut data entry for: {cut.data!r}")
                             for data_key, cut_data in data_cut._asdict().items():
-                                if cut.data == data_key:  # TODO extend with regex in future
+                                if cut.data == data_key:
                                     brams += cut_data.brams * object.slice_size
                                     sliceLUTs += cut_data.sliceLUTs * object.slice_size
                                     processors += cut_data.processors * object.slice_size
@@ -1362,7 +1341,7 @@ class ModuleCollection:
         scales = self.eventSetup.getScaleMapPtr()
 
         for condition in self.condition_handles.values():
-            for object in condition.objects:                
+            for object in condition.objects:
                 for cut in object.cuts:
                     if cut.cut_type == tmEventSetup.CicadaScore:
                         cut.precision_cscore = scales['PRECISION-CICADA-CScore'].getNbits()
@@ -1739,7 +1718,7 @@ def distribute(eventSetup, modules: int, config: str, ratio: float, reverse_sort
 
     # Create empty module collection
     collection = ModuleCollection(eventSetup, tray)
-    
+
     # Diagnostic output
     list_algorithms(collection)
 
@@ -1793,8 +1772,8 @@ def main() -> int:
             collection.setConstraint(k, v)
     # Run distibution
     collection.distribute(args.modules)
-    
-    
+
+
 
     list_distribution(collection)
 

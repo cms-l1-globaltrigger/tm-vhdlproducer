@@ -1,6 +1,6 @@
 # Resource calculation
 
-## Format Version 2
+## Format Version 3
 
 Base resource consumption and hardware implementation mapping for resource
 calculation is stored in JSON format.
@@ -8,7 +8,7 @@ calculation is stored in JSON format.
 Basic structure of the JSON file:
 
     {
-      "version": 2,
+      "version": 3,
       "resources": {
         "mapping": {
           "instances": {
@@ -24,12 +24,31 @@ Basic structure of the JSON file:
           }
         },
         "floor": {
-            "processors": <base>,
-            "sliceLUTs": <base>
+          "processors": <base>,
+          "brams": <consumption>,
+          "sliceLUTs": <base>
         },
         "ceiling": {
+          "processors": <threshold>,
+          "brams": <consumption>,
+          "sliceLUTs": <threshold>
+        },
+        "frame": {
+          "processors": <threshold>,
+          "brams": <consumption>,
+          "sliceLUTs": <threshold>
+        },
+        "fdl": {
+          "floor": {
             "processors": <threshold>,
+            "brams": <consumption>,
             "sliceLUTs": <threshold>
+          },
+          "algo_slice": {
+            "processors": <threshold>,
+            "brams": <consumption>,
+            "sliceLUTs": <threshold>
+          }
         },
         "object_cuts": {
           ...
@@ -47,9 +66,11 @@ object types and cut types used in "instances".
 Absolute limits per hardware module (board) are set by `floor` representing the
 base resource consumption of the MP7 VHDL framework (containing submodules
 "ctrl", "datapath", "infra", "readout" and "ttc") used to implement the trigger
-menu and `ceiling` to set a maximum threshold for resource consumption. The
-`ceiling` must not exceed 100.0 % (= 1.0) and is usually lower due to the fact
-that routing fill fail even before all available chip resources are used.
+menu, `ceiling` to set a maximum threshold for resource consumption, `frame`
+to add consumed resources of a modules frame and `fdl` for the FDL `floor` and
+`algo_slice` additional payloads. The `ceiling` must not exceed 100.0 % (= 1.0)
+and is usually lower due to the fact that routing fill fail even before all
+available chip resources are used.
 
 Structure of `object_cuts` entry defining resource consumption for object
 specific cuts:
@@ -58,6 +79,7 @@ specific cuts:
       "<object>": {
         "<cut>": {
           "processors": <consumption>,
+          "brams": <consumption>,
           "sliceLUTs": <consumption>
         },
         ...
@@ -73,12 +95,21 @@ Structure of a condition `instance` entry:
         {
           "types": ["<object>", ... ],
           "processors": <consumption>,
+          "brams": <consumption>,
           "sliceLUTs": <consumption>,
           "cuts": [
             {
               "type": "<cut>",
               "processors": <consumption>,
-              "sliceLUTs": <consumption>
+              "brams": <consumption>,
+              "sliceLUTs": <consumption>,
+              "data": {
+                "v1": {
+                  "processors": <consumption>,
+                  "brams": <consumption>,
+                  "sliceLUTs": <consumption>
+                }
+              }
             }
             ...
           ]

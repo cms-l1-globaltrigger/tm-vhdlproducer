@@ -1,5 +1,5 @@
 {
-    "version": 2,
+    "version": 3,
     "resources": {
         "mapping": {
             "instances": {
@@ -78,7 +78,7 @@
                 "ZDCMinus": "ZDCMinus",
                 "Axol1tlTrigger": "Axol1tlTrigger",
                 "TopologicalTrigger": "TopologicalTrigger",
-                "CicadaTrigger": "CicadaTrigger"                
+                "CicadaTrigger": "CicadaTrigger"
             },
             "objects": {
                 "Egamma": "calo",
