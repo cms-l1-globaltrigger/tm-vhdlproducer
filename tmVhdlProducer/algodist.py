@@ -37,6 +37,7 @@ from .handles import Payload
 from .handles import ObjectHandle
 from .handles import ConditionHandle
 from .handles import AlgorithmHandle
+from .configschema import config_schema
 
 MinModules: int = 1
 MaxModules: int = 6
@@ -502,6 +503,17 @@ def object_category(object_type: int) -> str:
         raise ValueError(f"invalid object type: {object_type!r}")
     return ObjectCategoryKey[object_type]
 
+def to_namedtuple(d: dict, name: str) -> tuple:
+    """Convert a dict into a namedtuple, used to convert JSON input.
+    http://stackoverflow.com/questions/35898270/trying-to-make-a-dict-behave-like-a-clean-class-method-structure
+    """
+    for key, value in d.items():
+        if isinstance(value, dict):
+            d[key] = to_namedtuple(value, name=key)
+        elif isinstance(value, list):
+            d[key] = [to_namedtuple(item, name=key) if isinstance(item, dict) else item for item in value]
+    return namedtuple(name, d.keys())(**d)
+
 #
 # Classes
 #
@@ -521,8 +533,6 @@ class ResourceTray:
     >>> tray.measure(condition)
     """
 
-    Version = 3
-
     # Instances used in resource configuration
     kMuonCondition = 'MuonCondition'
     kCaloCondition = 'CaloCondition'
@@ -534,20 +544,10 @@ class ResourceTray:
     def __init__(self, filename):
         """Attribute *filename* is a filename of an JSON payload configuration file."""
         with open(filename) as fp:
-            data = json.load(fp, object_hook=self._object_hook)
-        if data.version != type(self).Version:
-            raise VersionError(f"invalid JSON file version: {data.version}")
+            data = config_schema.validate(json.load(fp))
+        data = to_namedtuple(data, 'resource')
         self.resources = data.resources
         self.filename = filename
-
-    def _object_hook(self, d):
-        """Convert a dict into a namedtuple, used to convert JSON input.
-        http://stackoverflow.com/questions/35898270/trying-to-make-a-dict-behave-like-a-clean-class-method-structure
-        """
-        for k, v in d.items():
-            if isinstance(v, dict):
-                d[k] = self._object_hook(v)
-        return namedtuple('resource', d.keys())(**d)
 
     def map_instance(self, key: str) -> str:
         """Returns mapped condition instance type for *key*."""
