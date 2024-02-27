@@ -103,6 +103,9 @@ ObjectTypes: Dict[int, str] = {
     tmEventSetup.ADT: tmGrammar.ADT,
     tmEventSetup.ZDCP: tmGrammar.ZDCP,
     tmEventSetup.ZDCM: tmGrammar.ZDCM,
+    tmEventSetup.Axol1tl: tmGrammar.AXO,
+    tmEventSetup.Topological: tmGrammar.TOPO,
+    tmEventSetup.Cicada: tmGrammar.CICADA,
 }
 
 # Has the number of Objects of each Type
@@ -144,6 +147,9 @@ ObjectCount: Dict[int, int] = {
     tmEventSetup.ADT:        1,
     tmEventSetup.ZDCP:       1,
     tmEventSetup.ZDCM:       1,
+    tmEventSetup.Axol1tl:    1,
+    tmEventSetup.Topological:1,
+    tmEventSetup.Cicada:     1,
 }
 
 ComparisonOperator: Dict[int, bool] = {
@@ -824,7 +830,7 @@ class AlgorithmHelper(VhdlHelper):
         self.module_index = algorithm_handle.module_index
         self.expression = algorithm_handle.expression
         self.vhdl_signal = vhdl_label(algorithm_handle.name)
-        self.vhdl_expression =  vhdl_expression( algorithm_handle.expression_in_condition )
+        self.vhdl_expression = vhdl_expression(algorithm_handle.expression_in_condition)
         self.conditions = self.collect_conditions(algorithm_handle)
         self.handle = algorithm_handle
 
@@ -1229,6 +1235,8 @@ class ObjectHelper(VhdlHelper):
         is_calo_type        [bool]
         is_esums_type       [bool]
         anomalyScore        [AnomalyScoreCutHelper]
+        score               [ScoreCutHelper]
+        model               [ModelCutHelper]
         handle              handle to underlying object handle [None|ObjectHandle]
     """
 
@@ -1248,6 +1256,9 @@ class ObjectHelper(VhdlHelper):
         self.charge = ChargeCutHelper('ign')
         self.count = CountCutHelper()
         self.anomalyScore = AnomalyScoreCutHelper(0)
+        self.score = ScoreCutHelper(0)
+        self.model = ModelCutHelper("")
+        self.cicadaScore = CicadaScoreCutHelper(0)
         self.upt = UptCutHelper()
         self.impactParameter = ImpactParameterCutHelper(0xf)
         self.displaced = DisplacedCutHelper()
@@ -1301,6 +1312,12 @@ class ObjectHelper(VhdlHelper):
                 self.count.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.AnomalyScore:
                 self.anomalyScore.update(cut_handle)
+            elif cut_handle.cut_type == tmEventSetup.Score:
+                self.score.update(cut_handle)
+            elif cut_handle.cut_type == tmEventSetup.Model:
+                self.model.update(cut_handle)
+            elif cut_handle.cut_type == tmEventSetup.CicadaScore:
+                self.cicadaScore.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.UnconstrainedPt:
                 self.upt.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.ImpactParameter:
@@ -1418,6 +1435,40 @@ class AnomalyScoreCutHelper(CutHelper):
     def update(self, cut_handle):
         """Updates anomaly score and enables cut."""
         self.value = int(cut_handle.minimum.value)
+        self.enabled = True
+
+class ScoreCutHelper(CutHelper):
+
+    def __init__(self, value=0):
+        super().__init__()
+        self.value = value
+
+    def update(self, cut_handle):
+        """Updates anomaly score and enables cut."""
+        self.value = int(cut_handle.minimum.value)
+        self.enabled = True
+
+class ModelCutHelper(CutHelper):
+
+    def __init__(self, value=""):
+        super().__init__()
+        self.value = value
+
+    def update(self, cut_handle):
+        """Updates anomaly model and enables cut."""
+        self.value = cut_handle.data
+        self.enabled = True
+
+class CicadaScoreCutHelper(CutHelper):
+
+    def __init__(self, value=0):
+        super().__init__()
+        self.value = value
+
+    def update(self, cut_handle):
+        """Updates cicada score and enables cut."""
+        self.value = cut_handle.minimum.value
+        self.value = self.value * cut_handle.precision_cscore
         self.enabled = True
 
 class TwoBodyPtCutHelper(ThresholdCutHelper):

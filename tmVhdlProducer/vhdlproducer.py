@@ -105,7 +105,7 @@ def makedirs(path: str) -> None:
                     #lut_val[i] = lut[i]
                 #else:
                     #lut_val[i] = 0
-                    
+
     ## pt luts
     #if params['lut'] == "pt":
         #lut_len = 2**params['bits']
@@ -118,8 +118,8 @@ def makedirs(path: str) -> None:
                     #lut_val[i] = lut[i]
                 #else:
                     #lut_val[i] = 0
-        
-    
+
+
     ## TODO
     ## cosh deta and cos dphi luts
     ##if params['lut'] == "cosh_cos":
@@ -166,7 +166,7 @@ def makedirs(path: str) -> None:
             #max_val = max(lut_val)
             #min_val = min(lut_val)
 
-            
+
             #if corr_type == "calo_calo" and lut_type == "deta":
                 #cc_deta_ll = 2**eta_bits
                 #cc_deta_lut_val = lut_val
@@ -238,7 +238,7 @@ def makedirs(path: str) -> None:
             ##mu_upt_lut_val = lut_val
             ##mu_upt_max = max_val
             ##mu_upt_min = min_val
-            
+
 ## render template
     #lut_dir = "vhdl_gtl_luts"
     #os.path.join(directory, lut_dir)
@@ -246,9 +246,9 @@ def makedirs(path: str) -> None:
     #if not os.path.exists(lut_path):
         #makedirs(lut_path)
     #templ_luts = 'gtl_luts.vhd'
-    
+
     #v_p_r = 16 # format for LUT dump (16 LUT values per row)
-    
+
     #gtl_luts_params = {
         #'v_p_r': v_p_r,
         #'eg_pt_ll': eg_pt_ll,

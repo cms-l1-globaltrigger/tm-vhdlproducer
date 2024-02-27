@@ -1,5 +1,5 @@
 {
-    "version": 2,
+    "version": 3,
     "resources": {
         "mapping": {
             "instances": {
@@ -75,7 +75,10 @@
                 "TransverseMassOvRm": "CorrelationConditionOvRm",
                 "AnomalyDetectionTrigger": "AnomalyDetectionTrigger",
                 "ZDCPlus": "ZDCPlus",
-                "ZDCMinus": "ZDCMinus"
+                "ZDCMinus": "ZDCMinus",
+                "Axol1tlTrigger": "Axol1tlTrigger",
+                "TopologicalTrigger": "TopologicalTrigger",
+                "CicadaTrigger": "CicadaTrigger"
             },
             "objects": {
                 "Egamma": "calo",
@@ -111,8 +114,11 @@
                 "MBT1HFM": "bias",
                 "TOWERCOUNT": "count",
                 "ADT": "adt",
+                "Axol1tl": "axol1tl",
+                "Topological": "topological",
                 "ZDCP": "count",
                 "ZDCM": "count",
+                "Cicada": "cicada",
                 "EXT": "ext"
             },
             "cuts": {
@@ -386,6 +392,66 @@
                     "processors": 0,
                     "brams": 0,
                     "sliceLUTs": 2
+                }
+            },
+            "axol1tl": {
+                "Score": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 0
+                },
+                "Model": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 0,
+                    "data": {
+                        "v1": {
+                            "processors": 0,
+                            "brams": 0,
+                            "sliceLUTs": 1639
+                        },
+                        "v3": {
+                            "processors": 0,
+                            "brams": 0,
+                            "sliceLUTs": 7736
+                        }
+                    }
+                }
+            },
+            "cicada": {
+                "CicadaScore": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 4
+                }
+            },
+            "topological": {
+                "Score": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 0
+                },
+                "Model": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 0,
+                    "data": {
+                        "hh_ele_v1": {
+                            "processors": 0,
+                            "brams": 0,
+                            "sliceLUTs": 581
+                        },
+                        "hh_had_v1": {
+                            "processors": 0,
+                            "brams": 0,
+                            "sliceLUTs": 581
+                        },
+                        "hh_mu_v1": {
+                            "processors": 0,
+                            "brams": 0,
+                            "sliceLUTs": 581
+                        }
+                    }
                 }
             }
         },
@@ -946,12 +1012,6 @@
                         "processors": 0,
                         "brams": 0,
                         "sliceLUTs": 0
-                    },
-                    {
-                        "types": ["adt"],
-                        "processors": 0,
-                        "brams": 0,
-                        "sliceLUTs": 8440
                     }
                 ]
             },
@@ -973,7 +1033,29 @@
                         "types": ["adt"],
                         "processors": 0,
                         "brams": 0,
-                        "sliceLUTs": 8440
+                        "sliceLUTs": 7736
+                    }
+                ]
+            },
+            {
+                "type": "Axol1tlTrigger",
+                "objects": [
+                    {
+                        "types": ["axol1tl"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 0
+                    }
+                ]
+            },
+            {
+                "type": "TopologicalTrigger",
+                "objects": [
+                    {
+                        "types": ["topological"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 0
                     }
                 ]
             },
@@ -996,6 +1078,17 @@
                         "processors": 0,
                         "brams": 0,
                         "sliceLUTs": 2
+                    }
+                ]
+            },
+            {
+                "type": "CicadaTrigger",
+                "objects": [
+                    {
+                        "types": ["cicada"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 0
                     }
                 ]
             },

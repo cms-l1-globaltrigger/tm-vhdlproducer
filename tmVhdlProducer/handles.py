@@ -58,6 +58,9 @@ ObjectCollectionSize: Dict[int, int] = {
     tmEventSetup.ADT: 1,
     tmEventSetup.ZDCP: 1,
     tmEventSetup.ZDCM: 1,
+    tmEventSetup.Axol1tl: 1,
+    tmEventSetup.Topological: 1,
+    tmEventSetup.Cicada: 1,
 }
 """Dictionary for object collection size (slices)."""
 
@@ -112,6 +115,9 @@ SignalConditionTypes: List[int] = [
     tmEventSetup.MuonShowerOutOfTime0,
     tmEventSetup.MuonShowerOutOfTime1,
     tmEventSetup.AnomalyDetectionTrigger,
+    tmEventSetup.Axol1tlTrigger,
+    tmEventSetup.TopologicalTrigger,
+    tmEventSetup.CicadaTrigger,
 ]
 
 ExternalConditionTypes: List[int] = [
@@ -191,6 +197,7 @@ EsumsObjectTypes: List[int] = [
     tmEventSetup.ASYMETHF,
     tmEventSetup.ASYMHTHF,
 ]
+
 """List of energy sums object types."""
 
 SignalObjectTypes: List[int] = [
@@ -208,6 +215,9 @@ SignalObjectTypes: List[int] = [
     tmEventSetup.MUSOOT0,
     tmEventSetup.MUSOOT1,
     tmEventSetup.ADT,
+    tmEventSetup.Axol1tl,
+    tmEventSetup.Topological,
+    tmEventSetup.Cicada,
 ]
 """List of signal object types."""
 
@@ -250,6 +260,9 @@ ObjectsOrder: List[int] = [
     tmEventSetup.ADT,
     tmEventSetup.ZDCP,
     tmEventSetup.ZDCM,
+    tmEventSetup.Axol1tl,
+    tmEventSetup.Topological,
+    tmEventSetup.Cicada,
     tmEventSetup.EXT,
     tmEventSetup.Precision,
 ]
@@ -338,6 +351,7 @@ class CutHandle(Handle):
         self.precision_pt = 0
         self.precision_math = 0
         self.precision_inverse_dr = 0
+        self.precision_cscore = 0.
 
     def __repr__(self):
         return f"{self.__class__.__name__}(name={self.name})"
@@ -445,7 +459,7 @@ class ConditionHandle(Handle):
 
     def isTowerCountCondition(self):
         return self.type in TowerCountConditionTypes
-
+        
     def isCorrelationCondition(self):
         return self.type in CorrelationConditionTypes
 

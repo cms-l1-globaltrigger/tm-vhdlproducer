@@ -69,15 +69,9 @@
 {%- for condition in module.signalConditions %}
 {% include "instances/signal_condition.vhd" %}
 {% endfor %}
-{%- set adt_low_ext_cond_id = 192 %}
-{%- set adt_high_ext_cond_id = 223 %}
 {%- for condition in module.externalConditions %}
-    {%- if (condition.objects[0].externalChannelId >= adt_low_ext_cond_id) and (condition.objects[0].externalChannelId <= adt_high_ext_cond_id) %}
-{% include "instances/anomaly_detection.vhd" %}
-    {%- else %}
 -- External condition assignment
 {{ condition.vhdl_signal }} <= bx_data.ext_cond({{ condition.objects[0].bx_arr }})({{ condition.objects[0].externalChannelId }}); -- {{ condition.objects[0].name }}
-    {%- endif %}
 {%- endfor %}
 
 -- ========================================================

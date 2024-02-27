@@ -37,6 +37,7 @@ from .handles import Payload
 from .handles import ObjectHandle
 from .handles import ConditionHandle
 from .handles import AlgorithmHandle
+from .configschema import config_schema
 
 MinModules: int = 1
 MaxModules: int = 6
@@ -90,6 +91,9 @@ kMBT1HFP: str = 'MBT1HFP'
 kADT: str = 'ADT'
 kZDCP: str = 'ZDCP'
 kZDCM: str = 'ZDCM'
+kAxol1tl: str = 'Axol1tl'
+kTopological: str = 'Topological'
+kCicada: str = 'Cicada'
 kEXT: str = 'EXT'
 kPrecision: str = 'Precision'
 
@@ -171,6 +175,9 @@ kDoubleJetOvRm: str = 'DoubleJetOvRm'
 kTripleJetOvRm: str = 'TripleJetOvRm'
 kQuadJetOvRm: str = 'QuadJetOvRm'
 kAnomalyDetectionTrigger: str = 'AnomalyDetectionTrigger'
+kAxol1tlTrigger: str = 'Axol1tlTrigger'
+kTopologicalTrigger: str = 'TopologicalTrigger'
+kCicadaTrigger: str = 'CicadaTrigger'
 #
 # Keys for cut types
 #
@@ -199,6 +206,9 @@ kOvRmDeltaEta: str = 'OvRmDeltaEta'
 kOvRmDeltaPhi: str = 'OvRmDeltaPhi'
 kOvRmDeltaR: str = 'OvRmDeltaR'
 kAnomalyScore: str = 'AnomalyScore'
+kScore: str = 'Score'
+kCicadaScore: str = 'CicadaScore'
+kModel: str = 'Model'
 
 #
 # Operators
@@ -241,6 +251,9 @@ CutTypeKey: Dict[int, str] = {
     tmEventSetup.OvRmDeltaPhi: kOvRmDeltaPhi,
     tmEventSetup.OvRmDeltaR: kOvRmDeltaR,
     tmEventSetup.AnomalyScore: kAnomalyScore,
+    tmEventSetup.Score: kScore,
+    tmEventSetup.Model: kModel,
+    tmEventSetup.CicadaScore: kCicadaScore,
 }
 """Dictionary for cut type enumerations."""
 
@@ -281,6 +294,9 @@ ObjectTypeKey: Dict[int, str] = {
     tmEventSetup.ADT: kADT,
     tmEventSetup.ZDCP: kZDCP,
     tmEventSetup.ZDCM: kZDCM,
+    tmEventSetup.Axol1tl: kAxol1tl,
+    tmEventSetup.Topological: kTopological,
+    tmEventSetup.Cicada: kCicada,
     tmEventSetup.EXT: kEXT,
     tmEventSetup.Precision: kPrecision,
 }
@@ -324,8 +340,25 @@ ObjectGrammarKey: Dict[int, str] = {
     tmEventSetup.MBT1HFM: tmGrammar.MBT1HFM,
     tmEventSetup.TOWERCOUNT: tmGrammar.TOWERCOUNT,
     tmEventSetup.ADT: tmGrammar.ADT,
+    tmEventSetup.Axol1tl: tmGrammar.AXO,
+    tmEventSetup.Topological: tmGrammar.TOPO,
+    tmEventSetup.Cicada: tmGrammar.CICADA,
 }
 """Dictionary for object grammar type enumerations."""
+
+ObjectCategoryKey: Dict[int, str] = {
+    tmEventSetup.Muon: "muon",
+    tmEventSetup.Egamma: "calo",
+    tmEventSetup.Tau: "calo",
+    tmEventSetup.Jet: "calo",
+    tmEventSetup.ETT: "esums",
+    tmEventSetup.HTT: "esums",
+    tmEventSetup.ETM: "esums",
+    tmEventSetup.HTM: "esums",
+    tmEventSetup.ETTEM: "esums",
+    tmEventSetup.ETMHF: "esums",
+}
+"""Mapping object types to object category keys (for deltas)."""
 
 ConditionTypeKey: Dict[int, str] = {
     tmEventSetup.SingleMuon: kSingleMuon,
@@ -402,6 +435,9 @@ ConditionTypeKey: Dict[int, str] = {
     tmEventSetup.TripleJetOvRm: kTripleJetOvRm,
     tmEventSetup.QuadJetOvRm: kQuadJetOvRm,
     tmEventSetup.AnomalyDetectionTrigger: kAnomalyDetectionTrigger,
+    tmEventSetup.Axol1tlTrigger: kAxol1tlTrigger,
+    tmEventSetup.CicadaTrigger: kCicadaTrigger,
+    tmEventSetup.TopologicalTrigger: kTopologicalTrigger,
 }
 """Dictionary for condition type enumerations."""
 
@@ -461,24 +497,22 @@ def obj_type_to_str(object_type: int) -> Optional[str]:
         raise ValueError(f"invalid object type: {object_type!r}")
     return ObjectTypeKey[object_type]
 
-def obj_type_to_cat(object_type: int) -> str:
-    """Converts object type to object catagory representation."""
-    switcher = {
-        0: "muon",
-        1: "calo",
-        2: "calo",
-        3: "calo",
-        4: "esums",
-        5: "esums",
-        6: "esums",
-        7: "esums",
-        17: "esums",
-        18: "esums",
-        43: "adt",
-    }
-    if object_type not in switcher:
+def object_category(object_type: int) -> str:
+    """Converts object type to object category representation."""
+    if object_type not in ObjectCategoryKey:
         raise ValueError(f"invalid object type: {object_type!r}")
-    return switcher[object_type]
+    return ObjectCategoryKey[object_type]
+
+def to_namedtuple(d: dict, name: str) -> tuple:
+    """Convert a dict into a namedtuple, used to convert JSON input.
+    http://stackoverflow.com/questions/35898270/trying-to-make-a-dict-behave-like-a-clean-class-method-structure
+    """
+    for key, value in d.items():
+        if isinstance(value, dict):
+            d[key] = to_namedtuple(value, name=key)
+        elif isinstance(value, list):
+            d[key] = [to_namedtuple(item, name=key) if isinstance(item, dict) else item for item in value]
+    return namedtuple(name, d.keys())(**d)
 
 #
 # Classes
@@ -499,8 +533,6 @@ class ResourceTray:
     >>> tray.measure(condition)
     """
 
-    Version = 2
-
     # Instances used in resource configuration
     kMuonCondition = 'MuonCondition'
     kCaloCondition = 'CaloCondition'
@@ -508,25 +540,14 @@ class ResourceTray:
     kCorrelationCondition = 'CorrelationCondition'
     kCorrelation3Condition = 'Correlation3Condition'
     kCorrelationConditionOvRm = 'CorrelationConditionOvRm'
-    #kAnomalyDetectionTrigger = 'AnomalyDetectionTrigger'
 
     def __init__(self, filename):
         """Attribute *filename* is a filename of an JSON payload configuration file."""
         with open(filename) as fp:
-            data = json.load(fp, object_hook=self._object_hook)
-        if data.version != type(self).Version:
-            raise VersionError(f"invalid JSON file version: {data.version}")
+            data = config_schema.validate(json.load(fp))
+        data = to_namedtuple(data, 'resource')
         self.resources = data.resources
         self.filename = filename
-
-    def _object_hook(self, d):
-        """Convert a dict into a namedtuple, used to convert JSON input.
-        http://stackoverflow.com/questions/35898270/trying-to-make-a-dict-behave-like-a-clean-class-method-structure
-        """
-        for k, v in d.items():
-            if isinstance(v, dict):
-                d[k] = self._object_hook(v)
-        return namedtuple('resource', d.keys())(**d)
 
     def map_instance(self, key: str) -> str:
         """Returns mapped condition instance type for *key*."""
@@ -588,7 +609,6 @@ class ResourceTray:
         fdl_algo_floor = self.resources.fdl.floor
         return Payload(brams=fdl_algo_floor.brams, sliceLUTs=fdl_algo_floor.sliceLUTs, processors=fdl_algo_floor.processors)
 
-# =================================================================================
     def calc_deta_integer(self) -> Payload:
         """Returns resource consumption payload for one unit of calc_deta_integer calculation.
         >>> tray.calc_deta_integer()
@@ -639,8 +659,6 @@ class ResourceTray:
         processors = self.resources.calc_cut_mass._asdict()[obj0]._asdict()[obj1].processors
         return Payload(brams, sliceLUTs, processors)
 
-# =================================================================================
-
     def find_object_cut(self, object):
         """Returns object cut resource namedtuple for *key* or None if not found."""
         assert isinstance(object, ObjectHandle)
@@ -673,7 +691,6 @@ class ResourceTray:
         # instance
         instance = self.map_instance(ConditionTypeKey[condition.type])
         # select
-        #if instance in (self.kMuonCondition, self.kCaloCondition, self.kCaloConditionOvRm, self.kAnomalyDetectionTrigger):
         if instance in (self.kMuonCondition, self.kCaloCondition, self.kCaloConditionOvRm):
             return n_objects * n_requirements
         elif instance == self.kCorrelationCondition:
@@ -773,11 +790,8 @@ class ResourceTray:
         objects_types = [ObjectTypeKey[object_.type] for object_ in condition.objects]
         if objects_types[0] == 'EXT':
             for object in condition.objects:
-                if object.name.split('_')[1] == 'ADT':
-                    instance_objects = filter_first(lambda item: item.types == ['adt'], instance.objects)
-                else:
-                    mapped_objects = self.map_objects(objects_types)
-                    instance_objects = filter_first(lambda item: item.types == mapped_objects, instance.objects)
+                mapped_objects = self.map_objects(objects_types)
+                instance_objects = filter_first(lambda item: item.types == mapped_objects, instance.objects)
         else:
             mapped_objects = self.map_objects(objects_types)
             instance_objects = filter_first(lambda item: item.types == mapped_objects, instance.objects)
@@ -788,7 +802,6 @@ class ResourceTray:
                       f"objects {objects_types} in file '{self.filename}'."
             raise RuntimeError(message)
 
-# =================================================================================
         # calculate object cuts payload
         brams = instance_objects.brams
         sliceLUTs = instance_objects.sliceLUTs
@@ -804,12 +817,22 @@ class ResourceTray:
                         brams += object_cut.brams * object.slice_size
                         sliceLUTs += object_cut.sliceLUTs * object.slice_size
                         processors += object_cut.processors * object.slice_size
+                        # add optional cut data dependent resources
+                        data_cut = object_cut._asdict().get("data")
+                        if data_cut is not None:
+                            # TODO extend with regex in future?
+                            if cut.data not in data_cut._asdict():
+                                raise RuntimeError(f"missing cut data entry for: {cut.data!r}")
+                            for data_key, cut_data in data_cut._asdict().items():
+                                if cut.data == data_key:
+                                    brams += cut_data.brams * object.slice_size
+                                    sliceLUTs += cut_data.sliceLUTs * object.slice_size
+                                    processors += cut_data.processors * object.slice_size
                     else:
                         logging.warning(f"no object cut entry for cut type: {cut_key}")
                 else:
                     logging.warning(f"no object cut entry for object type: {object_key}")
         payload = Payload(brams, sliceLUTs, processors)
-# =================================================================================
 
         # calculate correlation cuts payload
         for cut in condition.cuts:
@@ -1043,7 +1066,7 @@ class Module:
                 obj_0 = combination[0]
                 obj_1 = combination[1]
                 factor = calc_factor(combination)
-                if (obj_1 == 6 or obj_1 == 7 or obj_1 == 18):
+                if obj_1 in (tmEventSetup.ETM, tmEventSetup.HTM, tmEventSetup.ETMHF):
                     sliceLUTs += self.calc_dphi_integer.sliceLUTs * factor
                     sliceLUTs_inst = self.calc_dphi_integer.sliceLUTs * factor
                 else:
@@ -1090,8 +1113,8 @@ class Module:
             sliceLUTs = 0
             processors = 0
             for combination in calc_cut_deta_combinations():
-                obj0 = obj_type_to_cat(combination[0])
-                obj1 = obj_type_to_cat(combination[1])
+                obj0 = object_category(combination[0])
+                obj1 = object_category(combination[1])
                 factor = calc_factor(combination)
                 sliceLUTs += self.tray.calc_cut_deta(obj0, obj1).sliceLUTs * factor
                 processors += self.tray.calc_cut_deta(obj0, obj1).processors * factor
@@ -1136,8 +1159,8 @@ class Module:
             sliceLUTs = 0
             processors = 0
             for combination in calc_cut_dphi_combinations():
-                obj0 = obj_type_to_cat(combination[0])
-                obj1 = obj_type_to_cat(combination[1])
+                obj0 = object_category(combination[0])
+                obj1 = object_category(combination[1])
                 factor = calc_factor(combination)
                 sliceLUTs += self.tray.calc_cut_dphi(obj0, obj1).sliceLUTs * factor
                 processors += self.tray.calc_cut_dphi(obj0, obj1).processors * factor
@@ -1182,8 +1205,8 @@ class Module:
             sliceLUTs = 0
             processors = 0
             for combination in calc_cut_dr_combinations():
-                obj0 = obj_type_to_cat(combination[0])
-                obj1 = obj_type_to_cat(combination[1])
+                obj0 = object_category(combination[0])
+                obj1 = object_category(combination[1])
                 factor = calc_factor(combination)
                 sliceLUTs += self.tray.calc_cut_dr(obj0, obj1).sliceLUTs * factor
                 processors += self.tray.calc_cut_dr(obj0, obj1).processors * factor
@@ -1212,8 +1235,8 @@ class Module:
             sliceLUTs = 0
             processors = 0
             for combination in calc_cut_mass_combinations():
-                obj0 = obj_type_to_cat(combination[0])
-                obj1 = obj_type_to_cat(combination[1])
+                obj0 = object_category(combination[0])
+                obj1 = object_category(combination[1])
                 factor = calc_factor(combination)
                 sliceLUTs += self.tray.calc_cut_mass(obj0, obj1).sliceLUTs * factor
                 processors += self.tray.calc_cut_mass(obj0, obj1).processors * factor
@@ -1301,6 +1324,7 @@ class ModuleCollection:
         # * assigning precision_pt
         # * assigning precision_math
         # * assigning precision_inverse_deltaR
+        # * assigning precision_cscore
         #
         def precision_key(left, right, name):
             """Returns precision key for scales map."""
@@ -1308,7 +1332,12 @@ class ModuleCollection:
             right = ObjectGrammarKey[right.type]
             return f'PRECISION-{left}-{right}-{name}'
         scales = self.eventSetup.getScaleMapPtr()
+
         for condition in self.condition_handles.values():
+            for object in condition.objects:
+                for cut in object.cuts:
+                    if cut.cut_type == tmEventSetup.CicadaScore:
+                        cut.precision_cscore = scales['PRECISION-CICADA-CScore'].getNbits()
             for cut in condition.cuts:
                 if cut.cut_type == tmEventSetup.TwoBodyPt:
                     left = condition.objects[0]
@@ -1736,6 +1765,8 @@ def main() -> int:
             collection.setConstraint(k, v)
     # Run distibution
     collection.distribute(args.modules)
+
+
 
     list_distribution(collection)
 
