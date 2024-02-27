@@ -345,6 +345,20 @@ ObjectGrammarKey: Dict[int, str] = {
 }
 """Dictionary for object grammar type enumerations."""
 
+ObjectCategoryKey: Dict[int, str] = {
+    tmEventSetup.Muon: "muon",
+    tmEventSetup.Egamma: "calo",
+    tmEventSetup.Tau: "calo",
+    tmEventSetup.Jet: "calo",
+    tmEventSetup.ETT: "esums",
+    tmEventSetup.HTT: "esums",
+    tmEventSetup.ETM: "esums",
+    tmEventSetup.HTM: "esums",
+    tmEventSetup.ETTEM: "esums",
+    tmEventSetup.ETMHF: "esums",
+}
+"""Mapping object types to object category keys (for deltas)."""
+
 ConditionTypeKey: Dict[int, str] = {
     tmEventSetup.SingleMuon: kSingleMuon,
     tmEventSetup.DoubleMuon: kDoubleMuon,
@@ -482,27 +496,11 @@ def obj_type_to_str(object_type: int) -> Optional[str]:
         raise ValueError(f"invalid object type: {object_type!r}")
     return ObjectTypeKey[object_type]
 
-def obj_type_to_cat(object_type: int) -> str:
+def object_category(object_type: int) -> str:
     """Converts object type to object category representation."""
-    switcher = {
-        0: "muon",
-        1: "calo",
-        2: "calo",
-        3: "calo",
-        4: "esums",
-        5: "esums",
-        6: "esums",
-        7: "esums",
-        17: "esums",
-        18: "esums",
-        43: "adt",
-        46: "cicada",
-        47: "axol1tl",
-        48: "topological",
-    }
-    if object_type not in switcher:
+    if object_type not in ObjectCategoryKey:
         raise ValueError(f"invalid object type: {object_type!r}")
-    return switcher[object_type]
+    return ObjectCategoryKey[object_type]
 
 #
 # Classes
@@ -611,7 +609,6 @@ class ResourceTray:
         fdl_algo_floor = self.resources.fdl.floor
         return Payload(brams=fdl_algo_floor.brams, sliceLUTs=fdl_algo_floor.sliceLUTs, processors=fdl_algo_floor.processors)
 
-# =================================================================================
     def calc_deta_integer(self) -> Payload:
         """Returns resource consumption payload for one unit of calc_deta_integer calculation.
         >>> tray.calc_deta_integer()
@@ -661,8 +658,6 @@ class ResourceTray:
         sliceLUTs = self.resources.calc_cut_mass._asdict()[obj0]._asdict()[obj1].sliceLUTs
         processors = self.resources.calc_cut_mass._asdict()[obj0]._asdict()[obj1].processors
         return Payload(brams, sliceLUTs, processors)
-
-# =================================================================================
 
     def find_object_cut(self, object):
         """Returns object cut resource namedtuple for *key* or None if not found."""
@@ -807,7 +802,6 @@ class ResourceTray:
                       f"objects {objects_types} in file '{self.filename}'."
             raise RuntimeError(message)
 
-# =================================================================================
         # calculate object cuts payload
         brams = instance_objects.brams
         sliceLUTs = instance_objects.sliceLUTs
@@ -839,7 +833,6 @@ class ResourceTray:
                 else:
                     logging.warning(f"no object cut entry for object type: {object_key}")
         payload = Payload(brams, sliceLUTs, processors)
-# =================================================================================
 
         # calculate correlation cuts payload
         for cut in condition.cuts:
@@ -1073,7 +1066,7 @@ class Module:
                 obj_0 = combination[0]
                 obj_1 = combination[1]
                 factor = calc_factor(combination)
-                if (obj_1 == 6 or obj_1 == 7 or obj_1 == 18):
+                if obj_1 in (tmEventSetup.ETM, tmEventSetup.HTM, tmEventSetup.ETMHF):
                     sliceLUTs += self.calc_dphi_integer.sliceLUTs * factor
                     sliceLUTs_inst = self.calc_dphi_integer.sliceLUTs * factor
                 else:
@@ -1120,8 +1113,8 @@ class Module:
             sliceLUTs = 0
             processors = 0
             for combination in calc_cut_deta_combinations():
-                obj0 = obj_type_to_cat(combination[0])
-                obj1 = obj_type_to_cat(combination[1])
+                obj0 = object_category(combination[0])
+                obj1 = object_category(combination[1])
                 factor = calc_factor(combination)
                 sliceLUTs += self.tray.calc_cut_deta(obj0, obj1).sliceLUTs * factor
                 processors += self.tray.calc_cut_deta(obj0, obj1).processors * factor
@@ -1166,8 +1159,8 @@ class Module:
             sliceLUTs = 0
             processors = 0
             for combination in calc_cut_dphi_combinations():
-                obj0 = obj_type_to_cat(combination[0])
-                obj1 = obj_type_to_cat(combination[1])
+                obj0 = object_category(combination[0])
+                obj1 = object_category(combination[1])
                 factor = calc_factor(combination)
                 sliceLUTs += self.tray.calc_cut_dphi(obj0, obj1).sliceLUTs * factor
                 processors += self.tray.calc_cut_dphi(obj0, obj1).processors * factor
@@ -1212,8 +1205,8 @@ class Module:
             sliceLUTs = 0
             processors = 0
             for combination in calc_cut_dr_combinations():
-                obj0 = obj_type_to_cat(combination[0])
-                obj1 = obj_type_to_cat(combination[1])
+                obj0 = object_category(combination[0])
+                obj1 = object_category(combination[1])
                 factor = calc_factor(combination)
                 sliceLUTs += self.tray.calc_cut_dr(obj0, obj1).sliceLUTs * factor
                 processors += self.tray.calc_cut_dr(obj0, obj1).processors * factor
@@ -1242,8 +1235,8 @@ class Module:
             sliceLUTs = 0
             processors = 0
             for combination in calc_cut_mass_combinations():
-                obj0 = obj_type_to_cat(combination[0])
-                obj1 = obj_type_to_cat(combination[1])
+                obj0 = object_category(combination[0])
+                obj1 = object_category(combination[1])
                 factor = calc_factor(combination)
                 sliceLUTs += self.tray.calc_cut_mass(obj0, obj1).sliceLUTs * factor
                 processors += self.tray.calc_cut_mass(obj0, obj1).processors * factor
