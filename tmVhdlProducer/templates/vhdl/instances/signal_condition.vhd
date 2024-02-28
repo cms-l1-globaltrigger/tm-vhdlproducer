@@ -63,4 +63,3 @@ cond_{{ condition.vhdl_signal }}: entity work.cicada_condition
 {%- elif o.is_signal_type -%}
 {{ condition.vhdl_signal }} <= bx_data.{{ o.type | lower }}({{ o.bx_arr }});
 {%- endif -%}
-
