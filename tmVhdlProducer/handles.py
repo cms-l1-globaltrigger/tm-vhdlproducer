@@ -351,11 +351,9 @@ class CutHandle(Handle):
         self.precision_pt = 0
         self.precision_math = 0
         self.precision_inverse_dr = 0
-        self.precision_cscore = 0.
 
     def __repr__(self):
         return f"{self.__class__.__name__}(name={self.name})"
-
 
 class ObjectHandle(Handle):
     """Represents an object."""
@@ -459,7 +457,7 @@ class ConditionHandle(Handle):
 
     def isTowerCountCondition(self):
         return self.type in TowerCountConditionTypes
-        
+
     def isCorrelationCondition(self):
         return self.type in CorrelationConditionTypes
 
