@@ -23,6 +23,7 @@ Dump distribution to JSON file
 import argparse
 import json
 import logging
+import subprocess
 import uuid
 import sys, os
 from collections import namedtuple
@@ -1694,6 +1695,16 @@ def dump_distribution(collection: ModuleCollection, filename: str):
 
 def distribute(eventSetup, modules: int, config: str, ratio: float, reverse_sorting: bool, constraints: Dict[str, str] = None) -> ModuleCollection:
     """Distribution wrapper function, provided for convenience."""
+
+    process = subprocess.Popen(["git", "branch", "--show-current"], stdout=subprocess.PIPE)
+    branch_name = process.communicate()
+    branch_name = str(branch_name).split("'")[1][:-2]
+    hash_val = subprocess.Popen(["git", "rev-parse", branch_name], stdout=subprocess.PIPE)
+    branch_hash = hash_val.communicate()
+    branch_hash = str(branch_hash).split("'")[1][:-2]
+    logging.info("====================")
+    logging.info("VHDL producer repo - branch/tag name: %s - branch/tag hash: %s", branch_name, branch_hash)
+    logging.info("====================")
     logging.info("distributing menu...")
 
     constraints = constraints or {}
