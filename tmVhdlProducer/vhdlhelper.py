@@ -252,6 +252,14 @@ def bx_encode_4_array(value: int) -> str:
     """
     return format([2, 1, 0, -1, -2].index(value), 'd')
 
+def get_branch_name_hash():
+    process = subprocess.Popen(["git", "branch", "--show-current"], stdout=subprocess.PIPE)
+    branch_name = process.communicate()
+    branch_name = str(branch_name).split("'")[1][:-2]
+    hash_val = subprocess.Popen(["git", "rev-parse", branch_name], stdout=subprocess.PIPE)
+    branch_hash = hash_val.communicate()
+    branch_hash = str(branch_hash).split("'")[1][:-2]
+    return branch_name, branch_hash
 
 # -----------------------------------------------------------------------------
 #  Factories
@@ -357,8 +365,8 @@ class InfoHelper(VhdlHelper):
         self.version = VersionHelper(tmEventSetup.__version__)
         self.sw_version = VersionHelper(__version__)
         # VHDL producer repo branch name and hash value used in VHDL templates
-        self.branch_name, self.branch_hash = algodist.get_branch_name_hash()
-
+        self.branch_name, self.branch_hash = get_branch_name_hash() 
+        
 class ModuleHelper(VhdlHelper):
     """Module template helper.
 

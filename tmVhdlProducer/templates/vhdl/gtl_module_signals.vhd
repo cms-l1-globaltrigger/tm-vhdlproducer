@@ -15,10 +15,14 @@
 -- Scale set:
 -- {{ menu.info.scale_set }}
 
--- VHDL producer
--- version: {{ menu.info.sw_version }}
--- repo branch name: {{ menu.info.branch_name }}
--- repo branch hash value: {{ menu.info.branch_hash }}
+-- VHDL producer repo 
+{%- if menu.info.branch_name == "" %}
+-- tag version: {{ menu.info.sw_version }}
+{%- else %}
+-- branch version: {{ menu.info.sw_version }}
+-- branch name: {{ menu.info.branch_name }}
+-- branch hash value: {{ menu.info.branch_hash }}
+{%- endif %}
 
 -- tmEventSetup
 -- version: {{ menu.info.version }}

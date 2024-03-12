@@ -33,6 +33,8 @@ import tmEventSetup
 import tmGrammar
 
 from .constants import BRAMS_TOTAL, SLICELUTS_TOTAL, PROCESSORS_TOTAL, NR_CALOS, NR_MUONS
+from . import vhdlhelper
+from . import __version__
 
 from .handles import Payload
 from .handles import ObjectHandle
@@ -1688,15 +1690,6 @@ def list_instantiations_debug(collection: ModuleCollection) -> None:
                 logging.debug(f"| {cond_name:<37} | {condition.payload.sliceLUTs:>5} | {condition.payload.processors:>5} | {condition.payload.brams:>5} | {n_a:<7} | {n_a:<7}| {n_a:<4}| {n_a:<4}|")
         logging.debug("|----------------------------------------------------------------------------------------------|")
 
-def get_branch_name_hash():
-    process = subprocess.Popen(["git", "branch", "--show-current"], stdout=subprocess.PIPE)
-    branch_name = process.communicate()
-    branch_name = str(branch_name).split("'")[1][:-2]
-    hash_val = subprocess.Popen(["git", "rev-parse", branch_name], stdout=subprocess.PIPE)
-    branch_hash = hash_val.communicate()
-    branch_hash = str(branch_hash).split("'")[1][:-2]
-    return branch_name, branch_hash
-
 def dump_distribution(collection: ModuleCollection, filename: str):
     logging.info(":: writing menu distribution JSON dump: %s", filename)
     with open(filename, 'w') as fp:
@@ -1705,10 +1698,16 @@ def dump_distribution(collection: ModuleCollection, filename: str):
 def distribute(eventSetup, modules: int, config: str, ratio: float, reverse_sorting: bool, constraints: Dict[str, str] = None) -> ModuleCollection:
     """Distribution wrapper function, provided for convenience."""
 
-    # added VHDL producer repo branch name and hash value to log file
-    branch_name, branch_hash = get_branch_name_hash()
+    # added VHDL producer repo branch name and hash value or tag version to log file
+    branch_name, branch_hash = vhdlhelper.get_branch_name_hash()
+
     logging.info("====================")
-    logging.info("VHDL producer repo - branch/tag name: %s - branch/tag hash: %s", branch_name, branch_hash)
+    logging.info("VHDL producer repo")
+    if branch_name == "":
+        logging.info("tag version: %s", vhdlhelper.VersionHelper(__version__))
+    else:
+        logging.info("branch name: %s", branch_name)
+        logging.info("branch hash: %s", branch_hash)
     logging.info("====================")
     logging.info("distributing menu...")
 
