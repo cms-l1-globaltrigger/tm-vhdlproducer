@@ -7,10 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.17.2] - 2024-03-11
+## [2.17.2] - 2024-03-12
 
 ### Changed
-- algo_dist.py, added branch name and branch hash value to log file.
+- algodist.py, added VHDL producer repo branch name and branch hash value to log file.
+- vhdlhelper.py, used VHDL producer repo branch name and branch hash value as comment in VHDL templates.
+- VHDL templates.
 
 ## [2.17.1] - 2024-02-28
 

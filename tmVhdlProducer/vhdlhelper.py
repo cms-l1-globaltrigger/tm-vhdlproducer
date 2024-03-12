@@ -40,6 +40,7 @@ scales.
       * MassCutHelper
 """
 
+import subprocess
 import math
 import string
 import re, os
@@ -355,6 +356,8 @@ class InfoHelper(VhdlHelper):
         self.scale_set = eventSetup.getScaleSetName()
         self.version = VersionHelper(tmEventSetup.__version__)
         self.sw_version = VersionHelper(__version__)
+        # VHDL producer repo branch name and hash value used in VHDL templates
+        self.branch_name, self.branch_hash = algodist.get_branch_name_hash()
 
 class ModuleHelper(VhdlHelper):
     """Module template helper.

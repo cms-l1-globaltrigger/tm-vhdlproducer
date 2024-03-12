@@ -15,11 +15,13 @@
 -- Scale set:
 -- {{ menu.info.scale_set }}
 
--- VHDL producer version
--- v{{ menu.info.sw_version }}
+-- VHDL producer
+-- version: {{ menu.info.sw_version }}
+-- repo branch name: {{ menu.info.branch_name }}
+-- repo branch hash value: {{ menu.info.branch_hash }}
 
--- tmEventSetup version
--- v{{ menu.info.version }}
+-- tmEventSetup
+-- version: {{ menu.info.version }}
 
 -- Signal definition of pt, eta and phi for correlation conditions.
 {%- include  "signals/signal_correlation_conditions_parameter.vhd" %}
