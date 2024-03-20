@@ -54,6 +54,9 @@ import tmGrammar  # import after tmEventSetup
 from . import algodist
 from . import __version__
 
+import hashlib
+from glob import glob
+
 # -----------------------------------------------------------------------------
 #  Precompiled regular expressions
 # -----------------------------------------------------------------------------
@@ -252,14 +255,30 @@ def bx_encode_4_array(value: int) -> str:
     """
     return format([2, 1, 0, -1, -2].index(value), 'd')
 
-def get_branch_name_hash():
-    process = subprocess.Popen(["git", "branch", "--show-current"], stdout=subprocess.PIPE)
-    branch_name = process.communicate()
-    branch_name = str(branch_name).split("'")[1][:-2]
-    hash_val = subprocess.Popen(["git", "rev-parse", branch_name], stdout=subprocess.PIPE)
-    branch_hash = hash_val.communicate()
-    branch_hash = str(branch_hash).split("'")[1][:-2]
-    return branch_name, branch_hash
+def get_files_hash_value(dir_path):
+    """Calculate hash value of the content of all .py and .vhd files in 'dir_path'.
+    """
+    py_files = dir_path+"/**/*.py"
+    vhd_files = dir_path+"/**/*.vhd"
+
+    x = hashlib.sha256()
+
+    filename = []
+
+    for filename_py in glob(py_files, recursive=True):
+        filename.append(filename_py)
+    for filename_vhd in glob(vhd_files, recursive=True):
+        filename.append(filename_vhd)
+    for i in range(0, len(filename)):
+        with open(filename[i], 'rb') as f:
+            while True:
+                # Reading is buffered, so we can read smaller chunks.
+                chunk = f.read(x.block_size)
+                if not chunk:
+                    break
+                x.update(chunk)
+
+    return x.hexdigest()
 
 # -----------------------------------------------------------------------------
 #  Factories
@@ -364,8 +383,9 @@ class InfoHelper(VhdlHelper):
         self.scale_set = eventSetup.getScaleSetName()
         self.version = VersionHelper(tmEventSetup.__version__)
         self.sw_version = VersionHelper(__version__)
-        # VHDL producer repo branch name and hash value used in VHDL templates
-        self.branch_name, self.branch_hash = get_branch_name_hash() 
+        # hash value of all .py and .vhd files in directory "tmVhdlProducer" recursively
+        file_path = os.path.dirname(__file__)
+        self.files_hash_value = get_files_hash_value(file_path)
         
 class ModuleHelper(VhdlHelper):
     """Module template helper.

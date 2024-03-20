@@ -1698,16 +1698,15 @@ def dump_distribution(collection: ModuleCollection, filename: str):
 def distribute(eventSetup, modules: int, config: str, ratio: float, reverse_sorting: bool, constraints: Dict[str, str] = None) -> ModuleCollection:
     """Distribution wrapper function, provided for convenience."""
 
-    # added VHDL producer repo branch name and hash value or tag version to log file
-    branch_name, branch_hash = vhdlhelper.get_branch_name_hash()
+    # hash value of the content of all .py and .vhd files in '__file__'.
+    file_path = os.path.dirname(__file__)
+    files_hash_value = vhdlhelper.get_files_hash_value(file_path)
 
     logging.info("====================")
-    logging.info("VHDL producer repo")
-    if branch_name == "":
-        logging.info("tag version: %s", vhdlhelper.VersionHelper(__version__))
-    else:
-        logging.info("branch name: %s", branch_name)
-        logging.info("branch hash: %s", branch_hash)
+    logging.info("VHDL producer")
+    logging.info(file_path)
+    logging.info("version: %s", vhdlhelper.VersionHelper(__version__))
+    logging.info("hash: %s", files_hash_value)
     logging.info("====================")
     logging.info("distributing menu...")
 
