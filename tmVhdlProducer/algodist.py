@@ -1704,7 +1704,6 @@ def distribute(eventSetup, modules: int, config: str, ratio: float, reverse_sort
 
     logging.info("====================")
     logging.info("VHDL producer")
-    logging.info(file_path)
     logging.info("version: %s", vhdlhelper.VersionHelper(__version__))
     logging.info("hash: %s", files_hash_value)
     logging.info("====================")
