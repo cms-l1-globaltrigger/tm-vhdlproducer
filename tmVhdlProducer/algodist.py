@@ -32,9 +32,11 @@ from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
 import tmEventSetup
 import tmGrammar
 
-from .constants import BRAMS_TOTAL, SLICELUTS_TOTAL, PROCESSORS_TOTAL, NR_CALOS, NR_MUONS
-from . import vhdlhelper
+from .constants import BRAMS_TOTAL, SLICELUTS_TOTAL, PROCESSORS_TOTAL, NR_CALOS, NR_MUONS  
+from .constants import get_files_hash_value
 from . import __version__
+
+
 
 from .handles import Payload
 from .handles import ObjectHandle
@@ -1700,11 +1702,11 @@ def distribute(eventSetup, modules: int, config: str, ratio: float, reverse_sort
 
     # hash value of the content of all .py and .vhd files in 'file_path'.
     file_path = os.path.dirname(__file__)
-    files_hash_value = vhdlhelper.get_files_hash_value(file_path)
+    files_hash_value = get_files_hash_value(file_path)
 
     logging.info("====================")
     logging.info("VHDL producer")
-    logging.info("version: %s", vhdlhelper.VersionHelper(__version__))
+    logging.info("version: %s", __version__)
     logging.info("hash: %s", files_hash_value)
     logging.info("====================")
     logging.info("distributing menu...")
