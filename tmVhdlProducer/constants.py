@@ -15,13 +15,13 @@ def get_files_hash_value(dir_path):
     py_files = dir_path+"/**/*.py"
     vhd_files = dir_path+"/**/*.vhd"
     x = hashlib.sha256()
-    filename = []
+    filenames = []
     for filename_py in glob(py_files, recursive=True):
-        filename.append(filename_py)
+        filenames.append(filename_py)
     for filename_vhd in glob(vhd_files, recursive=True):
-        filename.append(filename_vhd)
-    for i in range(0, len(filename)):
-        with open(filename[i], 'rb') as f:
+        filenames.append(filename_vhd)
+    for filename in filenames:
+        with open(filename, 'rb') as f:
             while True:
                 # Reading is buffered, so we can read smaller chunks.
                 chunk = f.read(x.block_size)

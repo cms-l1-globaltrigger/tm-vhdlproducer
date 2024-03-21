@@ -36,8 +36,6 @@ from .constants import BRAMS_TOTAL, SLICELUTS_TOTAL, PROCESSORS_TOTAL, NR_CALOS,
 from .constants import get_files_hash_value
 from . import __version__
 
-
-
 from .handles import Payload
 from .handles import ObjectHandle
 from .handles import ConditionHandle
