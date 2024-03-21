@@ -7,12 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.17.2] - 2024-03-20
+## [2.18.0] - 2024-03-21
 
 ### Changed
-- vhdlhelper.py with created function 'get_files_hash_value' (hash value of all .py and .vhd files in "tmVhdlProducer" recursively) for use in VHDL templates ("menu.info.files_hash_value").
-- algodist.py with writing "files_hash_value" to log file.
-- VHDL templates.
+- inserted function 'get_files_hash_value' in constants.py
+- writes "files_hash_value" to VHDL snippets comments ("menu.info.files_hash_value").
+- writes "files_hash_value" to log file.
+- updated VHDL templates.
 
 ## [2.17.1] - 2024-02-28
 
