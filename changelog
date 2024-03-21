@@ -10,10 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.18.0] - 2024-03-21
 
 ### Changed
-- inserted function 'get_files_hash_value' in constants.py
-- writes "files_hash_value" to VHDL snippets comments ("menu.info.files_hash_value").
-- writes "files_hash_value" to log file.
-- updated VHDL templates.
+- inserted function 'get_files_hash_value' in constants.py (#48).
+- writes "files_hash_value" to VHDL snippets comments ("menu.info.files_hash_value") (#48).
+- writes "files_hash_value" to log file (#48).
+- updated VHDL templates (#48).
 
 ## [2.17.1] - 2024-02-28
 
