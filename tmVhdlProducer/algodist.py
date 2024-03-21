@@ -1698,7 +1698,7 @@ def dump_distribution(collection: ModuleCollection, filename: str):
 def distribute(eventSetup, modules: int, config: str, ratio: float, reverse_sorting: bool, constraints: Dict[str, str] = None) -> ModuleCollection:
     """Distribution wrapper function, provided for convenience."""
 
-    # hash value of the content of all .py and .vhd files in '__file__'.
+    # hash value of the content of all .py and .vhd files in 'file_path'.
     file_path = os.path.dirname(__file__)
     files_hash_value = vhdlhelper.get_files_hash_value(file_path)
 
