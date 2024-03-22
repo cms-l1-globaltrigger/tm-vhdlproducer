@@ -23,7 +23,6 @@ Dump distribution to JSON file
 import argparse
 import json
 import logging
-import subprocess
 import uuid
 import sys, os
 from collections import namedtuple
@@ -1696,6 +1695,8 @@ def dump_distribution(collection: ModuleCollection, filename: str):
 
 def distribute(eventSetup, modules: int, config: str, ratio: float, reverse_sorting: bool, constraints: Dict[str, str] = None) -> ModuleCollection:
     """Distribution wrapper function, provided for convenience."""
+    logging.info("distributing menu...")
+
     constraints = constraints or {}
 
     logging.info("loading resource information from JSON: %s", config)

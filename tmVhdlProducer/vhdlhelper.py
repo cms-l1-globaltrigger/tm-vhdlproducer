@@ -40,7 +40,6 @@ scales.
       * MassCutHelper
 """
 
-import subprocess
 import math
 import string
 import re, os
