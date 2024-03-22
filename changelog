@@ -7,12 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.18.0] - 2024-03-21
+## [2.18.0] - 2024-03-22
+
+### Added
+- calculation of hash sum of source code (#48).
 
 ### Changed
-- inserted function 'get_files_hash_value' in constants.py (#48).
-- writes "files_hash_value" to VHDL snippets comments ("menu.info.files_hash_value") (#48).
-- writes "files_hash_value" to log file (#48).
 - updated VHDL templates (#48).
 
 ## [2.17.1] - 2024-02-28
@@ -318,8 +318,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - adjusted `--dryrun` and `--ratio` options.
 
-[unreleased]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.17.2...HEAD
-[2.17.2]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.17.1...2.17.2
+[unreleased]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.18.0...HEAD
+[2.18.0]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.17.1...2.18.0
 [2.17.1]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.17.0...2.17.1
 [2.17.0]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.16.0...2.17.0
 [2.16.0]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.15.1...2.16.0

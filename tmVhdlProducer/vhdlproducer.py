@@ -1,10 +1,9 @@
 import json
 import logging
+import math
+import os
 import shutil
 import uuid
-import os
-import math
-
 from binascii import hexlify
 from typing import Callable, Dict, List
 
@@ -115,6 +114,7 @@ class VhdlProducer(object):
 
     def __init__(self, searchpath):
         self.engine = TemplateEngine(searchpath)
+        self.config: dict = {}
 
     def create_dirs(self, directory, n_modules):
         """Create directory tree for output, return dictionary of created
@@ -148,7 +148,7 @@ class VhdlProducer(object):
         #GtlLutsGenerator(self, scales, directory)
 ### end
 
-        helper = MenuHelper(collection)
+        helper = MenuHelper(collection, self.config)
         logging.info("writing %s algorithms to %s module(s)", len(helper.algorithms), len(helper.modules))
         # Create directory tree
         directories = self.create_dirs(directory, len(collection))

@@ -17,7 +17,7 @@
 
 -- VHDL producer
 -- version: {{ menu.info.sw_version }}
--- hash value: {{ menu.info.files_hash_value }}
+-- hash value: {{ menu.info.sw_hash }}
 
 -- tmEventSetup
 -- version: {{ menu.info.version }}

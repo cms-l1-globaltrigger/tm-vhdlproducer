@@ -51,9 +51,8 @@ from typing import Dict, Iterable
 import tmEventSetup
 import tmGrammar  # import after tmEventSetup
 
-from . import algodist
 from . import __version__
-from .constants import get_files_hash_value
+from . import algodist
 
 # -----------------------------------------------------------------------------
 #  Precompiled regular expressions
@@ -318,9 +317,9 @@ class MenuHelper(VhdlHelper):
         modules  [list]
     """
 
-    def __init__(self, collection):
+    def __init__(self, collection, config: dict) -> None:
         # Init attribiutes
-        self.info = InfoHelper(collection)
+        self.info = InfoHelper(collection, config)
         self.algorithms = collection.algorithms
         self.conditions = collection.conditions
         self.modules = []
@@ -345,9 +344,10 @@ class InfoHelper(VhdlHelper):
         scale_set  [str]
         version  [str]
         sw_version  [str]
+        sw_hash  [str] (optional)
     """
 
-    def __init__(self, collection):
+    def __init__(self, collection, config: dict) -> None:
         eventSetup = collection.eventSetup
         # Init attribiutes
         self.name = eventSetup.getName()
@@ -356,10 +356,8 @@ class InfoHelper(VhdlHelper):
         self.scale_set = eventSetup.getScaleSetName()
         self.version = VersionHelper(tmEventSetup.__version__)
         self.sw_version = VersionHelper(__version__)
-        # hash value of all .py and .vhd files in directory "tmVhdlProducer" recursively
-        file_path = os.path.dirname(__file__)
-        self.files_hash_value = get_files_hash_value(file_path)
-        
+        self.sw_hash = config.get("sw_hash", "")
+
 class ModuleHelper(VhdlHelper):
     """Module template helper.
 
