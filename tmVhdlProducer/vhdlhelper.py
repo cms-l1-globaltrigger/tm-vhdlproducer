@@ -1662,7 +1662,7 @@ if __name__ == '__main__':
     collection.reverse_sorting = True
     collection.distribute(modules=6)
     # Create template helper
-    menu = MenuHelper(collection)
+    menu = MenuHelper(collection, {"sw_hash": "42"})
 
     # Info
     print("*" * 80)
@@ -1672,6 +1672,7 @@ if __name__ == '__main__':
     print("menu.info.scale_set     :", menu.info.scale_set)
     print("menu.info.version       :", menu.info.version)
     print("menu.info.sw_version    :", menu.info.sw_version)
+    print("menu.info.sw_hash       :", menu.info.sw_hash)
     print("*" * 80)
     print("menu.algorithms|length  :", len(menu.algorithms))
     print("menu.conditions|length  :", len(menu.conditions))
