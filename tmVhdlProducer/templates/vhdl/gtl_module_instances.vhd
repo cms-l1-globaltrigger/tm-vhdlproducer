@@ -15,11 +15,12 @@
 -- Scale set:
 -- {{ menu.info.scale_set }}
 
--- VHDL producer version
--- v{{ menu.info.sw_version }}
+-- VHDL producer
+-- version: {{ menu.info.sw_version }}
+-- hash value: {{ menu.info.sw_hash }}
 
--- tmEventSetup version
--- v{{ menu.info.version }}
+-- tmEventSetup
+-- version: {{ menu.info.version }}
 
 -- ========================================================
 -- Instantiations of conditions
@@ -96,4 +97,3 @@ algo({{ algorithm.module_index | d }}) <= {{ algorithm.vhdl_signal }};
 -- muon charge correlations
 {% include "instances/muon_charge_correlations.vhd" %}
 -- ========================================================
-
