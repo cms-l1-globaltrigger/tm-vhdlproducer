@@ -1,5 +1,6 @@
 import argparse
 import glob
+import hashlib
 import logging
 import os
 import re
@@ -10,13 +11,13 @@ from typing import Dict, List
 import tmEventSetup
 import tmReporter
 
-from .vhdlproducer import VhdlProducer
+from . import __version__
 from .algodist import ProjectDir
 from .algodist import distribute, constraint_t
 from .algodist import MinModules, MaxModules
 from .algodist import kExternals, kZDCPlus, kZDCMinus
 from .algodist import DefaultConfigFile
-from . import __version__
+from .vhdlproducer import VhdlProducer
 
 EXIT_SUCCESS: int = 0
 EXIT_FAILURE: int = 1
@@ -62,6 +63,26 @@ def ratio_t(value: str) -> float:
     if .0 <= ratio <= 1.:
         return ratio
     raise ValueError(ratio)
+
+def calc_sw_hash(path: str) -> str:
+    """Calculate a SHA-256 hash value of the content of all source files at given path."""
+    filenames = []
+    # Collect all python modules and VHDL templates
+    for pattern in ["**/*.py", "templates/vhdl/**/*.vhd"]:
+        for filename in glob.glob(os.path.join(path, pattern), recursive=True):
+            filenames.append(filename)
+
+    hash_sha256 = hashlib.sha256()
+    # Sort filenames for deterministic hash
+    for filename in sorted(filenames):
+        with open(filename, "rb") as f:
+            while True:
+                # Reading is buffered, so we can read smaller chunks.
+                chunk = f.read(hash_sha256.block_size)
+                if not chunk:
+                    break
+                hash_sha256.update(chunk)
+    return hash_sha256.hexdigest()
 
 # -----------------------------------------------------------------------------
 #  Command line parser
@@ -148,6 +169,10 @@ def main() -> int:
 
     logging.info("running VHDL producer...")
 
+    sw_hash = calc_sw_hash(os.path.dirname(__file__))
+    logging.info("version: %s", __version__)
+    logging.info("hash: %s", sw_hash)
+
     logging.info("loading XML menu: %s", args.menu)
     eventSetup = tmEventSetup.getTriggerMenu(args.menu)
     output_dir = os.path.join(args.output, f"{eventSetup.getName()}-d{args.dist}")
@@ -207,6 +232,7 @@ def main() -> int:
         logging.info("writing VHDL modules...")
         template_dir = os.path.join(ProjectDir, 'templates', 'vhdl')
         producer = VhdlProducer(template_dir)
+        producer.config.update({"sw_hash": sw_hash})
         producer.write(collection, output_dir)
         logging.info("writing updated XML file %s", args.menu)
 

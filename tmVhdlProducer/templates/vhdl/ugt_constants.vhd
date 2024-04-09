@@ -15,11 +15,12 @@
 -- Scale set:
 -- {{ menu.info.scale_set }}
 
--- VHDL producer version
--- v{{ menu.info.sw_version }}
+-- VHDL producer
+-- version: {{ menu.info.sw_version }}
+-- hash value: {{ menu.info.sw_hash }}
 
--- tmEventSetup version
--- v{{ menu.info.version }}
+-- tmEventSetup
+-- version: {{ menu.info.version }}
 
 -- Algorithms
 constant NR_ALGOS : positive := {{ module.algorithms | length }}; -- number of algorithmns (min. 32 for FDL registers width !!!) - written by TME

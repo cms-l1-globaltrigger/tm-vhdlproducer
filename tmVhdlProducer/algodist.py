@@ -32,6 +32,7 @@ import tmEventSetup
 import tmGrammar
 
 from .constants import BRAMS_TOTAL, SLICELUTS_TOTAL, PROCESSORS_TOTAL, NR_CALOS, NR_MUONS
+from . import __version__
 
 from .handles import Payload
 from .handles import ObjectHandle
