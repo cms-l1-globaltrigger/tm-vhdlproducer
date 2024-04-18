@@ -98,12 +98,20 @@ algo({{ algorithm.module_index | d }}) <= {{ algorithm.vhdl_signal }};
 {% include "instances/muon_charge_correlations.vhd" %}
 
 -- calculation instance for AXOL1TL score
-{%- set ns = namespace(matched = 0) -%}
+{%- set ns_v3 = namespace(matched = 0) -%}
 {%- for condition in module.signalConditions %}
-{%- set o = condition.objects[0] -%}
-{%-   if o.type == "AXO" and not ns.matched == 1 %}
+{%-   set o = condition.objects[0] %}
+{%-   if o.type == "AXO" and o.model.value == "v3" and not ns_v3.matched == 1 %}
 {%      include "instances/axol1tl_calculation.vhd" %}
-{%-     set ns.matched = 1 -%}
+{%-     set ns_v3.matched = 1 -%}
+{%-   endif -%}
+{% endfor %}
+{%- set ns_v1 = namespace(matched = 0) -%}
+{%- for condition in module.signalConditions %}
+{%-   set o = condition.objects[0] %}
+{%-   if o.type == "AXO" and o.model.value == "v1" and not ns_v1.matched == 1 %}
+{%      include "instances/axol1tl_calculation.vhd" %}
+{%-     set ns_v1.matched = 1 -%}
 {%-   endif -%}
 {% endfor %}
 -- ========================================================

@@ -35,12 +35,20 @@
 {%- endfor %}
 
 -- Signal definition for "AXO" calculation
-{%- set ns = namespace(matched = 0) -%}
+{%- set ns_v3 = namespace(matched = 0) -%}
 {%- for condition in module.signalConditions %}
 {%- set o = condition.objects[0] -%}
-{%-   if o.type == "AXO" and not ns.matched == 1 %}
+{%-   if o.type == "AXO" and o.model.value == "v3" and not ns_v3.matched == 1 %}
     signal axol1tl_{{ o.model.value }}_score : std_logic;
-{%-     set ns.matched = 1 -%}
+{%-     set ns_v3.matched = 1 -%}
+{%-   endif -%}
+{%- endfor %}
+{%- set ns_v1 = namespace(matched = 0) -%}
+{%- for condition in module.signalConditions %}
+{%- set o = condition.objects[0] -%}
+{%-   if o.type == "AXO" and o.model.value == "v1" and not ns_v1.matched == 1 %}
+    signal axol1tl_{{ o.model.value }}_score : std_logic;
+{%-     set ns_v1.matched = 1 -%}
 {%-   endif -%}
 {%- endfor %}
 
