@@ -15,7 +15,7 @@ from . import __version__
 from .algodist import ProjectDir
 from .algodist import distribute, constraint_t
 from .algodist import MinModules, MaxModules
-from .algodist import kExternals, kZDCPlus, kZDCMinus
+from .algodist import kExternals, kZDCPlus, kZDCMinus, kAxol1tlTrigger
 from .algodist import DefaultConfigFile
 from .vhdlproducer import VhdlProducer
 
@@ -36,6 +36,7 @@ DefaultOutputDir: str = os.getcwd()
 ConstraintTypes: Dict[str, List[str]] = {
     'ext': [kExternals],
     'zdc': [kZDCPlus, kZDCMinus],
+    'axo': [kAxol1tlTrigger],
 }
 """Mapping constraint types to esCondition types, provided for convenience."""
 

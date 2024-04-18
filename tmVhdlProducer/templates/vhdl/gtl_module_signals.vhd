@@ -34,6 +34,16 @@
     signal {{ condition.vhdl_signal }} : std_logic;
 {%- endfor %}
 
+-- Signal definition for "AXO" calculation
+{%- set ns = namespace(matched = 0) -%}
+{%- for condition in module.signalConditions %}
+{%- set o = condition.objects[0] -%}
+{%-   if o.type == "AXO" and not ns.matched == 1 %}
+    signal axol1tl_{{ o.model.value }}_score : std_logic;
+{%-     set ns.matched = 1 -%}
+{%-   endif -%}
+{%- endfor %}
+
 -- Signal definition for algorithms names
 {%- for algorithm in module.algorithms | sort_by_attribute('index') %}
     signal {{ algorithm.vhdl_signal }} : std_logic;

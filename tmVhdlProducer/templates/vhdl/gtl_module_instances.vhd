@@ -96,4 +96,14 @@ algo({{ algorithm.module_index | d }}) <= {{ algorithm.vhdl_signal }};
 
 -- muon charge correlations
 {% include "instances/muon_charge_correlations.vhd" %}
+
+-- calculation instance for AXOL1TL score
+{%- set ns = namespace(matched = 0) -%}
+{%- for condition in module.signalConditions %}
+{%- set o = condition.objects[0] -%}
+{%-   if o.type == "AXO" and not ns.matched == 1 %}
+{%      include "instances/axol1tl_calculation.vhd" %}
+{%-     set ns.matched = 1 -%}
+{%-   endif -%}
+{% endfor %}
 -- ========================================================

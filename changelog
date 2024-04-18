@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - TOPO model "base_v1" in resource_default.json.
+- calculation of ML scores only once.
 
 ### Removed 
 - unused templates (anomaly_detection.vhd and topo_trigger.vhd).
