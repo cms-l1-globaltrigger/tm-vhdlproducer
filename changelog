@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.19.0] - 2024-04-16
+## [2.20.0] - 2024-05-16
 
 ### Added
 - TOPO model "base_v1" in resource_default.json.
