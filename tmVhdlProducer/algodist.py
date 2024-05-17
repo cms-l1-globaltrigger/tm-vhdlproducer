@@ -179,6 +179,9 @@ kAnomalyDetectionTrigger: str = 'AnomalyDetectionTrigger'
 kAxol1tlTrigger: str = 'Axol1tlTrigger'
 kTopologicalTrigger: str = 'TopologicalTrigger'
 kCicadaTrigger: str = 'CicadaTrigger'
+kMultiEgamma: str = 'MultiEgamma'
+kMultiJet: str = 'MultiJet'
+kMultiTau: str = 'MultiTau'
 #
 # Keys for cut types
 #
@@ -440,6 +443,9 @@ ConditionTypeKey: Dict[int, str] = {
     tmEventSetup.Axol1tlTrigger: kAxol1tlTrigger,
     tmEventSetup.CicadaTrigger: kCicadaTrigger,
     tmEventSetup.TopologicalTrigger: kTopologicalTrigger,
+    tmEventSetup.MultiEgamma: kMultiEgamma,
+    tmEventSetup.MultiJet: kMultiJet,
+    tmEventSetup.MultiTau: kMultiTau,
 }
 """Dictionary for condition type enumerations."""
 

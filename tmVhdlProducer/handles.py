@@ -86,6 +86,12 @@ CaloConditionTypes: List[int] = [
     tmEventSetup.QuadJet,
 ]
 
+CaloMultiConditionTypes: List[int] = [
+    tmEventSetup.MultiEgamma,
+    tmEventSetup.MultiJet,
+    tmEventSetup.MultiTau,
+]
+
 EsumsConditionTypes: List[int] = [
     tmEventSetup.TotalEt,
     tmEventSetup.TotalEtEM,
@@ -442,6 +448,9 @@ class ConditionHandle(Handle):
 
     def isCaloCondition(self):
         return self.type in CaloConditionTypes
+
+    def isCaloMultiCondition(self):
+        return self.type in CaloMultiConditionTypes
 
     def isEsumsCondition(self):
         return self.type in EsumsConditionTypes

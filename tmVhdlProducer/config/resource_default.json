@@ -79,7 +79,10 @@
                 "ZDCMinus": "ZDCMinus",
                 "Axol1tlTrigger": "Axol1tlTrigger",
                 "TopologicalTrigger": "TopologicalTrigger",
-                "CicadaTrigger": "CicadaTrigger"
+                "CicadaTrigger": "CicadaTrigger",
+                "MultiEgamma": "CaloCondition",
+                "MultiJet": "CaloCondition",
+                "MultiTau": "CaloCondition"
             },
             "objects": {
                 "Egamma": "calo",
@@ -551,6 +554,54 @@
                         "processors": 0,
                         "brams": 0,
                         "sliceLUTs": 1672
+                    },
+                    {
+                        "types": ["calo", "calo", "calo", "calo", "calo"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 10
+                    },
+                    {
+                        "types": ["calo", "calo", "calo", "calo", "calo", "calo"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 10
+                    },
+                    {
+                        "types": ["calo", "calo", "calo", "calo", "calo", "calo", "calo"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 10
+                    },
+                    {
+                        "types": ["calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 10
+                    },
+                    {
+                        "types": ["calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 10
+                    },
+                    {
+                        "types": ["calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 10
+                    },
+                    {
+                        "types": ["calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 10
+                    },
+                    {
+                        "types": ["calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 10
                     }
                 ]
             },

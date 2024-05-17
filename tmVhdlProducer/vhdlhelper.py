@@ -16,6 +16,7 @@ Condition template helpers for needs of different condition types.
   * ConditionHelper
     * SimpleConditionHelper
     * CaloConditionHelper
+    * CaloMultiConditionHelper
     * MuonConditionHelper
     * ExternalConditionHelper
     * CorrelationConditionHelper
@@ -259,6 +260,8 @@ def conditionFactory(condition_handle):
     """Returns condition template helper class according to condition handle."""
     if condition_handle.isCaloCondition():
         return CaloConditionHelper(condition_handle)
+    elif condition_handle.isCaloMultiCondition():
+        return CaloMultiConditionHelper(condition_handle)
     elif condition_handle.isMuonCondition():
         return MuonConditionHelper(condition_handle)
     elif condition_handle.isEsumsCondition():
@@ -402,6 +405,10 @@ class ModuleHelper(VhdlHelper):
     @property
     def caloConditions(self):
         return filter(lambda condition: condition.handle.isCaloCondition(), self.conditions)
+
+    @property
+    def caloMultiConditions(self):
+        return filter(lambda condition: condition.handle.isCaloMultiCondition(), self.conditions)
 
     @property
     def caloConditionsOvRm(self):
@@ -890,6 +897,7 @@ class ConditionHelper(VhdlHelper):
     def update_objects(self, condition_handle):
         """Update objects assigned to this condition."""
         objects = list(condition_handle.objects)
+        print(len(objects))
         assert 0 < len(objects) <= self.ReqObjects, "condition object count missmatch"
         # Objects are returned in correct order!
         for i, obj in enumerate(objects):
@@ -934,6 +942,11 @@ class CaloConditionHelper(ConditionHelper):
         for cut_handle in condition_handle.cuts:
             if cut_handle.cut_type == tmEventSetup.TwoBodyPt:
                 self.twoBodyPt.update(cut_handle)
+
+class CaloMultiConditionHelper(ConditionHelper):
+    """Calorimeter condition multi template helper class."""
+    ReqObjects = 12
+    """Number of required objects."""
 
 class MuonConditionHelper(ConditionHelper):
     """Muon condition template helper class.
