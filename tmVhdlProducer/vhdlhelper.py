@@ -897,7 +897,6 @@ class ConditionHelper(VhdlHelper):
     def update_objects(self, condition_handle):
         """Update objects assigned to this condition."""
         objects = list(condition_handle.objects)
-        print(len(objects))
         assert 0 < len(objects) <= self.ReqObjects, "condition object count missmatch"
         # Objects are returned in correct order!
         for i, obj in enumerate(objects):
