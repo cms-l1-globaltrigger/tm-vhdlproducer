@@ -559,49 +559,49 @@
                         "types": ["calo", "calo", "calo", "calo", "calo"],
                         "processors": 0,
                         "brams": 0,
-                        "sliceLUTs": 10
+                        "sliceLUTs": 3
                     },
                     {
                         "types": ["calo", "calo", "calo", "calo", "calo", "calo"],
                         "processors": 0,
                         "brams": 0,
-                        "sliceLUTs": 10
+                        "sliceLUTs": 3
                     },
                     {
                         "types": ["calo", "calo", "calo", "calo", "calo", "calo", "calo"],
                         "processors": 0,
                         "brams": 0,
-                        "sliceLUTs": 10
+                        "sliceLUTs": 3
                     },
                     {
                         "types": ["calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo"],
                         "processors": 0,
                         "brams": 0,
-                        "sliceLUTs": 10
+                        "sliceLUTs": 3
                     },
                     {
                         "types": ["calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo"],
                         "processors": 0,
                         "brams": 0,
-                        "sliceLUTs": 10
+                        "sliceLUTs": 3
                     },
                     {
                         "types": ["calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo"],
                         "processors": 0,
                         "brams": 0,
-                        "sliceLUTs": 10
+                        "sliceLUTs": 3
                     },
                     {
                         "types": ["calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo"],
                         "processors": 0,
                         "brams": 0,
-                        "sliceLUTs": 10
+                        "sliceLUTs": 3
                     },
                     {
                         "types": ["calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo"],
                         "processors": 0,
                         "brams": 0,
-                        "sliceLUTs": 10
+                        "sliceLUTs": 3
                     }
                 ]
             },
