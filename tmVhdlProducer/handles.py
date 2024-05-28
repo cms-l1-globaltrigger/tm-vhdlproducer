@@ -32,7 +32,7 @@ ObjectCollectionSize: Dict[int, int] = {
     tmEventSetup.ETM: 1,
     tmEventSetup.HTM: 1,
     tmEventSetup.ETMHF: 1,
-#    tmEventSetup.HTMHF: 1,
+    tmEventSetup.HTMHF: 1,
     tmEventSetup.ASYMET: 1,
     tmEventSetup.ASYMHT: 1,
     tmEventSetup.ASYMETHF: 1,
@@ -86,6 +86,12 @@ CaloConditionTypes: List[int] = [
     tmEventSetup.QuadJet,
 ]
 
+CaloMultiConditionTypes: List[int] = [
+    tmEventSetup.MultiEgamma,
+    tmEventSetup.MultiJet,
+    tmEventSetup.MultiTau,
+]
+
 EsumsConditionTypes: List[int] = [
     tmEventSetup.TotalEt,
     tmEventSetup.TotalEtEM,
@@ -93,7 +99,7 @@ EsumsConditionTypes: List[int] = [
     tmEventSetup.MissingEt,
     tmEventSetup.MissingHt,
     tmEventSetup.MissingEtHF,
-#    tmEventSetup.MissingHtHF,
+    tmEventSetup.MissingHtHF,
     tmEventSetup.AsymmetryEt,
     tmEventSetup.AsymmetryHt,
     tmEventSetup.AsymmetryEtHF,
@@ -191,7 +197,7 @@ EsumsObjectTypes: List[int] = [
     tmEventSetup.ETM,
     tmEventSetup.HTM,
     tmEventSetup.ETMHF,
-#    tmEventSetup.HTMHF,
+    tmEventSetup.HTMHF,
     tmEventSetup.ASYMET,
     tmEventSetup.ASYMHT,
     tmEventSetup.ASYMETHF,
@@ -230,7 +236,7 @@ ObjectsOrder: List[int] = [
     tmEventSetup.ETM,
     tmEventSetup.HTM,
     tmEventSetup.ETMHF,
-#    tmEventSetup.HTMHF,
+    tmEventSetup.HTMHF,
 # other objects
     tmEventSetup.ETT,
     tmEventSetup.ETTEM,
@@ -442,6 +448,9 @@ class ConditionHandle(Handle):
 
     def isCaloCondition(self):
         return self.type in CaloConditionTypes
+
+    def isCaloMultiCondition(self):
+        return self.type in CaloMultiConditionTypes
 
     def isEsumsCondition(self):
         return self.type in EsumsConditionTypes

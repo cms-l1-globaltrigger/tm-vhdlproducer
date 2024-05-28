@@ -29,6 +29,9 @@
 {%- for condition in module.caloConditions %}
 {% include "instances/calo_condition.vhd" %}
 {% endfor %}
+{%- for condition in module.caloMultiConditions %}
+{% include "instances/calo_multi_condition.vhd" %}
+{% endfor %}
 {%- for condition in module.caloConditionsOvRm %}
 {% include "instances/calo_conditions_orm.vhd" %}
 {% endfor %}

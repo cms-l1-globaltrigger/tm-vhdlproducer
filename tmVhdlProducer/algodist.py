@@ -67,7 +67,7 @@ kTOWERCOUNT: str = 'TOWERCOUNT'
 kETM: str = 'ETM'
 kHTM: str = 'HTM'
 kETMHF: str = 'ETMHF'
-#kHTMHF: str = 'HTMHF'
+kHTMHF: str = 'HTMHF'
 kASYMET: str = 'ASYMET'
 kASYMHT: str = 'ASYMHT'
 kASYMETHF: str = 'ASYMETHF'
@@ -125,7 +125,7 @@ kTowerCount: str = 'TowerCount'
 kMissingEt: str = 'MissingEt'
 kMissingHt: str = 'MissingHt'
 kMissingEtHF: str = 'MissingEtHF'
-#kMissingHtHF: str = 'MissingHtHF'
+kMissingHtHF: str = 'MissingHtHF'
 kAsymmetryEt: str = 'AsymmetryEt'
 kAsymmetryHt: str = 'AsymmetryHt'
 kAsymmetryEtHF: str = 'AsymmetryEtHF'
@@ -179,6 +179,9 @@ kAnomalyDetectionTrigger: str = 'AnomalyDetectionTrigger'
 kAxol1tlTrigger: str = 'Axol1tlTrigger'
 kTopologicalTrigger: str = 'TopologicalTrigger'
 kCicadaTrigger: str = 'CicadaTrigger'
+kMultiEgamma: str = 'MultiEgamma'
+kMultiJet: str = 'MultiJet'
+kMultiTau: str = 'MultiTau'
 #
 # Keys for cut types
 #
@@ -270,7 +273,7 @@ ObjectTypeKey: Dict[int, str] = {
     tmEventSetup.ETM: kETM,
     tmEventSetup.HTM: kHTM,
     tmEventSetup.ETMHF: kETMHF,
-#    tmEventSetup.HTMHF: kHTMHF,
+    tmEventSetup.HTMHF: kHTMHF,
     tmEventSetup.ASYMET: kASYMET,
     tmEventSetup.ASYMHT: kASYMHT,
     tmEventSetup.ASYMETHF: kASYMETHF,
@@ -313,7 +316,7 @@ ObjectGrammarKey: Dict[int, str] = {
     tmEventSetup.HTT: tmGrammar.HTT,
     tmEventSetup.ETM: tmGrammar.ETM,
     tmEventSetup.ETMHF: tmGrammar.ETMHF,
-#    tmEventSetup.HTMHF: tmGrammar.HTMHF,
+    tmEventSetup.HTMHF: tmGrammar.HTMHF,
     tmEventSetup.HTM: tmGrammar.HTM,
     tmEventSetup.ASYMET: tmGrammar.ASYMET,
     tmEventSetup.ASYMHT: tmGrammar.ASYMHT,
@@ -358,6 +361,7 @@ ObjectCategoryKey: Dict[int, str] = {
     tmEventSetup.HTM: "esums",
     tmEventSetup.ETTEM: "esums",
     tmEventSetup.ETMHF: "esums",
+    tmEventSetup.HTMHF: "esums",
 }
 """Mapping object types to object category keys (for deltas)."""
 
@@ -385,7 +389,7 @@ ConditionTypeKey: Dict[int, str] = {
     tmEventSetup.MissingEt: kMissingEt,
     tmEventSetup.MissingHt: kMissingHt,
     tmEventSetup.MissingEtHF: kMissingEtHF,
-#    tmEventSetup.MissingHtHF: kMissingHtHF,
+    tmEventSetup.MissingHtHF: kMissingHtHF,
     tmEventSetup.AsymmetryEt: kAsymmetryEt,
     tmEventSetup.AsymmetryHt: kAsymmetryHt,
     tmEventSetup.AsymmetryEtHF: kAsymmetryEtHF,
@@ -439,6 +443,9 @@ ConditionTypeKey: Dict[int, str] = {
     tmEventSetup.Axol1tlTrigger: kAxol1tlTrigger,
     tmEventSetup.CicadaTrigger: kCicadaTrigger,
     tmEventSetup.TopologicalTrigger: kTopologicalTrigger,
+    tmEventSetup.MultiEgamma: kMultiEgamma,
+    tmEventSetup.MultiJet: kMultiJet,
+    tmEventSetup.MultiTau: kMultiTau,
 }
 """Dictionary for condition type enumerations."""
 
@@ -950,7 +957,8 @@ class Module:
         esums_type = [
             tmEventSetup.ETM,
             tmEventSetup.HTM,
-            tmEventSetup.ETMHF
+            tmEventSetup.ETMHF,
+            tmEventSetup.HTMHF
         ]
 
         def calc_factor(combination) -> float:
@@ -1067,7 +1075,7 @@ class Module:
                 obj_0 = combination[0]
                 obj_1 = combination[1]
                 factor = calc_factor(combination)
-                if obj_1 in (tmEventSetup.ETM, tmEventSetup.HTM, tmEventSetup.ETMHF):
+                if obj_1 in (tmEventSetup.ETM, tmEventSetup.HTM, tmEventSetup.ETMHF, tmEventSetup.HTMHF):
                     sliceLUTs += self.calc_dphi_integer.sliceLUTs * factor
                     sliceLUTs_inst = self.calc_dphi_integer.sliceLUTs * factor
                 else:
