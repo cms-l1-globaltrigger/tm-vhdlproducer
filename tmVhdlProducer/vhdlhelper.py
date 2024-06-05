@@ -53,6 +53,8 @@ import tmGrammar  # import after tmEventSetup
 from . import __version__
 from . import algodist
 
+from .constants import CALOS_ETA_BITS, MUON_ETA_BITS, MUON_INDEX_BITS
+
 # -----------------------------------------------------------------------------
 #  Precompiled regular expressions
 # -----------------------------------------------------------------------------
@@ -161,6 +163,32 @@ ComparisonOperator: Dict[int, bool] = {
 # -----------------------------------------------------------------------------
 #  Filters
 # -----------------------------------------------------------------------------
+
+def validate_window_limits(cut_type: str, type: str, lower: int, upper: int):
+    """Valitation of eta and index windows limits"""
+    if cut_type == tmEventSetup.Eta:
+        if type == 'MU':
+            mask = 1 << MUON_ETA_BITS-1
+        elif type == 'EG' or type == 'JET' or type == 'TAU':
+            mask = 1 << CALOS_ETA_BITS-1
+        else:
+            assert f"ERROR: wrong object type for eta windows ! - {type}"
+        # cases for positive and negative lower and upper limits
+        if (lower & mask != mask and upper & mask != mask):        
+            assert lower < upper, f"ERROR in eta windows: positive lower limit > positive upper limit ! - {type}, lower: {lower}, upper: {upper}"
+        elif (lower & mask == mask and upper & mask != mask):        
+            assert lower > upper, f"ERROR in eta windows: negative lower limit < positive upper limit ! - {type}, lower: {lower}, upper: {upper}"
+        elif (lower & mask != mask and upper & mask == mask):        
+            assert lower > upper, f"ERROR in eta windows: lower limit is positive, but upper limit is negative ! - {type}, lower: {lower}, upper: {upper}"
+        elif (lower & mask == mask and upper & mask == mask):
+            assert lower < upper, f"ERROR in eta windows: negative lower limit > negative upper limit ! - {type}, lower: {lower}, upper: {upper}"
+    elif cut_type == tmEventSetup.Index:
+        if type == 'MU':
+            mask = 1 << MUON_INDEX_BITS-1
+        else:
+            assert f"ERROR: wrong object type for index windows ! - {type}"
+        if (lower & mask != mask and upper & mask != mask):        
+            assert lower < upper, f"ERROR in index windows: lower limit > upper limit ! - {lower}, {upper}"
 
 def snakecase(label: str, separator: str = '_') -> str:
     """Transformes camel case label to spaced lower case (snaked) label.
@@ -1327,6 +1355,14 @@ class ObjectHelper(VhdlHelper):
                 self.displaced.update(cut_handle)
             if cut_handle.cut_type == tmEventSetup.Slice:
                 self.slice.update(cut_handle)
+
+        # validate eta windows
+        for i in range(len(etaCuts)):
+            validate_window_limits(tmEventSetup.Eta, self.type, etaCuts[i][0], etaCuts[i][1])
+        # validate index windows
+        for i in range(len(indexCuts)):
+            validate_window_limits(tmEventSetup.Index, self.type, indexCuts[i][0], indexCuts[i][1])
+            
         # setup eta windows
         if len(etaCuts) > 0:
             self.etaNrCuts = 1
