@@ -187,6 +187,8 @@ def validate_window_limits(cut_type: str, type: str, lower: int, upper: int, cut
             assert f"\033[1;31m ERROR: wrong object type for index cut ! - {type}\033[0;31m"
         else:
             assert lower < upper, f"\033[1;31m ERROR in index window: lower limit > upper limit ! => cut name: {cut_name}, lower: {lower} ({hex(lower)}), upper: {upper} ({hex(upper)})\033[0;31m"
+    else:
+        assert f"\033[1;31m ERROR: wrong cut type (only ETA and INDEX cuts have lower and upper limits) ! - {cut_type}\033[0;31m"
 
 def snakecase(label: str, separator: str = '_') -> str:
     """Transformes camel case label to spaced lower case (snaked) label.
