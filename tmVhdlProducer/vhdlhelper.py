@@ -164,31 +164,29 @@ ComparisonOperator: Dict[int, bool] = {
 #  Filters
 # -----------------------------------------------------------------------------
 
-def validate_window_limits(cut_type: str, type: str, lower: int, upper: int):
-    """Valitation of eta and index windows limits"""
+def validate_window_limits(cut_type: str, type: str, lower: int, upper: int, cut_name: str, obj_h):
+    """Validation of eta and index windows limits"""
     if cut_type == tmEventSetup.Eta:
-        if type == 'MU':
+        if obj_h.isMuonObject():  
             mask = 1 << MUON_ETA_BITS-1
-        elif type == 'EG' or type == 'JET' or type == 'TAU':
+        elif obj_h.isCaloObject():  
             mask = 1 << CALOS_ETA_BITS-1
         else:
-            assert f"ERROR: wrong object type for eta windows ! - {type}"
-        # cases for positive and negative lower and upper limits
+            assert f"\033[1;31m ERROR: wrong object type for eta cut ! - {type}\033[0;31m"
+        # case 1: positive values for lower and upper limits
         if (lower & mask != mask and upper & mask != mask):        
-            assert lower < upper, f"ERROR in eta windows: positive lower limit > positive upper limit ! - {type}, lower: {lower}, upper: {upper}"
-        elif (lower & mask == mask and upper & mask != mask):        
-            assert lower > upper, f"ERROR in eta windows: negative lower limit < positive upper limit ! - {type}, lower: {lower}, upper: {upper}"
+            assert lower < upper, f"\033[1;31m ERROR in eta window: positive lower limit > positive upper limit ! => cut name: {cut_name} lower: {lower} ({hex(lower)}), upper: {upper} ({hex(upper)})\033[0;31m"
+        # case 2: positive value for lower and and negative value for upper limit
         elif (lower & mask != mask and upper & mask == mask):        
-            assert lower > upper, f"ERROR in eta windows: lower limit is positive, but upper limit is negative ! - {type}, lower: {lower}, upper: {upper}"
+            assert lower > upper, f"\033[1;31m ERROR in eta window: lower limit is positive, but upper limit is negative ! => cut name: {cut_name}, lower: {lower} ({hex(lower)}), upper: {upper} ({hex(upper)})\033[0;31m"
+        # case 3: negative values for lower and upper limits
         elif (lower & mask == mask and upper & mask == mask):
-            assert lower < upper, f"ERROR in eta windows: negative lower limit > negative upper limit ! - {type}, lower: {lower}, upper: {upper}"
+            assert lower < upper, f"\033[1;31m ERROR in eta window: negative lower limit > negative upper limit ! => cut name: {cut_name}, lower: {lower} ({hex(lower)}), upper: {upper} ({hex(upper)})\033[0;31m"
     elif cut_type == tmEventSetup.Index:
-        if type == 'MU':
-            mask = 1 << MUON_INDEX_BITS-1
+        if not obj_h.isMuonObject():
+            assert f"\033[1;31m ERROR: wrong object type for index cut ! - {type}\033[0;31m"
         else:
-            assert f"ERROR: wrong object type for index windows ! - {type}"
-        if (lower & mask != mask and upper & mask != mask):        
-            assert lower < upper, f"ERROR in index windows: lower limit > upper limit ! - {lower}, {upper}"
+            assert lower < upper, f"\033[1;31m ERROR in index window: lower limit > upper limit ! => cut name: {cut_name}, lower: {lower} ({hex(lower)}), upper: {upper} ({hex(upper)})\033[0;31m"
 
 def snakecase(label: str, separator: str = '_') -> str:
     """Transformes camel case label to spaced lower case (snaked) label.
@@ -1319,7 +1317,9 @@ class ObjectHelper(VhdlHelper):
         # set the default slice range to maxNum - 1 (e.g. 0-11)
         self.slice.upper = ObjectCount[object_handle.type] - 1
         etaCuts = []
+        etaCutsName = []
         indexCuts = []
+        indexCutsName = []
         phiCuts = []
         # setup cuts
         for cut_handle in object_handle.cuts:
@@ -1329,8 +1329,10 @@ class ObjectHelper(VhdlHelper):
                 self.isolation.update(cut_handle)
             elif cut_handle.cut_type == tmEventSetup.Eta:
                 etaCuts.append((cut_handle.minimum.index, cut_handle.maximum.index))
+                etaCutsName.append(cut_handle.name)
             elif cut_handle.cut_type == tmEventSetup.Index:
                 indexCuts.append((cut_handle.minimum.index, cut_handle.maximum.index))
+                indexCutsName.append(cut_handle.name)
             elif cut_handle.cut_type == tmEventSetup.Phi:
                 phiCuts.append((cut_handle.minimum.index, cut_handle.maximum.index))
             elif cut_handle.cut_type == tmEventSetup.Quality:
@@ -1358,10 +1360,10 @@ class ObjectHelper(VhdlHelper):
 
         # validate eta windows
         for i in range(len(etaCuts)):
-            validate_window_limits(tmEventSetup.Eta, self.type, etaCuts[i][0], etaCuts[i][1])
+            validate_window_limits(tmEventSetup.Eta, self.type, etaCuts[i][0], etaCuts[i][1], etaCutsName[i], object_handle)
         # validate index windows
         for i in range(len(indexCuts)):
-            validate_window_limits(tmEventSetup.Index, self.type, indexCuts[i][0], indexCuts[i][1])
+            validate_window_limits(tmEventSetup.Index, self.type, indexCuts[i][0], indexCuts[i][1], indexCutsName[i], object_handle)
             
         # setup eta windows
         if len(etaCuts) > 0:
