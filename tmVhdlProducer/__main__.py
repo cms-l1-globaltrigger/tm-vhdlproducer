@@ -18,6 +18,7 @@ from .algodist import MinModules, MaxModules
 from .algodist import kExternals, kZDCPlus, kZDCMinus
 from .algodist import DefaultConfigFile
 from .vhdlproducer import VhdlProducer
+from .validate import validate_menu
 
 EXIT_SUCCESS: int = 0
 EXIT_FAILURE: int = 1
@@ -176,6 +177,9 @@ def main() -> int:
     logging.info("loading XML menu: %s", args.menu)
     eventSetup = tmEventSetup.getTriggerMenu(args.menu)
     output_dir = os.path.join(args.output, f"{eventSetup.getName()}-d{args.dist}")
+
+    # Validate menu integrity
+    validate_menu(eventSetup)
 
     # Prevent overwirting source menu
     dest = os.path.realpath(os.path.join(output_dir, 'xml'))

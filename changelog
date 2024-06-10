@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - depending on tm-python 0.13.0 (#49).
 - depending on tm-reporter 2.13.0 (#49).
 
+## [2.18.1] - 2024-06-06
+
+### Added
+- validation of ETA and INDEX cut ranges (#53).
+
+
 ## [2.18.0] - 2024-03-22
 
 ### Added
@@ -329,7 +335,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - adjusted `--dryrun` and `--ratio` options.
 
 [unreleased]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.19.0...HEAD
-[2.19.0]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.18.0...2.19.0
+[2.19.0]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.18.1...2.19.0
+[2.18.1]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.18.0...2.18.1
 [2.18.0]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.17.1...2.18.0
 [2.17.1]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.17.0...2.17.1
 [2.17.0]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.16.0...2.17.0
