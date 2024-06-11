@@ -7,7 +7,7 @@ Install using pip (>= 19.0)
 
 ```bash
 pip install --upgrade pip
-pip install git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git@2.18.1
+pip install git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git@2.19.0
 ```
 
 ## Build from source

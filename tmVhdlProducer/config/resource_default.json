@@ -46,6 +46,7 @@
                 "MinBiasHFM1": "MinBiasCondition",
                 "TotalEtEM": "EsumsCondition",
                 "MissingEtHF": "EsumsCondition",
+                "MissingHtHF": "EsumsCondition",
                 "AsymmetryEt": "EsumsCondition",
                 "AsymmetryHt": "EsumsCondition",
                 "AsymmetryEtHF": "EsumsCondition",
@@ -78,7 +79,10 @@
                 "ZDCMinus": "ZDCMinus",
                 "Axol1tlTrigger": "Axol1tlTrigger",
                 "TopologicalTrigger": "TopologicalTrigger",
-                "CicadaTrigger": "CicadaTrigger"
+                "CicadaTrigger": "CicadaTrigger",
+                "MultiEgamma": "CaloCondition",
+                "MultiJet": "CaloCondition",
+                "MultiTau": "CaloCondition"
             },
             "objects": {
                 "Egamma": "calo",
@@ -91,6 +95,7 @@
                 "ETM": "esum",
                 "ETMHF": "esum",
                 "HTM": "esum",
+                "HTMHF": "esum",
                 "ASYMET": "esum",
                 "ASYMHT": "esum",
                 "ASYMETHF": "esum",
@@ -549,6 +554,54 @@
                         "processors": 0,
                         "brams": 0,
                         "sliceLUTs": 1672
+                    },
+                    {
+                        "types": ["calo", "calo", "calo", "calo", "calo"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 3
+                    },
+                    {
+                        "types": ["calo", "calo", "calo", "calo", "calo", "calo"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 3
+                    },
+                    {
+                        "types": ["calo", "calo", "calo", "calo", "calo", "calo", "calo"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 3
+                    },
+                    {
+                        "types": ["calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 3
+                    },
+                    {
+                        "types": ["calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 3
+                    },
+                    {
+                        "types": ["calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 3
+                    },
+                    {
+                        "types": ["calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 3
+                    },
+                    {
+                        "types": ["calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo", "calo"],
+                        "processors": 0,
+                        "brams": 0,
+                        "sliceLUTs": 3
                     }
                 ]
             },

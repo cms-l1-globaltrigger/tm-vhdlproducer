@@ -16,6 +16,7 @@ Condition template helpers for needs of different condition types.
   * ConditionHelper
     * SimpleConditionHelper
     * CaloConditionHelper
+    * CaloMultiConditionHelper
     * MuonConditionHelper
     * ExternalConditionHelper
     * CorrelationConditionHelper
@@ -75,7 +76,7 @@ ObjectTypes: Dict[int, str] = {
     tmEventSetup.HTT: tmGrammar.HTT,
     tmEventSetup.ETM: tmGrammar.ETM,
     tmEventSetup.ETMHF: tmGrammar.ETMHF,
-#    tmEventSetup.HTMHF: tmGrammar.HTMHF,
+    tmEventSetup.HTMHF: tmGrammar.HTMHF,
     tmEventSetup.HTM: tmGrammar.HTM,
     tmEventSetup.ASYMET: tmGrammar.ASYMET,
     tmEventSetup.ASYMHT: tmGrammar.ASYMHT,
@@ -119,7 +120,7 @@ ObjectCount: Dict[int, int] = {
     tmEventSetup.HTT:        1,
     tmEventSetup.ETM:        1,
     tmEventSetup.ETMHF:      1,
-#    tmEventSetup.HTMHF:      1,
+    tmEventSetup.HTMHF:      1,
     tmEventSetup.HTM:        1,
     tmEventSetup.ASYMET:     1,
     tmEventSetup.ASYMHT:     1,
@@ -259,6 +260,8 @@ def conditionFactory(condition_handle):
     """Returns condition template helper class according to condition handle."""
     if condition_handle.isCaloCondition():
         return CaloConditionHelper(condition_handle)
+    elif condition_handle.isCaloMultiCondition():
+        return CaloMultiConditionHelper(condition_handle)
     elif condition_handle.isMuonCondition():
         return MuonConditionHelper(condition_handle)
     elif condition_handle.isEsumsCondition():
@@ -402,6 +405,10 @@ class ModuleHelper(VhdlHelper):
     @property
     def caloConditions(self):
         return filter(lambda condition: condition.handle.isCaloCondition(), self.conditions)
+
+    @property
+    def caloMultiConditions(self):
+        return filter(lambda condition: condition.handle.isCaloMultiCondition(), self.conditions)
 
     @property
     def caloConditionsOvRm(self):
@@ -934,6 +941,11 @@ class CaloConditionHelper(ConditionHelper):
         for cut_handle in condition_handle.cuts:
             if cut_handle.cut_type == tmEventSetup.TwoBodyPt:
                 self.twoBodyPt.update(cut_handle)
+
+class CaloMultiConditionHelper(ConditionHelper):
+    """Calorimeter condition multi template helper class."""
+    ReqObjects = 12
+    """Number of required objects."""
 
 class MuonConditionHelper(ConditionHelper):
     """Muon condition template helper class.
