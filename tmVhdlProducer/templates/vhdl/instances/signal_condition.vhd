@@ -32,7 +32,7 @@ cond_{{ condition.vhdl_signal }}: entity work.axol1tl_{{ o.model.value }}_wrappe
         {{ condition.vhdl_signal }}
     );
 {%- elif o.type == "TOPO" -%}
-cond_{{ condition.vhdl_signal }}: entity work.topo_trigger_{{ o.model.value }}_wrapper
+cond_{{ condition.vhdl_signal }}: entity work.topo_{{ o.model.value }}_wrapper
     generic map({{ o.score.value }})
     port map(
         lhc_clk,
