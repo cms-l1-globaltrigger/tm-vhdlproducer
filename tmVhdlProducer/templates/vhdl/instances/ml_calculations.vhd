@@ -18,6 +18,7 @@ calc_axo_{{ o.model.value }}_i: entity work.axol1tl_{{ o.model.value }}_instance
         bx_data.etm({{ o.bx_arr }}),
         bx_data.htm({{ o.bx_arr }}),
         bx_data.etmhf({{ o.bx_arr }}),
+        bx_data.htmhf({{ o.bx_arr }}),
         axol1tl_{{ o.model.value }}_score
     );
 {%-       set ns.matched = 1 -%}
@@ -44,6 +45,7 @@ calc_topo_{{ o.model.value }}_i: entity work.topo_{{ o.model.value }}_instance
         bx_data.etm({{ o.bx_arr }}),
         bx_data.htm({{ o.bx_arr }}),
         bx_data.etmhf({{ o.bx_arr }}),
+        bx_data.htmhf({{ o.bx_arr }}),
         topo_{{ o.model.value }}_score
     );
 {%-       set ns.matched = 1 -%}
