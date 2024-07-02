@@ -5,7 +5,7 @@
 {%-   for condition in module.signalConditions %}
 {%-     set o = condition.objects[0] %}
 {%-     if o.type == "AXO" and o.model.value == temp and not ns.matched == 1 %}
-calc_axo_{{ o.model.value }}_i: entity work.axol1tl_{{ o.model.value }}_instance
+calc_axo_{{ o.model.value }}_i: entity work.ml_calculation_instances
     generic map(AXO_SEL, AXO_MODEL_{{temp | upper}}, AXO_SCORE_WIDTH)
     port map(
         lhc_clk,
@@ -32,7 +32,7 @@ calc_axo_{{ o.model.value }}_i: entity work.axol1tl_{{ o.model.value }}_instance
 {%-   for condition in module.signalConditions %}
 {%-     set o = condition.objects[0] %}
 {%-     if o.type == "TOPO" and o.model.value == temp and not ns.matched == 1 %}
-calc_topo_{{ o.model.value }}_i: entity work.topo_{{ o.model.value }}_instance
+calc_topo_{{ o.model.value }}_i: entity work.ml_calculation_instances
     generic map(TOPO_SEL, TOPO_MODEL_{{temp | upper}}, TOPO_SCORE_WIDTH)
     port map(
         lhc_clk,
