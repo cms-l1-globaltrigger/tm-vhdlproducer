@@ -419,6 +419,11 @@
                             "processors": 0,
                             "brams": 0,
                             "sliceLUTs": 7736
+                        },
+                        "v4": {
+                            "processors": 0,
+                            "brams": 0,
+                            "sliceLUTs": 7736
                         }
                     }
                 }
