@@ -419,6 +419,11 @@
                             "processors": 0,
                             "brams": 0,
                             "sliceLUTs": 7736
+                        },
+                        "v4": {
+                            "processors": 0,
+                            "brams": 0,
+                            "sliceLUTs": 7736
                         }
                     }
                 }
@@ -441,6 +446,11 @@
                     "brams": 0,
                     "sliceLUTs": 0,
                     "data": {
+                        "base_v1": {
+                            "processors": 0,
+                            "brams": 0,
+                            "sliceLUTs": 581
+                        },
                         "hh_ele_v1": {
                             "processors": 0,
                             "brams": 0,

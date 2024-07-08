@@ -29,10 +29,11 @@ cond_{{ condition.vhdl_signal }}: entity work.axol1tl_{{ o.model.value }}_wrappe
         bx_data.etm({{ o.bx_arr }}),
         bx_data.htm({{ o.bx_arr }}),
         bx_data.etmhf({{ o.bx_arr }}),
+        bx_data.htmhf({{ o.bx_arr }}),
         {{ condition.vhdl_signal }}
     );
 {%- elif o.type == "TOPO" -%}
-cond_{{ condition.vhdl_signal }}: entity work.topo_trigger_{{ o.model.value }}_wrapper
+cond_{{ condition.vhdl_signal }}: entity work.topo_{{ o.model.value }}_wrapper
     generic map({{ o.score.value }})
     port map(
         lhc_clk,
