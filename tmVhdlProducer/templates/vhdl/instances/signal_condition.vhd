@@ -29,7 +29,9 @@ cond_{{ condition.vhdl_signal }}: entity work.axol1tl_{{ o.model.value }}_wrappe
         bx_data.etm({{ o.bx_arr }}),
         bx_data.htm({{ o.bx_arr }}),
         bx_data.etmhf({{ o.bx_arr }}),
+{%- if o.model.value != "v1" and o.model.value != "v3" %}
         bx_data.htmhf({{ o.bx_arr }}),
+{%- endif %}
         {{ condition.vhdl_signal }}
     );
 {%- elif o.type == "TOPO" -%}
