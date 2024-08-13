@@ -46,6 +46,7 @@ cond_{{ condition.vhdl_signal }}: entity work.topo_{{ o.model.value }}_wrapper
         bx_data.etm({{ o.bx_arr }}),
         bx_data.htm({{ o.bx_arr }}),
         bx_data.etmhf({{ o.bx_arr }}),
+        bx_data.htmhf({{ o.bx_arr }}),
         {{ condition.vhdl_signal }}
     );
 {%- elif o.type == "CICADA" -%}
