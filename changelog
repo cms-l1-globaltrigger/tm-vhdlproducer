@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.20.1] - 2024-08-12
 
 ### Changed
-- added "htmhf" in template signal_condition.vhd for "AXO" and "TOPO"
+- added "htmhf" in template signal_condition.vhd for "TOPO" (#56)
 
 ## [2.20.0] - 2024-07-04
 
