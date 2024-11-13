@@ -45,7 +45,7 @@ import math
 import string
 import re, os
 
-from distutils.version import StrictVersion
+from packaging.version import Version
 from typing import Dict, Iterable
 
 import tmEventSetup
@@ -301,10 +301,10 @@ class VersionHelper(VhdlHelper):
     (1, 2, 3)
     """
     def __init__(self, version):
-        version = StrictVersion(version).version
-        self.major = version[0]
-        self.minor = version[1]
-        self.patch = version[2]
+        version = Version(version)
+        self.major = version.major
+        self.minor = version.minor
+        self.patch = version.micro
 
     def __str__(self):
         return f"{self.major}.{self.minor}.{self.patch}"
