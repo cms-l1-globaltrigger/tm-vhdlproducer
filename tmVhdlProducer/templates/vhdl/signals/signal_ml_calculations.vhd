@@ -1,4 +1,4 @@
-{%- set model_list = ["v1", "v3"] -%}
+{%- set model_list = ["v1", "v3", "v4", "v5"] -%}
 {%- for idx in range(model_list| length) %}
 {%-   set temp = model_list[idx] -%}
 {%-   set ns = namespace(matched = 0) -%}
