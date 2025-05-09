@@ -16,14 +16,14 @@ cond_{{ condition.vhdl_signal }}_i: entity work.adt_wrapper
         {{ condition.vhdl_signal }}
     );
 {%- elif o.type == "AXO" -%}
-cond_{{ condition.vhdl_signal }}: entity work.axol1tl_{{ o.model.value }}_comparison
+cond_{{ condition.vhdl_signal }}: entity work.ml_comparison
     generic map({{ o.score.value }}, AXO_SCORE_WIDTH)
     port map(
         axol1tl_{{ o.model.value }}_score,
         {{ condition.vhdl_signal }}
     );
 {%- elif o.type == "TOPO" -%}
-cond_{{ condition.vhdl_signal }}: entity work.topo_{{ o.model.value }}_comparison
+cond_{{ condition.vhdl_signal }}: entity work.ml_comparison
     generic map({{ o.score.value }}, TOPO_SCORE_WIDTH)
     port map(
         topo_{{ o.model.value }}_score,
