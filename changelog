@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.22.0] - 2025-05-13
+
+### Added
+- instance for AXO and TOPO calculation only once per module. Fixed AXO algos to module 1, TOPO algos to module 2 by default. This reduces resources.
+
 ## [2.21.0] - 2025-03-20
 
 ### Added
@@ -359,7 +364,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - adjusted `--dryrun` and `--ratio` options.
 
-[unreleased]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.21.0...HEAD
+[unreleased]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.22.0...HEAD
+[2.22.0]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.21.0...2.22.0
 [2.21.0]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.20.2...2.21.0
 [2.20.2]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.20.1...2.20.2
 [2.20.1]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.20.0...2.20.1

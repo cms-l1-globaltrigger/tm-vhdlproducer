@@ -28,11 +28,15 @@ EXEC_REPORTER: str = 'tm-reporter'
 SortingAsc: str = 'asc'
 SortingDesc: str = 'desc'
 
-DefaultModuleZdc: int = 0
 DefaultNrModules: int = 6
 DefaultRatio: float = 0.0
 DefaultSorting: str = SortingDesc
 DefaultOutputDir: str = os.getcwd()
+
+# Default constraints
+DefaultModuleZdc: int = 0
+DefaultModuleAxo: int = 1
+DefaultModuleTopo: int = 2
 
 ConstraintTypes: Dict[str, List[str]] = {
     'ext': [kExternals],
@@ -220,6 +224,9 @@ def main() -> int:
     # Default constraint for ZDC
     constraints.setdefault(kZDCMinus, [DefaultModuleZdc])
     constraints.setdefault(kZDCPlus, [DefaultModuleZdc])
+    # Default constraint for AXO, TOPO
+    constraints.setdefault(kAxol1tlTrigger, [DefaultModuleAxo])
+    constraints.setdefault(kTopologicalTrigger, [DefaultModuleTopo])
 
     # Run distibution
     collection = distribute(
