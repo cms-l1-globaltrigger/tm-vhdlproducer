@@ -454,9 +454,12 @@ ConditionTypeKey: Dict[int, str] = {
 #
 
 def constraint_t(value: str) -> Tuple[str, List[int]]:
-    tokens = value.split(':')
+    tokens = value.split(':', 1)
     try:
-        return tokens[0], parse_range(tokens[1])
+        modules_ids = parse_range(tokens[1])
+        if not all(valid_module_id(module_id) for module_id in modules_ids):
+            raise ValueError(value)
+        return tokens[0], modules_ids
     except IndexError:
         pass
     raise ValueError(value)
@@ -498,6 +501,9 @@ def parse_range(expr: str) -> List[int]:
     for token in expr.split(','):
         result.update(expand_range(token))
     return list(result)
+
+def valid_module_id(module_id: int) -> bool:
+    return MinModules <= (module_id + 1) <= MaxModules
 
 def obj_type_to_str(object_type: int) -> Optional[str]:
     """Converts object type to string representation."""
@@ -1376,7 +1382,8 @@ class ModuleCollection:
         # Force list for single numbers
         modules = modules if isinstance(modules, (list, tuple)) else [modules]
         assert condition in ConditionTypeKey.values(), f"no such constraint condition type '{condition}'"
-        assert max(modules) <= MaxModules, "exceeding constraint module range 'modules'"
+        if not all(valid_module_id(module_id) for module_id in modules):
+            raise ValueError(f"exceeding constraint module range: {modules}")
         self.constraints[condition] = modules
 
     def capableModules(self):
@@ -1593,13 +1600,14 @@ def list_resources(tray: ResourceTray) -> None:
 def list_algorithms(collection: ModuleCollection) -> None:
     logging.info("|---------------------------------------------------------------------------------------|")
     logging.info("|                                                                                       |")
-    logging.info("| Algorithms sorted by payload (descending)                                             |")
+    logging.info("| Algorithms sorted by payload (ascending)                                              |")
     logging.info("|                                                                                       |")
     logging.info("|---------------------------------------------------------------------------------------|")
     logging.info("|-------|---------|-----------|---------|-----------------------------------------------|")
     logging.info("| Index | BRAMs   | SliceLUTs | DSPs    | Name                                          |")
     logging.info("|-------|---------|-----------|---------|-----------------------------------------------|")
-    for algorithm in collection.algorithm_handles:
+    sort_key = lambda a: (a.payload.brams, a.payload.sliceLUTs, a.payload.processors)
+    for algorithm in sorted(collection.algorithm_handles, key=sort_key):
         brams = algorithm.payload.brams / BRAMS_TOTAL  * 100.
         sliceLUTs = algorithm.payload.sliceLUTs / SLICELUTS_TOTAL * 100.
         processors = algorithm.payload.processors / PROCESSORS_TOTAL * 100.
