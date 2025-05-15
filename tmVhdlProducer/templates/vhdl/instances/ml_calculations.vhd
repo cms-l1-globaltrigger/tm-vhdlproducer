@@ -1,12 +1,9 @@
-{%- set axo_model_list = ["v1", "v3", "v4", "v5"] -%}
-{%- for idx in range(axo_model_list| length) %}
-{%-   set temp = axo_model_list[idx] -%}
-{%-   set ns = namespace(matched = 0) -%}
-{%-   for condition in module.signalConditions %}
-{%-     set o = condition.objects[0] %}
-{%-     if o.type == "AXO" and o.model.value == temp and not ns.matched == 1 %}
+{%- set ns_axo = namespace(models=[]) -%}
+{%- for condition in module.signalConditions -%}
+  {%- set o = condition.objects[0] -%}
+  {%- if o.type == "AXO" and o.model.value not in ns_axo.models %}
 calc_axo_{{ o.model.value }}_i: entity work.ml_calculation_instances
-    generic map(AXO_SEL, AXO_MODEL_{{temp | upper}}, AXO_SCORE_WIDTH)
+    generic map(AXO_SEL, AXO_MODEL_{{o.model.value | upper}}, AXO_SCORE_WIDTH)
     port map(
         lhc_clk,
         bx_data.mu({{ o.bx_arr }}),
@@ -21,17 +18,13 @@ calc_axo_{{ o.model.value }}_i: entity work.ml_calculation_instances
         bx_data.htmhf({{ o.bx_arr }}),
         axol1tl_{{ o.model.value }}_score
     );
-{%-       set ns.matched = 1 -%}
-{%-     endif -%}
-{%-   endfor -%}
+    {%- set _ = ns_axo.models.append(o.model.value) -%}
+  {%- endif -%}
 {% endfor %}
-{%- set topo_model_list = ["base_v1", "hh_ele_v1", "hh_had_v1", "hh_mu_v1"] -%}
-{%- for idx in range(topo_model_list| length) %}
-{%-   set temp = topo_model_list[idx] -%}
-{%-   set ns = namespace(matched = 0) -%}
-{%-   for condition in module.signalConditions %}
-{%-     set o = condition.objects[0] %}
-{%-     if o.type == "TOPO" and o.model.value == temp and not ns.matched == 1 %}
+{%- set ns_topo = namespace(models=[]) -%}
+{%- for condition in module.signalConditions -%}
+  {%- set o = condition.objects[0] -%}
+  {%- if o.type == "TOPO" and o.model.value not in ns_topo.models %}
 calc_topo_{{ o.model.value }}_i: entity work.ml_calculation_instances
     generic map(TOPO_SEL, TOPO_MODEL_{{temp | upper}}, TOPO_SCORE_WIDTH)
     port map(
@@ -48,8 +41,6 @@ calc_topo_{{ o.model.value }}_i: entity work.ml_calculation_instances
         bx_data.htmhf({{ o.bx_arr }}),
         topo_{{ o.model.value }}_score
     );
-{%-       set ns.matched = 1 -%}
-{%-     endif -%}
-{%-   endfor -%}
+    {%- set _ = ns_topo.models.append(o.model.value) -%}
+  {%- endif -%}
 {% endfor %}
-
