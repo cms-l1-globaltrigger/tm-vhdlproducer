@@ -34,6 +34,9 @@
     signal {{ condition.vhdl_signal }} : std_logic;
 {%- endfor %}
 
+-- Signal definition for  for ML calculations
+{%- include  "signals/signal_ml_calculations.vhd" %}
+
 -- Signal definition for algorithms names
 {%- for algorithm in module.algorithms | sort_by_attribute('index') %}
     signal {{ algorithm.vhdl_signal }} : std_logic;

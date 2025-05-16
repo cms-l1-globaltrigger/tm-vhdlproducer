@@ -15,7 +15,7 @@ from . import __version__
 from .algodist import ProjectDir
 from .algodist import distribute, constraint_t
 from .algodist import MinModules, MaxModules
-from .algodist import kExternals, kZDCPlus, kZDCMinus
+from .algodist import kExternals, kZDCPlus, kZDCMinus, kAxol1tlTrigger, kTopologicalTrigger
 from .algodist import DefaultConfigFile
 from .vhdlproducer import VhdlProducer
 from .validate import validate_menu
@@ -28,15 +28,21 @@ EXEC_REPORTER: str = 'tm-reporter'
 SortingAsc: str = 'asc'
 SortingDesc: str = 'desc'
 
-DefaultModuleZdc: int = 0
 DefaultNrModules: int = 6
 DefaultRatio: float = 0.0
 DefaultSorting: str = SortingDesc
 DefaultOutputDir: str = os.getcwd()
 
+# Default constraints
+DefaultModuleZdc: int = 0
+DefaultModuleAxo: int = 1
+DefaultModuleTopo: int = 2
+
 ConstraintTypes: Dict[str, List[str]] = {
     'ext': [kExternals],
     'zdc': [kZDCPlus, kZDCMinus],
+    'axo': [kAxol1tlTrigger],
+    'topo': [kTopologicalTrigger],
 }
 """Mapping constraint types to esCondition types, provided for convenience."""
 
@@ -218,6 +224,9 @@ def main() -> int:
     # Default constraint for ZDC
     constraints.setdefault(kZDCMinus, [DefaultModuleZdc])
     constraints.setdefault(kZDCPlus, [DefaultModuleZdc])
+    # Default constraint for AXO, TOPO
+    constraints.setdefault(kAxol1tlTrigger, [DefaultModuleAxo])
+    constraints.setdefault(kTopologicalTrigger, [DefaultModuleTopo])
 
     # Run distibution
     collection = distribute(

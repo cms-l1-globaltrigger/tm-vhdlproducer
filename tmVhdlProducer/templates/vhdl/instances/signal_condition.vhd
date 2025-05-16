@@ -16,37 +16,17 @@ cond_{{ condition.vhdl_signal }}_i: entity work.adt_wrapper
         {{ condition.vhdl_signal }}
     );
 {%- elif o.type == "AXO" -%}
-cond_{{ condition.vhdl_signal }}: entity work.axol1tl_{{ o.model.value }}_wrapper
-    generic map(false, {{ o.score.value }})
+cond_{{ condition.vhdl_signal }}: entity work.ml_comparison
+    generic map({{ o.score.value }}, AXO_SCORE_WIDTH)
     port map(
-        lhc_clk,
-        bx_data.mu({{ o.bx_arr }}),
-        bx_data.eg({{ o.bx_arr }}),
-        bx_data.jet({{ o.bx_arr }}),
-        bx_data.tau({{ o.bx_arr }}),
-        bx_data.ett({{ o.bx_arr }}),
-        bx_data.htt({{ o.bx_arr }}),
-        bx_data.etm({{ o.bx_arr }}),
-        bx_data.htm({{ o.bx_arr }}),
-        bx_data.etmhf({{ o.bx_arr }}),
-        bx_data.htmhf({{ o.bx_arr }}),
+        axol1tl_{{ o.model.value }}_score,
         {{ condition.vhdl_signal }}
     );
 {%- elif o.type == "TOPO" -%}
-cond_{{ condition.vhdl_signal }}: entity work.topo_{{ o.model.value }}_wrapper
-    generic map({{ o.score.value }})
+cond_{{ condition.vhdl_signal }}: entity work.ml_comparison
+    generic map({{ o.score.value }}, TOPO_SCORE_WIDTH)
     port map(
-        lhc_clk,
-        bx_data.mu({{ o.bx_arr }}),
-        bx_data.eg({{ o.bx_arr }}),
-        bx_data.jet({{ o.bx_arr }}),
-        bx_data.tau({{ o.bx_arr }}),
-        bx_data.ett({{ o.bx_arr }}),
-        bx_data.htt({{ o.bx_arr }}),
-        bx_data.etm({{ o.bx_arr }}),
-        bx_data.htm({{ o.bx_arr }}),
-        bx_data.etmhf({{ o.bx_arr }}),
-        bx_data.htmhf({{ o.bx_arr }}),
+        topo_{{ o.model.value }}_score,
         {{ condition.vhdl_signal }}
     );
 {%- elif o.type == "CICADA" -%}

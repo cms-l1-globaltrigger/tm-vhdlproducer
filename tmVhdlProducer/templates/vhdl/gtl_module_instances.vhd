@@ -99,4 +99,7 @@ algo({{ algorithm.module_index | d }}) <= {{ algorithm.vhdl_signal }};
 
 -- muon charge correlations
 {% include "instances/muon_charge_correlations.vhd" %}
+
+-- calculation instance for ML
+{% include "instances/ml_calculations.vhd" %}
 -- ========================================================
