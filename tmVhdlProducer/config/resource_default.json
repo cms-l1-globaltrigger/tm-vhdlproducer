@@ -302,6 +302,52 @@
                 }
             }
         },
+        "calc_ml_inst": {
+            "axol1tl": {
+                "v1": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 1639
+                },
+                "v3": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 7736
+                },
+                "v4": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 7736
+                },
+                "v5": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 2685
+                }
+            },
+            "topological": {
+                "base_v1": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 581
+                },
+                "hh_ele_v1": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 581
+                },
+                "hh_had_v1": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 581
+                },
+                "hh_mu_v1": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 581
+                }
+            }
+        },
         "object_cuts": {
             "muon": {
                 "Threshold": {
@@ -413,22 +459,22 @@
                         "v1": {
                             "processors": 0,
                             "brams": 0,
-                            "sliceLUTs": 1639
+                            "sliceLUTs": 15
                         },
                         "v3": {
                             "processors": 0,
                             "brams": 0,
-                            "sliceLUTs": 7736
+                            "sliceLUTs": 15
                         },
                         "v4": {
                             "processors": 0,
                             "brams": 0,
-                            "sliceLUTs": 7736
+                            "sliceLUTs": 15
                         },
                         "v5": {
                             "processors": 0,
                             "brams": 0,
-                            "sliceLUTs": 7736
+                            "sliceLUTs": 15
                         }
                     }
                 }
@@ -454,22 +500,22 @@
                         "base_v1": {
                             "processors": 0,
                             "brams": 0,
-                            "sliceLUTs": 581
+                            "sliceLUTs": 15
                         },
                         "hh_ele_v1": {
                             "processors": 0,
                             "brams": 0,
-                            "sliceLUTs": 581
+                            "sliceLUTs": 15
                         },
                         "hh_had_v1": {
                             "processors": 0,
                             "brams": 0,
-                            "sliceLUTs": 581
+                            "sliceLUTs": 15
                         },
                         "hh_mu_v1": {
                             "processors": 0,
                             "brams": 0,
-                            "sliceLUTs": 581
+                            "sliceLUTs": 15
                         }
                     }
                 }

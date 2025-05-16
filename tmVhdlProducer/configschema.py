@@ -61,6 +61,7 @@ config_schema = Schema({
         "calc_cut_dr": {str: {str: resource_schema}},
         "calc_cut_mass": {str: {str: resource_schema}},
         "calc_cut_massdr": {str: {str: resource_schema}},
+        "calc_ml_inst": {str: {str: resource_schema}},
         "object_cuts": object_cuts_schema,
         "instances": instances_schema,
     },

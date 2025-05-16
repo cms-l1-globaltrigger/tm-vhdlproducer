@@ -362,6 +362,8 @@ ObjectCategoryKey: Dict[int, str] = {
     tmEventSetup.ETTEM: "esums",
     tmEventSetup.ETMHF: "esums",
     tmEventSetup.HTMHF: "esums",
+    tmEventSetup.Axol1tl: "axol1tl",
+    tmEventSetup.Topological: "topological",
 }
 """Mapping object types to object category keys (for deltas)."""
 
@@ -673,6 +675,15 @@ class ResourceTray:
         processors = self.resources.calc_cut_mass._asdict()[obj0]._asdict()[obj1].processors
         return Payload(brams, sliceLUTs, processors)
 
+    def calc_ml_inst(self, obj, model) -> Payload:
+        """Returns resource consumption payload for one unit of ML calculation.
+        >>> tray.calc_ml_inst()
+        """
+        brams = self.resources.calc_ml_inst._asdict()[obj]._asdict()[model].brams
+        sliceLUTs = self.resources.calc_ml_inst._asdict()[obj]._asdict()[model].sliceLUTs
+        processors = self.resources.calc_ml_inst._asdict()[obj]._asdict()[model].processors
+        return Payload(brams, sliceLUTs, processors)
+
     def find_object_cut(self, object):
         """Returns object cut resource namedtuple for *key* or None if not found."""
         assert isinstance(object, ObjectHandle)
@@ -965,6 +976,10 @@ class Module:
             tmEventSetup.HTM,
             tmEventSetup.ETMHF,
             tmEventSetup.HTMHF
+        ]
+        ml_type = [
+            tmEventSetup.Axol1tlTrigger,
+            tmEventSetup.TopologicalTrigger,
         ]
 
         def calc_factor(combination) -> float:
@@ -1261,6 +1276,36 @@ class Module:
                     logging.debug(f"| {calc_name:<37} | {int(sliceLUTs_inst):>5} | {int(processors_inst):>5} | {brams:>5} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}|")
             return Payload(brams, sliceLUTs, processors)
 
+        def calc_ml_inst_combinations() -> dict:
+            """Object combinations for instances of ML calculations."""
+            combinations = {}
+            for algorithm in self.algorithms:
+                for condition in algorithm.conditions:
+                    if condition.type in ml_type:
+                        for cut in condition.objects[0].cuts:
+                            if cut.cut_type == tmEventSetup.Model:
+                                a = condition.objects[0]
+                                b = cut.data
+                                key = (a.type, b)
+                                combinations[key] = (a, b)
+            return combinations
+
+        def calc_ml_inst_payload() -> Payload:
+            """Payload for instances of ML calculations."""
+            calc_name = "calc_ml_instance"
+            brams = 0
+            sliceLUTs = 0
+            processors = 0
+            for combination in calc_ml_inst_combinations():
+                obj = object_category(combination[0])
+                model = combination[1]
+                factor = 1
+                sliceLUTs += self.tray.calc_ml_inst(obj, model).sliceLUTs * factor
+                sliceLUTs_inst = self.tray.calc_ml_inst(obj, model).sliceLUTs * factor
+                if self.debug:
+                    logging.debug(f"| {calc_name:<37} | {int(sliceLUTs_inst):>5} | {int(processors):>5} | {brams:>5} | {obj_type_to_str(combination[0]):<7} | {combination[1]:<7}|")
+            return Payload(brams, sliceLUTs, processors)
+
         # payload for "frame"
         payload += calc_frame_payload()
 
@@ -1281,6 +1326,9 @@ class Module:
 
         # payload for instances of "deta dphi integer" calculations
         payload += calc_deta_dphi_payload()
+
+        # payload for instances of ML calculations
+        payload += calc_ml_inst_payload()
 
 # =================================================================================
 
