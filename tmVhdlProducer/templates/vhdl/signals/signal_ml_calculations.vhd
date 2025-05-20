@@ -14,4 +14,3 @@
     {%- set _ = ns_topo.models.append(o.model.value) -%}
   {%- endif -%}
 {%- endfor -%}
-

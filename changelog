@@ -7,15 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.23.0] - 2025-05-15
+## [2.23.0] - 2025-05-20
 
 ### Added
 - resource calculation for ML (AXO and TOPO) calculation instances.
 
-## [2.22.0] - 2025-05-13
+## [2.22.0] - 2025-05-16
 
 ### Added
-- instance for AXO and TOPO calculation only once per module. Fixed AXO algos to module 1, TOPO algos to module 2 by default. This reduces resources.
+- Instanciate only one AXO/TOPO calculation per module to reduce resources.
+  Fixed AXO algos to module 1, TOPO algos to module 2 by default.
+- Support for Pyton 3.13.
+
+### Changed
+- Replaced flake8/pylint by ruff (#58).
+
+### Removed
+- Dropped support for Python < 3.9.
 
 ## [2.21.1] - 2025-05-14
 
