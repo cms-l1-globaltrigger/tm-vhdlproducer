@@ -625,19 +625,23 @@ class ResourceTray:
         fdl_algo_floor = self.resources.fdl.floor
         return Payload(brams=fdl_algo_floor.brams, sliceLUTs=fdl_algo_floor.sliceLUTs, processors=fdl_algo_floor.processors)
 
-    def calc_deta_integer(self) -> Payload:
+    def calc_deta_integer(self, obj0, obj1) -> Payload:
         """Returns resource consumption payload for one unit of calc_deta_integer calculation.
         >>> tray.calc_deta_integer()
         """
-        calc_deta_integer = self.resources.calc_deta_integer
-        return Payload(brams=calc_deta_integer.brams, sliceLUTs=calc_deta_integer.sliceLUTs, processors=calc_deta_integer.processors)
+        brams = self.resources.calc_deta_integer._asdict()[obj0]._asdict()[obj1].brams
+        sliceLUTs = self.resources.calc_deta_integer._asdict()[obj0]._asdict()[obj1].sliceLUTs
+        processors = self.resources.calc_deta_integer._asdict()[obj0]._asdict()[obj1].processors
+        return Payload(brams, sliceLUTs, processors)
 
-    def calc_dphi_integer(self) -> Payload:
+    def calc_dphi_integer(self, obj0, obj1) -> Payload:
         """Returns resource consumption payload for one unit of calc_dphi_integer calculation.
         >>> tray.calc_dphi_integer()
         """
-        calc_dphi_integer = self.resources.calc_dphi_integer
-        return Payload(brams=calc_dphi_integer.brams, sliceLUTs=calc_dphi_integer.sliceLUTs, processors=calc_dphi_integer.processors)
+        brams = self.resources.calc_dphi_integer._asdict()[obj0]._asdict()[obj1].brams
+        sliceLUTs = self.resources.calc_dphi_integer._asdict()[obj0]._asdict()[obj1].sliceLUTs
+        processors = self.resources.calc_dphi_integer._asdict()[obj0]._asdict()[obj1].processors
+        return Payload(brams, sliceLUTs, processors)
 
     def calc_cut_deta(self, obj0, obj1) -> Payload:
         """Returns resource consumption payload for one unit of calc_cut_deta calculation.
@@ -893,8 +897,6 @@ class Module:
         self.frame = tray.frame()
         self.fdl_algo_slice = tray.fdl_algo_slice()
         self.fdl_algo_floor = tray.fdl_algo_floor()
-        self.calc_deta_integer = tray.calc_deta_integer()
-        self.calc_dphi_integer = tray.calc_dphi_integer()
         self.debug = False
 
     def __len__(self):
@@ -1051,7 +1053,7 @@ class Module:
                 logging.debug(f"| {gtl_name:<92} |")
             return Payload(brams, sliceLUTs, processors)
 
-        def calc_deta_dphi_combinations() -> dict:
+        def calc_deta_dphi_integer_combinations() -> dict:
             """Object combinations for instances of "deta_dphi_integer" calculations."""
             combinations = {}
             for algorithm in self.algorithms:
@@ -1086,24 +1088,24 @@ class Module:
                         combinations[key] = (a, b)
             return combinations
 
-        def calc_deta_dphi_payload() -> Payload:
+        def calc_deta_dphi_integer_payload() -> Payload:
             """Payload for instances of "deta_dphi_integer" calculations."""
             calc_name = "calc_deta_dphi_integer"
             brams = 0
             sliceLUTs = 0
             processors = 0
-            for combination in calc_deta_dphi_combinations():
-                obj_0 = combination[0]
-                obj_1 = combination[1]
+            for combination in calc_deta_dphi_integer_combinations():
+                obj0 = object_category(combination[0])
+                obj1 = object_category(combination[1])
                 factor = calc_factor(combination)
-                if obj_1 in (tmEventSetup.ETM, tmEventSetup.HTM, tmEventSetup.ETMHF, tmEventSetup.HTMHF):
-                    sliceLUTs += self.calc_dphi_integer.sliceLUTs * factor
-                    sliceLUTs_inst = self.calc_dphi_integer.sliceLUTs * factor
+                if obj1 in (tmEventSetup.ETM, tmEventSetup.HTM, tmEventSetup.ETMHF, tmEventSetup.HTMHF):
+                    sliceLUTs += self.tray.calc_dphi_integer(obj0, obj1).sliceLUTs * factor
+                    sliceLUTs_inst = self.tray.calc_dphi_integer(obj0, obj1).sliceLUTs * factor
                 else:
-                    sliceLUTs += self.calc_deta_integer.sliceLUTs * factor
-                    sliceLUTs_inst = self.calc_deta_integer.sliceLUTs * factor
-                    sliceLUTs += self.calc_dphi_integer.sliceLUTs * factor
-                    sliceLUTs_inst += self.calc_dphi_integer.sliceLUTs * factor
+                    sliceLUTs += self.tray.calc_deta_integer(obj0, obj1).sliceLUTs * factor
+                    sliceLUTs_inst = self.tray.calc_deta_integer(obj0, obj1).sliceLUTs * factor
+                    sliceLUTs += self.tray.calc_dphi_integer(obj0, obj1).sliceLUTs * factor
+                    sliceLUTs_inst += self.tray.calc_dphi_integer(obj0, obj1).sliceLUTs * factor
                 if self.debug:
                     logging.debug(f"| {calc_name:<37} | {int(sliceLUTs_inst):>5} | {processors:>5} | {brams:>5} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}|")
             return Payload(brams, sliceLUTs, processors)
@@ -1325,7 +1327,7 @@ class Module:
         payload += calc_cut_mass_payload()
 
         # payload for instances of "deta dphi integer" calculations
-        payload += calc_deta_dphi_payload()
+        payload += calc_deta_dphi_integer_payload()
 
         # payload for instances of ML calculations
         payload += calc_ml_inst_payload()
@@ -1704,7 +1706,14 @@ def list_distribution(collection: ModuleCollection) -> None:
     logging.info("|--------------------------------------------------|---------|-------|------|-------|")
 
 def list_summary(collection: ModuleCollection) -> None:
-    message = f"Summary for distribution on {len(collection)} modules, shadow ratio: {collection.ratio:.1f}"
+    sliceLUTs_sum = []
+    brams_sum = []
+    proc_sum = []
+    if collection.reverse_sorting:
+        message = f"Summary for distribution on {len(collection)} modules, shadow ratio: {collection.ratio:.1f}, sorting: descending"
+    else:
+        message = f"Summary for distribution on {len(collection)} modules, shadow ratio: {collection.ratio:.1f}, sorting: ascending"
+    #message = f"Summary for distribution on {len(collection)} modules, shadow ratio: {collection.ratio:.1f}, sorting: "
     logging.info("|--------------------------------------------------------------------------------------|")
     logging.info("|                                                                                      |")
     logging.info(f"| {message:<84} |")
@@ -1721,13 +1730,24 @@ def list_summary(collection: ModuleCollection) -> None:
         conditions = len(module.conditions)
         proportion = float(conditions) / algorithms if algorithms else 1.0
         brams_val = module.payload.brams
+        brams_sum.append(brams_val)
         sliceLUTs_val = module.payload.sliceLUTs
+        sliceLUTs_sum.append(sliceLUTs_val)
         processors_val = module.payload.processors
+        proc_sum.append(processors_val)
         brams = module.payload.brams / BRAMS_TOTAL * 100.
         sliceLUTs = module.payload.sliceLUTs / SLICELUTS_TOTAL * 100.
         processors = module.payload.processors / PROCESSORS_TOTAL * 100.
         logging.info(f"| {module.id:>2} | {algorithms:>10} | {conditions:>10} | {proportion:>4.2f} | " \
                      f"{sliceLUTs_val:>6.0f} | {sliceLUTs:>5.2f} | {brams_val:>5.0f} | {brams:>5.2f} | {processors_val:>5.0f} | {processors:>5.2f} |")
+    logging.info("|----|------------|------------|------|--------|-------|-------|-------|-------|-------|")
+    sl_sum = sum(sliceLUTs_sum)
+    br_sum = sum(brams_sum)
+    pr_sum = sum(proc_sum)
+    sl_sum_perc = sl_sum / (6. * SLICELUTS_TOTAL) * 100.
+    br_sum_perc = br_sum / (6. * BRAMS_TOTAL) * 100.
+    pr_sum_perc = pr_sum / (6. * PROCESSORS_TOTAL) * 100.
+    logging.info(f"|Summary:                             |{sl_sum:>6.0f} | {sl_sum_perc:>5.2f} |{br_sum:>6.0f} | {br_sum_perc:>5.2f} |{pr_sum:>6.0f} | {pr_sum_perc:>5.2f} |")
     logging.info("|----|------------|------------|------|--------|-------|-------|-------|-------|-------|")
 
 def list_instantiations_debug(collection: ModuleCollection) -> None:
