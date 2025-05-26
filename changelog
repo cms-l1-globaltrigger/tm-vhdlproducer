@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - resource calculation for ML (AXO and TOPO) calculation instances.
+- fixed Invariant Mass conditions to one module (default = 3)
 
 ## [2.22.0] - 2025-05-16
 

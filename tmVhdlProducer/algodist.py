@@ -1706,6 +1706,7 @@ def list_distribution(collection: ModuleCollection) -> None:
     logging.info("|--------------------------------------------------|---------|-------|------|-------|")
 
 def list_summary(collection: ModuleCollection) -> None:
+    nr_mod = 0.
     sliceLUTs_sum = []
     brams_sum = []
     proc_sum = []
@@ -1725,7 +1726,9 @@ def list_summary(collection: ModuleCollection) -> None:
     logging.info("|-------------------------------------|------------------------------------------------|")
     logging.info("| ID | Algorithms | Conditions | Rel. | Value  |  [%]  | Value |  [%]  | Value |  [%]  |")
     logging.info("|----|------------|------------|------|--------|-------|-------|-------|-------|-------|")
+    
     for module in collection:
+        nr_mod += 1.
         algorithms = len(module)
         conditions = len(module.conditions)
         proportion = float(conditions) / algorithms if algorithms else 1.0
@@ -1744,10 +1747,10 @@ def list_summary(collection: ModuleCollection) -> None:
     sl_sum = sum(sliceLUTs_sum)
     br_sum = sum(brams_sum)
     pr_sum = sum(proc_sum)
-    sl_sum_perc = sl_sum / (6. * SLICELUTS_TOTAL) * 100.
-    br_sum_perc = br_sum / (6. * BRAMS_TOTAL) * 100.
-    pr_sum_perc = pr_sum / (6. * PROCESSORS_TOTAL) * 100.
-    logging.info(f"|Summary:                             |{sl_sum:>6.0f} | {sl_sum_perc:>5.2f} |{br_sum:>6.0f} | {br_sum_perc:>5.2f} |{pr_sum:>6.0f} | {pr_sum_perc:>5.2f} |")
+    sl_sum_perc = sl_sum / (nr_mod * SLICELUTS_TOTAL) * 100.
+    br_sum_perc = br_sum / (nr_mod * BRAMS_TOTAL) * 100.
+    pr_sum_perc = pr_sum / (nr_mod * PROCESSORS_TOTAL) * 100.
+    logging.info(f"|                            Summary: |{sl_sum:>6.0f} | {sl_sum_perc:>5.2f} |{br_sum:>6.0f} | {br_sum_perc:>5.2f} |{pr_sum:>6.0f} | {pr_sum_perc:>5.2f} |")
     logging.info("|----|------------|------------|------|--------|-------|-------|-------|-------|-------|")
 
 def list_instantiations_debug(collection: ModuleCollection) -> None:
