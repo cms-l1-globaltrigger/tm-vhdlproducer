@@ -34,6 +34,7 @@ import tmGrammar
 from .constants import BRAMS_TOTAL, SLICELUTS_TOTAL, PROCESSORS_TOTAL, NR_CALOS, NR_MUONS
 from . import __version__
 
+from .handles import sort_objects
 from .handles import Payload
 from .handles import ObjectHandle
 from .handles import ConditionHandle
@@ -1212,6 +1213,7 @@ class Module:
                             if cut.cut_type == tmEventSetup.DeltaR:
                                 a = condition.objects[0]
                                 b = condition.objects[1]
+                                a, b = sort_objects([a, b])
                                 key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
                                 combinations[key] = (a, b)
                     if condition.type in corr_cond_orm:
@@ -1219,6 +1221,7 @@ class Module:
                             if cut.cut_type == tmEventSetup.OvRmDeltaR:
                                 a = condition.objects[0]
                                 b = condition.objects[-1]
+                                a, b = sort_objects([a, b])
                                 key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
                                 combinations[key] = (a, b)
                     if condition.type in cond_orm:
@@ -1226,6 +1229,7 @@ class Module:
                             if cut.cut_type == tmEventSetup.OvRmDeltaR:
                                 a = condition.objects[0]
                                 b = condition.objects[-1]
+                                a, b = sort_objects([a, b])
                                 key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
                                 combinations[key] = (a, b)
             return combinations
@@ -1725,7 +1729,7 @@ def list_summary(collection: ModuleCollection) -> None:
     logging.info("|-------------------------------------|------------------------------------------------|")
     logging.info("| ID | Algorithms | Conditions | Rel. | Value  |  [%]  | Value |  [%]  | Value |  [%]  |")
     logging.info("|----|------------|------------|------|--------|-------|-------|-------|-------|-------|")
-    
+
     for module in collection:
         algorithms = len(module)
         conditions = len(module.conditions)

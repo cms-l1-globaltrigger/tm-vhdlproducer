@@ -282,6 +282,12 @@ def filter_first(func: Callable, data: Iterable[Any]) -> Optional[Any]:
     """Returns first result for filter() or None if not match found."""
     return (list(filter(func, data)) or [None])[0]
 
+def sort_objects(objects):
+    """Returns list of condition objects sorted by VHDL notation (object order
+    required by correlation conditions).
+    """
+    return sorted(objects, key=lambda object_: ObjectsOrder.index(object_.type))
+
 #
 #  Utility classes
 #
@@ -421,17 +427,11 @@ class ConditionHandle(Handle):
         # Do not sort object by type for overlap removal conditions. # TODO
         if not (self.isCorrelationConditionOvRm() or
                 self.isCaloConditionOvRm()):
-           self.objects = self.sortedObjects(self.objects)
+            self.objects = sort_objects(self.objects)
         self.cuts = []
         for cut in condition.getCuts():
             self.cuts.append(CutHandle(cut))
         self.payload = Payload(payload.brams, payload.sliceLUTs, payload.processors)
-
-    def sortedObjects(self, objects):
-        """Returns list of condition objects sorted by VHDL notation (object order
-        required by correlation conditions).
-        """
-        return sorted(objects, key=lambda object_: ObjectsOrder.index(object_.type))
 
     @property
     def same_object_types(self):
