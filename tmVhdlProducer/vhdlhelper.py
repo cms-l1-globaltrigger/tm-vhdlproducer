@@ -159,6 +159,13 @@ ComparisonOperator: Dict[int, bool] = {
 }
 """See utm/tmEventSetup/esTypes.hh"""
 
+def sort_objects(objects):
+    """Returns list of condition objects sorted by VHDL notation (object order
+    required by correlation conditions).
+    """
+    order = list(ObjectTypes.values())
+    return sorted(objects, key=lambda object_: order.index(object_.type))
+
 # -----------------------------------------------------------------------------
 #  Filters
 # -----------------------------------------------------------------------------
@@ -480,11 +487,13 @@ class ModuleHelper(VhdlHelper):
         for condition in self.conditions:
             if isinstance(condition, CorrelationConditionHelper):
                 a, b = condition.objects
+                a, b = sort_objects([a, b])
                 key = (a.type, b.type, a.bx, b.bx) # create custom hash
                 combinations[key] = (a, b)
             if isinstance(condition, (CorrelationConditionOvRmHelper, Correlation3ConditionHelper)):
                 if condition.nr_objects == 3:
                     a, b, c = condition.objects
+                    a, b, c = sort_objects([a, b, c])
                     key = (a.type, b.type, a.bx, b.bx) # a-b combination
                     combinations[key] = (a, b)
                     key = (a.type, c.type, a.bx, c.bx) # a-c combination
@@ -494,11 +503,13 @@ class ModuleHelper(VhdlHelper):
                 else:
                     a = condition.objects[0]
                     b = condition.objects[1]
+                    a, b = sort_objects([a, b])
                     key = (a.type, b.type, a.bx, b.bx)
                     combinations[key] = (a, b)
             if isinstance(condition, CaloConditionOvRmHelper):
                 a = condition.objects[0]
                 b = condition.objects[condition.nr_objects-1]
+                a, b = sort_objects([a, b])
                 key = (a.type, b.type, a.bx, b.bx)
                 combinations[key] = (a, b)
         return combinations.values()
@@ -551,34 +562,40 @@ class ModuleHelper(VhdlHelper):
                 if condition.deltaEta.enabled:
                     a = condition.objects[0]
                     b = condition.objects[condition.nr_objects-1]
+                    a, b = sort_objects([a, b])
                     key = (a.type, b.type, a.bx, b.bx)
                     combinations[key] = (a, b)
             if isinstance(condition, CorrelationConditionOvRmHelper):
                 if condition.deltaEta.enabled:
                     if condition.nr_objects == 3:
                         a, b, c = condition.objects
+                        a, b, c = sort_objects([a, b, c])
                         key = (a.type, c.type, a.bx, c.bx) # a-c combination
                         combinations[key] = (a, c)
                     else:
                         a = condition.objects[0]
                         b = condition.objects[1]
+                        a, b = sort_objects([a, b])
                         key = (a.type, b.type, a.bx, b.bx)
                         combinations[key] = (a, b)
             if isinstance(condition, CorrelationConditionOvRmHelper):
                 if condition.deltaEtaOrm.enabled:
                     if condition.nr_objects == 3:
                         a, b, c = condition.objects
+                        a, b, c = sort_objects([a, b, c])
                         key = (a.type, c.type, a.bx, c.bx) # a-c combination
                         combinations[key] = (a, c)
                     else:
                         a = condition.objects[0]
                         b = condition.objects[1]
+                        a, b = sort_objects([a, b])
                         key = (a.type, b.type, a.bx, b.bx)
                         combinations[key] = (a, b)
             if isinstance(condition, CaloConditionOvRmHelper):
                 if condition.deltaEtaOrm.enabled:
                     a = condition.objects[0]
                     b = condition.objects[condition.nr_objects-1]
+                    a, b = sort_objects([a, b])
                     key = (a.type, b.type, a.bx, b.bx)
                     combinations[key] = (a, b)
         return combinations.values()
@@ -591,34 +608,40 @@ class ModuleHelper(VhdlHelper):
                 if condition.deltaPhi.enabled:
                     a = condition.objects[0]
                     b = condition.objects[condition.nr_objects-1]
+                    a, b = sort_objects([a, b])
                     key = (a.type, b.type, a.bx, b.bx)
                     combinations[key] = (a, b)
             if isinstance(condition, CorrelationConditionOvRmHelper):
                 if condition.deltaPhi.enabled:
                     if condition.nr_objects == 3:
                         a, b, c = condition.objects
+                        a, b, c = sort_objects([a, b, c])
                         key = (a.type, c.type, a.bx, c.bx) # a-c combination
                         combinations[key] = (a, c)
                     else:
                         a = condition.objects[0]
                         b = condition.objects[1]
+                        a, b = sort_objects([a, b])
                         key = (a.type, b.type, a.bx, b.bx)
                         combinations[key] = (a, b)
             if isinstance(condition, CorrelationConditionOvRmHelper):
                 if condition.deltaPhiOrm.enabled:
                     if condition.nr_objects == 3:
                         a, b, c = condition.objects
+                        a, b, c = sort_objects([a, b, c])
                         key = (a.type, c.type, a.bx, c.bx) # a-c combination
                         combinations[key] = (a, c)
                     else:
                         a = condition.objects[0]
                         b = condition.objects[1]
+                        a, b = sort_objects([a, b])
                         key = (a.type, b.type, a.bx, b.bx)
                         combinations[key] = (a, b)
             if isinstance(condition, CaloConditionOvRmHelper):
                 if condition.deltaPhiOrm.enabled:
                     a = condition.objects[0]
                     b = condition.objects[condition.nr_objects-1]
+                    a, b = sort_objects([a, b])
                     key = (a.type, b.type, a.bx, b.bx)
                     combinations[key] = (a, b)
         return combinations.values()
@@ -630,23 +653,27 @@ class ModuleHelper(VhdlHelper):
             if hasattr(condition, 'deltaR') and condition.deltaR.enabled:
                 if isinstance(condition, CorrelationConditionHelper):
                     a, b = condition.objects
+                    a, b = sort_objects([a, b])
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
                     combinations[key] = (a, b)
             if isinstance(condition, CorrelationConditionOvRmHelper):
                 if condition.deltaROrm.enabled:
                     if condition.nr_objects == 3:
                         a, b, c = condition.objects
+                        a, b, c = sort_objects([a, b, c])
                         key = (a.type, c.type, a.bx, c.bx) # a-c combination
                         combinations[key] = (a, c)
                     else:
                         a = condition.objects[0]
                         b = condition.objects[1]
+                        a, b = sort_objects([a, b])
                         key = (a.type, b.type, a.bx, b.bx)
                         combinations[key] = (a, b)
             if isinstance(condition, CaloConditionOvRmHelper):
                 if condition.deltaROrm.enabled:
                     a = condition.objects[0]
                     b = condition.objects[condition.nr_objects-1]
+                    a, b = sort_objects([a, b])
                     key = (a.type, b.type, a.bx, b.bx)
                     combinations[key] = (a, b)
         return combinations.values()
@@ -658,6 +685,7 @@ class ModuleHelper(VhdlHelper):
             if hasattr(condition, 'mass') and condition.mass.enabled:
                 if isinstance(condition, CorrelationConditionHelper):
                     a, b = condition.objects
+                    a, b = sort_objects([a, b])
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
                     combinations[key] = (a, b)
         return combinations.values()
@@ -670,6 +698,7 @@ class ModuleHelper(VhdlHelper):
                if isinstance(condition, (CorrelationConditionHelper, CorrelationConditionOvRmHelper, Correlation3ConditionHelper)):
                     a = condition.objects[0]
                     b = condition.objects[1]
+                    a, b = sort_objects([a, b])
                     key = (a.type, b.type, a.bx, b.bx)
                     combinations[key] = (a, b)
         return combinations.values()
@@ -681,6 +710,7 @@ class ModuleHelper(VhdlHelper):
             if hasattr(condition, 'mass') and condition.mass.enabled and condition.mass.type == condition.mass.InvariantMassUptType:
                 if isinstance(condition, CorrelationConditionHelper):
                     a, b = condition.objects
+                    a, b = sort_objects([a, b])
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
                     combinations[key] = (a, b)
         return combinations.values()
@@ -692,6 +722,7 @@ class ModuleHelper(VhdlHelper):
             if hasattr(condition, 'mass') and condition.mass.enabled and condition.mass.type == condition.mass.TransverseMassType:
                 if isinstance(condition, CorrelationConditionHelper):
                     a, b = condition.objects
+                    a, b = sort_objects([a, b])
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
                     combinations[key] = (a, b)
         return combinations.values()
@@ -703,6 +734,7 @@ class ModuleHelper(VhdlHelper):
             if hasattr(condition, 'mass') and condition.mass.enabled and condition.mass.type == condition.mass.InvariantMassDeltaRType:
                 if isinstance(condition, CorrelationConditionHelper):
                     a, b = condition.objects
+                    a, b = sort_objects([a, b])
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
                     combinations[key] = (a, b)
         return combinations.values()
@@ -715,6 +747,7 @@ class ModuleHelper(VhdlHelper):
                 if isinstance(condition, (CorrelationConditionHelper, CorrelationConditionOvRmHelper, CaloConditionHelper, CaloConditionOvRmHelper, MuonConditionHelper)):
                     a = condition.objects[0]
                     b = condition.objects[1]
+                    a, b = sort_objects([a, b])
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
                     combinations[key] = (a, b)
         return combinations.values()
@@ -800,6 +833,7 @@ class ModuleHelper(VhdlHelper):
                     if condition.objects[0].is_muon_type and condition.objects[1].is_muon_type:
                         a = condition.objects[0]
                         b = condition.objects[1]
+                        a, b = sort_objects([a, b])
                         key = (a.type, b.type, a.bx, b.bx)
                         combinations[key] = (a, b)
         return combinations.values()
