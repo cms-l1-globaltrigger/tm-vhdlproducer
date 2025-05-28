@@ -159,7 +159,7 @@ ComparisonOperator: Dict[int, bool] = {
 }
 """See utm/tmEventSetup/esTypes.hh"""
 
-def sort_objects(objects):
+def sort_objects(objects: list) -> list:
     """Returns list of condition objects sorted by VHDL notation (object order
     required by correlation conditions).
     """
@@ -938,7 +938,7 @@ class ConditionHelper(VhdlHelper):
 
     @property
     def sorted_objects(self):
-        return sort_objects(self.objects)
+        return sort_objects(self.objects[:self.nr_objects])
 
     @property
     def nr_objects(self):

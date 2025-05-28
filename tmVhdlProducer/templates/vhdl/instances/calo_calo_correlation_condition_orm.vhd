@@ -1,10 +1,6 @@
 {% extends "instances/base/correlation_condition.vhd" %}
 
-{% macro signal_base(objects) -%}
-{% set o1 = objects[0] -%}
-{% set o2 = objects[-1] -%}
-{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}
-{%- endmacro %}
+{% from "macros.vhd" import signal_base %}
 
 {% block entity %}work.correlation_conditions{% endblock %}
 
@@ -15,8 +11,8 @@
 -- number of objects and type
   {%- for i in range(0,condition.nr_objects) %}
     {%- set o = condition.objects[i] %}
-        nr_obj{{i+1}} => NR_{{ o.type | upper }}_OBJECTS,
-        type_obj{{i+1}} => {{ o.type | upper }}_TYPE,
+        nr_obj{{ i + 1 }} => NR_{{ o.type | upper }}_OBJECTS,
+        type_obj{{ i + 1 }} => {{ o.type | upper }}_TYPE,
   {%- endfor %}
 -- selector one or two objects with orm
   {%- if condition.nr_objects == 3 %}
