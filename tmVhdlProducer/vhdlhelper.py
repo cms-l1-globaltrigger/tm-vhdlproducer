@@ -67,10 +67,10 @@ RegexVhdlLabel = re.compile('[^A-Za-z0-9_]')
 # -----------------------------------------------------------------------------
 
 ObjectTypes: Dict[int, str] = {
-    tmEventSetup.Muon: tmGrammar.MU,
     tmEventSetup.Egamma: tmGrammar.EG,
-    tmEventSetup.Tau: tmGrammar.TAU,
     tmEventSetup.Jet: tmGrammar.JET,
+    tmEventSetup.Tau: tmGrammar.TAU,
+    tmEventSetup.Muon: tmGrammar.MU,
     tmEventSetup.ETT: tmGrammar.ETT,
     tmEventSetup.ETTEM: tmGrammar.ETTEM,
     tmEventSetup.HTT: tmGrammar.HTT,
