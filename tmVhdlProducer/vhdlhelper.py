@@ -937,6 +937,10 @@ class ConditionHelper(VhdlHelper):
             self.objects[i].update(obj)
 
     @property
+    def sorted_objects(self):
+        return sort_objects(self.objects)
+
+    @property
     def nr_objects(self):
         """Returns number of valid objects."""
         return len([obj for obj in self.objects if obj.isValid])

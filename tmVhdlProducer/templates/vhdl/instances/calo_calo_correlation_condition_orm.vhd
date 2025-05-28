@@ -1,5 +1,11 @@
 {% extends "instances/base/correlation_condition.vhd" %}
 
+{% macro signal_base(objects) -%}
+{% set o1 = objects[0] -%}
+{% set o2 = objects[-1] -%}
+{{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}
+{%- endmacro %}
+
 {% block entity %}work.correlation_conditions{% endblock %}
 
 {%- block generic_map -%}
@@ -24,48 +30,33 @@
 {%- endblock %}
 
 {%- block port_map %}
-  {%- set o1 = condition.objects[0] %}
-  {%- set o2 = condition.objects[1] %}
         calo_obj1 => bx_data.{{ o1.type | lower }}({{ o1.bx_arr }}),
         calo_obj2 => bx_data.{{ o2.type | lower }}({{ o2.bx_arr }}),
   {%- if condition.nr_objects == 3 %}
-    {%- set o3 = condition.objects[2] %}
         calo_obj3 => bx_data.{{ o3.type | lower }}({{ o3.bx_arr }}),
   {%- endif %}
   {%- if condition.deltaEtaOrm %}
-    {%- if condition.nr_objects == 3 %}
-        deta_orm => {{ o1.type | lower }}_{{ o3.type | lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_deta,
-    {%- elif condition.nr_objects == 2 %}
-        deta_orm => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta,
-    {%- endif %}
+        deta_orm => {{ signal_base(condition.sorted_objects) }}_deta,
   {%- endif %}
   {%- if condition.deltaPhiOrm %}
-    {%- if condition.nr_objects == 3 %}
-        dphi_orm => {{ o1.type | lower }}_{{ o3.type | lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_dphi,
-    {%- elif condition.nr_objects == 2 %}
-        dphi_orm => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi,
-    {%- endif %}
+        dphi_orm => {{ signal_base(condition.sorted_objects) }}_dphi,
   {%- endif %}
   {%- if condition.deltaROrm %}
-    {%- if condition.nr_objects == 3 %}
-        dr_orm => {{ o1.type | lower }}_{{ o3.type | lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_dr,
-    {%- elif condition.nr_objects == 2 %}
-        dr_orm => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dr,
-    {%- endif %}
+        dr_orm => {{ signal_base(condition.sorted_objects) }}_dr,
   {%- endif %}
   {%- if condition.deltaEta %}
-        deta => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta,
+        deta => {{ signal_base(condition.sorted_objects) }}_deta,
   {%- endif %}
   {%- if condition.deltaPhi %}
-        dphi => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi,
+        dphi => {{ signal_base(condition.sorted_objects) }}_dphi,
   {%- endif %}
   {%- if condition.deltaR %}
-        dr => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dr,
+        dr => {{ signal_base(condition.sorted_objects) }}_dr,
   {%- endif %}
   {%- if condition.mass and condition.mass.type == condition.mass.InvariantMassType %}
-        mass_inv_pt => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_pt,
+        mass_inv_pt => {{ signal_base(condition.sorted_objects) }}_mass_inv_pt,
   {%- endif %}
   {%- if condition.twoBodyPt %}
-        tbpt => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt,
+        tbpt => {{ signal_base(condition.sorted_objects) }}_tbpt,
   {%- endif %}
 {%- endblock %}
