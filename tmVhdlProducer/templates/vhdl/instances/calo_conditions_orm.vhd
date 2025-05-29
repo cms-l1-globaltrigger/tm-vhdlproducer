@@ -50,6 +50,6 @@
         dr_orm => {{ signal_base(condition.sorted_objects) }}_dr,
     {%- endif %}
   {%- if condition.twoBodyPt %}
-        tbpt => {{ signal_base(condition.sorted_objects) }}_tbpt,
+        tbpt => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt,
   {%- endif %}
 {%- endblock %}

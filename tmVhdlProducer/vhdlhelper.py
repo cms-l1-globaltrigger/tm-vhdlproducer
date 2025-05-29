@@ -698,7 +698,7 @@ class ModuleHelper(VhdlHelper):
                if isinstance(condition, (CorrelationConditionHelper, CorrelationConditionOvRmHelper, Correlation3ConditionHelper)):
                     a = condition.objects[0]
                     b = condition.objects[1]
-                    a, b = sort_objects([a, b])
+                    #a, b = sort_objects([a, b])
                     key = (a.type, b.type, a.bx, b.bx)
                     combinations[key] = (a, b)
         return combinations.values()
@@ -710,7 +710,7 @@ class ModuleHelper(VhdlHelper):
             if hasattr(condition, 'mass') and condition.mass.enabled and condition.mass.type == condition.mass.InvariantMassUptType:
                 if isinstance(condition, CorrelationConditionHelper):
                     a, b = condition.objects
-                    a, b = sort_objects([a, b])
+                    #a, b = sort_objects([a, b])
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
                     combinations[key] = (a, b)
         return combinations.values()
@@ -722,7 +722,7 @@ class ModuleHelper(VhdlHelper):
             if hasattr(condition, 'mass') and condition.mass.enabled and condition.mass.type == condition.mass.TransverseMassType:
                 if isinstance(condition, CorrelationConditionHelper):
                     a, b = condition.objects
-                    a, b = sort_objects([a, b])
+                    #a, b = sort_objects([a, b])
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
                     combinations[key] = (a, b)
         return combinations.values()
@@ -734,7 +734,7 @@ class ModuleHelper(VhdlHelper):
             if hasattr(condition, 'mass') and condition.mass.enabled and condition.mass.type == condition.mass.InvariantMassDeltaRType:
                 if isinstance(condition, CorrelationConditionHelper):
                     a, b = condition.objects
-                    a, b = sort_objects([a, b])
+                    #a, b = sort_objects([a, b])
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
                     combinations[key] = (a, b)
         return combinations.values()
@@ -747,7 +747,7 @@ class ModuleHelper(VhdlHelper):
                 if isinstance(condition, (CorrelationConditionHelper, CorrelationConditionOvRmHelper, CaloConditionHelper, CaloConditionOvRmHelper, MuonConditionHelper)):
                     a = condition.objects[0]
                     b = condition.objects[1]
-                    a, b = sort_objects([a, b])
+                    #a, b = sort_objects([a, b])
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
                     combinations[key] = (a, b)
         return combinations.values()

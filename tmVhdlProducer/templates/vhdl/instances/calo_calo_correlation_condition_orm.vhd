@@ -50,9 +50,9 @@
         dr => {{ signal_base(condition.sorted_objects) }}_dr,
   {%- endif %}
   {%- if condition.mass and condition.mass.type == condition.mass.InvariantMassType %}
-        mass_inv_pt => {{ signal_base(condition.sorted_objects) }}_mass_inv_pt,
+        mass_inv_pt => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_mass_inv_pt,
   {%- endif %}
   {%- if condition.twoBodyPt %}
-        tbpt => {{ signal_base(condition.sorted_objects) }}_tbpt,
+        tbpt => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt,
   {%- endif %}
 {%- endblock %}
