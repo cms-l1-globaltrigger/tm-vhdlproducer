@@ -15,7 +15,8 @@ import tmEventSetup
 import tmTable
 
 from .vhdlhelper import MenuHelper
-from .vhdlhelper import vhdl_bool, bx_encode, sort_objects
+from .vhdlhelper import vhdl_bool, bx_encode
+#from .vhdlhelper import vhdl_bool, bx_encode, sort_objects
 
 __all__ = ['VhdlProducer']
 
@@ -67,7 +68,7 @@ CustomFilters: Dict[str, Callable] = {
     'hexuuid': uuid2hex_filter,
     'mmhashn': murmurhash,
     'vhdl_bool': vhdl_bool,
-    'sort_objects': sort_objects,
+    #'sort_objects': sort_objects,
 }
 
 ModuleTemplates: List[str] = [

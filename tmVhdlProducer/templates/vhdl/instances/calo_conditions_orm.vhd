@@ -1,7 +1,5 @@
 {% extends "instances/base/comb_condition.vhd" %}
 
-{% from "macros.vhd" import signal_base %}
-
 {% set o5 = condition.objects[4] %}
 {% set base_objects = condition.objects[:4] %}
 {% set nr_requirements = condition.nr_objects - 1 %}
@@ -38,16 +36,51 @@
 
 {% block port_map %}
         obj1_calo => bx_data.{{ o1.type | lower }}({{ o1.bx_arr }}),
-        obj2 => bx_data.{{ orm_obj.type | lower }}({{ orm_obj.bx_arr }}),
+  {%- if nr_requirements == 4 %}
+        obj2 => bx_data.{{ o5.type | lower }}({{ o5.bx_arr }}),
     {%- if condition.deltaEtaOrm %}
-        deta_orm => {{ signal_base(condition.sorted_objects) }}_deta,
+        deta_orm => {{ o1.type | lower }}_{{ o5.type | lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_deta,
     {%- endif %}
     {%- if condition.deltaPhiOrm %}
-        dphi_orm => {{ signal_base(condition.sorted_objects) }}_dphi,
+        dphi_orm => {{ o1.type | lower }}_{{ o5.type | lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_dphi,
     {%- endif %}
     {%- if condition.deltaROrm %}
-        dr_orm => {{ signal_base(condition.sorted_objects) }}_dr,
+        dr_orm => {{ o1.type | lower }}_{{ o5.type | lower }}_bx_{{ o1.bx }}_bx_{{ o5.bx }}_dr,
     {%- endif %}
+  {%- elif nr_requirements == 3 %}
+        obj2 => bx_data.{{ o4.type | lower }}({{ o4.bx_arr }}),
+    {%- if condition.deltaEtaOrm %}
+        deta_orm => {{ o1.type | lower }}_{{ o4.type | lower }}_bx_{{ o1.bx }}_bx_{{ o4.bx }}_deta,
+    {%- endif %}
+    {%- if condition.deltaPhiOrm %}
+        dphi_orm => {{ o1.type | lower }}_{{ o4.type | lower }}_bx_{{ o1.bx }}_bx_{{ o4.bx }}_dphi,
+    {%- endif %}
+    {%- if condition.deltaROrm %}
+        dr_orm => {{ o1.type | lower }}_{{ o4.type | lower }}_bx_{{ o1.bx }}_bx_{{ o4.bx }}_dr,
+    {%- endif %}
+  {%- elif nr_requirements == 2 %}
+        obj2 => bx_data.{{ o3.type | lower }}({{ o3.bx_arr }}),
+    {%- if condition.deltaEtaOrm %}
+        deta_orm => {{ o1.type | lower }}_{{ o3.type | lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_deta,
+    {%- endif %}
+    {%- if condition.deltaPhiOrm %}
+        dphi_orm => {{ o1.type | lower }}_{{ o3.type | lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_dphi,
+    {%- endif %}
+    {%- if condition.deltaROrm %}
+        dr_orm => {{ o1.type | lower }}_{{ o3.type | lower }}_bx_{{ o1.bx }}_bx_{{ o3.bx }}_dr,
+    {%- endif %}
+  {%- elif nr_requirements == 1 %}
+        obj2 => bx_data.{{ o2.type | lower }}({{ o2.bx_arr }}),
+    {%- if condition.deltaEtaOrm %}
+        deta_orm => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_deta,
+    {%- endif %}
+    {%- if condition.deltaPhiOrm %}
+        dphi_orm => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dphi,
+    {%- endif %}
+    {%- if condition.deltaROrm %}
+        dr_orm => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_dr,
+    {%- endif %}
+  {%- endif %}
   {%- if condition.twoBodyPt %}
         tbpt => {{ o1.type | lower }}_{{ o2.type | lower }}_bx_{{ o1.bx }}_bx_{{ o2.bx }}_tbpt,
   {%- endif %}
