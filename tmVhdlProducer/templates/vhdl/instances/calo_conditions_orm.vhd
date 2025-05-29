@@ -38,8 +38,7 @@
 
 {% block port_map %}
         obj1_calo => bx_data.{{ o1.type | lower }}({{ o1.bx_arr }}),
-  {%- set last_object = condition.sorted_objects[-1] %}
-        obj2 => bx_data.{{ last_object.type | lower }}({{ last_object.bx_arr }}),
+        obj2 => bx_data.{{ orm_obj.type | lower }}({{ orm_obj.bx_arr }}),
     {%- if condition.deltaEtaOrm %}
         deta_orm => {{ signal_base(condition.sorted_objects) }}_deta,
     {%- endif %}
