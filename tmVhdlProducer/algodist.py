@@ -34,7 +34,6 @@ import tmGrammar
 from .constants import BRAMS_TOTAL, SLICELUTS_TOTAL, PROCESSORS_TOTAL, NR_CALOS, NR_MUONS
 from . import __version__
 
-#from .handles import sort_objects
 from .handles import Payload
 from .handles import ObjectHandle
 from .handles import ConditionHandle
@@ -1061,13 +1060,11 @@ class Module:
                 for condition in algorithm.conditions:
                     if condition.type in corr_cond_2_obj:
                         a, b = condition.objects
-                        #a, b = sort_objects([a, b])
                         key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
                         combinations[key] = (a, b)
                     if condition.type in corr_cond_orm:
                         if len(condition.objects) == 3:
                             a, b, c = condition.objects
-                            #a, b, c = sort_objects([a, b, c])
                             key = (a.type, b.type, a.bx_offset, b.bx_offset) # a-b combination
                             combinations[key] = (a, b)
                             key = (a.type, c.type, a.bx_offset, c.bx_offset) # a-c combination
@@ -1077,19 +1074,16 @@ class Module:
                         else:
                             a = condition.objects[0]
                             b = condition.objects[1]
-                            #a, b = sort_objects([a, b])
                             key = (a.type, b.type, a.bx_offset, b.bx_offset)
                             combinations[key] = (a, b)
                     if condition.type in cond_orm:
                         a = condition.objects[0]
                         b = condition.objects[len(condition.objects)-1]
-                        #a, b = sort_objects([a, b])
                         key = (a.type, b.type, a.bx_offset, b.bx_offset)
                         combinations[key] = (a, b)
                     if condition.type == tmEventSetup.InvariantMassDeltaR:
                         a = condition.objects[0]
                         b = condition.objects[1]
-                        #a, b = sort_objects([a, b])
                         key = (a.type, b.type, a.bx_offset, b.bx_offset)
                         combinations[key] = (a, b)
             return combinations
@@ -1126,7 +1120,6 @@ class Module:
                             if cut.cut_type == tmEventSetup.DeltaEta:
                                 a = condition.objects[0]
                                 b = condition.objects[1]
-                                #a, b = sort_objects([a, b])
                                 key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
                                 combinations[key] = (a, b)
                     if condition.type in corr_cond_orm:
@@ -1134,7 +1127,6 @@ class Module:
                             if cut.cut_type == tmEventSetup.OvRmDeltaEta:
                                 a = condition.objects[0]
                                 b = condition.objects[-1]
-                                #a, b = sort_objects([a, b])
                                 key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
                                 combinations[key] = (a, b)
                     if condition.type in cond_orm:
@@ -1142,7 +1134,6 @@ class Module:
                             if cut.cut_type == tmEventSetup.OvRmDeltaEta:
                                 a = condition.objects[0]
                                 b = condition.objects[-1]
-                                #a, b = sort_objects([a, b])
                                 key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
                                 combinations[key] = (a, b)
             return combinations
@@ -1175,7 +1166,6 @@ class Module:
                             if cut.cut_type == tmEventSetup.DeltaPhi:
                                 a = condition.objects[0]
                                 b = condition.objects[1]
-                                #a, b = sort_objects([a, b])
                                 key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
                                 combinations[key] = (a, b)
                     if condition.type in corr_cond_orm:
@@ -1183,7 +1173,6 @@ class Module:
                             if cut.cut_type == tmEventSetup.OvRmDeltaPhi:
                                 a = condition.objects[0]
                                 b = condition.objects[-1]
-                                #a, b = sort_objects([a, b])
                                 key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
                                 combinations[key] = (a, b)
                     if condition.type in cond_orm:
@@ -1191,7 +1180,6 @@ class Module:
                             if cut.cut_type == tmEventSetup.OvRmDeltaPhi:
                                 a = condition.objects[0]
                                 b = condition.objects[-1]
-                                #a, b = sort_objects([a, b])
                                 key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
                                 combinations[key] = (a, b)
             return combinations
@@ -1224,7 +1212,6 @@ class Module:
                             if cut.cut_type == tmEventSetup.DeltaR:
                                 a = condition.objects[0]
                                 b = condition.objects[1]
-                                #a, b = sort_objects([a, b])
                                 key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
                                 combinations[key] = (a, b)
                     if condition.type in corr_cond_orm:
@@ -1232,7 +1219,6 @@ class Module:
                             if cut.cut_type == tmEventSetup.OvRmDeltaR:
                                 a = condition.objects[0]
                                 b = condition.objects[-1]
-                                #a, b = sort_objects([a, b])
                                 key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
                                 combinations[key] = (a, b)
                     if condition.type in cond_orm:
@@ -1240,7 +1226,6 @@ class Module:
                             if cut.cut_type == tmEventSetup.OvRmDeltaR:
                                 a = condition.objects[0]
                                 b = condition.objects[-1]
-                                #a, b = sort_objects([a, b])
                                 key = (a.type, b.type, a.bx_offset, b.bx_offset) # create custom hash
                                 combinations[key] = (a, b)
             return combinations
