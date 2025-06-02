@@ -936,9 +936,9 @@ class ConditionHelper(VhdlHelper):
         for i, obj in enumerate(objects):
             self.objects[i].update(obj)
 
-    @property
-    def sorted_objects(self):
-        return sort_objects(self.objects[:self.nr_objects])
+    #@property
+    #def sorted_objects(self):
+        #return sort_objects(self.objects[:self.nr_objects])
 
     @property
     def nr_objects(self):
