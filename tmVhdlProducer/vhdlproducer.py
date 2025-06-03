@@ -15,8 +15,7 @@ import tmEventSetup
 import tmTable
 
 from .vhdlhelper import MenuHelper
-from .vhdlhelper import vhdl_bool
-from .vhdlhelper import bx_encode
+from .vhdlhelper import vhdl_bool, bx_encode
 
 __all__ = ['VhdlProducer']
 

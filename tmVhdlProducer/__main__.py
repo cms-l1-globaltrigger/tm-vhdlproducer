@@ -15,7 +15,7 @@ from . import __version__
 from .algodist import ProjectDir
 from .algodist import distribute, constraint_t
 from .algodist import MinModules, MaxModules
-from .algodist import kExternals, kZDCPlus, kZDCMinus, kAxol1tlTrigger, kTopologicalTrigger
+from .algodist import kExternals, kZDCPlus, kZDCMinus, kAxol1tlTrigger, kTopologicalTrigger, kInvariantMass
 from .algodist import DefaultConfigFile
 from .vhdlproducer import VhdlProducer
 from .validate import validate_menu
@@ -37,12 +37,14 @@ DefaultOutputDir: str = os.getcwd()
 DefaultModuleZdc: int = 0
 DefaultModuleAxo: int = 1
 DefaultModuleTopo: int = 2
+DefaultInvMass: int = 3
 
 ConstraintTypes: Dict[str, List[str]] = {
     'ext': [kExternals],
     'zdc': [kZDCPlus, kZDCMinus],
     'axo': [kAxol1tlTrigger],
     'topo': [kTopologicalTrigger],
+    'inv_mass': [kInvariantMass],
 }
 """Mapping constraint types to esCondition types, provided for convenience."""
 
@@ -227,6 +229,8 @@ def main() -> int:
     # Default constraint for AXO, TOPO
     constraints.setdefault(kAxol1tlTrigger, [DefaultModuleAxo])
     constraints.setdefault(kTopologicalTrigger, [DefaultModuleTopo])
+    # Default constraint for Invariant Mass
+    constraints.setdefault(kInvariantMass, [DefaultInvMass])
 
     # Run distibution
     collection = distribute(

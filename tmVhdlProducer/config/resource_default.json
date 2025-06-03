@@ -168,14 +168,66 @@
             }
         },
         "calc_deta_integer": {
-            "processors": 0,
-            "brams": 0,
-            "sliceLUTs": 55
+            "calo": {
+                "calo": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 55
+                },
+                "muon": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 55
+                },
+                "esums": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 55
+                }
+            },
+            "muon": {
+                "muon": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 55
+                },
+                "esums": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 55
+                }
+            }
         },
         "calc_dphi_integer": {
-            "processors": 0,
-            "brams": 0,
-            "sliceLUTs": 43
+            "calo": {
+                "calo": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 43
+                },
+                "muon": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 43
+                },
+                "esums": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 43
+                }
+            },
+            "muon": {
+                "muon": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 43
+                },
+                "esums": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 43
+                }
+            }
         },
         "calc_cut_deta": {
             "calo": {
@@ -187,7 +239,7 @@
                 "muon": {
                     "processors": 0,
                     "brams": 0,
-                    "sliceLUTs": 0
+                    "sliceLUTs": 51
                 }
             },
             "muon": {
@@ -234,12 +286,12 @@
                 "calo": {
                     "processors": 2,
                     "brams": 0,
-                    "sliceLUTs": 101
+                    "sliceLUTs": 107
                 },
                 "muon": {
                     "processors": 2,
                     "brams": 0,
-                    "sliceLUTs": 295
+                    "sliceLUTs": 57
                 }
             },
             "muon": {
@@ -299,6 +351,52 @@
                     "processors": 0,
                     "brams": 0,
                     "sliceLUTs": 0
+                }
+            }
+        },
+        "calc_ml_inst": {
+            "axol1tl": {
+                "v1": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 1639
+                },
+                "v3": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 7736
+                },
+                "v4": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 7736
+                },
+                "v5": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 2685
+                }
+            },
+            "topological": {
+                "base_v1": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 581
+                },
+                "hh_ele_v1": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 581
+                },
+                "hh_had_v1": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 581
+                },
+                "hh_mu_v1": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 581
                 }
             }
         },
@@ -413,22 +511,22 @@
                         "v1": {
                             "processors": 0,
                             "brams": 0,
-                            "sliceLUTs": 1639
+                            "sliceLUTs": 15
                         },
                         "v3": {
                             "processors": 0,
                             "brams": 0,
-                            "sliceLUTs": 7736
+                            "sliceLUTs": 15
                         },
                         "v4": {
                             "processors": 0,
                             "brams": 0,
-                            "sliceLUTs": 7736
+                            "sliceLUTs": 15
                         },
                         "v5": {
                             "processors": 0,
                             "brams": 0,
-                            "sliceLUTs": 7736
+                            "sliceLUTs": 15
                         }
                     }
                 }
@@ -454,22 +552,22 @@
                         "base_v1": {
                             "processors": 0,
                             "brams": 0,
-                            "sliceLUTs": 581
+                            "sliceLUTs": 15
                         },
                         "hh_ele_v1": {
                             "processors": 0,
                             "brams": 0,
-                            "sliceLUTs": 581
+                            "sliceLUTs": 15
                         },
                         "hh_had_v1": {
                             "processors": 0,
                             "brams": 0,
-                            "sliceLUTs": 581
+                            "sliceLUTs": 15
                         },
                         "hh_mu_v1": {
                             "processors": 0,
                             "brams": 0,
-                            "sliceLUTs": 581
+                            "sliceLUTs": 15
                         }
                     }
                 }

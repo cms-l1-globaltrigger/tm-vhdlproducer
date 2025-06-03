@@ -67,10 +67,10 @@ RegexVhdlLabel = re.compile('[^A-Za-z0-9_]')
 # -----------------------------------------------------------------------------
 
 ObjectTypes: Dict[int, str] = {
-    tmEventSetup.Muon: tmGrammar.MU,
     tmEventSetup.Egamma: tmGrammar.EG,
-    tmEventSetup.Tau: tmGrammar.TAU,
     tmEventSetup.Jet: tmGrammar.JET,
+    tmEventSetup.Tau: tmGrammar.TAU,
+    tmEventSetup.Muon: tmGrammar.MU,
     tmEventSetup.ETT: tmGrammar.ETT,
     tmEventSetup.ETTEM: tmGrammar.ETTEM,
     tmEventSetup.HTT: tmGrammar.HTT,
@@ -503,46 +503,6 @@ class ModuleHelper(VhdlHelper):
                 combinations[key] = (a, b)
         return combinations.values()
 
-    #@property
-    #def correlationCombinationsDetaDphi(self):
-        #combinations = {}
-        #for condition in self.conditions:
-            #if isinstance(condition, CorrelationConditionHelper):
-                #if condition.deltaEta.enabled or condition.deltaPhi.enabled:
-                    #a = condition.objects[0]
-                    #b = condition.objects[condition.nr_objects-1]
-                    #key = (a.type, b.type, a.bx, b.bx)
-                    #combinations[key] = (a, b)
-            #if isinstance(condition, CorrelationConditionOvRmHelper):
-                #if condition.deltaEta.enabled or condition.deltaPhi.enabled:
-                    #if condition.nr_objects == 3:
-                        #a, b, c = condition.objects
-                        #key = (a.type, c.type, a.bx, c.bx) # a-c combination
-                        #combinations[key] = (a, c)
-                    #else:
-                        #a = condition.objects[0]
-                        #b = condition.objects[1]
-                        #key = (a.type, b.type, a.bx, b.bx)
-                        #combinations[key] = (a, b)
-            #if isinstance(condition, CorrelationConditionOvRmHelper):
-                #if condition.deltaEtaOrm.enabled or condition.deltaPhiOrm.enabled:
-                    #if condition.nr_objects == 3:
-                        #a, b, c = condition.objects
-                        #key = (a.type, c.type, a.bx, c.bx) # a-c combination
-                        #combinations[key] = (a, c)
-                    #else:
-                        #a = condition.objects[0]
-                        #b = condition.objects[1]
-                        #key = (a.type, b.type, a.bx, b.bx)
-                        #combinations[key] = (a, b)
-            #if isinstance(condition, CaloConditionOvRmHelper):
-                #if condition.deltaEtaOrm.enabled or condition.deltaPhiOrm.enabled or condition.deltaROrm.enabled:
-                    #a = condition.objects[0]
-                    #b = condition.objects[condition.nr_objects-1]
-                    #key = (a.type, b.type, a.bx, b.bx)
-                    #combinations[key] = (a, b)
-        #return combinations.values()
-
     @property
     def correlationCombinationsDeta(self):
         combinations = {}
@@ -771,25 +731,6 @@ class ModuleHelper(VhdlHelper):
                 key = obj.type # create custom hash
                 objects[key] = obj
         return objects.values()
-
-    #@property
-    #def muonBxCombinations(self):
-        #combinations = set()
-        #for condition in self.conditions:
-            #if isinstance(condition, (MuonConditionHelper, CorrelationConditionHelper)):
-                #if condition.nr_objects == 2:
-                    #a = condition.objects[0]
-                    #b = condition.objects[1]
-                    #combinations.add((a.bx, b.bx))
-            #elif isinstance(condition, Correlation3ConditionHelper):
-                #if condition.nr_objects == 3:
-                    #a = condition.objects[0]
-                    #b = condition.objects[1]
-                    #c = condition.objects[2]
-                    #combinations.add((a.bx, b.bx))
-                    #combinations.add((a.bx, c.bx))
-                    #combinations.add((b.bx, c.bx))
-        #return list(combinations)
 
     @property
     def muonBxCombinations(self):

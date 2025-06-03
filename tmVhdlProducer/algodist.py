@@ -362,6 +362,8 @@ ObjectCategoryKey: Dict[int, str] = {
     tmEventSetup.ETTEM: "esums",
     tmEventSetup.ETMHF: "esums",
     tmEventSetup.HTMHF: "esums",
+    tmEventSetup.Axol1tl: "axol1tl",
+    tmEventSetup.Topological: "topological",
 }
 """Mapping object types to object category keys (for deltas)."""
 
@@ -623,19 +625,23 @@ class ResourceTray:
         fdl_algo_floor = self.resources.fdl.floor
         return Payload(brams=fdl_algo_floor.brams, sliceLUTs=fdl_algo_floor.sliceLUTs, processors=fdl_algo_floor.processors)
 
-    def calc_deta_integer(self) -> Payload:
+    def calc_deta_integer(self, obj0, obj1) -> Payload:
         """Returns resource consumption payload for one unit of calc_deta_integer calculation.
         >>> tray.calc_deta_integer()
         """
-        calc_deta_integer = self.resources.calc_deta_integer
-        return Payload(brams=calc_deta_integer.brams, sliceLUTs=calc_deta_integer.sliceLUTs, processors=calc_deta_integer.processors)
+        brams = self.resources.calc_deta_integer._asdict()[obj0]._asdict()[obj1].brams
+        sliceLUTs = self.resources.calc_deta_integer._asdict()[obj0]._asdict()[obj1].sliceLUTs
+        processors = self.resources.calc_deta_integer._asdict()[obj0]._asdict()[obj1].processors
+        return Payload(brams, sliceLUTs, processors)
 
-    def calc_dphi_integer(self) -> Payload:
+    def calc_dphi_integer(self, obj0, obj1) -> Payload:
         """Returns resource consumption payload for one unit of calc_dphi_integer calculation.
         >>> tray.calc_dphi_integer()
         """
-        calc_dphi_integer = self.resources.calc_dphi_integer
-        return Payload(brams=calc_dphi_integer.brams, sliceLUTs=calc_dphi_integer.sliceLUTs, processors=calc_dphi_integer.processors)
+        brams = self.resources.calc_dphi_integer._asdict()[obj0]._asdict()[obj1].brams
+        sliceLUTs = self.resources.calc_dphi_integer._asdict()[obj0]._asdict()[obj1].sliceLUTs
+        processors = self.resources.calc_dphi_integer._asdict()[obj0]._asdict()[obj1].processors
+        return Payload(brams, sliceLUTs, processors)
 
     def calc_cut_deta(self, obj0, obj1) -> Payload:
         """Returns resource consumption payload for one unit of calc_cut_deta calculation.
@@ -671,6 +677,15 @@ class ResourceTray:
         brams = self.resources.calc_cut_mass._asdict()[obj0]._asdict()[obj1].brams
         sliceLUTs = self.resources.calc_cut_mass._asdict()[obj0]._asdict()[obj1].sliceLUTs
         processors = self.resources.calc_cut_mass._asdict()[obj0]._asdict()[obj1].processors
+        return Payload(brams, sliceLUTs, processors)
+
+    def calc_ml_inst(self, obj, model) -> Payload:
+        """Returns resource consumption payload for one unit of ML calculation.
+        >>> tray.calc_ml_inst()
+        """
+        brams = self.resources.calc_ml_inst._asdict()[obj]._asdict()[model].brams
+        sliceLUTs = self.resources.calc_ml_inst._asdict()[obj]._asdict()[model].sliceLUTs
+        processors = self.resources.calc_ml_inst._asdict()[obj]._asdict()[model].processors
         return Payload(brams, sliceLUTs, processors)
 
     def find_object_cut(self, object):
@@ -882,8 +897,6 @@ class Module:
         self.frame = tray.frame()
         self.fdl_algo_slice = tray.fdl_algo_slice()
         self.fdl_algo_floor = tray.fdl_algo_floor()
-        self.calc_deta_integer = tray.calc_deta_integer()
-        self.calc_dphi_integer = tray.calc_dphi_integer()
         self.debug = False
 
     def __len__(self):
@@ -966,6 +979,10 @@ class Module:
             tmEventSetup.ETMHF,
             tmEventSetup.HTMHF
         ]
+        ml_type = [
+            tmEventSetup.Axol1tlTrigger,
+            tmEventSetup.TopologicalTrigger,
+        ]
 
         def calc_factor(combination) -> float:
             left, right = combination[0], combination[1]
@@ -1036,7 +1053,7 @@ class Module:
                 logging.debug(f"| {gtl_name:<92} |")
             return Payload(brams, sliceLUTs, processors)
 
-        def calc_deta_dphi_combinations() -> dict:
+        def calc_deta_dphi_integer_combinations() -> dict:
             """Object combinations for instances of "deta_dphi_integer" calculations."""
             combinations = {}
             for algorithm in self.algorithms:
@@ -1071,24 +1088,24 @@ class Module:
                         combinations[key] = (a, b)
             return combinations
 
-        def calc_deta_dphi_payload() -> Payload:
+        def calc_deta_dphi_integer_payload() -> Payload:
             """Payload for instances of "deta_dphi_integer" calculations."""
             calc_name = "calc_deta_dphi_integer"
             brams = 0
             sliceLUTs = 0
             processors = 0
-            for combination in calc_deta_dphi_combinations():
-                obj_0 = combination[0]
-                obj_1 = combination[1]
+            for combination in calc_deta_dphi_integer_combinations():
+                obj0 = object_category(combination[0])
+                obj1 = object_category(combination[1])
                 factor = calc_factor(combination)
-                if obj_1 in (tmEventSetup.ETM, tmEventSetup.HTM, tmEventSetup.ETMHF, tmEventSetup.HTMHF):
-                    sliceLUTs += self.calc_dphi_integer.sliceLUTs * factor
-                    sliceLUTs_inst = self.calc_dphi_integer.sliceLUTs * factor
+                if obj1 in (tmEventSetup.ETM, tmEventSetup.HTM, tmEventSetup.ETMHF, tmEventSetup.HTMHF):
+                    sliceLUTs += self.tray.calc_dphi_integer(obj0, obj1).sliceLUTs * factor
+                    sliceLUTs_inst = self.tray.calc_dphi_integer(obj0, obj1).sliceLUTs * factor
                 else:
-                    sliceLUTs += self.calc_deta_integer.sliceLUTs * factor
-                    sliceLUTs_inst = self.calc_deta_integer.sliceLUTs * factor
-                    sliceLUTs += self.calc_dphi_integer.sliceLUTs * factor
-                    sliceLUTs_inst += self.calc_dphi_integer.sliceLUTs * factor
+                    sliceLUTs += self.tray.calc_deta_integer(obj0, obj1).sliceLUTs * factor
+                    sliceLUTs_inst = self.tray.calc_deta_integer(obj0, obj1).sliceLUTs * factor
+                    sliceLUTs += self.tray.calc_dphi_integer(obj0, obj1).sliceLUTs * factor
+                    sliceLUTs_inst += self.tray.calc_dphi_integer(obj0, obj1).sliceLUTs * factor
                 if self.debug:
                     logging.debug(f"| {calc_name:<37} | {int(sliceLUTs_inst):>5} | {processors:>5} | {brams:>5} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}|")
             return Payload(brams, sliceLUTs, processors)
@@ -1261,6 +1278,36 @@ class Module:
                     logging.debug(f"| {calc_name:<37} | {int(sliceLUTs_inst):>5} | {int(processors_inst):>5} | {brams:>5} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}|")
             return Payload(brams, sliceLUTs, processors)
 
+        def calc_ml_inst_combinations() -> dict:
+            """Object combinations for instances of ML calculations."""
+            combinations = {}
+            for algorithm in self.algorithms:
+                for condition in algorithm.conditions:
+                    if condition.type in ml_type:
+                        for cut in condition.objects[0].cuts:
+                            if cut.cut_type == tmEventSetup.Model:
+                                a = condition.objects[0]
+                                b = cut.data
+                                key = (a.type, b)
+                                combinations[key] = (a, b)
+            return combinations
+
+        def calc_ml_inst_payload() -> Payload:
+            """Payload for instances of ML calculations."""
+            calc_name = "calc_ml_instance"
+            brams = 0
+            sliceLUTs = 0
+            processors = 0
+            for combination in calc_ml_inst_combinations():
+                obj = object_category(combination[0])
+                model = combination[1]
+                factor = 1
+                sliceLUTs += self.tray.calc_ml_inst(obj, model).sliceLUTs * factor
+                sliceLUTs_inst = self.tray.calc_ml_inst(obj, model).sliceLUTs * factor
+                if self.debug:
+                    logging.debug(f"| {calc_name:<37} | {int(sliceLUTs_inst):>5} | {int(processors):>5} | {brams:>5} | {obj_type_to_str(combination[0]):<7} | {combination[1]:<7}|")
+            return Payload(brams, sliceLUTs, processors)
+
         # payload for "frame"
         payload += calc_frame_payload()
 
@@ -1280,7 +1327,10 @@ class Module:
         payload += calc_cut_mass_payload()
 
         # payload for instances of "deta dphi integer" calculations
-        payload += calc_deta_dphi_payload()
+        payload += calc_deta_dphi_integer_payload()
+
+        # payload for instances of ML calculations
+        payload += calc_ml_inst_payload()
 
 # =================================================================================
 
@@ -1656,7 +1706,14 @@ def list_distribution(collection: ModuleCollection) -> None:
     logging.info("|--------------------------------------------------|---------|-------|------|-------|")
 
 def list_summary(collection: ModuleCollection) -> None:
-    message = f"Summary for distribution on {len(collection)} modules, shadow ratio: {collection.ratio:.1f}"
+    sliceLUTs_sums = []
+    brams_sums = []
+    proc_sums = []
+    if collection.reverse_sorting:
+        message = f"Summary for distribution on {len(collection)} modules, shadow ratio: {collection.ratio:.1f}, sorting: descending"
+    else:
+        message = f"Summary for distribution on {len(collection)} modules, shadow ratio: {collection.ratio:.1f}, sorting: ascending"
+    #message = f"Summary for distribution on {len(collection)} modules, shadow ratio: {collection.ratio:.1f}, sorting: "
     logging.info("|--------------------------------------------------------------------------------------|")
     logging.info("|                                                                                      |")
     logging.info(f"| {message:<84} |")
@@ -1668,19 +1725,32 @@ def list_summary(collection: ModuleCollection) -> None:
     logging.info("|-------------------------------------|------------------------------------------------|")
     logging.info("| ID | Algorithms | Conditions | Rel. | Value  |  [%]  | Value |  [%]  | Value |  [%]  |")
     logging.info("|----|------------|------------|------|--------|-------|-------|-------|-------|-------|")
+
     for module in collection:
         algorithms = len(module)
         conditions = len(module.conditions)
         proportion = float(conditions) / algorithms if algorithms else 1.0
         brams_val = module.payload.brams
+        brams_sums.append(brams_val)
         sliceLUTs_val = module.payload.sliceLUTs
+        sliceLUTs_sums.append(sliceLUTs_val)
         processors_val = module.payload.processors
+        proc_sums.append(processors_val)
         brams = module.payload.brams / BRAMS_TOTAL * 100.
         sliceLUTs = module.payload.sliceLUTs / SLICELUTS_TOTAL * 100.
         processors = module.payload.processors / PROCESSORS_TOTAL * 100.
         logging.info(f"| {module.id:>2} | {algorithms:>10} | {conditions:>10} | {proportion:>4.2f} | " \
                      f"{sliceLUTs_val:>6.0f} | {sliceLUTs:>5.2f} | {brams_val:>5.0f} | {brams:>5.2f} | {processors_val:>5.0f} | {processors:>5.2f} |")
-    logging.info("|----|------------|------------|------|--------|-------|-------|-------|-------|-------|")
+    logging.info("|-------------------------------------|--------|-------|-------|-------|-------|-------|")
+    n_modules = len(collection)
+    sliceLUTs_sum = sum(sliceLUTs_sums)
+    brams_sum = sum(brams_sums)
+    proc_sum = sum(proc_sums)
+    sliceLUTs_sum_perc = sliceLUTs_sum / (n_modules * SLICELUTS_TOTAL) * 100.
+    brams_sum_perc = brams_sum / (n_modules * BRAMS_TOTAL) * 100.
+    proc_sum_perc = proc_sum / (n_modules * PROCESSORS_TOTAL) * 100.
+    logging.info(f"| Total sum:                          |{sliceLUTs_sum:>6.0f} | {sliceLUTs_sum_perc:>5.2f} |{brams_sum:>6.0f} | {brams_sum_perc:>5.2f} |{proc_sum:>6.0f} | {proc_sum_perc:>5.2f} |")
+    logging.info("|-------------------------------------|--------|-------|-------|-------|-------|-------|")
 
 def list_instantiations_debug(collection: ModuleCollection) -> None:
     n_a = " "
