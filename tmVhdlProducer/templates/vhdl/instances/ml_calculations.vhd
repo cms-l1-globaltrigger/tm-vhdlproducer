@@ -26,7 +26,7 @@ calc_axo_{{ o.model.value }}_i: entity work.ml_calculation_instances
   {%- set o = condition.objects[0] -%}
   {%- if o.type == "TOPO" and o.model.value not in ns_topo.models %}
 calc_topo_{{ o.model.value }}_i: entity work.ml_calculation_instances
-    generic map(TOPO_SEL, TOPO_MODEL_{{temp | upper}}, TOPO_SCORE_WIDTH)
+    generic map(TOPO_SEL, TOPO_MODEL_{{o.model.value | upper}}, TOPO_SCORE_WIDTH)
     port map(
         lhc_clk,
         bx_data.mu({{ o.bx_arr }}),
