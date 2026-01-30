@@ -1,5 +1,4 @@
-include changelog
+include CHANGELOG.md
 include README.md
-include requirements.txt
 include mypy.ini
 include tox.ini

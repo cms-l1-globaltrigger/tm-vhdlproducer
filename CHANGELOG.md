@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Renamed `changelog` to `CHANGELOG.md`.
 
+### Removed
+
+- Obsolete `requirements.txt`.
+
 ### Fixed
 
 - Markdown format in changelog.
