@@ -10,7 +10,7 @@
 {%- for condition in module.signalConditions -%}
   {%- set o = condition.objects[0] -%}
   {%- if o.type == "TOPO" and o.model.value not in ns_topo.models %}
-    signal topo_{{ o.model.value }}_score : std_logic_vector(AXO_SCORE_WIDTH-1 downto 0);
+    signal topo_{{ o.model.value }}_score : std_logic_vector(TOPO_SCORE_WIDTH-1 downto 0);
     {%- set _ = ns_topo.models.append(o.model.value) -%}
   {%- endif -%}
 {%- endfor -%}
