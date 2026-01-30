@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- TOPO model `HHbbWW_1mu_v5` and AXO model `v6` in `resource_default.json`.
+- TOPO model `HHbbWW_1mu_v5` resource configuration.
+- AXO model `v6` resource configuration.
 
 ### Changed
 
