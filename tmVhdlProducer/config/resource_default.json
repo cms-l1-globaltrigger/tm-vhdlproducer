@@ -375,6 +375,11 @@
                     "processors": 0,
                     "brams": 0,
                     "sliceLUTs": 2685
+                },
+                "v6": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 2685
                 }
             },
             "topological": {
@@ -394,6 +399,11 @@
                     "sliceLUTs": 581
                 },
                 "hh_mu_v1": {
+                    "processors": 0,
+                    "brams": 0,
+                    "sliceLUTs": 581
+                },
+                "HHbbWW_1mu_v5": {
                     "processors": 0,
                     "brams": 0,
                     "sliceLUTs": 581
@@ -527,6 +537,11 @@
                             "processors": 0,
                             "brams": 0,
                             "sliceLUTs": 15
+                        },
+                        "v6": {
+                            "processors": 0,
+                            "brams": 0,
+                            "sliceLUTs": 15
                         }
                     }
                 }
@@ -565,6 +580,11 @@
                             "sliceLUTs": 15
                         },
                         "hh_mu_v1": {
+                            "processors": 0,
+                            "brams": 0,
+                            "sliceLUTs": 15
+                        },
+                        "HHbbWW_1mu_v5": {
                             "processors": 0,
                             "brams": 0,
                             "sliceLUTs": 15
