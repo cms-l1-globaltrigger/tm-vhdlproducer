@@ -3,10 +3,8 @@ VHDL Producer
 
 ## Install
 
-Install using pip (>= 19.0)
-
 ```bash
-pip install git+https://github.com/cms-l1-globaltrigger/tm-vhdlproducer.git@2.24.0
+pip install --extra-index-url https://globaltrigger.web.cern.ch/pypi tm-vhdlproducer
 ```
 
 ## Build from source
