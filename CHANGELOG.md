@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Support `NETETMHF` objects (#64).
-- Added Jinja filter `type_remap` to map `NETETMHF` to `HTM` in templates (#64).
+- Mapping of `NETETMHF` to `HTM` in templates (#64).
 
 ### Changed
 
