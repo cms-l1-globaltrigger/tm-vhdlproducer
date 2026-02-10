@@ -2,12 +2,12 @@
 
 Perform a quick distribution using the convenient distribution function.
 
->>> es = tmEventSetup.getTriggerMenu('sample.xml')
->>> collection = distribute(es, modules=2, config='path/to/spec.json', ratio=0.25)
+>>> es = tmEventSetup.getTriggerMenu("sample.xml")
+>>> collection = distribute(es, modules=2, config="path/to/spec.json", ratio=0.25)
 
 Full detailed approach:
 
->>> tray = ResourceTray(config='path/to/spec.json')
+>>> tray = ResourceTray(config="path/to/spec.json")
 >>> collection = ModuleCollection(es, tray)
 >>> collection.distribute(modules=2, ratio=0.25)
 >>> collection.validate()
@@ -24,7 +24,8 @@ import argparse
 import json
 import logging
 import uuid
-import sys, os
+import sys
+import os
 from collections import namedtuple
 from typing import Any, Callable, Dict, Iterable, List, Optional, Tuple
 
@@ -32,7 +33,6 @@ import tmEventSetup
 import tmGrammar
 
 from .constants import BRAMS_TOTAL, SLICELUTS_TOTAL, PROCESSORS_TOTAL, NR_CALOS, NR_MUONS
-from . import __version__
 
 from .handles import Payload
 from .handles import ObjectHandle
@@ -46,173 +46,175 @@ MaxModules: int = 6
 ProjectDir: str = os.path.abspath(os.path.join(os.path.dirname(__file__)))
 """Projects root directory."""
 
-DefaultConfigDir: str = os.path.join(ProjectDir, 'config')
+DefaultConfigDir: str = os.path.join(ProjectDir, "config")
 """Default directory for resource configuration files."""
 
-DefaultConfigFile: str = os.path.join(DefaultConfigDir, 'resource_default.json')
+DefaultConfigFile: str = os.path.join(DefaultConfigDir, "resource_default.json")
 """Default resource configuration file."""
 
 #
 # Keys for object types
 #
 
-kMuon: str = 'Muon'
-kEgamma: str = 'Egamma'
-kTau: str = 'Tau'
-kJet: str = 'Jet'
-kETT: str = 'ETT'
-kETTEM: str = 'ETTEM'
-kHTT: str = 'HTT'
-kTOWERCOUNT: str = 'TOWERCOUNT'
-kETM: str = 'ETM'
-kHTM: str = 'HTM'
-kETMHF: str = 'ETMHF'
-kHTMHF: str = 'HTMHF'
-kASYMET: str = 'ASYMET'
-kASYMHT: str = 'ASYMHT'
-kASYMETHF: str = 'ASYMETHF'
-kASYMHTHF: str = 'ASYMHTHF'
-kCENT0: str = 'CENT0'
-kCENT1: str = 'CENT1'
-kCENT2: str = 'CENT2'
-kCENT3: str = 'CENT3'
-kCENT4: str = 'CENT4'
-kCENT5: str = 'CENT5'
-kCENT6: str = 'CENT6'
-kCENT7: str = 'CENT7'
-kMUS0: str = 'MUS0'
-kMUS1: str = 'MUS1'
-kMUS2: str = 'MUS2'
-kMUSOOT0: str = 'MUSOOT0'
-kMUSOOT1: str = 'MUSOOT1'
-kMBT0HFM: str = 'MBT0HFM'
-kMBT0HFP: str = 'MBT0HFP'
-kMBT1HFM: str = 'MBT1HFM'
-kMBT1HFP: str = 'MBT1HFP'
-kADT: str = 'ADT'
-kZDCP: str = 'ZDCP'
-kZDCM: str = 'ZDCM'
-kAxol1tl: str = 'Axol1tl'
-kTopological: str = 'Topological'
-kCicada: str = 'Cicada'
-kEXT: str = 'EXT'
-kPrecision: str = 'Precision'
+kMuon: str = "Muon"
+kEgamma: str = "Egamma"
+kTau: str = "Tau"
+kJet: str = "Jet"
+kETT: str = "ETT"
+kETTEM: str = "ETTEM"
+kHTT: str = "HTT"
+kTOWERCOUNT: str = "TOWERCOUNT"
+kETM: str = "ETM"
+kHTM: str = "HTM"
+kETMHF: str = "ETMHF"
+kHTMHF: str = "HTMHF"
+kNETETMHF: str = "NETETMHF"
+kASYMET: str = "ASYMET"
+kASYMHT: str = "ASYMHT"
+kASYMETHF: str = "ASYMETHF"
+kASYMHTHF: str = "ASYMHTHF"
+kCENT0: str = "CENT0"
+kCENT1: str = "CENT1"
+kCENT2: str = "CENT2"
+kCENT3: str = "CENT3"
+kCENT4: str = "CENT4"
+kCENT5: str = "CENT5"
+kCENT6: str = "CENT6"
+kCENT7: str = "CENT7"
+kMUS0: str = "MUS0"
+kMUS1: str = "MUS1"
+kMUS2: str = "MUS2"
+kMUSOOT0: str = "MUSOOT0"
+kMUSOOT1: str = "MUSOOT1"
+kMBT0HFM: str = "MBT0HFM"
+kMBT0HFP: str = "MBT0HFP"
+kMBT1HFM: str = "MBT1HFM"
+kMBT1HFP: str = "MBT1HFP"
+kADT: str = "ADT"
+kZDCP: str = "ZDCP"
+kZDCM: str = "ZDCM"
+kAxol1tl: str = "Axol1tl"
+kTopological: str = "Topological"
+kCicada: str = "Cicada"
+kEXT: str = "EXT"
+kPrecision: str = "Precision"
 
 #
 # Keys for condition types
 #
 
-kSingleMuon: str = 'SingleMuon'
-kDoubleMuon: str = 'DoubleMuon'
-kTripleMuon: str = 'TripleMuon'
-kQuadMuon: str = 'QuadMuon'
-kSingleEgamma: str = 'SingleEgamma'
-kDoubleEgamma: str = 'DoubleEgamma'
-kTripleEgamma: str = 'TripleEgamma'
-kQuadEgamma: str = 'QuadEgamma'
-kSingleTau: str = 'SingleTau'
-kDoubleTau: str = 'DoubleTau'
-kTripleTau: str = 'TripleTau'
-kQuadTau: str = 'QuadTau'
-kSingleJet: str = 'SingleJet'
-kDoubleJet: str = 'DoubleJet'
-kTripleJet: str = 'TripleJet'
-kQuadJet: str = 'QuadJet'
-kTotalEt: str = 'TotalEt'
-kTotalEtEM: str = 'TotalEtEM'
-kTotalHt: str = 'TotalHt'
-kTowerCount: str = 'TowerCount'
-kMissingEt: str = 'MissingEt'
-kMissingHt: str = 'MissingHt'
-kMissingEtHF: str = 'MissingEtHF'
-kMissingHtHF: str = 'MissingHtHF'
-kAsymmetryEt: str = 'AsymmetryEt'
-kAsymmetryHt: str = 'AsymmetryHt'
-kAsymmetryEtHF: str = 'AsymmetryEtHF'
-kAsymmetryHtHF: str = 'AsymmetryHtHF'
-kCentrality0: str = 'Centrality0'
-kCentrality1: str = 'Centrality1'
-kCentrality2: str = 'Centrality2'
-kCentrality3: str = 'Centrality3'
-kCentrality4: str = 'Centrality4'
-kCentrality5: str = 'Centrality5'
-kCentrality6: str = 'Centrality6'
-kCentrality7: str = 'Centrality7'
-kMuonShower0: str = 'MuonShower0'
-kMuonShower1: str = 'MuonShower1'
-kMuonShower2: str = 'MuonShower2'
-kMuonShowerOutOfTime0: str = 'MuonShowerOutOfTime0'
-kMuonShowerOutOfTime1: str = 'MuonShowerOutOfTime1'
-kMinBiasHFM0: str = 'MinBiasHFM0'
-kMinBiasHFM1: str = 'MinBiasHFM1'
-kMinBiasHFP0: str = 'MinBiasHFP0'
-kMinBiasHFP1: str = 'MinBiasHFP1'
-kZDCPlus: str = 'ZDCPlus'
-kZDCMinus: str = 'ZDCMinus'
-kExternals: str = 'Externals'
-kMuonMuonCorrelation: str = 'MuonMuonCorrelation'
-kMuonEsumCorrelation: str = 'MuonEsumCorrelation'
-kCaloMuonCorrelation: str = 'CaloMuonCorrelation'
-kCaloCaloCorrelation: str = 'CaloCaloCorrelation'
-kCaloEsumCorrelation: str = 'CaloEsumCorrelation'
-kInvariantMass: str = 'InvariantMass'
-kInvariantMass3: str = 'InvariantMass3'
-kInvariantMassUpt: str = 'InvariantMassUpt'
-kInvariantMassDeltaR: str = 'InvariantMassDeltaR'
-kTransverseMass: str = 'TransverseMass'
-kCaloCaloCorrelationOvRm: str = 'CaloCaloCorrelationOvRm'
-kInvariantMassOvRm: str = 'InvariantMassOvRm'
-kTransverseMassOvRm: str = 'TransverseMassOvRm'
-kSingleEgammaOvRm: str = 'SingleEgammaOvRm'
-kDoubleEgammaOvRm: str = 'DoubleEgammaOvRm'
-kTripleEgammaOvRm: str = 'TripleEgammaOvRm'
-kQuadEgammaOvRm: str = 'QuadEgammaOvRm'
-kSingleTauOvRm: str = 'SingleTauOvRm'
-kDoubleTauOvRm: str = 'DoubleTauOvRm'
-kTripleTauOvRm: str = 'TripleTauOvRm'
-kQuadTauOvRm: str = 'QuadTauOvRm'
-kSingleJetOvRm: str = 'SingleJetOvRm'
-kDoubleJetOvRm: str = 'DoubleJetOvRm'
-kTripleJetOvRm: str = 'TripleJetOvRm'
-kQuadJetOvRm: str = 'QuadJetOvRm'
-kAnomalyDetectionTrigger: str = 'AnomalyDetectionTrigger'
-kAxol1tlTrigger: str = 'Axol1tlTrigger'
-kTopologicalTrigger: str = 'TopologicalTrigger'
-kCicadaTrigger: str = 'CicadaTrigger'
-kMultiEgamma: str = 'MultiEgamma'
-kMultiJet: str = 'MultiJet'
-kMultiTau: str = 'MultiTau'
+kSingleMuon: str = "SingleMuon"
+kDoubleMuon: str = "DoubleMuon"
+kTripleMuon: str = "TripleMuon"
+kQuadMuon: str = "QuadMuon"
+kSingleEgamma: str = "SingleEgamma"
+kDoubleEgamma: str = "DoubleEgamma"
+kTripleEgamma: str = "TripleEgamma"
+kQuadEgamma: str = "QuadEgamma"
+kSingleTau: str = "SingleTau"
+kDoubleTau: str = "DoubleTau"
+kTripleTau: str = "TripleTau"
+kQuadTau: str = "QuadTau"
+kSingleJet: str = "SingleJet"
+kDoubleJet: str = "DoubleJet"
+kTripleJet: str = "TripleJet"
+kQuadJet: str = "QuadJet"
+kTotalEt: str = "TotalEt"
+kTotalEtEM: str = "TotalEtEM"
+kTotalHt: str = "TotalHt"
+kTowerCount: str = "TowerCount"
+kMissingEt: str = "MissingEt"
+kMissingHt: str = "MissingHt"
+kMissingEtHF: str = "MissingEtHF"
+kMissingHtHF: str = "MissingHtHF"
+kNetMissingEtHF: str = "NetMissingEtHF"
+kAsymmetryEt: str = "AsymmetryEt"
+kAsymmetryHt: str = "AsymmetryHt"
+kAsymmetryEtHF: str = "AsymmetryEtHF"
+kAsymmetryHtHF: str = "AsymmetryHtHF"
+kCentrality0: str = "Centrality0"
+kCentrality1: str = "Centrality1"
+kCentrality2: str = "Centrality2"
+kCentrality3: str = "Centrality3"
+kCentrality4: str = "Centrality4"
+kCentrality5: str = "Centrality5"
+kCentrality6: str = "Centrality6"
+kCentrality7: str = "Centrality7"
+kMuonShower0: str = "MuonShower0"
+kMuonShower1: str = "MuonShower1"
+kMuonShower2: str = "MuonShower2"
+kMuonShowerOutOfTime0: str = "MuonShowerOutOfTime0"
+kMuonShowerOutOfTime1: str = "MuonShowerOutOfTime1"
+kMinBiasHFM0: str = "MinBiasHFM0"
+kMinBiasHFM1: str = "MinBiasHFM1"
+kMinBiasHFP0: str = "MinBiasHFP0"
+kMinBiasHFP1: str = "MinBiasHFP1"
+kZDCPlus: str = "ZDCPlus"
+kZDCMinus: str = "ZDCMinus"
+kExternals: str = "Externals"
+kMuonMuonCorrelation: str = "MuonMuonCorrelation"
+kMuonEsumCorrelation: str = "MuonEsumCorrelation"
+kCaloMuonCorrelation: str = "CaloMuonCorrelation"
+kCaloCaloCorrelation: str = "CaloCaloCorrelation"
+kCaloEsumCorrelation: str = "CaloEsumCorrelation"
+kInvariantMass: str = "InvariantMass"
+kInvariantMass3: str = "InvariantMass3"
+kInvariantMassUpt: str = "InvariantMassUpt"
+kInvariantMassDeltaR: str = "InvariantMassDeltaR"
+kTransverseMass: str = "TransverseMass"
+kCaloCaloCorrelationOvRm: str = "CaloCaloCorrelationOvRm"
+kInvariantMassOvRm: str = "InvariantMassOvRm"
+kTransverseMassOvRm: str = "TransverseMassOvRm"
+kSingleEgammaOvRm: str = "SingleEgammaOvRm"
+kDoubleEgammaOvRm: str = "DoubleEgammaOvRm"
+kTripleEgammaOvRm: str = "TripleEgammaOvRm"
+kQuadEgammaOvRm: str = "QuadEgammaOvRm"
+kSingleTauOvRm: str = "SingleTauOvRm"
+kDoubleTauOvRm: str = "DoubleTauOvRm"
+kTripleTauOvRm: str = "TripleTauOvRm"
+kQuadTauOvRm: str = "QuadTauOvRm"
+kSingleJetOvRm: str = "SingleJetOvRm"
+kDoubleJetOvRm: str = "DoubleJetOvRm"
+kTripleJetOvRm: str = "TripleJetOvRm"
+kQuadJetOvRm: str = "QuadJetOvRm"
+kAnomalyDetectionTrigger: str = "AnomalyDetectionTrigger"
+kAxol1tlTrigger: str = "Axol1tlTrigger"
+kTopologicalTrigger: str = "TopologicalTrigger"
+kCicadaTrigger: str = "CicadaTrigger"
+kMultiEgamma: str = "MultiEgamma"
+kMultiJet: str = "MultiJet"
+kMultiTau: str = "MultiTau"
 #
 # Keys for cut types
 #
 
-kThreshold: str = 'Threshold'
-kEta: str = 'Eta'
-kIndex: str = 'Index'
-kPhi: str = 'Phi'
-kUnconstrainedPt: str = 'UnconstrainedPt'
-kImpactParameter: str = 'ImpactParameter'
-kCharge: str = 'Charge'
-kQuality: str = 'Quality'
-kIsolation: str = 'Isolation'
-kDisplaced: str = 'Displaced'
-kDeltaEta: str = 'DeltaEta'
-kDeltaPhi: str = 'DeltaPhi'
-kDeltaR: str = 'DeltaR'
-kMass: str = 'Mass'
-kMassUpt: str = 'MassUpt'
-kMassDeltaR: str = 'MassDeltaR'
-kTwoBodyPt: str = 'TwoBodyPt'
-kSlice: str = 'Slice'
-kChargeCorrelation: str = 'ChargeCorrelation'
-kCount: str = 'Count'
-kOvRmDeltaEta: str = 'OvRmDeltaEta'
-kOvRmDeltaPhi: str = 'OvRmDeltaPhi'
-kOvRmDeltaR: str = 'OvRmDeltaR'
-kAnomalyScore: str = 'AnomalyScore'
-kScore: str = 'Score'
-kCicadaScore: str = 'CicadaScore'
-kModel: str = 'Model'
+kThreshold: str = "Threshold"
+kEta: str = "Eta"
+kIndex: str = "Index"
+kPhi: str = "Phi"
+kUnconstrainedPt: str = "UnconstrainedPt"
+kImpactParameter: str = "ImpactParameter"
+kCharge: str = "Charge"
+kQuality: str = "Quality"
+kIsolation: str = "Isolation"
+kDisplaced: str = "Displaced"
+kDeltaEta: str = "DeltaEta"
+kDeltaPhi: str = "DeltaPhi"
+kDeltaR: str = "DeltaR"
+kMass: str = "Mass"
+kMassUpt: str = "MassUpt"
+kMassDeltaR: str = "MassDeltaR"
+kTwoBodyPt: str = "TwoBodyPt"
+kSlice: str = "Slice"
+kChargeCorrelation: str = "ChargeCorrelation"
+kCount: str = "Count"
+kOvRmDeltaEta: str = "OvRmDeltaEta"
+kOvRmDeltaPhi: str = "OvRmDeltaPhi"
+kOvRmDeltaR: str = "OvRmDeltaR"
+kAnomalyScore: str = "AnomalyScore"
+kScore: str = "Score"
+kCicadaScore: str = "CicadaScore"
+kModel: str = "Model"
 
 #
 # Operators
@@ -274,6 +276,7 @@ ObjectTypeKey: Dict[int, str] = {
     tmEventSetup.HTM: kHTM,
     tmEventSetup.ETMHF: kETMHF,
     tmEventSetup.HTMHF: kHTMHF,
+    tmEventSetup.NETETMHF: kNETETMHF,
     tmEventSetup.ASYMET: kASYMET,
     tmEventSetup.ASYMHT: kASYMHT,
     tmEventSetup.ASYMETHF: kASYMETHF,
@@ -318,6 +321,7 @@ ObjectGrammarKey: Dict[int, str] = {
     tmEventSetup.ETMHF: tmGrammar.ETMHF,
     tmEventSetup.HTMHF: tmGrammar.HTMHF,
     tmEventSetup.HTM: tmGrammar.HTM,
+    tmEventSetup.NETETMHF: tmGrammar.NETETMHF,
     tmEventSetup.ASYMET: tmGrammar.ASYMET,
     tmEventSetup.ASYMHT: tmGrammar.ASYMHT,
     tmEventSetup.ASYMETHF: tmGrammar.ASYMETHF,
@@ -362,6 +366,7 @@ ObjectCategoryKey: Dict[int, str] = {
     tmEventSetup.ETTEM: "esums",
     tmEventSetup.ETMHF: "esums",
     tmEventSetup.HTMHF: "esums",
+    tmEventSetup.NETETMHF: "esums",
     tmEventSetup.Axol1tl: "axol1tl",
     tmEventSetup.Topological: "topological",
 }
@@ -392,6 +397,7 @@ ConditionTypeKey: Dict[int, str] = {
     tmEventSetup.MissingHt: kMissingHt,
     tmEventSetup.MissingEtHF: kMissingEtHF,
     tmEventSetup.MissingHtHF: kMissingHtHF,
+    tmEventSetup.NetMissingEtHF: kNetMissingEtHF,
     tmEventSetup.AsymmetryEt: kAsymmetryEt,
     tmEventSetup.AsymmetryHt: kAsymmetryHt,
     tmEventSetup.AsymmetryEtHF: kAsymmetryEtHF,
@@ -456,7 +462,7 @@ ConditionTypeKey: Dict[int, str] = {
 #
 
 def constraint_t(value: str) -> Tuple[str, List[int]]:
-    tokens = value.split(':', 1)
+    tokens = value.split(":", 1)
     try:
         modules_ids = parse_range(tokens[1])
         if not all(valid_module_id(module_id) for module_id in modules_ids):
@@ -487,12 +493,12 @@ def expand_range(expr: str) -> List[int]:
     >>> parse_range("4-7")
     [4, 5, 6, 7]
     """
-    tokens = expr.split('-')
+    tokens = expr.split("-")
     if len(tokens) == 2:
         return [int(tokens[0]), int(tokens[1])]
     if len(tokens) == 1:
         return [int(tokens[0])]
-    raise ValueError(f"invalid range '{expr}'")
+    raise ValueError(f"invalid range {expr!r}")
 
 def parse_range(expr: str) -> List[int]:
     """Parse and resolves numeric ranges.
@@ -500,7 +506,7 @@ def parse_range(expr: str) -> List[int]:
     [2, 4, 5, 6, 7, 9]
     """
     result = set()
-    for token in expr.split(','):
+    for token in expr.split(","):
         result.update(expand_range(token))
     return list(result)
 
@@ -545,23 +551,23 @@ class ResourceTray:
     """Scale tray for calculating condition and algorithm payloads. It loads
     payload and threshold specifications from a JSON file.
 
-    >>> tray = ResourceTray('algo_dist.json')
+    >>> tray = ResourceTray("algo_dist.json")
     >>> tray.measure(condition)
     """
 
     # Instances used in resource configuration
-    kMuonCondition = 'MuonCondition'
-    kCaloCondition = 'CaloCondition'
-    kCaloConditionOvRm = 'CaloConditionOvRm'
-    kCorrelationCondition = 'CorrelationCondition'
-    kCorrelation3Condition = 'Correlation3Condition'
-    kCorrelationConditionOvRm = 'CorrelationConditionOvRm'
+    kMuonCondition = "MuonCondition"
+    kCaloCondition = "CaloCondition"
+    kCaloConditionOvRm = "CaloConditionOvRm"
+    kCorrelationCondition = "CorrelationCondition"
+    kCorrelation3Condition = "Correlation3Condition"
+    kCorrelationConditionOvRm = "CorrelationConditionOvRm"
 
     def __init__(self, filename):
         """Attribute *filename* is a filename of an JSON payload configuration file."""
         with open(filename) as fp:
             data = config_schema.validate(json.load(fp))
-        data = to_namedtuple(data, 'resource')
+        data = to_namedtuple(data, "resource")
         self.resources = data.resources
         self.filename = filename
 
@@ -698,7 +704,6 @@ class ResourceTray:
     def find_instance(self, condition):
         """Returns instance resource namedtuple for *key* or None if not found."""
         assert isinstance(condition, ConditionHandle)
-        instance_map = self.resources.mapping.instances._asdict()
         def compare(instance):
             return instance.type == self.map_instance(ConditionTypeKey[condition.type])
         return filter_first(compare, self.resources.instances)
@@ -730,17 +735,17 @@ class ResourceTray:
                 n_objects_2 = objects[1].slice_size
                 return n_objects_1 * n_objects_2
         elif instance == self.kCorrelation3Condition:
-            if mapped_objects == ['calo', 'calo', 'calo']:
+            if mapped_objects == ["calo", "calo", "calo"]:
                 return n_objects * (n_objects - 1) * (n_objects - 2) / 6
-            elif mapped_objects == ['muon', 'muon', 'muon']:
+            elif mapped_objects == ["muon", "muon", "muon"]:
                 return n_objects * (n_objects - 1) * (n_objects - 2) / 6
-            raise RuntimeError(f"missing mapped objects for '{instance}': {mapped_objects}")
+            raise RuntimeError(f"missing mapped objects for {instance!r}: {mapped_objects}")
         elif instance == self.kCorrelationConditionOvRm:
-            if mapped_objects == ['calo', 'calo', 'calo']:
+            if mapped_objects == ["calo", "calo", "calo"]:
                 return n_objects * (n_objects - 1) * 0.5
-            elif mapped_objects == ['calo', 'calo']:
+            elif mapped_objects == ["calo", "calo"]:
                 return n_objects * n_objects_ovrm
-            raise RuntimeError(f"missing mapped objects for '{instance}': {mapped_objects}")
+            raise RuntimeError(f"missing mapped objects for {instance!r}: {mapped_objects}")
         return 1.
 
     def calc_cut_factor(self, condition, cut: str):
@@ -755,7 +760,6 @@ class ResourceTray:
         # condition type dependent factor calculation (see also config/README.md)
         mapped_cut = self.map_cut(cut)
         objects = condition.objects
-        n_requirements = len(objects)
         n_objects = objects[0].slice_size
         n_objects_ovrm = objects[-1].slice_size
         object_keys = [ObjectTypeKey[object_.type] for object_ in condition.objects]
@@ -764,12 +768,12 @@ class ResourceTray:
         instance = self.map_instance(ConditionTypeKey[condition.type])
         # select
         if instance in (self.kMuonCondition, self.kCaloCondition):
-            if mapped_cut == 'tbpt':
+            if mapped_cut == "tbpt":
                 return n_objects * (n_objects - 1) * 0.5
         elif instance  == self.kCaloConditionOvRm:
-            if mapped_cut == 'tbpt':
+            if mapped_cut == "tbpt":
                 return n_objects * (n_objects - 1) * 0.5
-            elif mapped_cut in ('deta', 'dphi', 'dr'):
+            elif mapped_cut in ("deta", "dphi", "dr"):
                 return n_objects * n_objects_ovrm
         elif instance == self.kCorrelationCondition:
             if condition.same_object_types and condition.same_object_bxs:
@@ -779,22 +783,22 @@ class ResourceTray:
                 n_objects_2 = objects[1].slice_size
                 return n_objects_1 * n_objects_2
         elif instance == self.kCorrelation3Condition:
-            if mapped_objects == ['calo', 'calo', 'calo']:
+            if mapped_objects == ["calo", "calo", "calo"]:
                 return n_objects * (n_objects - 1) * (n_objects - 2) / 6
                 #return n_objects * (n_objects - 1) * 0.5
-            elif mapped_objects == ['muon', 'muon', 'muon']:
+            elif mapped_objects == ["muon", "muon", "muon"]:
                 return n_objects * (n_objects - 1) * (n_objects - 2) / 6
                 #return n_objects * (n_objects - 1) * 0.5
-            raise RuntimeError(f"missing mapped objects for '{instance}': {mapped_objects}")
+            raise RuntimeError(f"missing mapped objects for {instance!r}: {mapped_objects}")
         elif instance == self.kCorrelationConditionOvRm:
-            if mapped_objects == ['calo', 'calo', 'calo']:
+            if mapped_objects == ["calo", "calo", "calo"]:
                 if cut in (kOvRmDeltaEta, kOvRmDeltaPhi, kOvRmDeltaR):
                     return n_objects * n_objects_ovrm
                 else:
                     return n_objects * (n_objects - 1) * 0.5
-            elif mapped_objects == ['calo', 'calo']:
+            elif mapped_objects == ["calo", "calo"]:
                 return n_objects * n_objects_ovrm
-            raise RuntimeError(f"missing mapped objects for '{instance}': {mapped_objects}")
+            raise RuntimeError(f"missing mapped objects for {instance!r}: {mapped_objects}")
         return 1.
 
     def measure(self, condition):
@@ -811,13 +815,13 @@ class ResourceTray:
         if not instance:
             condition_type = ConditionTypeKey[condition.type]
             objects_types = [ObjectTypeKey[object_.type] for object_ in condition.objects]
-            message = f"Missing configuration for condition of type '{condition_type}' with " \
-                      f"objects {objects_types} in file '{self.filename}'."
+            message = f"Missing configuration for condition of type {condition_type!r} with " \
+                      f"objects {objects_types} in file {self.filename!r}."
             raise RuntimeError(message)
 
         # Pick object configuration
         objects_types = [ObjectTypeKey[object_.type] for object_ in condition.objects]
-        if objects_types[0] == 'EXT':
+        if objects_types[0] == "EXT":
             for object in condition.objects:
                 mapped_objects = self.map_objects(objects_types)
                 instance_objects = filter_first(lambda item: item.types == mapped_objects, instance.objects)
@@ -827,8 +831,8 @@ class ResourceTray:
 
         if not instance_objects:
             condition_type = ConditionTypeKey[condition.type]
-            message = f"Missing configuration for condition of type '{condition_type}' with " \
-                      f"objects {objects_types} in file '{self.filename}'."
+            message = f"Missing configuration for condition of type {condition_type!r} with " \
+                      f"objects {objects_types} in file {self.filename!r}."
             raise RuntimeError(message)
 
         # calculate object cuts payload
@@ -868,13 +872,13 @@ class ResourceTray:
             name = CutTypeKey[cut.cut_type]
             try: # only for cuts listed in configuration... might be error prone
                 mapped_cut = self.map_cut(name)
-            except KeyError as e:
-                logging.warning("skipping cut '%s' (not defined in resource config)", name)
+            except KeyError:
+                logging.warning("skipping cut %r (not defined in resource config)", name)
             else:
                 result = filter_first(lambda cut: cut.type == mapped_cut, instance_objects.cuts)
                 if result:
                     factor = self.calc_cut_factor(condition, name)
-                    logging.debug("%s.calc_cut_factor(<instance %s>, '%s') => %s", self.__class__.__name__, condition.name, name, factor)
+                    logging.debug("%s.calc_cut_factor(<instance %s>, %r) => %s", self.__class__.__name__, condition.name, name, factor)
                     brams = result.brams * int(factor)
                     sliceLUTs = result.sliceLUTs * int(factor)
                     processors = result.processors * int(factor)
@@ -977,7 +981,8 @@ class Module:
             tmEventSetup.ETM,
             tmEventSetup.HTM,
             tmEventSetup.ETMHF,
-            tmEventSetup.HTMHF
+            tmEventSetup.HTMHF,
+            tmEventSetup.NETETMHF,
         ]
         ml_type = [
             tmEventSetup.Axol1tlTrigger,
@@ -1098,7 +1103,7 @@ class Module:
                 obj0 = object_category(combination[0])
                 obj1 = object_category(combination[1])
                 factor = calc_factor(combination)
-                if obj1 in (tmEventSetup.ETM, tmEventSetup.HTM, tmEventSetup.ETMHF, tmEventSetup.HTMHF):
+                if obj1 in (tmEventSetup.ETM, tmEventSetup.HTM, tmEventSetup.ETMHF, tmEventSetup.HTMHF, tmEventSetup.NETETMHF):
                     sliceLUTs += self.tray.calc_dphi_integer(obj0, obj1).sliceLUTs * factor
                     sliceLUTs_inst = self.tray.calc_dphi_integer(obj0, obj1).sliceLUTs * factor
                 else:
@@ -1153,7 +1158,7 @@ class Module:
                 sliceLUTs_inst = self.tray.calc_cut_deta(obj0, obj1).sliceLUTs * factor
                 processors_inst = self.tray.calc_cut_deta(obj0, obj1).processors * factor
                 if self.debug:
-                    logging.debug(f"| {calc_name:<37} | {int(sliceLUTs_inst):>5} | {processors:>5} | {brams:>5} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}|")
+                    logging.debug(f"| {calc_name:<37} | {int(sliceLUTs_inst):>5} | {processors_inst:>5} | {brams:>5} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}|")
             return Payload(brams, sliceLUTs, processors)
 
         def calc_cut_dphi_combinations() -> dict:
@@ -1199,7 +1204,7 @@ class Module:
                 sliceLUTs_inst = self.tray.calc_cut_dphi(obj0, obj1).sliceLUTs * factor
                 processors_inst = self.tray.calc_cut_dphi(obj0, obj1).processors * factor
                 if self.debug:
-                    logging.debug(f"| {calc_name:<37} | {int(sliceLUTs_inst):>5} | {processors:>5} | {brams:>5} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}|")
+                    logging.debug(f"| {calc_name:<37} | {int(sliceLUTs_inst):>5} | {processors_inst:>5} | {brams:>5} | {obj_type_to_str(combination[0]):<7} | {obj_type_to_str(combination[1]):<7}| {combination[2]:<4}| {combination[3]:<4}|")
             return Payload(brams, sliceLUTs, processors)
 
         def calc_cut_dr_combinations() -> dict:
@@ -1394,7 +1399,7 @@ class ModuleCollection:
             """Returns precision key for scales map."""
             left = ObjectGrammarKey[left.type]
             right = ObjectGrammarKey[right.type]
-            return f'PRECISION-{left}-{right}-{name}'
+            return f"PRECISION-{left}-{right}-{name}"
         scales = self.eventSetup.getScaleMapPtr()
 
         for condition in self.condition_handles.values():
@@ -1403,18 +1408,18 @@ class ModuleCollection:
                     left = condition.objects[0]
                     right = condition.objects[1]
                     cut.precision_pt = 1 # for all
-                    cut.precision_math = scales[precision_key(left, right, 'TwoBodyPtMath')].getNbits()
+                    cut.precision_math = scales[precision_key(left, right, "TwoBodyPtMath")].getNbits()
                 elif cut.cut_type in (tmEventSetup.Mass, tmEventSetup.MassUpt):
                     left = condition.objects[0]
                     right = condition.objects[1]
-                    cut.precision_pt = scales[precision_key(left, right, 'MassPt')].getNbits()
-                    cut.precision_math = scales[precision_key(left, right, 'Math')].getNbits()
+                    cut.precision_pt = scales[precision_key(left, right, "MassPt")].getNbits()
+                    cut.precision_math = scales[precision_key(left, right, "Math")].getNbits()
                 elif cut.cut_type == tmEventSetup.MassDeltaR:
                     left = condition.objects[0]
                     right = condition.objects[1]
-                    cut.precision_pt = scales[precision_key(left, right, 'MassPt')].getNbits()
-                    cut.precision_math = scales[precision_key(left, right, 'Math')].getNbits()
-                    cut.precision_inverse_dr = scales[precision_key(left, right, 'InverseDeltaRMath')].getNbits()
+                    cut.precision_pt = scales[precision_key(left, right, "MassPt")].getNbits()
+                    cut.precision_math = scales[precision_key(left, right, "Math")].getNbits()
+                    cut.precision_inverse_dr = scales[precision_key(left, right, "InverseDeltaRMath")].getNbits()
         #
         # /END HACK
         #
@@ -1431,7 +1436,7 @@ class ModuleCollection:
         """Set module constraint for condition type."""
         # Force list for single numbers
         modules = modules if isinstance(modules, (list, tuple)) else [modules]
-        assert condition in ConditionTypeKey.values(), f"no such constraint condition type '{condition}'"
+        assert condition in ConditionTypeKey.values(), f"no such constraint condition type {condition!r}"
         if not all(valid_module_id(module_id) for module_id in modules):
             raise ValueError(f"exceeding constraint module range: {modules}")
         self.constraints[condition] = modules
@@ -1525,20 +1530,18 @@ class ModuleCollection:
         """Raises an asserion exception on errors."""
         for module in self:
             for algorithm in module:
-                names = [condition.name for condition in algorithm.conditions]
                 assert module.id == algorithm.module_id
 
     def load(self, fp):
         """Loads distribution from JSON."""
         data = json.load(fp)
-        modules = [Module(id, self.tray) for id in range(data['n_modules'])]
+        modules = [Module(id, self.tray) for id in range(data["n_modules"])]
         stack = list(self.algorithm_handles)
         try:
-            for algorithm in sorted(data['algorithms'], key=lambda a: a['module_index']):
-                index = algorithm['index']
-                name = algorithm['name']
-                module_id = algorithm['module_id']
-                module_index = algorithm['module_index']
+            for algorithm in sorted(data["algorithms"], key=lambda a: a["module_index"]):
+                index = algorithm["index"]
+                name = algorithm["name"]
+                module_id = algorithm["module_id"]
                 algorithm_handle = filter_first(lambda handle: handle.index == index and handle.name == name, self.algorithm_handles)
                 stack.pop(stack.index(algorithm_handle))
                 # insert in correct order!
@@ -1560,19 +1563,19 @@ class ModuleCollection:
         for module in self:
             for algorithm in module:
                 algorithms.append({
-                    'name': algorithm.name,
-                    'index': algorithm.index,
-                    'module_id': algorithm.module_id,
-                    'module_index': algorithm.module_index,
+                    "name": algorithm.name,
+                    "index": algorithm.index,
+                    "module_id": algorithm.module_id,
+                    "module_index": algorithm.module_index,
                 })
         # Sort by global index
-        algorithms.sort(key=lambda algorithm: algorithm['index'])
+        algorithms.sort(key=lambda algorithm: algorithm["index"])
         data = {
-            'name': self.eventSetup.getName(),
-            'menu_uuid': self.eventSetup.getMenuUuid(),
-            'firmware_uuid': self.eventSetup.getFirmwareUuid(),
-            'n_modules': len(self),
-            'algorithms': algorithms,
+            "name": self.eventSetup.getName(),
+            "menu_uuid": self.eventSetup.getMenuUuid(),
+            "firmware_uuid": self.eventSetup.getFirmwareUuid(),
+            "n_modules": len(self),
+            "algorithms": algorithms,
         }
         json.dump(data, fp, indent=indent)
 
@@ -1616,14 +1619,14 @@ def float_percent(value: float) -> float:
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('filename', metavar='<file>', type=os.path.abspath, help="XML menu")
-    parser.add_argument('--config', metavar='<file>', default=DefaultConfigFile, type=os.path.abspath, help=f"JSON resource configuration file, default {DefaultConfigFile}")
-    parser.add_argument('--modules', metavar='<n>', default=2, type=int, help="number of modules, default is 2")
-    parser.add_argument('--ratio', metavar='<f>', default=0.0, type=float, help="algorithm shadow ratio (0.0 < ratio <= 1.0, default 0.0)")
-    parser.add_argument('--sorting', metavar='asc|desc', choices=('asc', 'desc'), default='asc', help="sort order for weighting (asc or desc, default asc)")
-    parser.add_argument('--constraint', metavar='<condition:module>', type=constraint_t, action='append', help="limit condition type to a specific module")
-    parser.add_argument('-o', metavar='<file>', type=os.path.abspath, help="write calculated distribution to JSON file")
-    parser.add_argument('--list', action='store_true', help="list resource scales and exit")
+    parser.add_argument("filename", metavar="<file>", type=os.path.abspath, help="XML menu")
+    parser.add_argument("--config", metavar="<file>", default=DefaultConfigFile, type=os.path.abspath, help=f"JSON resource configuration file, default {DefaultConfigFile}")
+    parser.add_argument("--modules", metavar="<n>", default=2, type=int, help="number of modules, default is 2")
+    parser.add_argument("--ratio", metavar="<f>", default=0.0, type=float, help="algorithm shadow ratio (0.0 < ratio <= 1.0, default 0.0)")
+    parser.add_argument("--sorting", metavar="asc|desc", choices=("asc", "desc"), default="asc", help="sort order for weighting (asc or desc, default asc)")
+    parser.add_argument("--constraint", metavar="<condition:module>", type=constraint_t, action="append", help="limit condition type to a specific module")
+    parser.add_argument("-o", metavar="<file>", type=os.path.abspath, help="write calculated distribution to JSON file")
+    parser.add_argument("--list", action="store_true", help="list resource scales and exit")
     parser.add_argument("--verbose", dest="verbose", action="store_true")
     return parser.parse_args()
 
@@ -1640,10 +1643,10 @@ def list_resources(tray: ResourceTray) -> None:
     logging.info("instances:")
     for instance in tray.resources.instances:
         for object_ in instance.objects:
-            object_list = ', '.join(object_.types)
+            object_list = ", ".join(object_.types)
             name = f"{instance.type}[ {object_list} ]"
             logging.info(section(name, object_))
-            if hasattr(object_, 'cuts'):
+            if hasattr(object_, "cuts"):
                 for cut in object_.cuts:
                     logging.info("  %s", section(cut.type, cut))
 
@@ -1656,7 +1659,8 @@ def list_algorithms(collection: ModuleCollection) -> None:
     logging.info("|-------|---------|-----------|---------|-----------------------------------------------|")
     logging.info("| Index | BRAMs   | SliceLUTs | DSPs    | Name                                          |")
     logging.info("|-------|---------|-----------|---------|-----------------------------------------------|")
-    sort_key = lambda a: (a.payload.brams, a.payload.sliceLUTs, a.payload.processors)
+    def sort_key(a):
+        return (a.payload.brams, a.payload.sliceLUTs, a.payload.processors)
     for algorithm in sorted(collection.algorithm_handles, key=sort_key):
         brams = algorithm.payload.brams / BRAMS_TOTAL  * 100.
         sliceLUTs = algorithm.payload.sliceLUTs / SLICELUTS_TOTAL * 100.
@@ -1677,7 +1681,6 @@ def list_distribution(collection: ModuleCollection) -> None:
     logging.info("| ID | Index | Index | Name                                                   |")
     logging.info("|----|-------|-------|--------------------------------------------------------|")
     for module in collection:
-        indices = sorted(str(algorithm.index) for algorithm in module)
         for algorithm in module:
             name = short_name(algorithm.name, 50)
             line = f"| {algorithm.module_id:>2d} | {algorithm.module_index:>5d} " \
@@ -1701,7 +1704,7 @@ def list_distribution(collection: ModuleCollection) -> None:
         for module in collection:
             if condition in module.conditions:
                 modules.append(module.id)
-        modules_list = ','.join([str(module) for module in modules])
+        modules_list = ",".join([str(module) for module in modules])
         logging.info(f"| {condition.name:<48} | {modules_list:<7} | {condition.payload.sliceLUTs:<6}| {condition.payload.processors:<5}| {condition.payload.brams:<5} |")
     logging.info("|--------------------------------------------------|---------|-------|------|-------|")
 
@@ -1767,7 +1770,6 @@ def list_instantiations_debug(collection: ModuleCollection) -> None:
         logging.debug("|                                                                                              |")
         logging.debug("| instantiation name                    | sLUTs | DSPs  | BRAMs | obj 1   | obj 2  | bx 1| bx 2|")
         logging.debug("|---------------------------------------|-------|-------|-------|---------|--------|-----|-----|")
-        module_payload = module.payload # dummy for debug listing of calculation instantiations resources
         for algorithm in module:
             for condition in algorithm.conditions:
                 cond_name =  "cond_" + condition.name
@@ -1776,7 +1778,7 @@ def list_instantiations_debug(collection: ModuleCollection) -> None:
 
 def dump_distribution(collection: ModuleCollection, filename: str):
     logging.info(":: writing menu distribution JSON dump: %s", filename)
-    with open(filename, 'w') as fp:
+    with open(filename, "w") as fp:
         collection.dump(fp)
 
 def distribute(eventSetup, modules: int, config: str, ratio: float, reverse_sorting: bool, constraints: Dict[str, str] = None) -> ModuleCollection:
@@ -1840,7 +1842,7 @@ def main() -> int:
     logging.info("distributing algorithms, shadow ratio: %s", args.ratio)
     collection.ratio = args.ratio
     # Set sort order (asc or desc)
-    collection.reverse_sorting = (args.sorting == 'desc')
+    collection.reverse_sorting = (args.sorting == "desc")
     # Collect condition constraints
     if args.constraint:
         for k, v in args.constraint:
@@ -1863,5 +1865,5 @@ def main() -> int:
 
     return 0
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())

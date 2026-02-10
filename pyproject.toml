@@ -1,3 +1,52 @@
+[project]
+name = "tm-vhdlproducer"
+dynamic = ["version"]
+description = "Generate VHDL implementation from XML trigger menu."
+readme = "README.md"
+license = { text = "GPLv3" }
+authors = [
+  { name = "Bernhard Arnold", email = "bernhard.arnold@cern.ch" }
+]
+urls = { Homepage = "https://github.com/cms-l1-globaltrigger/tm-vhdlproducer" }
+classifiers = [
+  "Topic :: Software Development",
+  "Topic :: Utilities"
+]
+requires-python = ">=3.9"
+dependencies = [
+  "Jinja2~=3.1.0",
+  "markupsafe~=2.0.0",
+  "packaging~=24.1",
+  "schema~=0.7.5",
+  "tm-table~=0.14.1",
+  "tm-grammar~=0.14.1",
+  "tm-eventsetup~=0.14.1",
+  "tm-reporter~=2.14.0"
+]
+
+[project.scripts]
+tm-vhdlproducer = "tmVhdlProducer.__main__:main"
+
 [build-system]
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.dynamic]
+version = { attr = "tmVhdlProducer.__version__" }
+
+[tool.setuptools.packages.find]
+where = ["."]
+namespaces = false
+
+[tool.setuptools.package-data]
+tmVhdlProducer = [
+  "config/*.json",
+  "templates/vhdl/*.vhd",
+  "templates/vhdl/menu.json",
+  "templates/vhdl/instances/*.vhd",
+  "templates/vhdl/instances/base/*.vhd",
+  "templates/vhdl/signals/*.vhd"
+]

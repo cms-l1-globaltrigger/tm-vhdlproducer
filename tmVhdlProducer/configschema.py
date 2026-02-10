@@ -2,25 +2,25 @@ from schema import Schema, And, Optional
 
 SCHEMA_VERSION: int = 3
 
-resource_schema = {
+resource_schema: dict = {
     "processors": And(int, lambda n: n >= 0),
     "sliceLUTs": And(int, lambda n: n >= 0),
     "brams": And(int, lambda n: n >= 0),
 }
 
-correlation_schema = {
+correlation_schema: dict = {
     str: {
         str: resource_schema,
     },
 }
 
-mapping_schema = {
+mapping_schema: dict = {
     "instances": {str: str},
     "objects": {str: str},
     "cuts": {str: str},
 }
 
-object_cuts_schema = {
+object_cuts_schema: dict = {
     str: {
         str: {
             **resource_schema,
@@ -31,7 +31,7 @@ object_cuts_schema = {
     },
 }
 
-instances_schema = [{
+instances_schema: list[dict] = [{
     "type": str,
     "objects": [{
         "types": [str],
@@ -43,7 +43,7 @@ instances_schema = [{
     }],
 }]
 
-config_schema = Schema({
+config_schema: Schema = Schema({
     "version": SCHEMA_VERSION,
     "resources": {
         "mapping": mapping_schema,

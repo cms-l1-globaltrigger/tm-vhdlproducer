@@ -23,9 +23,9 @@
         phi_w2_upper_limit => X"{{ o.phiW2.upper | X04 }}",
         phi_w2_lower_limit => X"{{ o.phiW2.lower | X04 }}",
   {%- endif %}
-        obj_type => {{ o.type | upper }}_TYPE
+        obj_type => {{ o.type | type_remap | upper }}_TYPE
 {%- endblock %}
 
 {% block port_map %}
-        bx_data.{{ o.type | lower }}({{ o.bx_arr }}),
+        bx_data.{{ o.type | type_remap | lower }}({{ o.bx_arr }}),
 {%- endblock %}

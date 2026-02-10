@@ -8,8 +8,9 @@ import subprocess
 import sys
 from typing import Dict, List
 
+import tmTable as tmTable  # NOTE: need to be loaded before tmEventSetup
 import tmEventSetup
-import tmReporter
+import tmReporter as tmReporter
 
 from . import __version__
 from .algodist import ProjectDir
@@ -22,11 +23,11 @@ from .validate import validate_menu
 
 EXIT_SUCCESS: int = 0
 EXIT_FAILURE: int = 1
-LOGFILE: str = 'tm-vhdlproducer.log'
-EXEC_REPORTER: str = 'tm-reporter'
+LOGFILE: str = "tm-vhdlproducer.log"
+EXEC_REPORTER: str = "tm-reporter"
 
-SortingAsc: str = 'asc'
-SortingDesc: str = 'desc'
+SortingAsc: str = "asc"
+SortingDesc: str = "desc"
 
 DefaultNrModules: int = 6
 DefaultRatio: float = 0.0
@@ -40,11 +41,11 @@ DefaultModuleTopo: int = 2
 DefaultInvMass: int = 3
 
 ConstraintTypes: Dict[str, List[str]] = {
-    'ext': [kExternals],
-    'zdc': [kZDCPlus, kZDCMinus],
-    'axo': [kAxol1tlTrigger],
-    'topo': [kTopologicalTrigger],
-    'inv_mass': [kInvariantMass],
+    "ext": [kExternals],
+    "zdc": [kZDCPlus, kZDCMinus],
+    "axo": [kAxol1tlTrigger],
+    "topo": [kTopologicalTrigger],
+    "inv_mass": [kInvariantMass],
 }
 """Mapping constraint types to esCondition types, provided for convenience."""
 
@@ -100,66 +101,66 @@ def calc_sw_hash(path: str) -> str:
 def parse_args():
     """Parse command line options."""
     parser = argparse.ArgumentParser(
-        prog='tm-vhdlproducer',
+        prog="tm-vhdlproducer",
         description="Trigger Menu VHDL Producer for uGT upgrade",
         epilog="Report bugs to <bernhard.arnold@cern.ch>"
     )
-    parser.add_argument('menu',
+    parser.add_argument("menu",
         type=os.path.abspath,
         help="XML menu file to be loaded"
     )
-    parser.add_argument('--modules',
-        metavar='<n>',
+    parser.add_argument("--modules",
+        metavar="<n>",
         type=modules_t,
         default=DefaultNrModules,
         help=f"number of modules ({MinModules}-{MaxModules}, default is {DefaultNrModules}))"
     )
-    parser.add_argument('-d', '--dist',
-        metavar='<n>',
+    parser.add_argument("-d", "--dist",
+        metavar="<n>",
         required=True,
         type=dist_t,
         help="firmware distribution number (starting with 1)"
     )
-    parser.add_argument('--ratio',
-        metavar='<f>',
+    parser.add_argument("--ratio",
+        metavar="<f>",
         default=DefaultRatio,
         type=ratio_t,
         help=f"algorithm shadow ratio (0.0 < ratio <= 1.0, default is {DefaultRatio})"
     )
-    parser.add_argument('--sorting',
-        metavar='asc|desc',
+    parser.add_argument("--sorting",
+        metavar="asc|desc",
         default=DefaultSorting,
         choices=(SortingAsc, SortingDesc),
         help=f"sort order for condition weights ({SortingAsc} or {SortingDesc}, default is {DefaultSorting})"
     )
-    parser.add_argument('--config',
-        metavar='<file>',
+    parser.add_argument("--config",
+        metavar="<file>",
         default=DefaultConfigFile,
         type=os.path.abspath,
         help=f"JSON resource configuration file (default is {DefaultConfigFile})"
     )
-    parser.add_argument('--constraint',
-        metavar='<condition:modules>',
-        action='append',
+    parser.add_argument("--constraint",
+        metavar="<condition:modules>",
+        action="append",
         type=constraint_t,
         help=f"limit condition type to a specific module, valid types are: {', '.join(ConstraintTypes)}"
     )
-    parser.add_argument('-o', '--output',
-        metavar='<dir>',
+    parser.add_argument("-o", "--output",
+        metavar="<dir>",
         default=DefaultOutputDir,
         type=os.path.abspath,
         help=f"directory to write VHDL producer output (default is {DefaultOutputDir})"
     )
-    parser.add_argument('--dryrun',
-        action='store_true',
+    parser.add_argument("--dryrun",
+        action="store_true",
         help="do not write any output to the file system"
     )
     parser.add_argument("--verbose",
         dest="verbose",
         action="store_true",
     )
-    parser.add_argument('--version',
-        action='version',
+    parser.add_argument("--version",
+        action="version",
         version=f"L1 Trigger Menu VHDL producer version {__version__}"
     )
     return parser.parse_args()
@@ -174,7 +175,7 @@ def main() -> int:
 
     # Setup console logging
     level = logging.DEBUG if args.verbose else logging.INFO
-    logging.basicConfig(format='%(levelname)s: %(message)s', level=level)
+    logging.basicConfig(format="%(levelname)s: %(message)s", level=level)
 
     logging.info("running VHDL producer...")
 
@@ -190,7 +191,7 @@ def main() -> int:
     validate_menu(eventSetup)
 
     # Prevent overwirting source menu
-    dest = os.path.realpath(os.path.join(output_dir, 'xml'))
+    dest = os.path.realpath(os.path.join(output_dir, "xml"))
     orig = os.path.dirname(os.path.realpath(args.menu))
     if dest == orig:
         logging.error("%s is in %s directory which will be overwritten during the process", args.menu, dest)
@@ -199,20 +200,20 @@ def main() -> int:
 
     if not args.dryrun:
         if os.path.isdir(output_dir):
-            logging.error("directory `%s' already exists", output_dir)
+            logging.error("directory %r already exists", output_dir)
             return EXIT_FAILURE
         else:
             os.makedirs(output_dir)
 
     if not args.dryrun:
         # Forward logs to file
-        handler = logging.FileHandler(os.path.join(output_dir, LOGFILE), mode='a')
-        handler.setFormatter(logging.Formatter(fmt='%(asctime)s %(levelname)s : %(message)s', datefmt='%Y-%m-%d %H:%M:%S'))
+        handler = logging.FileHandler(os.path.join(output_dir, LOGFILE), mode="a")
+        handler.setFormatter(logging.Formatter(fmt="%(asctime)s %(levelname)s : %(message)s", datefmt="%Y-%m-%d %H:%M:%S"))
         handler.setLevel(level)
         logging.getLogger().addHandler(handler)
 
     # Distribute algorithms, set sort order (asc or desc)
-    reverse_sorting = (args.sorting == 'desc')
+    reverse_sorting = (args.sorting == "desc")
     # Collect condition constraints
     constraints = {}
     # Note: args.constraint is None if not used.
@@ -247,27 +248,27 @@ def main() -> int:
     else:
 
         logging.info("writing VHDL modules...")
-        template_dir = os.path.join(ProjectDir, 'templates', 'vhdl')
+        template_dir = os.path.join(ProjectDir, "templates", "vhdl")
         producer = VhdlProducer(template_dir)
         producer.config.update({"sw_hash": sw_hash})
         producer.write(collection, output_dir)
         logging.info("writing updated XML file %s", args.menu)
 
-        filename = producer.writeXmlMenu(args.menu, os.path.join(output_dir, 'xml'), args.dist) # TODO
+        filename = producer.writeXmlMenu(args.menu, os.path.join(output_dir, "xml"), args.dist) # TODO
 
         # Write menu documentation.
         logging.info("generating menu documentation...")
-        doc_dir = os.path.join(output_dir, 'doc')
+        doc_dir = os.path.join(output_dir, "doc")
 
         logging.info("writing HTML documentation %s", filename)
-        subprocess.check_call([EXEC_REPORTER, '-m', 'html', '-o', doc_dir, filename])
+        subprocess.check_call([EXEC_REPORTER, "-m", "html", "-o", doc_dir, filename])
 
         logging.info("writing TWIKI page template %s", filename)
-        subprocess.check_call([EXEC_REPORTER, '-m', 'twiki', '-o', doc_dir, filename])
+        subprocess.check_call([EXEC_REPORTER, "-m", "twiki", "-o", doc_dir, filename])
 
         logging.info("patching filenames...")
-        for filename in glob.glob(os.path.join(doc_dir, '*')):
-            newname = re.sub(r'(.+)\.([a-z]+)$', rf'\1-d{args.dist}.\2', filename)
+        for filename in glob.glob(os.path.join(doc_dir, "*")):
+            newname = re.sub(r"(.+)\.([a-z]+)$", rf"\1-d{args.dist}.\2", filename)
             logging.info("%s --> %s", filename, newname)
             os.rename(filename, newname)
 
@@ -275,5 +276,5 @@ def main() -> int:
 
     return EXIT_SUCCESS
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())
