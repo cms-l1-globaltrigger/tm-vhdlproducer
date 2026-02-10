@@ -1187,13 +1187,11 @@ class ObjectHelper(VhdlHelper):
         displaced           [DisplacedCutHelper]
         etaNrCuts           [int]
         etaLowerLimit       [list]
-        etaLowerLimit       [list]
+        etaUpperLimit       [list]
         indexNrCuts         [int]
         indexLowerLimit     [list]
-        indexLowerLimit     [list]
+        indexUpperLimit     [list]
         phi                 [list of RangeCutHelper]
-        phiFullRange        [bool]
-        phiW2Ignore         [bool]
         slice               [SliceCutHelper]
         isValid             is False if object is not initialized [bool]
         is_muon_type        [bool]
@@ -1246,7 +1244,7 @@ class ObjectHelper(VhdlHelper):
 
     def update(self, object_handle):
         self.name = object_handle.name
-        self.type = ObjectTypes[object_handle.type]
+        self.type = type_remap(ObjectTypes[object_handle.type])  # NOTE: NETETMHF -> HTM
         self.operator = ComparisonOperator[object_handle.comparison_operator]
         self.bx = bx_encode(object_handle.bx_offset)
         self.bx_arr = bx_encode_4_array(object_handle.bx_offset)
