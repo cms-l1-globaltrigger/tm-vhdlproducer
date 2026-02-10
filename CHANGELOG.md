@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support `NETETMHF` objects (#64).
+- Added Jinja filter `type_remap` to map `NETETMHF` to `HTM` in templates (#64).
+
+### Changed
+
+- Updated dependency support for utm v0.14 (#64).
+- Migrated project configuration to `pyproject.toml`.
+- Resolved Ruff linting issues.
+
+### Removed
+
+- Removed obsolete `requirements.txt` and `setup.cfg`.
+
 ## [2.24.0] - 2026-01-30
 
 ### Added
@@ -17,10 +32,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Renamed `changelog` to `CHANGELOG.md`.
-
-### Removed
-
-- Obsolete `requirements.txt`.
 
 ### Fixed
 
