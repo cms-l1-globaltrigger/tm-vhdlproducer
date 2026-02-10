@@ -14,18 +14,17 @@
         et_threshold => X"{{ o.threshold | X04 }}",
   {%- endif %}
   {%- if o.phiNrCuts > 0 %}
-        phi_full_range => {{ o.phiFullRange | vhdl_bool }},
-        phi_w1_upper_limit => X"{{ o.phiW1.upper | X04 }}",
-        phi_w1_lower_limit => X"{{ o.phiW1.lower | X04 }}",
+        nr_phi_windows => {{ o.phiNrCuts }},
+        phi_w1_upper_limit => X"{{ o.phiUpperLimit[0] | X04 }}",
+        phi_w1_lower_limit => X"{{ o.phiLowerLimit[0] | X04 }}",
   {%- endif %}
   {%- if o.phiNrCuts > 1 %}
-        phi_w2_ignore => {{ o.phiW2Ignore | vhdl_bool }},
-        phi_w2_upper_limit => X"{{ o.phiW2.upper | X04 }}",
-        phi_w2_lower_limit => X"{{ o.phiW2.lower | X04 }}",
+        phi_w2_upper_limit => X"{{ o.phiUpperLimit[1] | X04 }}",
+        phi_w2_lower_limit => X"{{ o.phiLowerLimit[1] | X04 }}",
   {%- endif %}
-        obj_type => {{ o.type | type_remap | upper }}_TYPE
+        obj_type => {{ o.type | upper }}_TYPE
 {%- endblock %}
 
 {% block port_map %}
-        bx_data.{{ o.type | type_remap | lower }}({{ o.bx_arr }}),
+        bx_data.{{ o.type | lower }}({{ o.bx_arr }}),
 {%- endblock %}
