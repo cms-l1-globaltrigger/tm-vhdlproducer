@@ -1,6 +1,5 @@
 import json
 import logging
-import math
 import os
 import shutil
 import uuid
@@ -11,13 +10,13 @@ from jinja2 import Environment
 from jinja2 import FileSystemLoader
 from jinja2 import StrictUndefined
 
-import tmEventSetup
 import tmTable
+import tmEventSetup
 
 from .vhdlhelper import MenuHelper
-from .vhdlhelper import vhdl_bool, bx_encode
+from .vhdlhelper import vhdl_bool, bx_encode, type_remap
 
-__all__ = ['VhdlProducer']
+__all__ = ["VhdlProducer"]
 
 # -----------------------------------------------------------------------------
 #  Jinja2 custom filters exposed to VHDL templates.
@@ -35,7 +34,7 @@ def hexstr_filter(s, bytes):
 def uuid2hex_filter(s):
     """Converts a UUID into hex representation.
 
-    >>> uuid2hex_filter('1d69f777-ade0-4fb7-82f7-2b9afbba4078')
+    >>> uuid2hex_filter("1d69f777-ade0-4fb7-82f7-2b9afbba4078")
     '1d69f777ade04fb782f72b9afbba4078'
     """
     return uuid.UUID(s).hex.lower()
@@ -55,25 +54,27 @@ def murmurhash(s):
 # -----------------------------------------------------------------------------
 
 CustomFilters: Dict[str, Callable] = {
-    'X21' : lambda x: "%021X" % int(float(x)),
-    'X16' : lambda x: "%016X" % int(float(x)),
-    'X08' : lambda x: "%08X" % int(float(x)),
-    'X04' : lambda x: "%04X" % int(float(x)),
-    'X01' : lambda x: "%01X" % int(float(x)),
-    'alpha' : lambda s: ''.join(c for c in s if c.isalpha()),
-    'sort_by_attribute': sort_by_attribute,
-    'hex': lambda d: format(int(d), 'x'), # plain hex format
-    'hexstr': hexstr_filter,
-    'hexuuid': uuid2hex_filter,
-    'mmhashn': murmurhash,
-    'vhdl_bool': vhdl_bool,
+    "X21" : lambda x: "%021X" % int(float(x)),
+    "X16" : lambda x: "%016X" % int(float(x)),
+    "X08" : lambda x: "%08X" % int(float(x)),
+    "X04" : lambda x: "%04X" % int(float(x)),
+    "X01" : lambda x: "%01X" % int(float(x)),
+    "alpha" : lambda s: "".join(c for c in s if c.isalpha()),
+    "sort_by_attribute": sort_by_attribute,
+    "hex": lambda d: format(int(d), "x"), # plain hex format
+    "hexstr": hexstr_filter,
+    "hexuuid": uuid2hex_filter,
+    "mmhashn": murmurhash,
+    "vhdl_bool": vhdl_bool,
+    "bx_encode": bx_encode,
+    "type_remap": type_remap,
 }
 
 ModuleTemplates: List[str] = [
-    'algo_index.vhd',
-    'gtl_module_signals.vhd',
-    'gtl_module_instances.vhd',
-    'ugt_constants.vhd',
+    "algo_index.vhd",
+    "gtl_module_signals.vhd",
+    "gtl_module_instances.vhd",
+    "ugt_constants.vhd",
 ]
 
 # -----------------------------------------------------------------------------
@@ -93,7 +94,7 @@ def makedirs(path: str) -> None:
 class TemplateEngine(object):
     """Custom tempalte engine class."""
 
-    def __init__(self, searchpath, encoding='utf-8'):
+    def __init__(self, searchpath, encoding="utf-8"):
         # Create Jinja environment.
         loader = FileSystemLoader(searchpath, encoding)
         self.environment = Environment(loader=loader, undefined=StrictUndefined)
@@ -131,7 +132,7 @@ class VhdlProducer(object):
         # Check for exisiting directories (TODO obsolete?)
         for path in directories.values():
             if os.path.exists(path):
-                logging.warning("directory `%s' already exists. Will be overwritten.", path)
+                logging.warning("directory %r already exists. Will be overwritten.", path)
                 shutil.rmtree(path)
         # Create directries
         for path in directories.values():
@@ -156,25 +157,25 @@ class VhdlProducer(object):
             logging.info("writing output for module: %s", module.id)
             for template in ModuleTemplates:
                 params = {
-                    'menu': helper,
-                    'module': module,
+                    "menu": helper,
+                    "module": module,
                 }
                 content = self.engine.render(template, params)
                 #print("content", content)
                 module_id = f"module_{module.id:d}"
                 filename = os.path.join(directories[module_id], template)
-                with open(filename, 'w') as fp:
+                with open(filename, "w") as fp:
                     fp.write(content)
                 logging.info(f"{template:<24}: {filename}")
 
         # Write JSON dump (TODO obsolete?)
         params = {
-            'menu': helper,
+            "menu": helper,
         }
-        content = self.engine.render('menu.json', params)
-        filename = os.path.join(directories['xml'], 'menu.json')
+        content = self.engine.render("menu.json", params)
+        filename = os.path.join(directories["xml"], "menu.json")
         makedirs(os.path.dirname(filename)) # Create path if required
-        with open(filename, 'w') as fp:
+        with open(filename, "w") as fp:
             fp.write(content)
 
     def writeXmlMenu(self, filename, json_dir, dist=1):
@@ -184,7 +185,7 @@ class VhdlProducer(object):
         """
         # TODO
         # Load mapping from JSON
-        with open(os.path.join(json_dir, 'menu.json')) as fp:
+        with open(os.path.join(json_dir, "menu.json")) as fp:
             json_data = json.load(fp)
 
         menu = tmTable.Menu()
@@ -231,7 +232,7 @@ class VhdlProducer(object):
             algorithm["module_index"] = str(module_index)
             menu.algorithms[id_] = algorithm
 
-        target = os.path.join(json_dir, f'{menu_name}-d{dist}.xml')
+        target = os.path.join(json_dir, f"{menu_name}-d{dist}.xml")
 
         logging.info("writing target XML menu file %s", target)
         tmTable.menu2xml(menu, scale, ext_signal, target)

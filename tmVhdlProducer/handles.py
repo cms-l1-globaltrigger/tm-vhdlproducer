@@ -10,8 +10,7 @@ Classes:
 """
 
 import tmEventSetup
-import tmGrammar
-import os
+import tmGrammar  # noqa: F401
 from typing import Any, Callable, Dict, Iterable, List, Optional
 
 from .constants import BRAMS_TOTAL, SLICELUTS_TOTAL, PROCESSORS_TOTAL
@@ -33,6 +32,7 @@ ObjectCollectionSize: Dict[int, int] = {
     tmEventSetup.HTM: 1,
     tmEventSetup.ETMHF: 1,
     tmEventSetup.HTMHF: 1,
+    tmEventSetup.NETETMHF: 1,
     tmEventSetup.ASYMET: 1,
     tmEventSetup.ASYMHT: 1,
     tmEventSetup.ASYMETHF: 1,
@@ -100,6 +100,7 @@ EsumsConditionTypes: List[int] = [
     tmEventSetup.MissingHt,
     tmEventSetup.MissingEtHF,
     tmEventSetup.MissingHtHF,
+    tmEventSetup.NetMissingEtHF,
     tmEventSetup.AsymmetryEt,
     tmEventSetup.AsymmetryHt,
     tmEventSetup.AsymmetryEtHF,
@@ -196,6 +197,7 @@ EsumsObjectTypes: List[int] = [
     tmEventSetup.HTT,
     tmEventSetup.ETM,
     tmEventSetup.HTM,
+    tmEventSetup.NETETMHF,
     tmEventSetup.ETMHF,
     tmEventSetup.HTMHF,
     tmEventSetup.ASYMET,
@@ -237,6 +239,7 @@ ObjectsOrder: List[int] = [
     tmEventSetup.HTM,
     tmEventSetup.ETMHF,
     tmEventSetup.HTMHF,
+    tmEventSetup.NETETMHF,
 # other objects
     tmEventSetup.ETT,
     tmEventSetup.ETTEM,

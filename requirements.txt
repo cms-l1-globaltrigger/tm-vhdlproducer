@@ -1,6 +1,0 @@
-Jinja2==2.11.*
-markupsafe==2.0.*
-packaging==24.1
-schema==0.7.5
-tm-python @ git+https://github.com/cms-l1-globaltrigger/tm-python@0.13.0
-tm-reporter @ git+https://github.com/cms-l1-globaltrigger/tm-reporter@2.13.0

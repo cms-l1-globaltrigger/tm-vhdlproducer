@@ -43,7 +43,8 @@ scales.
 
 import math
 import string
-import re, os
+import re
+import os
 
 from packaging.version import Version
 from typing import Dict, Iterable
@@ -58,9 +59,9 @@ from . import algodist
 #  Precompiled regular expressions
 # -----------------------------------------------------------------------------
 
-RegexCamelSnake1 = re.compile(r'([^_])([A-Z][a-z]+)')
-RegexCamelSnake2 = re.compile('([a-z0-9])([A-Z])')
-RegexVhdlLabel = re.compile('[^A-Za-z0-9_]')
+RegexCamelSnake1 = re.compile(r"([^_])([A-Z][a-z]+)")
+RegexCamelSnake2 = re.compile(r"([a-z0-9])([A-Z])")
+RegexVhdlLabel = re.compile(r"[^A-Za-z0-9_]")
 
 # -----------------------------------------------------------------------------
 #  Conversion dictionaries
@@ -78,6 +79,7 @@ ObjectTypes: Dict[int, str] = {
     tmEventSetup.ETMHF: tmGrammar.ETMHF,
     tmEventSetup.HTMHF: tmGrammar.HTMHF,
     tmEventSetup.HTM: tmGrammar.HTM,
+    tmEventSetup.NETETMHF: tmGrammar.NETETMHF,
     tmEventSetup.ASYMET: tmGrammar.ASYMET,
     tmEventSetup.ASYMHT: tmGrammar.ASYMHT,
     tmEventSetup.ASYMETHF: tmGrammar.ASYMETHF,
@@ -122,6 +124,7 @@ ObjectCount: Dict[int, int] = {
     tmEventSetup.ETMHF:      1,
     tmEventSetup.HTMHF:      1,
     tmEventSetup.HTM:        1,
+    tmEventSetup.NETETMHF:   1,
     tmEventSetup.ASYMET:     1,
     tmEventSetup.ASYMHT:     1,
     tmEventSetup.ASYMETHF:   1,
@@ -163,21 +166,21 @@ ComparisonOperator: Dict[int, bool] = {
 #  Filters
 # -----------------------------------------------------------------------------
 
-def snakecase(label: str, separator: str = '_') -> str:
+def snakecase(label: str, separator: str = "_") -> str:
     """Transformes camel case label to spaced lower case (snaked) label.
 
-    >>> snakecase('CamelCaseLabel')
+    >>> snakecase("CamelCaseLabel")
     'camel_case_label'
     """
-    subbed = RegexCamelSnake1.sub(rf'\1{separator}\2', label)
-    return RegexCamelSnake2.sub(rf'\1{separator}\2', subbed).lower()
+    subbed = RegexCamelSnake1.sub(rf"\1{separator}\2", label)
+    return RegexCamelSnake2.sub(rf"\1{separator}\2", subbed).lower()
 
 def unique_name(name: str, names: Iterable) -> str:
     """Generate unique signal name to prevent name collisions."""
     count = 1
     def suffixed():
         if count > 1:
-            return f'{name}_{count}'
+            return f"{name}_{count}"
         return name
     while suffixed() in names:
         count += 1
@@ -185,54 +188,54 @@ def unique_name(name: str, names: Iterable) -> str:
 
 def vhdl_bool(value: bool) -> str: # TODO add to filters
     """Returns VHDL boolean equivalent to value."""
-    return 'true' if bool(value) else 'false'
+    return "true" if bool(value) else "false"
 
 def vhdl_label(label: str) -> str: # TODO add to filters
     """Return normalized VHDL label for signal or instance names.
 
-    >>> vhdl_label('001FooBar.value__@2_')
+    >>> vhdl_label("001FooBar.value__@2_")
     'd001_foo_bar_value_2'
     """
-    label = RegexVhdlLabel.sub('_', label.strip()) # Replace unsave characters by underscore.
+    label = RegexVhdlLabel.sub("_", label.strip()) # Replace unsave characters by underscore.
     # Suppress multible underlines (VHDL spec)
-    label = re.sub(r'[_]+', r'_', label)
+    label = re.sub(r"[_]+", r"_", label)
     # Suppress leading/trailing underlines (VHDL spec)
-    label = label.strip('_')
+    label = label.strip("_")
     # Prepend char if starts with digit (starting with underline not allowed in VHDL spec).
     if label[0] in string.digits:
-        label = ''.join(('d', label))
+        label = "".join(("d", label))
     return snakecase(label) # Convert to spaced lower case
 
 def vhdl_expression(expression: str) -> str: # TODO add to filters
     """Return safe VHDL expression string using normalized signals for conditions.
 
-    >>> vhdl_expression('(singleMu_1 and doubleMu_2)')
+    >>> vhdl_expression("(singleMu_1 and doubleMu_2)")
     '( single_mu_1 and double_mu_2 )'
     """
-    expression = re.sub(r'([\(\)])', r' \1 ', expression) # separate braces
-    expression = re.sub(r'[\ ]+', r' ', expression) # suppress multiple spaces
+    expression = re.sub(r"([\(\)])", r" \1 ", expression) # separate braces
+    expression = re.sub(r"[\ ]+", r" ", expression) # suppress multiple spaces
     tokens = []
     for token in expression.split():
-        if token not in ['(', ')']:
+        if token not in ["(", ")"]:
             token = vhdl_label(token)
         tokens.append(token)
-    return ' '.join(tokens)
+    return " ".join(tokens)
 
 def charge_encode(value: str) -> str:
     """Encode charge value to VHDL string literal."""
-    if value in ('positive', 'pos', '1'):
-        return 'pos' # positive
-    if value in ('negative', 'neg', '-1'):
-        return 'neg' # negative
-    return 'ign' # ignore
+    if value in ("positive", "pos", "1"):
+        return "pos" # positive
+    if value in ("negative", "neg", "-1"):
+        return "neg" # negative
+    return "ign" # ignore
 
 def charge_correlation_encode(value: str) -> str:
     """Encode charge correlation value to VHDL string literal."""
-    if value in ('like', 'ls', '0'):
-        return 'ls' # like sign
-    if value in ('opposite', 'os', '1'):
-        return 'os' # opposite sign
-    return 'ig' # ignore
+    if value in ("like", "ls", "0"):
+        return "ls" # like sign
+    if value in ("opposite", "os", "1"):
+        return "os" # opposite sign
+    return "ig" # ignore
 
 def bx_encode(value: int) -> str:
     """Encode relative bunch crossings into VHDL notation. All positive values
@@ -240,17 +243,25 @@ def bx_encode(value: int) -> str:
     prefixed with p instead of the minus sign.
     """
     # Prefix positive values greater then zero with p.
-    if value > 0: return f'p{value:d}'
+    if value > 0:
+        return f"p{value:d}"
     # Prefix negative values with m instead of minus sign (abs).
-    if value < 0: return f'm{abs(value):d}'
+    if value < 0:
+        return f"m{abs(value):d}"
     # Zero value is not prefixed according to VHDL documentation.
-    return '0'
+    return "0"
 
 def bx_encode_4_array(value: int) -> str:
     """Encode relative bunch crossings into VHDL notation (with bx array, where
     p2 is array index 0, p1 is array index 1, and so on.
     """
-    return format([2, 1, 0, -1, -2].index(value), 'd')
+    return format([2, 1, 0, -1, -2].index(value), "d")
+
+def type_remap(type_name: str) -> str:
+    """Map a type name to another."""
+    return {
+        "NETETMHF": "HTM",
+    }.get(type_name, type_name)
 
 # -----------------------------------------------------------------------------
 #  Factories
@@ -296,7 +307,7 @@ class VhdlHelper(object):
 class VersionHelper(VhdlHelper):
     """Version template helper, splitting string version numbers.
 
-    >>> version = VersionHelper('1.2.3')
+    >>> version = VersionHelper("1.2.3")
     >>> version.major, version.minor, version.patch
     (1, 2, 3)
     """
@@ -587,7 +598,7 @@ class ModuleHelper(VhdlHelper):
     def correlationCombinationsDeltaR(self):
         combinations = {}
         for condition in self.conditions:
-            if hasattr(condition, 'deltaR') and condition.deltaR.enabled:
+            if hasattr(condition, "deltaR") and condition.deltaR.enabled:
                 if isinstance(condition, CorrelationConditionHelper):
                     a, b = condition.objects
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
@@ -615,7 +626,7 @@ class ModuleHelper(VhdlHelper):
     def correlationCombinationsCoshCos(self):
         combinations = {}
         for condition in self.conditions:
-            if hasattr(condition, 'mass') and condition.mass.enabled:
+            if hasattr(condition, "mass") and condition.mass.enabled:
                 if isinstance(condition, CorrelationConditionHelper):
                     a, b = condition.objects
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
@@ -626,7 +637,7 @@ class ModuleHelper(VhdlHelper):
     def correlationCombinationsInvMass(self):
         combinations = {}
         for condition in self.conditions:
-            if hasattr(condition, 'mass') and condition.mass.enabled and (condition.mass.type == condition.mass.InvariantMassType or condition.mass.type == condition.mass.InvariantMassDeltaRType):
+            if hasattr(condition, "mass") and condition.mass.enabled and (condition.mass.type == condition.mass.InvariantMassType or condition.mass.type == condition.mass.InvariantMassDeltaRType):
                if isinstance(condition, (CorrelationConditionHelper, CorrelationConditionOvRmHelper, Correlation3ConditionHelper)):
                     a = condition.objects[0]
                     b = condition.objects[1]
@@ -638,7 +649,7 @@ class ModuleHelper(VhdlHelper):
     def correlationCombinationsInvMassUpt(self):
         combinations = {}
         for condition in self.conditions:
-            if hasattr(condition, 'mass') and condition.mass.enabled and condition.mass.type == condition.mass.InvariantMassUptType:
+            if hasattr(condition, "mass") and condition.mass.enabled and condition.mass.type == condition.mass.InvariantMassUptType:
                 if isinstance(condition, CorrelationConditionHelper):
                     a, b = condition.objects
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
@@ -649,7 +660,7 @@ class ModuleHelper(VhdlHelper):
     def correlationCombinationsTransMass(self):
         combinations = {}
         for condition in self.conditions:
-            if hasattr(condition, 'mass') and condition.mass.enabled and condition.mass.type == condition.mass.TransverseMassType:
+            if hasattr(condition, "mass") and condition.mass.enabled and condition.mass.type == condition.mass.TransverseMassType:
                 if isinstance(condition, CorrelationConditionHelper):
                     a, b = condition.objects
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
@@ -660,7 +671,7 @@ class ModuleHelper(VhdlHelper):
     def correlationCombinationsInvMassDivDr(self):
         combinations = {}
         for condition in self.conditions:
-            if hasattr(condition, 'mass') and condition.mass.enabled and condition.mass.type == condition.mass.InvariantMassDeltaRType:
+            if hasattr(condition, "mass") and condition.mass.enabled and condition.mass.type == condition.mass.InvariantMassDeltaRType:
                 if isinstance(condition, CorrelationConditionHelper):
                     a, b = condition.objects
                     key = (a.type, b.type, a.bx, b.bx) # create custom hash
@@ -671,7 +682,7 @@ class ModuleHelper(VhdlHelper):
     def correlationCombinationsTbpt(self):
         combinations = {}
         for condition in self.conditions:
-            if hasattr(condition, 'twoBodyPt') and condition.twoBodyPt.enabled:
+            if hasattr(condition, "twoBodyPt") and condition.twoBodyPt.enabled:
                 if isinstance(condition, (CorrelationConditionHelper, CorrelationConditionOvRmHelper, CaloConditionHelper, CaloConditionOvRmHelper, MuonConditionHelper)):
                     a = condition.objects[0]
                     b = condition.objects[1]
@@ -694,7 +705,7 @@ class ModuleHelper(VhdlHelper):
                 return True
             if condition.handle.isCaloConditionOvRm():
                 return True
-            if hasattr(condition, 'twoBodyPt'):
+            if hasattr(condition, "twoBodyPt"):
                 return bool(condition.twoBodyPt)
             return False
         objects = {}
@@ -907,7 +918,7 @@ class MuonConditionHelper(ConditionHelper):
     def __init__(self, condition_handle):
         super().__init__(condition_handle)
         # Default attributes
-        self.chargeCorrelation = ChargeCorrelationCutHelper('ig')
+        self.chargeCorrelation = ChargeCorrelationCutHelper("ig")
         self.twoBodyPt = TwoBodyPtCutHelper()
         self.update_cuts(condition_handle)
 
@@ -972,12 +983,12 @@ class CorrelationConditionHelper(ConditionHelper):
         self.deltaR = DeltaRCutHelper()
         self.mass = MassCutHelper()
         self.twoBodyPt = TwoBodyPtCutHelper()
-        self.chargeCorrelation = ChargeCorrelationCutHelper('ig')
+        self.chargeCorrelation = ChargeCorrelationCutHelper("ig")
         self.update(condition_handle)
 
     @property
     def objectsInSameBx(self):
-        """Returns 'true' if all objects of same BX offset else returns 'false'."""
+        """Returns True if all objects of same BX offset else returns False."""
         return 1 == len(set([obj.bx for obj in self.objects]))
 
     def update(self, condition_handle):
@@ -1023,12 +1034,12 @@ class Correlation3ConditionHelper(ConditionHelper):
         super().__init__(condition_handle)
         # Default attributes
         self.mass = MassCutHelper()
-        self.chargeCorrelation = ChargeCorrelationCutHelper('ig')
+        self.chargeCorrelation = ChargeCorrelationCutHelper("ig")
         self.update(condition_handle)
 
     @property
     def objectsInSameBx(self):
-        """Returns 'true' if all objects of same BX offset else returns 'false'."""
+        """Returns True if all objects of same BX offset else returns False."""
         return 1 == len(set([obj.bx for obj in self.objects]))
 
     def update(self, condition_handle):
@@ -1076,12 +1087,12 @@ class CorrelationConditionOvRmHelper(ConditionHelper):
         self.deltaR = DeltaRCutHelper()
         self.mass = MassCutHelper()
         self.twoBodyPt = TwoBodyPtCutHelper()
-        self.chargeCorrelation = ChargeCorrelationCutHelper('ig')
+        self.chargeCorrelation = ChargeCorrelationCutHelper("ig")
         self.update(condition_handle)
 
     @property
     def objectsInSameBx(self):
-        """Returns 'true' if all objects of same BX offset else returns 'false'."""
+        """Returns True if all objects of same BX offset else returns False."""
         return 1 == len(set([obj.bx for obj in self.objects]))
 
     def update(self, condition_handle):
@@ -1138,7 +1149,7 @@ class CaloConditionOvRmHelper(ConditionHelper):
 
     @property
     def objectsInSameBx(self):
-        """Returns 'true' if all objects of same BX offset else returns 'false'."""
+        """Returns True if all objects of same BX offset else returns False."""
         return 1 == len(set([obj.bx for obj in self.objects]))
 
     def update(self, condition_handle):
@@ -1196,18 +1207,18 @@ class ObjectHelper(VhdlHelper):
 
     def __init__(self):
         # common attributes
-        self.name = 'UNDEFINED'
-        self.type = 'UNDEFINED'
+        self.name = "UNDEFINED"
+        self.type = "UNDEFINED"
         self.operator = True
         self.bx = bx_encode(0)
         self.bx_arr = bx_encode_4_array(0)
-        self.externalSignalName = 'UNDEFINED'
+        self.externalSignalName = "UNDEFINED"
         self.externalChannelId = 0
         # common cuts
         self.threshold = 0
         self.isolation = IsolationCutHelper(0xf)
         self.quality = QualityCutHelper(0xffff)
-        self.charge = ChargeCutHelper('ign')
+        self.charge = ChargeCutHelper("ign")
         self.count = CountCutHelper()
         self.anomalyScore = AnomalyScoreCutHelper(0)
         self.score = ScoreCutHelper(0)
@@ -1595,17 +1606,17 @@ class SliceCutHelper(RangeCutHelper):
 #  Tests
 # -----------------------------------------------------------------------------
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument('filename')
-    parser.add_argument('-m', action='store_true', help="show modules")
-    parser.add_argument('-c', action='store_true', help="show conditions")
-    parser.add_argument('-o', action='store_true', help="show objects")
+    parser.add_argument("filename")
+    parser.add_argument("-m", action="store_true", help="show modules")
+    parser.add_argument("-c", action="store_true", help="show conditions")
+    parser.add_argument("-o", action="store_true", help="show objects")
     args = parser.parse_args()
 
     # Create tray
-    resource = os.path.join(os.path.dirname(__file__), '..', 'config', 'resource_default.json')
+    resource = os.path.join(os.path.dirname(__file__), "..", "config", "resource_default.json")
     tray = algodist.ResourceTray(resource)
     # Load event setup
     eventSetup = tmEventSetup.getTriggerMenu(args.filename)
