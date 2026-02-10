@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.25.0] - 2026-02-10
+
 ### Added
 
 - Support `NETETMHF` objects (#64).
@@ -501,7 +503,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - adjusted `--dryrun` and `--ratio` options.
 
-[unreleased]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.24.0...HEAD
+[unreleased]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.25.0...HEAD
+[2.25.0]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.24.0...2.25.0
 [2.24.0]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.23.2...2.24.0
 [2.23.2]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.23.1...2.23.2
 [2.23.1]: https://github.com/cms-l1-globaltrigger/tm-vhdlproducer/compare/2.23.0...2.23.1
